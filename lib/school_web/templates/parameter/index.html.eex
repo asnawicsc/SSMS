@@ -1,0 +1,40 @@
+<h2>Listing Parameters</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Nationality</th>
+      <th>Race</th>
+      <th>Religion</th>
+      <th>Blood type</th>
+      <th>Transport</th>
+      <th>Sickness</th>
+      <th>Career</th>
+      <th>Oku</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for parameter <- @parameters do %>
+    <tr>
+      <td><%= parameter.nationality %></td>
+      <td><%= parameter.race %></td>
+      <td><%= parameter.religion %></td>
+      <td><%= parameter.blood_type %></td>
+      <td><%= parameter.transport %></td>
+      <td><%= parameter.sickness %></td>
+      <td><%= parameter.career %></td>
+      <td><%= parameter.oku %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: parameter_path(@conn, :show, parameter), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: parameter_path(@conn, :edit, parameter), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: parameter_path(@conn, :delete, parameter), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Parameter", to: parameter_path(@conn, :new) %></span>

@@ -1,0 +1,48 @@
+<h2>Show Parameter</h2>
+
+<ul>
+
+  <li>
+    <strong>Nationality:</strong>
+    <%= @parameter.nationality %>
+  </li>
+
+  <li>
+    <strong>Race:</strong>
+    <%= @parameter.race %>
+  </li>
+
+  <li>
+    <strong>Religion:</strong>
+    <%= @parameter.religion %>
+  </li>
+
+  <li>
+    <strong>Blood type:</strong>
+    <%= @parameter.blood_type %>
+  </li>
+
+  <li>
+    <strong>Transport:</strong>
+    <%= @parameter.transport %>
+  </li>
+
+  <li>
+    <strong>Sickness:</strong>
+    <%= @parameter.sickness %>
+  </li>
+
+  <li>
+    <strong>Career:</strong>
+    <%= @parameter.career %>
+  </li>
+
+  <li>
+    <strong>Oku:</strong>
+    <%= @parameter.oku %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: parameter_path(@conn, :edit, @parameter) %></span>
+<span><%= link "Back", to: parameter_path(@conn, :index) %></span>

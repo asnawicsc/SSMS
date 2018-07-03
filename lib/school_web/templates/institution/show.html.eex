@@ -1,0 +1,78 @@
+<h2>Show Institution</h2>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @institution.name %>
+  </li>
+
+  <li>
+    <strong>Line1:</strong>
+    <%= @institution.line1 %>
+  </li>
+
+  <li>
+    <strong>Line2:</strong>
+    <%= @institution.line2 %>
+  </li>
+
+  <li>
+    <strong>Town:</strong>
+    <%= @institution.town %>
+  </li>
+
+  <li>
+    <strong>Postcode:</strong>
+    <%= @institution.postcode %>
+  </li>
+
+  <li>
+    <strong>State:</strong>
+    <%= @institution.state %>
+  </li>
+
+  <li>
+    <strong>Country:</strong>
+    <%= @institution.country %>
+  </li>
+
+  <li>
+    <strong>Phone:</strong>
+    <%= @institution.phone %>
+  </li>
+
+  <li>
+    <strong>Phone2:</strong>
+    <%= @institution.phone2 %>
+  </li>
+
+  <li>
+    <strong>Email:</strong>
+    <%= @institution.email %>
+  </li>
+
+  <li>
+    <strong>Email2:</strong>
+    <%= @institution.email2 %>
+  </li>
+
+  <li>
+    <strong>Fax:</strong>
+    <%= @institution.fax %>
+  </li>
+
+  <li>
+    <strong>Logo bin:</strong>
+    <%= @institution.logo_bin %>
+  </li>
+
+  <li>
+    <strong>Logo filename:</strong>
+    <%= @institution.logo_filename %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: institution_path(@conn, :edit, @institution) %></span>
+<span><%= link "Back", to: institution_path(@conn, :index) %></span>

@@ -1,0 +1,75 @@
+<nav class="navbar  navbar-expand-lg navbar-light bg-light after_login">
+  <a class="navbar-brand" href="#">Student Affairs System</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+
+    
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Setup
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="#">School Profile</a>
+          <a class="dropdown-item" href="#">User Account</a>
+          <a class="dropdown-item" href="#">System Configuration</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Register Student</a>
+          <a class="dropdown-item" href="#">Student History</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Processing
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="#">Mark Sheet</a>
+          <a class="dropdown-item" href="#">Attendance</a>
+          <a class="dropdown-item" href="#">Student Comment</a>
+          <a class="dropdown-item" href="#">Health Weight</a>
+          <a class="dropdown-item" href="#">Student Fees</a>
+          <a class="dropdown-item" href="#">Segak</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Exclude Rank</a>
+          <a class="dropdown-item" href="#">Next Year Class</a>
+          <a class="dropdown-item" href="#">UPSR Result</a>
+          <a class="dropdown-item" href="#">Co-curriculum</a>
+           <div class="dropdown-divider"></div>
+           <a class="dropdown-item" href="#">Teacher</a>
+           <a class="dropdown-item" href="#">Project Nilam</a>
+           
+        </div>
+
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Report
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="#">Table List</a>
+          <a class="dropdown-item" href="#">Comment List</a>
+          <a class="dropdown-item" href="#">Holiday List</a>
+          <a class="dropdown-item" href="#">Standard List</a>
+          <a class="dropdown-item" href="#">Class List</a>
+          <a class="dropdown-item" href="#">Visitor List</a>
+          <a class="dropdown-item" href="#">User List</a>
+          
+    
+           
+        </div>
+        
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link " href="/logout"  role="button" >
+          Logout
+        </a>
+ 
+      </li>
+  
+    </ul>
+
+  </div>
+</nav>

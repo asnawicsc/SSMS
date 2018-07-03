@@ -1,0 +1,10 @@
+
+<div class="btn-group after_login" role="group" aria-label="dashboard">
+  <button type="button" class="btn btn-secondary">Student</button>
+  <button type="button" class="btn btn-secondary">Teacher</button>
+  <button type="button" class="btn btn-secondary">Mark</button>
+  <button type="button" class="btn btn-secondary">Result</button>
+  <button type="button" class="btn btn-secondary">Attendance</button>
+  <button type="button" class="btn btn-secondary">UPSR</button>
+  <button type="button" class="btn btn-secondary">Co-curriculum</button>
+</div>

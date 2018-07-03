@@ -1,0 +1,95 @@
+<%= form_for @changeset, @action, fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= label f, :name, class: "control-label" %>
+    <%= text_input f, :name, class: "form-control" %>
+    <%= error_tag f, :name %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :line1, class: "control-label" %>
+    <%= text_input f, :line1, class: "form-control" %>
+    <%= error_tag f, :line1 %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :line2, class: "control-label" %>
+    <%= text_input f, :line2, class: "form-control" %>
+    <%= error_tag f, :line2 %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :town, class: "control-label" %>
+    <%= text_input f, :town, class: "form-control" %>
+    <%= error_tag f, :town %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :postcode, class: "control-label" %>
+    <%= text_input f, :postcode, class: "form-control" %>
+    <%= error_tag f, :postcode %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :state, class: "control-label" %>
+    <%= text_input f, :state, class: "form-control" %>
+    <%= error_tag f, :state %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :country, class: "control-label" %>
+    <%= text_input f, :country, class: "form-control" %>
+    <%= error_tag f, :country %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :phone, class: "control-label" %>
+    <%= text_input f, :phone, class: "form-control" %>
+    <%= error_tag f, :phone %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :phone2, class: "control-label" %>
+    <%= text_input f, :phone2, class: "form-control" %>
+    <%= error_tag f, :phone2 %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :email, class: "control-label" %>
+    <%= text_input f, :email, class: "form-control" %>
+    <%= error_tag f, :email %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :email2, class: "control-label" %>
+    <%= text_input f, :email2, class: "form-control" %>
+    <%= error_tag f, :email2 %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :fax, class: "control-label" %>
+    <%= text_input f, :fax, class: "form-control" %>
+    <%= error_tag f, :fax %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :logo_bin, class: "control-label" %>
+    <%= text_input f, :logo_bin, class: "form-control" %>
+    <%= error_tag f, :logo_bin %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :logo_filename, class: "control-label" %>
+    <%= text_input f, :logo_filename, class: "form-control" %>
+    <%= error_tag f, :logo_filename %>
+  </div>
+
+  <div class="form-group">
+    <%= submit "Submit", class: "btn btn-primary" %>
+  </div>
+<% end %>
