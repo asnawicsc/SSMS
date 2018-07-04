@@ -1,0 +1,49 @@
+<h2>Listing Students</h2>
+<script type="text/javascript">
+  window.csrf = "<%= Phoenix.Controller.get_csrf_token %>"
+</script>
+<div class="row">
+  <div class="col-lg-2">
+    
+    <table class="table">
+      <thead>
+        <tr>
+        
+
+          <th>Name</th>
+        </tr>
+      </thead>
+      <tbody>
+    <%= for student <- @students do %>
+        <tr>
+       
+
+
+          <td class="text-right">
+            <% link "Show", to: student_path(@conn, :show, student), class: "btn btn-default btn-xs" %>
+            <span>
+              <div id="<%= student.id %>" class="btn btn-info student"><%= student.name %> <%= student.chinese_name %></div>
+
+              <% link "Edit", to: student_path(@conn, :edit, student), class: "btn btn-default btn-xs" %></span>
+            <span><% link "Delete", to: student_path(@conn, :delete, student), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+          </td>
+        </tr>
+    <% end %>
+      </tbody>
+    </table>
+  </div>
+  <div class="col-lg-10" aria-label="student_details">
+    
+  </div>
+</div>
+<div class="table-responsive">
+  
+
+</div>
+<span><%= link "New Student", to: student_path(@conn, :new) %></span>
+<script type="text/javascript">
+  $(window).ready(function(){
+    var target = window.location.search.substring(1).split("=")[1]
+    $("div#"+target+".student").click()
+  })
+</script>

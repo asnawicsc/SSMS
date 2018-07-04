@@ -1,0 +1,143 @@
+<h2>Show Student</h2>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @student.name %>
+  </li>
+
+  <li>
+    <strong>Chinese name:</strong>
+    <%= @student.chinese_name %>
+  </li>
+
+  <li>
+    <strong>Sex:</strong>
+    <%= @student.sex %>
+  </li>
+
+  <li>
+    <strong>Ic:</strong>
+    <%= @student.ic %>
+  </li>
+
+  <li>
+    <strong>Dob:</strong>
+    <%= @student.dob %>
+  </li>
+
+  <li>
+    <strong>Pob:</strong>
+    <%= @student.pob %>
+  </li>
+
+  <li>
+    <strong>Race:</strong>
+    <%= @student.race %>
+  </li>
+
+  <li>
+    <strong>Religion:</strong>
+    <%= @student.religion %>
+  </li>
+
+  <li>
+    <strong>Nationality:</strong>
+    <%= @student.nationality %>
+  </li>
+
+  <li>
+    <strong>Country:</strong>
+    <%= @student.country %>
+  </li>
+
+  <li>
+    <strong>Line1:</strong>
+    <%= @student.line1 %>
+  </li>
+
+  <li>
+    <strong>Line2:</strong>
+    <%= @student.line2 %>
+  </li>
+
+  <li>
+    <strong>Postcode:</strong>
+    <%= @student.postcode %>
+  </li>
+
+  <li>
+    <strong>Town:</strong>
+    <%= @student.town %>
+  </li>
+
+  <li>
+    <strong>State:</strong>
+    <%= @student.state %>
+  </li>
+
+  <li>
+    <strong>Phone:</strong>
+    <%= @student.phone %>
+  </li>
+
+  <li>
+    <strong>Username:</strong>
+    <%= @student.username %>
+  </li>
+
+  <li>
+    <strong>Pass:</strong>
+    <%= @student.pass %>
+  </li>
+
+  <li>
+    <strong>Is oku:</strong>
+    <%= @student.is_oku %>
+  </li>
+
+  <li>
+    <strong>Oku no:</strong>
+    <%= @student.oku_no %>
+  </li>
+
+  <li>
+    <strong>Oku cat:</strong>
+    <%= @student.oku_cat %>
+  </li>
+
+  <li>
+    <strong>Transport:</strong>
+    <%= @student.transport %>
+  </li>
+
+  <li>
+    <strong>Distance:</strong>
+    <%= @student.distance %>
+  </li>
+
+  <li>
+    <strong>Blood type:</strong>
+    <%= @student.blood_type %>
+  </li>
+
+  <li>
+    <strong>Position in house:</strong>
+    <%= @student.position_in_house %>
+  </li>
+
+  <li>
+    <strong>Guardian ids:</strong>
+    <%= @student.guardian_ids %>
+  </li>
+
+  <li>
+    <strong>Subject ids:</strong>
+    <%= @student.subject_ids %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: student_path(@conn, :edit, @student) %></span>
+<span><%= link "Back", to: student_path(@conn, :index) %></span>

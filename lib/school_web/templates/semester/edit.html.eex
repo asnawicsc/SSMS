@@ -1,0 +1,5 @@
+<h2>Edit Semester</h2>
+
+<%= render "form.html", Map.put(assigns, :action, semester_path(@conn, :update, @semester)) %>
+
+<span><%= link "Back", to: semester_path(@conn, :index) %></span>

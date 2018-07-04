@@ -1,0 +1,33 @@
+<h2>Show Student class</h2>
+
+<ul>
+
+  <li>
+    <strong>Institute:</strong>
+    <%= @student_class.institute_id %>
+  </li>
+
+  <li>
+    <strong>Level:</strong>
+    <%= @student_class.level_id %>
+  </li>
+
+  <li>
+    <strong>Semester:</strong>
+    <%= @student_class.semester_id %>
+  </li>
+
+  <li>
+    <strong>Class:</strong>
+    <%= @student_class.class_id %>
+  </li>
+
+  <li>
+    <strong>Sudent:</strong>
+    <%= @student_class.sudent_id %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: student_class_path(@conn, :edit, @student_class) %></span>
+<span><%= link "Back", to: student_class_path(@conn, :index) %></span>

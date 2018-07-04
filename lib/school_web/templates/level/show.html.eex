@@ -1,0 +1,13 @@
+<h2>Show Level</h2>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @level.name %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: level_path(@conn, :edit, @level) %></span>
+<span><%= link "Back", to: level_path(@conn, :index) %></span>

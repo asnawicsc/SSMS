@@ -25,9 +25,19 @@ channel
 
 $(document).ready(function(){
 
-if (window.currentUser == "lobby") {
-  $("nav.after_login").hide()
-   $("div.after_login").hide()
-}
+  if (window.currentUser == "lobby") {
+    $("nav.after_login").hide()
+     $("div.after_login").hide()
+  };
 
+  $("div.student").click(function(){
+    var student_id = $(this).attr("id")
+    channel.push("inquire_student_details", {user_id: window.currentUser, student_id: student_id})
+  })
+
+  channel.on("show_student_details", payload => {
+    $("div[aria-label='student_details']").html(payload.html)
+    var csrf = window.csrf
+    $("input[name='_csrf_token']").val(csrf)
+  })
 })

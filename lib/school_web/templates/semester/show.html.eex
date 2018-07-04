@@ -1,0 +1,33 @@
+<h2>Show Semester</h2>
+
+<ul>
+
+  <li>
+    <strong>Start date:</strong>
+    <%= @semester.start_date %>
+  </li>
+
+  <li>
+    <strong>End date:</strong>
+    <%= @semester.end_date %>
+  </li>
+
+  <li>
+    <strong>Holiday start:</strong>
+    <%= @semester.holiday_start %>
+  </li>
+
+  <li>
+    <strong>Holiday end:</strong>
+    <%= @semester.holiday_end %>
+  </li>
+
+  <li>
+    <strong>School days:</strong>
+    <%= @semester.school_days %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: semester_path(@conn, :edit, @semester) %></span>
+<span><%= link "Back", to: semester_path(@conn, :index) %></span>
