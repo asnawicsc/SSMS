@@ -1,4 +1,1 @@
-Click on the above to start.
-
-
-
+<h3>Current semester: </h3> <%= @current_sem.start_date %> - <%= @current_sem.end_date %> 

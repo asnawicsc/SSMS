@@ -13,6 +13,6 @@
   </li>
 
 </ul>
-
+<span><%= link "Students", to: class_path(@conn, :students, @class) %></span>
 <span><%= link "Edit", to: class_path(@conn, :edit, @class) %></span>
 <span><%= link "Back", to: class_path(@conn, :index) %></span>

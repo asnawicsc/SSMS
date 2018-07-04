@@ -76,6 +76,7 @@
 <div class="row">
   <div class="col-lg-12">
     <div class="btn-group after_login" role="group" aria-label="dashboard">
+      <a href="/classes" class="btn btn-secondary">Classes</a>
       <a href="/students" class="btn btn-secondary">Student</a>
       <button type="button" class="btn btn-secondary">Teacher</button>
       <button type="button" class="btn btn-secondary">Mark</button>

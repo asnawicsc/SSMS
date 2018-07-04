@@ -30,6 +30,8 @@ defmodule SchoolWeb.Router do
     resources "/levels",                    LevelController
     resources "/semesters",                 SemesterController
     resources "/classes",                   ClassController
+      get "/classes/:id/students",          ClassController,        :students
+      get "/add_to_class_semester",         ClassController,        :add_to_class_semester
     resources "/student_classes",           StudentClassController
 
   end

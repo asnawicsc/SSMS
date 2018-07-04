@@ -10,7 +10,7 @@ defmodule SchoolWeb.SemesterController do
   end
 
   def new(conn, _params) do
-    changeset = Affairs.change_semester(%Semester{})
+    changeset = Affairs.change_semester(%Semester{start_date: Timex.today, end_date: Timex.today, holiday_start: Timex.today, holiday_end: Timex.today})
     render(conn, "new.html", changeset: changeset)
   end
 

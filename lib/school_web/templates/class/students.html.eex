@@ -1,0 +1,54 @@
+<h3>Students in <%= @class.name %></h3>
+
+
+<div class="row">
+	<div class="col-lg-6">
+		<div class="card ">
+			<div class="card-header">All Students</div>
+			<div class="card-body">
+				<ol class="unselected">
+				<%= for student <- @students do %>
+				<li student_id="<%= student.id %>"><%= student.name %></li>
+				<% end %>
+				</ol>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-6">
+		<div class="card ">
+			<div class="card-header">Students in this class this semester</div>
+			<div class="card-body">
+				<ol class="selected">
+	
+				</ol>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("ol.unselected").on("click", "li", function(){
+
+			var li = $(this)
+			var student_id = $(this).attr("student_id")
+			$("ol.selected").append(li)
+
+	    $.ajax({
+	      url: "/add_to_class_semester",
+	      dataType: "json",
+	      data: { student_id: student_id, institute_id: window.currentInstitute }
+	    }).done(function(j) {
+	    	console.log(j)
+	    })
+		})
+
+		$("ol.selected").on("click", "li", function(){
+
+			var li = $(this)
+
+			$("ol.unselected").append(li)
+		})
+
+
+	})
+</script>

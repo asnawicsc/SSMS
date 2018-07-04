@@ -309,6 +309,13 @@ defmodule School.Affairs do
     Repo.all(Class)
   end
 
+  def list_classes(institution_id) do
+    Repo.all(from c in Class, left_join: l in Level, on: l.id == c.level_id, where: c.institution_id == ^institution_id,
+      select: %{id: c.id, name: c.name, remarks: c.remarks, level_id: l.name}
+
+      )
+  end
+
   @doc """
   Gets a single class.
 
@@ -484,5 +491,9 @@ defmodule School.Affairs do
   """
   def change_student_class(%StudentClass{} = student_class) do
     StudentClass.changeset(student_class, %{})
+  end
+
+  def inst_id(conn) do
+     conn.private.plug_session["institution_id"]
   end
 end
