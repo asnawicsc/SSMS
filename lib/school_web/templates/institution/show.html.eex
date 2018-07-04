@@ -74,5 +74,5 @@
 
 </ul>
 
-<span><%= link "Edit", to: institution_path(@conn, :edit, @institution) %></span>
+
 <span><%= link "Back", to: institution_path(@conn, :index) %></span>

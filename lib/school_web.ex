@@ -23,6 +23,8 @@ defmodule SchoolWeb do
       import Plug.Conn
       import SchoolWeb.Router.Helpers
       import SchoolWeb.Gettext
+            import Ecto.Query
+      alias School.Repo
     end
   end
 
@@ -40,6 +42,8 @@ defmodule SchoolWeb do
       import SchoolWeb.Router.Helpers
       import SchoolWeb.ErrorHelpers
       import SchoolWeb.Gettext
+      import Ecto.Query
+      alias School.Repo
     end
   end
 
@@ -55,6 +59,8 @@ defmodule SchoolWeb do
     quote do
       use Phoenix.Channel
       import SchoolWeb.Gettext
+            import Ecto.Query
+      alias School.Repo
     end
   end
 

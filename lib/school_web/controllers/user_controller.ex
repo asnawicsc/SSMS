@@ -7,14 +7,17 @@ defmodule SchoolWeb.UserController do
 
   def create_user(conn, params) do
 
-    crypted_password = Comeonin.Bcrypt.hashpwsalt(params["password"])
-    params = Map.put(params, "password", crypted_password)
 
+    crypted_password = Comeonin.Bcrypt.hashpwsalt(params["password"])
+    params = Map.put(params, "crypted_password", crypted_password)
+    params = Map.delete(params, "password")
+   
     case Settings.create_user(params) do
       {:ok, user} ->
         conn
-        |> put_flash(:info, "User created successfully.")
-        |> redirect(to: page_path(conn, :index))
+        |> put_session(:user_id, user.id)
+        |> put_flash(:info, "Please select a school.")
+        |> redirect(to: institution_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
@@ -23,25 +26,35 @@ defmodule SchoolWeb.UserController do
   end
 
   def authenticate(conn, %{"email" => email, "password" => password}) do
-    # user = Repo.get_by(User, email: email)
+    user = Repo.get_by(User, email: email)
 
-    # if user != nil do
+    if user != nil do
    
 
-    #   if Comeonin.Bcrypt.checkpw(password, p2) do
+      if Comeonin.Bcrypt.checkpw(password, user.crypted_password) do
+         
+
+
+        if user.institution_id == nil do
+          conn
+          |> put_session(:user_id, user.id)
+          |> redirect(to: institution_path(conn, :index))
+          else 
+          conn
+          |> put_session(:user_id, user.id)
+          |> put_session(:institution_id, user.institution_id)
+          |> redirect(to: page_path(conn, :index))
+        end
+      else
         conn
-        |> put_session(:user_id, 1)
-        |> redirect(to: page_path(conn, :index))
-    #   else
-    #     conn
-    #     |> put_flash(:error, "Wrong password!")
-    #     |> redirect(to: user_path(conn, :login))
-    #   end
-    # else
-    #   conn
-    #   |> put_flash(:error, "User not found")
-    #   |> redirect(to: user_path(conn, :login))
-    # end
+        |> put_flash(:error, "Wrong password!")
+        |> redirect(to: user_path(conn, :login))
+      end
+    else
+      conn
+      |> put_flash(:error, "User not found")
+      |> redirect(to: user_path(conn, :login))
+    end
   end
 
   def login(conn, params) do
@@ -52,6 +65,7 @@ defmodule SchoolWeb.UserController do
   def logout(conn, _params) do
     conn
     |> delete_session(:user_id)
+    |> delete_session(:institution_id)
     |> put_flash(:info, "Logout successfully")
     |> redirect(to: user_path(conn, :login))
   end

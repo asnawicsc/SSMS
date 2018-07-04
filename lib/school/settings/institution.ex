@@ -26,6 +26,6 @@ defmodule School.Settings.Institution do
   def changeset(institution, attrs) do
     institution
     |> cast(attrs, [:name, :line1, :line2, :town, :postcode, :state, :country, :phone, :phone2, :email, :email2, :fax, :logo_bin, :logo_filename])
-    |> validate_required([:name, :line1, :line2, :town, :postcode, :state, :country, :phone, :phone2, :email, :email2, :fax, :logo_bin, :logo_filename])
+    |> validate_required([:name])
   end
 end

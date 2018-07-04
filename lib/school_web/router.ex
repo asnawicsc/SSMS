@@ -18,10 +18,13 @@ defmodule SchoolWeb.Router do
 
     get "/", PageController, :index
     resources "/parameters", ParameterController
+    get "/system_config/:institution_id", ParameterController, :system_config
     resources "/institutions", InstitutionController
+    get "/institutions/:id/select", InstitutionController, :select
     resources "/users", UserController
     get "/login", UserController, :login
     post "/authenticate", UserController, :authenticate
+    post "/create_user", UserController, :create_user
      get "/logout", UserController, :logout
   end
 

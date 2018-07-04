@@ -15,6 +15,7 @@ defmodule SchoolWeb.ParameterController do
   end
 
   def create(conn, %{"parameter" => parameter_params}) do
+    parameter_params = Map.put(parameter_params, "institution_id", conn.private.plug_session["institution_id"])
     case Settings.create_parameter(parameter_params) do
       {:ok, parameter} ->
         conn
@@ -23,6 +24,12 @@ defmodule SchoolWeb.ParameterController do
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
+  end
+
+  def system_config(conn, %{"institution_id" => id}) do
+    parameter = Repo.get_by(Parameter, institution_id: id)
+   
+    render(conn, "show.html", parameter: parameter)
   end
 
   def show(conn, %{"id" => id}) do
@@ -38,7 +45,7 @@ defmodule SchoolWeb.ParameterController do
 
   def update(conn, %{"id" => id, "parameter" => parameter_params}) do
     parameter = Settings.get_parameter!(id)
-
+    parameter_params = Map.put(parameter_params, "institution_id", conn.private.plug_session["institution_id"])
     case Settings.update_parameter(parameter, parameter_params) do
       {:ok, parameter} ->
         conn

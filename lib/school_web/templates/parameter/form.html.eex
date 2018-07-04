@@ -7,49 +7,49 @@
 
   <div class="form-group">
     <%= label f, :nationality, class: "control-label" %>
-    <%= text_input f, :nationality, class: "form-control" %>
+    <%= text_input f, :nationality, class: "form-control", "data-role": "tagsinput"  %>
     <%= error_tag f, :nationality %>
   </div>
 
   <div class="form-group">
     <%= label f, :race, class: "control-label" %>
-    <%= text_input f, :race, class: "form-control" %>
+    <%= text_input f, :race, class: "form-control", "data-role": "tagsinput" %>
     <%= error_tag f, :race %>
   </div>
 
   <div class="form-group">
     <%= label f, :religion, class: "control-label" %>
-    <%= text_input f, :religion, class: "form-control" %>
+    <%= text_input f, :religion, class: "form-control", "data-role": "tagsinput" %>
     <%= error_tag f, :religion %>
   </div>
 
   <div class="form-group">
     <%= label f, :blood_type, class: "control-label" %>
-    <%= text_input f, :blood_type, class: "form-control" %>
+    <%= text_input f, :blood_type, class: "form-control", "data-role": "tagsinput" %>
     <%= error_tag f, :blood_type %>
   </div>
 
   <div class="form-group">
     <%= label f, :transport, class: "control-label" %>
-    <%= text_input f, :transport, class: "form-control" %>
+    <%= text_input f, :transport, class: "form-control", "data-role": "tagsinput" %>
     <%= error_tag f, :transport %>
   </div>
 
   <div class="form-group">
     <%= label f, :sickness, class: "control-label" %>
-    <%= text_input f, :sickness, class: "form-control" %>
+    <%= text_input f, :sickness, class: "form-control", "data-role": "tagsinput" %>
     <%= error_tag f, :sickness %>
   </div>
 
   <div class="form-group">
     <%= label f, :career, class: "control-label" %>
-    <%= text_input f, :career, class: "form-control" %>
+    <%= text_input f, :career, class: "form-control", "data-role": "tagsinput" %>
     <%= error_tag f, :career %>
   </div>
 
   <div class="form-group">
     <%= label f, :oku, class: "control-label" %>
-    <%= text_input f, :oku, class: "form-control" %>
+    <%= text_input f, :oku, class: "form-control", "data-role": "tagsinput" %>
     <%= error_tag f, :oku %>
   </div>
 
@@ -57,3 +57,7 @@
     <%= submit "Submit", class: "btn btn-primary" %>
   </div>
 <% end %>
+<script type="text/javascript">
+  
+  $("input#parameter_religion").tagsinput('remove', 'Isla');
+</script>

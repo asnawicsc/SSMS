@@ -27,6 +27,7 @@ $(document).ready(function(){
 
 if (window.currentUser == "lobby") {
   $("nav.after_login").hide()
+   $("div.after_login").hide()
 }
 
 })

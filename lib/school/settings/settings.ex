@@ -8,6 +8,8 @@ defmodule School.Settings do
 
   alias School.Settings.Parameter
 
+
+
   @doc """
   Returns the list of parameters.
 
@@ -294,5 +296,11 @@ defmodule School.Settings do
   """
   def change_user(%User{} = user) do
     User.changeset(user, %{})
+  end
+
+
+  def current_user(conn) do
+    id = Plug.Conn.get_session(conn, :user_id)
+    if id, do: School.Repo.get(User, id)
   end
 end

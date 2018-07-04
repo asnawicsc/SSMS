@@ -2,9 +2,23 @@ defmodule SchoolWeb.InstitutionController do
   use SchoolWeb, :controller
 
   alias School.Settings
-  alias School.Settings.Institution
+  alias School.Settings.{Institution, User}
+  require IEx
+
+  def select(conn, %{"id" => id}) do
+    institution = Settings.get_institution!(id)
+    user = Settings.current_user(conn)
+    User.changeset(user, %{institution_id: id}) |> Repo.update!
+
+    conn
+    |> put_session(:institution_id, id)
+    |> put_flash(:info, "#{institution.name} selected!")
+    |> redirect(to: institution_path(conn, :index))
+
+  end
 
   def index(conn, _params) do
+
     institutions = Settings.list_institutions()
     render(conn, "index.html", institutions: institutions)
   end
