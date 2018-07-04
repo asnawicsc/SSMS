@@ -32,6 +32,7 @@
       <% else %>
         window.currentUser = "<%= @conn.private.plug_session["user_id"] %>";
         window.currentInstitute = "<%= @conn.private.plug_session["institution_id"] %>";
+        window.currentSemester = "<%= @conn.private.plug_session["semester_id"] %>";
       <% end %>
     </script>
     <script src="<%= static_path(@conn, "/js/phoenix.js") %>"></script>

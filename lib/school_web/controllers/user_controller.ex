@@ -33,8 +33,13 @@ defmodule SchoolWeb.UserController do
 
       if Comeonin.Bcrypt.checkpw(password, user.crypted_password) do
          
-
-
+          current_sem = Repo.all(from s in School.Affairs.Semester,
+           where: s.end_date > ^Timex.today and s.start_date < ^Timex.today )
+          if current_sem != [] do
+            current_sem = hd(current_sem)
+          else
+            current_sem = %{id: 0, start_date: "Not set", end_date: "Not set"}
+          end
         if user.institution_id == nil do
           conn
           |> put_session(:user_id, user.id)
@@ -42,6 +47,7 @@ defmodule SchoolWeb.UserController do
           else 
           conn
           |> put_session(:user_id, user.id)
+          |> put_session(:semester_id, current_sem.id)
           |> put_session(:institution_id, user.institution_id)
           |> redirect(to: page_path(conn, :index))
         end
@@ -66,6 +72,7 @@ defmodule SchoolWeb.UserController do
     conn
     |> delete_session(:user_id)
     |> delete_session(:institution_id)
+    |> delete_session(:semester_id)
     |> put_flash(:info, "Logout successfully")
     |> redirect(to: user_path(conn, :login))
   end

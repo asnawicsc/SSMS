@@ -19,7 +19,9 @@
 			<div class="card-header">Students in this class this semester</div>
 			<div class="card-body">
 				<ol class="selected">
-	
+	<%= for student <- @students_in do %>
+				<li student_id="<%= student.id %>"><%= student.name %></li>
+				<% end %>
 				</ol>
 			</div>
 		</div>
@@ -32,19 +34,35 @@
 			var li = $(this)
 			var student_id = $(this).attr("student_id")
 			$("ol.selected").append(li)
-
+			var class_id = location.pathname.split("/")[2]
 	    $.ajax({
 	      url: "/add_to_class_semester",
 	      dataType: "json",
-	      data: { student_id: student_id, institute_id: window.currentInstitute }
+	      data: { student_id: student_id, 
+	      	institute_id: window.currentInstitute, 
+	      	semester_id:  window.currentSemester,
+	      	class_id: class_id	}
 	    }).done(function(j) {
-	    	console.log(j)
+	    $.notify({message: j.student+" "+j.action+" "+j.class},{type: j.type});
 	    })
 		})
 
 		$("ol.selected").on("click", "li", function(){
 
 			var li = $(this)
+			var student_id = $(this).attr("student_id")
+			$("ol.selected").append(li)
+			var class_id = location.pathname.split("/")[2]
+	    $.ajax({
+	      url: "/add_to_class_semester",
+	      dataType: "json",
+	      data: { student_id: student_id, 
+	      	institute_id: window.currentInstitute, 
+	      	semester_id:  window.currentSemester,
+	      	class_id: class_id	}
+	    }).done(function(j) {
+	    $.notify({message: j.student+" "+j.action+" "+j.class},{type: j.type});
+	    })
 
 			$("ol.unselected").append(li)
 		})
