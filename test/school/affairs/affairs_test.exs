@@ -372,4 +372,138 @@ defmodule School.AffairsTest do
       assert %Ecto.Changeset{} = Affairs.change_student_class(student_class)
     end
   end
+
+  describe "attendance" do
+    alias School.Affairs.Attendance
+
+    @valid_attrs %{attendance_date: ~D[2010-04-17], class_id: 42, institution_id: 42, mark_by: "some mark_by", semester_id: 42, student_id: 42}
+    @update_attrs %{attendance_date: ~D[2011-05-18], class_id: 43, institution_id: 43, mark_by: "some updated mark_by", semester_id: 43, student_id: 43}
+    @invalid_attrs %{attendance_date: nil, class_id: nil, institution_id: nil, mark_by: nil, semester_id: nil, student_id: nil}
+
+    def attendance_fixture(attrs \\ %{}) do
+      {:ok, attendance} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_attendance()
+
+      attendance
+    end
+
+    test "list_attendance/0 returns all attendance" do
+      attendance = attendance_fixture()
+      assert Affairs.list_attendance() == [attendance]
+    end
+
+    test "get_attendance!/1 returns the attendance with given id" do
+      attendance = attendance_fixture()
+      assert Affairs.get_attendance!(attendance.id) == attendance
+    end
+
+    test "create_attendance/1 with valid data creates a attendance" do
+      assert {:ok, %Attendance{} = attendance} = Affairs.create_attendance(@valid_attrs)
+      assert attendance.attendance_date == ~D[2010-04-17]
+      assert attendance.class_id == 42
+      assert attendance.institution_id == 42
+      assert attendance.mark_by == "some mark_by"
+      assert attendance.semester_id == 42
+      assert attendance.student_id == 42
+    end
+
+    test "create_attendance/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_attendance(@invalid_attrs)
+    end
+
+    test "update_attendance/2 with valid data updates the attendance" do
+      attendance = attendance_fixture()
+      assert {:ok, attendance} = Affairs.update_attendance(attendance, @update_attrs)
+      assert %Attendance{} = attendance
+      assert attendance.attendance_date == ~D[2011-05-18]
+      assert attendance.class_id == 43
+      assert attendance.institution_id == 43
+      assert attendance.mark_by == "some updated mark_by"
+      assert attendance.semester_id == 43
+      assert attendance.student_id == 43
+    end
+
+    test "update_attendance/2 with invalid data returns error changeset" do
+      attendance = attendance_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_attendance(attendance, @invalid_attrs)
+      assert attendance == Affairs.get_attendance!(attendance.id)
+    end
+
+    test "delete_attendance/1 deletes the attendance" do
+      attendance = attendance_fixture()
+      assert {:ok, %Attendance{}} = Affairs.delete_attendance(attendance)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_attendance!(attendance.id) end
+    end
+
+    test "change_attendance/1 returns a attendance changeset" do
+      attendance = attendance_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_attendance(attendance)
+    end
+  end
+
+  describe "absent" do
+    alias School.Affairs.Absent
+
+    @valid_attrs %{absent_date: ~D[2010-04-17], reason: "some reason", student_id: 42}
+    @update_attrs %{absent_date: ~D[2011-05-18], reason: "some updated reason", student_id: 43}
+    @invalid_attrs %{absent_date: nil, reason: nil, student_id: nil}
+
+    def absent_fixture(attrs \\ %{}) do
+      {:ok, absent} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_absent()
+
+      absent
+    end
+
+    test "list_absent/0 returns all absent" do
+      absent = absent_fixture()
+      assert Affairs.list_absent() == [absent]
+    end
+
+    test "get_absent!/1 returns the absent with given id" do
+      absent = absent_fixture()
+      assert Affairs.get_absent!(absent.id) == absent
+    end
+
+    test "create_absent/1 with valid data creates a absent" do
+      assert {:ok, %Absent{} = absent} = Affairs.create_absent(@valid_attrs)
+      assert absent.absent_date == ~D[2010-04-17]
+      assert absent.reason == "some reason"
+      assert absent.student_id == 42
+    end
+
+    test "create_absent/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_absent(@invalid_attrs)
+    end
+
+    test "update_absent/2 with valid data updates the absent" do
+      absent = absent_fixture()
+      assert {:ok, absent} = Affairs.update_absent(absent, @update_attrs)
+      assert %Absent{} = absent
+      assert absent.absent_date == ~D[2011-05-18]
+      assert absent.reason == "some updated reason"
+      assert absent.student_id == 43
+    end
+
+    test "update_absent/2 with invalid data returns error changeset" do
+      absent = absent_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_absent(absent, @invalid_attrs)
+      assert absent == Affairs.get_absent!(absent.id)
+    end
+
+    test "delete_absent/1 deletes the absent" do
+      absent = absent_fixture()
+      assert {:ok, %Absent{}} = Affairs.delete_absent(absent)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_absent!(absent.id) end
+    end
+
+    test "change_absent/1 returns a absent changeset" do
+      absent = absent_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_absent(absent)
+    end
+  end
 end

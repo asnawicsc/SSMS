@@ -1,0 +1,47 @@
+<%= form_for @changeset, @action, fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= label f, :institution_id, class: "control-label" %>
+    <%= number_input f, :institution_id, class: "form-control" %>
+    <%= error_tag f, :institution_id %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :class_id, class: "control-label" %>
+    <%= number_input f, :class_id, class: "form-control" %>
+    <%= error_tag f, :class_id %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :student_id, class: "control-label" %>
+    <%= number_input f, :student_id, class: "form-control" %>
+    <%= error_tag f, :student_id %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :semester_id, class: "control-label" %>
+    <%= number_input f, :semester_id, class: "form-control" %>
+    <%= error_tag f, :semester_id %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :attendance_date, class: "control-label" %>
+    <%= date_select f, :attendance_date, class: "form-control" %>
+    <%= error_tag f, :attendance_date %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :mark_by, class: "control-label" %>
+    <%= text_input f, :mark_by, class: "form-control" %>
+    <%= error_tag f, :mark_by %>
+  </div>
+
+  <div class="form-group">
+    <%= submit "Submit", class: "btn btn-primary" %>
+  </div>
+<% end %>

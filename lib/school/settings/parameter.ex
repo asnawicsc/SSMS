@@ -13,6 +13,7 @@ defmodule School.Settings.Parameter do
     field :sickness, :binary
     field :transport, :binary
     field :institution_id, :integer
+      field :absent_reasons, :binary
 
     timestamps()
   end
@@ -20,7 +21,7 @@ defmodule School.Settings.Parameter do
   @doc false
   def changeset(parameter, attrs) do
     parameter
-    |> cast(attrs, [:institution_id, :nationality, :race, :religion, :blood_type, :transport, :sickness, :career, :oku])
+    |> cast(attrs, [:absent_reasons, :institution_id, :nationality, :race, :religion, :blood_type, :transport, :sickness, :career, :oku])
 
   end
 end

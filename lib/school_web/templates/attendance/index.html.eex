@@ -1,0 +1,16 @@
+<h2>Listing Attendance</h2>
+
+<% levels = Map.keys(@classes) %>
+
+<div class="row">
+  <%= for level <- levels do %>
+  <div class="col-md-3">
+    <%= level %>
+    <ol>
+      <%= for class <- @classes[level] do %>
+      <li><%= class.class %> <a href="/mark_attendance/<%= class.id%>">Mark Attendance</a></li>
+      <% end %>
+    </ol>
+  </div>
+  <% end %>
+</div>

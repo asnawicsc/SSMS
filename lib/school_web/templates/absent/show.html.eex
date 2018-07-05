@@ -1,0 +1,23 @@
+<h2>Show Absent</h2>
+
+<ul>
+
+  <li>
+    <strong>Student:</strong>
+    <%= @absent.student_id %>
+  </li>
+
+  <li>
+    <strong>Reason:</strong>
+    <%= @absent.reason %>
+  </li>
+
+  <li>
+    <strong>Absent date:</strong>
+    <%= @absent.absent_date %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: absent_path(@conn, :edit, @absent) %></span>
+<span><%= link "Back", to: absent_path(@conn, :index) %></span>

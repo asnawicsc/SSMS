@@ -28,8 +28,13 @@ defmodule SchoolWeb.ParameterController do
 
   def system_config(conn, %{"institution_id" => id}) do
     parameter = Repo.get_by(Parameter, institution_id: id)
-   
+   if parameter == nil do
+      conn
+      |> put_flash(:info, "Parameter have not been set yet.")
+      |> redirect(to: parameter_path(conn, :new))
+     else
     render(conn, "show.html", parameter: parameter)
+   end
   end
 
   def show(conn, %{"id" => id}) do

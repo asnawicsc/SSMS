@@ -73,7 +73,19 @@
 
   </div>
 </nav>
-<div class="single-item">
+<div class="single-item2">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="btn-group after_login" role="group" aria-label="dashboard">
+        <a href="/classes" class="btn btn-secondary">Classes</a>
+        <a href="/students" class="btn btn-secondary">Student</a>
+ 
+        <a href="/attendance" class="btn btn-secondary">Attendance</a>
+ 
+      </div>
+      
+    </div>
+  </div>
   <div class="row">
     <div class="col-lg-12">
       <div class="btn-group after_login" role="group" aria-label="dashboard">
@@ -87,21 +99,7 @@
       
     </div>
   </div>
-  <div class="row">
-    <div class="col-lg-12">
-      <div class="btn-group after_login" role="group" aria-label="dashboard">
-        <a href="/classes" class="btn btn-secondary">Classes</a>
-        <a href="/students" class="btn btn-secondary">Student</a>
-        <button type="button" class="btn btn-secondary">Teacher</button>
-        <button type="button" class="btn btn-secondary">Mark</button>
-        <button type="button" class="btn btn-secondary">Result</button>
-        <button type="button" class="btn btn-secondary">Attendance</button>
-        <button type="button" class="btn btn-secondary">UPSR</button>
-        <button type="button" class="btn btn-secondary">Co-curriculum</button>
-      </div>
-      
-    </div>
-  </div>
+
 
 
 </div>
@@ -109,5 +107,5 @@
 
 <script type="text/javascript">
   
-    $(".single-item").slick({ arrows: false });
+    $(".single-item2").slick({ arrows: false });
 </script>

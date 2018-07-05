@@ -54,6 +54,12 @@
   </div>
 
   <div class="form-group">
+    <%= label f, :absent_reasons, class: "control-label" %>
+    <%= text_input f, :absent_reasons, class: "form-control", "data-role": "tagsinput" %>
+    <%= error_tag f, :absent_reasons %>
+  </div>
+
+  <div class="form-group">
     <%= submit "Submit", class: "btn btn-primary" %>
   </div>
 <% end %>

@@ -496,4 +496,196 @@ defmodule School.Affairs do
   def inst_id(conn) do
      conn.private.plug_session["institution_id"]
   end
+
+  alias School.Affairs.Attendance
+
+  @doc """
+  Returns the list of attendance.
+
+  ## Examples
+
+      iex> list_attendance()
+      [%Attendance{}, ...]
+
+  """
+  def list_attendance do
+    Repo.all(Attendance)
+  end
+
+  @doc """
+  Gets a single attendance.
+
+  Raises `Ecto.NoResultsError` if the Attendance does not exist.
+
+  ## Examples
+
+      iex> get_attendance!(123)
+      %Attendance{}
+
+      iex> get_attendance!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_attendance!(id), do: Repo.get!(Attendance, id)
+
+  @doc """
+  Creates a attendance.
+
+  ## Examples
+
+      iex> create_attendance(%{field: value})
+      {:ok, %Attendance{}}
+
+      iex> create_attendance(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_attendance(attrs \\ %{}) do
+    %Attendance{}
+    |> Attendance.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a attendance.
+
+  ## Examples
+
+      iex> update_attendance(attendance, %{field: new_value})
+      {:ok, %Attendance{}}
+
+      iex> update_attendance(attendance, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_attendance(%Attendance{} = attendance, attrs) do
+    attendance
+    |> Attendance.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a Attendance.
+
+  ## Examples
+
+      iex> delete_attendance(attendance)
+      {:ok, %Attendance{}}
+
+      iex> delete_attendance(attendance)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_attendance(%Attendance{} = attendance) do
+    Repo.delete(attendance)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking attendance changes.
+
+  ## Examples
+
+      iex> change_attendance(attendance)
+      %Ecto.Changeset{source: %Attendance{}}
+
+  """
+  def change_attendance(%Attendance{} = attendance) do
+    Attendance.changeset(attendance, %{})
+  end
+
+  alias School.Affairs.Absent
+
+  @doc """
+  Returns the list of absent.
+
+  ## Examples
+
+      iex> list_absent()
+      [%Absent{}, ...]
+
+  """
+  def list_absent do
+    Repo.all(Absent)
+  end
+
+  @doc """
+  Gets a single absent.
+
+  Raises `Ecto.NoResultsError` if the Absent does not exist.
+
+  ## Examples
+
+      iex> get_absent!(123)
+      %Absent{}
+
+      iex> get_absent!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_absent!(id), do: Repo.get!(Absent, id)
+
+  @doc """
+  Creates a absent.
+
+  ## Examples
+
+      iex> create_absent(%{field: value})
+      {:ok, %Absent{}}
+
+      iex> create_absent(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_absent(attrs \\ %{}) do
+    %Absent{}
+    |> Absent.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a absent.
+
+  ## Examples
+
+      iex> update_absent(absent, %{field: new_value})
+      {:ok, %Absent{}}
+
+      iex> update_absent(absent, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_absent(%Absent{} = absent, attrs) do
+    absent
+    |> Absent.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a Absent.
+
+  ## Examples
+
+      iex> delete_absent(absent)
+      {:ok, %Absent{}}
+
+      iex> delete_absent(absent)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_absent(%Absent{} = absent) do
+    Repo.delete(absent)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking absent changes.
+
+  ## Examples
+
+      iex> change_absent(absent)
+      %Ecto.Changeset{source: %Absent{}}
+
+  """
+  def change_absent(%Absent{} = absent) do
+    Absent.changeset(absent, %{})
+  end
 end

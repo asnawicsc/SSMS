@@ -41,6 +41,10 @@
     <strong>Oku:</strong>
     <%= @parameter.oku %>
   </li>
+  <li>
+    <strong>absent_reasons:</strong>
+    <%= @parameter.absent_reasons %>
+  </li>
 
 </ul>
 

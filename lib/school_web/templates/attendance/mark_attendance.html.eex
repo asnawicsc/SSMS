@@ -1,0 +1,120 @@
+<% parameters = Repo.get_by(School.Settings.Parameter, institution_id: @conn.private.plug_session["institution_id"])
+  %>
+<% absent_reasons = parameters.absent_reasons |> String.split(",") %>
+
+<h4>Mark attendance for <%= @class.name%> on <%= Date.utc_today%></h4>
+
+<div class="row">
+	<div class="col-lg-4">
+		<div class="card">
+			<div class="card-header">Unmark Students</div>
+			<div class="card-body">
+				<ol class="unmark">
+				<%= for student <- @students do %>
+				<li student_id="<%= student.id %>"><%= student.name %></li>
+				<% end %>
+			  </ol>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-4">
+		<div class="card">
+			<div class="card-header">Selected Students</div>
+			<div class="card-body">
+				<ol  class="mark">
+				<%= for attended_student <- @attended_students do %>
+				<li student_id="<%= attended_student.id %>"><%= attended_student.name %></li>
+				<% end %>
+			  </ol>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-4">
+		<div class="card">
+			<div class="card-header">Absent Students</div>
+			<div class="card-body">
+				<form aria-label="absent_reasons">
+					
+				<table>
+		
+				<%= for student <- @students do %>
+					<tr student_id="<%= student.id %>">
+						
+						<td student_id="<%= student.id %>"><%= student.name %></td>
+						<td>
+							<select name="<%= student.id %>">
+							<option></option>
+							<%= for absent_reason <- absent_reasons do %>
+							<option value="<%= absent_reason%>"><%= absent_reason%></option>
+							<% end %>
+						</select>
+					</td>
+					</tr>
+				<% end %>
+						</table>
+				</form>
+		
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+		$("ol.unmark").on("click", "li", function(){
+
+			var li = $(this)
+			var student_id = $(this).attr("student_id")
+			$("tr[student_id='"+student_id+"']").hide()
+			$("ol.mark").append(li)
+			var class_id = location.pathname.split("/")[2]
+	    $.ajax({
+	      url: "/add_to_class_attendance",
+	      dataType: "json",
+	      data: { student_id: student_id, 
+	      	institute_id: window.currentInstitute, 
+	      	semester_id:  window.currentSemester,
+	      	class_id: class_id	}
+	    }).done(function(j) {
+	    $.notify({message: j.student+" "+j.action+" "+j.class},{type: j.type});
+	    })
+		})
+
+		$("ol.mark").on("click", "li", function(){
+
+			var li = $(this)
+			var student_id = $(this).attr("student_id")
+			$("tr[student_id='"+student_id+"']").show()
+			$("ol.mark").append(li)
+			var class_id = location.pathname.split("/")[2]
+	    $.ajax({
+	      url: "/add_to_class_attendance",
+	      dataType: "json",
+	      data: { student_id: student_id, 
+	      	institute_id: window.currentInstitute, 
+	      	semester_id:  window.currentSemester,
+	      	class_id: class_id	}
+	    }).done(function(j) {
+	    $.notify({message: j.student+" "+j.action+" "+j.class},{type: j.type});
+	    })
+
+			$("ol.unmark").append(li)
+		})
+
+$("form[aria-label='absent_reasons'] select").on("change", function(){
+			var class_id = location.pathname.split("/")[2]
+		
+	    $.ajax({
+	      url: "/add_to_class_absent",
+	      dataType: "json",
+	      data: { 
+	      	absent_reason: this.value,
+	      	student_id: this.name, 
+	      	institute_id: window.currentInstitute, 
+	      	semester_id:  window.currentSemester,
+	      	class_id: class_id	}
+	    }).done(function(j) {
+		    $.notify({message: j.student+" "+j.action+" "+j.class},{type: j.type});
+
+	    })
+})
+</script>

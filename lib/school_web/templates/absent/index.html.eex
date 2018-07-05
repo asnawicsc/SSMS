@@ -1,0 +1,30 @@
+<h2>Listing Absent</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Student</th>
+      <th>Reason</th>
+      <th>Absent date</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for absent <- @absent do %>
+    <tr>
+      <td><%= absent.student_id %></td>
+      <td><%= absent.reason %></td>
+      <td><%= absent.absent_date %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: absent_path(@conn, :show, absent), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: absent_path(@conn, :edit, absent), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: absent_path(@conn, :delete, absent), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Absent", to: absent_path(@conn, :new) %></span>

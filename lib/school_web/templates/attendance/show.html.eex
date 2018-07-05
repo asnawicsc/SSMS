@@ -1,0 +1,38 @@
+<h2>Show Attendance</h2>
+
+<ul>
+
+  <li>
+    <strong>Institution:</strong>
+    <%= @attendance.institution_id %>
+  </li>
+
+  <li>
+    <strong>Class:</strong>
+    <%= @attendance.class_id %>
+  </li>
+
+  <li>
+    <strong>Student:</strong>
+    <%= @attendance.student_id %>
+  </li>
+
+  <li>
+    <strong>Semester:</strong>
+    <%= @attendance.semester_id %>
+  </li>
+
+  <li>
+    <strong>Attendance date:</strong>
+    <%= @attendance.attendance_date %>
+  </li>
+
+  <li>
+    <strong>Mark by:</strong>
+    <%= @attendance.mark_by %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: attendance_path(@conn, :edit, @attendance) %></span>
+<span><%= link "Back", to: attendance_path(@conn, :index) %></span>

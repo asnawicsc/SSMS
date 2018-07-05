@@ -34,7 +34,12 @@ defmodule SchoolWeb.Router do
       get "/classes/:id/students",          ClassController,        :students
       get "/add_to_class_semester",         ClassController,        :add_to_class_semester
     resources "/student_classes",           StudentClassController
-
+    resources "/attendance",                AttendanceController
+     get "/mark_attendance/:class_id",      AttendanceController,   :mark_attendance
+      get "/add_to_class_attendance",         AttendanceController,        :add_to_class_attendance
+       get "/add_to_class_absent",         AttendanceController,        :add_to_class_absent
+  
+      resources "/absent", AbsentController
   end
 
   # Other scopes may use custom stacks.
