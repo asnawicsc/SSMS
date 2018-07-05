@@ -3,7 +3,7 @@ defmodule SchoolWeb.StudentController do
 
   alias School.Affairs
   alias School.Affairs.Student
-
+require IEx
   def index(conn, _params) do
     students = Repo.all(from s in Student, where: s.institution_id == ^conn.private.plug_session["institution_id"], order_by: [asc: s.name])
     render(conn, "index.html", students: students)
@@ -43,9 +43,21 @@ defmodule SchoolWeb.StudentController do
 
     case Affairs.update_student(student, student_params) do
       {:ok, student} ->
+        url = student_path(conn, :index, focus: student.id)
+        referer = conn.req_headers |> Enum.filter(fn x -> elem(x,0) == "referer" end)
+        if referer != [] do
+          refer = hd(referer) 
+          url = refer |> elem(1) |> String.split("?") |> List.first
+          conn
+          |> put_flash(:info, "#{student.name} updated successfully.")
+          |> redirect(external: url<>"?focus=#{student.id}")
+        else
+
         conn
         |> put_flash(:info, "#{student.name} updated successfully.")
-        |> redirect(to: student_path(conn, :index, focus: student.id))
+        |> redirect(to: url)
+        end
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", student: student, changeset: changeset)
     end

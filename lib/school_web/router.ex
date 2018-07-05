@@ -17,6 +17,7 @@ defmodule SchoolWeb.Router do
     pipe_through :browser # Use the default browser stack
 
       get "/",                              PageController,         :index
+      get "/operations",                    PageController,         :operations
     resources "/parameters",                ParameterController
       get "/system_config/:institution_id", ParameterController,    :system_config
     resources "/institutions",              InstitutionController

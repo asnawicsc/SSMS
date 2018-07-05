@@ -1,10 +1,12 @@
-<h3>Students in <%= @class.name %></h3>
+<h3>Students in <%= @class.name %>
+	
+<div class="btn btn-dark" aria-label="toggle_student_list">Manage students</div>
+</h3>
 
-
-<div class="row">
+<div class="row" aria-label="manage_student">
 	<div class="col-lg-6">
 		<div class="card ">
-			<div class="card-header">All Students</div>
+			<div class="card-header">All Students (Unassigned)</div>
 			<div class="card-body">
 				<ol class="unselected">
 				<%= for student <- @students do %>
@@ -27,8 +29,29 @@
 		</div>
 	</div>
 </div>
+<%= raw(@html)%>
 <script type="text/javascript">
 	$(document).ready(function(){
+
+
+		if (localStorage.getItem("toggle_student_list") == null) {
+			localStorage.setItem("toggle_student_list", "open")
+		}
+
+		if (localStorage.getItem("toggle_student_list") == "close") {
+			$("div[aria-label='manage_student']").hide()
+		}
+
+		$("div[aria-label='toggle_student_list']").click(function(){
+			$("div[aria-label='manage_student']").toggle("slide")
+			if (localStorage.getItem("toggle_student_list") == "close") {
+				localStorage.setItem("toggle_student_list", "open")
+			} else {
+				localStorage.setItem("toggle_student_list", "close")
+			}
+		})
+
+
 		$("ol.unselected").on("click", "li", function(){
 
 			var li = $(this)

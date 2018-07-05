@@ -28,4 +28,65 @@ defmodule School.Application do
     SchoolWeb.Endpoint.config_change(changed, removed)
     :ok
   end
+
+@member_map %{
+      name: "YONG CHUI MEI", 
+      chinese_name: "", 
+      phone: "no-phone",
+      email: "no-email",
+      ic_no: "880720-08-5291",  
+      membership_code: "KHS013"} 
+@loan_map %{
+  loan_params: %{
+
+    inventory_id: 100,
+    member_organization_id: 281,
+    loan_date: Date.utc_today,
+    return_date: Date.utc_today
+  }
+}
+
+@return_map %{
+  loan_params: %{
+    
+    inventory_id: 100,
+    member_organization_id: 281,
+  }
+}
+
+  def api(request_type) do
+       # uri<>"?scope=get_lib&lib_id=1",
+        # uri<>"?scope=get_books&cat_id=3&lib_id=1",
+         # uri<>"?scope=get_members&lib_id=1",
+
+         # uri<>"?scope=link_member&lib_id=1",
+         # uri<>"?scope=loan_book&lib_id=1",
+         # uri<>"?scope=return_loan&lib_id=1",
+    uri = "http://localhost:4000/api"
+    json_map = @return_map |> Poison.encode!
+     case request_type  do
+       "get" ->
+        HTTPoison.get!(
+          uri<>"?scope=get_members&lib_id=1",
+          [{"Content-Type", "application/json"}],
+          timeout: 50_000,
+          recv_timeout: 50_000
+        ).body |> Poison.decode!
+        "post" ->
+        
+        HTTPoison.post!(
+          uri<>"?scope=loan_book&lib_id=1",
+          json_map,
+          [{"Content-Type", "application/json"}],
+
+          timeout: 50_000,
+          recv_timeout: 50_000
+        )
+     end
+     # create an account and get api key from it...
+     # need to create an api that would call for the library and keep in institute model
+      # get the students member_organization
+      # student need to create account in li6rary by linking 
+  end
+
 end

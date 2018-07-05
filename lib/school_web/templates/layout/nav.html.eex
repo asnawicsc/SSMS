@@ -73,18 +73,41 @@
 
   </div>
 </nav>
-<div class="row">
-  <div class="col-lg-12">
-    <div class="btn-group after_login" role="group" aria-label="dashboard">
-      <a href="/classes" class="btn btn-secondary">Classes</a>
-      <a href="/students" class="btn btn-secondary">Student</a>
-      <button type="button" class="btn btn-secondary">Teacher</button>
-      <button type="button" class="btn btn-secondary">Mark</button>
-      <button type="button" class="btn btn-secondary">Result</button>
-      <button type="button" class="btn btn-secondary">Attendance</button>
-      <button type="button" class="btn btn-secondary">UPSR</button>
-      <button type="button" class="btn btn-secondary">Co-curriculum</button>
+<div class="single-item">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="btn-group after_login" role="group" aria-label="dashboard">
+        <button type="button" class="btn btn-warning api" call="get_lib">Book List by Categories</button>
+        <button type="button" class="btn btn-warning api">New Book</button>
+        <button type="button" class="btn btn-warning api" call="get_loans">Loan List</button>
+        <button type="button" class="btn btn-warning api">New Loans</button>
+        <button type="button" class="btn btn-warning api">Returns</button>
+
+      </div>
+      
     </div>
-    
   </div>
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="btn-group after_login" role="group" aria-label="dashboard">
+        <a href="/classes" class="btn btn-secondary">Classes</a>
+        <a href="/students" class="btn btn-secondary">Student</a>
+        <button type="button" class="btn btn-secondary">Teacher</button>
+        <button type="button" class="btn btn-secondary">Mark</button>
+        <button type="button" class="btn btn-secondary">Result</button>
+        <button type="button" class="btn btn-secondary">Attendance</button>
+        <button type="button" class="btn btn-secondary">UPSR</button>
+        <button type="button" class="btn btn-secondary">Co-curriculum</button>
+      </div>
+      
+    </div>
+  </div>
+
+
 </div>
+
+
+<script type="text/javascript">
+  
+    $(".single-item").slick({ arrows: false });
+</script>

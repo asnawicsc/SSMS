@@ -26,7 +26,7 @@ defmodule SchoolWeb.ClassController do
   end
 
   def students(conn, params) do
-    students = Repo.all(from s in School.Affairs.Student, where: s.institution_id == ^School.Affairs.inst_id(conn), select: %{name: s.name, id: s.id} )
+    students = Repo.all(from s in School.Affairs.Student, where: s.institution_id == ^School.Affairs.inst_id(conn), select: %{chinese_name: s.chinese_name, name: s.name, id: s.id} )
     # list of all students
 
     # list of all students in this class, in this semester using student class
@@ -34,16 +34,25 @@ defmodule SchoolWeb.ClassController do
     students_in = Repo.all(from s in School.Affairs.StudentClass, left_join: t in School.Affairs.Student, on: t.id == s.sudent_id, where: 
       s.institute_id == ^School.Affairs.inst_id(conn) and 
       s.semester_id == ^conn.private.plug_session["semester_id"] and
-      s.class_id == ^String.to_integer(params["id"]), select: %{name: t.name, id: t.id})
+      s.class_id == ^String.to_integer(params["id"]), select: %{chinese_name: t.chinese_name, name: t.name, id: t.id})
 
-    students_in_out = Repo.all(from s in School.Affairs.StudentClass, left_join: t in School.Affairs.Student, on: t.id == s.sudent_id, where: 
+    students_unassigned = Repo.all(from s in School.Affairs.StudentClass, left_join: t in School.Affairs.Student, on: t.id == s.sudent_id, where: 
       s.institute_id == ^School.Affairs.inst_id(conn) and 
-      s.semester_id == ^conn.private.plug_session["semester_id"] , select: %{name: t.name, id: t.id})
+      s.semester_id == ^conn.private.plug_session["semester_id"] , select: %{chinese_name: t.chinese_name, name: t.name, id: t.id})
 
 
-    rem = students -- students_in_out
+    rem = students -- students_unassigned
     class = Repo.get(Class, params["id"])
-    render(conn, "students.html", students: rem, class: class, students_in: students_in)
+
+    html =
+      Phoenix.View.render_to_string(
+        SchoolWeb.StudentView,
+        "index.html",
+        students: students_in, 
+        conn: conn
+      )
+
+    render(conn, "students.html", students: rem, class: class, students_in: students_in, html: html)
   end
   def index(conn, _params) do
     classes = Affairs.list_classes(conn.private.plug_session["institution_id"])
