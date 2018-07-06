@@ -3,6 +3,7 @@ defmodule SchoolWeb.ParameterController do
 
   alias School.Settings
   alias School.Settings.Parameter
+  require IEx
 
   def index(conn, _params) do
     parameters = Settings.list_parameters()
@@ -10,17 +11,34 @@ defmodule SchoolWeb.ParameterController do
   end
 
   def new(conn, _params) do
-    changeset = Settings.change_parameter(%Parameter{})
+    changeset =
+      Settings.change_parameter(%Parameter{
+        blood_type: "A, B, C, D",
+        career: "Headmaster, Teacher",
+        nationality: "Malaysian",
+        oku: "None",
+        race: "Malay, Chinese, Indian, Others",
+        religion: "Islam, Christian, Buddhism, Hinduism",
+        sickness: "Fever",
+        transport: "Public Bus, Private Car, School Bus, Private Bus",
+        absent_reasons: "Lewat, Ponteng, Sakit, Wakil Sekolah, Kebenaran Bersebab"
+      })
+
     render(conn, "new.html", changeset: changeset)
   end
 
   def create(conn, %{"parameter" => parameter_params}) do
-    parameter_params = Map.put(parameter_params, "institution_id", conn.private.plug_session["institution_id"])
+    parameter_params =
+      Map.put(parameter_params, "institution_id", conn.private.plug_session["institution_id"])
+
+    IEx.pry()
+
     case Settings.create_parameter(parameter_params) do
       {:ok, parameter} ->
         conn
         |> put_flash(:info, "Parameter created successfully.")
         |> redirect(to: parameter_path(conn, :show, parameter))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
@@ -28,13 +46,14 @@ defmodule SchoolWeb.ParameterController do
 
   def system_config(conn, %{"institution_id" => id}) do
     parameter = Repo.get_by(Parameter, institution_id: id)
-   if parameter == nil do
+
+    if parameter == nil do
       conn
       |> put_flash(:info, "Parameter have not been set yet.")
       |> redirect(to: parameter_path(conn, :new))
-     else
-    render(conn, "show.html", parameter: parameter)
-   end
+    else
+      render(conn, "show.html", parameter: parameter)
+    end
   end
 
   def show(conn, %{"id" => id}) do
@@ -50,12 +69,16 @@ defmodule SchoolWeb.ParameterController do
 
   def update(conn, %{"id" => id, "parameter" => parameter_params}) do
     parameter = Settings.get_parameter!(id)
-    parameter_params = Map.put(parameter_params, "institution_id", conn.private.plug_session["institution_id"])
+
+    parameter_params =
+      Map.put(parameter_params, "institution_id", conn.private.plug_session["institution_id"])
+
     case Settings.update_parameter(parameter, parameter_params) do
       {:ok, parameter} ->
         conn
         |> put_flash(:info, "Parameter updated successfully.")
         |> redirect(to: parameter_path(conn, :show, parameter))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", parameter: parameter, changeset: changeset)
     end

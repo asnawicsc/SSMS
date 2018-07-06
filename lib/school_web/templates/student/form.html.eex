@@ -52,6 +52,11 @@
   </div>
   <div class="form-row">
   <div class="form-group col-md-2">
+    <%= label f, :b_cert, class: "" %>
+    <%= text_input f, :b_cert, class: "form-control" %>
+    <%= error_tag f, :b_cert %>
+  </div>
+  <div class="form-group col-md-2">
     <%= label f, :race, class: "" %>
     <%= select f, :race, race, class: "form-control" %>
     <%= error_tag f, :race %>
@@ -175,6 +180,11 @@
     <%= label f, :institution_id, class: "" %>
     <%= select f, :institution_id, institutes, class: "form-control" %>
     <%= error_tag f, :institution_id %>
+  </div>
+  <div class="form-group col-md-3">
+    <%= label f, :student_no, class: "" %>
+    <%= text_input f, :student_no, class: "form-control" %>
+    <%= error_tag f, :student_no %>
   </div>
 </div>
   <div class="form-group ">

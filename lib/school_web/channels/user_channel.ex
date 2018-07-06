@@ -1,8 +1,9 @@
 defmodule SchoolWeb.UserChannel do
   use SchoolWeb, :channel
-require IEx
-alias School.Affairs
-  def join("user:"<>user_id, payload, socket) do
+  require IEx
+  alias School.Affairs
+
+  def join("user:" <> user_id, payload, socket) do
     if authorized?(payload) do
       {:ok, socket}
     else
@@ -10,6 +11,13 @@ alias School.Affairs
     end
   end
 
+  def handle_in("load_footer", payload, socket) do
+    id = payload["inst_id"]
+    inst = Repo.get(School.Settings.Institution, id)
+
+    broadcast(socket, "show_footer", %{logo_bin: inst.logo_bin, maintain: inst.maintained_by})
+    {:noreply, socket}
+  end
 
   def handle_in("inquire_student_details", payload, socket) do
     id = payload["student_id"]
@@ -17,8 +25,8 @@ alias School.Affairs
     student = Affairs.get_student!(id)
     changeset = Affairs.change_student(student)
 
-
     conn = %{private: %{plug_session: %{"institution_id" => user.institution_id}}}
+
     html =
       Phoenix.View.render_to_string(
         SchoolWeb.StudentView,
@@ -28,8 +36,9 @@ alias School.Affairs
         conn: conn,
         action: "/students/#{student.id}"
       )
-    csrf = Phoenix.Controller.get_csrf_token
-    broadcast socket, "show_student_details", %{html: html, csrf: csrf}
+
+    csrf = Phoenix.Controller.get_csrf_token()
+    broadcast(socket, "show_student_details", %{html: html, csrf: csrf})
     {:noreply, socket}
   end
 

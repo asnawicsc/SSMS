@@ -1,5 +1,5 @@
 <h2>New Institution</h2>
 
-<%= render "form.html", Map.put(assigns, :action, institution_path(@conn, :create)) %>
+<%= render "form.html", action: institution_path(@conn, :create), changeset: @changeset, bin: "" %>
 
 <span><%= link "Back", to: institution_path(@conn, :index) %></span>

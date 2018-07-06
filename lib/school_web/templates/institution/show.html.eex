@@ -59,18 +59,9 @@
 
   <li>
     <strong>Fax:</strong>
-    <%= @institution.fax %>
+    <%= @institution.maintained_by %>
   </li>
 
-  <li>
-    <strong>Logo bin:</strong>
-    <%= @institution.logo_bin %>
-  </li>
-
-  <li>
-    <strong>Logo filename:</strong>
-    <%= @institution.logo_filename %>
-  </li>
 
 </ul>
 

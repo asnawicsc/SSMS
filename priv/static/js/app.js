@@ -28,7 +28,36 @@ $(document).ready(function(){
   if (window.currentUser == "lobby") {
     $("nav.after_login").hide()
      $("div.after_login").hide()
+  } else {
+    if (localStorage.getItem("logo_bin") == null) {
+
+      channel.push("load_footer", {inst_id: window.currentInstitute})
+    }
   };
+
+
+if (localStorage.getItem("logo_bin") != null) {
+  var bin = localStorage.getItem("logo_bin")
+  var img = "   <img id='school_logo' style='float:left; width:auto; height: 100px;' src='data:image/png;base64, "+bin+"'>"
+$("footer").append(img)
+}
+
+if (localStorage.getItem("maintain") != null) {
+  var bin = localStorage.getItem("maintain")
+  var maintain =  "<p style='padding-top: 40px; float:left;'>Support by "+bin+"</p>"
+$("footer").append(maintain)
+}
+
+  channel.on("show_footer", payload => {
+    localStorage.setItem("logo_bin", payload.logo_bin)
+    localStorage.setItem("maintain", payload.maintain)
+      var bin = localStorage.getItem("logo_bin")
+      var img = "   <img id='school_logo' style='float:left; width:auto; height: 100px;' src='data:image/png;base64, "+bin+"'>"
+    $("footer").append(img)
+      var bin = localStorage.getItem("maintain")
+      var maintain = "<p style='padding-top: 40px; float:left;'>Support by "+bin+"</p>"
+    $("footer").append(maintain)
+  })
 
   $("div.student").click(function(){
     var student_id = $(this).attr("id")
@@ -39,5 +68,10 @@ $(document).ready(function(){
     $("div[aria-label='student_details']").html(payload.html)
     var csrf = window.csrf
     $("input[name='_csrf_token']").val(csrf)
+  })
+
+  $("a[href='/logout']").click(function(){
+    localStorage.removeItem("maintain")
+    localStorage.removeItem("logo_bin")
   })
 })

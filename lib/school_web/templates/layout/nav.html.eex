@@ -16,6 +16,7 @@
           <a class="dropdown-item" href="/institutions/<%= @conn.private.plug_session["institution_id"]%>">School Profile</a>
           <a class="dropdown-item" href="/users/<%= @conn.private.plug_session["user_id"]%>">User Account</a>
           <a class="dropdown-item" href="/system_config/<%= @conn.private.plug_session["institution_id"]%>">System Configuration</a>
+          <a class="dropdown-item" href="/semesters">Semesters</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="#">Register Student</a>
           <a class="dropdown-item" href="#">Student History</a>
