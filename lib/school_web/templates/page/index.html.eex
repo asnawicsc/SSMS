@@ -1,7 +1,10 @@
 <h3>Current semester: </h3> <%= @current_sem.start_date %> - <%= @current_sem.end_date %> 
+<div class="table-responsive">
+	
 <table class="table" aria-label="result">
 	
 </table>
+</div>
 <script type="text/javascript">
 	
 $("button.api").click(function(){

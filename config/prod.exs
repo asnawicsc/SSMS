@@ -15,7 +15,7 @@ use Mix.Config
 # which you typically run after static files are built.
 config :school, SchoolWeb.Endpoint,
   http: [port: 80],
-  url: [host: "139.99.102.57", port: 80]
+  url: [host: "sm.resertech.com", port: 80]
 
 
 # Do not print debug messages in production
