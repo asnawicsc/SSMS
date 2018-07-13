@@ -66,5 +66,5 @@
 </ul>
 
 <span><%= link "Set System Settings", to: parameter_path(@conn, :new), class: "btn btn-primary" %></span>
-
+<span><%= link "Edit", to: institution_path(@conn, :edit, @institution.id), class: "btn btn-info" %></span>
 <span><%= link "Back", to: institution_path(@conn, :index) %></span>

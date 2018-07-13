@@ -31,6 +31,7 @@ defmodule SchoolWeb.InstitutionController do
   def create(conn, %{"institution" => institution_params}) do
     image_params = institution_params["image1"]
     result = upload(image_params)
+
     institution_params = Map.put(institution_params, "logo_bin", result.bin)
     institution_params = Map.put(institution_params, "logo_filename", result.filename)
 
@@ -65,7 +66,7 @@ defmodule SchoolWeb.InstitutionController do
     resized = Mogrify.open(absolute_path) |> resize("200x200") |> save(path: absolute_path_bin)
     {:ok, bin} = File.read(resized.path)
 
-    File.rm(resized.path)
+    # File.rm(resized.path)
 
     %{filename: seconds <> fl, bin: Base.encode64(bin)}
   end
@@ -83,6 +84,11 @@ defmodule SchoolWeb.InstitutionController do
 
   def update(conn, %{"id" => id, "institution" => institution_params}) do
     institution = Settings.get_institution!(id)
+    image_params = institution_params["image1"]
+    result = upload(image_params)
+
+    institution_params = Map.put(institution_params, "logo_bin", result.bin)
+    institution_params = Map.put(institution_params, "logo_filename", result.filename)
 
     case Settings.update_institution(institution, institution_params) do
       {:ok, institution} ->
