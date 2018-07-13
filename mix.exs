@@ -20,7 +20,7 @@ defmodule School.Mixfile do
   def application do
     [
       mod: {School.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :iconv]
     ]
   end
 
@@ -49,7 +49,8 @@ defmodule School.Mixfile do
       {:comeonin, "~> 4.0"},
       {:bcrypt_elixir, "~> 0.12"},
       {:httpoison, "~> 1.0"},
-      {:codepagex, "~> 0.1.4"}
+      {:codepagex, "~> 0.1.4"},
+      {:iconv, "~> 1.0.0"}
     ]
   end
 

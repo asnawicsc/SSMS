@@ -2,44 +2,57 @@ defmodule SchoolWeb.Router do
   use SchoolWeb, :router
 
   pipeline :browser do
-    plug :accepts, ["html"]
-    plug :fetch_session
-    plug :fetch_flash
-    plug :protect_from_forgery
-    plug :put_secure_browser_headers
+    plug(:accepts, ["html"])
+    plug(:fetch_session)
+    plug(:fetch_flash)
+    plug(:protect_from_forgery)
+    plug(:put_secure_browser_headers)
   end
 
   pipeline :api do
-    plug :accepts, ["json"]
+    plug(:accepts, ["json"])
+  end
+
+  pipeline :splash_layout do
+    plug(:put_layout, {SchoolWeb.LayoutView, :splash_page})
   end
 
   scope "/", SchoolWeb do
-    pipe_through :browser # Use the default browser stack
+    # Use the default browser stack
+    pipe_through([:browser, :splash_layout])
+    get("/", PageController, :index)
+  end
 
-      get "/",                              PageController,         :index
-      get "/operations",                    PageController,         :operations
-    resources "/parameters",                ParameterController
-      get "/system_config/:institution_id", ParameterController,    :system_config
-    resources "/institutions",              InstitutionController
-      get "/institutions/:id/select",       InstitutionController,  :select
-    resources "/users",                     UserController
-      get "/login",                         UserController,         :login
-      post "/authenticate",                 UserController,         :authenticate
-      post "/create_user",                  UserController,         :create_user
-      get "/logout",                        UserController,         :logout
-    resources "/students",                  StudentController
-    resources "/levels",                    LevelController
-    resources "/semesters",                 SemesterController
-    resources "/classes",                   ClassController
-      get "/classes/:id/students",          ClassController,        :students
-      get "/add_to_class_semester",         ClassController,        :add_to_class_semester
-    resources "/student_classes",           StudentClassController
-    resources "/attendance",                AttendanceController
-     get "/mark_attendance/:class_id",      AttendanceController,   :mark_attendance
-      get "/add_to_class_attendance",         AttendanceController,        :add_to_class_attendance
-       get "/add_to_class_absent",         AttendanceController,        :add_to_class_absent
-  
-      resources "/absent", AbsentController
+  scope "/", SchoolWeb do
+    # Use the default browser stack
+    pipe_through(:browser)
+
+    get("/dashboard", PageController, :dashboard)
+    get("/operations", PageController, :operations)
+    resources("/parameters", ParameterController)
+    get("/system_config/:institution_id", ParameterController, :system_config)
+    resources("/institutions", InstitutionController)
+    get("/institutions/:id/select", InstitutionController, :select)
+    resources("/users", UserController)
+    get("/login", UserController, :login)
+    post("/authenticate", UserController, :authenticate)
+    post("/create_user", UserController, :create_user)
+    get("/logout", UserController, :logout)
+    resources("/students", StudentController)
+    post("/upload_students", StudentController, :upload_students)
+    resources("/levels", LevelController)
+    resources("/semesters", SemesterController)
+    resources("/classes", ClassController)
+    get("/classes/:id/students", ClassController, :students)
+    get("/add_to_class_semester", ClassController, :add_to_class_semester)
+    resources("/student_classes", StudentClassController)
+    get("/attendance/report", AttendanceController, :attendance_report)
+    resources("/attendance", AttendanceController)
+    get("/mark_attendance/:class_id", AttendanceController, :mark_attendance)
+    get("/add_to_class_attendance", AttendanceController, :add_to_class_attendance)
+    get("/add_to_class_absent", AttendanceController, :add_to_class_absent)
+
+    resources("/absent", AbsentController)
   end
 
   # Other scopes may use custom stacks.

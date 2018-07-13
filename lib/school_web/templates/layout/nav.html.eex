@@ -1,5 +1,5 @@
 <nav class="navbar  navbar-expand-lg navbar-light bg-light after_login">
-  <a class="navbar-brand" href="/">Student Affairs System</a>
+  <a class="navbar-brand" href="/dashboard">21st Smart School Management System</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -18,7 +18,7 @@
           <a class="dropdown-item" href="/system_config/<%= @conn.private.plug_session["institution_id"]%>">System Configuration</a>
           <a class="dropdown-item" href="/semesters">Semesters</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Register Student</a>
+          <a class="dropdown-item" href="/students/new">Register Student</a>
           <a class="dropdown-item" href="#">Student History</a>
         </div>
       </li>
@@ -28,11 +28,11 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href="#">Mark Sheet</a>
-          <a class="dropdown-item" href="#">Attendance</a>
+          <a class="dropdown-item" href="/attendance">Attendance</a>
           <a class="dropdown-item" href="#">Student Comment</a>
           <a class="dropdown-item" href="#">Health Weight</a>
           <a class="dropdown-item" href="#">Student Fees</a>
-          <a class="dropdown-item" href="#">Segak</a>
+         
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="#">Exclude Rank</a>
           <a class="dropdown-item" href="#">Next Year Class</a>
@@ -40,7 +40,7 @@
           <a class="dropdown-item" href="#">Co-curriculum</a>
            <div class="dropdown-divider"></div>
            <a class="dropdown-item" href="#">Teacher</a>
-           <a class="dropdown-item" href="#">Project Nilam</a>
+        
            
         </div>
 

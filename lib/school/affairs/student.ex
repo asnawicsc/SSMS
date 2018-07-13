@@ -82,8 +82,6 @@ defmodule School.Affairs.Student do
       :race,
       :religion,
       :nationality,
-      :transport,
-      :blood_type,
       :institution_id
     ])
   end

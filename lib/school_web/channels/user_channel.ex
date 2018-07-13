@@ -19,6 +19,25 @@ defmodule SchoolWeb.UserChannel do
     {:noreply, socket}
   end
 
+  def handle_in("load_absent_reasons", payload, socket) do
+    absent =
+      Repo.all(
+        from(
+          a in Absent,
+          where: a.absent_date == ^Date.utc_today() and a.student_id == ^payload["student_id"]
+        )
+      )
+
+    if absent != [] do
+      broadcast(socket, "show_reasons", %{
+        student_id: hd(absent).student_id,
+        reason: hd(absent).reason
+      })
+    end
+
+    {:noreply, socket}
+  end
+
   def handle_in("inquire_student_details", payload, socket) do
     id = payload["student_id"]
     user = Repo.get(School.Settings.User, payload["user_id"])

@@ -42,7 +42,7 @@
 						
 						<td student_id="<%= student.id %>"><%= student.name %></td>
 						<td>
-							<select name="<%= student.id %>">
+							<select name="<%= student.id %>" class="late">
 							<option></option>
 							<%= for absent_reason <- absent_reasons do %>
 							<option value="<%= absent_reason%>"><%= absent_reason%></option>
@@ -117,4 +117,16 @@ $("form[aria-label='absent_reasons'] select").on("change", function(){
 
 	    })
 })
+
+
+	$("select.late").each(function(){
+
+	var id = $(this).attr("name")
+	channel.push("load_absent_reasons", {student_id: id})
+	})
+
+	channel.on("show_reasons", payload=> {
+
+		$("select[name='"+payload.student_id+"']").val(payload.reason)
+	})
 </script>

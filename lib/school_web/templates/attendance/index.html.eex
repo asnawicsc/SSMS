@@ -1,3 +1,4 @@
+<% semesters = Repo.all( School.Affairs.Semester) %>
 <h2>Listing Attendance</h2>
 
 <% levels = Map.keys(@classes) %>
@@ -13,4 +14,59 @@
     </ol>
   </div>
   <% end %>
+</div>
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header">Attendance Report Generator</div>
+      <div class="card-body">
+        <form method="get" action="/attendance/report">
+          <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+          <div class="form-row">
+              <div class="form-group col-md-3">
+                <select name="semester">
+                  <%= for semester <- semesters do %>
+                  <option value="<%= semester.id%>"><%= semester.start_date%> -  <%= semester.end_date%></option>
+                  <% end %>
+                </select>
+              </div>
+              <div class="form-group col-md-3">
+                <select name="class">
+                  <%= for level <- levels do %>
+        
+                   
+              
+                      <%= for class <- @classes[level] do %>
+                         <option value="<%= class.id %>">
+                            <%= level %> - <%= class.class %> 
+                           
+                         </option>
+                      <% end %>
+              
+            
+                  <% end %>
+               
+                </select>
+
+              </div>
+              <div class="form-group col-md-2">
+                <select name="month">
+                    <option value="7">July</option>
+               
+                </select>
+                
+              </div>
+              <div class="form-group col-md-2">
+                <select name="year">
+                    <option value="2018">2018</option>
+               
+                </select>
+                
+              </div>
+          </div>
+          <input type="submit" name="" value="Generate">
+        </form>
+      </div>
+    </div>
+  </div>
 </div>

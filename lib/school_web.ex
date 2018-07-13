@@ -23,15 +23,18 @@ defmodule SchoolWeb do
       import Plug.Conn
       import SchoolWeb.Router.Helpers
       import SchoolWeb.Gettext
-            import Ecto.Query
+      import Ecto.Query
       alias School.Repo
+      alias School.Affairs
+      alias School.Affairs.{Absent, Semester, StudentClass, Class, Attendance, Level, Student}
     end
   end
 
   def view do
     quote do
-      use Phoenix.View, root: "lib/school_web/templates",
-                        namespace: SchoolWeb
+      use Phoenix.View,
+        root: "lib/school_web/templates",
+        namespace: SchoolWeb
 
       # Import convenience functions from controllers
       import Phoenix.Controller, only: [get_flash: 2, view_module: 1]
@@ -44,6 +47,8 @@ defmodule SchoolWeb do
       import SchoolWeb.Gettext
       import Ecto.Query
       alias School.Repo
+      alias School.Affairs
+      alias School.Affairs.{Absent, Semester, StudentClass, Class, Attendance, Level, Student}
     end
   end
 
@@ -59,8 +64,10 @@ defmodule SchoolWeb do
     quote do
       use Phoenix.Channel
       import SchoolWeb.Gettext
-            import Ecto.Query
+      import Ecto.Query
       alias School.Repo
+      alias School.Affairs
+      alias School.Affairs.{Absent, Semester, StudentClass, Class, Attendance, Level, Student}
     end
   end
 

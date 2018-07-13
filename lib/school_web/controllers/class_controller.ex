@@ -53,7 +53,8 @@ defmodule SchoolWeb.ClassController do
         from(
           s in School.Affairs.Student,
           where: s.institution_id == ^School.Affairs.inst_id(conn),
-          select: %{chinese_name: s.chinese_name, name: s.name, id: s.id}
+          select: %{chinese_name: s.chinese_name, name: s.name, id: s.id},
+          order_by: [s.name]
         )
       )
 

@@ -1,0 +1,219 @@
+
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-12" style="width: 100%;">
+
+            <table style="float: left;" class="table-striped">
+
+              <tr>
+                <th>Dates<br>Students</th>
+         
+              </tr>
+
+              <%= for student <- @students do %>
+
+                <tr>
+                  <td>
+                    	<div style="margin-top: 3px; margin-bottom: 3px;">
+                  
+       								<%= student.name%>
+                      </div>
+                    </td>
+
+                </tr>
+
+                <% end %>
+              <tr>
+                <th>Students</th>
+              </tr>
+              <tr>
+                <th>Absents</th>
+              </tr>
+              <tr>
+                <th>Presents</th>
+              </tr>
+              <tr>
+                <th>Total</th>
+              </tr>
+
+            </table>
+
+            <div style="overflow-x: scroll;overflow-y: hidden;">
+
+              <table style="margin-left: 20px; width: 100%;" class="table-striped">
+
+              		<% dates = Timex.Interval.new(from: @start_date, until: @end_date, left_open: false, right_open: false) %>
+              		<% all_dates = Enum.map(dates, fn x -> NaiveDateTime.to_date(x) end ) %>
+                <tr>
+                  <%= for date <- dates do %>
+                  <% weekday = Elixir.Timex.weekday(NaiveDateTime.to_date(date)) %>
+		                  <%= if weekday == 6 or weekday == 7 do %>
+			                  <th style="width: 200px; text-align: center; color: blue;"><%= date.month %>/<%= date.day %></th>
+		                  <% else %>
+		                    <th style="width: 200px; text-align: center;"><%= date.month %>/<%= date.day %></th>
+                    	<% end %>
+                    <% end %>
+                    <td style="width: 400px; text-align: center;">This Month</td>
+                    <td style="width: 400px; text-align: center;">Last Month</td>
+                    <td style="width: 400px; text-align: center;">Total</td>
+                </tr>
+	              <%= for student <- @students do %>
+
+	                <tr>
+	                  <%= for date <- dates do %>
+	                    <td style="width: 200px; text-align: center;">
+	                    	<div style="margin-top: 3px; margin-bottom: 3px;">
+	                    	<%
+
+	                    	student_ids = Enum.filter(@attendance, fn x -> x.attendance_date == NaiveDateTime.to_date(date) end)
+	                    	if student_ids != [] do
+	                    	  
+	                    	student_ids = hd(student_ids).student_id |> String.split(",")
+	                      else
+	                    	student_ids = []
+	                    	end
+
+	                    	%>
+
+
+	                  		<%= if Enum.any?(student_ids, fn x -> x == Integer.to_string(student.sudent_id) end) do  %>
+	                  		1
+	                  		<% else %>
+	                  		<% a = Repo.get_by(Absent, absent_date: NaiveDateTime.to_date(date), student_id: Integer.to_string(student.sudent_id))   %>
+
+		                  		<%= if a != nil do %>
+	                  		<span style="color: red;">
+		                  		<%= a.reason |> String.split() |> hd() |> String.split("") |> Enum.reject(fn x -> x == ""end) |> hd()  %>
+
+		                  	</span>
+		                  		<% else %>
+		                  		.
+		                  		<% end %>
+	                  		<% end %>
+	                  		</div>
+	                    </td>
+	                    <% end %>
+	                    <td style="width: 400px; text-align: center;">
+	                    	<%= Repo.all(from a in Absent, where: a.absent_date in ^all_dates and a.student_id == ^Integer.to_string(student.sudent_id)) |> Enum.count()  %>
+
+	                    </td>
+	                    <td style="width: 400px; text-align: center;">
+	                    </td>
+	                    <td style="width: 400px; text-align: center;">
+	                    </td>
+	                </tr>
+
+	                <% end %>
+
+	                <%# this row is dates  %>
+	                <tr>
+              		
+                  <%= for date <- dates do %>
+                  <% weekday = Elixir.Timex.weekday(NaiveDateTime.to_date(date)) %>
+		                  <%= if weekday == 6 or weekday == 7 do %>
+			                  <th style="width: 200px; text-align: center; color: blue;"><%= date.month %>/<%= date.day %></th>
+		                  <% else %>
+		                    <th style="width: 200px; text-align: center;"><%= date.month %>/<%= date.day %></th>
+                    	<% end %>
+                    <% end %>
+	                    <td style="width: 400px; text-align: center;">
+	                    </td>
+	                    <td style="width: 400px; text-align: center;">
+	                    </td>
+	                    <td style="width: 400px; text-align: center;">
+	                    </td>
+                  </tr>
+         
+                  <%# this row is absent  %>
+                  <tr>
+              		
+                  <%= for date <- dates do %>
+                  <% weekday = Elixir.Timex.weekday(NaiveDateTime.to_date(date)) %>
+		                  <td style="width: 200px; text-align: center;">
+		                  	<%= Repo.all(from a in Absent, where: a.absent_date ==^ NaiveDateTime.to_date(date)) |> Enum.count()   %>
+		                  		
+		                  </td>
+                    <% end %>
+                    	<td style="width: 400px; text-align: center;">
+                    		<%= Repo.all(from a in Absent, where: a.absent_date in ^all_dates and a.class_id == ^@class.id) |> Enum.count()  %>
+	                    </td>
+	                    <td style="width: 400px; text-align: center;">
+	                    </td>
+	                    <td style="width: 400px; text-align: center;">
+	                    </td>
+                  </tr>
+
+                  <%# this row is present  %>
+                  <tr>
+              		
+                  <%= for date <- dates do %>
+                  <% weekday = Elixir.Timex.weekday(NaiveDateTime.to_date(date)) %>
+		                  <td style="width: 200px; text-align: center;">
+		                  	<%
+
+	                    	student_ids = Enum.filter(@attendance, fn x -> x.attendance_date == NaiveDateTime.to_date(date) end)
+	                    	if student_ids != [] do
+	                    	  
+	                    	student_ids = hd(student_ids).student_id |> String.split(",")
+	                      else
+	                    	student_ids = []
+	                    	end
+
+	                    	%>
+		                  		<%= Enum.count(student_ids)%>
+		                  </td>
+                    <% end %>
+                   	  <td style="width: 400px; text-align: center;">
+                   	  	<%=
+                   	  	Enum.map(@attendance, fn x -> String.split(x.student_id, ",") end) |> List.flatten |> Enum.reject(fn x -> x == "" end) |> Enum.count()
+                   	  	%>
+	                    </td>
+	                    <td style="width: 400px; text-align: center;">
+	                    </td>
+	                    <td style="width: 400px; text-align: center;">
+	                    </td>
+                  </tr>
+
+                  <%# this row is total  %>
+                  <tr> 
+              		
+                  <%= for date <- dates do %>
+                  <% weekday = Elixir.Timex.weekday(NaiveDateTime.to_date(date)) %>
+		                  <td style="width: 200px; text-align: center;">
+		                  	<%
+
+	                    	student_ids = Enum.filter(@attendance, fn x -> x.attendance_date == NaiveDateTime.to_date(date) end)
+	                    	if student_ids != [] do
+	                    	  
+	                    	student_ids = hd(student_ids).student_id |> String.split(",")
+	                      else
+	                    	student_ids = []
+	                    	end
+
+	                    	%>
+		                  		<% a = Enum.count(student_ids)%>
+		                  		<% b = Repo.all(from a in Absent, where: a.absent_date ==^ NaiveDateTime.to_date(date)) |> Enum.count()   %>
+		                  		<%= a+b%>
+		                  </td>
+                    <% end %>
+                      <td style="width: 400px; text-align: center;">
+                      	<% a = Repo.all(from a in Absent, where: a.absent_date in ^all_dates and a.class_id == ^@class.id) |> Enum.count()  %>
+                      	<% b =
+                   	  	Enum.map(@attendance, fn x -> String.split(x.student_id, ",") end) |> List.flatten |> Enum.reject(fn x -> x == "" end) |> Enum.count()
+                   	  	%>
+                   	  	<%= a+b %>
+	                    </td>
+	                    <td style="width: 400px; text-align: center;">
+	                    </td>
+	                    <td style="width: 400px; text-align: center;">
+	                    </td>
+                  </tr>
+
+              </table>
+            </div>
+		      </div>
+		    </div>
+
+      </div>
+    </div>

@@ -1,3 +1,4 @@
+
 <h3>Students in <%= @class.name %>
 	
 <div class="btn btn-dark" aria-label="toggle_student_list">Manage students</div>
@@ -7,7 +8,7 @@
 	<div class="col-lg-6">
 		<div class="card ">
 			<div class="card-header">All Students (Unassigned)</div>
-			<div class="card-body">
+			<div class="card-body" style="height: 500px; overflow-y: scroll;">
 				<ol class="unselected">
 				<%= for student <- @students do %>
 				<li student_id="<%= student.id %>"><%= student.name %></li>

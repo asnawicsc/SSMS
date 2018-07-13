@@ -77,13 +77,13 @@
   <div class="form-row">
 
 
-  <div class="form-group col-md-2">
+  <div class="form-group col-md-3">
     <%= label f, :line1, class: "" %>
     <%= text_input f, :line1, class: "form-control" %>
     <%= error_tag f, :line1 %>
   </div>
 
-  <div class="form-group col-md-2">
+  <div class="form-group col-md-3">
     <%= label f, :line2, class: "" %>
     <%= text_input f, :line2, class: "form-control" %>
     <%= error_tag f, :line2 %>

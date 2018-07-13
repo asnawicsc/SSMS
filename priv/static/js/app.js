@@ -25,6 +25,17 @@ channel
 
 $(document).ready(function(){
 
+  $("div.convert").click(function(){
+    var txt = $("input[name='from']").val()
+    var from = $("select[name='from']").val()
+      var to = $("select[name='to']").val()
+    channel.push("convert_text", {txt: txt, from: from, to: to})
+  })
+
+  channel.on("show_text", payload => {
+    $("p#result").html(payload.text)
+  })
+
   if (window.currentUser == "lobby") {
     $("nav.after_login").hide()
      $("div.after_login").hide()

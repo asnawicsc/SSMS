@@ -31,8 +31,6 @@ defmodule SchoolWeb.ParameterController do
     parameter_params =
       Map.put(parameter_params, "institution_id", conn.private.plug_session["institution_id"])
 
-    IEx.pry()
-
     case Settings.create_parameter(parameter_params) do
       {:ok, parameter} ->
         conn
