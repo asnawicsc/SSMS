@@ -1,11 +1,11 @@
-<h2>Listing Classes</h2>
+<h2><%= gettext "Listing Classes" %></h2>
 
 <table class="table">
   <thead>
     <tr>
-      <th>Name</th>
-      <th>Remarks</th>
-      <th>Level</th>
+      <th><%= gettext "Name" %></th>
+      <th><%= gettext "Remarks" %></th>
+      <th><%= gettext "Level" %></th>
       <th></th>
     </tr>
   </thead>
@@ -17,13 +17,13 @@
        <td><%= class.level_id %></td>
 
       <td class="text-right">
-        <span><%= link "Students", to: class_path(@conn, :students, class.id), class: "btn btn-default btn-xs" %></span>
-        <span><%= link "Edit", to: class_path(@conn, :edit, class.id), class: "btn btn-default btn-xs" %></span>
-        <span><%= link "Delete", to: class_path(@conn, :delete, class.id), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+        <span><%= link (gettext "Students"), to: class_path(@conn, :students, class.id), class: "btn btn-default btn-xs" %></span>
+        <span><%= link (gettext "Edit"), to: class_path(@conn, :edit, class.id), class: "btn btn-default btn-xs" %></span>
+        <span><%= link (gettext "Delete"), to: class_path(@conn, :delete, class.id), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
       </td>
     </tr>
 <% end %>
   </tbody>
 </table>
 
-<span><%= link "New Class", to: class_path(@conn, :new) %></span>
+<span><%= link (gettext "New Class"), to: class_path(@conn, :new) %></span>

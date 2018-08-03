@@ -1,0 +1,28 @@
+<h2>Show Label</h2>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @label.name %>
+  </li>
+
+  <li>
+    <strong>En:</strong>
+    <%= @label.en %>
+  </li>
+
+  <li>
+    <strong>Cn:</strong>
+    <%= @label.cn %>
+  </li>
+
+  <li>
+    <strong>Bm:</strong>
+    <%= @label.bm %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: label_path(@conn, :edit, @label) %></span>
+<span><%= link "Back", to: label_path(@conn, :index) %></span>

@@ -1,7 +1,8 @@
 <h3>Current semester: </h3> <%= @current_sem.start_date %> - <%= @current_sem.end_date %> 
 
 <div class="table-responsive">
-	
+	<%= gettext("hello")%>
+	<%= gettext("welcome")%>
 <table class="table" aria-label="result">
 	
 </table>

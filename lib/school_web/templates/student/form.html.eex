@@ -15,31 +15,31 @@
   <% end %>
   <div class="form-row">
   <div class="form-group col-md-3">
-    <%= label f, :name, class: "" %>
+    <%= label f, (gettext "name"), class: "" %>
     <%= text_input f, :name, class: "form-control" %>
     <%= error_tag f, :name %>
   </div>
 
   <div class="form-group col-md-2">
-    <%= label f, :chinese_name, class: "" %>
+    <%= label f, (gettext "chinese_name"), class: "" %>
     <%= text_input f, :chinese_name, class: "form-control" %>
     <%= error_tag f, :chinese_name %>
   </div>
 
   <div class="form-group col-md-1">
-    <%= label f, :sex, class: "" %>
+    <%= label f, (gettext "sex"), class: "" %>
     <%= text_input f, :sex, class: "form-control" %>
     <%= error_tag f, :sex %>
   </div>
 
   <div class="form-group col-md-2">
-    <%= label f, :ic, class: "" %>
+    <%= label f, (gettext "ic"), class: "" %>
     <%= text_input f, :ic, class: "form-control" %>
     <%= error_tag f, :ic %>
   </div>
 
   <div class="form-group col-md-2">
-    <%= label f, :dob, class: "" %>
+    <%= label f, (gettext "dob"), class: "" %>
     <%= text_input f, :dob, class: "form-control" %>
     <%= error_tag f, :dob %>
   </div>

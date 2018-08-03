@@ -316,4 +316,70 @@ defmodule School.SettingsTest do
       assert %Ecto.Changeset{} = Settings.change_user(user)
     end
   end
+
+  describe "labels" do
+    alias School.Settings.Label
+
+    @valid_attrs %{bm: "some bm", cn: "some cn", en: "some en", name: "some name"}
+    @update_attrs %{bm: "some updated bm", cn: "some updated cn", en: "some updated en", name: "some updated name"}
+    @invalid_attrs %{bm: nil, cn: nil, en: nil, name: nil}
+
+    def label_fixture(attrs \\ %{}) do
+      {:ok, label} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Settings.create_label()
+
+      label
+    end
+
+    test "list_labels/0 returns all labels" do
+      label = label_fixture()
+      assert Settings.list_labels() == [label]
+    end
+
+    test "get_label!/1 returns the label with given id" do
+      label = label_fixture()
+      assert Settings.get_label!(label.id) == label
+    end
+
+    test "create_label/1 with valid data creates a label" do
+      assert {:ok, %Label{} = label} = Settings.create_label(@valid_attrs)
+      assert label.bm == "some bm"
+      assert label.cn == "some cn"
+      assert label.en == "some en"
+      assert label.name == "some name"
+    end
+
+    test "create_label/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Settings.create_label(@invalid_attrs)
+    end
+
+    test "update_label/2 with valid data updates the label" do
+      label = label_fixture()
+      assert {:ok, label} = Settings.update_label(label, @update_attrs)
+      assert %Label{} = label
+      assert label.bm == "some updated bm"
+      assert label.cn == "some updated cn"
+      assert label.en == "some updated en"
+      assert label.name == "some updated name"
+    end
+
+    test "update_label/2 with invalid data returns error changeset" do
+      label = label_fixture()
+      assert {:error, %Ecto.Changeset{}} = Settings.update_label(label, @invalid_attrs)
+      assert label == Settings.get_label!(label.id)
+    end
+
+    test "delete_label/1 deletes the label" do
+      label = label_fixture()
+      assert {:ok, %Label{}} = Settings.delete_label(label)
+      assert_raise Ecto.NoResultsError, fn -> Settings.get_label!(label.id) end
+    end
+
+    test "change_label/1 returns a label changeset" do
+      label = label_fixture()
+      assert %Ecto.Changeset{} = Settings.change_label(label)
+    end
+  end
 end

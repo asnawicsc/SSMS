@@ -7,6 +7,7 @@ defmodule SchoolWeb.Router do
     plug(:fetch_flash)
     plug(:protect_from_forgery)
     plug(:put_secure_browser_headers)
+    plug(School.SetLocale)
   end
 
   pipeline :api do
@@ -53,6 +54,7 @@ defmodule SchoolWeb.Router do
     get("/add_to_class_absent", AttendanceController, :add_to_class_absent)
 
     resources("/absent", AbsentController)
+    resources("/labels", LabelController)
   end
 
   # Other scopes may use custom stacks.

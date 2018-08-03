@@ -6,16 +6,14 @@
 use Mix.Config
 
 # General application configuration
-config :school,
-  ecto_repos: [School.Repo]
+config :school, ecto_repos: [School.Repo]
 
 # Configures the endpoint
 config :school, SchoolWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "UmJu7SagsaJGRy4GyUZrw0OD3MUUx3qqZK0Ka2NQ86UzRjO52sOEHC5ul1xrnMBa",
   render_errors: [view: SchoolWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: School.PubSub,
-           adapter: Phoenix.PubSub.PG2]
+  pubsub: [name: School.PubSub, adapter: Phoenix.PubSub.PG2]
 
 # Configures Elixir's Logger
 config :logger, :console,
@@ -24,4 +22,4 @@ config :logger, :console,
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
-import_config "#{Mix.env}.exs"
+import_config "#{Mix.env()}.exs"

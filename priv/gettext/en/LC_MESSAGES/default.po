@@ -1,0 +1,206 @@
+## `msgid`s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove `msgid`s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use `mix gettext.extract --merge` or `mix gettext.merge`
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: en\n"
+"Plural-Forms: nplurals=2\n"
+
+#: lib/school_web/templates/page/index.html.eex:4
+msgid "hello"
+msgstr "howdy"
+
+#: lib/school_web/templates/page/index.html.eex:5
+msgid "welcome"
+msgstr "comeon in"
+
+#: lib/school_web/templates/layout/nav.html.eex:40
+msgid "Register Student"
+msgstr ""
+
+#: lib/school_web/templates/layout/nav.html.eex:31
+msgid "School Profile"
+msgstr ""
+
+#: lib/school_web/templates/layout/nav.html.eex:37
+msgid "Semesters"
+msgstr ""
+
+#: lib/school_web/templates/layout/nav.html.eex:27
+msgid "Setup"
+msgstr ""
+
+#: lib/school_web/templates/layout/nav.html.eex:42
+msgid "Student History"
+msgstr ""
+
+#: lib/school_web/templates/layout/nav.html.eex:35
+msgid "System Configuration"
+msgstr ""
+
+#: lib/school_web/templates/layout/nav.html.eex:33
+msgid "User Account"
+msgstr ""
+
+#: lib/school_web/templates/layout/nav.html.eex:21
+#: lib/school_web/templates/layout/nav.html.eex:51
+msgid "Attendance"
+msgstr ""
+
+#: lib/school_web/templates/layout/nav.html.eex:91
+msgid "Book List by Categories"
+msgstr ""
+
+#: lib/school_web/templates/layout/nav.html.eex:77
+msgid "Class List"
+msgstr ""
+
+#: lib/school_web/templates/layout/nav.html.eex:11
+msgid "Classes"
+msgstr ""
+
+#: lib/school_web/templates/layout/nav.html.eex:60
+msgid "Co-curriculum"
+msgstr ""
+
+#: lib/school_web/templates/layout/nav.html.eex:74
+msgid "Comment List"
+msgstr ""
+
+#: lib/school_web/templates/layout/nav.html.eex:53
+msgid "Health Weight"
+msgstr ""
+
+#: lib/school_web/templates/layout/nav.html.eex:75
+msgid "Holiday List"
+msgstr ""
+
+#: lib/school_web/templates/layout/nav.html.eex:93
+msgid "Loan List"
+msgstr ""
+
+#: lib/school_web/templates/layout/nav.html.eex:50
+msgid "Mark Sheet"
+msgstr ""
+
+#: lib/school_web/templates/layout/nav.html.eex:92
+msgid "New Book"
+msgstr ""
+
+#: lib/school_web/templates/layout/nav.html.eex:94
+msgid "New Loans"
+msgstr ""
+
+#: lib/school_web/templates/layout/nav.html.eex:58
+msgid "Next Year Class"
+msgstr ""
+
+#: lib/school_web/templates/layout/nav.html.eex:47
+msgid "Processing"
+msgstr ""
+
+#: lib/school_web/templates/layout/nav.html.eex:95
+msgid "Returns"
+msgstr ""
+
+#: lib/school_web/templates/layout/nav.html.eex:76
+msgid "Standard List"
+msgstr ""
+
+#: lib/school_web/templates/layout/nav.html.eex:52
+msgid "Student Comment"
+msgstr ""
+
+#: lib/school_web/templates/layout/nav.html.eex:59
+msgid "Student Exam Result"
+msgstr ""
+
+#: lib/school_web/templates/layout/nav.html.eex:54
+msgid "Student Fee"
+msgstr ""
+
+#: lib/school_web/templates/class/index.html.eex:20
+#: lib/school_web/templates/layout/nav.html.eex:16
+msgid "Students"
+msgstr ""
+
+#: lib/school_web/templates/layout/nav.html.eex:73
+msgid "Table List"
+msgstr ""
+
+#: lib/school_web/templates/layout/nav.html.eex:62
+msgid "Teacher"
+msgstr ""
+
+#: lib/school_web/templates/layout/nav.html.eex:79
+msgid "User List"
+msgstr ""
+
+#: lib/school_web/templates/layout/nav.html.eex:78
+msgid "Visitor List"
+msgstr ""
+
+#: lib/school_web/templates/class/index.html.eex:22
+msgid "Delete"
+msgstr ""
+
+#: lib/school_web/templates/class/index.html.eex:21
+msgid "Edit"
+msgstr ""
+
+#: lib/school_web/templates/class/index.html.eex:8
+msgid "Level"
+msgstr ""
+
+#: lib/school_web/templates/layout/nav.html.eex:88
+msgid "Library"
+msgstr ""
+
+#: lib/school_web/templates/class/index.html.eex:1
+msgid "Listing Classes"
+msgstr ""
+
+#: lib/school_web/templates/layout/nav.html.eex:102
+msgid "Logout"
+msgstr ""
+
+#: lib/school_web/templates/class/index.html.eex:6
+msgid "Name"
+msgstr ""
+
+#: lib/school_web/templates/class/index.html.eex:29
+msgid "New Class"
+msgstr ""
+
+#: lib/school_web/templates/class/index.html.eex:7
+msgid "Remarks"
+msgstr ""
+
+#: lib/school_web/templates/layout/nav.html.eex:70
+msgid "Report"
+msgstr ""
+
+#: lib/school_web/templates/student/form.html.eex:24
+msgid "chinese_name"
+msgstr ""
+
+#: lib/school_web/templates/student/form.html.eex:42
+msgid "dob"
+msgstr ""
+
+#: lib/school_web/templates/student/form.html.eex:36
+msgid "ic"
+msgstr ""
+
+#: lib/school_web/templates/student/form.html.eex:18
+msgid "name"
+msgstr ""
+
+#: lib/school_web/templates/student/form.html.eex:30
+msgid "sex"
+msgstr ""

@@ -1,0 +1,206 @@
+## `msgid`s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove `msgid`s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use `mix gettext.extract --merge` or `mix gettext.merge`
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: zh\n"
+"Plural-Forms: nplurals=1\n"
+
+#: lib/school_web/templates/page/index.html.eex:4
+msgid "hello"
+msgstr "你好"
+
+#: lib/school_web/templates/page/index.html.eex:5
+msgid "welcome"
+msgstr "欢迎来到"
+
+#: lib/school_web/templates/layout/nav.html.eex:40
+msgid "Register Student"
+msgstr "注册学生"
+
+#: lib/school_web/templates/layout/nav.html.eex:31
+msgid "School Profile"
+msgstr "学校质料"
+
+#: lib/school_web/templates/layout/nav.html.eex:37
+msgid "Semesters"
+msgstr "学期"
+
+#: lib/school_web/templates/layout/nav.html.eex:27
+msgid "Setup"
+msgstr "安装"
+
+#: lib/school_web/templates/layout/nav.html.eex:42
+msgid "Student History"
+msgstr "学生历史"
+
+#: lib/school_web/templates/layout/nav.html.eex:35
+msgid "System Configuration"
+msgstr "系统设置"
+
+#: lib/school_web/templates/layout/nav.html.eex:33
+msgid "User Account"
+msgstr "个人质料"
+
+#: lib/school_web/templates/layout/nav.html.eex:21
+#: lib/school_web/templates/layout/nav.html.eex:51
+msgid "Attendance"
+msgstr "出席记录"
+
+#: lib/school_web/templates/layout/nav.html.eex:91
+msgid "Book List by Categories"
+msgstr "书籍"
+
+#: lib/school_web/templates/layout/nav.html.eex:77
+msgid "Class List"
+msgstr "班级"
+
+#: lib/school_web/templates/layout/nav.html.eex:11
+msgid "Classes"
+msgstr "班级"
+
+#: lib/school_web/templates/layout/nav.html.eex:60
+msgid "Co-curriculum"
+msgstr "课外活动"
+
+#: lib/school_web/templates/layout/nav.html.eex:74
+msgid "Comment List"
+msgstr "学生评语"
+
+#: lib/school_web/templates/layout/nav.html.eex:53
+msgid "Health Weight"
+msgstr "学生体重"
+
+#: lib/school_web/templates/layout/nav.html.eex:75
+msgid "Holiday List"
+msgstr "假期"
+
+#: lib/school_web/templates/layout/nav.html.eex:93
+msgid "Loan List"
+msgstr "借书记录"
+
+#: lib/school_web/templates/layout/nav.html.eex:50
+msgid "Mark Sheet"
+msgstr "改考卷"
+
+#: lib/school_web/templates/layout/nav.html.eex:92
+msgid "New Book"
+msgstr "新书"
+
+#: lib/school_web/templates/layout/nav.html.eex:94
+msgid "New Loans"
+msgstr "借书"
+
+#: lib/school_web/templates/layout/nav.html.eex:58
+msgid "Next Year Class"
+msgstr "明年班级"
+
+#: lib/school_web/templates/layout/nav.html.eex:47
+msgid "Processing"
+msgstr "操作"
+
+#: lib/school_web/templates/layout/nav.html.eex:95
+msgid "Returns"
+msgstr "还书"
+
+#: lib/school_web/templates/layout/nav.html.eex:76
+msgid "Standard List"
+msgstr "级别"
+
+#: lib/school_web/templates/layout/nav.html.eex:52
+msgid "Student Comment"
+msgstr "学生评语"
+
+#: lib/school_web/templates/layout/nav.html.eex:59
+msgid "Student Exam Result"
+msgstr "学生考试成绩"
+
+#: lib/school_web/templates/layout/nav.html.eex:54
+msgid "Student Fee"
+msgstr "学费"
+
+#: lib/school_web/templates/class/index.html.eex:20
+#: lib/school_web/templates/layout/nav.html.eex:16
+msgid "Students"
+msgstr "学生列表"
+
+#: lib/school_web/templates/layout/nav.html.eex:73
+msgid "Table List"
+msgstr "列表"
+
+#: lib/school_web/templates/layout/nav.html.eex:62
+msgid "Teacher"
+msgstr "教师列表"
+
+#: lib/school_web/templates/layout/nav.html.eex:79
+msgid "User List"
+msgstr "系统用户列表"
+
+#: lib/school_web/templates/layout/nav.html.eex:78
+msgid "Visitor List"
+msgstr "参观者列表"
+
+#: lib/school_web/templates/class/index.html.eex:22
+msgid "Delete"
+msgstr "删除"
+
+#: lib/school_web/templates/class/index.html.eex:21
+msgid "Edit"
+msgstr "更改"
+
+#: lib/school_web/templates/class/index.html.eex:8
+msgid "Level"
+msgstr "级别"
+
+#: lib/school_web/templates/layout/nav.html.eex:88
+msgid "Library"
+msgstr "图书馆"
+
+#: lib/school_web/templates/class/index.html.eex:1
+msgid "Listing Classes"
+msgstr "班级列表"
+
+#: lib/school_web/templates/layout/nav.html.eex:102
+msgid "Logout"
+msgstr "登出"
+
+#: lib/school_web/templates/class/index.html.eex:6
+msgid "Name"
+msgstr "名字"
+
+#: lib/school_web/templates/class/index.html.eex:29
+msgid "New Class"
+msgstr "新班"
+
+#: lib/school_web/templates/class/index.html.eex:7
+msgid "Remarks"
+msgstr "记录"
+
+#: lib/school_web/templates/layout/nav.html.eex:70
+msgid "Report"
+msgstr "报表"
+
+#: lib/school_web/templates/student/form.html.eex:24
+msgid "chinese_name"
+msgstr ""
+
+#: lib/school_web/templates/student/form.html.eex:42
+msgid "dob"
+msgstr ""
+
+#: lib/school_web/templates/student/form.html.eex:36
+msgid "ic"
+msgstr ""
+
+#: lib/school_web/templates/student/form.html.eex:18
+msgid "name"
+msgstr ""
+
+#: lib/school_web/templates/student/form.html.eex:30
+msgid "sex"
+msgstr ""

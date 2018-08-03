@@ -6,40 +6,60 @@
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown">
+        
+       <a href="/classes" class="nav-link" role="button"><%= gettext "Classes" %></a>
 
+      </li>
+      <li class="nav-item dropdown">
+        
+       <a href="/students" class="nav-link" role="button"><%= gettext "Students" %></a>
+       
+      </li>
+      <li class="nav-item dropdown">
+        
+       <a href="/attendance" class="nav-link" role="button"><%= gettext "Attendance" %></a>
+       
+      </li>
     
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Setup
+          <%= gettext "Setup" %>
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="/institutions/<%= @conn.private.plug_session["institution_id"]%>">School Profile</a>
-          <a class="dropdown-item" href="/users/<%= @conn.private.plug_session["user_id"]%>">User Account</a>
-          <a class="dropdown-item" href="/system_config/<%= @conn.private.plug_session["institution_id"]%>">System Configuration</a>
-          <a class="dropdown-item" href="/semesters">Semesters</a>
+          <a class="dropdown-item" href="/institutions/<%= @conn.private.plug_session["institution_id"]%>">
+            <%= gettext "School Profile" %></a>
+          <a class="dropdown-item" href="/users/<%= @conn.private.plug_session["user_id"]%>">
+            <%= gettext "User Account" %></span></a>
+          <a class="dropdown-item" href="/system_config/<%= @conn.private.plug_session["institution_id"]%>">
+            <%= gettext "System Configuration" %></a>
+          <a class="dropdown-item" href="/semesters">
+            <%= gettext "Semesters" %> </a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="/students/new">Register Student</a>
-          <a class="dropdown-item" href="#">Student History</a>
+          <a class="dropdown-item" href="/students/new">
+            <%= gettext "Register Student" %></a>
+          <a class="dropdown-item" href="#">
+            <%= gettext "Student History" %></a>
         </div>
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Processing
+          <%= gettext "Processing" %>
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">Mark Sheet</a>
-          <a class="dropdown-item" href="/attendance">Attendance</a>
-          <a class="dropdown-item" href="#">Student Comment</a>
-          <a class="dropdown-item" href="#">Health Weight</a>
-          <a class="dropdown-item" href="#">Student Fees</a>
+          <a class="dropdown-item" href="#"><%= gettext "Mark Sheet" %></a>
+          <a class="dropdown-item" href="/attendance"><%= gettext "Attendance" %></a>
+          <a class="dropdown-item" href="#"><%= gettext "Student Comment" %></a>
+          <a class="dropdown-item" href="#"><%= gettext "Health Weight" %></a>
+          <a class="dropdown-item" href="#"><%= gettext "Student Fee" %></a>
          
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Exclude Rank</a>
-          <a class="dropdown-item" href="#">Next Year Class</a>
-          <a class="dropdown-item" href="#">UPSR Result</a>
-          <a class="dropdown-item" href="#">Co-curriculum</a>
+  
+          <a class="dropdown-item" href="#"><%= gettext "Next Year Class" %></a>
+          <a class="dropdown-item" href="#"><%= gettext "Student Exam Result" %></a>
+          <a class="dropdown-item" href="#"><%= gettext "Co-curriculum" %></a>
            <div class="dropdown-divider"></div>
-           <a class="dropdown-item" href="#">Teacher</a>
+           <a class="dropdown-item" href="#"><%= gettext "Teacher" %></a>
         
            
         </div>
@@ -47,16 +67,16 @@
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Report
+          <%= gettext "Report" %>
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">Table List</a>
-          <a class="dropdown-item" href="#">Comment List</a>
-          <a class="dropdown-item" href="#">Holiday List</a>
-          <a class="dropdown-item" href="#">Standard List</a>
-          <a class="dropdown-item" href="#">Class List</a>
-          <a class="dropdown-item" href="#">Visitor List</a>
-          <a class="dropdown-item" href="#">User List</a>
+          <a class="dropdown-item" href="#"><%= gettext "Table List" %></a>
+          <a class="dropdown-item" href="#"><%= gettext "Comment List" %></a>
+          <a class="dropdown-item" href="#"><%= gettext "Holiday List" %></a>
+          <a class="dropdown-item" href="#"><%= gettext "Standard List" %></a>
+          <a class="dropdown-item" href="#"><%= gettext "Class List" %></a>
+          <a class="dropdown-item" href="#"><%= gettext "Visitor List" %></a>
+          <a class="dropdown-item" href="#"><%= gettext "User List" %></a>
           
     
            
@@ -64,8 +84,22 @@
         
       </li>
       <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+           <%= gettext "Library" %>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <button type="button" class="dropdown-item api" call="get_lib"><%= gettext "Book List by Categories" %></button>
+        <button type="button" class="dropdown-item api"><%= gettext "New Book" %></button>
+        <button type="button" class="dropdown-item api" call="get_loans"><%= gettext "Loan List" %></button>
+        <button type="button" class="dropdown-item api"><%= gettext "New Loans" %></button>
+        <button type="button" class="dropdown-item api"><%= gettext "Returns" %></button>
+          
+        </div>
+        
+      </li>
+      <li class="nav-item dropdown">
         <a class="nav-link " href="/logout"  role="button" >
-          Logout
+          <%= gettext "Logout" %>
         </a>
  
       </li>
@@ -74,39 +108,4 @@
 
   </div>
 </nav>
-<div class="single-item2">
-  <div class="row">
-    <div class="col-lg-12">
-      <div class="btn-group after_login" role="group" aria-label="dashboard">
-        <a href="/classes" class="btn btn-secondary">Classes</a>
-        <a href="/students" class="btn btn-secondary">Student</a>
- 
-        <a href="/attendance" class="btn btn-secondary">Attendance</a>
- 
-      </div>
-      
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-lg-12">
-      <div class="btn-group after_login" role="group" aria-label="dashboard">
-        <button type="button" class="btn btn-warning api" call="get_lib">Book List by Categories</button>
-        <button type="button" class="btn btn-warning api">New Book</button>
-        <button type="button" class="btn btn-warning api" call="get_loans">Loan List</button>
-        <button type="button" class="btn btn-warning api">New Loans</button>
-        <button type="button" class="btn btn-warning api">Returns</button>
 
-      </div>
-      
-    </div>
-  </div>
-
-
-
-</div>
-
-
-<script type="text/javascript">
-  
-    $(".single-item2").slick({ arrows: false });
-</script>
