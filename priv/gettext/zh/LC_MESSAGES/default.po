@@ -187,20 +187,20 @@ msgstr "报表"
 
 #: lib/school_web/templates/student/form.html.eex:24
 msgid "chinese_name"
-msgstr ""
+msgstr "名字"
 
 #: lib/school_web/templates/student/form.html.eex:42
 msgid "dob"
-msgstr ""
+msgstr "生日日期"
 
 #: lib/school_web/templates/student/form.html.eex:36
 msgid "ic"
-msgstr ""
+msgstr "身份证"
 
 #: lib/school_web/templates/student/form.html.eex:18
 msgid "name"
-msgstr ""
+msgstr "英文名字"
 
 #: lib/school_web/templates/student/form.html.eex:30
 msgid "sex"
-msgstr ""
+msgstr "性别"

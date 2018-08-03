@@ -51,7 +51,18 @@
               </div>
               <div class="form-group col-md-2">
                 <select name="month">
-                    <option value="7">July</option>
+                    <option value="1"><%= Timex.month_name(1)%></option>
+                    <option value="2"><%= Timex.month_name(2)%></option>
+                    <option value="3"><%= Timex.month_name(3)%></option>
+                    <option value="4"><%= Timex.month_name(4)%></option>
+                    <option value="5"><%= Timex.month_name(5)%></option>
+                    <option value="6"><%= Timex.month_name(6)%></option>
+                    <option value="7"><%= Timex.month_name(7)%></option>
+                    <option value="8"><%= Timex.month_name(8)%></option>
+                    <option value="9"><%= Timex.month_name(9)%></option>
+                    <option value="10"><%= Timex.month_name(10)%></option>
+                    <option value="11"><%= Timex.month_name(11)%></option>
+                    <option value="12"><%= Timex.month_name(12)%></option>
                
                 </select>
                 

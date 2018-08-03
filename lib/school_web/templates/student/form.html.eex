@@ -7,6 +7,8 @@
 <% nationality = parameters.nationality |> String.split(",") %>
 <% blood_type = parameters.blood_type |> String.split(",") %>
 <% transport = parameters.transport |> String.split(",") %>
+<% user = Repo.get(School.Settings.User,@conn.private.plug_session["user_id"]) %>
+<% Gettext.put_locale(SchoolWeb.Gettext, user.default_lang) %>
 <%= form_for @changeset, @action, fn f -> %>
   <%= if @changeset.action do %>
     <div class="alert alert-danger">

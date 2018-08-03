@@ -17,6 +17,12 @@
   </div>
 
   <div class="form-group">
+    <%= label f, :default_lang, class: "control-label" %>
+    <%= select f, :default_lang, [{"English", "en"}, {"Chinese", "zh"}, {"Bahasa", "my"}], class: "form-control" %>
+    <%= error_tag f, :default_lang %>
+  </div>
+
+  <div class="form-group">
     <%= label f, :password, class: "control-label" %>
     <%= text_input f, :password, class: "form-control" %>
     <%= error_tag f, :password %>

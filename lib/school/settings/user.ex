@@ -9,6 +9,7 @@ defmodule School.Settings.User do
     field(:password, :string)
     field(:role, :string, default: "Support")
     field(:email, :string)
+    field(:default_lang, :string, default: "en")
 
     timestamps()
   end
@@ -16,7 +17,15 @@ defmodule School.Settings.User do
   @doc false
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:email, :name, :password, :crypted_password, :institution_id, :role])
+    |> cast(attrs, [
+      :default_lang,
+      :email,
+      :name,
+      :password,
+      :crypted_password,
+      :institution_id,
+      :role
+    ])
     |> validate_required([:crypted_password, :email])
     |> unique_constraint(:email)
   end

@@ -1,4 +1,4 @@
-
+<% require IEx %>
     <div class="card">
       <div class="card-body">
         <div class="row">
@@ -155,19 +155,22 @@
 	                    	student_ids = Enum.filter(@attendance, fn x -> x.attendance_date == NaiveDateTime.to_date(date) end)
 	                    	if student_ids != [] do
 	                    	  
-	                    	student_ids = hd(student_ids).student_id |> String.split(",")
+	                    	student_ids = hd(student_ids).student_id |> String.split(",") |> Enum.reject(fn x -> x  == "" end)
 	                      else
 	                    	student_ids = []
 	                    	end
 
 	                    	%>
+	                
 		                  		<%= Enum.count(student_ids)%>
+
 		                  </td>
                     <% end %>
                    	  <td style="width: 400px; text-align: center;">
                    	  	<%=
                    	  	Enum.map(@attendance, fn x -> String.split(x.student_id, ",") end) |> List.flatten |> Enum.reject(fn x -> x == "" end) |> Enum.count()
                    	  	%>
+
 	                    </td>
 	                    <td style="width: 400px; text-align: center;">
 	                    </td>
@@ -186,7 +189,7 @@
 	                    	student_ids = Enum.filter(@attendance, fn x -> x.attendance_date == NaiveDateTime.to_date(date) end)
 	                    	if student_ids != [] do
 	                    	  
-	                    	student_ids = hd(student_ids).student_id |> String.split(",")
+	                    	student_ids = hd(student_ids).student_id |> String.split(",")|> Enum.reject(fn x -> x  == "" end)
 	                      else
 	                    	student_ids = []
 	                    	end

@@ -5,7 +5,7 @@ defmodule SchoolWeb.UserChannel do
 
   def join("user:" <> user_id, payload, socket) do
     if authorized?(payload) do
-      {:ok, socket}
+      {:ok, socket |> assign(:locale, "zh")}
     else
       {:error, %{reason: "unauthorized"}}
     end
@@ -44,7 +44,11 @@ defmodule SchoolWeb.UserChannel do
     student = Affairs.get_student!(id)
     changeset = Affairs.change_student(student)
 
-    conn = %{private: %{plug_session: %{"institution_id" => user.institution_id}}}
+    conn = %{
+      private: %{
+        plug_session: %{"institution_id" => user.institution_id, "user_id" => user.id}
+      }
+    }
 
     html =
       Phoenix.View.render_to_string(
