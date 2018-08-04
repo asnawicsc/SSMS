@@ -22,7 +22,7 @@
 			<div class="card-header">Students in this class this semester</div>
 			<div class="card-body">
 				<ol class="selected">
-	<%= for student <- @students_in do %>
+	<%= for student <- @students_in |> Enum.sort_by(fn x -> x.name end) do %>
 				<li student_id="<%= student.id %>"><%= student.name %></li>
 				<% end %>
 				</ol>

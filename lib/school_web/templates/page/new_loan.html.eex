@@ -1,0 +1,52 @@
+<h3>New Loans</h3>
+<form>
+	<input type="text" name="query" placeholder="Search terms">
+	<input type="text" name="user" placeholder="Search user">
+</form>
+	<button class="btn btn-primary btn-sm api" call="get_book">
+		Search Book
+	</button>
+	<button class="btn btn-primary btn-sm api" call="get_user">
+		Search User
+	</button>
+	<button class="btn btn-warning btn-sm api" call="get_loan_response">
+		Loan
+	</button>
+<div class="table-responsive">
+	
+
+	<table class="table" id="book_result">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Series</th>
+				<th>Volume</th>
+				<th>Author</th>
+				<th>Coauthor</th>
+				<th>Barcode</th>
+				<th>ISBN</th>
+				
+				<th>Publisher</th>
+				<th>Illustrator</th>
+				<th>Translator</th>
+
+		
+			
+				
+			</tr>
+		</thead>
+	</table>
+</div>
+<div class="table-responsive">
+	
+
+	<table class="table" id="user_result">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Membership</th>
+
+			</tr>
+		</thead>
+	</table>
+</div>

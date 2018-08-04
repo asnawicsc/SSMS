@@ -49,4 +49,5 @@
 </ul>
 
 <span><%= link "Edit", to: parameter_path(@conn, :edit, @parameter) %></span>
-<span><%= link "Back", to: parameter_path(@conn, :index) %></span>
+<span><a class="" href="/institutions/<%= @conn.private.plug_session["institution_id"]%>">
+            <%= gettext "Back" %></a></span>

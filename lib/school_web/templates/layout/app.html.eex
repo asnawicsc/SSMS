@@ -39,6 +39,7 @@
     </script>
     <script src="<%= static_path(@conn, "/js/phoenix.js") %>"></script>
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
+    <script src="<%= static_path(@conn, "/js/library.js") %>"></script>
   </head>
 
   <body>

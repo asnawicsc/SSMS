@@ -30,6 +30,8 @@ defmodule SchoolWeb.Router do
 
     get("/dashboard", PageController, :dashboard)
     get("/operations", PageController, :operations)
+    get("/library/books", PageController, :books)
+    get("/library/loans/new", PageController, :new_loan)
     resources("/parameters", ParameterController)
     get("/system_config/:institution_id", ParameterController, :system_config)
     resources("/institutions", InstitutionController)

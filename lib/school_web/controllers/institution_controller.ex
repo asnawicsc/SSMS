@@ -2,7 +2,7 @@ defmodule SchoolWeb.InstitutionController do
   use SchoolWeb, :controller
 
   alias School.Settings
-  alias School.Settings.{Institution, User}
+  alias School.Settings.{Institution, User, Parameter}
   require IEx
   import Mogrify
 
@@ -73,7 +73,9 @@ defmodule SchoolWeb.InstitutionController do
 
   def show(conn, %{"id" => id}) do
     institution = Settings.get_institution!(id)
-    render(conn, "show.html", institution: institution)
+    param = Repo.get_by(Parameter, institution_id: id)
+
+    render(conn, "show.html", institution: institution, param: param)
   end
 
   def edit(conn, %{"id" => id}) do

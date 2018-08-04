@@ -39,8 +39,13 @@ defmodule SchoolWeb.PageController do
   end
 
   def operations(conn, params) do
-    uri = "https://www.li6rary.net/api"
-    lib_id = School.Affairs.inst_id(conn)
+    if Application.get_env(:your_app, :env) == nil do
+      uri = "http://localhost:4000/api"
+      lib_id = 3
+    else
+      uri = "https://www.li6rary.net/api"
+      lib_id = School.Affairs.inst_id(conn)
+    end
 
     case params["scope"] do
       "get_lib" ->
@@ -52,6 +57,19 @@ defmodule SchoolWeb.PageController do
       "get_books" ->
         cat_id = params["cat_id"]
         path = "?scope=get_books&cat_id=#{cat_id}&lib_id=#{lib_id}"
+
+      "get_book" ->
+        query = params["query"]
+        path = "?scope=get_book&query=#{query}&lib_id=#{lib_id}"
+
+      "get_user" ->
+        query = params["query"]
+        path = "?scope=get_user&query=#{query}&lib_id=#{lib_id}"
+
+      "get_loan_response" ->
+        book = params["book"]
+        user = params["user"]
+        path = "?scope=get_loan_response&book=#{book}&user=#{user}&lib_id=#{lib_id}"
     end
 
     response =
@@ -62,6 +80,7 @@ defmodule SchoolWeb.PageController do
         recv_timeout: 50_000
       ).body
 
+    IO.inspect(response)
     send_resp(conn, 200, response)
   end
 
@@ -73,5 +92,36 @@ defmodule SchoolWeb.PageController do
     # uri<>"?scope=link_member&lib_id=1",
     # uri<>"?scope=loan_book&lib_id=1",
     # uri<>"?scope=return_loan&lib_id=1",
+  end
+
+  def books(conn, params) do
+    if Application.get_env(:your_app, :env) == nil do
+      uri = "http://localhost:4000/api"
+      lib_id = 3
+    else
+      uri = "https://www.li6rary.net/api"
+      lib_id = School.Affairs.inst_id(conn)
+    end
+
+    path = "?scope=get_lib&lib_id=#{lib_id}"
+
+    response =
+      HTTPoison.get!(
+        uri <> path,
+        [{"Content-Type", "application/json"}],
+        timeout: 50_000,
+        recv_timeout: 50_000
+      ).body
+
+    library = response |> Poison.decode!()
+
+    loan = library["loan"]
+    categories = library["categories"]
+
+    render(conn, "books.html", loans: loan, categories: categories)
+  end
+
+  def new_loan(conn, params) do
+    render(conn, "new_loan.html")
   end
 end
