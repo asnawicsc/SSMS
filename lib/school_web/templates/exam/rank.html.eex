@@ -1,0 +1,105 @@
+<% require IEx %>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+    html {
+      font-family: sans-serif;
+    }
+    table {
+      border-collapse: collapse;
+      border: 2px solid rgb(200,200,200);
+      letter-spacing: 1px;
+      font-size: 0.8rem;
+    }
+    td, th {
+      border: 1px solid rgb(190,190,190);
+      padding: 10px 20px;
+    }
+    td {
+      text-align: center;
+    }
+    caption {
+      padding: 10px;
+    }
+    </style>
+  </head>
+ <% require IEx %>
+  <body>
+    <h1><%= @exam_name %></h1>
+
+ 
+    <table id="example">
+      <colgroup>
+        <col col span="2" >
+      </colgroup>
+      <tr>
+
+        <th style="background-color:#97DB9A;">Student Name</th>
+        <%= for item <- @mark|>Enum.sort_by(fn x -> x end) do %>    
+         
+        <th style="background-color:#97DB9A;"><%= item|>elem(0) %></th>
+        <% end %>
+        <th style="background-color:#97DB9A;">Total Mark</th>
+        <th style="background-color:#97DB9A;">Total Grade</th>
+        <th style="background-color:#97DB9A;">CGPA</th>
+      </tr>
+     
+
+        <%= for item <- @z do %>
+        <tr>
+
+          <th><a href="/report_card/<%= @exam_name %>/<%= item.student_id %>"><%=item.name %></a></th>
+   
+        <%= for subject <- item.subject do %>
+         <%= if subject.grade != "G" and subject.grade != "E" and subject.grade != "F" do %>
+        <th><%= subject.student_mark %>(<%=  subject.grade %>)</th>
+       <% else %>
+         <th ><font color="red"><%= subject.student_mark %>(<%=  subject.grade %>)</font></th>
+       <% end %>
+        
+        <%end %>
+     
+        <th style="background-color:grey;"><%= item.total_mark %>/<%= item.total_per %></th>
+         <th style="background-color:grey;" > <%= if item.a == 0 do %>
+            <% else %>
+           <%= item.a %>A, 
+           <%end %>
+           <%= if item.b == 0 do %>
+            <% else %>
+           <%= item.b %>B, 
+           <%end %>
+           <%= if item.c == 0 do %>
+            <% else %>
+           <%= item.c %>C, 
+           <%end %>
+           <%= if item.d == 0 do %>
+            <% else %>
+           <%= item.d %>D, 
+           <%end %>
+           <%= if item.e == 0 do %>
+            <% else %>
+           <%= item.e %>E, 
+           <%end %>
+           <%= if item.f == 0 do %>
+            <% else %>
+           <%= item.f %>F, 
+           <%end %>
+           <%= if item.g == 0 do %>
+            <% else %>
+           <%= item.g %>G, 
+           <%end %>
+          </th>
+           <th style="background-color:grey;"><%= item.cgpa %></th>
+      </tr>
+       <% end %>
+
+ 
+
+    </table>
+
+
+  </body>
+</html>

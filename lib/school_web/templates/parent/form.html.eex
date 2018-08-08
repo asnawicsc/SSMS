@@ -1,0 +1,205 @@
+<%= form_for @changeset, @action, fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+
+<div class="form-row">
+  <div class="form-group col-md-2">
+    <%= label f, (gettext "icno"), class: "control-label" %>
+    <%= text_input f, :icno, class: "form-control" %>
+    <%= error_tag f, :icno %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, (gettext "name"),class: "control-label" %>
+    <%= text_input f, :name, class: "form-control" %>
+    <%= error_tag f, :name %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, (gettext "cname"),  class: "control-label" %>
+    <%= text_input f, :cname, class: "form-control" %>
+    <%= error_tag f, :cname %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, (gettext "relation"),  class: "control-label" %>
+    <%= text_input f, :relation, class: "form-control" %>
+    <%= error_tag f, :relation %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, (gettext "race"), class: "control-label" %>
+    <%= text_input f, :race, class: "form-control" %>
+    <%= error_tag f, :race %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, (gettext "religion"),  class: "control-label" %>
+    <%= text_input f, :religion, class: "form-control" %>
+    <%= error_tag f, :religion %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, (gettext "nation"),  class: "control-label" %>
+    <%= text_input f, :nation, class: "form-control" %>
+    <%= error_tag f, :nation %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, (gettext "country"),  class: "control-label" %>
+    <%= text_input f, :country, class: "form-control" %>
+    <%= error_tag f, :country %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, (gettext "nacert"),  class: "control-label" %>
+    <%= text_input f, :nacert, class: "form-control" %>
+    <%= error_tag f, :nacert %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, (gettext "pstatus"),  class: "control-label" %>
+    <%= text_input f, :pstatus, class: "form-control" %>
+    <%= error_tag f, :pstatus %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, (gettext "tanggn"), class: "control-label" %>
+    <%= text_input f, :tanggn, class: "form-control" %>
+    <%= error_tag f, :tanggn %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, (gettext "oldic"),  class: "control-label" %>
+    <%= text_input f, :oldic, class: "form-control" %>
+    <%= error_tag f, :oldic %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, (gettext "refno"),  class: "control-label" %>
+    <%= text_input f, :refno, class: "form-control" %>
+    <%= error_tag f, :refno %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, (gettext "occup"),  class: "control-label" %>
+    <%= text_input f, :occup, class: "form-control" %>
+    <%= error_tag f, :occup %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, (gettext "income"),  class: "control-label" %>
+    <%= text_input f, :income, class: "form-control" %>
+    <%= error_tag f, :income %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, (gettext "addr1"),  class: "control-label" %>
+    <%= text_input f, :addr1, class: "form-control" %>
+    <%= error_tag f, :addr1 %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, (gettext "addr2"),  class: "control-label" %>
+    <%= text_input f, :addr2, class: "form-control" %>
+    <%= error_tag f, :addr2 %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, (gettext "addr3"), class: "control-label" %>
+    <%= text_input f, :addr3, class: "form-control" %>
+    <%= error_tag f, :addr3 %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, (gettext "poscod"),  class: "control-label" %>
+    <%= text_input f, :poscod, class: "form-control" %>
+    <%= error_tag f, :poscod %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, (gettext "district"), class: "control-label" %>
+    <%= text_input f, :district, class: "form-control" %>
+    <%= error_tag f, :district %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, (gettext "state"), class: "control-label" %>
+    <%= text_input f, :state, class: "form-control" %>
+    <%= error_tag f, :state %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, (gettext "htel"),  class: "control-label" %>
+    <%= text_input f, :htel, class: "form-control" %>
+    <%= error_tag f, :htel %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, (gettext "otel"), class: "control-label" %>
+    <%= text_input f, :otel, class: "form-control" %>
+    <%= error_tag f, :otel %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, (gettext "hphone"),  class: "control-label" %>
+    <%= text_input f, :hphone, class: "form-control" %>
+    <%= error_tag f, :hphone %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, (gettext "epname"), class: "control-label" %>
+    <%= text_input f, :epname, class: "form-control" %>
+    <%= error_tag f, :epname %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, (gettext "epaddr1"), class: "control-label" %>
+    <%= text_input f, :epaddr1, class: "form-control" %>
+    <%= error_tag f, :epaddr1 %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, (gettext "epaddr2"), class: "control-label" %>
+    <%= text_input f, :epaddr2, class: "form-control" %>
+    <%= error_tag f, :epaddr2 %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, (gettext "epaddr3"),  class: "control-label" %>
+    <%= text_input f, :epaddr3, class: "form-control" %>
+    <%= error_tag f, :epaddr3 %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, (gettext "epposcod"),  class: "control-label" %>
+    <%= text_input f, :epposcod, class: "form-control" %>
+    <%= error_tag f, :epposcod %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, (gettext "epdistrict"),  class: "control-label" %>
+    <%= text_input f, :epdistrict, class: "form-control" %>
+    <%= error_tag f, :epdistrict %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, (gettext "epstate"),  class: "control-label" %>
+    <%= text_input f, :epstate, class: "form-control" %>
+    <%= error_tag f, :epstate %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, (gettext "inctaxno"), class: "control-label" %>
+    <%= text_input f, :inctaxno, class: "form-control" %>
+    <%= error_tag f, :inctaxno %>
+  </div>
+</div>
+
+  <div class="form-group">
+    <%= submit "Submit", class: "btn btn-primary" %>
+  </div>
+<% end %>

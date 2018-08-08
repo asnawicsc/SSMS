@@ -1,0 +1,27 @@
+<h2>Show Grade</h2>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @grade.name %>
+  </li>
+
+  <li>
+    <strong>Max:</strong>
+    <%= @grade.max %>
+  </li>
+
+  <li>
+    <strong>Mix:</strong>
+    <%= @grade.mix %>
+  </li>
+    <li>
+    <strong>Gpa:</strong>
+    <%= @grade.gpa %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: grade_path(@conn, :edit, @grade) %></span>
+<span><%= link "Back", to: grade_path(@conn, :index) %></span>

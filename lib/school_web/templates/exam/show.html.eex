@@ -1,0 +1,18 @@
+<h2>Show Exam</h2>
+
+<ul>
+
+  <li>
+    <strong>Subject:</strong>
+    <%= @exam.subject_id %>
+  </li>
+
+  <li>
+    <strong>Exam master:</strong>
+    <%= @exam.exam_master_id %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: exam_path(@conn, :edit, @exam) %></span>
+<span><%= link "Back", to: exam_path(@conn, :index) %></span>

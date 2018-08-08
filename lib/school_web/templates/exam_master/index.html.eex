@@ -1,0 +1,32 @@
+<h2>Listing Exam master</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Semester</th>
+      <th>Level</th>
+      <th>Year</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for exam_master <- @exam_master do %>
+    <tr>
+      <td><%= exam_master.name %></td>
+      <td><%= exam_master.semester_id %></td>
+      <td><%= exam_master.level_id %></td>
+      <td><%= exam_master.year %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: exam_master_path(@conn, :show, exam_master), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: exam_master_path(@conn, :edit, exam_master), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: exam_master_path(@conn, :delete, exam_master), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Exam master", to: exam_master_path(@conn, :new) %></span>

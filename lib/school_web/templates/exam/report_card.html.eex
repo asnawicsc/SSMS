@@ -1,0 +1,110 @@
+<head>
+  <title> Student Report Card </title>
+  <h2> Student Report Card </h2>
+  <div class="row">
+     <div class="form-group">
+      Name : <%= @student_name %><br>
+      Class : <%= @class_name %>
+  </div>
+
+  </div>
+</head>
+<body>
+  <table>
+    <thead>
+      <tr>
+        <td colspan="3">Course </td>
+        <td rowspan="2"> Semester </td>
+        <td colspan="2"> Grade </td>
+      </tr>
+      <tr>
+        <td>Code </td>
+        <td colspan="2"> Name </td>
+        <td> Grade </td>
+        <td> Points </td>
+      </tr>
+    </thead>
+    <tbody>
+      <%= for item <- @all_data do %>
+      <tr>
+        <td><%= item.subject_code %></td>
+        <td colspan="2"><%= item.subject_name %></td>
+        <td align="center"> <%= item.semester %></td>
+        <td align="center"><%= item.grade %></td>
+        <td><%= item.gpa %></td>
+      
+      </tr>       
+       <% end %>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="4" class="footer">Total</td>
+        <td><%= if @a == 0 do %>
+            <% else %>
+           <%= @a %>A, 
+           <%end %>
+           <%= if @b == 0 do %>
+            <% else %>
+           <%= @b %>B, 
+           <%end %>
+           <%= if @c == 0 do %>
+            <% else %>
+           <%= @c %>C, 
+           <%end %>
+           <%= if @d == 0 do %>
+            <% else %>
+           <%= @d %>D, 
+           <%end %>
+           <%= if @e == 0 do %>
+            <% else %>
+           <%= @e %>E, 
+           <%end %>
+           <%= if @f == 0 do %>
+            <% else %>
+           <%= @f %>F, 
+           <%end %>
+           <%= if @g == 0 do %>
+            <% else %>
+           <%= @g %>G, 
+           <%end %></td>
+        <td colspan="2"> <%= @total_gpa %></td>
+      </tr>
+      <tr>
+        <td colspan="4" class="footer">CGPA</td>
+        <td colspan="3"><%= @cgpa%> </td>
+      </tr>
+  </table>
+</body>
+
+<style type="text/css">
+  html {
+  font-family:arial;
+  font-size: 18px;
+}
+
+td {
+  border: 1px solid #726E6D;
+  padding: 15px;
+}
+
+thead{
+  font-weight:bold;
+  text-align:center;
+  background: #625D5D;
+  color:white;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+.footer {
+  text-align:right;
+  font-weight:bold;
+}
+
+tbody >tr:nth-child(odd) {
+  background: #D1D0CE;
+}
+
+</style>

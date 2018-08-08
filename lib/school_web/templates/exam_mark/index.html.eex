@@ -1,0 +1,36 @@
+<h2>Listing Exam mark</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Class</th>
+      <th>Exam</th>
+      <th>Mark</th>
+      <th>Subject</th>
+      <th>Student</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for exam_mark <- @exam_mark do %>
+    <tr>
+      <td><%= exam_mark.class_id %></td>
+      <td><%= exam_mark.exam_id %></td>
+      <td><%= exam_mark.mark %></td>
+      <td><%= exam_mark.subject_id %></td>
+      <td><%= exam_mark.student_id %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: exam_mark_path(@conn, :show, exam_mark), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: exam_mark_path(@conn, :edit, exam_mark), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: exam_mark_path(@conn, :delete, exam_mark), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Exam mark", to: exam_mark_path(@conn, :new) %></span>
+
+

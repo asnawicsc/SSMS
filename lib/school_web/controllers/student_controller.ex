@@ -128,6 +128,7 @@ defmodule SchoolWeb.StudentController do
         url = student_path(conn, :index, focus: student.id)
         referer = conn.req_headers |> Enum.filter(fn x -> elem(x, 0) == "referer" end)
 
+
         if referer != [] do
           refer = hd(referer)
           url = refer |> elem(1) |> String.split("?") |> List.first()

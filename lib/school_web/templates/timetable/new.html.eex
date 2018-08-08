@@ -1,0 +1,5 @@
+<h2>New Timetable</h2>
+
+<%= render "form.html", Map.put(assigns, :action, timetable_path(@conn, :create)) %>
+
+<span><%= link "Back", to: timetable_path(@conn, :index) %></span>

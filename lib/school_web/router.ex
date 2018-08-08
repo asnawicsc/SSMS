@@ -53,8 +53,40 @@ defmodule SchoolWeb.Router do
     get("/add_to_class_attendance", AttendanceController, :add_to_class_attendance)
     get("/add_to_class_absent", AttendanceController, :add_to_class_absent)
 
+    resources "/teacher", TeacherController
+     post("/upload_teachers", TeacherController, :upload_teachers)
+    resources "/subject", SubjectController
+    post("/upload_subjects", SubjectController, :upload_subjects)
+     resources "/parent", ParentController
+     post("/upload_parents", ParentController, :upload_parents)
+
+    resources "/timetable", TimetableController
+     get("/generated_timetable/:id", TimetableController, :generated_timetable)
+    resources "/period", PeriodController
+        post("/create_period", PeriodController, :create_period)
+         post("/update_period/:id", PeriodController, :update_period)
+    resources "/day", DayController
+    resources "/grade", GradeController
+resources "/exam_master", ExamMasterController
+resources "/time_period", TimePeriodController
+
+
+        resources "/exam", ExamController
+            get("/generate_exam/:id", ExamController, :generate_exam)
+                   post("/mark", ExamController, :mark)
+  post("/create_mark", ExamController, :create_mark)
+  post("/update_mark", ExamController, :update_mark)
+   get("/new_exam", ExamController, :new_exam)
+   post("/create_exam", ExamController, :create_exam)
+    get("/rank/:id", ExamController, :rank)
     resources("/absent", AbsentController)
     resources("/labels", LabelController)
+     post("/exam_ranking", ExamController, :exam_ranking)
+          get("/generate_ranking", ExamController, :generate_ranking)
+
+get("/report_card/:exam_name/:id", ExamController, :report_card)
+      resources "/exam_mark", ExamMarkController
+
   end
 
   # Other scopes may use custom stacks.

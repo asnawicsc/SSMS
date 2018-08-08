@@ -1,0 +1,28 @@
+<h2>Listing Time period</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Time start</th>
+      <th>Time end</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for time_period <- @time_period do %>
+    <tr>
+      <td><%= time_period.time_start %></td>
+      <td><%= time_period.time_end %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: time_period_path(@conn, :show, time_period), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: time_period_path(@conn, :edit, time_period), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: time_period_path(@conn, :delete, time_period), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Time period", to: time_period_path(@conn, :new) %></span>

@@ -1,0 +1,89 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title><%= @class.name %>Timetable</title>
+    <style>
+    html {
+      font-family: sans-serif;
+    }
+    table {
+      border-collapse: collapse;
+      border: 2px solid rgb(200,200,200);
+      letter-spacing: 1px;
+      font-size: 0.8rem;
+    }
+    td, th {
+      border: 1px solid rgb(190,190,190);
+      padding: 10px 20px;
+    }
+    td {
+      text-align: center;
+    }
+    caption {
+      padding: 10px;
+    }
+    </style>
+  </head>
+ <% require IEx %>
+  <body>
+    <h1> Class <%= @class.name %></h1>
+
+    <table>
+      <colgroup>
+        <col col span="2" >
+      </colgroup>
+      <tr>
+
+         <td style="background-color:#97DB9A;"> &nbsp;</td>
+         <%= for item <- @time_period do %>
+
+        <% time_start= Time.to_string(item.time_start)|>String.split_at(5)|>elem(0) %>
+        <% time_end=Time.to_string(item.time_end)|>String.split_at(5)|>elem(0)  %>
+         <th style="background-color:#97DB9A;"><%= time_start %>-<%= time_end %></th>
+           
+        <% end %>
+
+      </tr>
+       <%= for item <- @period do %>
+
+       <% day=item|>elem(1)|>Enum.map(fn x -> x.day_name end)|>Enum.uniq|>hd %>
+
+        <% all=item|>elem(1)|>Enum.sort_by(fn x -> x.start_time end) %>
+
+      <tr>
+
+       <th  style="background-color:#DCC48E; "><%= day %></th>
+
+     
+
+
+     
+         <%= for item <- all do %>
+
+          <% e=item.end_time  %>
+          <% s=item.start_time %>
+
+
+        <% col = e-s %>
+
+
+       
+       
+
+        <td colspan="<%= col %>"><%= item.s_code %><br>(<%=item.t_name %>)</td>
+          
+        <%= end %>
+       
+
+      </tr>
+         <% end %>
+
+    </table>
+
+
+  </body>
+</html> 
+
+

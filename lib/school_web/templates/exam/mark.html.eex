@@ -1,0 +1,64 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Exam Mark for <%= @class.name %></title>
+    <style>
+    html {
+      font-family: sans-serif;
+    }
+    table {
+      border-collapse: collapse;
+      border: 2px solid rgb(200,200,200);
+      letter-spacing: 1px;
+      font-size: 0.8rem;
+    }
+    td, th {
+      border: 1px solid rgb(190,190,190);
+      padding: 10px 20px;
+    }
+    td {
+      text-align: center;
+    }
+    caption {
+      padding: 10px;
+    }
+    </style>
+  </head>
+ <% require IEx %>
+  <body>
+    <h1>(<%=@class.name %>) Exam Mark for <%= @subject.description %></h1>
+<form method="post" action="/create_mark" class="form-horizontal">
+  <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+   <input type="hidden" name="class_id" value="<%= @class.id %>">
+    <input type="hidden" name="subject_id" value="<%= @subject.id %>">
+       <input type="hidden" name="exam_id" value="<%= @exam_id %>">
+    <table>
+      <colgroup>
+        <col col span="2" >
+      </colgroup>
+      <tr>
+
+         <th style="background-color:#97DB9A;">Student Name</th>
+        <th style="background-color:#97DB9A;">Mark</th>
+      </tr>
+       <%= for item <- @student do %>
+
+      <tr>
+
+       <th ><%= item.student_name %></th>
+        <th  ><input type="number" min="0" max="100" name="mark[<%=item.id %>]"></th>
+
+      </tr>
+         <% end %>
+
+    </table>
+
+
+  </body>
+</html> <br>
+
+    <input class="btn btn-primary" name="" value="Submit" type="submit">
+</form>
+

@@ -1,0 +1,19 @@
+<h2>Show Day</h2>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @day.name %>
+
+  </li>
+    <li>
+    <strong>Number:</strong>
+
+     <%= @day.number %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: day_path(@conn, :edit, @day) %></span>
+<span><%= link "Back", to: day_path(@conn, :index) %></span>
