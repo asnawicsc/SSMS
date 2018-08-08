@@ -1,0 +1,33 @@
+<h2>Show Timetable</h2>
+
+<ul>
+
+  <li>
+    <strong>Class:</strong>
+    <%= @timetable.class_id %>
+  </li>
+
+  <li>
+    <strong>Institution:</strong>
+    <%= @timetable.institution_id %>
+  </li>
+
+  <li>
+    <strong>Level:</strong>
+    <%= @timetable.level_id %>
+  </li>
+
+  <li>
+    <strong>Period:</strong>
+    <%= @timetable.period_id %>
+  </li>
+
+  <li>
+    <strong>Semester:</strong>
+    <%= @timetable.semester_id %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: timetable_path(@conn, :edit, @timetable) %></span>
+<span><%= link "Back", to: timetable_path(@conn, :index) %></span>

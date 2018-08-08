@@ -1,0 +1,18 @@
+<h2>Show Time period</h2>
+
+<ul>
+
+  <li>
+    <strong>Time start:</strong>
+    <%= @time_period.time_start %>
+  </li>
+
+  <li>
+    <strong>Time end:</strong>
+    <%= @time_period.time_end %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: time_period_path(@conn, :edit, @time_period) %></span>
+<span><%= link "Back", to: time_period_path(@conn, :index) %></span>

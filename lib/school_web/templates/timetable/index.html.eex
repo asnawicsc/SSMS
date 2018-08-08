@@ -1,0 +1,34 @@
+<h2>Listing Timetable</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Class</th>
+      <th>Institution</th>
+      <th>Level</th>
+      <th>Period</th>
+      <th>Semester</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for timetable <- @timetable do %>
+    <tr>
+      <td><%= timetable.class_id %></td>
+      <td><%= timetable.institution_id %></td>
+      <td><%= timetable.level_id %></td>
+      <td><%= timetable.period_id %></td>
+      <td><%= timetable.semester_id %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: timetable_path(@conn, :show, timetable), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: timetable_path(@conn, :edit, timetable), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: timetable_path(@conn, :delete, timetable), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Timetable", to: timetable_path(@conn, :new) %></span>

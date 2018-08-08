@@ -1,0 +1,28 @@
+<h2>Show Exam master</h2>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @exam_master.name %>
+  </li>
+
+  <li>
+    <strong>Semester:</strong>
+    <%= @exam_master.semester_id %>
+  </li>
+
+  <li>
+    <strong>Level:</strong>
+    <%= @exam_master.level_id %>
+  </li>
+
+  <li>
+    <strong>Year:</strong>
+    <%= @exam_master.year %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: exam_master_path(@conn, :edit, @exam_master) %></span>
+<span><%= link "Back", to: exam_master_path(@conn, :index) %></span>

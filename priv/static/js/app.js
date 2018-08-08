@@ -128,8 +128,46 @@ $("footer").append(maintain)
     $("input[name='_csrf_token']").val(csrf)
   })
 
+    $("div.subject").click(function(){
+    var code = $(this).attr("id")
+    channel.push("inquire_subject_details", {user_id: window.currentUser, code: code})
+  })
+
+      channel.on("show_subject_details", payload => {
+    $("div[aria-label='subject_details']").html(payload.html)
+    var csrf = window.csrf
+    $("input[name='_csrf_token']").val(csrf)
+  })
+
+
+    $("div.teacher").click(function(){
+    var code = $(this).attr("id")
+    channel.push("inquire_teacher_details", {user_id: window.currentUser, code: code})
+  })
+
+          channel.on("show_teacher_details", payload => {
+    $("div[aria-label='teacher_details']").html(payload.html)
+    var csrf = window.csrf
+    $("input[name='_csrf_token']").val(csrf)
+  })
+
+       $("div.parent").click(function(){
+    var icno = $(this).attr("id")
+    channel.push("inquire_parent_details", {user_id: window.currentUser, icno: icno})
+  }) 
+
+            channel.on("show_parent_details", payload => {
+    $("div[aria-label='parent_details']").html(payload.html)
+    var csrf = window.csrf
+    $("input[name='_csrf_token']").val(csrf)
+  })      
+
+
+
   $("a[href='/logout']").click(function(){
     localStorage.removeItem("maintain")
     localStorage.removeItem("logo_bin")
   })
+
+  
 })

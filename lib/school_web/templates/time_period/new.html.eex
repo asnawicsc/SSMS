@@ -1,0 +1,5 @@
+<h2>New Time period</h2>
+
+<%= render "form.html", Map.put(assigns, :action, time_period_path(@conn, :create)) %>
+
+<span><%= link "Back", to: time_period_path(@conn, :index) %></span>

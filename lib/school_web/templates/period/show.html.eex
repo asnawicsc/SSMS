@@ -1,0 +1,42 @@
+<h2>Show Period</h2>
+    <%subject=School.Repo.get_by(School.Affairs.Subject,id: @period.subject_id)%>
+    <%class=School.Repo.get_by(School.Affairs.Class,id: @period.class_id)%>
+    <%teacher=School.Repo.get_by(School.Affairs.Teacher,id: @period.teacher_id)%>
+
+<ul>
+
+  <li>
+    <strong>Start time:</strong>
+    <%= @period.start_time %>
+  </li>
+
+  <li>
+    <strong>End time:</strong>
+    <%= @period.end_time %>
+  </li>
+
+  <li>
+    <strong>Day:</strong>
+    <%= @period.day %>
+  </li>
+
+  <li>
+    <strong>Subject:</strong>
+    <%= subject.description %>
+  </li>
+
+    <li>
+    <strong>Class:</strong>
+    <%= class.name %>
+  </li>
+
+
+  <li>
+    <strong>Teacher:</strong>
+    <%= teacher.name %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: period_path(@conn, :edit, @period) %></span>
+<span><%= link "Back", to: period_path(@conn, :index) %></span>

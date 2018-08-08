@@ -1,0 +1,5 @@
+<h2>Edit Grade</h2>
+
+<%= render "form.html", Map.put(assigns, :action, grade_path(@conn, :update, @grade)) %>
+
+<span><%= link "Back", to: grade_path(@conn, :index) %></span>

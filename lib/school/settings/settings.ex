@@ -399,4 +399,6 @@ defmodule School.Settings do
   def change_label(%Label{} = label) do
     Label.changeset(label, %{})
   end
+
+
 end

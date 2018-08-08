@@ -44,7 +44,7 @@ defmodule SchoolWeb.UserController do
         if user.institution_id == nil do
           conn
           |> put_session(:user_id, user.id)
-          |> redirect(to: institution_path(conn, :dashboard))
+          |> redirect(to: institution_path(conn, :index))
         else
           conn
           |> put_session(:user_id, user.id)

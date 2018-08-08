@@ -1,0 +1,28 @@
+<h2>Show Subject</h2>
+
+<ul>
+
+  <li>
+    <strong>Code:</strong>
+    <%= @subject.code %>
+  </li>
+
+  <li>
+    <strong>Description:</strong>
+    <%= @subject.description %>
+  </li>
+
+  <li>
+    <strong>Cdesc:</strong>
+    <%= @subject.cdesc %>
+  </li>
+
+  <li>
+    <strong>Sysdef:</strong>
+    <%= @subject.sysdef %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: subject_path(@conn, :edit, @subject) %></span>
+<span><%= link "Back", to: subject_path(@conn, :index) %></span>

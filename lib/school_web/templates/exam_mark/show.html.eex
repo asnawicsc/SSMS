@@ -1,0 +1,33 @@
+<h2>Show Exam mark</h2>
+
+<ul>
+
+  <li>
+    <strong>Class:</strong>
+    <%= @exam_mark.class_id %>
+  </li>
+
+  <li>
+    <strong>Exam:</strong>
+    <%= @exam_mark.exam_id %>
+  </li>
+
+  <li>
+    <strong>Mark:</strong>
+    <%= @exam_mark.mark %>
+  </li>
+
+  <li>
+    <strong>Subject:</strong>
+    <%= @exam_mark.subject_id %>
+  </li>
+
+  <li>
+    <strong>Student:</strong>
+    <%= @exam_mark.student_id %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: exam_mark_path(@conn, :edit, @exam_mark) %></span>
+<span><%= link "Back", to: exam_mark_path(@conn, :index) %></span>

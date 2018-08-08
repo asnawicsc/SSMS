@@ -1,0 +1,168 @@
+<h2>Show Parent</h2>
+
+<ul>
+
+  <li>
+    <strong>Icno:</strong>
+    <%= @parent.icno %>
+  </li>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @parent.name %>
+  </li>
+
+  <li>
+    <strong>Cname:</strong>
+    <%= @parent.cname %>
+  </li>
+
+  <li>
+    <strong>Relation:</strong>
+    <%= @parent.relation %>
+  </li>
+
+  <li>
+    <strong>Race:</strong>
+    <%= @parent.race %>
+  </li>
+
+  <li>
+    <strong>Religion:</strong>
+    <%= @parent.religion %>
+  </li>
+
+  <li>
+    <strong>Nation:</strong>
+    <%= @parent.nation %>
+  </li>
+
+  <li>
+    <strong>Country:</strong>
+    <%= @parent.country %>
+  </li>
+
+  <li>
+    <strong>Nacert:</strong>
+    <%= @parent.nacert %>
+  </li>
+
+  <li>
+    <strong>Pstatus:</strong>
+    <%= @parent.pstatus %>
+  </li>
+
+  <li>
+    <strong>Tanggn:</strong>
+    <%= @parent.tanggn %>
+  </li>
+
+  <li>
+    <strong>Oldic:</strong>
+    <%= @parent.oldic %>
+  </li>
+
+  <li>
+    <strong>Refno:</strong>
+    <%= @parent.refno %>
+  </li>
+
+  <li>
+    <strong>Occup:</strong>
+    <%= @parent.occup %>
+  </li>
+
+  <li>
+    <strong>Income:</strong>
+    <%= @parent.income %>
+  </li>
+
+  <li>
+    <strong>Addr1:</strong>
+    <%= @parent.addr1 %>
+  </li>
+
+  <li>
+    <strong>Addr2:</strong>
+    <%= @parent.addr2 %>
+  </li>
+
+  <li>
+    <strong>Addr3:</strong>
+    <%= @parent.addr3 %>
+  </li>
+
+  <li>
+    <strong>Poscod:</strong>
+    <%= @parent.poscod %>
+  </li>
+
+  <li>
+    <strong>District:</strong>
+    <%= @parent.district %>
+  </li>
+
+  <li>
+    <strong>State:</strong>
+    <%= @parent.state %>
+  </li>
+
+  <li>
+    <strong>Htel:</strong>
+    <%= @parent.htel %>
+  </li>
+
+  <li>
+    <strong>Otel:</strong>
+    <%= @parent.otel %>
+  </li>
+
+  <li>
+    <strong>Hphone:</strong>
+    <%= @parent.hphone %>
+  </li>
+
+  <li>
+    <strong>Epname:</strong>
+    <%= @parent.epname %>
+  </li>
+
+  <li>
+    <strong>Epaddr1:</strong>
+    <%= @parent.epaddr1 %>
+  </li>
+
+  <li>
+    <strong>Epaddr2:</strong>
+    <%= @parent.epaddr2 %>
+  </li>
+
+  <li>
+    <strong>Epaddr3:</strong>
+    <%= @parent.epaddr3 %>
+  </li>
+
+  <li>
+    <strong>Epposcod:</strong>
+    <%= @parent.epposcod %>
+  </li>
+
+  <li>
+    <strong>Epdistrict:</strong>
+    <%= @parent.epdistrict %>
+  </li>
+
+  <li>
+    <strong>Epstate:</strong>
+    <%= @parent.epstate %>
+  </li>
+
+  <li>
+    <strong>Inctaxno:</strong>
+    <%= @parent.inctaxno %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: parent_path(@conn, :edit, @parent) %></span>
+<span><%= link "Back", to: parent_path(@conn, :index) %></span>
