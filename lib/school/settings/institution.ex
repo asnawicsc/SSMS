@@ -18,6 +18,7 @@ defmodule School.Settings.Institution do
     field(:state, :string)
     field(:town, :string)
     field(:maintained_by, :string)
+    field(:library_organization_id, :integer)
 
     timestamps()
   end
@@ -26,6 +27,7 @@ defmodule School.Settings.Institution do
   def changeset(institution, attrs) do
     institution
     |> cast(attrs, [
+      :library_organization_id,
       :name,
       :line1,
       :line2,

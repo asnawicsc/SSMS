@@ -1,6 +1,7 @@
 defmodule SchoolWeb.PageController do
   use SchoolWeb, :controller
   require IEx
+  alias School.Settings.Institution
 
   def index(conn, _params) do
     current_sem =
@@ -39,18 +40,17 @@ defmodule SchoolWeb.PageController do
   end
 
   def operations(conn, params) do
+    inst = Repo.get(Institution, School.Affairs.inst_id(conn))
+
     if Application.get_env(:your_app, :env) == nil do
       uri = "http://localhost:4000/api"
-      lib_id = 3
     else
       uri = "https://www.li6rary.net/api"
-      lib_id = School.Affairs.inst_id(conn)
     end
 
-    case params["scope"] do
-      "get_lib" ->
-        path = "?scope=get_lib&lib_id=#{lib_id}"
+    lib_id = inst.library_organization_id
 
+    case params["scope"] do
       "get_loans" ->
         path = "?scope=get_loans&lib_id=#{lib_id}"
 
@@ -103,7 +103,7 @@ defmodule SchoolWeb.PageController do
       lib_id = School.Affairs.inst_id(conn)
     end
 
-    path = "?scope=get_lib&lib_id=#{lib_id}"
+    path = "?scope=get_lib&inst_id=sa_#{lib_id}"
 
     response =
       HTTPoison.get!(
@@ -114,6 +114,12 @@ defmodule SchoolWeb.PageController do
       ).body
 
     library = response |> Poison.decode!()
+
+    library_organization_id = library["org_id"]
+    inst = Repo.get(Institution, School.Affairs.inst_id(conn))
+
+    Institution.changeset(inst, %{library_organization_id: library_organization_id})
+    |> Repo.update()
 
     loan = library["loan"]
     categories = library["categories"]

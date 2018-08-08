@@ -1,9 +1,64 @@
 defmodule SchoolWeb.ClassController do
   use SchoolWeb, :controller
-
+  use Task
   alias School.Affairs
+  alias School.Settings.Institution
   alias School.Affairs.{Level, Class}
   require IEx
+
+  def sync_library_membership(conn, params) do
+    students_in =
+      Repo.all(
+        from(
+          s in School.Affairs.StudentClass,
+          left_join: t in School.Affairs.Student,
+          on: t.id == s.sudent_id,
+          where:
+            s.institute_id == ^School.Affairs.inst_id(conn) and
+              s.semester_id == ^conn.private.plug_session["semester_id"] and
+              s.class_id == ^String.to_integer(params["id"]),
+          select: %{
+            chinese_name: t.chinese_name,
+            name: t.name,
+            id: t.id,
+            ic: t.ic,
+            student_no: t.student_no,
+            phone: t.phone
+          }
+        )
+      )
+
+    inst = Repo.get(Institution, School.Affairs.inst_id(conn))
+
+    if Application.get_env(:your_app, :env) == nil do
+      uri = "http://localhost:4000/api"
+    else
+      uri = "https://www.li6rary.net/api"
+    end
+
+    lib_id = inst.library_organization_id
+
+    a =
+      for student <- students_in do
+        Task.start_link(__MODULE__, :reg_lib_student, [student, lib_id, uri])
+      end
+
+    conn
+    |> put_flash(:info, "Library membership synced!")
+    |> redirect(to: class_path(conn, :index))
+  end
+
+  def reg_lib_student(student, lib_id, uri) do
+    name = String.replace(student.name, " ", "+")
+
+    path =
+      "?scope=get_user_register_response&lib_id=#{lib_id}&name=#{name}&ic=#{student.ic}&phone=#{
+        student.phone
+      }&code=#{student.student_no}"
+
+    IO.inspect(uri <> path)
+    response = HTTPoison.get!(uri <> path, [{"Content-Type", "application/json"}]).body
+  end
 
   def add_to_class_semester(conn, %{
         "institute_id" => institute_id,

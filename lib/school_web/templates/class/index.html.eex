@@ -17,6 +17,7 @@
        <td><%= class.level_id %></td>
 
       <td class="text-right">
+        <span><%= link (gettext "Sync Library Membership"), to: class_path(@conn, :sync_library_membership, class.id), class: "btn btn-default btn-xs" %></span>
         <span><%= link (gettext "Exam Rank"), to: exam_path(@conn, :rank, class.id), class: "btn btn-default btn-xs" %></span>
          <span><%= link (gettext "Create Exam"), to: exam_path(@conn, :generate_exam, class.id), class: "btn btn-default btn-xs" %></span>
          <span><%= link (gettext "Timetable"), to: timetable_path(@conn, :generated_timetable, class.id), class: "btn btn-default btn-xs" %></span>
