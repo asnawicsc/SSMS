@@ -30,7 +30,7 @@
 
 			<%= form_for @conn, "/library/books/uploads",[method: :post, multipart: true], fn f -> %>
 
-		  <%= file_input f, :book, accept: ".csv" %>
+		  <%= file_input f, :book, accept: ".csv", required: true %>
 			<input type="submit" name="" value="Upload">
 		<% end %>
 	</div>

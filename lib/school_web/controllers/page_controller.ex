@@ -115,20 +115,19 @@ defmodule SchoolWeb.PageController do
       |> Enum.map(fn x -> String.trim(String.downcase(x)) end)
 
     body = data_list |> tl()
-
-    for book_string <- body do
-      book_data = book_string |> String.split(",")
-      book_param = Enum.zip(header, book_data) |> Enum.into(%{})
-      Task.start_link(__MODULE__, :upload_book, [book_param, lib_id, uri])
-    end
-
-    # a =
-    #   for student <- students_in do
-    #   end
+    Task.start_link(__MODULE__, :upload_process, [body, header, lib_id, uri])
 
     conn
     |> put_flash(:info, "Library books uploaded!")
     |> redirect(to: page_path(conn, :books))
+  end
+
+  def upload_process(body, header, lib_id, uri) do
+    for book_string <- body do
+      book_data = book_string |> String.split(",")
+      book_param = Enum.zip(header, book_data) |> Enum.into(%{})
+      upload_book(book_param, lib_id, uri)
+    end
   end
 
   def upload_book(book_param, lib_id, uri) do
