@@ -32,7 +32,9 @@ defmodule SchoolWeb.PeriodController do
     new_start_time=a<>start_time|>String.reverse|>Time.from_iso8601!()
 
     n_time=new_start_time.hour
+      n_sm=new_start_time.minute
     e_time=new_end_time.hour
+      n_em=new_start_time.minute
 
      if  n_time == 0 do 
 
@@ -51,7 +53,7 @@ defmodule SchoolWeb.PeriodController do
 
     params=%{day: day, end_time: new_end_time, start_time: new_start_time,teacher_id: teacher.id,class_id: class.id,subject_id: subject.id}
 
-     time_diff=Time.diff(new_end_time,new_start_time) 
+
 
     period_class=Repo.all(from p in Period, where: p.class_id ==^class.id and p.day ==^day)
 
@@ -59,6 +61,8 @@ defmodule SchoolWeb.PeriodController do
       all=for item <- period_class do
       e=item.end_time.hour  
       s=item.start_time.hour 
+        em=item.end_time.minute  
+      sm=item.start_time.minute 
 
        if  e == 0 do 
 
@@ -70,11 +74,12 @@ defmodule SchoolWeb.PeriodController do
           s= 12
       end 
 
-      %{end_time: e,start_time: s}
+      %{end_time: e,start_time: s,start_minute: sm,end_minute: em}
     
    end
 
-   a=all|>Enum.filter(fn x -> x.start_time > n_time and x.start_time < e_time end)
+   a=all|>Enum.filter(fn x -> x.start_time >= n_time and x.start_time <= e_time and x.start_minute >= n_sm and x.start_minute <= n_em end)
+
 
    b=a|>Enum.count
 
@@ -169,6 +174,11 @@ defmodule SchoolWeb.PeriodController do
     new_end_time=a<>end_time|>String.reverse|>Time.from_iso8601!()
     new_start_time=a<>start_time|>String.reverse|>Time.from_iso8601!()
 
+        n_time=new_start_time.hour
+      n_sm=new_start_time.minute
+    e_time=new_end_time.hour
+      n_em=new_start_time.minute
+
     subject=Repo.get_by(Subject,code: subject)
     class=Repo.get_by(Class,name: class_name)
     teacher=Repo.get_by(Teacher,code: teacher)
@@ -179,15 +189,59 @@ defmodule SchoolWeb.PeriodController do
 
 
 
-    changeset = Affairs.change_period(period)
-    case Affairs.update_period(period, period_params) do
-      {:ok, period} ->
-        conn
-        |> put_flash(:info, "Period updated successfully.")
-        |> redirect(to: period_path(conn, :show, period))
-      {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html", period: period, changeset: changeset)
+
+    period_class=Repo.all(from p in Period, where: p.class_id ==^class.id and p.day ==^day)|>Enum.reject(fn x -> x.id == period.id end)
+
+      all=for item <- period_class do
+      e=item.end_time.hour  
+      s=item.start_time.hour 
+        em=item.end_time.minute  
+      sm=item.start_time.minute 
+
+       if  e == 0 do 
+
+          e= 12
+      end
+
+      if  s == 0 do
+
+          s= 12
+      end 
+
+      %{end_time: e,start_time: s,start_minute: sm,end_minute: em}
+    
+   end
+
+   a=all|>Enum.filter(fn x -> x.start_time >= n_time and x.start_time <= e_time and x.start_minute >= n_sm and x.start_minute <= n_em end)
+
+
+   b=a|>Enum.count
+
+
+
+    if b == 0 do
+
+
+
+
+      changeset = Affairs.change_period(period)
+      case Affairs.update_period(period, period_params) do
+        {:ok, period} ->
+          conn
+          |> put_flash(:info, "Period updated successfully.")
+          |> redirect(to: period_path(conn, :show, period))
+       
+      end
+
+
+  else
+
+         conn
+        |> put_flash(:info, "That slot already been taken,please refer to period table.")
+        |> redirect(to: period_path(conn, :index))
+   
     end
+
   end
 
   def delete(conn, %{"id" => id}) do

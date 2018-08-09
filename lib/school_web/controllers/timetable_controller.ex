@@ -71,7 +71,7 @@ defmodule SchoolWeb.TimetableController do
     left_join: s in School.Affairs.Subject, on: s.id==p.subject_id,
     left_join: t in School.Affairs.Teacher, on: t.id==p.teacher_id,
     left_join: d in School.Affairs.Day, on: d.name==p.day,
-    where: p.class_id==^class_id,select: %{day_name: d.name,day_number: d.number,end_time: p.end_time,start_time: p.start_time,t_name: t.name,s_code: s.code})
+    where: p.class_id==^class_id,select: %{day_number: d.number,end_time: p.end_time,start_time: p.start_time,s_code: s.code})
 
    all=for item <- period do
       e=item.end_time.hour  
@@ -87,12 +87,33 @@ defmodule SchoolWeb.TimetableController do
           s= 12
       end 
 
-      %{day_name: item.day_name,day_number: item.day_number,end_time: e,start_time: s,t_name: item.t_name,s_code: item.s_code}
+      %{day_number: item.day_number,end_time: e,start_time: s,s_code: item.s_code}
     
    end|>Enum.group_by(fn x -> x.day_number end)
 
-   time_period=Repo.all(from tp in School.Affairs.TimePeriod)|>Enum.sort_by(fn x -> x.time_start end)
+    all2=for item <- period do
+      e=item.end_time.hour  
+      s=item.start_time.hour 
+sm=item.start_time.minute 
+em=item.end_time.minute 
+       if  e == 0 do 
 
-    render(conn, "generated_timetable.html",changeset: changeset,time_period: time_period,class: class,period: all)
+          e= 12
+      end
+
+      if  s == 0 do
+
+          s= 12
+      end 
+
+
+   %{location: item.day_number,end_hour: e,end_minute: em,start_minute: sm,start_hour: s,name: item.s_code}
+
+     
+    
+   end|>Enum.reject(fn x-> x == nil end)
+
+
+    render(conn, "generated_timetable.html",all2: Poison.encode!(all2))
   end
 end

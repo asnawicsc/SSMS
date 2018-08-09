@@ -1,89 +1,87 @@
 
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title><%= @class.name %>Timetable</title>
-    <style>
-    html {
-      font-family: sans-serif;
-    }
-    table {
-      border-collapse: collapse;
-      border: 2px solid rgb(200,200,200);
-      letter-spacing: 1px;
-      font-size: 0.8rem;
-    }
-    td, th {
-      border: 1px solid rgb(190,190,190);
-      padding: 10px 20px;
-    }
-    td {
-      text-align: center;
-    }
-    caption {
-      padding: 10px;
-    }
-    </style>
-  </head>
- <% require IEx %>
-  <body>
-    <h1> Class <%= @class.name %></h1>
 
-    <table>
-      <colgroup>
-        <col col span="2" >
-      </colgroup>
-      <tr>
 
-         <td style="background-color:#97DB9A;"> &nbsp;</td>
-         <%= for item <- @time_period do %>
+      
+          <link rel="stylesheet" href="/css/jquery.skedTape.css">
+    </head>
+    <body>
+        <div class="container">
+            <div class="mb-4">
+            
+                
+                <div id="sked1"></div>
+            </div>
+       
+        </div>
+       
+   <script src="<%= static_path(@conn, "/js/jquery.skedTape.js") %> "></script>
 
-        <% time_start= Time.to_string(item.time_start)|>String.split_at(5)|>elem(0) %>
-        <% time_end=Time.to_string(item.time_end)|>String.split_at(5)|>elem(0)  %>
-         <th style="background-color:#97DB9A;"><%= time_start %>-<%= time_end %></th>
+
+         
            
-        <% end %>
 
-      </tr>
-       <%= for item <- @period do %>
-
-       <% day=item|>elem(1)|>Enum.map(fn x -> x.day_name end)|>Enum.uniq|>hd %>
-
-        <% all=item|>elem(1)|>Enum.sort_by(fn x -> x.start_time end) %>
-
-      <tr>
-
-       <th  style="background-color:#DCC48E; "><%= day %></th>
-
-     
+        <script type="text/javascript">
 
 
-     
-         <%= for item <- all do %>
-
-          <% e=item.end_time  %>
-          <% s=item.start_time %>
+   $(document).ready(function() {
 
 
-        <% col = e-s %>
+
+    var maps = JSON.parse('<%=raw(@all2)%>')
+
+   $(maps).each(function(i,v) {
+          console.log(v)
+             v["start"]= start(v["start_hour"],v["start_minute"])
+             v["end"]= end(v["end_hour"],v["end_minute"])
+        })
 
 
-       
-       
+            // --------------------------- Data --------------------------------
+            var locations = [
+                {id: '1', name: 'Ahad'},
+                {id: '2', name: 'Isnin'},
+                {id: '3', name: 'Selasa'},
+                {id: '4', name: 'Rabu'},
+                {id: '5', name: 'Khamis'},
+                {id: '6', name: 'Jumaat'},
+                {id: '7', name: 'Sabtu'}
+                  
+              
+                ];
 
-        <td colspan="<%= col %>"><%= item.s_code %><br>(<%=item.t_name %>)</td>
+            var events =maps;
+            // -------------------------- Helpers ------------------------------
+             function start(hours, minutes) {
+                var date = new Date();
+                date.setUTCHours(hours, minutes, 0, 0);
+                console.log(date)
+                return date;
+
+            }
+              function end(hours, minutes) {
+                var date = new Date();
+                date.setUTCHours(hours, minutes, 0, 0);
+                return date;
+            }
+            
+            
           
-        <%= end %>
-       
-
-      </tr>
-         <% end %>
-
-    </table>
-
-
-  </body>
-</html> 
-
-
+            // --------------------------- Example 1 ---------------------------
+            var $sked1 = $('#sked1').skedTape({
+                caption: 'Day',
+                start: start(8,0),
+                end: end(18, 0),
+                showEventTime: true,
+                showEventDuration: true,
+                scrollWithYWheel: true,
+                locations: locations,
+                events: events
+               
+            });
+           
+           
+          })
+        </script>
+    </body>
+</html>
