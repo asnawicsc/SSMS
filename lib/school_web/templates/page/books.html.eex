@@ -25,6 +25,15 @@
 		</table>
 		
 	</div>
+	<div class="col-lg-4">
+
+
+			<%= form_for @conn, "/library/books/uploads",[method: :post, multipart: true], fn f -> %>
+
+		  <%= file_input f, :book, accept: ".csv" %>
+			<input type="submit" name="" value="Upload">
+		<% end %>
+	</div>
 </div>
 </div>
 

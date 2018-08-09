@@ -1,6 +1,7 @@
 defmodule SchoolWeb.PageController do
   use SchoolWeb, :controller
   require IEx
+  use Task
   alias School.Settings.Institution
 
   def index(conn, _params) do
@@ -92,6 +93,56 @@ defmodule SchoolWeb.PageController do
     # uri<>"?scope=link_member&lib_id=1",
     # uri<>"?scope=loan_book&lib_id=1",
     # uri<>"?scope=return_loan&lib_id=1",
+  end
+
+  def upload_books(conn, params) do
+    inst = Repo.get(Institution, School.Affairs.inst_id(conn))
+
+    if Application.get_env(:your_app, :env) == nil do
+      uri = "http://localhost:4000/api"
+    else
+      uri = "https://www.li6rary.net/api"
+    end
+
+    lib_id = inst.library_organization_id
+
+    book_params = conn.params["book"]
+    data = File.read!(book_params.path)
+    data_list = data |> String.split("\n")
+
+    header =
+      data_list |> hd() |> String.split(",")
+      |> Enum.map(fn x -> String.trim(String.downcase(x)) end)
+
+    body = data_list |> tl()
+
+    for book_string <- body do
+      book_data = book_string |> String.split(",")
+      book_param = Enum.zip(header, book_data) |> Enum.into(%{})
+      Task.start_link(__MODULE__, :upload_book, [book_param, lib_id, uri])
+    end
+
+    # a =
+    #   for student <- students_in do
+    #   end
+
+    conn
+    |> put_flash(:info, "Library books uploaded!")
+    |> redirect(to: page_path(conn, :books))
+  end
+
+  def upload_book(book_param, lib_id, uri) do
+    # new_pm
+    book_param = Map.put(book_param, "lib_id", lib_id)
+    book_param = Map.put(book_param, "scope", "upload_book")
+
+    HTTPoison.request(
+      :post,
+      uri,
+      Poison.encode!(book_param),
+      [{"Content-Type", "application/json"}],
+      []
+    )
   end
 
   def books(conn, params) do
