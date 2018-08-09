@@ -346,7 +346,7 @@ defmodule SchoolWeb.ExamController do
         end
         |> Enum.sort_by(fn x -> x.total_mark end)
         |> Enum.reverse()
-
+        |>Enum.with_index
       mark = mark1 |> Enum.group_by(fn x -> x.subject_code end)
 
       render(conn, "rank.html", z: z, exam_name: exam_name, mark: mark, mark1: mark1)
@@ -445,15 +445,23 @@ defmodule SchoolWeb.ExamController do
   end
 
   def generate_ranking(conn, params) do
+     exam = Repo.all(from(e in School.Affairs.ExamMaster))
     level = Repo.all(from(l in School.Affairs.Level))
     semester = Repo.all(from(s in School.Affairs.Semester))
 
-    render(conn, "generate_ranking.html", semester: semester, level: level)
+
+
+    render(conn, "generate_ranking.html", semester: semester, level: level,exam: exam)
   end
 
   def exam_ranking(conn, params) do
-    exam_id = params["exam_id"]
-    semester_id = params["semester_id"]
+    exam_name= params["exam_name"]
+    level_id = params["level_id"]
+     semester_id = params["semester_id"]
+
+        exam_id= Repo.get_by(School.Affairs.ExamMaster,%{name: exam_name,level_id: level_id,semester_id: semester_id})
+   
+
 
     exam_mark =
       Repo.all(
@@ -465,7 +473,7 @@ defmodule SchoolWeb.ExamController do
           on: s.id == e.student_id,
           left_join: p in School.Affairs.Subject,
           on: p.id == e.subject_id,
-          where: e.exam_id == ^exam_id and k.semester_id == ^semester_id,
+          where: e.exam_id == ^exam_id.id and k.semester_id == ^semester_id and k.level_id == ^level_id,
           select: %{
             subject_code: p.code,
             exam_name: k.name,
@@ -552,6 +560,9 @@ defmodule SchoolWeb.ExamController do
         end
         |> Enum.sort_by(fn x -> x.total_mark end)
         |> Enum.reverse()
+        |>Enum.with_index
+
+     
 
       mark = mark1 |> Enum.group_by(fn x -> x.subject_code end)
 
