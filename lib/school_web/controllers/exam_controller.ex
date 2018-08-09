@@ -207,8 +207,7 @@ level=Repo.all(from s in School.Affairs.Level,select: %{id: s.id,name: s.name})
 
 
    exam_mark=Repo.all(from e in School.Affairs.ExamMark,
-   left_join: i in School.Affairs.Exam ,on: i.id== e.exam_id,
-   left_join: k in School.Affairs.ExamMaster, on: k.id==i.exam_master_id,
+   left_join: k in School.Affairs.ExamMaster, on: k.id==e.exam_id,
    left_join: s in School.Affairs.Student, on: s.id==e.student_id,
    left_join: p in School.Affairs.Subject, on: p.id==e.subject_id,
    where: e.class_id==^id,select: %{subject_code: p.code,exam_name: k.name,student_id: s.id, student_name: s.name,student_mark: e.mark})
@@ -371,8 +370,7 @@ class_name=all_data|>Enum.map(fn x -> x.class_name end)|>Enum.uniq|>hd
 
 
    exam_mark=Repo.all(from e in School.Affairs.ExamMark,
-   left_join: i in School.Affairs.Exam ,on: i.id== e.exam_id,
-   left_join: k in School.Affairs.ExamMaster, on: k.id==i.exam_master_id,
+   left_join: k in School.Affairs.ExamMaster, on: k.id==e.exam_id,
    left_join: s in School.Affairs.Student, on: s.id==e.student_id,
    left_join: p in School.Affairs.Subject, on: p.id==e.subject_id,
    where: e.exam_id==^exam_id and k.semester_id==^semester_id,select: %{subject_code: p.code,exam_name: k.name,student_id: s.id, student_name: s.name,student_mark: e.mark})
