@@ -1,7 +1,8 @@
 <div class="table-responsive">
 <h3><%= gettext("Books Categories") %></h3>
+   <link rel="stylesheet" href="/css/jquery.dataTables.min.css">
 <div class="row">
-	<div class="col-lg-4">
+	<div class="col-lg-6">
 		<table class="table" id="categories">
 			<thead>
 				
@@ -17,7 +18,7 @@
 				<tr>
 					<td><%= cat["name"] %></td>
 					<td><%= cat["prefix"] %></td>
-					<td><div cat_id="<%= cat["id"] %>" class="btn btn-sm btn-info"><%= gettext("Expand") %></div></td>
+					<td><button  id="show_books" cat_id="<%= cat["id"] %>" class="btn btn-sm btn-info"  data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo"><%= gettext("Expand") %></button></td>
 				</tr>
 				<% end %>
 
@@ -25,7 +26,7 @@
 		</table>
 		
 	</div>
-	<div class="col-lg-4">
+	<div class="col-lg-6">
 
 
 			<%= form_for @conn, "/library/books/uploads",[method: :post, multipart: true], fn f -> %>
@@ -37,6 +38,219 @@
 </div>
 </div>
 
+<br>
+<div class="card card-default mb-1">
+      <div class="card-header" id="headingTwo" class="text-inherit collapsed" data-toggle="expanded" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" style="cursor: pointer;">
+         <h4 class="mb-0">Books Details
+         </h4>
+      </div>
+      <div class="expanded" id="collapseTwo" aria-labelledby="headingTwo" >
+         <div class="card-body border-top">
+            <div class = "row">
+                <div class="col-lg-8">
+                     <table  id="books_result" class="display" style="width:100%">
+						<thead>
+							<tr>
+								<th>Title</th>
+								<th>Series</th>
+								<th>Volume</th>
+								<th>Author</th>
+								<th>Coauthor</th>
+								<th>Barcode</th>
+								<th>ISBN</th>
+								<th>Publisher</th>
+								<th>Illustrator</th>
+								<th>Translator</th>
+								<th>Action</tr>
+
+						
+							
+								
+							</tr>
+						</thead>
+						<tbody>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+
+						</tbody>
+					</table>        
+                   </div>
+
+                <div class="col-lg-4" >
+                    <div id="details">
+
+
+
+<div class="card card-primary">
+      <div class="card-body">
+          <!-- <h3 style=" margin-left: 10px;">Book Info</h3> -->
+                                                         
+            <h2 style="margin-left: 2%;"></h2>
+            </div>
+
+              <div  ">
+              <ul style="list-style: none;">
+
+
+
+                <li>
+                  <strong>Author:</strong>
+                
+                </li>
+
+                <li>
+                  <strong>Coauthor:</strong>
+                
+                </li>
+
+                <li>
+                  <strong>Translator:</strong>
+                  
+                </li>
+
+                <li>
+                  <strong>Illustrator:</strong>
+                 
+                </li>
+
+                <li>
+                  <strong>Publisher:</strong>
+                
+                </li>
+
+                <li>
+                  <strong>Series:</strong>
+               
+                </li>
+
+                <li>
+                  <strong>Volume:</strong>
+              
+                </li>
+                <li>
+                  <strong>ISBN:</strong>
+                
+                </li>
+                <li>
+                  <strong>Barcode:</strong>
+                 
+                </li>
+                <li>
+                  <button class="btn btn-link" aria-label="open_description" id="" ><<< Read description</button>
+                </li>
+
+                
+              </ul>
+              <div class="btn btn-oval btn-primary" aria-label="open_edit_book_modal" id="" style="background-color:#564aa3; margin-left: 10px;" >
+                Edit
+              </div>
+              <span class="btn btn-oval btn-danger" style="float: right" aria-label="delete_book" id="">Delete book</span>
+
+      </div>
+</div>
+  
+
+
+
+                 		
+                    </div>             
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
 <script type="text/javascript">
-	$("#categories").DataTable();
+	// $("#categories").DataTable();
+
+ $("div#details").hide()
+
+
+	  $("button#show_books").click(function(){
+							    	var cat_id = $(this).attr("cat_id")
+							    	console.log(cat_id)
+								    $.ajax({
+								      url: "/operations",
+								      dataType: "json",
+								      data: { scope: "get_books", cat_id: cat_id }
+								    }).done(function(j) {
+
+
+									$("#books_result").DataTable({
+							             destroy: true,
+							            data: j,
+							            dom: 'Bfrtip',
+							            buttons: [
+							                'copy', 'csv', 'print'
+							            ],
+							            columns: [
+							            {data: 'title'},
+							            {data: 'series'},
+							            {data: 'volume'},
+							            {data: 'author'},
+							            {data: 'coauthor'},
+							            {data: 'barcode'},
+							            {data: 'isbn'},
+							            {data: 'publisher'},
+							            {data: 'illustrator'},
+							            {data: 'translator'},
+							            {data: 'id'}
+							           
+				 		  
+							            ],columnDefs: [
+		            {targets: 10,
+		            	data: 'id',
+		            	render: function(data, type, row, meta){
+		            		return "<button id='show' b_id="+data+" class='btn btn-primary btn-sm api' >Details</button>";
+		            	}}
+		            ]
+
+
+
+
+							        });
+
+	    							$("button#show").click(function(){
+							    	var b_id = $(this).attr("b_id")
+console.log(b_id)
+								    $.ajax({
+								      url: "/operations",
+								      dataType: "json",
+								      data: { scope: "get_book_inventory", b_id: b_id }
+								    }).done(function(j) {
+
+								    })
+
+
+								console.log(j)
+
+								     $("div#details").show()
+
+
+							    })
+
+
+ 
+
+								    })
+							    })
+
+
+
 </script>
+
+
+          
+
+</div>
+

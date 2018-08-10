@@ -13,11 +13,12 @@ defmodule SchoolWeb.PageController do
         )
       )
 
-    if current_sem != [] do
-      current_sem = hd(current_sem)
-    else
-      current_sem = %{start_date: "Not set", end_date: "Not set"}
-    end
+    current_sem =
+      if current_sem != [] do
+        hd(current_sem)
+      else
+        %{start_date: "Not set", end_date: "Not set"}
+      end
 
     render(conn, "index.html", current_sem: current_sem)
   end
@@ -31,11 +32,12 @@ defmodule SchoolWeb.PageController do
         )
       )
 
-    if current_sem != [] do
-      current_sem = hd(current_sem)
-    else
-      current_sem = %{start_date: "Not set", end_date: "Not set"}
-    end
+    current_sem =
+      if current_sem != [] do
+        hd(current_sem)
+      else
+        %{start_date: "Not set", end_date: "Not set"}
+      end
 
     render(conn, "index.html", current_sem: current_sem)
   end
@@ -43,39 +45,48 @@ defmodule SchoolWeb.PageController do
   def operations(conn, params) do
     inst = Repo.get(Institution, School.Affairs.inst_id(conn))
 
-    if Application.get_env(:your_app, :env) == nil do
-      uri = "http://localhost:4000/api"
-    else
-      uri = "https://www.li6rary.net/api"
-    end
+    uri =
+      if Application.get_env(:your_app, :env) == nil do
+        "http://localhost:4000/api"
+      else
+        "https://www.li6rary.net/api"
+      end
 
     lib_id = inst.library_organization_id
 
-    case params["scope"] do
-      "get_loans" ->
-        path = "?scope=get_loans&lib_id=#{lib_id}"
+    {path} =
+      case params["scope"] do
+        "get_loans" ->
+          {"?scope=get_loans&lib_id=#{lib_id}"}
 
-      "get_books" ->
-        cat_id = params["cat_id"]
-        path = "?scope=get_books&cat_id=#{cat_id}&lib_id=#{lib_id}"
+        "get_books" ->
+          cat_id = params["cat_id"]
+          {"?scope=get_books&cat_id=#{cat_id}&lib_id=#{lib_id}"}
 
-      "get_book" ->
-        query = params["query"]
-        path = "?scope=get_book&query=#{query}&lib_id=#{lib_id}"
+        "get_book" ->
+          query = params["query"]
 
-      "get_user" ->
-        query = params["query"]
-        path = "?scope=get_user&query=#{query}&lib_id=#{lib_id}"
+          {"?scope=get_book&query=#{query}&lib_id=#{lib_id}"}
 
-      "get_loan_response" ->
-        book = params["book"]
-        user = params["user"]
-        path = "?scope=get_loan_response&book=#{book}&user=#{user}&lib_id=#{lib_id}"
+        "get_user" ->
+          query = params["query"]
+          {"?scope=get_user&query=#{query}&lib_id=#{lib_id}"}
 
-      "get_return_response" ->
-        loan_id = params["loan_id"]
-        path = "?scope=get_return_response&loan_id=#{loan_id}&lib_id=#{lib_id}"
-    end
+        "get_loan_response" ->
+          book = params["book"]
+          user = params["user"]
+          {"?scope=get_loan_response&book=#{book}&user=#{user}&lib_id=#{lib_id}"}
+
+        "get_return_response" ->
+          loan_id = params["loan_id"]
+
+          {"?scope=get_return_response&loan_id=#{loan_id}&lib_id=#{lib_id}"}
+
+        "get_book_inventory" ->
+          query = params["b_id"]
+
+          {"?scope=get_book_inventory&query=#{query}&lib_id=#{lib_id}"}
+      end
 
     response =
       HTTPoison.get!(
@@ -102,11 +113,12 @@ defmodule SchoolWeb.PageController do
   def upload_books(conn, params) do
     inst = Repo.get(Institution, School.Affairs.inst_id(conn))
 
-    if Application.get_env(:your_app, :env) == nil do
-      uri = "http://localhost:4000/api"
-    else
-      uri = "https://www.li6rary.net/api"
-    end
+    uri =
+      if Application.get_env(:your_app, :env) == nil do
+        "http://localhost:4000/api"
+      else
+        "https://www.li6rary.net/api"
+      end
 
     lib_id = inst.library_organization_id
 
@@ -149,13 +161,19 @@ defmodule SchoolWeb.PageController do
   end
 
   def books(conn, params) do
-    if Application.get_env(:your_app, :env) == nil do
-      uri = "http://localhost:4000/api"
-      lib_id = 3
-    else
-      uri = "https://www.li6rary.net/api"
-      lib_id = School.Affairs.inst_id(conn)
-    end
+    uri =
+      if Application.get_env(:your_app, :env) == nil do
+        uri = "http://localhost:4000/api"
+      else
+        uri = "https://www.li6rary.net/api"
+      end
+
+    lib_id =
+      if Application.get_env(:your_app, :env) == nil do
+        lib_id = 3
+      else
+        lib_id = School.Affairs.inst_id(conn)
+      end
 
     path = "?scope=get_lib&inst_id=sa_#{lib_id}"
 
