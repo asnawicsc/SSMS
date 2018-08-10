@@ -34,11 +34,11 @@
 </div>
   </div>
   <div class="col-lg-9" aria-label="subject_details">
-   <p class="lead">Click on a student name in the left panel. </p> 
+   <p class="lead">Click on a subject name in the left panel. </p> 
   <div class="row" style="margin-top: 40px;">
       <div class="col-lg-12">
         <div class="panel">
-          <div class="panel-heading">Bulk Upload Students</div>
+          <div class="panel-heading">Bulk Upload Subjects</div>
           <div class="panel-body">
              <%= form_for @conn, subject_path(@conn, :upload_subjects), [as: :item, multipart: true], fn f -> %>
 
