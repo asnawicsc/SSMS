@@ -99,7 +99,7 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a href="/library/books" class="dropdown-item api" call="get_lib"><%= gettext "Book List by Categories" %></a>
-        <button type="button" class="dropdown-item api" call="get_loans"><%= gettext "Return List" %></button>
+        <a href="/library/returns" class="dropdown-item api" call="get_loans"><%= gettext "Return List" %></a>
         <a href="/library/loans/new" class="dropdown-item api"><%= gettext "New Loans" %></a>
 
           

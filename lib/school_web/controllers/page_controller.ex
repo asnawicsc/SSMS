@@ -71,6 +71,10 @@ defmodule SchoolWeb.PageController do
         book = params["book"]
         user = params["user"]
         path = "?scope=get_loan_response&book=#{book}&user=#{user}&lib_id=#{lib_id}"
+
+      "get_return_response" ->
+        loan_id = params["loan_id"]
+        path = "?scope=get_return_response&loan_id=#{loan_id}&lib_id=#{lib_id}"
     end
 
     response =
@@ -179,5 +183,28 @@ defmodule SchoolWeb.PageController do
 
   def new_loan(conn, params) do
     render(conn, "new_loan.html")
+  end
+
+  def return(conn, params) do
+    if Application.get_env(:your_app, :env) == nil do
+      uri = "http://localhost:4000/api"
+    else
+      uri = "https://www.li6rary.net/api"
+    end
+
+    inst = Repo.get(Institution, School.Affairs.inst_id(conn))
+    path = "?scope=get_returns&lib_id=#{inst.library_organization_id}"
+
+    response =
+      HTTPoison.get!(
+        uri <> path,
+        [{"Content-Type", "application/json"}],
+        timeout: 50_000,
+        recv_timeout: 50_000
+      ).body
+
+    returns = response |> Poison.decode!()
+
+    render(conn, "return.html", returns: returns)
   end
 end
