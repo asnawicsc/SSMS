@@ -77,14 +77,16 @@ defmodule SchoolWeb.TimetableController do
       e=item.end_time.hour  
       s=item.start_time.hour 
 
-       if  e == 0 do 
-
-          e= 12
+          e= if e == 0 do 
+         12
+       else
+        e
       end
 
-      if  s == 0 do
-
-          s= 12
+    s= if s == 0 do
+          12
+        else
+          s
       end 
 
       %{day_number: item.day_number,end_time: e,start_time: s,s_code: item.s_code}
@@ -96,16 +98,17 @@ defmodule SchoolWeb.TimetableController do
       s=item.start_time.hour 
 sm=item.start_time.minute 
 em=item.end_time.minute 
-       if  e == 0 do 
-
-          e= 12
+      e= if e == 0 do 
+         12
+       else
+        e
       end
 
-      if  s == 0 do
-
-          s= 12
+    s= if s == 0 do
+          12
+        else
+          s
       end 
-
 
    %{location: item.day_number,end_hour: e,end_minute: em,start_minute: sm,start_hour: s,name: item.s_code}
 

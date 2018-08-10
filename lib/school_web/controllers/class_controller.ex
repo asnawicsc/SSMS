@@ -30,10 +30,10 @@ defmodule SchoolWeb.ClassController do
 
     inst = Repo.get(Institution, School.Affairs.inst_id(conn))
 
-    if Application.get_env(:your_app, :env) == nil do
-      uri = "http://localhost:4000/api"
+      uri = if Application.get_env(:your_app, :env) == nil do
+     "http://localhost:4000/api"
     else
-      uri = "https://www.li6rary.net/api"
+    "https://www.li6rary.net/api"
     end
 
     lib_id = inst.library_organization_id
@@ -78,7 +78,7 @@ defmodule SchoolWeb.ClassController do
         institute_id: institute_id
       )
 
-    if sc == nil do
+    {action,type}=if sc == nil do
       School.Affairs.StudentClass.changeset(%School.Affairs.StudentClass{}, %{
         class_id: class_id,
         sudent_id: student_id,
@@ -88,13 +88,15 @@ defmodule SchoolWeb.ClassController do
       })
       |> Repo.insert()
 
-      action = "has been added to"
-      type = "success"
+      {"has been added to","success"} 
+  
     else
       Repo.delete(sc)
-      action = "has been removed from"
-      type = "danger"
+   
+        {"has been removed from","danger"} 
     end
+
+
 
     map =
       %{student: student.name, class: class.name, action: action, type: type} |> Poison.encode!()

@@ -66,16 +66,17 @@ defmodule SchoolWeb.AttendanceController do
         semester_id: semester_id,
         institution_id: institute_id
       )
+  
 
     student_ids = attendance.student_id |> String.split(",")
 
-    if Enum.any?(student_ids, fn x -> x == student_id end) do
+  {action,type}=  if Enum.any?(student_ids, fn x -> x == student_id end) do
       student_ids = List.delete(student_ids, student_id) |> Enum.join(",")
 
       Attendance.changeset(attendance, %{student_id: student_ids}) |> Repo.update!()
 
-      action = "has been marked as absent."
-      type = "danger"
+    {"has been marked as absent.","danger"}
+  
     else
       student_ids = List.insert_at(student_ids, 0, student_id) |> Enum.join(",")
 
@@ -97,9 +98,8 @@ defmodule SchoolWeb.AttendanceController do
           )
         )
       end
-
-      action = "has been marked as attended."
-      type = "success"
+      {"has been marked as attended.","success"}
+    
     end
 
     map =
@@ -145,12 +145,12 @@ defmodule SchoolWeb.AttendanceController do
       )
 
     student_ids = attendance.student_id |> String.split(",") |> Enum.reject(fn x -> x == "" end)
-
+    attended_students=
     if student_ids != [] do
-      attended_students =
+    
         Repo.all(from(s in Student, where: s.id in ^student_ids, order_by: [s.name]))
     else
-      attended_students = []
+     []
     end
 
     rem = students -- attended_students

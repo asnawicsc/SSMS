@@ -58,34 +58,36 @@ $(document).ready(function(){
 						      data: { scope: scope, query: q }
 						    }).done(function(j) {
 					
-        $("table#book_result").DataTable({
-             destroy: true,
-            data: j,
-            dom: 'Bfrtip',
-            buttons: [
-                'copy', 'csv', 'print'
-            ],
-            columns: [
-            {data: 'name'},
-            {data: 'series'},
-            {data: 'volume'},
-            {data: 'author'},
-            {data: 'coauthor'},
-            {data: 'barcode'},
-            {data: 'isbn'},
+					        $("table#book_result").DataTable({
+					             destroy: true,
+					            data: j,
+					            dom: 'Bfrtip',
+					            buttons: [
+					                'copy', 'csv', 'print'
+					            ],
+					            columns: [
+					            {data: 'name'},
+					            {data: 'series'},
+					            {data: 'volume'},
+					            {data: 'author'},
+					            {data: 'coauthor'},
+					            {data: 'barcode'},
+					            {data: 'isbn'},
 
-            {data: 'publisher'},
-            {data: 'illustrator'},
-            {data: 'translator'}
-            
-  
-            ]
-        });
+					            {data: 'publisher'},
+					            {data: 'illustrator'},
+					            {data: 'translator'}
+					            
+					  
+					            ]
+					        });
 
 
 						    })
 
 				        break; 
+
+				        
 
 
 				    case "get_user":
@@ -136,6 +138,8 @@ $(document).ready(function(){
 						    })
 
 				        break; 
+
+				        
 
 				    case "none":
 				       
