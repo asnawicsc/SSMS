@@ -40,8 +40,8 @@
       </colgroup>
       <tr>
 
-         <th style="background-color:#97DB9A;">Student Name</th>
-        <th style="background-color:#97DB9A;">Mark</th>
+         <th style="background-color:#97DB9A;"><%= gettext "Student Name" %></th>
+        <th style="background-color:#97DB9A;"><%= gettext "Mark" %></th>
       </tr>
        <%= for item <- @all do %>
     <% student=Affairs.get_student!(item.student_id)%>

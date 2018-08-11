@@ -161,19 +161,15 @@ defmodule SchoolWeb.PageController do
   end
 
   def books(conn, params) do
-    uri =
+    {uri,lib_id} =
       if Application.get_env(:your_app, :env) == nil do
-        uri = "http://localhost:4000/api"
+          {"http://localhost:4000/api",3}
       else
-        uri = "https://www.li6rary.net/api"
+        {"https://www.li6rary.net/api",School.Affairs.inst_id(conn)}
+       
       end
 
-    lib_id =
-      if Application.get_env(:your_app, :env) == nil do
-        lib_id = 3
-      else
-        lib_id = School.Affairs.inst_id(conn)
-      end
+  
 
     path = "?scope=get_lib&inst_id=sa_#{lib_id}"
 
@@ -204,10 +200,10 @@ defmodule SchoolWeb.PageController do
   end
 
   def return(conn, params) do
-    if Application.get_env(:your_app, :env) == nil do
-      uri = "http://localhost:4000/api"
+   uri = if Application.get_env(:your_app, :env) == nil do
+       "http://localhost:4000/api"
     else
-      uri = "https://www.li6rary.net/api"
+      "https://www.li6rary.net/api"
     end
 
     inst = Repo.get(Institution, School.Affairs.inst_id(conn))
@@ -224,5 +220,40 @@ defmodule SchoolWeb.PageController do
     returns = response |> Poison.decode!()
 
     render(conn, "return.html", returns: returns)
+  end
+
+
+  def update_book(conn, params) do
+
+    inst = Repo.get(Institution, School.Affairs.inst_id(conn))
+
+    uri =
+      if Application.get_env(:your_app, :env) == nil do
+        "http://localhost:4000/api"
+      else
+        "https://www.li6rary.net/api"
+      end
+
+    lib_id = inst.library_organization_id
+
+
+
+    book_params = %{scope: "update_book",author: params["author"],id: params["id"], barcode: params["barcode"],coauthor: params["coauthor"],
+    illustrator: params["illustrator"],isbn: params["isbn"],publisher: params["publisher"],series: params["series"],
+    title: params["name"],translator: params["translator"],volume: params["volume"]}
+
+     HTTPoison.request(
+      :post,
+      uri,
+      Poison.encode!(book_params),
+      [{"Content-Type", "application/json"}],
+      []
+    )
+
+
+  
+  conn
+    |> put_flash(:info, "Library books updated!")
+    |> redirect(to: page_path(conn, :books))
   end
 end

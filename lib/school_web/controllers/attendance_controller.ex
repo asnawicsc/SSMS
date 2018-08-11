@@ -119,7 +119,7 @@ defmodule SchoolWeb.AttendanceController do
         semester_id: conn.private.plug_session["semester_id"]
       )
 
-    if attendance == nil do
+    {attendance}=if attendance == nil do
       cg =
         Attendance.changeset(%Attendance{}, %{
           institution_id: Affairs.inst_id(conn),
@@ -128,7 +128,19 @@ defmodule SchoolWeb.AttendanceController do
           semester_id: conn.private.plug_session["semester_id"]
         })
 
-      {:ok, attendance} = Repo.insert(cg)
+     {Repo.insert(cg)}
+
+    else
+
+       
+     { Repo.get_by(
+        Attendance,
+        attendance_date: Date.utc_today(),
+        class_id: class.id,
+        semester_id: conn.private.plug_session["semester_id"]
+      )}
+
+
     end
 
     students =

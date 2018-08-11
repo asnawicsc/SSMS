@@ -103,6 +103,35 @@ defmodule SchoolWeb.ExamController do
         )
       )
 
+      all=if all == [] do
+        conn
+    |> put_flash(:info, "Please Create Exam Subject.")
+    |> redirect(to: class_path(conn, :index))
+
+  else
+
+      
+      Repo.all(
+        from(
+          p in School.Affairs.Period,
+          left_join: sb in School.Affairs.Subject,
+          on: sb.id == p.subject_id,
+          left_join: s in School.Affairs.Class,
+          on: p.class_id == s.id,
+          left_join: t in School.Affairs.Teacher,
+          on: t.id == p.teacher_id,
+          where: p.class_id == ^id,
+          select: %{id: sb.id, t_name: t.name, s_code: sb.code, subject: sb.description}
+        )
+      )
+      |> Enum.uniq()
+      |> Enum.filter(fn x -> x.t_name != "Rest" end)
+
+
+      end
+
+
+
     render(conn, "generate_exam.html", all: all, id: id, exam: exam)
   end
 
@@ -347,9 +376,37 @@ defmodule SchoolWeb.ExamController do
         |> Enum.sort_by(fn x -> x.total_mark end)
         |> Enum.reverse()
         |>Enum.with_index
+
+
+        k=for item <- z do
+
+               rank = item|>elem(1) 
+          item = item|>elem(0) 
+
+        %{
+           subject: item.subject,
+            name: item.name,
+            student_id: item.student_id,
+            total_mark: item.total_mark,
+            per: item.per,
+            total_per: item.total_per,
+            a: item.a,
+            b: item.b,
+            c: item.c,
+            d: item.d,
+            e: item.e,
+            f: item.f,
+            g: item.g,
+            cgpa: item.cgpa,
+            rank: rank+1
+          }
+   
+        end|>Enum.sort_by(fn x -> x.name end)|>Enum.with_index
+
+
       mark = mark1 |> Enum.group_by(fn x -> x.subject_code end)
 
-      render(conn, "rank.html", z: z, exam_name: exam_name, mark: mark, mark1: mark1)
+      render(conn, "rank.html", z: k, exam_name: exam_name, mark: mark, mark1: mark1)
     else
       conn
       |> put_flash(:info, "Please Insert Exam Record First")
@@ -423,13 +480,20 @@ defmodule SchoolWeb.ExamController do
     g = all_data |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "G" end)
 
     per = all_data |> Enum.map(fn x -> x.student_mark end) |> Enum.count()
+    total_mark = all_data |> Enum.map(fn x -> x.student_mark end) |> Enum.sum()
     total_gpa = all_data |> Enum.map(fn x -> Decimal.to_float(x.gpa) end) |> Enum.sum()
     cgpa = (total_gpa / per) |> Float.round(2)
+ 
+      total_per = per * 100
+
+          total_average=((total_mark/total_per)*100)|>Float.round(2)  
 
     render(
       conn,
       "report_card.html",
       total_gpa: total_gpa,
+      total_mark: total_mark,
+      total_average: total_average,
       a: a,
       b: b,
       c: c,
@@ -479,7 +543,8 @@ defmodule SchoolWeb.ExamController do
             exam_name: k.name,
             student_id: s.id,
             student_name: s.name,
-            student_mark: e.mark
+            student_mark: e.mark,
+            class_id: e.class_id
           }
         )
       )
@@ -508,7 +573,8 @@ defmodule SchoolWeb.ExamController do
                   grade: grade.name,
                   gpa: grade.gpa,
                   subject_code: subject_code,
-                  student_mark: student_mark
+                  student_mark: student_mark,
+                  class_id: data.class_id
                 }
               end
             end
@@ -521,11 +587,18 @@ defmodule SchoolWeb.ExamController do
 
       z =
         for new <- news do
+
+        
           total = new |> elem(1) |> Enum.map(fn x -> x.student_mark end) |> Enum.sum()
 
           per = new |> elem(1) |> Enum.map(fn x -> x.student_mark end) |> Enum.count()
           total_per = per * 100
 
+          total_average=((total/total_per)*100)|>Float.round(2)
+
+
+
+          class_id = new |> elem(1) |> Enum.map(fn x -> x.class_id end) |> Enum.uniq() |> hd
           student_id = new |> elem(1) |> Enum.map(fn x -> x.student_id end) |> Enum.uniq() |> hd
 
           a = new |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "A" end)
@@ -548,6 +621,7 @@ defmodule SchoolWeb.ExamController do
             total_mark: total,
             per: per,
             total_per: total_per,
+            total_average: total_average,
             a: a,
             b: b,
             c: c,
@@ -555,18 +629,91 @@ defmodule SchoolWeb.ExamController do
             e: e,
             f: f,
             g: g,
-            cgpa: cgpa
+            cgpa: cgpa,
+            class_id: class_id
           }
-        end
-        |> Enum.sort_by(fn x -> x.total_mark end)
-        |> Enum.reverse()
-        |>Enum.with_index
+        end|>Enum.group_by(fn x -> x.class_id end)
 
+
+        g=for group <- z do
+
+
+          a=group|>elem(1)|>Enum.sort_by(fn x -> x.total_mark end)|>Enum.reverse|>Enum.with_index
+
+         
+         for item <- a do
+            rank= item|>elem(1)
+            item=item|>elem(0)
+            rank=rank+1
+
+               %{
+            subject: item.subject,
+            name: item.name,
+            student_id: item.student_id,
+            total_mark: item.total_mark,
+            per: item.per,
+            total_per: item.total_per,
+            total_average: item.total_average,
+            a: item.a,
+            b: item.b,
+            c: item.c,
+            d: item.d,
+            e: item.e,
+            f: item.f,
+            g: item.g,
+            cgpa: item.cgpa,
+            class_id: item.class_id,
+            class_rank: rank
+          }
+  
+
+            
+          end
      
+        end|>List.flatten
+            |> Enum.sort_by(fn x -> x.total_mark end)
+            |> Enum.reverse()
+            |>Enum.with_index
+
+
+
+            t=for item <- g do
+
+              rank= item|>elem(1)
+            item=item|>elem(0)
+            rank=rank+1
+
+               %{
+            subject: item.subject,
+            name: item.name,
+            student_id: item.student_id,
+            total_mark: item.total_mark,
+            per: item.per,
+            total_per: item.total_per,
+            total_average: item.total_average,
+            a: item.a,
+            b: item.b,
+            c: item.c,
+            d: item.d,
+            e: item.e,
+            f: item.f,
+            g: item.g,
+            cgpa: item.cgpa,
+            class_id: item.class_id,
+            class_rank: item.class_rank,
+            all_rank: rank}
+              
+            end
+             |> Enum.sort_by(fn x -> x.name end)
+             |>Enum.with_index
+
+      
+
+
 
       mark = mark1 |> Enum.group_by(fn x -> x.subject_code end)
 
-      render(conn, "exam_ranking.html", z: z, exam_name: exam_name, mark: mark, mark1: mark1)
+      render(conn, "exam_ranking.html", z: t, exam_name: exam_name, mark: mark, mark1: mark1)
     else
       conn
       |> put_flash(:info, "Please Insert Exam Record First")

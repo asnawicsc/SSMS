@@ -4,13 +4,13 @@
 
               <div class="col-sm-6">
                 <div class="form-group bmd-form-group">
-                  <label class="bmd-label-floating">Exam Name</label>
+                  <label class="bmd-label-floating"><%= gettext "Exam Name" %></label>
                   <input name="exam_name" class="form-control" type="text"  required="">
                 </div>
               </div>
                         <div class="col-sm-2">
                 <div class="form-group bmd-form-group">
-                  <label class="bmd-label-floating">Year</label><br>
+                  <label class="bmd-label-floating"><%= gettext "Year" %></label><br>
                     <select class="select" required="required" name="year">
                          
                                             <option value="2018" >2018
@@ -27,7 +27,7 @@
            
               <div class="col-sm-2">
                 <div class="form-group bmd-form-group">
-                  <label class="bmd-label-floating">Semester</label><br>
+                  <label class="bmd-label-floating"><%= gettext "Semester" %></label><br>
                  <select class="select" required="required" name="semester">
                            <%= for a <- @semester |> Enum.sort do %>
                                             <option value="<%= a.id %>" ><%= a.start_date %>
@@ -41,7 +41,7 @@
          
                <div class="col-sm-2">
                 <div class="form-group bmd-form-group">
-                  <label class="bmd-label-floating">Level</label><br>
+                  <label class="bmd-label-floating"><%= gettext "Level" %></label><br>
                     <select class="select" required="required" name="level">
                            <%= for a <- @level |> Enum.sort do %>
                                             <option value="<%= a.id %>" ><%= a.name %>
@@ -61,7 +61,7 @@
 <div class="row">
   <div class="col-lg-6">
     <div class="card">
-      <div class="card-header">Subject</div>
+      <div class="card-header"><%= gettext "Subject" %></div>
       <div class="card-body">
         <ol class="s_unmark" id="s_unmark">
         <%= for subject <- @subjects do %>
@@ -80,7 +80,7 @@
   </div>
   <div class="col-lg-6">
     <div class="card">
-      <div class="card-header">Selected Subject</div>
+      <div class="card-header"><%= gettext "Selected Subject" %></div>
       <div class="card-body">
         <ol  class="s_mark" id="s_mark">
        

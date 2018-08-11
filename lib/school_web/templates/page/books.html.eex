@@ -39,7 +39,7 @@
 </div>
 
 <br>
-<div class="card card-default mb-1">
+<div class="card card-default mb-1" id="book">
       <div class="card-header" id="headingTwo" class="text-inherit collapsed" data-toggle="expanded" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" style="cursor: pointer;">
          <h4 class="mb-0">Books Details
          </h4>
@@ -92,68 +92,52 @@
 
 <div class="card card-primary">
       <div class="card-body">
-          <!-- <h3 style=" margin-left: 10px;">Book Info</h3> -->
-                                                         
-            <h2 style="margin-left: 2%;"></h2>
-            </div>
-
-              <div  ">
-              <ul style="list-style: none;">
+          <form method="post" action="/library/book/update_book" class="form-horizontal">
+  <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
 
 
-
-                <li>
-                  <strong>Author:</strong>
-                
-                </li>
-
-                <li>
-                  <strong>Coauthor:</strong>
-                
-                </li>
-
-                <li>
-                  <strong>Translator:</strong>
-                  
-                </li>
-
-                <li>
-                  <strong>Illustrator:</strong>
-                 
-                </li>
-
-                <li>
-                  <strong>Publisher:</strong>
-                
-                </li>
-
-                <li>
-                  <strong>Series:</strong>
-               
-                </li>
-
-                <li>
-                  <strong>Volume:</strong>
+  <input type="hidden" name="id" value="">   
+  
+            <table align="center">
+            	<tr>
+            		<td><label class="bmd-label-floating">Title:</label></td><td><input type="text" name="name" value="">  </td>
+            	</tr>
+            	<tr>
+            		<td> <label class="bmd-label-floating">Author:</label></td><td>     <input type="text" name="author">   </td>
+            	</tr>
+            	<tr>
+            		<td>  <label class="bmd-label-floating">Coauthor:</label></td><td>  <input type="text" name="coauthor">  </td>
+            	</tr>
+            	<tr>
+            		<td>  <label class="bmd-label-floating">Translator:</label></td><td> <input type="text" name="translator">  </td>
+            	</tr>
+            	<tr>
+            		<td>  <label class="bmd-label-floating">Ilustrator:</label></td><td>  <input type="text" name="illustrator">  </td>
+            	</tr>
+            	<tr>
+            		<td> <label class="bmd-label-floating">Publisher:</label></td><td> <input type="text" name="publisher">  </td>
+            	</tr>
+            	<tr>
+            		<td> <label class="bmd-label-floating">Series:</label></td><td> <input type="text" name="series">  </td>
+            	</tr>
+            	<tr>
+            		<td>   <label class="bmd-label-floating">Volume:</label></td><td>  <input type="text" name="series"> </td>
+            	</tr>
+            	<tr>
+            		<td>  <label class="bmd-label-floating">Isbn:</label></td><td>    <input type="text" name="isbn"> </td>
+            	</tr>
+            	<tr>
+            		<td> <label class="bmd-label-floating">Barcode:</label></td><td><input type="text" name="barcode"> </td>
+            	</tr>
+            	<tr><td colspan="2" align="center"><input class="btn btn-primary" name="" value="Submit" type="submit"></td></tr>
+            </table>
+       
               
-                </li>
-                <li>
-                  <strong>ISBN:</strong>
-                
-                </li>
-                <li>
-                  <strong>Barcode:</strong>
-                 
-                </li>
-                <li>
-                  <button class="btn btn-link" aria-label="open_description" id="" ><<< Read description</button>
-                </li>
 
-                
-              </ul>
-              <div class="btn btn-oval btn-primary" aria-label="open_edit_book_modal" id="" style="background-color:#564aa3; margin-left: 10px;" >
-                Edit
-              </div>
-              <span class="btn btn-oval btn-danger" style="float: right" aria-label="delete_book" id="">Delete book</span>
+          
+</form>
+                                                         
+           
 
       </div>
 </div>
@@ -174,6 +158,7 @@
 	// $("#categories").DataTable();
 
  $("div#details").hide()
+  $("div#book").hide()
 
 
 	  $("button#show_books").click(function(){
@@ -185,7 +170,7 @@
 								      data: { scope: "get_books", cat_id: cat_id }
 								    }).done(function(j) {
 
-
+   $("div#book").show()
 									$("#books_result").DataTable({
 							             destroy: true,
 							            data: j,
@@ -211,7 +196,7 @@
 		            {targets: 10,
 		            	data: 'id',
 		            	render: function(data, type, row, meta){
-		            		return "<button id='show' b_id="+data+" class='btn btn-primary btn-sm api' >Details</button>";
+		            		return "<button id='show' b_id="+data+" class='btn btn-primary btn-sm api' >Update</button>";
 		            	}}
 		            ]
 
@@ -222,19 +207,43 @@
 
 	    							$("button#show").click(function(){
 							    	var b_id = $(this).attr("b_id")
-console.log(b_id)
+									console.log(b_id)
 								    $.ajax({
 								      url: "/operations",
 								      dataType: "json",
 								      data: { scope: "get_book_inventory", b_id: b_id }
 								    }).done(function(j) {
+								    		var id=j[0].id
+								    		var title=j[0].name
+											var author=j[0].author
+											var coauthor=j[0].coauthor
+											var translator=j[0].translator
+											var illustrator=j[0].illustrator
+											var publisher=j[0].publisher
+											var series=j[0].series
+											var volume=j[0].volume
+											var isbn=j[0].isbn
+											var barcode=j[0].barcode
+										
+										$("input[name='id']").val(id)		
+										$("input[name='name']").val(title)
+										$("input[name='author']").val(author)
+										$("input[name='coauthor']").val(coauthor)
+										$("input[name='translator']").val(translator)
+										$("input[name='illustrator']").val(illustrator)
+										$("input[name='publisher']").val(publisher)
+										$("input[name='series']").val(series)
+										$("input[name='volume']").val(volume)
+										$("input[name='isbn']").val(isbn)
+										$("input[name='barcode']").val(barcode)
 
 								    })
 
 
-								console.log(j)
+							
 
 								     $("div#details").show()
+
 
 
 							    })

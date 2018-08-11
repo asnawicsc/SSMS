@@ -6,7 +6,7 @@
   
               <div class="col-sm-2">
                 <div class="form-group bmd-form-group">
-                  <label class="bmd-label-floating">Exam Name</label><br>
+                  <label class="bmd-label-floating"><%= gettext "Exam Name" %></label><br>
                  <select class="select"  name="exam_id" >
                            <%= for a <- @exam|>Enum.uniq |> Enum.sort do %>
                                             <option value="<%= a.id %>" ><%= a.exam_name %>
@@ -17,7 +17,7 @@
               </div>
                 <div class="col-sm-2">
                 <div class="form-group bmd-form-group">
-                  <label class="bmd-label-floating">Subject Teaching</label><br>
+                  <label class="bmd-label-floating"><%= gettext "Subject Teaching" %></label><br>
                  <select class="select"  name="subject" >
                            <%= for a <- @all|>Enum.uniq |> Enum.sort do %>
                                             <option value="<%= a.id %>" >(<%= a.s_code %>)<%= a.subject %>

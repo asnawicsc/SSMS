@@ -31,6 +31,7 @@ defmodule SchoolWeb.Router do
     get("/operations", PageController, :operations)
     get("/library/books", PageController, :books)
     post("/library/books/uploads", PageController, :upload_books)
+    post("/library/book/update_book", PageController, :update_book)
     get("/library/loans/new", PageController, :new_loan)
     get("/library/returns", PageController, :return)
     resources("/parameters", ParameterController)
