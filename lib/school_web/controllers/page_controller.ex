@@ -45,12 +45,7 @@ defmodule SchoolWeb.PageController do
   def operations(conn, params) do
     inst = Repo.get(Institution, School.Affairs.inst_id(conn))
 
-    uri =
-      if Application.get_env(:your_app, :env) == nil do
-        "http://localhost:4000/api"
-      else
-        "https://www.li6rary.net/api"
-      end
+    uri = "https://www.li6rary.net/api"
 
     lib_id = inst.library_organization_id
 
@@ -113,12 +108,7 @@ defmodule SchoolWeb.PageController do
   def upload_books(conn, params) do
     inst = Repo.get(Institution, School.Affairs.inst_id(conn))
 
-    uri =
-      if Application.get_env(:your_app, :env) == nil do
-        "http://localhost:4000/api"
-      else
-        "https://www.li6rary.net/api"
-      end
+    uri = "https://www.li6rary.net/api"
 
     lib_id = inst.library_organization_id
 
@@ -161,15 +151,10 @@ defmodule SchoolWeb.PageController do
   end
 
   def books(conn, params) do
-    uri =
-      if Application.get_env(:your_app, :env) == nil do
-        uri = "http://localhost:4000/api"
-      else
-        uri = "https://www.li6rary.net/api"
-      end
+    uri = "https://www.li6rary.net/api"
 
     lib_id =
-      if Application.get_env(:your_app, :env) == nil do
+      if Application.get_env(:school, :env) == nil do
         lib_id = 3
       else
         lib_id = School.Affairs.inst_id(conn)
@@ -204,11 +189,7 @@ defmodule SchoolWeb.PageController do
   end
 
   def return(conn, params) do
-    if Application.get_env(:your_app, :env) == nil do
-      uri = "http://localhost:4000/api"
-    else
-      uri = "https://www.li6rary.net/api"
-    end
+    uri = "https://www.li6rary.net/api"
 
     inst = Repo.get(Institution, School.Affairs.inst_id(conn))
     path = "?scope=get_returns&lib_id=#{inst.library_organization_id}"
