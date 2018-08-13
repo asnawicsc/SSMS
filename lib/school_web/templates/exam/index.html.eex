@@ -3,8 +3,8 @@
 <table class="table">
   <thead>
     <tr>
-      <th>Subject</th>
-      <th>Exam master</th>
+      <th><%= gettext "Subject" %></th>
+      <th><%= gettext "Exam master" %></th>
 
       <th></th>
     </tr>

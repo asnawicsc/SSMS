@@ -1,17 +1,17 @@
 <head>
-  <title> Student Report Card </title>
-  <h2> Student Report Card </h2>
-  <div class="row">
-     <div class="form-group">
-      Name : <%= @student_name %><br>
-      Class : <%= @class_name %>
-  </div>
+  <title a> Student Report Card </title>
+  <h2 align="center"> Student Report Card </h2>
 
   </div>
 </head>
 <body>
-  <table>
+  <table align="center">
     <thead>
+      <tr >
+        <td colspan="4" align="left" >Name : <%= @student_name %></td>
+      
+        <td colspan="3"> Darjah : <%=@class_name %> </td>
+      </tr>
       <tr>
         <td colspan="3">Course </td>
         <td rowspan="2"> Semester </td>
@@ -21,7 +21,7 @@
         <td>Code </td>
         <td colspan="2"> Name </td>
         <td> Grade </td>
-        <td> Points </td>
+        <td> Mark </td>
       </tr>
     </thead>
     <tbody>
@@ -31,7 +31,7 @@
         <td colspan="2"><%= item.subject_name %></td>
         <td align="center"> <%= item.semester %></td>
         <td align="center"><%= item.grade %></td>
-        <td><%= item.gpa %></td>
+        <td><%= item.student_mark %></td>
       
       </tr>       
        <% end %>
@@ -67,11 +67,23 @@
             <% else %>
            <%= @g %>G, 
            <%end %></td>
-        <td colspan="2"> <%= @total_gpa %></td>
+        <td colspan="2"> <%= @total_mark %></td>
       </tr>
       <tr>
-        <td colspan="4" class="footer">CGPA</td>
-        <td colspan="3"><%= @cgpa%> </td>
+        <td colspan="4" class="footer">Total Average</td>
+        <td colspan="3"><%= @total_average%> </td>
+      </tr>
+      <tr>
+        <td colspan="4" class="footer">Head Teacher Signiture</td>
+        <td colspan="3"></td>
+      </tr>
+      <tr>
+        <td colspan="4" class="footer">Teacher Signiture</td>
+        <td colspan="3"></td>
+      </tr>
+      <tr>
+        <td colspan="4" class="footer">Parent Signiture</td>
+        <td colspan="3"></td>
       </tr>
   </table>
 </body>

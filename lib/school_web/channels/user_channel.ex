@@ -58,6 +58,9 @@ defmodule SchoolWeb.UserChannel do
         SchoolWeb.StudentView,
         "form.html",
         student: student,
+        guardian: student.gicno,
+        father: student.ficno,
+        mother: student.micno,
         changeset: changeset,
         conn: conn,
         action: "/students/#{student.id}"

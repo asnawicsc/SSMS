@@ -136,6 +136,25 @@
     <strong>Subject ids:</strong>
     <%= @student.subject_ids %>
   </li>
+    <li>
+    <strong>Guard type:</strong>
+    <%= @student.guardtype %>
+  </li>
+
+  <li>
+    <strong>GICNO:</strong>
+    <%= @student.gicno %>
+  </li>
+
+  <li>
+    <strong>Guardian ids:</strong>
+    <%= @student.ficno %>
+  </li>
+
+  <li>
+    <strong>Subject ids:</strong>
+    <%= @student.micno %>
+  </li>
 
 </ul>
 

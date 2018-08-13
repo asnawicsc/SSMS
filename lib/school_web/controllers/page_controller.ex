@@ -206,4 +206,44 @@ defmodule SchoolWeb.PageController do
 
     render(conn, "return.html", returns: returns)
   end
+
+  def update_book(conn, params) do
+    inst = Repo.get(Institution, School.Affairs.inst_id(conn))
+
+    uri =
+      if Application.get_env(:your_app, :env) == nil do
+        "http://localhost:4000/api"
+      else
+        "https://www.li6rary.net/api"
+      end
+
+    lib_id = inst.library_organization_id
+
+    book_params = %{
+      scope: "update_book",
+      author: params["author"],
+      id: params["id"],
+      barcode: params["barcode"],
+      coauthor: params["coauthor"],
+      illustrator: params["illustrator"],
+      isbn: params["isbn"],
+      publisher: params["publisher"],
+      series: params["series"],
+      title: params["name"],
+      translator: params["translator"],
+      volume: params["volume"]
+    }
+
+    HTTPoison.request(
+      :post,
+      uri,
+      Poison.encode!(book_params),
+      [{"Content-Type", "application/json"}],
+      []
+    )
+
+    conn
+    |> put_flash(:info, "Library books updated!")
+    |> redirect(to: page_path(conn, :books))
+  end
 end

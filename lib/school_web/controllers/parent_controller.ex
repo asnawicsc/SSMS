@@ -30,6 +30,24 @@ require IEx
     render(conn, "show.html", parent: parent)
   end
 
+
+  def show_guardian(conn, %{"id" => id}) do
+    guardian = Repo.get_by(Parent,icno: id)
+
+    if guardian != [] do
+        changeset = Affairs.change_parent(guardian)
+        render(conn, "edit.html", parent: guardian, changeset: changeset)
+      
+      else
+         conn
+          |> put_flash(:info, "This parent information is not exist")
+          |> redirect(to: student_path(conn, :index))
+
+    end
+
+  
+  end
+
   def edit(conn, %{"id" => id}) do
     parent = Affairs.get_parent!(id)
     changeset = Affairs.change_parent(parent)
@@ -72,7 +90,7 @@ require IEx
     bin = params["item"]["file"].path |> File.read() |> elem(1)
     data = bin |>String.split("\n")|>Enum.map(fn x-> String.split(x,",") end)
     headers = hd(data)|>Enum.map(fn x-> String.trim(x," ")end)
-    contents = tl(data)
+    contents = tl(data)|>Enum.map(fn x-> String.trim(x," ")end)
 
 
     parents_params =
@@ -84,8 +102,8 @@ require IEx
         c =
           for item <- content do
 
-
-            case Poison.decode(item) do
+            item=String.replace(item,"@@@",",") 
+            case item do
               {:ok, i} ->
                 i
               _ ->
@@ -98,19 +116,12 @@ require IEx
                     "null"
                   true ->
                     item
-                    if is_integer(item) do
-                      item=Integer.to_string(item)
-                      item
-                      |> String.split("\"")
-                      |> Enum.map(fn x -> String.replace(x, "\n", "") end)
-                      |> List.last()
-                    else
+                    
                     item
                     |> String.split("\"")
                     |> Enum.map(fn x -> String.replace(x, "\n", "") end)
                     |> List.last()
-                  end
-
+                
                 end
             end
           end

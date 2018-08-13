@@ -73,7 +73,7 @@ defmodule SchoolWeb.TeacherController do
     bin = params["item"]["file"].path |> File.read() |> elem(1)
     data = bin |> String.split("\n")|>Enum.map(fn x-> String.split(x,",") end)
     headers = hd(data)|>Enum.map(fn x-> String.trim(x," ")end)
-    contents = tl(data)
+    contents = tl(data)|>Enum.map(fn x-> String.trim(x," ")end)
 
     teachers_params =
       for content <- contents do
@@ -83,6 +83,8 @@ defmodule SchoolWeb.TeacherController do
 
         c =
           for item <- content do
+
+              item=String.replace(item,"@@@",",") 
      
             case item do
               {:ok, i} ->

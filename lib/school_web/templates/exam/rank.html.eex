@@ -36,7 +36,7 @@
         <col col span="2" >
       </colgroup>
       <tr>
-        <th style="background-color:#97DB9A;">Ranking</th>
+        <th style="background-color:#97DB9A;">No</th>
         <th style="background-color:#97DB9A;">Student Name</th>
         <%= for item <- @mark|>Enum.sort_by(fn x -> x end) do %>    
          
@@ -44,15 +44,15 @@
         <% end %>
         <th style="background-color:#97DB9A;">Total Mark</th>
         <th style="background-color:#97DB9A;">Total Grade</th>
-        <th style="background-color:#97DB9A;">CGPA</th>
+         <th style="background-color:#97DB9A;">Class</th>
       </tr>
      
 
         <%= for item <- @z do %>
-          <% rank = item|>elem(1) %>
+          <% no = item|>elem(1) %>
           <% item = item|>elem(0) %>
         <tr>
-       <th style="background-color:grey;"><%= rank+1 %></th>
+       <th ><%= no+1 %></th>
           <th><a href="/report_card/<%= @exam_name %>/<%= item.student_id %>"><%=item.name %></a></th>
    
         <%= for subject <- item.subject do %>
@@ -94,7 +94,7 @@
            <%= item.g %>G, 
            <%end %>
           </th>
-           <th style="background-color:grey;"><%= item.cgpa %></th>
+            <th style="background-color:grey;"><%= item.rank %></th>
       </tr>
        <% end %>
 

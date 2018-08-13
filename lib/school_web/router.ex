@@ -31,6 +31,7 @@ defmodule SchoolWeb.Router do
     get("/operations", PageController, :operations)
     get("/library/books", PageController, :books)
     post("/library/books/uploads", PageController, :upload_books)
+    post("/library/book/update_book", PageController, :update_book)
     get("/library/loans/new", PageController, :new_loan)
     get("/library/returns", PageController, :return)
     resources("/parameters", ParameterController)
@@ -88,6 +89,7 @@ defmodule SchoolWeb.Router do
     get("/generate_ranking", ExamController, :generate_ranking)
 
     get("/report_card/:exam_name/:id", ExamController, :report_card)
+      get("/show_guardian/:id",ParentController, :show_guardian)
     resources("/exam_mark", ExamMarkController)
   end
 
