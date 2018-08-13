@@ -35,6 +35,10 @@ defmodule School.Affairs.Student do
     field(:achievements, :binary)
     field(:remarks, :binary)
     field(:student_no, :string)
+     field(:guardtype, :string)
+    field(:gicno, :string)
+    field(:ficno, :string)
+    field(:micno, :string)
     timestamps()
   end
 
@@ -72,17 +76,13 @@ defmodule School.Affairs.Student do
       :blood_type,
       :position_in_house,
       :guardian_ids,
-      :subject_ids
+      :subject_ids,
+      :guardtype,
+      :gicno,
+      :ficno,
+      :micno, 
     ])
-    |> validate_required([
-      :name,
-      :chinese_name,
-      :sex,
-      :ic,
-      :race,
-      :religion,
-      :nationality,
-      :institution_id
-    ])
+     |> validate_required([:student_no])
+   
   end
 end

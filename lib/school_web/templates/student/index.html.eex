@@ -21,21 +21,22 @@
         </tr>
       </thead>
       <tbody>
+       
     <%= for student <- @students do %>
         <tr>
        
 
 
           <td class="text-left">
-          <% link "Show", to: student_path(@conn, :show, student.id), class: "btn btn-link" %>
+       
        
               <div id="<%= student.id %>" class="btn btn-link student"><%= student.name %> <%= student.chinese_name %></div>
 
-          <% link "Edit", to: student_path(@conn, :edit, student.id), class: "btn btn-default btn-xs" %>
-          <% link "Delete", to: student_path(@conn, :delete, student.id), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %>
+       
           </td>
         </tr>
     <% end %>
+
       </tbody>
     </table>
 </div>
