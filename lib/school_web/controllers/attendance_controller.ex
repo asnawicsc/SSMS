@@ -66,41 +66,40 @@ defmodule SchoolWeb.AttendanceController do
         semester_id: semester_id,
         institution_id: institute_id
       )
-  
 
     student_ids = attendance.student_id |> String.split(",")
 
-  {action,type}=  if Enum.any?(student_ids, fn x -> x == student_id end) do
-      student_ids = List.delete(student_ids, student_id) |> Enum.join(",")
+    {action, type} =
+      if Enum.any?(student_ids, fn x -> x == student_id end) do
+        student_ids = List.delete(student_ids, student_id) |> Enum.join(",")
 
-      Attendance.changeset(attendance, %{student_id: student_ids}) |> Repo.update!()
+        Attendance.changeset(attendance, %{student_id: student_ids}) |> Repo.update!()
 
-    {"has been marked as absent.","danger"}
-  
-    else
-      student_ids = List.insert_at(student_ids, 0, student_id) |> Enum.join(",")
+        {"has been marked as absent.", "danger"}
+      else
+        student_ids = List.insert_at(student_ids, 0, student_id) |> Enum.join(",")
 
-      Attendance.changeset(attendance, %{student_id: student_ids}) |> Repo.update!()
+        Attendance.changeset(attendance, %{student_id: student_ids}) |> Repo.update!()
 
-      abs =
-        Repo.all(
-          from(
-            a in Absent,
-            where: a.absent_date == ^Date.utc_today() and a.student_id == ^student_id
+        abs =
+          Repo.all(
+            from(
+              a in Absent,
+              where: a.absent_date == ^Date.utc_today() and a.student_id == ^student_id
+            )
           )
-        )
 
-      if abs != [] do
-        Repo.delete_all(
-          from(
-            a in Absent,
-            where: a.absent_date == ^Date.utc_today() and a.student_id == ^student_id
+        if abs != [] do
+          Repo.delete_all(
+            from(
+              a in Absent,
+              where: a.absent_date == ^Date.utc_today() and a.student_id == ^student_id
+            )
           )
-        )
+        end
+
+        {"has been marked as attended.", "success"}
       end
-      {"has been marked as attended.","success"}
-    
-    end
 
     map =
       %{student: student.name, class: class.name, action: action, type: type} |> Poison.encode!()
@@ -119,29 +118,26 @@ defmodule SchoolWeb.AttendanceController do
         semester_id: conn.private.plug_session["semester_id"]
       )
 
-    {attendance}=if attendance == nil do
-      cg =
-        Attendance.changeset(%Attendance{}, %{
-          institution_id: Affairs.inst_id(conn),
-          attendance_date: Date.utc_today(),
-          class_id: class.id,
-          semester_id: conn.private.plug_session["semester_id"]
-        })
+    {attendance} =
+      if attendance == nil do
+        cg =
+          Attendance.changeset(%Attendance{}, %{
+            institution_id: Affairs.inst_id(conn),
+            attendance_date: Date.utc_today(),
+            class_id: class.id,
+            semester_id: conn.private.plug_session["semester_id"]
+          })
 
-     {Repo.insert(cg)}
-
-    else
-
-       
-     { Repo.get_by(
-        Attendance,
-        attendance_date: Date.utc_today(),
-        class_id: class.id,
-        semester_id: conn.private.plug_session["semester_id"]
-      )}
-
-
-    end
+        {:ok, attendance} = Repo.insert(cg)
+        {attendance}
+      else
+        {Repo.get_by(
+           Attendance,
+           attendance_date: Date.utc_today(),
+           class_id: class.id,
+           semester_id: conn.private.plug_session["semester_id"]
+         )}
+      end
 
     students =
       Repo.all(
@@ -157,13 +153,13 @@ defmodule SchoolWeb.AttendanceController do
       )
 
     student_ids = attendance.student_id |> String.split(",") |> Enum.reject(fn x -> x == "" end)
-    attended_students=
-    if student_ids != [] do
-    
+
+    attended_students =
+      if student_ids != [] do
         Repo.all(from(s in Student, where: s.id in ^student_ids, order_by: [s.name]))
-    else
-     []
-    end
+      else
+        []
+      end
 
     rem = students -- attended_students
 

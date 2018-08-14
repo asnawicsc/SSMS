@@ -21,6 +21,7 @@ defmodule SchoolWeb.TeacherController do
         conn
         |> put_flash(:info, "Teacher created successfully.")
         |> redirect(to: teacher_path(conn, :show, teacher))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
@@ -38,11 +39,11 @@ defmodule SchoolWeb.TeacherController do
   end
 
   def update(conn, %{"id" => id, "teacher" => teacher_params}) do
-    teacher = Repo.get_by(Teacher,code: id)
+    teacher = Repo.get_by(Teacher, code: id)
 
     case Affairs.update_teacher(teacher, teacher_params) do
       {:ok, teacher} ->
-         url = teacher_path(conn, :index, focus: teacher.code)
+        url = teacher_path(conn, :index, focus: teacher.code)
         referer = conn.req_headers |> Enum.filter(fn x -> elem(x, 0) == "referer" end)
 
         if referer != [] do
@@ -69,23 +70,20 @@ defmodule SchoolWeb.TeacherController do
     |> redirect(to: teacher_path(conn, :index))
   end
 
-   def upload_teachers(conn, params) do
+  def upload_teachers(conn, params) do
     bin = params["item"]["file"].path |> File.read() |> elem(1)
-    data = bin |> String.split("\n")|>Enum.map(fn x-> String.split(x,",") end)
-    headers = hd(data)|>Enum.map(fn x-> String.trim(x," ")end)
-    contents = tl(data)|>Enum.map(fn x-> String.trim(x," ")end)
+    data = bin |> String.split("\n") |> Enum.map(fn x -> String.split(x, ",") end)
+    headers = hd(data) |> Enum.map(fn x -> String.trim(x, " ") end)
+    contents = tl(data)
 
     teachers_params =
       for content <- contents do
-
-
-        h = headers |>Enum.map(fn x-> String.downcase(x) end)
+        h = headers |> Enum.map(fn x -> String.downcase(x) end)
 
         c =
           for item <- content do
+            item = String.replace(item, "@@@", ",")
 
-              item=String.replace(item,"@@@",",") 
-     
             case item do
               {:ok, i} ->
                 i
@@ -94,34 +92,28 @@ defmodule SchoolWeb.TeacherController do
                 cond do
                   item == " " ->
                     "null"
-                      item == "" ->
+
+                  item == "" ->
                     "null"
-                     item == "  " ->
+
+                  item == "  " ->
                     "null"
 
                   true ->
                     item
-
                     |> String.split("\"")
                     |> Enum.map(fn x -> String.replace(x, "\n", "") end)
                     |> List.last()
-
-            
                 end
             end
           end
 
         teachers_params = Enum.zip(h, c) |> Enum.into(%{})
 
-
-
         if is_integer(teachers_params["bcenrlno"]) do
-           teachers_params =
-           Map.put(teachers_params, "bcenrlno", Integer.to_string(teachers_params["bcenrlno"]))
-
+          teachers_params =
+            Map.put(teachers_params, "bcenrlno", Integer.to_string(teachers_params["bcenrlno"]))
         end
-
-     
 
         cg = Teacher.changeset(%Teacher{}, teachers_params)
 
