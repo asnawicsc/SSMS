@@ -45,6 +45,7 @@ defmodule SchoolWeb.Router do
     get("/logout", UserController, :logout)
     resources("/students", StudentController)
     post("/upload_students", StudentController, :upload_students)
+    get("/height_weight", StudentController, :height_weight)
     resources("/levels", LevelController)
     resources("/semesters", SemesterController)
     resources("/classes", ClassController)
@@ -89,7 +90,7 @@ defmodule SchoolWeb.Router do
     get("/generate_ranking", ExamController, :generate_ranking)
 
     get("/report_card/:exam_name/:id", ExamController, :report_card)
-      get("/show_guardian/:id",ParentController, :show_guardian)
+    get("/show_guardian/:id", ParentController, :show_guardian)
     resources("/exam_mark", ExamMarkController)
   end
 

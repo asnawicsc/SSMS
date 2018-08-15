@@ -18,6 +18,21 @@ defmodule SchoolWeb.StudentController do
     render(conn, "index.html", students: students)
   end
 
+  def height_weight(conn, params) do
+    students =
+      Repo.all(
+        from(
+          s in Student,
+          where: s.institution_id == ^conn.private.plug_session["institution_id"],
+          order_by: [asc: s.name]
+        )
+      )
+
+    levels = Repo.all(Level)
+
+    render(conn, "height_weight.html", students: students, levels: levels)
+  end
+
   def new(conn, _params) do
     changeset = Affairs.change_student(%Student{})
 
@@ -27,60 +42,58 @@ defmodule SchoolWeb.StudentController do
   def upload_students(conn, params) do
     bin = params["item"]["file"].path |> File.read() |> elem(1)
 
-
-    data = bin |> String.split("\n") |>Enum.map(fn x-> String.split(x,",") end)
-    headers = hd(data)|>Enum.map(fn x-> String.trim(x," ")end)
+    data = bin |> String.split("\n") |> Enum.map(fn x -> String.split(x, ",") end)
+    headers = hd(data) |> Enum.map(fn x -> String.trim(x, " ") end)
     contents = tl(data)
 
     student_params =
       for content <- contents do
-        h = headers|>Enum.map(fn x-> String.downcase(x) end)
+        h = headers |> Enum.map(fn x -> String.downcase(x) end)
 
-     content=content|>Enum.map(fn x-> x end)|>Enum.filter(fn x -> x !="\"" end)
+        content = content |> Enum.map(fn x -> x end) |> Enum.filter(fn x -> x != "\"" end)
 
         c =
           for item <- content do
+            item = String.replace(item, "@@@", ",")
 
-           item=String.replace(item,"@@@",",") 
+            a =
+              case item do
+                {:ok, i} ->
+                  i
 
+                _ ->
+                  cond do
+                    item == " " ->
+                      "null"
 
+                    item == "  " ->
+                      "null"
 
-           a=case item do
-              {:ok, i} ->
-                i
+                    item == "   " ->
+                      "null"
 
-              _ ->
-                cond do
-                   item==" " ->
-                    "null"
-                    item=="  " ->
-                    "null"
-                     item=="   " ->
-                    "null"
-                  true ->
-                    item
-                     |> String.split("\"")
-                    |> Enum.map(fn x -> String.replace(x, "\n", "") end)
-                    |> List.last()
-                  
-                end
-            end
-    
+                    true ->
+                      item
+                      |> String.split("\"")
+                      |> Enum.map(fn x -> String.replace(x, "\n", "") end)
+                      |> List.last()
+                  end
+              end
           end
 
         student_param = Enum.zip(h, c) |> Enum.into(%{})
 
         student_param =
           Map.put(student_param, "institution_id", conn.private.plug_session["institution_id"])
-  
+
         #   Map.put(student_param, "ic", Integer.to_string(student_param["ic_no"]))
         #  student_param =if is_integer(student_param["postcode"]) do
-         
+
         #     Map.put(student_param, "postcode", Integer.to_string(student_param["postcode"]))
         # end
 
         #  student_param =if is_integer(student_param["student_no"]) do
-         
+
         #     Map.put(student_param, "student_no", Integer.to_string(student_param["student_no"]))
         # end
 
@@ -89,15 +102,14 @@ defmodule SchoolWeb.StudentController do
         # end
 
         #  student_param =if is_integer(student_param["phone"]) do
-         
+
         #     Map.put(student_param, "phone", Integer.to_string(student_param["phone"]))
         # end
 
         #    student_param =if is_integer(student_param["state"]) do
-         
+
         #     Map.put(student_param, "state", Integer.to_string(student_param["state"]))
         # end
-   
 
         cg = Student.changeset(%Student{}, student_param)
 
@@ -146,7 +158,6 @@ defmodule SchoolWeb.StudentController do
       {:ok, student} ->
         url = student_path(conn, :index, focus: student.id)
         referer = conn.req_headers |> Enum.filter(fn x -> elem(x, 0) == "referer" end)
-
 
         if referer != [] do
           refer = hd(referer)
