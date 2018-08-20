@@ -1812,4 +1812,136 @@ defmodule School.AffairsTest do
       assert %Ecto.Changeset{} = Affairs.change_time_period(time_period)
     end
   end
+
+  describe "head_count" do
+    alias School.Affairs.HeadCount
+
+    @valid_attrs %{class_id: 42, student_id: 42, subject_id: 42, targer_mark: 42}
+    @update_attrs %{class_id: 43, student_id: 43, subject_id: 43, targer_mark: 43}
+    @invalid_attrs %{class_id: nil, student_id: nil, subject_id: nil, targer_mark: nil}
+
+    def head_count_fixture(attrs \\ %{}) do
+      {:ok, head_count} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_head_count()
+
+      head_count
+    end
+
+    test "list_head_count/0 returns all head_count" do
+      head_count = head_count_fixture()
+      assert Affairs.list_head_count() == [head_count]
+    end
+
+    test "get_head_count!/1 returns the head_count with given id" do
+      head_count = head_count_fixture()
+      assert Affairs.get_head_count!(head_count.id) == head_count
+    end
+
+    test "create_head_count/1 with valid data creates a head_count" do
+      assert {:ok, %HeadCount{} = head_count} = Affairs.create_head_count(@valid_attrs)
+      assert head_count.class_id == 42
+      assert head_count.student_id == 42
+      assert head_count.subject_id == 42
+      assert head_count.targer_mark == 42
+    end
+
+    test "create_head_count/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_head_count(@invalid_attrs)
+    end
+
+    test "update_head_count/2 with valid data updates the head_count" do
+      head_count = head_count_fixture()
+      assert {:ok, head_count} = Affairs.update_head_count(head_count, @update_attrs)
+      assert %HeadCount{} = head_count
+      assert head_count.class_id == 43
+      assert head_count.student_id == 43
+      assert head_count.subject_id == 43
+      assert head_count.targer_mark == 43
+    end
+
+    test "update_head_count/2 with invalid data returns error changeset" do
+      head_count = head_count_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_head_count(head_count, @invalid_attrs)
+      assert head_count == Affairs.get_head_count!(head_count.id)
+    end
+
+    test "delete_head_count/1 deletes the head_count" do
+      head_count = head_count_fixture()
+      assert {:ok, %HeadCount{}} = Affairs.delete_head_count(head_count)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_head_count!(head_count.id) end
+    end
+
+    test "change_head_count/1 returns a head_count changeset" do
+      head_count = head_count_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_head_count(head_count)
+    end
+  end
+
+  describe "head_counts" do
+    alias School.Affairs.HeadCount
+
+    @valid_attrs %{class_id: 42, student_id: 42, subject_id: 42, targer_mark: 42}
+    @update_attrs %{class_id: 43, student_id: 43, subject_id: 43, targer_mark: 43}
+    @invalid_attrs %{class_id: nil, student_id: nil, subject_id: nil, targer_mark: nil}
+
+    def head_count_fixture(attrs \\ %{}) do
+      {:ok, head_count} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_head_count()
+
+      head_count
+    end
+
+    test "list_head_counts/0 returns all head_counts" do
+      head_count = head_count_fixture()
+      assert Affairs.list_head_counts() == [head_count]
+    end
+
+    test "get_head_count!/1 returns the head_count with given id" do
+      head_count = head_count_fixture()
+      assert Affairs.get_head_count!(head_count.id) == head_count
+    end
+
+    test "create_head_count/1 with valid data creates a head_count" do
+      assert {:ok, %HeadCount{} = head_count} = Affairs.create_head_count(@valid_attrs)
+      assert head_count.class_id == 42
+      assert head_count.student_id == 42
+      assert head_count.subject_id == 42
+      assert head_count.targer_mark == 42
+    end
+
+    test "create_head_count/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_head_count(@invalid_attrs)
+    end
+
+    test "update_head_count/2 with valid data updates the head_count" do
+      head_count = head_count_fixture()
+      assert {:ok, head_count} = Affairs.update_head_count(head_count, @update_attrs)
+      assert %HeadCount{} = head_count
+      assert head_count.class_id == 43
+      assert head_count.student_id == 43
+      assert head_count.subject_id == 43
+      assert head_count.targer_mark == 43
+    end
+
+    test "update_head_count/2 with invalid data returns error changeset" do
+      head_count = head_count_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_head_count(head_count, @invalid_attrs)
+      assert head_count == Affairs.get_head_count!(head_count.id)
+    end
+
+    test "delete_head_count/1 deletes the head_count" do
+      head_count = head_count_fixture()
+      assert {:ok, %HeadCount{}} = Affairs.delete_head_count(head_count)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_head_count!(head_count.id) end
+    end
+
+    test "change_head_count/1 returns a head_count changeset" do
+      head_count = head_count_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_head_count(head_count)
+    end
+  end
 end

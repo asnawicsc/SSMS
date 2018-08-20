@@ -1,0 +1,28 @@
+<h2>Show Head count</h2>
+
+<ul>
+
+  <li>
+    <strong>Class:</strong>
+    <%= @head_count.class_id %>
+  </li>
+
+  <li>
+    <strong>Subject:</strong>
+    <%= @head_count.subject_id %>
+  </li>
+
+  <li>
+    <strong>Student:</strong>
+    <%= @head_count.student_id %>
+  </li>
+
+  <li>
+    <strong>Targer mark:</strong>
+    <%= @head_count.targer_mark %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: head_count_path(@conn, :edit, @head_count) %></span>
+<span><%= link "Back", to: head_count_path(@conn, :index) %></span>

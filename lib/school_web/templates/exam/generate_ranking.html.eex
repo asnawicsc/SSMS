@@ -8,7 +8,7 @@
                 <div class="form-group bmd-form-group">
                   <label class="bmd-label-floating"><%= gettext "Exam Name" %></label><br>
                  <select class="select"  name="exam_name" >
-                           <%= for a <- @exam|>Enum.uniq |> Enum.sort do %>
+                           <%= for a <- @exam|> Enum.sort do %>
                                             <option value="<%= a.name %>" ><%= a.name %>
                                             </option>
                                           <% end %>

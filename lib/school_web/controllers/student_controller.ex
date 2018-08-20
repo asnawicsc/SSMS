@@ -127,6 +127,22 @@ defmodule SchoolWeb.StudentController do
     end
   end
 
+  def print_students(conn, %{"id" => id}) do
+    class = Affairs.get_class!(id)
+
+    all_student=Repo.all(from sc in School.Affairs.StudentClass,
+      left_join: s in School.Affairs.Student, on: s.id==sc.sudent_id,
+       where: sc.class_id ==^class.id,
+       select:
+        %{ name: s.name,
+       chinese_name: s.chinese_name,
+        sex: s.sex,
+        student_no: s.student_no
+      })|>Enum.with_index
+
+    render(conn, "print_students.html", all_student: all_student,class_name: class.name)
+  end
+
   def show(conn, %{"id" => id}) do
     student = Affairs.get_student!(id)
     render(conn, "show.html", student: student)

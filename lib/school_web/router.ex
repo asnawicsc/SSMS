@@ -82,11 +82,26 @@ defmodule SchoolWeb.Router do
     post("/update_mark", ExamController, :update_mark)
     get("/new_exam", ExamController, :new_exam)
     post("/create_exam", ExamController, :create_exam)
-    get("/rank/:id", ExamController, :rank)
+    post("/rank", ExamController, :rank)
     resources("/absent", AbsentController)
     resources("/labels", LabelController)
     post("/exam_ranking", ExamController, :exam_ranking)
     get("/generate_ranking", ExamController, :generate_ranking)
+
+        get("/rank_exam/:id", ExamController, :rank_exam)
+
+  resources "/head_counts", HeadCountController
+
+ get("/generate_head_count/:id", HeadCountController, :generate_head_count)
+  post("/head_count_create", HeadCountController, :head_count_create)
+
+    post("/create_head_count", HeadCountController, :create_head_count)
+
+     post("/update_head_count_mark", HeadCountController, :update_head_count_mark)
+      get("/head_count_subject/:id", HeadCountController, :head_count_subject)
+       post("/head_count_subject_create", HeadCountController, :head_count_subject_create)
+
+        get("/print_students/:id", StudentController, :print_students)
 
     get("/report_card/:exam_name/:id", ExamController, :report_card)
       get("/show_guardian/:id",ParentController, :show_guardian)
