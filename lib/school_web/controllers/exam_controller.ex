@@ -130,8 +130,6 @@ defmodule SchoolWeb.ExamController do
 
       end
 
-
-
     render(conn, "generate_exam.html", all: all, id: id, exam: exam)
   end
 
@@ -275,9 +273,26 @@ defmodule SchoolWeb.ExamController do
     |> redirect(to: class_path(conn, :index))
   end
 
-  def rank(conn, %{"id" => id}) do
-    class = Affairs.get_class!(id)
 
+    def rank_exam(conn, %{"id" => id}) do
+
+     exam =
+      Repo.all(
+        from(
+          e in School.Affairs.ExamMaster,
+          left_join: c in School.Affairs.Class,
+          on: c.level_id == e.level_id,
+          where: c.id == ^id,
+          select: %{id: e.id, exam_name: e.name}
+        )
+      )
+    render(conn, "rank_exam.html", exam: exam, id: id)
+  end
+
+  def rank(conn,params) do
+
+     class_id=params["class_id"]|>String.to_integer
+   exam_id=params["exam_id"]|>String.to_integer
     exam_mark =
       Repo.all(
         from(
@@ -288,7 +303,7 @@ defmodule SchoolWeb.ExamController do
           on: s.id == e.student_id,
           left_join: p in School.Affairs.Subject,
           on: p.id == e.subject_id,
-          where: e.class_id == ^id,
+          where: e.class_id == ^class_id and e.exam_id==^exam_id,
           select: %{
             subject_code: p.code,
             exam_name: k.name,
@@ -509,7 +524,7 @@ defmodule SchoolWeb.ExamController do
   end
 
   def generate_ranking(conn, params) do
-     exam = Repo.all(from(e in School.Affairs.ExamMaster))
+     exam = Repo.all(from(e in School.Affairs.ExamMaster))|>Enum.map(fn x -> %{name: x.name} end)|>Enum.uniq
     level = Repo.all(from(l in School.Affairs.Level))
     semester = Repo.all(from(s in School.Affairs.Semester))
 
@@ -525,7 +540,13 @@ defmodule SchoolWeb.ExamController do
 
         exam_id= Repo.get_by(School.Affairs.ExamMaster,%{name: exam_name,level_id: level_id,semester_id: semester_id})
    
-
+   
+        if exam_id == nil do
+           conn
+          |> put_flash(:info, "This level do not have any exam data")
+          |> redirect(to: exam_path(conn, :generate_ranking))
+        end  
+ 
 
     exam_mark =
       Repo.all(
@@ -719,6 +740,8 @@ defmodule SchoolWeb.ExamController do
       |> put_flash(:info, "Please Insert Exam Record First")
       |> redirect(to: class_path(conn, :index))
     end
+
+  
   end
 
   def show(conn, %{"id" => id}) do

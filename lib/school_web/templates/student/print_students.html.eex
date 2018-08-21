@@ -1,0 +1,53 @@
+<table class="table" border="1" align="center">
+<th>Institutuion Name:</th>
+<th>Class: <%= @class_name %></th>
+<th>Teacher Name:</th>
+<th>Subject:</th>
+<th>Date:</th>
+</table>
+
+<table class="table" border="1" align="center">
+	<thead>
+		<tr align="center">
+		<th>Bil.</th>
+		<th>Student No</th>
+		<th>Name</th>
+		<th>Chinese Name</th>
+		<th>Sex</th>
+		<th></th>
+		<th></th>
+		<th></th>
+		<th></th>
+		<th></th>
+		<th></th>
+		<th></th>
+		<th></th>
+</tr>
+
+	</thead>
+	<tbody>
+		<%= for item <- @all_student do %>
+		<% bil=item|>elem(1) %>
+		<% item=item|>elem(0) %>
+			<tr align="center">
+			<td><%= bil+1 %></td>
+			<td><%= item.student_no %></td>
+			<td align="left"><%= item.name %></td>
+			<td ><%= item.chinese_name %></td>
+			<td><%= item.sex %></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+
+		</tr>
+		<% end %>
+	
+		
+
+	</tbody>
+</table>

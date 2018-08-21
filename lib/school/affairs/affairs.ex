@@ -1748,4 +1748,103 @@ defmodule School.Affairs do
   def change_time_period(%TimePeriod{} = time_period) do
     TimePeriod.changeset(time_period, %{})
   end
+
+
+
+
+  alias School.Affairs.HeadCount
+
+  @doc """
+  Returns the list of head_counts.
+
+  ## Examples
+
+      iex> list_head_counts()
+      [%HeadCount{}, ...]
+
+  """
+  def list_head_counts do
+    Repo.all(HeadCount)
+  end
+
+  @doc """
+  Gets a single head_count.
+
+  Raises `Ecto.NoResultsError` if the Head count does not exist.
+
+  ## Examples
+
+      iex> get_head_count!(123)
+      %HeadCount{}
+
+      iex> get_head_count!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_head_count!(id), do: Repo.get!(HeadCount, id)
+
+  @doc """
+  Creates a head_count.
+
+  ## Examples
+
+      iex> create_head_count(%{field: value})
+      {:ok, %HeadCount{}}
+
+      iex> create_head_count(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_head_count(attrs \\ %{}) do
+    %HeadCount{}
+    |> HeadCount.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a head_count.
+
+  ## Examples
+
+      iex> update_head_count(head_count, %{field: new_value})
+      {:ok, %HeadCount{}}
+
+      iex> update_head_count(head_count, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_head_count(%HeadCount{} = head_count, attrs) do
+    head_count
+    |> HeadCount.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a HeadCount.
+
+  ## Examples
+
+      iex> delete_head_count(head_count)
+      {:ok, %HeadCount{}}
+
+      iex> delete_head_count(head_count)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_head_count(%HeadCount{} = head_count) do
+    Repo.delete(head_count)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking head_count changes.
+
+  ## Examples
+
+      iex> change_head_count(head_count)
+      %Ecto.Changeset{source: %HeadCount{}}
+
+  """
+  def change_head_count(%HeadCount{} = head_count) do
+    HeadCount.changeset(head_count, %{})
+  end
 end

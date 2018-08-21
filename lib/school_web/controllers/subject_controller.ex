@@ -94,7 +94,7 @@ defmodule SchoolWeb.SubjectController do
           for item <- content do
 
 
-            case Poison.decode(item) do
+            case item do
               {:ok, i} ->
                 i
 
