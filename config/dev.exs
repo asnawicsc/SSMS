@@ -56,3 +56,6 @@ config :school, School.Repo,
   database: "school_dev",
   hostname: "localhost",
   pool_size: 10
+
+# config :api, url: "https://www.li6rary.net/api"
+config :school, :api, url: "http://0.0.0.0:4001/api"

@@ -44,8 +44,8 @@ defmodule SchoolWeb.PageController do
 
   def operations(conn, params) do
     inst = Repo.get(Institution, School.Affairs.inst_id(conn))
-
-    uri = "https://www.li6rary.net/api"
+    uri = Application.get_env(:school, :api)[:url]
+    # uri = "https://www.li6rary.net/api"
 
     lib_id = inst.library_organization_id
 
@@ -108,7 +108,8 @@ defmodule SchoolWeb.PageController do
   def upload_books(conn, params) do
     inst = Repo.get(Institution, School.Affairs.inst_id(conn))
 
-    uri = "https://www.li6rary.net/api"
+    # uri = "https://www.li6rary.net/api"
+    uri = Application.get_env(:school, :api)[:url]
 
     lib_id = inst.library_organization_id
 
@@ -117,7 +118,9 @@ defmodule SchoolWeb.PageController do
     data_list = data |> String.split("\n")
 
     header =
-      data_list |> hd() |> String.split(",")
+      data_list
+      |> hd()
+      |> String.split(",")
       |> Enum.map(fn x -> String.trim(String.downcase(x)) end)
 
     body = data_list |> tl()
@@ -151,7 +154,8 @@ defmodule SchoolWeb.PageController do
   end
 
   def books(conn, params) do
-    uri = "https://www.li6rary.net/api"
+    # uri = "https://www.li6rary.net/api"
+    uri = Application.get_env(:school, :api)[:url]
 
     lib_id =
       if Application.get_env(:school, :env) == nil do
@@ -189,7 +193,8 @@ defmodule SchoolWeb.PageController do
   end
 
   def return(conn, params) do
-    uri = "https://www.li6rary.net/api"
+    # uri = "https://www.li6rary.net/api"
+    uri = Application.get_env(:school, :api)[:url]
 
     inst = Repo.get(Institution, School.Affairs.inst_id(conn))
     path = "?scope=get_returns&lib_id=#{inst.library_organization_id}"
@@ -210,12 +215,7 @@ defmodule SchoolWeb.PageController do
   def update_book(conn, params) do
     inst = Repo.get(Institution, School.Affairs.inst_id(conn))
 
-    uri =
-      if Application.get_env(:your_app, :env) == nil do
-        "http://localhost:4000/api"
-      else
-        "https://www.li6rary.net/api"
-      end
+    uri = Application.get_env(:school, :api)[:url]
 
     lib_id = inst.library_organization_id
 
@@ -244,6 +244,6 @@ defmodule SchoolWeb.PageController do
 
     conn
     |> put_flash(:info, "Library books updated!")
-    |> redirect(to: page_path(conn, :books))
+    |> redirect(to: page_path(conn, :books, cat_id: params["cat_id"], b_id: params["b_id"]))
   end
 end
