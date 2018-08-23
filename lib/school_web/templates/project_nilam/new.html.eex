@@ -1,0 +1,5 @@
+<h2>New Project nilam</h2>
+
+<%= render "form.html", Map.put(assigns, :action, project_nilam_path(@conn, :create)) %>
+
+<span><%= link "Back", to: project_nilam_path(@conn, :index) %></span>

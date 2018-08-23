@@ -14,7 +14,7 @@ defmodule SchoolWeb.StudentController do
           order_by: [asc: s.name]
         )
       )
-
+ 
     render(conn, "index.html", students: students)
   end
 

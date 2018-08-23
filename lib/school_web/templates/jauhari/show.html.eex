@@ -1,0 +1,27 @@
+<h2>Show Jauhari</h2>
+
+<ul>
+
+  <li>
+    <strong>Prize:</strong>
+    <%= @jauhari.prize %>
+  </li>
+
+  <li>
+    <strong>Min:</strong>
+    <%= @jauhari.min %>
+  </li>
+
+  <li>
+    <strong>Max:</strong>
+    <%= @jauhari.max %>
+  </li>
+    <li>
+    <strong>Standard:</strong>
+    <%= @jauhari.standard_id %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: jauhari_path(@conn, :edit, @jauhari) %></span>
+<span><%= link "Back", to: jauhari_path(@conn, :index) %></span>

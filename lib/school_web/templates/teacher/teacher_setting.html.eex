@@ -1,0 +1,74 @@
+      <div class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card ">
+                <div class="card-header ">
+                  <h4 class="card-title">Teacher Setting
+                  </h4>
+                    <hr>
+                  <ul class="nav nav-pills nav-pills-warning" role="tablist">
+                    <li class="nav-item">
+                      <a class="nav-link active" data-toggle="tab" href="#link1" role="tablist">
+                        Teacher Info
+                      </a>
+
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" data-toggle="tab" href="#link2" role="tablist">
+                        Teacher Period
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" data-toggle="tab" href="#link3" role="tablist">
+                        School Job
+                      </a>
+                    </li>
+                     <li class="nav-item">
+                      <a class="nav-link" data-toggle="tab" href="#link4" role="tablist">
+                        Co-Curriculum Job
+                      </a>
+                    </li>
+                     <li class="nav-item">
+                      <a class="nav-link" data-toggle="tab" href="#link5" role="tablist">
+                        Hem Job
+                      </a>
+                    </li>
+                      <li class="nav-item">
+                      <a class="nav-link" data-toggle="tab" href="#link6" role="tablist">
+                        Absent Reason
+                      </a>
+                    </li>
+                  </ul>
+            
+                </div>
+                <div class="card-body ">
+
+                  <div class="tab-content tab-space">
+                    <div class="tab-pane active" id="link1">
+                      <%= render("index.html", conn: @conn, teacher: @teacher)%>
+                    </div>
+                    <div class="tab-pane" id="link2">
+                       <%= render("teacher_timetable.html", conn: @conn, teacher: @teacher)%>
+                    </div>
+                    <div class="tab-pane" id="link3">
+                       <%= render("school_job.html", conn: @conn, school_job: @school_job, teacher_school_job: @teacher_school_job)%>
+                    </div>
+                     <div class="tab-pane" id="link4">
+                       <%= render("co-curriculum_job.html", conn: @conn, cocurriculum_job: @co_curriculum_job,teacher_co_curriculum_job: @teacher_co_curriculum_job)%>
+                    </div>
+                     <div class="tab-pane" id="link5">
+                       <%= render("hem_job.html", conn: @conn, hem_job: @hem_job,teacher_hem_job: @teacher_hem_job)%>
+                    </div>
+                     <div class="tab-pane" id="link6">
+                       <%= render("absent_reason.html", conn: @conn, absent_reason: @absent_reason)%>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+         
+          </div>
+
+        </div>
+      </div>

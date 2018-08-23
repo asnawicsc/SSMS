@@ -1,0 +1,5 @@
+<h2>New Teacher hem job</h2>
+
+<%= render "form.html", Map.put(assigns, :action, teacher_hem_job_path(@conn, :create)) %>
+
+<span><%= link "Back", to: teacher_path(@conn, :teacher_setting) %></span>

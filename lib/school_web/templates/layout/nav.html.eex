@@ -31,12 +31,20 @@
             <%= gettext "System Configuration" %></a>
           <a class="dropdown-item" href="/semesters">
             <%= gettext "Semesters" %> </a>
+             <a class="dropdown-item" href="/teacher_setting">
+            <%= gettext "Teacher Setting" %> </a>
+                  <a class="dropdown-item" href="/standard_setting">
+            <%= gettext "Standard Setting" %> </a>
+             <a class="dropdown-item" href="/nilam_setting">
+            <%= gettext "Nilam Setting" %> </a>
           <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="/subject"><%= gettext "Subjects" %></a>
-            <a class="dropdown-item" href="/teacher"><%= gettext "Teachers" %></a>
             <a class="dropdown-item" href="/parent"><%= gettext "Parents" %></a>
             <a class="dropdown-item" href="/students"><%= gettext "Students" %></a>
             <a class="dropdown-item" href="/period"><%= gettext "Period" %></a>
+               <a class="dropdown-item" href="/grade"><%= gettext "Grade" %></a>
+            <a class="dropdown-item" href="/co_grade"><%= gettext "Co Grade" %></a>
+      
         </div>
       </li>
       <li class="nav-item dropdown">

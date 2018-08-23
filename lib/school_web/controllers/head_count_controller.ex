@@ -146,7 +146,7 @@ defmodule SchoolWeb.HeadCountController do
     end
 
     conn
-    |> put_flash(:info, "Exam mark updated successfully.")
+    |> put_flash(:info, "Exam target mark updated successfully.")
     |> redirect(to: class_path(conn, :index))
   end
 

@@ -1,0 +1,38 @@
+<h2>Listing Project nilam</h2>
+
+<table class="table" id="project_nilam">
+  <thead>
+    <tr>
+      <th>Below satisfy</th>
+      <th>Member reading quantity</th>
+      <th>Page</th>
+      <th>Import from library</th>
+      <th>Count page</th>
+      <th>Standard</th>
+
+    </tr>
+  </thead>
+  <tbody>
+
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+
+    </tr>
+
+  </tbody>
+</table>
+
+<span><%= link "New Project nilam", to: project_nilam_path(@conn, :new) %></span>
+
+
+<script type="text/javascript">
+  
+   var level=localStorage.getItem("level")
+
+  channel.push("nilam_setting", {user_id: window.currentUser,level: level})
+</script>

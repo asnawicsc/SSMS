@@ -1,0 +1,32 @@
+<h2>Listing Jauhari</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Prize</th>
+      <th>Min</th>
+      <th>Max</th>
+      <th>Standard</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for jauhari <- @jauhari do %>
+    <tr>
+      <td><%= jauhari.prize %></td>
+      <td><%= jauhari.min %></td>
+      <td><%= jauhari.max %></td>
+      <td><%= jauhari.standard_id %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: jauhari_path(@conn, :show, jauhari), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: jauhari_path(@conn, :edit, jauhari), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: jauhari_path(@conn, :delete, jauhari), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Jauhari", to: jauhari_path(@conn, :new) %></span>

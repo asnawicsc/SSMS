@@ -1,0 +1,30 @@
+<h2>Listing Hem job</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Code</th>
+      <th>Description</th>
+      <th>Cdesc</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for hem_job <- @hem_job do %>
+    <tr>
+      <td><%= hem_job.code %></td>
+      <td><%= hem_job.description %></td>
+      <td><%= hem_job.cdesc %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: hem_job_path(@conn, :show, hem_job), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: hem_job_path(@conn, :edit, hem_job), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: hem_job_path(@conn, :delete, hem_job), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Hem job", to: hem_job_path(@conn, :new) %></span>

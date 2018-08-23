@@ -1,0 +1,28 @@
+<h2>Show Standard subject</h2>
+
+<ul>
+
+  <li>
+    <strong>Year:</strong>
+    <%= @standard_subject.year %>
+  </li>
+
+  <li>
+    <strong>Semester:</strong>
+    <%= @standard_subject.semester_id %>
+  </li>
+
+  <li>
+    <strong>Standard:</strong>
+    <%= @standard_subject.standard_id %>
+  </li>
+
+  <li>
+    <strong>Subject:</strong>
+    <%= @standard_subject.subject_id %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: standard_subject_path(@conn, :edit, @standard_subject) %></span>
+<span><%= link "Back", to: standard_subject_path(@conn, :index) %></span>

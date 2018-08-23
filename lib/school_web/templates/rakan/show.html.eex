@@ -1,0 +1,28 @@
+<h2>Show Rakan</h2>
+
+<ul>
+
+  <li>
+    <strong>Prize:</strong>
+    <%= @rakan.prize %>
+  </li>
+
+  <li>
+    <strong>Min:</strong>
+    <%= @rakan.min %>
+  </li>
+
+  <li>
+    <strong>Max:</strong>
+    <%= @rakan.max %>
+  </li>
+
+  <li>
+    <strong>Standard:</strong>
+    <%= @rakan.standard_id %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: rakan_path(@conn, :edit, @rakan) %></span>
+<span><%= link "Back", to: rakan_path(@conn, :index) %></span>

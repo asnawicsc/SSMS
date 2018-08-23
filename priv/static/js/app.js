@@ -160,7 +160,18 @@ $("footer").append(maintain)
     $("div[aria-label='parent_details']").html(payload.html)
     var csrf = window.csrf
     $("input[name='_csrf_token']").val(csrf)
-  })      
+  })  
+
+     $("div.teacher_timetable").click(function(){
+    var code = $(this).attr("id")
+    channel.push("inquire_teacher_timetable", {user_id: window.currentUser, code: code})
+  })
+
+       channel.on("show_teacher_timetable", payload => {
+    $("div[aria-label='teacher_timetable']").html(payload.html)
+    var csrf = window.csrf
+    $("input[name='_csrf_token']").val(csrf)
+  })
 
 
 
@@ -169,5 +180,358 @@ $("footer").append(maintain)
     localStorage.removeItem("logo_bin")
   })
 
+
+  $("div#project_nilam").show();
+  $("div#jauhari").hide();
+ $("div#rakan").hide();
+
+$(".nav-link#project_nilam").click(function() {
+   $("div#project_nilam").show();
+  $("div#jauhari").hide();
+  $("div#rakan").hide();
+   var level=localStorage.getItem("level")
+
+  channel.push("nilam_setting", {user_id: window.currentUser,level: level})
+    
+  })
+
+channel.on("show_project_nilam", payload => {
+    var data = payload.project_nilam
+
+    console.log(data)
+
+        $("table#project_nilam").DataTable({
+            
+            destroy: true,
+            data: data,
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
+            columns: [{
+                    data: 'below_satisfy'
+                },
+                {
+                    data: 'member_reading_quantity'
+                },
+                {
+                    data: 'page'
+                },
+                {
+                    data: 'import_from_library'
+                },
+                {
+                    data: 'count_page'
+                },
+                {
+                    data: 'standard_id'
+                }
+               
+            ]
+        });
+  })
+
+$(".nav-link#jauhari").click(function() {
+
+  $("div#project_nilam").hide();
+  $("div#jauhari").show();
+   $("div#rakan").hide();
+   var level=localStorage.getItem("level")
+
+  channel.push("jauhari", {user_id: window.currentUser,level: level})
+    
+  })
+
+channel.on("show_jauhari", payload => {
+    var data = payload.jauhari
+
+    console.log(data)
+
+        $("table#jauhari").DataTable({
+            
+            destroy: true,
+            data: data,
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
+            columns: [{
+                    data: 'prize'
+                },
+                {
+                    data: 'min'
+                },
+                {
+                    data: 'max'
+                },
+                {
+                    data: 'standard_id'
+                }
+               
+            ]
+        });
+  })
+
+$(".nav-link#rakan").click(function() {
+
+  $("div#project_nilam").hide();
+  $("div#jauhari").hide();
+  $("div#rakan").show();
+   var level=localStorage.getItem("level")
+
+  channel.push("rakan", {user_id: window.currentUser,level: level})
+    
+  })
+
+channel.on("show_rakan", payload => {
+    var data = payload.rakan
+
+    console.log(data)
+
+        $("table#rakan").DataTable({
+            
+            destroy: true,
+            data: data,
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
+            columns: [{
+                    data: 'prize'
+                },
+                {
+                    data: 'min'
+                },
+                {
+                    data: 'max'
+                },
+                {
+                    data: 'standard_id'
+                }
+               
+            ]
+        });
+  })
+
+ $("div#standard_subject").show();
+  $("div#subject_test").hide();
+  $("div#test").hide();
+  $("div#result_grade").hide();
+  $("div#result_default").hide();
+  $("div#seq").hide();
+  $("div#co_curriculum").hide();
+  $("div#grade_co").hide();
+
+$(".nav-link#standard_subject").click(function() {
+
+   $("div#standard_subject").show();
+  $("div#subject_test").hide();
+    $("div#test").hide();
+  $("div#result_grade").hide();
+  $("div#result_default").hide();
+  $("div#seq").hide();
+  $("div#co_curriculum").hide();
+  $("div#grade_co").hide();
+
+   var standard_level=localStorage.getItem("standard_level")
+
+  channel.push("standard_subject", {user_id: window.currentUser,standard_level: standard_level})
+    
+  })
+
+channel.on("show_standard_subject", payload => {
+    var data = payload.standard_subject
+var standard_level=payload.standard_level
+
+  $("div#standard_level").html(standard_level)
+    console.log(data)
+
+        $("table#standard_subject").DataTable({
+            
+            destroy: true,
+            data: data,
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
+            columns: [{
+                    data: 'year'
+                },
+                {
+                    data: 'semester_id'
+                },
+                {
+                    data: 'standard_id'
+                },
+                {
+                    data: 'subject_id'
+                }
+               
+            ]
+        });
+  })
+
+$(".nav-link#subject_test").click(function() {
+
+     $("div#standard_subject").hide();
+  $("div#subject_test").show();
+    $("div#test").hide();
+  $("div#result_grade").hide();
+  $("div#result_default").hide();
+  $("div#seq").hide();
+  $("div#co_curriculum").hide();
+  $("div#grade_co").hide();
+
+
+   var standard_level=localStorage.getItem("standard_level")
+
+  channel.push("subject_test", {user_id: window.currentUser,standard_level: standard_level})
+    
+  })
+
+channel.on("show_subject_test", payload => {
+    var data = payload.subject_test
+var standard_level=payload.standard_level
+
+  $("div#standard_level").html(standard_level)
+    console.log(data)
+
+        $("table#subject_test").DataTable({
+            
+            destroy: true,
+            data: data,
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
+            columns: [ {
+                    data: 'subject_id'
+                },
+                {
+                    data: 'name'
+                },
+                {
+                    data: 'semester_id'
+                },
+                {
+                    data: 'standard_id'
+                },
+                {
+                    data: 'year'
+                }
+               
+            ]
+        });
+  })
+
+$(".nav-link#test").click(function() {
+
+     $("div#standard_subject").hide();
+  $("div#subject_test").hide();
+    $("div#test").show();
+  $("div#result_grade").hide();
+  $("div#result_default").hide();
+  $("div#seq").hide();
+  $("div#co_curriculum").hide();
+  $("div#grade_co").hide();
+
+
+   var standard_level=localStorage.getItem("standard_level")
+
+  channel.push("test", {user_id: window.currentUser,standard_level: standard_level})
+    
+  })
+
+$(".nav-link#result_grade").click(function() {
+
+     $("div#standard_subject").hide();
+  $("div#subject_test").hide();
+    $("div#test").hide();
+  $("div#result_grade").show();
+  $("div#result_default").hide();
+  $("div#seq").hide();
+  $("div#co_curriculum").hide();
+  $("div#grade_co").hide();
+
+
+   var standard_level=localStorage.getItem("standard_level")
+
+  channel.push("result_grade", {user_id: window.currentUser,standard_level: standard_level})
+    
+  })
+
+$(".nav-link#result_default").click(function() {
+
+     $("div#standard_subject").hide();
+  $("div#subject_test").hide();
+    $("div#test").hide();
+  $("div#result_grade").hide();
+  $("div#result_default").show();
+  $("div#seq").hide();
+  $("div#co_curriculum").hide();
+  $("div#grade_co").hide();
+
+
+   var standard_level=localStorage.getItem("standard_level")
+
+  channel.push("result_default", {user_id: window.currentUser,standard_level: standard_level})
+    
+  })
+
+$(".nav-link#seq").click(function() {
+
+     $("div#standard_subject").hide();
+  $("div#subject_test").hide();
+    $("div#test").hide();
+  $("div#result_grade").hide();
+  $("div#result_default").hide();
+  $("div#seq").show();
+  $("div#co_curriculum").hide();
+  $("div#grade_co").hide();
+
+
+   var standard_level=localStorage.getItem("standard_level")
+
+  channel.push("seq", {user_id: window.currentUser,standard_level: standard_level})
+    
+  })
+
+$(".nav-link#co_curriculum").click(function() {
+
+     $("div#standard_subject").hide();
+  $("div#subject_test").hide();
+    $("div#test").hide();
+  $("div#result_grade").hide();
+  $("div#result_default").hide();
+  $("div#seq").hide();
+  $("div#co_curriculum").show();
+  $("div#grade_co").hide();
+
+
+   var standard_level=localStorage.getItem("standard_level")
+
+  channel.push("co_curriculum", {user_id: window.currentUser,standard_level: standard_level})
+    
+  })
+
+$(".nav-link#grade_co").click(function() {
+
+     $("div#standard_subject").hide();
+  $("div#subject_test").hide();
+    $("div#test").hide();
+  $("div#result_grade").hide();
+  $("div#result_default").hide();
+  $("div#seq").hide();
+  $("div#co_curriculum").hide();
+  $("div#grade_co").show();
+
+
+   var standard_level=localStorage.getItem("standard_level")
+
+  channel.push("grade_co", {user_id: window.currentUser,standard_level: standard_level})
+    
+  })
+
   
 })
+

@@ -1,0 +1,38 @@
+<h2>Show Project nilam</h2>
+
+<ul>
+
+  <li>
+    <strong>Below satisfy:</strong>
+    <%= @project_nilam.below_satisfy %>
+  </li>
+
+  <li>
+    <strong>Member reading quantity:</strong>
+    <%= @project_nilam.member_reading_quantity %>
+  </li>
+
+  <li>
+    <strong>Page:</strong>
+    <%= @project_nilam.page %>
+  </li>
+
+  <li>
+    <strong>Import from library:</strong>
+    <%= @project_nilam.import_from_library %>
+  </li>
+
+  <li>
+    <strong>Count page:</strong>
+    <%= @project_nilam.count_page %>
+  </li>
+
+  <li>
+    <strong>Standard:</strong>
+    <%= @project_nilam.standard_id %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: project_nilam_path(@conn, :edit, @project_nilam) %></span>
+<span><%= link "Back", to: project_nilam_path(@conn, :index) %></span>

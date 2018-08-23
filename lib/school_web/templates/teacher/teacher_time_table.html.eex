@@ -1,0 +1,148 @@
+    <link rel="stylesheet" href="/css/jquery.skedTape.css">
+           <script src=" /js/jquery.skedTape.js"></script>
+        <div class="container">
+            <div class="mb-4" align="center">
+                <h4>Teacher <%= @name %> Timetable</h4>
+                <div id="sked1"></div>
+            </div>
+            <div align="center">
+            <div class="row">
+                 <h4>School Job</h4>
+                <p></p>
+                <table class="table" border="1">
+                    <thead>
+                        <tr style="background-color:#97DB9A;">
+                            <th  >Code</th>
+                            <th>Description</th>
+                            <th>Desc.(Chinese)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                             <%= for item <- @school_job do %>
+                                <td><%= item.code %></td>
+                                <td><%= item.description %></td> 
+                                <td><%= item.cdesc %></td>  
+                           <% end%>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+              <div class="row">
+                       <h4>Co-Curriculum Job</h4>
+                <p></p>
+                <table class="table" border="1">
+                    <thead>
+                        <tr style="background-color:#97DB9A;">
+                            <th>Code</th>
+                            <th>Description</th>
+                            <th>Desc.(Chinese)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <%= for item <- @co_curriculum_job do %>
+                                <td><%= item.code %></td>
+                                <td><%= item.description %></td> 
+                                <td><%= item.cdesc %></td>  
+                           <% end%>
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row">
+                       <h4>Hem Job</h4>
+                <p></p>
+                <table class="table" border="1">
+                    <thead>
+                        <tr style="background-color:#97DB9A;">
+                            <th>Code</th>
+                            <th>Description</th>
+                            <th>Desc.(Chinese)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                             <%= for item <- @hem_job do %>
+                                <td><%= item.code %></td>
+                                <td><%= item.description %></td> 
+                                <td><%= item.cdesc %></td>  
+                           <% end%>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+       </div>
+        </div>
+
+
+
+           
+
+        <script type="text/javascript">
+
+
+   $(document).ready(function() {
+
+
+
+    var maps = JSON.parse('<%=raw(@all2)%>')
+console.log(maps);
+
+   $(maps).each(function(i,v) {
+          console.log(v)
+             v["start"]= start(v["start_hour"],v["start_minute"])
+             v["end"]= end(v["end_hour"],v["end_minute"])
+        })
+
+
+            // --------------------------- Data --------------------------------
+            var locations = [
+                {id: '1', name: 'Sunday'},
+                {id: '2', name: 'Monday'},
+                {id: '3', name: 'Tuesday'},
+                {id: '4', name: 'Wednesday'},
+                {id: '5', name: 'Thursday'},
+                {id: '6', name: 'Friday'},
+                {id: '7', name: 'Saturday'}
+                  
+              
+                ];
+
+            var events =maps;
+            // -------------------------- Helpers ------------------------------
+             function start(hours, minutes) {
+                var date = new Date();
+                date.setUTCHours(hours, minutes, 0, 0);
+                console.log(date)
+                return date;
+
+            }
+              function end(hours, minutes) {
+                var date = new Date();
+                date.setUTCHours(hours, minutes, 0, 0);
+                return date;
+            }
+            
+            
+          
+            // --------------------------- Example 1 ---------------------------
+            var $sked1 = $('#sked1').skedTape({
+                caption: 'Day',
+                start: start(8,0),
+                end: end(18, 0),
+                showEventTime: true,
+                showEventDuration: true,
+                scrollWithYWheel: true,
+                locations: locations,
+                events: events
+               
+            });
+           
+           
+          })
+
+
+   
+        </script>

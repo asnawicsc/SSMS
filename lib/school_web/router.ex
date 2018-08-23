@@ -106,6 +106,49 @@ defmodule SchoolWeb.Router do
     get("/report_card/:exam_name/:id", ExamController, :report_card)
       get("/show_guardian/:id",ParentController, :show_guardian)
     resources("/exam_mark", ExamMarkController)
+    get("/generate_mark_analyse/:id", ExamController, :generate_mark_analyse)
+     post("/mark_analyse", ExamController, :mark_analyse)
+          get("/default_grade", GradeController, :default_grade)
+           get("/default_day", DayController, :default_day)
+          resources "/teacher_period", TeacherPeriodController
+              post("/create_teacher_period", TeacherPeriodController, :create_teacher_period)
+
+               get("/teacher_timetable", TeacherController, :teacher_timetable)
+               resources "/co_grade", CoGradeController
+  get("/default_co_grade", CoGradeController, :default_co_grade)
+  resources "/school_job", SchoolJobController
+
+  resources "/cocurriculum_job", CoCurriculumJobController
+ resources "/hem_job", HemJobController
+ resources "/absent_reason", AbsentReasonController
+ get("/teacher_setting", TeacherController, :teacher_setting)
+
+  get("/school_job", TeacherController, :school_job)
+
+  resources "/teacher_school_job", TeacherSchoolJobController
+  resources "/teacher_co_curriculum_job", TeacherCoCurriculumJobController
+   resources "/teacher_hem_job", TeacherHemJobController
+
+    resources "/teacher_absent_reason", TeacherAbsentReasonController
+
+
+  post("/create_teacher_school_job", TeacherSchoolJobController, :create_teacher_school_job)
+
+    post("/create_teacher_cocurriculum_job", TeacherCoCurriculumJobController, :create_teacher_cocurriculum_job)
+     post("/create_teacher_hem_job", TeacherHemJobController, :create_teacher_hem_job)
+
+
+      get("/standard_setting", SubjectController, :standard_setting)
+
+       resources "/project_nilam", ProjectNilamController
+  resources "/jauhari", JauhariController
+ resources "/rakan", RakanController
+get("/nilam_setting", ProjectNilamController, :nilam_setting)
+ resources "/standard_subject", StandardSubjectController
+
+   post("/create_standard_subject", StandardSubjectController, :create_standard_subject)
+    get("/new_standard_subject", SubjectController, :new_standard_subject)
+  get("/create_new_test", SubjectController, :create_new_test)
   end
 
   # Other scopes may use custom stacks.

@@ -8,6 +8,7 @@ defmodule School.Affairs.Grade do
     field :mix, :integer
     field :name, :string
     field :gpa, :decimal
+     field :standard_id, :integer
 
     timestamps()
   end
@@ -15,7 +16,7 @@ defmodule School.Affairs.Grade do
   @doc false
   def changeset(grade, attrs) do
     grade
-    |> cast(attrs, [:name, :max, :mix,:gpa])
-    |> validate_required([:name, :max, :mix,:gpa])
+    |> cast(attrs, [:standard_id,:name, :max, :mix,:gpa])
+    |> validate_required([:standard_id,:name, :max, :mix,:gpa])
   end
 end

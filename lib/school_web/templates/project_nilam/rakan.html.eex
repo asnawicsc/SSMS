@@ -1,0 +1,26 @@
+<h2>Listing Rakan</h2>
+
+<table class="table" id="rakan">
+  <thead>
+    <tr>
+      <th>Prize</th>
+      <th>Min</th>
+      <th>Max</th>
+      <th>Standard</th>
+
+    </tr>
+  </thead>
+  <tbody>
+
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+
+    </tr>
+
+  </tbody>
+</table>
+
+<span><%= link "New Rakan", to: rakan_path(@conn, :new) %></span>

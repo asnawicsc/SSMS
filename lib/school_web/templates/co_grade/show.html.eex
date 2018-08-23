@@ -1,0 +1,28 @@
+<h2>Show Co grade</h2>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @co_grade.name %>
+  </li>
+
+  <li>
+    <strong>Max:</strong>
+    <%= @co_grade.max %>
+  </li>
+
+  <li>
+    <strong>Min:</strong>
+    <%= @co_grade.min %>
+  </li>
+
+  <li>
+    <strong>Gpa:</strong>
+    <%= @co_grade.gpa %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: co_grade_path(@conn, :edit, @co_grade) %></span>
+<span><%= link "Back", to: co_grade_path(@conn, :index) %></span>

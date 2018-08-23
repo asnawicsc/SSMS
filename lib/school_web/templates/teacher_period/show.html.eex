@@ -1,0 +1,38 @@
+<h2>Show Teacher period</h2>
+
+<ul>
+
+  <li>
+    <strong>Place:</strong>
+    <%= @teacher_period.place %>
+  </li>
+
+  <li>
+    <strong>Day:</strong>
+    <%= @teacher_period.day %>
+  </li>
+
+  <li>
+    <strong>Start time:</strong>
+    <%= @teacher_period.start_time %>
+  </li>
+
+  <li>
+    <strong>End time:</strong>
+    <%= @teacher_period.end_time %>
+  </li>
+
+  <li>
+    <strong>Activity:</strong>
+    <%= @teacher_period.activity %>
+  </li>
+
+  <li>
+    <strong>Teacher:</strong>
+    <%= @teacher_period.teacher_id %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: teacher_period_path(@conn, :edit, @teacher_period) %></span>
+<span><%= link "Back", to: teacher_period_path(@conn, :index) %></span>

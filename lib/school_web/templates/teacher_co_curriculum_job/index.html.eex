@@ -1,0 +1,30 @@
+<h2>Listing Teacher co curriculum job</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Teacher</th>
+      <th>Co curriculum job</th>
+      <th>Semester</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for teacher_co_curriculum_job <- @teacher_co_curriculum_job do %>
+    <tr>
+      <td><%= teacher_co_curriculum_job.teacher_id %></td>
+      <td><%= teacher_co_curriculum_job.co_curriculum_job_id %></td>
+      <td><%= teacher_co_curriculum_job.semester_id %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: teacher_co_curriculum_job_path(@conn, :show, teacher_co_curriculum_job), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: teacher_co_curriculum_job_path(@conn, :edit, teacher_co_curriculum_job), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: teacher_co_curriculum_job_path(@conn, :delete, teacher_co_curriculum_job), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Teacher co curriculum job", to: teacher_co_curriculum_job_path(@conn, :new) %></span>

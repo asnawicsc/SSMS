@@ -55,6 +55,34 @@
 
     </table>
 
+    <br>
+
+    <%= if  @fi != [] do %>
+
+    Unmarking Student
+    <table>
+      <colgroup>
+        <col col span="2" >
+      </colgroup>
+      <tr>
+
+         <th style="background-color:#97DB9A;"><%= gettext "Student Name" %></th>
+        <th style="background-color:#97DB9A;"><%= gettext "Mark" %></th>
+      </tr>
+       <%= for item <- @fi do %>
+  
+      <tr>
+
+       <th ><%= item.student_name %></th>
+        <th  ><input type="number" min="0" max="100" value="<%= item.mark %>" name="mark[<%=item.student_id %>]"></th>
+
+      </tr>
+         <% end %>
+
+    </table>
+
+    <% end %>
+
 
   </body>
 </html> <br>

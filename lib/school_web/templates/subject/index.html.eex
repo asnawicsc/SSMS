@@ -1,72 +1,158 @@
-<style type="text/css">
-  .btn.btn-link.subject {
-    line-height: 0em !important;
-  }
-</style>
+ <form method="post" action="/create_standard_subject" class="form-horizontal">
+  <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+   <div class="row">
 
-<script type="text/javascript">
-  window.csrf = "<%= Phoenix.Controller.get_csrf_token %>"
-</script>
-<div class="row">
-  <div class="col-lg-3">
-    <div class="table-responsive">
-      
-    
-    <table class="table">
-      <thead>
-        <tr>
-        
-
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-            <%= for subject <- @subject do %>
-        <tr>
-       
-
-
-          <td>   <div id="<%= subject.code %> " class="btn btn-link subject"><%= subject.code %> <%= subject.description %></div></td>
-        </tr>
-    <% end %>
-      </tbody>
-    </table>
-</div>
-  </div>
-  <div class="col-lg-9" aria-label="subject_details">
-   <p class="lead">Click on a subject name in the left panel. </p> 
-  <div class="row" style="margin-top: 40px;">
-      <div class="col-lg-12">
-        <div class="panel">
-          <div class="panel-heading">Bulk Upload Subjects</div>
-          <div class="panel-body">
-             <%= form_for @conn, subject_path(@conn, :upload_subjects), [as: :item, multipart: true], fn f -> %>
-
-                <%= file_input f, :file, accept: ".csv"%>
-                <%= error_tag f, :file %>
-
-             
-                <%= submit "Upload", class: "btn btn-primary" %>
+              <div class="col-sm-2">
+                <div class="form-group bmd-form-group">
+                  <label class="bmd-label-floating"><%= gettext "Year" %></label><br>
+                    <select class="select" required="required" name="year">
+                         
+                                            <option value="2018" >2018
+                                            </option>
+                                            <option value="2019" >2019
+                                            </option>
+                                            <option value="2020" >2020
+                                            </option>
+                                        
+                                        </select>
+                  
+                </div>
+              </div>
+           
+              <div class="col-sm-2">
+                <div class="form-group bmd-form-group">
+                  <label class="bmd-label-floating"><%= gettext "Semester" %></label><br>
+                 <select class="select" required="required" name="semester">
+                           <%= for a <- @semester |> Enum.sort do %>
+                                            <option value="<%= a.id %>" ><%= a.start_date %>
+                                            </option>
+                                          <% end %>
+                                        </select>
+                </div>
+              </div>
+   
+              <div class="col-sm-2">
+                <div class="form-group bmd-form-group">
+                  <label class="bmd-label-floating"><%= gettext "Level" %></label><br>
+                    <select class="select" required="required" name="level">
+                           <%= for a <- @level |> Enum.sort do %>
+                                            <option value="<%= a.id %>" ><%= a.name %>
+                                            </option>
+                                          <% end %>
+                                        </select>
+                  
+                </div>
+              </div>
+           
               
+           
+ </div>
+
+    <input type="hidden" name="standard_subject">
+
+
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="card">
+          <div class="card-header"><%= gettext "Subject" %></div>
+          <div class="card-body">
+            <ol class="s_unmark1" id="s_unmark1">
+            <%= for subject <- @subjects do %>
+            <li id="<%= subject.id %>"><%= subject.name %></li>
             <% end %>
-
-
+            </ol>
           </div>
+            <div class="card-footer">
+                    <button type="button" rel="tooltip" title="" class="btn btn-primary btn-link btn-sm show_menu_cata" data-original-title="standard_subject">
+
+                       Select All -->
+                     
+                    </button>
+           </div>
         </div>
       </div>
+
+          <div class="col-lg-6">
+        <div class="card">
+          <div class="card-header"><%= gettext "Selected Subject" %></div>
+          <div class="card-body">
+            <ol  class="s_mark1" id="s_mark1">
+           
+            </ol>
+          </div>
+          <div class="card-footer" >
+                    <button type="button" rel="tooltip" title="" class="btn btn-primary btn-link btn-sm show_menu_cata" data-original-title="un standard_subject">
+
+                       <-- Unselect All
+                     
+                    </button>
+          </div>
+        </div>
+        </div>
+      </div>
+
+
+     <div align="right" style="margin-top: 10px">
+      <input class="btn btn-primary" name="" value="Submit" type="submit">
     </div>
-  </div>
-</div>
-<div class="table-responsive">
 
 
-</div>
-<span><%= link "New Subject", to: subject_path(@conn, :new) %></span>
+</form>
+
+
 <script type="text/javascript">
-  $(window).ready(function(){
-    var target = window.location.search.substring(1).split("=")[1]
-    $("div#"+target+".subject").click()
+  
 
-     $('.table').DataTable();
+       $("ol#s_unmark1").on("click", "li", function(){
+
+    $("ol#s_mark1").append(this)
+    var list_ids = [] 
+    $("ol#s_mark1 li").each(function(){
+    var id = $(this).attr("id")
+      list_ids.push(id)
+    })
+    $("input[name='standard_subject']").val(list_ids)
   })
+
+  $("ol#s_mark1").on("click", "li", function(){
+
+    $("ol#s_unmark1").append(this)
+
+  })
+
+
+  $('button[data-original-title="standard_subject"]').click(function() {
+            var li_list = $('ol#s_unmark1').find("li")
+             var list_ids = [] 
+            $(li_list).each(function() {
+              var id = $(this).attr("id")
+                 list_ids.push(id)
+                var li = $(this);
+      
+             
+              
+                $("ol#s_mark1").append(li);
+            })
+
+            $("input[name='standard_subject']").val(list_ids)
+
+
+  })
+
+
+
+        $('button[data-original-title="un standard_subject"]').click(function() {
+            var li_list = $('ol#s_mark1').find("li")
+            $(li_list).each(function() {
+
+                var li = $(this);
+           
+                
+                $("ol#s_unmark1").append(li);
+            })
+
+
+        })
+
+
 </script>

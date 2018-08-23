@@ -72,6 +72,7 @@ defmodule SchoolWeb.TimetableController do
     left_join: t in School.Affairs.Teacher, on: t.id==p.teacher_id,
     left_join: d in School.Affairs.Day, on: d.name==p.day,
     where: p.class_id==^class_id,select: %{day_number: d.number,end_time: p.end_time,start_time: p.start_time,s_code: s.code})
+ 
 
    all=for item <- period do
       e=item.end_time.hour  

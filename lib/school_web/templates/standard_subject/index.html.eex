@@ -1,0 +1,32 @@
+<h2>Listing Standard subject</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Year</th>
+      <th>Semester</th>
+      <th>Standard</th>
+      <th>Subject</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for standard_subject <- @standard_subject do %>
+    <tr>
+      <td><%= standard_subject.year %></td>
+      <td><%= standard_subject.semester_id %></td>
+      <td><%= standard_subject.standard_id %></td>
+      <td><%= standard_subject.subject_id %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: standard_subject_path(@conn, :show, standard_subject), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: standard_subject_path(@conn, :edit, standard_subject), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: standard_subject_path(@conn, :delete, standard_subject), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Standard subject", to: standard_subject_path(@conn, :new) %></span>

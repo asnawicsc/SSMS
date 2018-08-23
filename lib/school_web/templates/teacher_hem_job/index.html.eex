@@ -1,0 +1,30 @@
+<h2>Listing Teacher hem job</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Teacher</th>
+      <th>Hem job</th>
+      <th>Semester</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for teacher_hem_job <- @teacher_hem_job do %>
+    <tr>
+      <td><%= teacher_hem_job.teacher_id %></td>
+      <td><%= teacher_hem_job.hem_job_id %></td>
+      <td><%= teacher_hem_job.semester_id %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: teacher_hem_job_path(@conn, :show, teacher_hem_job), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: teacher_hem_job_path(@conn, :edit, teacher_hem_job), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: teacher_hem_job_path(@conn, :delete, teacher_hem_job), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Teacher hem job", to: teacher_hem_job_path(@conn, :new) %></span>
