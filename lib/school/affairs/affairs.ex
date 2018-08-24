@@ -1847,4 +1847,1350 @@ defmodule School.Affairs do
   def change_head_count(%HeadCount{} = head_count) do
     HeadCount.changeset(head_count, %{})
   end
+
+  alias School.Affairs.TeacherPeriod
+
+  @doc """
+  Returns the list of teacher_period.
+
+  ## Examples
+
+      iex> list_teacher_period()
+      [%TeacherPeriod{}, ...]
+
+  """
+  def list_teacher_period do
+    Repo.all(TeacherPeriod)
+  end
+
+  @doc """
+  Gets a single teacher_period.
+
+  Raises `Ecto.NoResultsError` if the Teacher period does not exist.
+
+  ## Examples
+
+      iex> get_teacher_period!(123)
+      %TeacherPeriod{}
+
+      iex> get_teacher_period!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_teacher_period!(id), do: Repo.get!(TeacherPeriod, id)
+
+  @doc """
+  Creates a teacher_period.
+
+  ## Examples
+
+      iex> create_teacher_period(%{field: value})
+      {:ok, %TeacherPeriod{}}
+
+      iex> create_teacher_period(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_teacher_period(attrs \\ %{}) do
+    %TeacherPeriod{}
+    |> TeacherPeriod.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a teacher_period.
+
+  ## Examples
+
+      iex> update_teacher_period(teacher_period, %{field: new_value})
+      {:ok, %TeacherPeriod{}}
+
+      iex> update_teacher_period(teacher_period, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_teacher_period(%TeacherPeriod{} = teacher_period, attrs) do
+    teacher_period
+    |> TeacherPeriod.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a TeacherPeriod.
+
+  ## Examples
+
+      iex> delete_teacher_period(teacher_period)
+      {:ok, %TeacherPeriod{}}
+
+      iex> delete_teacher_period(teacher_period)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_teacher_period(%TeacherPeriod{} = teacher_period) do
+    Repo.delete(teacher_period)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking teacher_period changes.
+
+  ## Examples
+
+      iex> change_teacher_period(teacher_period)
+      %Ecto.Changeset{source: %TeacherPeriod{}}
+
+  """
+  def change_teacher_period(%TeacherPeriod{} = teacher_period) do
+    TeacherPeriod.changeset(teacher_period, %{})
+  end
+
+  alias School.Affairs.CoGrade
+
+  @doc """
+  Returns the list of co_grade.
+
+  ## Examples
+
+      iex> list_co_grade()
+      [%CoGrade{}, ...]
+
+  """
+  def list_co_grade do
+    Repo.all(CoGrade)
+  end
+
+  @doc """
+  Gets a single co_grade.
+
+  Raises `Ecto.NoResultsError` if the Co grade does not exist.
+
+  ## Examples
+
+      iex> get_co_grade!(123)
+      %CoGrade{}
+
+      iex> get_co_grade!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_co_grade!(id), do: Repo.get!(CoGrade, id)
+
+  @doc """
+  Creates a co_grade.
+
+  ## Examples
+
+      iex> create_co_grade(%{field: value})
+      {:ok, %CoGrade{}}
+
+      iex> create_co_grade(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_co_grade(attrs \\ %{}) do
+    %CoGrade{}
+    |> CoGrade.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a co_grade.
+
+  ## Examples
+
+      iex> update_co_grade(co_grade, %{field: new_value})
+      {:ok, %CoGrade{}}
+
+      iex> update_co_grade(co_grade, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_co_grade(%CoGrade{} = co_grade, attrs) do
+    co_grade
+    |> CoGrade.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a CoGrade.
+
+  ## Examples
+
+      iex> delete_co_grade(co_grade)
+      {:ok, %CoGrade{}}
+
+      iex> delete_co_grade(co_grade)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_co_grade(%CoGrade{} = co_grade) do
+    Repo.delete(co_grade)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking co_grade changes.
+
+  ## Examples
+
+      iex> change_co_grade(co_grade)
+      %Ecto.Changeset{source: %CoGrade{}}
+
+  """
+  def change_co_grade(%CoGrade{} = co_grade) do
+    CoGrade.changeset(co_grade, %{})
+  end
+
+ 
+
+  alias School.Affairs.SchoolJob
+
+  @doc """
+  Returns the list of school_job.
+
+  ## Examples
+
+      iex> list_school_job()
+      [%SchoolJob{}, ...]
+
+  """
+  def list_school_job do
+    Repo.all(SchoolJob)
+  end
+
+  @doc """
+  Gets a single school_job.
+
+  Raises `Ecto.NoResultsError` if the School job does not exist.
+
+  ## Examples
+
+      iex> get_school_job!(123)
+      %SchoolJob{}
+
+      iex> get_school_job!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_school_job!(id), do: Repo.get!(SchoolJob, id)
+
+  @doc """
+  Creates a school_job.
+
+  ## Examples
+
+      iex> create_school_job(%{field: value})
+      {:ok, %SchoolJob{}}
+
+      iex> create_school_job(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_school_job(attrs \\ %{}) do
+    %SchoolJob{}
+    |> SchoolJob.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a school_job.
+
+  ## Examples
+
+      iex> update_school_job(school_job, %{field: new_value})
+      {:ok, %SchoolJob{}}
+
+      iex> update_school_job(school_job, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_school_job(%SchoolJob{} = school_job, attrs) do
+    school_job
+    |> SchoolJob.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a SchoolJob.
+
+  ## Examples
+
+      iex> delete_school_job(school_job)
+      {:ok, %SchoolJob{}}
+
+      iex> delete_school_job(school_job)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_school_job(%SchoolJob{} = school_job) do
+    Repo.delete(school_job)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking school_job changes.
+
+  ## Examples
+
+      iex> change_school_job(school_job)
+      %Ecto.Changeset{source: %SchoolJob{}}
+
+  """
+  def change_school_job(%SchoolJob{} = school_job) do
+    SchoolJob.changeset(school_job, %{})
+  end
+
+  alias School.Affairs.CoCurriculumJob
+
+  @doc """
+  Returns the list of cocurriculum_job.
+
+  ## Examples
+
+      iex> list_cocurriculum_job()
+      [%CoCurriculumJob{}, ...]
+
+  """
+  def list_cocurriculum_job do
+    Repo.all(CoCurriculumJob)
+  end
+
+  @doc """
+  Gets a single co_curriculum_job.
+
+  Raises `Ecto.NoResultsError` if the Co curriculum job does not exist.
+
+  ## Examples
+
+      iex> get_co_curriculum_job!(123)
+      %CoCurriculumJob{}
+
+      iex> get_co_curriculum_job!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_co_curriculum_job!(id), do: Repo.get!(CoCurriculumJob, id)
+
+  @doc """
+  Creates a co_curriculum_job.
+
+  ## Examples
+
+      iex> create_co_curriculum_job(%{field: value})
+      {:ok, %CoCurriculumJob{}}
+
+      iex> create_co_curriculum_job(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_co_curriculum_job(attrs \\ %{}) do
+    %CoCurriculumJob{}
+    |> CoCurriculumJob.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a co_curriculum_job.
+
+  ## Examples
+
+      iex> update_co_curriculum_job(co_curriculum_job, %{field: new_value})
+      {:ok, %CoCurriculumJob{}}
+
+      iex> update_co_curriculum_job(co_curriculum_job, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_co_curriculum_job(%CoCurriculumJob{} = co_curriculum_job, attrs) do
+    co_curriculum_job
+    |> CoCurriculumJob.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a CoCurriculumJob.
+
+  ## Examples
+
+      iex> delete_co_curriculum_job(co_curriculum_job)
+      {:ok, %CoCurriculumJob{}}
+
+      iex> delete_co_curriculum_job(co_curriculum_job)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_co_curriculum_job(%CoCurriculumJob{} = co_curriculum_job) do
+    Repo.delete(co_curriculum_job)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking co_curriculum_job changes.
+
+  ## Examples
+
+      iex> change_co_curriculum_job(co_curriculum_job)
+      %Ecto.Changeset{source: %CoCurriculumJob{}}
+
+  """
+  def change_co_curriculum_job(%CoCurriculumJob{} = co_curriculum_job) do
+    CoCurriculumJob.changeset(co_curriculum_job, %{})
+  end
+
+  alias School.Affairs.HemJob
+
+  @doc """
+  Returns the list of hem_job.
+
+  ## Examples
+
+      iex> list_hem_job()
+      [%HemJob{}, ...]
+
+  """
+  def list_hem_job do
+    Repo.all(HemJob)
+  end
+
+  @doc """
+  Gets a single hem_job.
+
+  Raises `Ecto.NoResultsError` if the Hem job does not exist.
+
+  ## Examples
+
+      iex> get_hem_job!(123)
+      %HemJob{}
+
+      iex> get_hem_job!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_hem_job!(id), do: Repo.get!(HemJob, id)
+
+  @doc """
+  Creates a hem_job.
+
+  ## Examples
+
+      iex> create_hem_job(%{field: value})
+      {:ok, %HemJob{}}
+
+      iex> create_hem_job(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_hem_job(attrs \\ %{}) do
+    %HemJob{}
+    |> HemJob.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a hem_job.
+
+  ## Examples
+
+      iex> update_hem_job(hem_job, %{field: new_value})
+      {:ok, %HemJob{}}
+
+      iex> update_hem_job(hem_job, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_hem_job(%HemJob{} = hem_job, attrs) do
+    hem_job
+    |> HemJob.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a HemJob.
+
+  ## Examples
+
+      iex> delete_hem_job(hem_job)
+      {:ok, %HemJob{}}
+
+      iex> delete_hem_job(hem_job)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_hem_job(%HemJob{} = hem_job) do
+    Repo.delete(hem_job)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking hem_job changes.
+
+  ## Examples
+
+      iex> change_hem_job(hem_job)
+      %Ecto.Changeset{source: %HemJob{}}
+
+  """
+  def change_hem_job(%HemJob{} = hem_job) do
+    HemJob.changeset(hem_job, %{})
+  end
+
+  alias School.Affairs.AbsentReason
+
+  @doc """
+  Returns the list of absent_reason.
+
+  ## Examples
+
+      iex> list_absent_reason()
+      [%AbsentReason{}, ...]
+
+  """
+  def list_absent_reason do
+    Repo.all(AbsentReason)
+  end
+
+  @doc """
+  Gets a single absent_reason.
+
+  Raises `Ecto.NoResultsError` if the Absent reason does not exist.
+
+  ## Examples
+
+      iex> get_absent_reason!(123)
+      %AbsentReason{}
+
+      iex> get_absent_reason!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_absent_reason!(id), do: Repo.get!(AbsentReason, id)
+
+  @doc """
+  Creates a absent_reason.
+
+  ## Examples
+
+      iex> create_absent_reason(%{field: value})
+      {:ok, %AbsentReason{}}
+
+      iex> create_absent_reason(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_absent_reason(attrs \\ %{}) do
+    %AbsentReason{}
+    |> AbsentReason.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a absent_reason.
+
+  ## Examples
+
+      iex> update_absent_reason(absent_reason, %{field: new_value})
+      {:ok, %AbsentReason{}}
+
+      iex> update_absent_reason(absent_reason, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_absent_reason(%AbsentReason{} = absent_reason, attrs) do
+    absent_reason
+    |> AbsentReason.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a AbsentReason.
+
+  ## Examples
+
+      iex> delete_absent_reason(absent_reason)
+      {:ok, %AbsentReason{}}
+
+      iex> delete_absent_reason(absent_reason)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_absent_reason(%AbsentReason{} = absent_reason) do
+    Repo.delete(absent_reason)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking absent_reason changes.
+
+  ## Examples
+
+      iex> change_absent_reason(absent_reason)
+      %Ecto.Changeset{source: %AbsentReason{}}
+
+  """
+  def change_absent_reason(%AbsentReason{} = absent_reason) do
+    AbsentReason.changeset(absent_reason, %{})
+  end
+
+  alias School.Affairs.TeacherSchoolJob
+
+  @doc """
+  Returns the list of teacher_school_job.
+
+  ## Examples
+
+      iex> list_teacher_school_job()
+      [%TeacherSchoolJob{}, ...]
+
+  """
+  def list_teacher_school_job do
+    Repo.all(TeacherSchoolJob)
+  end
+
+  @doc """
+  Gets a single teacher_school_job.
+
+  Raises `Ecto.NoResultsError` if the Teacher school job does not exist.
+
+  ## Examples
+
+      iex> get_teacher_school_job!(123)
+      %TeacherSchoolJob{}
+
+      iex> get_teacher_school_job!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_teacher_school_job!(id), do: Repo.get!(TeacherSchoolJob, id)
+
+  @doc """
+  Creates a teacher_school_job.
+
+  ## Examples
+
+      iex> create_teacher_school_job(%{field: value})
+      {:ok, %TeacherSchoolJob{}}
+
+      iex> create_teacher_school_job(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_teacher_school_job(attrs \\ %{}) do
+    %TeacherSchoolJob{}
+    |> TeacherSchoolJob.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a teacher_school_job.
+
+  ## Examples
+
+      iex> update_teacher_school_job(teacher_school_job, %{field: new_value})
+      {:ok, %TeacherSchoolJob{}}
+
+      iex> update_teacher_school_job(teacher_school_job, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_teacher_school_job(%TeacherSchoolJob{} = teacher_school_job, attrs) do
+    teacher_school_job
+    |> TeacherSchoolJob.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a TeacherSchoolJob.
+
+  ## Examples
+
+      iex> delete_teacher_school_job(teacher_school_job)
+      {:ok, %TeacherSchoolJob{}}
+
+      iex> delete_teacher_school_job(teacher_school_job)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_teacher_school_job(%TeacherSchoolJob{} = teacher_school_job) do
+    Repo.delete(teacher_school_job)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking teacher_school_job changes.
+
+  ## Examples
+
+      iex> change_teacher_school_job(teacher_school_job)
+      %Ecto.Changeset{source: %TeacherSchoolJob{}}
+
+  """
+  def change_teacher_school_job(%TeacherSchoolJob{} = teacher_school_job) do
+    TeacherSchoolJob.changeset(teacher_school_job, %{})
+  end
+
+  alias School.Affairs.TeacherCoCurriculumJob
+
+  @doc """
+  Returns the list of teacher_co_curriculum_job.
+
+  ## Examples
+
+      iex> list_teacher_co_curriculum_job()
+      [%TeacherCoCurriculumJob{}, ...]
+
+  """
+  def list_teacher_co_curriculum_job do
+    Repo.all(TeacherCoCurriculumJob)
+  end
+
+  @doc """
+  Gets a single teacher_co_curriculum_job.
+
+  Raises `Ecto.NoResultsError` if the Teacher co curriculum job does not exist.
+
+  ## Examples
+
+      iex> get_teacher_co_curriculum_job!(123)
+      %TeacherCoCurriculumJob{}
+
+      iex> get_teacher_co_curriculum_job!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_teacher_co_curriculum_job!(id), do: Repo.get!(TeacherCoCurriculumJob, id)
+
+  @doc """
+  Creates a teacher_co_curriculum_job.
+
+  ## Examples
+
+      iex> create_teacher_co_curriculum_job(%{field: value})
+      {:ok, %TeacherCoCurriculumJob{}}
+
+      iex> create_teacher_co_curriculum_job(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_teacher_co_curriculum_job(attrs \\ %{}) do
+    %TeacherCoCurriculumJob{}
+    |> TeacherCoCurriculumJob.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a teacher_co_curriculum_job.
+
+  ## Examples
+
+      iex> update_teacher_co_curriculum_job(teacher_co_curriculum_job, %{field: new_value})
+      {:ok, %TeacherCoCurriculumJob{}}
+
+      iex> update_teacher_co_curriculum_job(teacher_co_curriculum_job, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_teacher_co_curriculum_job(%TeacherCoCurriculumJob{} = teacher_co_curriculum_job, attrs) do
+    teacher_co_curriculum_job
+    |> TeacherCoCurriculumJob.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a TeacherCoCurriculumJob.
+
+  ## Examples
+
+      iex> delete_teacher_co_curriculum_job(teacher_co_curriculum_job)
+      {:ok, %TeacherCoCurriculumJob{}}
+
+      iex> delete_teacher_co_curriculum_job(teacher_co_curriculum_job)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_teacher_co_curriculum_job(%TeacherCoCurriculumJob{} = teacher_co_curriculum_job) do
+    Repo.delete(teacher_co_curriculum_job)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking teacher_co_curriculum_job changes.
+
+  ## Examples
+
+      iex> change_teacher_co_curriculum_job(teacher_co_curriculum_job)
+      %Ecto.Changeset{source: %TeacherCoCurriculumJob{}}
+
+  """
+  def change_teacher_co_curriculum_job(%TeacherCoCurriculumJob{} = teacher_co_curriculum_job) do
+    TeacherCoCurriculumJob.changeset(teacher_co_curriculum_job, %{})
+  end
+
+  alias School.Affairs.TeacherHemJob
+
+  @doc """
+  Returns the list of teacher_hem_job.
+
+  ## Examples
+
+      iex> list_teacher_hem_job()
+      [%TeacherHemJob{}, ...]
+
+  """
+  def list_teacher_hem_job do
+    Repo.all(TeacherHemJob)
+  end
+
+  @doc """
+  Gets a single teacher_hem_job.
+
+  Raises `Ecto.NoResultsError` if the Teacher hem job does not exist.
+
+  ## Examples
+
+      iex> get_teacher_hem_job!(123)
+      %TeacherHemJob{}
+
+      iex> get_teacher_hem_job!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_teacher_hem_job!(id), do: Repo.get!(TeacherHemJob, id)
+
+  @doc """
+  Creates a teacher_hem_job.
+
+  ## Examples
+
+      iex> create_teacher_hem_job(%{field: value})
+      {:ok, %TeacherHemJob{}}
+
+      iex> create_teacher_hem_job(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_teacher_hem_job(attrs \\ %{}) do
+    %TeacherHemJob{}
+    |> TeacherHemJob.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a teacher_hem_job.
+
+  ## Examples
+
+      iex> update_teacher_hem_job(teacher_hem_job, %{field: new_value})
+      {:ok, %TeacherHemJob{}}
+
+      iex> update_teacher_hem_job(teacher_hem_job, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_teacher_hem_job(%TeacherHemJob{} = teacher_hem_job, attrs) do
+    teacher_hem_job
+    |> TeacherHemJob.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a TeacherHemJob.
+
+  ## Examples
+
+      iex> delete_teacher_hem_job(teacher_hem_job)
+      {:ok, %TeacherHemJob{}}
+
+      iex> delete_teacher_hem_job(teacher_hem_job)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_teacher_hem_job(%TeacherHemJob{} = teacher_hem_job) do
+    Repo.delete(teacher_hem_job)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking teacher_hem_job changes.
+
+  ## Examples
+
+      iex> change_teacher_hem_job(teacher_hem_job)
+      %Ecto.Changeset{source: %TeacherHemJob{}}
+
+  """
+  def change_teacher_hem_job(%TeacherHemJob{} = teacher_hem_job) do
+    TeacherHemJob.changeset(teacher_hem_job, %{})
+  end
+
+  alias School.Affairs.TeacherAbsentReason
+
+  @doc """
+  Returns the list of teacher_absent_reason.
+
+  ## Examples
+
+      iex> list_teacher_absent_reason()
+      [%TeacherAbsentReason{}, ...]
+
+  """
+  def list_teacher_absent_reason do
+    Repo.all(TeacherAbsentReason)
+  end
+
+  @doc """
+  Gets a single teacher_absent_reason.
+
+  Raises `Ecto.NoResultsError` if the Teacher absent reason does not exist.
+
+  ## Examples
+
+      iex> get_teacher_absent_reason!(123)
+      %TeacherAbsentReason{}
+
+      iex> get_teacher_absent_reason!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_teacher_absent_reason!(id), do: Repo.get!(TeacherAbsentReason, id)
+
+  @doc """
+  Creates a teacher_absent_reason.
+
+  ## Examples
+
+      iex> create_teacher_absent_reason(%{field: value})
+      {:ok, %TeacherAbsentReason{}}
+
+      iex> create_teacher_absent_reason(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_teacher_absent_reason(attrs \\ %{}) do
+    %TeacherAbsentReason{}
+    |> TeacherAbsentReason.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a teacher_absent_reason.
+
+  ## Examples
+
+      iex> update_teacher_absent_reason(teacher_absent_reason, %{field: new_value})
+      {:ok, %TeacherAbsentReason{}}
+
+      iex> update_teacher_absent_reason(teacher_absent_reason, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_teacher_absent_reason(%TeacherAbsentReason{} = teacher_absent_reason, attrs) do
+    teacher_absent_reason
+    |> TeacherAbsentReason.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a TeacherAbsentReason.
+
+  ## Examples
+
+      iex> delete_teacher_absent_reason(teacher_absent_reason)
+      {:ok, %TeacherAbsentReason{}}
+
+      iex> delete_teacher_absent_reason(teacher_absent_reason)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_teacher_absent_reason(%TeacherAbsentReason{} = teacher_absent_reason) do
+    Repo.delete(teacher_absent_reason)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking teacher_absent_reason changes.
+
+  ## Examples
+
+      iex> change_teacher_absent_reason(teacher_absent_reason)
+      %Ecto.Changeset{source: %TeacherAbsentReason{}}
+
+  """
+  def change_teacher_absent_reason(%TeacherAbsentReason{} = teacher_absent_reason) do
+    TeacherAbsentReason.changeset(teacher_absent_reason, %{})
+  end
+
+  alias School.Affairs.ProjectNilam
+
+  @doc """
+  Returns the list of project_nilam.
+
+  ## Examples
+
+      iex> list_project_nilam()
+      [%ProjectNilam{}, ...]
+
+  """
+  def list_project_nilam do
+    Repo.all(ProjectNilam)
+  end
+
+  @doc """
+  Gets a single project_nilam.
+
+  Raises `Ecto.NoResultsError` if the Project nilam does not exist.
+
+  ## Examples
+
+      iex> get_project_nilam!(123)
+      %ProjectNilam{}
+
+      iex> get_project_nilam!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_project_nilam!(id), do: Repo.get!(ProjectNilam, id)
+
+  @doc """
+  Creates a project_nilam.
+
+  ## Examples
+
+      iex> create_project_nilam(%{field: value})
+      {:ok, %ProjectNilam{}}
+
+      iex> create_project_nilam(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_project_nilam(attrs \\ %{}) do
+    %ProjectNilam{}
+    |> ProjectNilam.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a project_nilam.
+
+  ## Examples
+
+      iex> update_project_nilam(project_nilam, %{field: new_value})
+      {:ok, %ProjectNilam{}}
+
+      iex> update_project_nilam(project_nilam, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_project_nilam(%ProjectNilam{} = project_nilam, attrs) do
+    project_nilam
+    |> ProjectNilam.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a ProjectNilam.
+
+  ## Examples
+
+      iex> delete_project_nilam(project_nilam)
+      {:ok, %ProjectNilam{}}
+
+      iex> delete_project_nilam(project_nilam)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_project_nilam(%ProjectNilam{} = project_nilam) do
+    Repo.delete(project_nilam)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking project_nilam changes.
+
+  ## Examples
+
+      iex> change_project_nilam(project_nilam)
+      %Ecto.Changeset{source: %ProjectNilam{}}
+
+  """
+  def change_project_nilam(%ProjectNilam{} = project_nilam) do
+    ProjectNilam.changeset(project_nilam, %{})
+  end
+
+  alias School.Affairs.Jauhari
+
+  @doc """
+  Returns the list of jauhari.
+
+  ## Examples
+
+      iex> list_jauhari()
+      [%Jauhari{}, ...]
+
+  """
+  def list_jauhari do
+    Repo.all(Jauhari)
+  end
+
+  @doc """
+  Gets a single jauhari.
+
+  Raises `Ecto.NoResultsError` if the Jauhari does not exist.
+
+  ## Examples
+
+      iex> get_jauhari!(123)
+      %Jauhari{}
+
+      iex> get_jauhari!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_jauhari!(id), do: Repo.get!(Jauhari, id)
+
+  @doc """
+  Creates a jauhari.
+
+  ## Examples
+
+      iex> create_jauhari(%{field: value})
+      {:ok, %Jauhari{}}
+
+      iex> create_jauhari(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_jauhari(attrs \\ %{}) do
+    %Jauhari{}
+    |> Jauhari.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a jauhari.
+
+  ## Examples
+
+      iex> update_jauhari(jauhari, %{field: new_value})
+      {:ok, %Jauhari{}}
+
+      iex> update_jauhari(jauhari, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_jauhari(%Jauhari{} = jauhari, attrs) do
+    jauhari
+    |> Jauhari.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a Jauhari.
+
+  ## Examples
+
+      iex> delete_jauhari(jauhari)
+      {:ok, %Jauhari{}}
+
+      iex> delete_jauhari(jauhari)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_jauhari(%Jauhari{} = jauhari) do
+    Repo.delete(jauhari)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking jauhari changes.
+
+  ## Examples
+
+      iex> change_jauhari(jauhari)
+      %Ecto.Changeset{source: %Jauhari{}}
+
+  """
+  def change_jauhari(%Jauhari{} = jauhari) do
+    Jauhari.changeset(jauhari, %{})
+  end
+
+  alias School.Affairs.Rakan
+
+  @doc """
+  Returns the list of rakan.
+
+  ## Examples
+
+      iex> list_rakan()
+      [%Rakan{}, ...]
+
+  """
+  def list_rakan do
+    Repo.all(Rakan)
+  end
+
+  @doc """
+  Gets a single rakan.
+
+  Raises `Ecto.NoResultsError` if the Rakan does not exist.
+
+  ## Examples
+
+      iex> get_rakan!(123)
+      %Rakan{}
+
+      iex> get_rakan!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_rakan!(id), do: Repo.get!(Rakan, id)
+
+  @doc """
+  Creates a rakan.
+
+  ## Examples
+
+      iex> create_rakan(%{field: value})
+      {:ok, %Rakan{}}
+
+      iex> create_rakan(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_rakan(attrs \\ %{}) do
+    %Rakan{}
+    |> Rakan.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a rakan.
+
+  ## Examples
+
+      iex> update_rakan(rakan, %{field: new_value})
+      {:ok, %Rakan{}}
+
+      iex> update_rakan(rakan, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_rakan(%Rakan{} = rakan, attrs) do
+    rakan
+    |> Rakan.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a Rakan.
+
+  ## Examples
+
+      iex> delete_rakan(rakan)
+      {:ok, %Rakan{}}
+
+      iex> delete_rakan(rakan)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_rakan(%Rakan{} = rakan) do
+    Repo.delete(rakan)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking rakan changes.
+
+  ## Examples
+
+      iex> change_rakan(rakan)
+      %Ecto.Changeset{source: %Rakan{}}
+
+  """
+  def change_rakan(%Rakan{} = rakan) do
+    Rakan.changeset(rakan, %{})
+  end
+
+  alias School.Affairs.StandardSubject
+
+  @doc """
+  Returns the list of standard_subject.
+
+  ## Examples
+
+      iex> list_standard_subject()
+      [%StandardSubject{}, ...]
+
+  """
+  def list_standard_subject do
+    Repo.all(StandardSubject)
+  end
+
+  @doc """
+  Gets a single standard_subject.
+
+  Raises `Ecto.NoResultsError` if the Standard subject does not exist.
+
+  ## Examples
+
+      iex> get_standard_subject!(123)
+      %StandardSubject{}
+
+      iex> get_standard_subject!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_standard_subject!(id), do: Repo.get!(StandardSubject, id)
+
+  @doc """
+  Creates a standard_subject.
+
+  ## Examples
+
+      iex> create_standard_subject(%{field: value})
+      {:ok, %StandardSubject{}}
+
+      iex> create_standard_subject(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_standard_subject(attrs \\ %{}) do
+    %StandardSubject{}
+    |> StandardSubject.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a standard_subject.
+
+  ## Examples
+
+      iex> update_standard_subject(standard_subject, %{field: new_value})
+      {:ok, %StandardSubject{}}
+
+      iex> update_standard_subject(standard_subject, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_standard_subject(%StandardSubject{} = standard_subject, attrs) do
+    standard_subject
+    |> StandardSubject.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a StandardSubject.
+
+  ## Examples
+
+      iex> delete_standard_subject(standard_subject)
+      {:ok, %StandardSubject{}}
+
+      iex> delete_standard_subject(standard_subject)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_standard_subject(%StandardSubject{} = standard_subject) do
+    Repo.delete(standard_subject)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking standard_subject changes.
+
+  ## Examples
+
+      iex> change_standard_subject(standard_subject)
+      %Ecto.Changeset{source: %StandardSubject{}}
+
+  """
+  def change_standard_subject(%StandardSubject{} = standard_subject) do
+    StandardSubject.changeset(standard_subject, %{})
+  end
 end

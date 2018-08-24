@@ -1,0 +1,23 @@
+<h2>Show School job</h2>
+
+<ul>
+
+  <li>
+    <strong>Code:</strong>
+    <%= @school_job.code %>
+  </li>
+
+  <li>
+    <strong>Description:</strong>
+    <%= @school_job.description %>
+  </li>
+
+  <li>
+    <strong>Cdesc:</strong>
+    <%= @school_job.cdesc %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: school_job_path(@conn, :edit, @school_job) %></span>
+<span><%= link "Back", to: teacher_path(@conn, :teacher_setting) %></span>

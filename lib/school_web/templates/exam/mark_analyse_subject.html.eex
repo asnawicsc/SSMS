@@ -1,0 +1,106 @@
+<% require IEx %>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+    html {
+      font-family: sans-serif;
+    }
+    table {
+      border-collapse: collapse;
+      border: 2px solid rgb(200,200,200);
+      letter-spacing: 1px;
+      font-size: 0.8rem;
+    }
+    td, th {
+      border: 1px solid rgb(190,190,190);
+      padding: 10px 20px;
+    }
+    td {
+      text-align: center;
+    }
+    caption {
+      padding: 10px;
+    }
+    </style>
+  </head>
+ <% require IEx %>
+  <body>
+    <h4>CLASS: <%= @class.name %></h4>
+
+    <table id="example">
+      <colgroup>
+        <col col span="2" >
+      </colgroup>
+      <tr align="center">
+        <th style="background-color:#97DB9A;">Subject</th>
+        <th style="background-color:#97DB9A;" colspan="2">Grade A</th>
+        <th style="background-color:#97DB9A;" colspan="2">Grade B</th>
+        <th style="background-color:#97DB9A;" colspan="2">Grade C</th>
+        <th style="background-color:#97DB9A;" colspan="2">Grade D</th>
+        <th style="background-color:#97DB9A;" colspan="2">Grade E</th>
+        <th style="background-color:#97DB9A;" colspan="2">Grade F</th>
+        <th style="background-color:#97DB9A;" colspan="2">Grade G</th>
+        <th style="background-color:#97DB9A;" colspan="2">Pass</th>
+        <th style="background-color:#97DB9A;" colspan="2">Fail</th>
+         <th style="background-color:#97DB9A;" >GPS</th>
+
+      </tr>
+     
+
+        <%= for item <- @group_subject do %>
+        
+        <tr>
+     
+          <th><%=item.subject %></a></th>
+          <th ><%= item.a %></th>
+          <th ><%= (item.a/item.total_student)*100|>Float.round(2) %>%</th>
+          <th><%= item.b %></th>
+           <th ><%= (item.b/item.total_student)*100|>Float.round(2) %>%</th>
+            <th><%= item.c %></th>
+           <th ><%= (item.c/item.total_student)*100|>Float.round(2) %>%</th>
+            <th><%= item.d %></th>
+           <th ><%= (item.d/item.total_student)*100|>Float.round(2) %>%</th>
+            <th><%= item.e %></th>
+           <th ><%= (item.e/item.total_student)*100|>Float.round(2) %>%</th>
+            <th><%= item.f %></th>
+           <th ><%= (item.f/item.total_student)*100|>Float.round(2) %>%</th>
+            <th><%= item.g %></th>
+           <th ><%= (item.g/item.total_student)*100|>Float.round(2) %>%</th>
+            <th><%= item.lulus %></th>
+           <th ><%= (item.lulus/item.total_student)*100|>Float.round(2) %>%</th>
+            <th><%= item.tak_lulus %></th>
+           <th ><%= (item.tak_lulus/item.total_student)*100|>Float.round(2) %>%</th>
+      </tr>
+       <% end %>
+
+    <tr>
+       <th>AVG</a></th>
+          <th ><%= @a %></th>
+          <th ><%= (@a/@total)*100|>Float.round(2) %>%</th>
+          <th ><%= @b %></th>
+          <th ><%= (@b/@total)*100|>Float.round(2) %>%</th>
+          <th ><%= @c %></th>
+          <th ><%= (@c/@total)*100|>Float.round(2) %>%</th>
+          <th ><%= @d %></th>
+          <th ><%= (@d/@total)*100|>Float.round(2) %>%</th>
+          <th ><%= @e %></th>
+          <th ><%= (@e/@total)*100|>Float.round(2) %>%</th>
+          <th ><%= @f %></th>
+          <th ><%= (@f/@total)*100|>Float.round(2) %>%</th>
+          <th ><%= @g %></th>
+          <th ><%= (@g/@total)*100|>Float.round(2) %>%</th>
+          <th ><%= @lulus %></th>
+          <th ><%= (@lulus/@total)*100|>Float.round(2) %>%</th>
+          <th ><%= @tak_lulus %></th>
+          <th ><%= (@tak_lulus/@total)*100|>Float.round(2) %>%</th>
+          
+    </tr>
+
+    </table>
+
+
+  </body>
+</html>

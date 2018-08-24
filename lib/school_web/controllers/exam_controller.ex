@@ -62,6 +62,146 @@ defmodule SchoolWeb.ExamController do
     end
   end
 
+  def generate_mark_analyse(conn,%{"id" => id}) do
+
+
+    exam =
+      Repo.all(
+        from(
+          e in School.Affairs.ExamMaster,
+          left_join: c in School.Affairs.Class,
+          on: c.level_id == e.level_id,
+          where: c.id == ^id,
+          select: %{id: e.id, exam_name: e.name}
+        )
+      )
+
+
+
+   render(conn, "generate_mark_analyse.html",exam: exam, id: id) 
+  end
+
+  def mark_analyse(conn,params) do
+    class_id=params["class_id"]
+    exam_name=params["exam_name"]
+
+    class=Repo.get_by(School.Affairs.Class,%{id: class_id})
+ 
+
+    exam=Repo.get_by(School.Affairs.ExamMaster, %{name: exam_name,level_id: class.level_id})
+
+
+
+        all =
+      Repo.all(
+        from(
+          s in School.Affairs.ExamMark,
+          left_join: p in School.Affairs.Subject, on: s.subject_id==p.id,
+          left_join: t in School.Affairs.ExamMaster, on: s.exam_id== t.id,
+          left_join: r in School.Affairs.Class, on: r.id==s.class_id,
+          where: s.class_id == ^class_id  and s.exam_id == ^exam.id,
+          select: %{
+            class_name: r.name,
+            subject_code: p.code,
+            exam_name: t.name,
+            student_id: s.student_id,
+            mark: s.mark
+          }
+        )
+      )
+
+        if all ==[] do
+ 
+            conn
+            |> put_flash(:info, "Please Insert Exam Record First")
+            |> redirect(to: class_path(conn, :index))
+        end
+
+ all_mark = all |> Enum.group_by(fn x -> x.subject_code end)
+
+      mark1 =
+        for item <- all_mark do
+          subject_code = item |> elem(0)
+
+          datas = item |> elem(1)
+
+          for data <- datas do
+            student_mark = data.mark
+
+            grades = Repo.all(from(g in School.Affairs.Grade))
+
+            for grade <- grades do
+              if student_mark >= grade.mix and student_mark <= grade.max do
+                %{
+                  student_id: data.student_id,
+                  grade: grade.name,
+                  gpa: grade.gpa,
+                  subject_code: subject_code,
+                  student_mark: student_mark,
+                  class_name: data.class_name,
+                  exam_name: data.exam_name
+                }
+              end
+            end
+          end
+        end
+        |> List.flatten()
+        |> Enum.filter(fn x -> x != nil end)
+
+
+        group=mark1|>Enum.group_by(fn x -> x.subject_code end)
+
+        group_subject=for item <- group do
+            subject=item|>elem(0)
+
+            total_student=item|>elem(1)|>Enum.count
+            a = item |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "A" end)
+          b = item |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "B" end)
+          c = item |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "C" end)
+          d = item |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "D" end)
+          e = item |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "E" end)
+          f = item |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "F" end)
+          g = item |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "G" end)
+
+          lulus =a+b+c+d
+          fail=e+f+g
+
+           %{
+            subject: subject,
+            total_student: total_student,
+            a: a,
+            b: b,
+            c: c,
+            d: d,
+            e: e,
+            f: f,
+            g: g,
+            lulus: lulus,
+            tak_lulus: fail
+           
+          }
+
+          
+        end
+
+          a = group_subject|>Enum.map(fn x -> x.a end) |> Enum.sum
+          b =group_subject|>Enum.map(fn x -> x.b end) |> Enum.sum
+          c =group_subject|>Enum.map(fn x -> x.c end) |> Enum.sum
+          d =group_subject|>Enum.map(fn x -> x.d end) |> Enum.sum
+          e = group_subject|>Enum.map(fn x -> x.e end) |> Enum.sum
+          f =group_subject|>Enum.map(fn x -> x.f end) |> Enum.sum
+          g =group_subject|>Enum.map(fn x -> x.g end) |> Enum.sum
+          lulus =group_subject|>Enum.map(fn x -> x.lulus end) |> Enum.sum
+          tak_lulus =group_subject|>Enum.map(fn x -> x.tak_lulus end) |> Enum.sum
+          total =group_subject|>Enum.map(fn x -> x.total_student end) |> Enum.sum
+
+
+       
+  render(conn, "mark_analyse_subject.html",a: a,b: b,c: c,d: d,e: e,f: f,g: g,lulus: lulus,tak_lulus: tak_lulus,total: total, group_subject: group_subject,exam: exam,class: class)
+
+
+  end
+
   def create(conn, %{"exam" => exam_params}) do
     case Affairs.create_exam(exam_params) do
       {:ok, exam} ->
@@ -90,7 +230,9 @@ defmodule SchoolWeb.ExamController do
         )
       )
       |> Enum.uniq()
-      |> Enum.filter(fn x -> x.t_name != "Rest" end)
+      |> Enum.filter(fn x -> x.t_name != "Rehat" end)
+
+
 
     exam =
       Repo.all(
@@ -125,7 +267,7 @@ defmodule SchoolWeb.ExamController do
         )
       )
       |> Enum.uniq()
-      |> Enum.filter(fn x -> x.t_name != "Rest" end)
+      |> Enum.filter(fn x -> x.t_name != "Rehat" end)
 
 
       end
@@ -197,10 +339,39 @@ defmodule SchoolWeb.ExamController do
       class = Affairs.get_class!(class_id)
       subject = Affairs.get_subject!(subject_id)
 
+      # all_student=Repo.all(from s in School.Affairs.StudentClass,   
+      #   where: e.subject_id==^subject.id and s.class_id==^class.id and e.exam_id==^exam_id and e.student_id != s.sudent_id,
+      #   select: %{
+      #     name: s.sudent_id,
+      #     mark: e.mark
+      #     })
+   t=Repo.all(from i in StudentClass,
+    left_join: s in Student, on: s.id==i.sudent_id, where: i.class_id==^class.id,select: %{ name: s.name,student_id: s.id})
+
+   fi=for item <- t do
+
+     a=Enum.filter(all,fn x -> x.student_id == item.student_id end)
+
+     if a == [] do
+
+
+      %{class_id: class_id,exam_id: exam_id,student_id: item.student_id,subject_id: subject_id,student_name: item.name,mark: 0}
+
+    else
+       
+     end
+      
+
+  
+     
+   end|>Enum.filter(fn x -> x != nil end)
+
+
       render(
         conn |> put_flash(:info, "Exam  mark already filled, please edit existing mark."),
         "edit_mark.html",
         all: all,
+        fi: fi,
         class: class,
         exam_id: exam_id,
         subject: subject
@@ -238,6 +409,7 @@ defmodule SchoolWeb.ExamController do
   end
 
   def update_mark(conn, params) do
+
     class_id = params["class_id"]
     mark = params["mark"]
     subject_id = params["subject_id"]
@@ -250,12 +422,29 @@ defmodule SchoolWeb.ExamController do
       student_id = item |> elem(0)
       mark = item |> elem(1)
 
-      exam_mark =
+       exam_mark =
         Repo.get_by(School.Affairs.ExamMark, %{
           exam_id: exam_id,
           subject_id: subject_id,
           student_id: student_id
         })
+
+            exam_mark_params = %{
+        class_id: class_id,
+        exam_id: exam_id,
+        mark: mark,
+        subject_id: subject_id,
+        student_id: student_id
+      }
+
+      if exam_mark == nil   do
+
+        Affairs.create_exam_mark(exam_mark_params)
+
+      else
+        
+    
+     
 
       exam_mark_params = %{
         class_id: class_id,
@@ -266,6 +455,8 @@ defmodule SchoolWeb.ExamController do
       }
 
       Affairs.update_exam_mark(exam_mark, exam_mark_params)
+
+    end
     end
 
     conn

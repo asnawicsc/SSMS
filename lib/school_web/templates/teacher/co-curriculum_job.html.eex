@@ -1,0 +1,95 @@
+<span><%= link "Assign Teacher Co-curriculum Job",class: "btn btn-primary", to: teacher_co_curriculum_job_path(@conn, :new) %></span>
+<span><%= link "New Co curriculum job", class: "btn btn-primary", to: co_curriculum_job_path(@conn, :new) %></span>
+ <span><a href="#" id="show" class="btn btn-primary" aria-label="toggle_cocuriculum_job">Show Assign Job</a></span>
+<h2>Listing Cocurriculum job</h2>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Code</th>
+      <th>Description</th>
+      <th>Cdesc</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for co_curriculum_job <- @cocurriculum_job do %>
+    <tr>
+      <td><%= co_curriculum_job.code %></td>
+      <td><%= co_curriculum_job.description %></td>
+      <td><%= co_curriculum_job.cdesc %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: co_curriculum_job_path(@conn, :show, co_curriculum_job), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: co_curriculum_job_path(@conn, :edit, co_curriculum_job), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: co_curriculum_job_path(@conn, :delete, co_curriculum_job), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+
+
+<div aria-label="assign_cocuriculum">
+  <h2>Listing Co Curriculum Assign School job</h2>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Teacher Name</th>
+      <th>Job</th>
+      <th>Semester</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for co_curriculum <- @teacher_co_curriculum_job do %>
+<% teacher = School.Affairs.get_teacher!(co_curriculum.teacher_id) %>
+<% teacher_co_curriculum_job = School.Affairs.get_co_curriculum_job!(co_curriculum.co_curriculum_job_id) %>
+
+    <tr>
+      <td><%= teacher.name %></td>
+      <td><%= teacher_co_curriculum_job.description %></td>
+      <td><%= co_curriculum.semester_id %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: co_curriculum_job_path(@conn, :show, co_curriculum), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: co_curriculum_job_path(@conn, :edit, co_curriculum), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: co_curriculum_job_path(@conn, :delete, co_curriculum), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+</div>
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+  
+
+    if (localStorage.getItem("toggle_cocuriculum_job") == null) {
+      localStorage.setItem("toggle_cocuriculum_job", "open")
+    }
+
+    if (localStorage.getItem("toggle_cocuriculum_job") == "close") {
+      $("div[aria-label='assign_cocuriculum']").hide()
+    }
+
+
+    $("a[aria-label='toggle_cocuriculum_job']").click(function(){
+      $("div[aria-label='assign_cocuriculum']").toggle("slide")
+      if (localStorage.getItem("toggle_cocuriculum_job") == "close") {
+        localStorage.setItem("toggle_cocuriculum_job", "open")
+      } else {
+        localStorage.setItem("toggle_cocuriculum_job", "close")
+      }
+    })
+
+</script>

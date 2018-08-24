@@ -1,0 +1,32 @@
+<h2>Listing Rakan</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Prize</th>
+      <th>Min</th>
+      <th>Max</th>
+      <th>Standard</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for rakan <- @rakan do %>
+    <tr>
+      <td><%= rakan.prize %></td>
+      <td><%= rakan.min %></td>
+      <td><%= rakan.max %></td>
+      <td><%= rakan.standard_id %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: rakan_path(@conn, :show, rakan), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: rakan_path(@conn, :edit, rakan), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: rakan_path(@conn, :delete, rakan), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Rakan", to: rakan_path(@conn, :new) %></span>

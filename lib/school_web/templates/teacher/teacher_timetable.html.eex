@@ -1,0 +1,54 @@
+<style type="text/css">
+  .btn.btn-link.student {
+    line-height: 0em !important;
+  }
+</style>
+
+<script type="text/javascript">
+  window.csrf = "<%= Phoenix.Controller.get_csrf_token %>"
+</script>
+<div class="row">
+  <div class="col-lg-3">
+    <div class="table-responsive">
+      
+    
+    <table class="table">
+      <thead>
+        <tr>
+        
+
+             <th>Name</th>
+        </tr>
+      </thead>
+      <tbody>
+           <%= for teacher <- @teacher do %>
+        <tr>
+       
+
+
+          <td>   <div id="<%= teacher.code %> " class="btn btn-link teacher_timetable"><%= teacher.name %></div></td>
+        </tr>
+    <% end %>
+      </tbody>
+    </table>
+</div>
+  </div>
+  <div class="col-lg-9" aria-label="teacher_timetable">
+   <p class="lead">Click on a teacher name in the left panel. </p> 
+ 
+  </div>
+</div>
+<div class="table-responsive">
+
+
+</div>
+
+<a href="/teacher_period"><%= gettext " New Teacher Period" %></a>
+<script type="text/javascript">
+  $(window).ready(function(){
+    var target = window.location.search.substring(1).split("=")[1]
+    $("div#"+target+".teacher").click()
+
+     $('.table').DataTable();
+  })
+</script>

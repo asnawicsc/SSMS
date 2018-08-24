@@ -1,0 +1,30 @@
+<h2>Listing School job</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Code</th>
+      <th>Description</th>
+      <th>Cdesc</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for school_job <- @school_job do %>
+    <tr>
+      <td><%= school_job.code %></td>
+      <td><%= school_job.description %></td>
+      <td><%= school_job.cdesc %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: school_job_path(@conn, :show, school_job), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: school_job_path(@conn, :edit, school_job), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: school_job_path(@conn, :delete, school_job), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "Back", to: teacher_path(@conn, :teacher_setting) %></span>

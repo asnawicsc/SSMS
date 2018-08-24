@@ -1,0 +1,23 @@
+<h2>Show Teacher hem job</h2>
+
+<ul>
+
+  <li>
+    <strong>Teacher:</strong>
+    <%= @teacher_hem_job.teacher_id %>
+  </li>
+
+  <li>
+    <strong>Hem job:</strong>
+    <%= @teacher_hem_job.hem_job_id %>
+  </li>
+
+  <li>
+    <strong>Semester:</strong>
+    <%= @teacher_hem_job.semester_id %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: teacher_hem_job_path(@conn, :edit, @teacher_hem_job) %></span>
+<span><%= link "Back", to: teacher_path(@conn, :teacher_setting) %></span>

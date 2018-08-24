@@ -1,0 +1,129 @@
+      <div class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card ">
+               
+                <div class="card-header ">
+          
+
+                  <div class="row">
+                  <h4 class="card-title">Standard Setting
+                  </h4>
+
+                   
+                    <select class="select" onchange="getval(this);" required="required" name="standard_level">
+                           <%= for a <- @level |> Enum.sort do %>
+                                            <option value="<%= a.id %>" ><%= a.name %>
+                                            </option>
+                                          <% end %>
+                                        </select>     
+                    
+                   
+                  </div>
+                          
+                    
+                    <hr>
+
+                  <ul class="nav nav-pills nav-pills-warning" role="tablist">
+                    <li class="nav-item">
+                      <a class="nav-link active" data-toggle="tab" href="" id="standard_subject" role="tablist">
+                        Subject
+                      </a>
+
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" data-toggle="tab" href="" id="subject_test" role="tablist">
+                        Subject ( Test )
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" data-toggle="tab" href="" id="test" role="tablist">
+                        Test
+                      </a>
+                    </li>
+                     <li class="nav-item">
+                      <a class="nav-link" data-toggle="tab" href=""  id="result_grade" role="tablist">
+                        Result Grade
+                      </a>
+                    </li>
+                     <li class="nav-item">
+                      <a class="nav-link" data-toggle="tab" href="" id="result_default" role="tablist">
+                        Result Default
+                      </a>
+                    </li>
+                      <li class="nav-item">
+                      <a class="nav-link" data-toggle="tab" href="" id="seq" role="tablist">
+                        Seq No. Sorting Order
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" data-toggle="tab" href="" id="co_curriculum" role="tablist">
+                        Co-Curriculum
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" data-toggle="tab" href="" id="grade_co" role="tablist">
+                        Grade Co-C
+                      </a>
+                    </li>
+                  </ul>
+            
+                </div>
+                <div class="card-body ">
+
+                  <div class="tab-content tab-space">
+                    <div class="tab-pane active" id="standard_subject">
+                       <%= render("standard_subject.html", conn: @conn,standard_subject: @standard_subject) %>
+                    </div>
+                    <div class="tab-pane" id="subject_test">
+                        <%= render("subject_test.html", conn: @conn,exam_master: @exam_master) %>
+                    </div>
+                    <div class="tab-pane" id="test">
+                        
+                    </div>
+                     <div class="tab-pane" id="result_grade">
+                   <%= render("grade.html", conn: @conn, grade: @grade) %>
+                    </div>
+                     <div class="tab-pane" id="result_default">
+                
+                    </div>
+                     <div class="tab-pane" id="seq">
+                  
+                    </div>
+                        <div class="tab-pane" id="co_curriculum">
+                
+                    </div>
+                     <div class="tab-pane" id="grade_co">
+                    <%= render("co_grade.html", conn: @conn, co_grade: @co_grade) %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+         
+          </div>
+
+        </div>
+      </div>
+
+      <script type="text/javascript">
+
+
+ $('select[name="standard_level"]').val(localStorage.getItem("standard_level"));
+
+  
+
+  function getval(sel)
+{
+    d=sel.value
+var level=  localStorage.setItem("standard_level", d);
+
+
+    window.location.reload();
+
+}
+
+
+</script>
+

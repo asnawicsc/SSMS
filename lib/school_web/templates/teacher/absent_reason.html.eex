@@ -1,0 +1,30 @@
+<h2>Listing Absent reason</h2> <a href="/teacher_period"><%= gettext " Insert Absent Record" %></a>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Code</th>
+      <th>Description</th>
+      <th>Type</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for absent_reason <- @absent_reason do %>
+    <tr>
+      <td><%= absent_reason.code %></td>
+      <td><%= absent_reason.description %></td>
+      <td><%= absent_reason.type %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: absent_reason_path(@conn, :show, absent_reason), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: absent_reason_path(@conn, :edit, absent_reason), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: absent_reason_path(@conn, :delete, absent_reason), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Absent reason", to: absent_reason_path(@conn, :new) %></span>

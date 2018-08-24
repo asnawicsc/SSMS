@@ -1,0 +1,30 @@
+<h2>Listing Teacher absent reason</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Teacher</th>
+      <th>Absent reason</th>
+      <th>Semester</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for teacher_absent_reason <- @teacher_absent_reason do %>
+    <tr>
+      <td><%= teacher_absent_reason.teacher_id %></td>
+      <td><%= teacher_absent_reason.absent_reason_id %></td>
+      <td><%= teacher_absent_reason.semester_id %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: teacher_absent_reason_path(@conn, :show, teacher_absent_reason), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: teacher_absent_reason_path(@conn, :edit, teacher_absent_reason), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: teacher_absent_reason_path(@conn, :delete, teacher_absent_reason), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Teacher absent reason", to: teacher_absent_reason_path(@conn, :new) %></span>

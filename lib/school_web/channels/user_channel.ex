@@ -149,6 +149,175 @@ defmodule SchoolWeb.UserChannel do
     {:noreply, socket}
   end
 
+  def handle_in("inquire_teacher_timetable", payload, socket) do
+    code = payload["code"]|>String.trim(" ")
+
+    user = Repo.get(School.Settings.User, payload["user_id"])
+
+    teacher = Repo.get_by(Teacher,code: code)
+    changeset = Affairs.change_teacher(teacher)
+
+        school_job=Repo.all(from g in School.Affairs.TeacherSchoolJob,
+              left_join: s in School.Affairs.SchoolJob, on: g.school_job_id==s.id,
+              where: g.teacher_id==^teacher.id,
+              select: %{ code: s.code,description: s.description,cdesc: s.cdesc})
+
+        co_curriculum_job=Repo.all(from g in School.Affairs.TeacherCoCurriculumJob,
+              left_join: s in School.Affairs.CoCurriculumJob, on: g.co_curriculum_job_id==s.id,
+              where: g.teacher_id==^teacher.id,
+              select: %{ code: s.code,description: s.description,cdesc: s.cdesc})
+
+            hem_job=Repo.all(from g in School.Affairs.TeacherHemJob,
+              left_join: s in School.Affairs.HemJob, on: g.hem_job_id==s.id,
+              where: g.teacher_id==^teacher.id,
+              select: %{ code: s.code,description: s.description,cdesc: s.cdesc})
+
+
+    conn = %{private: %{plug_session: %{"institution_id" => user.institution_id}}}
+
+    period=Repo.all(from p in School.Affairs.Period,
+    left_join: s in School.Affairs.Subject, on: s.id==p.subject_id,
+    left_join: t in School.Affairs.Teacher, on: t.id==p.teacher_id,
+    left_join: d in School.Affairs.Day, on: d.name==p.day,
+    where: p.teacher_id==^teacher.id,select: %{day_number: d.number,end_time: p.end_time,start_time: p.start_time,s_code: s.code})
+
+        teacher_period=Repo.all(from p in School.Affairs.TeacherPeriod,
+    left_join: t in School.Affairs.Teacher, on: t.id==p.teacher_id,
+    left_join: d in School.Affairs.Day, on: d.name==p.day,
+    where: p.teacher_id==^teacher.id,select: %{day_number: d.number,end_time: p.end_time,start_time: p.start_time,s_code: p.activity})
+
+
+        period_all=period++teacher_period
+
+   all=for item <- period_all do
+      e=item.end_time.hour  
+      s=item.start_time.hour 
+
+          e= if e == 0 do 
+         12
+       else
+        e
+      end
+
+    s= if s == 0 do
+          12
+        else
+          s
+      end 
+
+      %{day_number: item.day_number,end_time: e,start_time: s,s_code: item.s_code}
+    
+   end|>Enum.group_by(fn x -> x.day_number end)
+
+    all2=for item <- period_all do
+      e=item.end_time.hour  
+      s=item.start_time.hour 
+sm=item.start_time.minute 
+em=item.end_time.minute 
+      e= if e == 0 do 
+         12
+       else
+        e
+      end
+
+    s= if s == 0 do
+          12
+        else
+          s
+      end 
+
+   %{location: item.day_number,end_hour: e,end_minute: em,start_minute: sm,start_hour: s,name: item.s_code}
+
+     
+    
+   end|>Enum.reject(fn x-> x == nil end)
+
+
+    html =
+      Phoenix.View.render_to_string(
+        SchoolWeb.TeacherView,
+        "teacher_time_table.html",
+        code: code,
+        name: teacher.name,
+        school_job: school_job,
+        co_curriculum_job: co_curriculum_job,
+        hem_job: hem_job,
+        all2: Poison.encode!(all2),
+        changeset: changeset,
+        conn: conn,
+        action: "/teacher_timetable/#{teacher.code}"
+      )
+
+
+    csrf = Phoenix.Controller.get_csrf_token()
+    broadcast(socket, "show_teacher_timetable", %{html: html, csrf: csrf})
+    {:noreply, socket}
+  end
+
+   def handle_in("nilam_setting", payload, socket) do
+    
+               project_nilam =     Repo.all(from s in School.Affairs.ProjectNilam,
+                where: s.standard_id ==^payload["level"],select: %{below_satisfy: s.below_satisfy,
+                count_page: s.count_page,import_from_library: s.import_from_library,member_reading_quantity: s.member_reading_quantity,
+                page: s.page,standard_id: s.standard_id})
+     
+
+  broadcast(socket, "show_project_nilam", %{project_nilam: project_nilam})
+    {:noreply, socket}
+
+  end
+
+  def handle_in("jauhari", payload, socket) do
+    
+               jauhari =     Repo.all(from s in School.Affairs.Jauhari,
+                where: s.standard_id ==^payload["level"],select: %{prize: s.prize,
+                min: s.min,max: s.max,standard_id: s.standard_id})
+     
+
+  broadcast(socket, "show_jauhari", %{jauhari: jauhari})
+    {:noreply, socket}
+
+  end
+
+    def handle_in("rakan", payload, socket) do
+    
+               rakan =     Repo.all(from s in School.Affairs.Rakan,
+                where: s.standard_id ==^payload["level"],select: %{prize: s.prize,
+                min: s.min,max: s.max,standard_id: s.standard_id})
+
+
+  broadcast(socket, "show_rakan", %{rakan: rakan})
+    {:noreply, socket}
+
+  end
+
+      def handle_in("standard_subject", payload, socket) do
+ standard_level=payload["standard_level"]
+               standard_subject = Repo.all(from s in School.Affairs.StandardSubject,
+                where: s.standard_id ==^payload["standard_level"],select: %{year: s.year,
+                semester_id: s.semester_id,standard_id: s.standard_id,subject_id: s.subject_id})
+
+  broadcast(socket, "show_standard_subject", %{standard_level: standard_level,standard_subject: standard_subject})
+    {:noreply, socket}
+
+  end
+
+        def handle_in("subject_test", payload, socket) do
+
+ standard_level=payload["standard_level"]
+               subject_test = Repo.all(from s in School.Affairs.ExamMaster,
+                left_join: p in School.Affairs.Exam, on: p.exam_master_id== s.id,
+                where: s.level_id ==^payload["standard_level"],select: %{year: s.year,
+                semester_id: s.semester_id,standard_id: s.level_id,subject_id: p.subject_id,name: s.name})
+
+
+  broadcast(socket, "show_subject_test", %{standard_level: standard_level,subject_test: subject_test})
+    {:noreply, socket}
+
+  end
+
+
+
   
 
   # Add authorization logic here as required.
