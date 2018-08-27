@@ -96,7 +96,7 @@ defmodule SchoolWeb.PeriodController do
       {:ok, period} ->
         conn
         |> put_flash(:info, "Period created successfully.")
-        |> redirect(to: period_path(conn, :show, period))
+         |> redirect(to: subject_path(conn, :standard_setting))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
         end
@@ -105,7 +105,7 @@ defmodule SchoolWeb.PeriodController do
 
          conn
         |> put_flash(:info, "That slot already been taken,please refer to period table.")
-        |> redirect(to: period_path(conn, :index))
+        |> redirect(to: subject_path(conn, :standard_setting))
    
     end
 

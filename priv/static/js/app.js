@@ -117,10 +117,12 @@ $("footer").append(maintain)
     $("footer").append(maintain)
   })
 
-  $("div.student").click(function(){
+    $("div.student").click(function(){
     var student_id = $(this).attr("id")
+
     channel.push("inquire_student_details", {user_id: window.currentUser, student_id: student_id})
   })
+
 
   channel.on("show_student_details", payload => {
     $("div[aria-label='student_details']").html(payload.html)
@@ -198,38 +200,21 @@ $(".nav-link#project_nilam").click(function() {
 channel.on("show_project_nilam", payload => {
     var data = payload.project_nilam
 
-    console.log(data)
 
-        $("table#project_nilam").DataTable({
-            
-            destroy: true,
-            data: data,
-            dom: 'Bfrtip',
-            buttons: [
-                'copy', 'csv', 'excel', 'pdf', 'print'
-            ],
-            columns: [{
-                    data: 'below_satisfy'
-                },
-                {
-                    data: 'member_reading_quantity'
-                },
-                {
-                    data: 'page'
-                },
-                {
-                    data: 'import_from_library'
-                },
-                {
-                    data: 'count_page'
-                },
-                {
-                    data: 'standard_id'
-                }
-               
-            ]
-        });
+       $("input[name='below_satisfy']").val(data.below_satisfy)
+
+   $("input[name='member_reading_quantity']").val(data.member_reading_quantity)
+
+    $("input[name='page']").val(data.page)
+
+     $("input[name='import_from_library']").val(data.import_from_library)
+
+ $("input[name='count_page_number']").val(data.count_page)
+     $("input[name='standard_id']").val(data.standard_id)
+        $("input[name='id']").val(data.ids)
   })
+
+
 
 $(".nav-link#jauhari").click(function() {
 
@@ -321,6 +306,7 @@ channel.on("show_rakan", payload => {
   $("div#seq").hide();
   $("div#co_curriculum").hide();
   $("div#grade_co").hide();
+   $("div#standard_period").hide();
 
 $(".nav-link#standard_subject").click(function() {
 
@@ -332,6 +318,7 @@ $(".nav-link#standard_subject").click(function() {
   $("div#seq").hide();
   $("div#co_curriculum").hide();
   $("div#grade_co").hide();
+   $("div#standard_period").hide();
 
    var standard_level=localStorage.getItem("standard_level")
 
@@ -381,6 +368,7 @@ $(".nav-link#subject_test").click(function() {
   $("div#seq").hide();
   $("div#co_curriculum").hide();
   $("div#grade_co").hide();
+   $("div#standard_period").hide();
 
 
    var standard_level=localStorage.getItem("standard_level")
@@ -434,6 +422,7 @@ $(".nav-link#test").click(function() {
   $("div#seq").hide();
   $("div#co_curriculum").hide();
   $("div#grade_co").hide();
+   $("div#standard_period").hide();
 
 
    var standard_level=localStorage.getItem("standard_level")
@@ -452,6 +441,7 @@ $(".nav-link#result_grade").click(function() {
   $("div#seq").hide();
   $("div#co_curriculum").hide();
   $("div#grade_co").hide();
+   $("div#standard_period").hide();
 
 
    var standard_level=localStorage.getItem("standard_level")
@@ -470,6 +460,7 @@ $(".nav-link#result_default").click(function() {
   $("div#seq").hide();
   $("div#co_curriculum").hide();
   $("div#grade_co").hide();
+   $("div#standard_period").hide();
 
 
    var standard_level=localStorage.getItem("standard_level")
@@ -488,6 +479,7 @@ $(".nav-link#seq").click(function() {
   $("div#seq").show();
   $("div#co_curriculum").hide();
   $("div#grade_co").hide();
+   $("div#standard_period").hide();
 
 
    var standard_level=localStorage.getItem("standard_level")
@@ -506,6 +498,7 @@ $(".nav-link#co_curriculum").click(function() {
   $("div#seq").hide();
   $("div#co_curriculum").show();
   $("div#grade_co").hide();
+   $("div#standard_period").hide();
 
 
    var standard_level=localStorage.getItem("standard_level")
@@ -524,6 +517,7 @@ $(".nav-link#grade_co").click(function() {
   $("div#seq").hide();
   $("div#co_curriculum").hide();
   $("div#grade_co").show();
+    $("div#standard_period").hide();
 
 
    var standard_level=localStorage.getItem("standard_level")
@@ -531,6 +525,312 @@ $(".nav-link#grade_co").click(function() {
   channel.push("grade_co", {user_id: window.currentUser,standard_level: standard_level})
     
   })
+
+
+$(".nav-link#standard_period").click(function() {
+
+     $("div#standard_subject").hide();
+  $("div#subject_test").hide();
+    $("div#test").hide();
+  $("div#result_grade").hide();
+  $("div#result_default").hide();
+  $("div#seq").hide();
+  $("div#co_curriculum").hide();
+  $("div#grade_co").hide();
+  $("div#standard_period").show();
+
+
+   var standard_level=localStorage.getItem("standard_level")
+
+  channel.push("period", {user_id: window.currentUser,standard_level: standard_level})
+    
+  })
+
+channel.on("show_period", payload => {
+    var data = payload.period
+var standard_level=payload.standard_level
+
+  $("div#period").html(standard_level)
+    console.log(data)
+
+        $("table#period").DataTable({
+            
+            destroy: true,
+            data: data,
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
+            columns: [ {
+                    data: 'class_name'
+                },
+                {
+                    data: 'day'
+                },
+                {
+                    data: 'start_time'
+                },
+                {
+                    data: 'end_time'
+                },
+                {
+                    data: 'subject_name'
+                },
+                 {
+                    data: 'teacher_name'
+                }
+
+               
+            ]
+        });
+  })
+
+
+$(".nav-link#class_info").click(function() {
+
+   
+
+   var class_id=localStorage.getItem("class_id")
+
+  channel.push("class_info", {user_id: window.currentUser,class_id: class_id})
+    
+  })
+
+
+$("div#class_info").show();
+$("div#class_subject").hide();
+$("div#class_period").hide();
+$("div#class_student").hide();
+$("div#class_student_info").hide();
+
+channel.on("show_class_info", payload => {
+
+$("div#class_info").show();
+$("div#class_subject").hide();
+$("div#class_period").hide();
+$("div#class_student").hide();
+$("div#class_student_info").hide();
+    var data = payload.all
+var standard_level=payload.standard_level
+var name = payload.name
+var institution_id = payload.institution_id
+var level_id = payload.level_id
+var remark = payload.remark
+
+   $("input[name='class_name']").val(name)
+
+   $("input[name='remark']").val(remark)
+
+    $("input[name='institution_id']").val(institution_id)
+
+     $("input[name='level_id']").val(level_id)
+
+
+
+      
+  })
+
+
+
+$(".nav-link#class_subject").click(function() {
+
+   
+
+   var class_id=localStorage.getItem("class_id")
+
+  channel.push("class_subject", {user_id: window.currentUser,class_id: class_id})
+    
+  })
+
+
+
+channel.on("show_class_subject", payload => {
+
+$("div#class_info").hide();
+$("div#class_subject").show();
+$("div#class_period").hide();
+$("div#class_student").hide();
+$("div#class_student_info").hide();
+var class_id = payload.class_id
+
+  $("button[name='class_id']").val(class_id)   
+  var data = payload.all
+ $("table#class_subject").DataTable({
+            
+            destroy: true,
+            data: data,
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
+            columns: [ {
+                    data: 'subject_code'
+                },
+                {
+                    data: 'subject_name'
+                },
+                {
+                    data: 'teacher_code'
+                },
+                {
+                    data: 'teacher_name'
+                }
+               
+            ]
+        });
+  })
+
+
+$(".nav-link#class_period").click(function() {
+
+   
+
+   var class_id=localStorage.getItem("class_id")
+
+  channel.push("class_period", {user_id: window.currentUser,class_id: class_id})
+    
+  })
+
+
+
+channel.on("show_class_period", payload => {
+
+$("div#class_info").hide();
+$("div#class_subject").hide();
+$("div#class_period").show();
+$("div#class_student").hide();
+$("div#class_student_info").hide();
+
+
+    var maps = JSON.parse(payload.all2)
+
+   $(maps).each(function(i,v) {
+          console.log(v)
+             v["start"]= start(v["start_hour"],v["start_minute"])
+             v["end"]= end(v["end_hour"],v["end_minute"])
+        })
+
+
+            // --------------------------- Data --------------------------------
+            var locations = [
+                {id: '1', name: 'Sunday'},
+                {id: '2', name: 'Monday'},
+                {id: '3', name: 'Tuesday'},
+                {id: '4', name: 'Wednesday'},
+                {id: '5', name: 'Thursday'},
+                {id: '6', name: 'Friday'},
+                {id: '7', name: 'Saturday'}
+                  
+              
+                ];
+
+            var events =maps;
+            // -------------------------- Helpers ------------------------------
+             function start(hours, minutes) {
+                var date = new Date();
+                date.setUTCHours(hours, minutes, 0, 0);
+                console.log(date)
+                return date;
+
+            }
+              function end(hours, minutes) {
+                var date = new Date();
+                date.setUTCHours(hours, minutes, 0, 0);
+                return date;
+            }
+            
+            
+          
+            // --------------------------- Example 1 ---------------------------
+            var $sked1 = $('#sked5').skedTape({
+                caption: 'Day',
+                start: start(8,0),
+                end: end(18, 0),
+                showEventTime: true,
+                showEventDuration: true,
+                scrollWithYWheel: true,
+                locations: locations,
+                events: events
+               
+            });
+           
+
+
+  })
+
+$(".nav-link#class_student").click(function() {
+
+   
+
+   var class_id=localStorage.getItem("class_id")
+
+  channel.push("class_student", {semester_id: window.currentSemester, inst_id: window.currentInstitute,user_id: window.currentUser,class_id: class_id})
+    
+  })
+
+
+channel.on("show_class_student", payload => {
+
+$("div#class_info").hide();
+$("div#class_subject").hide();
+$("div#class_period").hide();
+$("div#class_student").show();
+$("div#class_student_info").hide();
+
+    $("#m1").html(payload.html);
+
+  })
+
+
+$(".nav-link#class_student_info").click(function() {
+
+   
+
+   var class_id=localStorage.getItem("class_id")
+
+  channel.push("class_student_info", {semester_id: window.currentSemester, inst_id: window.currentInstitute,user_id: window.currentUser,class_id: class_id})
+    
+  })
+
+
+
+
+
+
+
+$("button[name='class_id']").click(function() {
+
+    var class_id = $(this).val()
+   var csrf = window.csrf
+
+  channel.push("subject_class_teach", {csrf: csrf,user_id: window.currentUser,class_id: class_id})
+    
+  })
+
+      channel.on("show_subject_class_teach", payload => {
+    $("#modal_form1").html(payload.html);
+
+  })
+
+
+
+$("button[name='create_period']").click(function() {
+
+ var class_id=localStorage.getItem("class_id")
+
+var csrf = window.csrf
+  channel.push("create_period", {csrf: csrf,user_id: window.currentUser,class_id: class_id})
+    
+  })
+
+      channel.on("show_create_period", payload => {
+   
+    $("div#period_bod").html(payload.html);
+
+  })
+
+
+
 
   
 })

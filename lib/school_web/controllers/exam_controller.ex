@@ -214,18 +214,20 @@ defmodule SchoolWeb.ExamController do
     end
   end
 
-  def generate_exam(conn, %{"id" => id}) do
-    all =
+
+  def mark_sheet(conn,params) do
+
+
+     all =
       Repo.all(
         from(
-          p in School.Affairs.Period,
+          p in School.Affairs.SubjectTeachClass,
           left_join: sb in School.Affairs.Subject,
           on: sb.id == p.subject_id,
           left_join: s in School.Affairs.Class,
           on: p.class_id == s.id,
           left_join: t in School.Affairs.Teacher,
           on: t.id == p.teacher_id,
-          where: p.class_id == ^id,
           select: %{id: sb.id, t_name: t.name, s_code: sb.code, subject: sb.description}
         )
       )
@@ -238,12 +240,11 @@ defmodule SchoolWeb.ExamController do
       Repo.all(
         from(
           e in School.Affairs.ExamMaster,
-          left_join: c in School.Affairs.Class,
-          on: c.level_id == e.level_id,
-          where: c.id == ^id,
           select: %{id: e.id, exam_name: e.name}
         )
       )
+
+
 
       all=if all == [] do
         conn
@@ -252,17 +253,16 @@ defmodule SchoolWeb.ExamController do
 
   else
 
-      
+       
       Repo.all(
         from(
-          p in School.Affairs.Period,
+          p in School.Affairs.SubjectTeachClass,
           left_join: sb in School.Affairs.Subject,
           on: sb.id == p.subject_id,
           left_join: s in School.Affairs.Class,
           on: p.class_id == s.id,
           left_join: t in School.Affairs.Teacher,
           on: t.id == p.teacher_id,
-          where: p.class_id == ^id,
           select: %{id: sb.id, t_name: t.name, s_code: sb.code, subject: sb.description}
         )
       )
@@ -272,13 +272,84 @@ defmodule SchoolWeb.ExamController do
 
       end
 
-    render(conn, "generate_exam.html", all: all, id: id, exam: exam)
+    class=Repo.all(from s in School.Affairs.Class,select: %{id: s.id,name: s.name})
+
+     render(
+        conn,
+        "mark_sheet.html",class: class,class: class, all: all, exam: exam)
+  end
+
+  def generate_exam(conn, params) do
+    all =
+      Repo.all(
+        from(
+          p in School.Affairs.SubjectTeachClass,
+          left_join: sb in School.Affairs.Subject,
+          on: sb.id == p.subject_id,
+          left_join: s in School.Affairs.Class,
+          on: p.class_id == s.id,
+          left_join: t in School.Affairs.Teacher,
+          on: t.id == p.teacher_id,
+          select: %{id: sb.id, t_name: t.name, s_code: sb.code, subject: sb.description}
+        )
+      )
+      |> Enum.uniq()
+      |> Enum.filter(fn x -> x.t_name != "Rehat" end)
+
+
+
+    exam =
+      Repo.all(
+        from(
+          e in School.Affairs.ExamMaster,
+          select: %{id: e.id, exam_name: e.name}
+        )
+      )
+
+          class =
+      Repo.all(
+        from(
+          e in School.Affairs.Class,
+          select: %{id: e.id,name: e.name}
+        )
+      )
+
+
+
+      all=if all == [] do
+        conn
+    |> put_flash(:info, "Please Create Exam Subject.")
+    |> redirect(to: class_path(conn, :index))
+
+  else
+
+       
+      Repo.all(
+        from(
+          p in School.Affairs.SubjectTeachClass,
+          left_join: sb in School.Affairs.Subject,
+          on: sb.id == p.subject_id,
+          left_join: s in School.Affairs.Class,
+          on: p.class_id == s.id,
+          left_join: t in School.Affairs.Teacher,
+          on: t.id == p.teacher_id,
+          select: %{id: sb.id, t_name: t.name, s_code: sb.code, subject: sb.description}
+        )
+      )
+      |> Enum.uniq()
+      |> Enum.filter(fn x -> x.t_name != "Rehat" end)
+
+
+      end
+
+    render(conn, "generate_exam.html",class: class, all: all, exam: exam)
   end
 
   def mark(conn, params) do
     class_id = params["class_id"]
-    subject_id = params["subject"]
+    subject_id = params["subject_id"]
     exam_id = params["exam_id"]
+
 
     all =
       Repo.all(
@@ -379,11 +450,40 @@ defmodule SchoolWeb.ExamController do
     end
   end
 
+  def exam_result_class(conn,params) do
+
+        class=Repo.all(from s in School.Affairs.Class,select: %{id: s.id,name: s.name})
+
+           render(
+        conn,
+        "exam_result_class.html",
+        class: class
+      )
+    
+  end
+
+    def exam_result_standard(conn,params) do
+
+
+    level = Repo.all(from(l in School.Affairs.Level))
+
+
+    
+
+           render(
+        conn,
+        "exam_result_standard.html",
+        level: level
+      )
+    
+  end
+
   def create_mark(conn, params) do
     class_id = params["class_id"]
     mark = params["mark"]
     subject_id = params["subject_id"]
     exam_id = params["exam_id"]
+
 
     a = Affairs.get_exam_master!(exam_id)
     exam_name = a.name
@@ -405,7 +505,7 @@ defmodule SchoolWeb.ExamController do
 
     conn
     |> put_flash(:info, "Exam mark created successfully.")
-    |> redirect(to: class_path(conn, :index))
+    |> redirect(to: exam_path(conn, :mark_sheet))
   end
 
   def update_mark(conn, params) do
@@ -461,7 +561,7 @@ defmodule SchoolWeb.ExamController do
 
     conn
     |> put_flash(:info, "Exam mark updated successfully.")
-    |> redirect(to: class_path(conn, :index))
+     |> redirect(to: exam_path(conn, :mark_sheet))
   end
 
 

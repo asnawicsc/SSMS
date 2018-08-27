@@ -30,7 +30,7 @@
   <body>
     <h1>(<%=@class.name %>) Exam Mark for <%= @subject.description %></h1>
 <form method="post" action="/create_mark" class="form-horizontal">
-  <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+   <input type="hidden" name="_csrf_token" value="<%= @csrf %>">
    <input type="hidden" name="class_id" value="<%= @class.id %>">
     <input type="hidden" name="subject_id" value="<%= @subject.id %>">
        <input type="hidden" name="exam_id" value="<%= @exam_id %>">

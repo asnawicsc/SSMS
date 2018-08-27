@@ -46,7 +46,7 @@ defmodule SchoolWeb.SubjectController do
 
     def standard_setting(conn,params) do
  subject = Affairs.list_subject()
-
+ period = Affairs.list_period()
   subjects =
       Repo.all(
         from(s in School.Affairs.Subject, select: %{id: s.id, code: s.code, name: s.description})
@@ -60,7 +60,7 @@ defmodule SchoolWeb.SubjectController do
       co_grade = Affairs.list_co_grade()
        standard_subject = Affairs.list_standard_subject()
        exam_master = Affairs.list_exam_master()
-    render(conn, "standard_setting.html",exam_master: exam_master,standard_subject: standard_subject,co_grade: co_grade,grade: grade,subject: subject,subjects: subjects,semester: semester,level: level)
+    render(conn, "standard_setting.html",period: period,exam_master: exam_master,standard_subject: standard_subject,co_grade: co_grade,grade: grade,subject: subject,subjects: subjects,semester: semester,level: level)
   end
 
   def create(conn, %{"subject" => subject_params}) do

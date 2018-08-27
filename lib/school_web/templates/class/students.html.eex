@@ -1,65 +1,47 @@
 
-<h3>Students in <%= @class.name %>
-	
-<div class="btn btn-dark" aria-label="toggle_student_list">Manage students</div>
- <h6><a href="/print_students/<%=@class.id %>">Print All Student</a></h6>
-</h3>
+		<h3>Students in <%= @class.name %>
 
-<div class="row" aria-label="manage_student">
-	<div class="col-lg-6">
-		<div class="card ">
-			<div class="card-header">All Students (Unassigned)</div>
-			<div class="card-body" style="height: 500px; overflow-y: scroll;">
-				<ol class="unselected">
-				<%= for student <- @students do %>
-				<li student_id="<%= student.id %>"><%= student.name %></li>
-				<% end %>
-				</ol>
+	 <h6><a href="/print_students/<%=@class.id %>">Print All Student</a></h6>
+	</h3>
+
+	<div class="row" aria-label="manage_student">
+		<div class="col-lg-6">
+			<div class="card ">
+				<div class="card-header">All Students (Unassigned)</div>
+				<div class="card-body" style="height: 500px; overflow-y: scroll;">
+					<ol class="unselected">
+					<%= for student <- @students do %>
+					<li student_id="<%= student.id %>"><%= student.name %></li>
+					<% end %>
+					</ol>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-6">
+			<div class="card ">
+				<div class="card-header">Students in this class this semester</div>
+				<div class="card-body">
+					<ol class="selected">
+		<%= for student <- @students_in |> Enum.sort_by(fn x -> x.name end) do %>
+					<li student_id="<%= student.id %>"><%= student.name %></li>
+					<% end %>
+					</ol>
+				</div>
 			</div>
 		</div>
 	</div>
-	<div class="col-lg-6">
-		<div class="card ">
-			<div class="card-header">Students in this class this semester</div>
-			<div class="card-body">
-				<ol class="selected">
-	<%= for student <- @students_in |> Enum.sort_by(fn x -> x.name end) do %>
-				<li student_id="<%= student.id %>"><%= student.name %></li>
-				<% end %>
-				</ol>
-			</div>
-		</div>
-	</div>
-</div>
-<%= raw(@html)%>
+
 <script type="text/javascript">
-	$(document).ready(function(){
 
 
-		if (localStorage.getItem("toggle_student_list") == null) {
-			localStorage.setItem("toggle_student_list", "open")
-		}
-
-		if (localStorage.getItem("toggle_student_list") == "close") {
-			$("div[aria-label='manage_student']").hide()
-		}
-
-		$("div[aria-label='toggle_student_list']").click(function(){
-			$("div[aria-label='manage_student']").toggle("slide")
-			if (localStorage.getItem("toggle_student_list") == "close") {
-				localStorage.setItem("toggle_student_list", "open")
-			} else {
-				localStorage.setItem("toggle_student_list", "close")
-			}
-		})
-
+	
 
 		$("ol.unselected").on("click", "li", function(){
 
 			var li = $(this)
 			var student_id = $(this).attr("student_id")
 			$("ol.selected").append(li)
-			var class_id = location.pathname.split("/")[2]
+			var class_id = localStorage.getItem("class_id")
 	    $.ajax({
 	      url: "/add_to_class_semester",
 	      dataType: "json",
@@ -77,7 +59,7 @@
 			var li = $(this)
 			var student_id = $(this).attr("student_id")
 			$("ol.selected").append(li)
-			var class_id = location.pathname.split("/")[2]
+			var class_id = localStorage.getItem("class_id")
 	    $.ajax({
 	      url: "/add_to_class_semester",
 	      dataType: "json",
@@ -93,5 +75,4 @@
 		})
 
 
-	})
 </script>

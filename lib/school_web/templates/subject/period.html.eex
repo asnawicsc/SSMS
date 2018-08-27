@@ -1,0 +1,150 @@
+<div class="row">
+ <p> <h4>List Period Standard </h4>
+          <h4><div id="standard_level"></div>
+</div></h4></p>
+
+<table class="table" id="period">
+  <thead>
+    <tr>
+      <th>Class</th>
+      <th>Day</th>
+      <th>Start Time</th>
+      <th>End Time</th>
+      <th>Subject</th>
+      <th>Teacher</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+        <td></td>
+
+    
+    </tr>
+
+  </tbody>
+</table>
+
+<button type="button" rel="tooltip" title="" class="btn btn-danger btn-link btn-sm" id="" name="create_period"  data-toggle="modal" aria-label="price" data-target="#model7" data-original-title="Edit Item"><i class="material-icons">New Period</i><div class="ripple-container"></div>                 </button>
+                    </button>
+
+
+             
+
+
+
+         
+<div class="modal fade" id="model7" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document" style="width: 1000px; margin-left: 550px;">
+    <div class="modal-content" style="width: 1000px;">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">New Period</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="modal_form1">
+<% require IEx %>
+   <%subjects = School.Repo.all(from l in School.Affairs.Subject, select: %{name: l.description,code: l.code}) %>
+   <%days = School.Repo.all(from l in School.Affairs.Day, select: %{name: l.name}) %>
+   <%class = School.Repo.all(from l in School.Affairs.Class, select: %{name: l.name}) %>
+   <%teachers = School.Repo.all(from l in School.Affairs.Teacher, select: %{name: l.name, code: l.code}) %>
+    <%period = School.Repo.all(from l in School.Affairs.Teacher, select: %{name: l.name, code: l.code}) %>
+<form method="post" action="/create_period" aria-label="item_form">
+    <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+
+  <div class="form-group">
+  <label>Day :</label>
+      <select class="select" name="day">
+                                        
+          <%= for day <- days do %>
+                                                    
+                                                
+          <option value="<%= day.name %>" ><%= day.name %></option>
+                                                      
+
+          <%end %>
+                                        
+      </select>
+  </div>
+
+  <div class="form-group">
+  <label>Start Time :</label>
+     <input type="time" name="start_time" required="required"> <font color="grey"> Example: 08:00 AM</font>
+  </div>
+
+   <div class="form-group">
+  <label>End Time :</label>
+     <input type="time" name="end_time" required="required">  <font color="grey"> Example: 10:00 AM</font>
+  </div>
+
+
+  <div class="form-group">
+  <label>Class :</label>
+      <select class="select" name="class">
+                                        
+          <%= for clas <- class do %>
+                                                    
+                                                
+          <option value="<%= clas.name %>" ><%= clas.name %></option>
+                                                      
+
+          <%end %>
+                                        
+      </select>
+  </div>
+
+
+  <div class="form-group">
+  <label>Subject :</label>
+      <select class="select" name="subject" >
+                                        
+          <%= for subject <- subjects do %>
+                                                    
+                                                
+          <option value="<%= subject.code %>" >(<%= subject.code %>)<%= subject.name %></option>
+                                                      
+
+          <%end %>
+                                        
+      </select>
+  </div>
+
+
+
+  <div class="form-group">
+  <label>Teacher :</label>
+      <select class="select" name="teacher">
+                                        
+          <%= for teacher <- teachers do %>
+                                                    
+                                                
+          <option value="<%= teacher.code %>" ><%= teacher.name %></option>
+                                                      
+
+          <%end %>
+                                        
+      </select>
+  </div>
+
+  <div class="form-group">
+        <input class="btn btn-primary" name="" value="Submit" type="submit">
+  </div>
+</form>
+
+
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <input type="hidden" name="popup" value="0">
+      </div>
+    </div>
+  </div>
+</div>

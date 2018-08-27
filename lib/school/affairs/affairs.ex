@@ -3193,4 +3193,100 @@ defmodule School.Affairs do
   def change_standard_subject(%StandardSubject{} = standard_subject) do
     StandardSubject.changeset(standard_subject, %{})
   end
+
+  alias School.Affairs.SubjectTeachClass
+
+  @doc """
+  Returns the list of subject_teach_class.
+
+  ## Examples
+
+      iex> list_subject_teach_class()
+      [%SubjectTeachClass{}, ...]
+
+  """
+  def list_subject_teach_class do
+    Repo.all(SubjectTeachClass)
+  end
+
+  @doc """
+  Gets a single subject_teach_class.
+
+  Raises `Ecto.NoResultsError` if the Subject teach class does not exist.
+
+  ## Examples
+
+      iex> get_subject_teach_class!(123)
+      %SubjectTeachClass{}
+
+      iex> get_subject_teach_class!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_subject_teach_class!(id), do: Repo.get!(SubjectTeachClass, id)
+
+  @doc """
+  Creates a subject_teach_class.
+
+  ## Examples
+
+      iex> create_subject_teach_class(%{field: value})
+      {:ok, %SubjectTeachClass{}}
+
+      iex> create_subject_teach_class(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_subject_teach_class(attrs \\ %{}) do
+    %SubjectTeachClass{}
+    |> SubjectTeachClass.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a subject_teach_class.
+
+  ## Examples
+
+      iex> update_subject_teach_class(subject_teach_class, %{field: new_value})
+      {:ok, %SubjectTeachClass{}}
+
+      iex> update_subject_teach_class(subject_teach_class, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_subject_teach_class(%SubjectTeachClass{} = subject_teach_class, attrs) do
+    subject_teach_class
+    |> SubjectTeachClass.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a SubjectTeachClass.
+
+  ## Examples
+
+      iex> delete_subject_teach_class(subject_teach_class)
+      {:ok, %SubjectTeachClass{}}
+
+      iex> delete_subject_teach_class(subject_teach_class)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_subject_teach_class(%SubjectTeachClass{} = subject_teach_class) do
+    Repo.delete(subject_teach_class)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking subject_teach_class changes.
+
+  ## Examples
+
+      iex> change_subject_teach_class(subject_teach_class)
+      %Ecto.Changeset{source: %SubjectTeachClass{}}
+
+  """
+  def change_subject_teach_class(%SubjectTeachClass{} = subject_teach_class) do
+    SubjectTeachClass.changeset(subject_teach_class, %{})
+  end
 end

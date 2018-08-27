@@ -67,6 +67,11 @@
                         Grade Co-C
                       </a>
                     </li>
+                     <li class="nav-item">
+                      <a class="nav-link" data-toggle="tab" href="" id="standard_period" role="tablist">
+                        Period
+                      </a>
+                    </li>
                   </ul>
             
                 </div>
@@ -74,10 +79,10 @@
 
                   <div class="tab-content tab-space">
                     <div class="tab-pane active" id="standard_subject">
-                       <%= render("standard_subject.html", conn: @conn,standard_subject: @standard_subject) %>
+                       <%= render("standard_subject.html", conn: @conn,standard_subject: @standard_subject,semester: @semester,subjects: @subjects,level: @level) %>
                     </div>
                     <div class="tab-pane" id="subject_test">
-                        <%= render("subject_test.html", conn: @conn,exam_master: @exam_master) %>
+                        <%= render("subject_test.html", conn: @conn,exam_master: @exam_master,semester: @semester,subjects: @subjects,level: @level) %>
                     </div>
                     <div class="tab-pane" id="test">
                         
@@ -96,6 +101,9 @@
                     </div>
                      <div class="tab-pane" id="grade_co">
                     <%= render("co_grade.html", conn: @conn, co_grade: @co_grade) %>
+                    </div>
+                    <div class="tab-pane" id="standard_period">
+                    <%= render("period.html", conn: @conn,period: @period) %>
                     </div>
                   </div>
                 </div>

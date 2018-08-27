@@ -1,0 +1,64 @@
+<style type="text/css">
+  .btn.btn-link.student {
+    line-height: 0em !important;
+  }
+</style>
+
+
+<div class="row">
+  <div class="col-lg-4">
+    <div class="table-responsive">
+      
+    
+    <table class="table">
+      <thead>
+        <tr>
+        
+
+          <th>Name</th>
+        </tr>
+      </thead>
+      <tbody>
+       
+    <%= for student <- @students do %>
+        <tr>
+       
+
+
+          <td class="text-left">
+       
+       
+              <div id="<%= student.id %>" class="btn btn-link student"><%= student.name %> <%= student.chinese_name %></div>
+
+       
+          </td>
+        </tr>
+    <% end %>
+
+      </tbody>
+    </table>
+</div>
+  </div>
+  <div class="col-lg-8" aria-label="student_details">
+   <p class="lead">Click on a student name in the left panel. </p> 
+  <div class="row" style="margin-top: 10px;">
+      <div class="col-lg-12">
+        <div class="panel">
+         
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="table-responsive">
+
+
+</div>
+
+<script type="text/javascript">
+  $(window).ready(function(){
+    var target = window.location.search.substring(1).split("=")[1]
+    $("div#"+target+".student").click()
+
+  })
+</script>

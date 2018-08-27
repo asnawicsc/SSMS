@@ -1,0 +1,48 @@
+
+
+<form method="post" action="/edit_class_subject_teach" >
+    <input type="hidden" name="_csrf_token" value="<%= @csrf %>">
+
+
+ <input type="hidden" name="class_id" value="<%= @class_id %>">
+  <input type="hidden" name="standard_id" value="<%= @standard_id %>">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Subject Code</th>
+          <th>Subject Name</th>
+          <th>Subject Teacher Name</th>
+        </tr>
+      </thead>
+      <tbody>
+  
+            <%=for item <- @data do %>
+        <tr>
+          <input type="hidden" name="subject[<%= item.id %>]"   value="<%= item.subject_id %>">
+          <input type="hidden" name="id"   value="<%= item.id %>">
+            <td><input type="text"  disabled="disabled" value="<%= item.subject_code %>"></td>
+            <td><input type="text"  disabled="disabled" value="<%= item.subject_name %>"></td>
+             <td> <select class="select" name="teacher[<%= item.id %>]"  required="required" >
+              <option value="<%= item.teacher_id %>" selected="selected">(<%= item.teacher_code %>) <%= item.teacher_name %></option>
+              <%= for teacher <- @teacher do %>
+              <option value="<%= teacher.id %>">(<%= teacher.teacher_code %>) <%= teacher.teacher_name %></option>
+              <%end %></select></td>
+
+        </tr>
+
+      
+
+      <% end %>
+        
+      </tbody>
+    
+    </table>
+
+  
+  <div class="form-group">
+        <input class="btn btn-primary" name="" value="Submit" type="submit">
+  </div>
+</form>
+
+
+

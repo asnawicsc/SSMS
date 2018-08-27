@@ -2922,4 +2922,70 @@ defmodule School.AffairsTest do
       assert %Ecto.Changeset{} = Affairs.change_standard_subject(standard_subject)
     end
   end
+
+  describe "subject_teach_class" do
+    alias School.Affairs.SubjectTeachClass
+
+    @valid_attrs %{class_id: 42, standard_id: 42, subject_id: 42, teacher_id: 42}
+    @update_attrs %{class_id: 43, standard_id: 43, subject_id: 43, teacher_id: 43}
+    @invalid_attrs %{class_id: nil, standard_id: nil, subject_id: nil, teacher_id: nil}
+
+    def subject_teach_class_fixture(attrs \\ %{}) do
+      {:ok, subject_teach_class} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_subject_teach_class()
+
+      subject_teach_class
+    end
+
+    test "list_subject_teach_class/0 returns all subject_teach_class" do
+      subject_teach_class = subject_teach_class_fixture()
+      assert Affairs.list_subject_teach_class() == [subject_teach_class]
+    end
+
+    test "get_subject_teach_class!/1 returns the subject_teach_class with given id" do
+      subject_teach_class = subject_teach_class_fixture()
+      assert Affairs.get_subject_teach_class!(subject_teach_class.id) == subject_teach_class
+    end
+
+    test "create_subject_teach_class/1 with valid data creates a subject_teach_class" do
+      assert {:ok, %SubjectTeachClass{} = subject_teach_class} = Affairs.create_subject_teach_class(@valid_attrs)
+      assert subject_teach_class.class_id == 42
+      assert subject_teach_class.standard_id == 42
+      assert subject_teach_class.subject_id == 42
+      assert subject_teach_class.teacher_id == 42
+    end
+
+    test "create_subject_teach_class/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_subject_teach_class(@invalid_attrs)
+    end
+
+    test "update_subject_teach_class/2 with valid data updates the subject_teach_class" do
+      subject_teach_class = subject_teach_class_fixture()
+      assert {:ok, subject_teach_class} = Affairs.update_subject_teach_class(subject_teach_class, @update_attrs)
+      assert %SubjectTeachClass{} = subject_teach_class
+      assert subject_teach_class.class_id == 43
+      assert subject_teach_class.standard_id == 43
+      assert subject_teach_class.subject_id == 43
+      assert subject_teach_class.teacher_id == 43
+    end
+
+    test "update_subject_teach_class/2 with invalid data returns error changeset" do
+      subject_teach_class = subject_teach_class_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_subject_teach_class(subject_teach_class, @invalid_attrs)
+      assert subject_teach_class == Affairs.get_subject_teach_class!(subject_teach_class.id)
+    end
+
+    test "delete_subject_teach_class/1 deletes the subject_teach_class" do
+      subject_teach_class = subject_teach_class_fixture()
+      assert {:ok, %SubjectTeachClass{}} = Affairs.delete_subject_teach_class(subject_teach_class)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_subject_teach_class!(subject_teach_class.id) end
+    end
+
+    test "change_subject_teach_class/1 returns a subject_teach_class changeset" do
+      subject_teach_class = subject_teach_class_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_subject_teach_class(subject_teach_class)
+    end
+  end
 end

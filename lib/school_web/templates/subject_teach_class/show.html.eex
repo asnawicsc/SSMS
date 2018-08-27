@@ -1,0 +1,28 @@
+<h2>Show Subject teach class</h2>
+
+<ul>
+
+  <li>
+    <strong>Standard:</strong>
+    <%= @subject_teach_class.standard_id %>
+  </li>
+
+  <li>
+    <strong>Subject:</strong>
+    <%= @subject_teach_class.subject_id %>
+  </li>
+
+  <li>
+    <strong>Teacher:</strong>
+    <%= @subject_teach_class.teacher_id %>
+  </li>
+
+  <li>
+    <strong>Class:</strong>
+    <%= @subject_teach_class.class_id %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: subject_teach_class_path(@conn, :edit, @subject_teach_class) %></span>
+<span><%= link "Back", to: subject_teach_class_path(@conn, :index) %></span>

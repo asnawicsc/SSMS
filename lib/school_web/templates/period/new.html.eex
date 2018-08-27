@@ -2,4 +2,4 @@
 
 <%= render "form.html", Map.put(assigns, :action, period_path(@conn, :create)) %>
 
-<span><%= link "Back", to: period_path(@conn, :index) %></span>
+<span><%= link "Back", to: subject_path(@conn, :standard_setting) %></span>

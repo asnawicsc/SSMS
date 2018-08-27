@@ -1,0 +1,62 @@
+
+   <%subjects = School.Repo.all(from s in School.Affairs.SubjectTeachClass,
+   left_join: l in School.Affairs.Teacher, on: l.id==s.teacher_id,
+   left_join: r in School.Affairs.Subject, on: r.id==s.subject_id,
+   where: s.class_id==^@class_id,
+    select: %{id: s.id,name: r.description,code: r.code}) %>
+
+   <%days = School.Repo.all(from l in School.Affairs.Day, select: %{name: l.name}) %>
+ <script type="text/javascript">
+    window.csrf = "<%= Phoenix.Controller.get_csrf_token %>"
+</script>
+<form method="post" action="/create_class_period" aria-label="item_form">
+    <input type="hidden" name="_csrf_token" value="<%= @csrf %>">
+  <input type="hidden" name="class_id" value="<%= @class_id %>">
+  <div class="form-group">
+  <label>Day :</label>
+      <select class="select" name="day">
+                                        
+          <%= for day <- days do %>
+                                                    
+                                                
+          <option value="<%= day.name %>" ><%= day.name %></option>
+                                                      
+
+          <%end %>
+                                        
+      </select>
+  </div>
+
+  <div class="form-group">
+  <label>Start Time :</label>
+     <input type="time" name="start_time" required="required"> <font color="grey"> Example: 08:00 AM</font>
+  </div>
+
+   <div class="form-group">
+  <label>End Time :</label>
+     <input type="time" name="end_time" required="required">  <font color="grey"> Example: 10:00 AM</font>
+  </div>
+
+
+  <div class="form-group">
+  <label>Subject :</label>
+      <select class="select" name="subject" >
+                                        
+          <%= for subject <- subjects do %>
+                                                    
+                                                
+          <option value="<%= subject.id %>" >(<%= subject.code %>)<%= subject.name %></option>
+                                                      
+
+          <%end %>
+                                        
+      </select>
+  </div>
+
+
+
+  <div class="form-group">
+        <input class="btn btn-primary" name="" value="Submit" type="submit">
+  </div>
+</form>
+
