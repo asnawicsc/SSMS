@@ -1,0 +1,47 @@
+<%= form_for @changeset, @action, fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= label f, :below_satisfy, class: "control-label" %>
+    <%= number_input f, :below_satisfy, class: "form-control" %>
+    <%= error_tag f, :below_satisfy %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :member_reading_quantity, class: "control-label" %>
+    <%= number_input f, :member_reading_quantity, class: "form-control" %>
+    <%= error_tag f, :member_reading_quantity %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :page, class: "control-label" %>
+    <%= number_input f, :page, class: "form-control" %>
+    <%= error_tag f, :page %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :import_from_library, class: "control-label" %>
+    <%= number_input f, :import_from_library, class: "form-control" %>
+    <%= error_tag f, :import_from_library %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :count_page, class: "control-label" %>
+    <%= number_input f, :count_page, class: "form-control" %>
+    <%= error_tag f, :count_page %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :standard_id, class: "control-label" %>
+    <%= number_input f, :standard_id, class: "form-control" %>
+    <%= error_tag f, :standard_id %>
+  </div>
+
+  <div class="form-group">
+    <%= submit "Submit", class: "btn btn-primary" %>
+  </div>
+<% end %>

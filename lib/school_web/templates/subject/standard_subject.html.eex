@@ -1,0 +1,36 @@
+<div class="row">
+ <p> <h4>List Subject Standard</h4>
+          <h4><div id="standard_level"></div>
+</div></h4></p>
+<table class="table" id="standard_subject">
+  <thead>
+    <tr>
+      <th>Year</th>
+      <th>Semester</th>
+      <th>Standard</th>
+      <th>Subject</th>
+
+    </tr>
+  </thead>
+  <tbody>
+
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+
+    </tr>
+
+  </tbody>
+</table>
+
+<span><%= link "New Standard subject", to: subject_path(@conn, :new_standard_subject) %></span>
+
+ 
+
+<script type="text/javascript">
+  
+     var standard_level=localStorage.getItem("standard_level")
+
+  channel.push("standard_subject", {user_id: window.currentUser,standard_level: standard_level})
+</script>

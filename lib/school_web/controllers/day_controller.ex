@@ -9,6 +9,24 @@ defmodule SchoolWeb.DayController do
     render(conn, "index.html", day: day)
   end
 
+  def default_day(conn,params) do
+
+    Repo.delete_all(Day)
+    Affairs.create_day(%{name: "Sunday", number: 1})
+     Affairs.create_day(%{name: "Monday", number: 2})
+      Affairs.create_day(%{name: "Tuesday", number: 3})
+       Affairs.create_day(%{name: "Wednesday", number: 4})
+        Affairs.create_day(%{name: "Thursday", number: 5})
+         Affairs.create_day(%{name: "Friday", number: 6})
+          Affairs.create_day(%{name: "Saturday", number: 7})
+
+           day = Affairs.list_day()
+  conn
+        |> put_flash(:info, "Day update successfully.")
+        |> redirect(to: day_path(conn, :indexs, day))
+    
+  end
+
   def new(conn, _params) do
     changeset = Affairs.change_day(%Day{})
     render(conn, "new.html", changeset: changeset)

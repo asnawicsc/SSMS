@@ -1812,4 +1812,1114 @@ defmodule School.AffairsTest do
       assert %Ecto.Changeset{} = Affairs.change_time_period(time_period)
     end
   end
+
+  describe "head_count" do
+    alias School.Affairs.HeadCount
+
+    @valid_attrs %{class_id: 42, student_id: 42, subject_id: 42, targer_mark: 42}
+    @update_attrs %{class_id: 43, student_id: 43, subject_id: 43, targer_mark: 43}
+    @invalid_attrs %{class_id: nil, student_id: nil, subject_id: nil, targer_mark: nil}
+
+    def head_count_fixture(attrs \\ %{}) do
+      {:ok, head_count} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_head_count()
+
+      head_count
+    end
+
+    test "list_head_count/0 returns all head_count" do
+      head_count = head_count_fixture()
+      assert Affairs.list_head_count() == [head_count]
+    end
+
+    test "get_head_count!/1 returns the head_count with given id" do
+      head_count = head_count_fixture()
+      assert Affairs.get_head_count!(head_count.id) == head_count
+    end
+
+    test "create_head_count/1 with valid data creates a head_count" do
+      assert {:ok, %HeadCount{} = head_count} = Affairs.create_head_count(@valid_attrs)
+      assert head_count.class_id == 42
+      assert head_count.student_id == 42
+      assert head_count.subject_id == 42
+      assert head_count.targer_mark == 42
+    end
+
+    test "create_head_count/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_head_count(@invalid_attrs)
+    end
+
+    test "update_head_count/2 with valid data updates the head_count" do
+      head_count = head_count_fixture()
+      assert {:ok, head_count} = Affairs.update_head_count(head_count, @update_attrs)
+      assert %HeadCount{} = head_count
+      assert head_count.class_id == 43
+      assert head_count.student_id == 43
+      assert head_count.subject_id == 43
+      assert head_count.targer_mark == 43
+    end
+
+    test "update_head_count/2 with invalid data returns error changeset" do
+      head_count = head_count_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_head_count(head_count, @invalid_attrs)
+      assert head_count == Affairs.get_head_count!(head_count.id)
+    end
+
+    test "delete_head_count/1 deletes the head_count" do
+      head_count = head_count_fixture()
+      assert {:ok, %HeadCount{}} = Affairs.delete_head_count(head_count)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_head_count!(head_count.id) end
+    end
+
+    test "change_head_count/1 returns a head_count changeset" do
+      head_count = head_count_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_head_count(head_count)
+    end
+  end
+
+  describe "head_counts" do
+    alias School.Affairs.HeadCount
+
+    @valid_attrs %{class_id: 42, student_id: 42, subject_id: 42, targer_mark: 42}
+    @update_attrs %{class_id: 43, student_id: 43, subject_id: 43, targer_mark: 43}
+    @invalid_attrs %{class_id: nil, student_id: nil, subject_id: nil, targer_mark: nil}
+
+    def head_count_fixture(attrs \\ %{}) do
+      {:ok, head_count} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_head_count()
+
+      head_count
+    end
+
+    test "list_head_counts/0 returns all head_counts" do
+      head_count = head_count_fixture()
+      assert Affairs.list_head_counts() == [head_count]
+    end
+
+    test "get_head_count!/1 returns the head_count with given id" do
+      head_count = head_count_fixture()
+      assert Affairs.get_head_count!(head_count.id) == head_count
+    end
+
+    test "create_head_count/1 with valid data creates a head_count" do
+      assert {:ok, %HeadCount{} = head_count} = Affairs.create_head_count(@valid_attrs)
+      assert head_count.class_id == 42
+      assert head_count.student_id == 42
+      assert head_count.subject_id == 42
+      assert head_count.targer_mark == 42
+    end
+
+    test "create_head_count/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_head_count(@invalid_attrs)
+    end
+
+    test "update_head_count/2 with valid data updates the head_count" do
+      head_count = head_count_fixture()
+      assert {:ok, head_count} = Affairs.update_head_count(head_count, @update_attrs)
+      assert %HeadCount{} = head_count
+      assert head_count.class_id == 43
+      assert head_count.student_id == 43
+      assert head_count.subject_id == 43
+      assert head_count.targer_mark == 43
+    end
+
+    test "update_head_count/2 with invalid data returns error changeset" do
+      head_count = head_count_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_head_count(head_count, @invalid_attrs)
+      assert head_count == Affairs.get_head_count!(head_count.id)
+    end
+
+    test "delete_head_count/1 deletes the head_count" do
+      head_count = head_count_fixture()
+      assert {:ok, %HeadCount{}} = Affairs.delete_head_count(head_count)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_head_count!(head_count.id) end
+    end
+
+    test "change_head_count/1 returns a head_count changeset" do
+      head_count = head_count_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_head_count(head_count)
+    end
+  end
+
+  describe "teacher_period" do
+    alias School.Affairs.TeacherPeriod
+
+    @valid_attrs %{class_id: 42, day: "some day", end_time: ~T[14:00:00.000000], start_time: ~T[14:00:00.000000], subject_id: 42, teacher_id: 42}
+    @update_attrs %{class_id: 43, day: "some updated day", end_time: ~T[15:01:01.000000], start_time: ~T[15:01:01.000000], subject_id: 43, teacher_id: 43}
+    @invalid_attrs %{class_id: nil, day: nil, end_time: nil, start_time: nil, subject_id: nil, teacher_id: nil}
+
+    def teacher_period_fixture(attrs \\ %{}) do
+      {:ok, teacher_period} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_teacher_period()
+
+      teacher_period
+    end
+
+    test "list_teacher_period/0 returns all teacher_period" do
+      teacher_period = teacher_period_fixture()
+      assert Affairs.list_teacher_period() == [teacher_period]
+    end
+
+    test "get_teacher_period!/1 returns the teacher_period with given id" do
+      teacher_period = teacher_period_fixture()
+      assert Affairs.get_teacher_period!(teacher_period.id) == teacher_period
+    end
+
+    test "create_teacher_period/1 with valid data creates a teacher_period" do
+      assert {:ok, %TeacherPeriod{} = teacher_period} = Affairs.create_teacher_period(@valid_attrs)
+      assert teacher_period.class_id == 42
+      assert teacher_period.day == "some day"
+      assert teacher_period.end_time == ~T[14:00:00.000000]
+      assert teacher_period.start_time == ~T[14:00:00.000000]
+      assert teacher_period.subject_id == 42
+      assert teacher_period.teacher_id == 42
+    end
+
+    test "create_teacher_period/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_teacher_period(@invalid_attrs)
+    end
+
+    test "update_teacher_period/2 with valid data updates the teacher_period" do
+      teacher_period = teacher_period_fixture()
+      assert {:ok, teacher_period} = Affairs.update_teacher_period(teacher_period, @update_attrs)
+      assert %TeacherPeriod{} = teacher_period
+      assert teacher_period.class_id == 43
+      assert teacher_period.day == "some updated day"
+      assert teacher_period.end_time == ~T[15:01:01.000000]
+      assert teacher_period.start_time == ~T[15:01:01.000000]
+      assert teacher_period.subject_id == 43
+      assert teacher_period.teacher_id == 43
+    end
+
+    test "update_teacher_period/2 with invalid data returns error changeset" do
+      teacher_period = teacher_period_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_teacher_period(teacher_period, @invalid_attrs)
+      assert teacher_period == Affairs.get_teacher_period!(teacher_period.id)
+    end
+
+    test "delete_teacher_period/1 deletes the teacher_period" do
+      teacher_period = teacher_period_fixture()
+      assert {:ok, %TeacherPeriod{}} = Affairs.delete_teacher_period(teacher_period)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_teacher_period!(teacher_period.id) end
+    end
+
+    test "change_teacher_period/1 returns a teacher_period changeset" do
+      teacher_period = teacher_period_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_teacher_period(teacher_period)
+    end
+  end
+
+  describe "co_grade" do
+    alias School.Affairs.CoGrade
+
+    @valid_attrs %{gpa: "120.5", max: 42, min: 42, name: "some name"}
+    @update_attrs %{gpa: "456.7", max: 43, min: 43, name: "some updated name"}
+    @invalid_attrs %{gpa: nil, max: nil, min: nil, name: nil}
+
+    def co_grade_fixture(attrs \\ %{}) do
+      {:ok, co_grade} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_co_grade()
+
+      co_grade
+    end
+
+    test "list_co_grade/0 returns all co_grade" do
+      co_grade = co_grade_fixture()
+      assert Affairs.list_co_grade() == [co_grade]
+    end
+
+    test "get_co_grade!/1 returns the co_grade with given id" do
+      co_grade = co_grade_fixture()
+      assert Affairs.get_co_grade!(co_grade.id) == co_grade
+    end
+
+    test "create_co_grade/1 with valid data creates a co_grade" do
+      assert {:ok, %CoGrade{} = co_grade} = Affairs.create_co_grade(@valid_attrs)
+      assert co_grade.gpa == Decimal.new("120.5")
+      assert co_grade.max == 42
+      assert co_grade.min == 42
+      assert co_grade.name == "some name"
+    end
+
+    test "create_co_grade/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_co_grade(@invalid_attrs)
+    end
+
+    test "update_co_grade/2 with valid data updates the co_grade" do
+      co_grade = co_grade_fixture()
+      assert {:ok, co_grade} = Affairs.update_co_grade(co_grade, @update_attrs)
+      assert %CoGrade{} = co_grade
+      assert co_grade.gpa == Decimal.new("456.7")
+      assert co_grade.max == 43
+      assert co_grade.min == 43
+      assert co_grade.name == "some updated name"
+    end
+
+    test "update_co_grade/2 with invalid data returns error changeset" do
+      co_grade = co_grade_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_co_grade(co_grade, @invalid_attrs)
+      assert co_grade == Affairs.get_co_grade!(co_grade.id)
+    end
+
+    test "delete_co_grade/1 deletes the co_grade" do
+      co_grade = co_grade_fixture()
+      assert {:ok, %CoGrade{}} = Affairs.delete_co_grade(co_grade)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_co_grade!(co_grade.id) end
+    end
+
+    test "change_co_grade/1 returns a co_grade changeset" do
+      co_grade = co_grade_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_co_grade(co_grade)
+    end
+  end
+
+  describe "school_job" do
+    alias School.Affairs.ScSchoolJob
+
+    @valid_attrs %{cdesc: "some cdesc", code: "some code", description: "some description"}
+    @update_attrs %{cdesc: "some updated cdesc", code: "some updated code", description: "some updated description"}
+    @invalid_attrs %{cdesc: nil, code: nil, description: nil}
+
+    def sc_school_job_fixture(attrs \\ %{}) do
+      {:ok, sc_school_job} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_sc_school_job()
+
+      sc_school_job
+    end
+
+    test "list_school_job/0 returns all school_job" do
+      sc_school_job = sc_school_job_fixture()
+      assert Affairs.list_school_job() == [sc_school_job]
+    end
+
+    test "get_sc_school_job!/1 returns the sc_school_job with given id" do
+      sc_school_job = sc_school_job_fixture()
+      assert Affairs.get_sc_school_job!(sc_school_job.id) == sc_school_job
+    end
+
+    test "create_sc_school_job/1 with valid data creates a sc_school_job" do
+      assert {:ok, %ScSchoolJob{} = sc_school_job} = Affairs.create_sc_school_job(@valid_attrs)
+      assert sc_school_job.cdesc == "some cdesc"
+      assert sc_school_job.code == "some code"
+      assert sc_school_job.description == "some description"
+    end
+
+    test "create_sc_school_job/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_sc_school_job(@invalid_attrs)
+    end
+
+    test "update_sc_school_job/2 with valid data updates the sc_school_job" do
+      sc_school_job = sc_school_job_fixture()
+      assert {:ok, sc_school_job} = Affairs.update_sc_school_job(sc_school_job, @update_attrs)
+      assert %ScSchoolJob{} = sc_school_job
+      assert sc_school_job.cdesc == "some updated cdesc"
+      assert sc_school_job.code == "some updated code"
+      assert sc_school_job.description == "some updated description"
+    end
+
+    test "update_sc_school_job/2 with invalid data returns error changeset" do
+      sc_school_job = sc_school_job_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_sc_school_job(sc_school_job, @invalid_attrs)
+      assert sc_school_job == Affairs.get_sc_school_job!(sc_school_job.id)
+    end
+
+    test "delete_sc_school_job/1 deletes the sc_school_job" do
+      sc_school_job = sc_school_job_fixture()
+      assert {:ok, %ScSchoolJob{}} = Affairs.delete_sc_school_job(sc_school_job)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_sc_school_job!(sc_school_job.id) end
+    end
+
+    test "change_sc_school_job/1 returns a sc_school_job changeset" do
+      sc_school_job = sc_school_job_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_sc_school_job(sc_school_job)
+    end
+  end
+
+  describe "school_job" do
+    alias School.Affairs.SchoolJob
+
+    @valid_attrs %{cdesc: "some cdesc", code: "some code", description: "some description"}
+    @update_attrs %{cdesc: "some updated cdesc", code: "some updated code", description: "some updated description"}
+    @invalid_attrs %{cdesc: nil, code: nil, description: nil}
+
+    def school_job_fixture(attrs \\ %{}) do
+      {:ok, school_job} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_school_job()
+
+      school_job
+    end
+
+    test "list_school_job/0 returns all school_job" do
+      school_job = school_job_fixture()
+      assert Affairs.list_school_job() == [school_job]
+    end
+
+    test "get_school_job!/1 returns the school_job with given id" do
+      school_job = school_job_fixture()
+      assert Affairs.get_school_job!(school_job.id) == school_job
+    end
+
+    test "create_school_job/1 with valid data creates a school_job" do
+      assert {:ok, %SchoolJob{} = school_job} = Affairs.create_school_job(@valid_attrs)
+      assert school_job.cdesc == "some cdesc"
+      assert school_job.code == "some code"
+      assert school_job.description == "some description"
+    end
+
+    test "create_school_job/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_school_job(@invalid_attrs)
+    end
+
+    test "update_school_job/2 with valid data updates the school_job" do
+      school_job = school_job_fixture()
+      assert {:ok, school_job} = Affairs.update_school_job(school_job, @update_attrs)
+      assert %SchoolJob{} = school_job
+      assert school_job.cdesc == "some updated cdesc"
+      assert school_job.code == "some updated code"
+      assert school_job.description == "some updated description"
+    end
+
+    test "update_school_job/2 with invalid data returns error changeset" do
+      school_job = school_job_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_school_job(school_job, @invalid_attrs)
+      assert school_job == Affairs.get_school_job!(school_job.id)
+    end
+
+    test "delete_school_job/1 deletes the school_job" do
+      school_job = school_job_fixture()
+      assert {:ok, %SchoolJob{}} = Affairs.delete_school_job(school_job)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_school_job!(school_job.id) end
+    end
+
+    test "change_school_job/1 returns a school_job changeset" do
+      school_job = school_job_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_school_job(school_job)
+    end
+  end
+
+  describe "cocurriculum_job" do
+    alias School.Affairs.CoCurriculumJob
+
+    @valid_attrs %{cdesc: "some cdesc", code: "some code", description: "some description"}
+    @update_attrs %{cdesc: "some updated cdesc", code: "some updated code", description: "some updated description"}
+    @invalid_attrs %{cdesc: nil, code: nil, description: nil}
+
+    def co_curriculum_job_fixture(attrs \\ %{}) do
+      {:ok, co_curriculum_job} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_co_curriculum_job()
+
+      co_curriculum_job
+    end
+
+    test "list_cocurriculum_job/0 returns all cocurriculum_job" do
+      co_curriculum_job = co_curriculum_job_fixture()
+      assert Affairs.list_cocurriculum_job() == [co_curriculum_job]
+    end
+
+    test "get_co_curriculum_job!/1 returns the co_curriculum_job with given id" do
+      co_curriculum_job = co_curriculum_job_fixture()
+      assert Affairs.get_co_curriculum_job!(co_curriculum_job.id) == co_curriculum_job
+    end
+
+    test "create_co_curriculum_job/1 with valid data creates a co_curriculum_job" do
+      assert {:ok, %CoCurriculumJob{} = co_curriculum_job} = Affairs.create_co_curriculum_job(@valid_attrs)
+      assert co_curriculum_job.cdesc == "some cdesc"
+      assert co_curriculum_job.code == "some code"
+      assert co_curriculum_job.description == "some description"
+    end
+
+    test "create_co_curriculum_job/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_co_curriculum_job(@invalid_attrs)
+    end
+
+    test "update_co_curriculum_job/2 with valid data updates the co_curriculum_job" do
+      co_curriculum_job = co_curriculum_job_fixture()
+      assert {:ok, co_curriculum_job} = Affairs.update_co_curriculum_job(co_curriculum_job, @update_attrs)
+      assert %CoCurriculumJob{} = co_curriculum_job
+      assert co_curriculum_job.cdesc == "some updated cdesc"
+      assert co_curriculum_job.code == "some updated code"
+      assert co_curriculum_job.description == "some updated description"
+    end
+
+    test "update_co_curriculum_job/2 with invalid data returns error changeset" do
+      co_curriculum_job = co_curriculum_job_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_co_curriculum_job(co_curriculum_job, @invalid_attrs)
+      assert co_curriculum_job == Affairs.get_co_curriculum_job!(co_curriculum_job.id)
+    end
+
+    test "delete_co_curriculum_job/1 deletes the co_curriculum_job" do
+      co_curriculum_job = co_curriculum_job_fixture()
+      assert {:ok, %CoCurriculumJob{}} = Affairs.delete_co_curriculum_job(co_curriculum_job)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_co_curriculum_job!(co_curriculum_job.id) end
+    end
+
+    test "change_co_curriculum_job/1 returns a co_curriculum_job changeset" do
+      co_curriculum_job = co_curriculum_job_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_co_curriculum_job(co_curriculum_job)
+    end
+  end
+
+  describe "hem_job" do
+    alias School.Affairs.HemJob
+
+    @valid_attrs %{cdesc: "some cdesc", code: "some code", description: "some description"}
+    @update_attrs %{cdesc: "some updated cdesc", code: "some updated code", description: "some updated description"}
+    @invalid_attrs %{cdesc: nil, code: nil, description: nil}
+
+    def hem_job_fixture(attrs \\ %{}) do
+      {:ok, hem_job} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_hem_job()
+
+      hem_job
+    end
+
+    test "list_hem_job/0 returns all hem_job" do
+      hem_job = hem_job_fixture()
+      assert Affairs.list_hem_job() == [hem_job]
+    end
+
+    test "get_hem_job!/1 returns the hem_job with given id" do
+      hem_job = hem_job_fixture()
+      assert Affairs.get_hem_job!(hem_job.id) == hem_job
+    end
+
+    test "create_hem_job/1 with valid data creates a hem_job" do
+      assert {:ok, %HemJob{} = hem_job} = Affairs.create_hem_job(@valid_attrs)
+      assert hem_job.cdesc == "some cdesc"
+      assert hem_job.code == "some code"
+      assert hem_job.description == "some description"
+    end
+
+    test "create_hem_job/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_hem_job(@invalid_attrs)
+    end
+
+    test "update_hem_job/2 with valid data updates the hem_job" do
+      hem_job = hem_job_fixture()
+      assert {:ok, hem_job} = Affairs.update_hem_job(hem_job, @update_attrs)
+      assert %HemJob{} = hem_job
+      assert hem_job.cdesc == "some updated cdesc"
+      assert hem_job.code == "some updated code"
+      assert hem_job.description == "some updated description"
+    end
+
+    test "update_hem_job/2 with invalid data returns error changeset" do
+      hem_job = hem_job_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_hem_job(hem_job, @invalid_attrs)
+      assert hem_job == Affairs.get_hem_job!(hem_job.id)
+    end
+
+    test "delete_hem_job/1 deletes the hem_job" do
+      hem_job = hem_job_fixture()
+      assert {:ok, %HemJob{}} = Affairs.delete_hem_job(hem_job)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_hem_job!(hem_job.id) end
+    end
+
+    test "change_hem_job/1 returns a hem_job changeset" do
+      hem_job = hem_job_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_hem_job(hem_job)
+    end
+  end
+
+  describe "absent_reason" do
+    alias School.Affairs.AbsentReason
+
+    @valid_attrs %{code: "some code", description: "some description", type: "some type"}
+    @update_attrs %{code: "some updated code", description: "some updated description", type: "some updated type"}
+    @invalid_attrs %{code: nil, description: nil, type: nil}
+
+    def absent_reason_fixture(attrs \\ %{}) do
+      {:ok, absent_reason} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_absent_reason()
+
+      absent_reason
+    end
+
+    test "list_absent_reason/0 returns all absent_reason" do
+      absent_reason = absent_reason_fixture()
+      assert Affairs.list_absent_reason() == [absent_reason]
+    end
+
+    test "get_absent_reason!/1 returns the absent_reason with given id" do
+      absent_reason = absent_reason_fixture()
+      assert Affairs.get_absent_reason!(absent_reason.id) == absent_reason
+    end
+
+    test "create_absent_reason/1 with valid data creates a absent_reason" do
+      assert {:ok, %AbsentReason{} = absent_reason} = Affairs.create_absent_reason(@valid_attrs)
+      assert absent_reason.code == "some code"
+      assert absent_reason.description == "some description"
+      assert absent_reason.type == "some type"
+    end
+
+    test "create_absent_reason/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_absent_reason(@invalid_attrs)
+    end
+
+    test "update_absent_reason/2 with valid data updates the absent_reason" do
+      absent_reason = absent_reason_fixture()
+      assert {:ok, absent_reason} = Affairs.update_absent_reason(absent_reason, @update_attrs)
+      assert %AbsentReason{} = absent_reason
+      assert absent_reason.code == "some updated code"
+      assert absent_reason.description == "some updated description"
+      assert absent_reason.type == "some updated type"
+    end
+
+    test "update_absent_reason/2 with invalid data returns error changeset" do
+      absent_reason = absent_reason_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_absent_reason(absent_reason, @invalid_attrs)
+      assert absent_reason == Affairs.get_absent_reason!(absent_reason.id)
+    end
+
+    test "delete_absent_reason/1 deletes the absent_reason" do
+      absent_reason = absent_reason_fixture()
+      assert {:ok, %AbsentReason{}} = Affairs.delete_absent_reason(absent_reason)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_absent_reason!(absent_reason.id) end
+    end
+
+    test "change_absent_reason/1 returns a absent_reason changeset" do
+      absent_reason = absent_reason_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_absent_reason(absent_reason)
+    end
+  end
+
+  describe "teacher_school_job" do
+    alias School.Affairs.TeacherSchoolJob
+
+    @valid_attrs %{school_job_id: 42, semester_id: 42, teacher_id: 42}
+    @update_attrs %{school_job_id: 43, semester_id: 43, teacher_id: 43}
+    @invalid_attrs %{school_job_id: nil, semester_id: nil, teacher_id: nil}
+
+    def teacher_school_job_fixture(attrs \\ %{}) do
+      {:ok, teacher_school_job} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_teacher_school_job()
+
+      teacher_school_job
+    end
+
+    test "list_teacher_school_job/0 returns all teacher_school_job" do
+      teacher_school_job = teacher_school_job_fixture()
+      assert Affairs.list_teacher_school_job() == [teacher_school_job]
+    end
+
+    test "get_teacher_school_job!/1 returns the teacher_school_job with given id" do
+      teacher_school_job = teacher_school_job_fixture()
+      assert Affairs.get_teacher_school_job!(teacher_school_job.id) == teacher_school_job
+    end
+
+    test "create_teacher_school_job/1 with valid data creates a teacher_school_job" do
+      assert {:ok, %TeacherSchoolJob{} = teacher_school_job} = Affairs.create_teacher_school_job(@valid_attrs)
+      assert teacher_school_job.school_job_id == 42
+      assert teacher_school_job.semester_id == 42
+      assert teacher_school_job.teacher_id == 42
+    end
+
+    test "create_teacher_school_job/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_teacher_school_job(@invalid_attrs)
+    end
+
+    test "update_teacher_school_job/2 with valid data updates the teacher_school_job" do
+      teacher_school_job = teacher_school_job_fixture()
+      assert {:ok, teacher_school_job} = Affairs.update_teacher_school_job(teacher_school_job, @update_attrs)
+      assert %TeacherSchoolJob{} = teacher_school_job
+      assert teacher_school_job.school_job_id == 43
+      assert teacher_school_job.semester_id == 43
+      assert teacher_school_job.teacher_id == 43
+    end
+
+    test "update_teacher_school_job/2 with invalid data returns error changeset" do
+      teacher_school_job = teacher_school_job_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_teacher_school_job(teacher_school_job, @invalid_attrs)
+      assert teacher_school_job == Affairs.get_teacher_school_job!(teacher_school_job.id)
+    end
+
+    test "delete_teacher_school_job/1 deletes the teacher_school_job" do
+      teacher_school_job = teacher_school_job_fixture()
+      assert {:ok, %TeacherSchoolJob{}} = Affairs.delete_teacher_school_job(teacher_school_job)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_teacher_school_job!(teacher_school_job.id) end
+    end
+
+    test "change_teacher_school_job/1 returns a teacher_school_job changeset" do
+      teacher_school_job = teacher_school_job_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_teacher_school_job(teacher_school_job)
+    end
+  end
+
+  describe "teacher_co_curriculum_job" do
+    alias School.Affairs.TeacherCoCurriculumJob
+
+    @valid_attrs %{co_curriculum_job_id: 42, semester_id: 42, teacher_id: 42}
+    @update_attrs %{co_curriculum_job_id: 43, semester_id: 43, teacher_id: 43}
+    @invalid_attrs %{co_curriculum_job_id: nil, semester_id: nil, teacher_id: nil}
+
+    def teacher_co_curriculum_job_fixture(attrs \\ %{}) do
+      {:ok, teacher_co_curriculum_job} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_teacher_co_curriculum_job()
+
+      teacher_co_curriculum_job
+    end
+
+    test "list_teacher_co_curriculum_job/0 returns all teacher_co_curriculum_job" do
+      teacher_co_curriculum_job = teacher_co_curriculum_job_fixture()
+      assert Affairs.list_teacher_co_curriculum_job() == [teacher_co_curriculum_job]
+    end
+
+    test "get_teacher_co_curriculum_job!/1 returns the teacher_co_curriculum_job with given id" do
+      teacher_co_curriculum_job = teacher_co_curriculum_job_fixture()
+      assert Affairs.get_teacher_co_curriculum_job!(teacher_co_curriculum_job.id) == teacher_co_curriculum_job
+    end
+
+    test "create_teacher_co_curriculum_job/1 with valid data creates a teacher_co_curriculum_job" do
+      assert {:ok, %TeacherCoCurriculumJob{} = teacher_co_curriculum_job} = Affairs.create_teacher_co_curriculum_job(@valid_attrs)
+      assert teacher_co_curriculum_job.co_curriculum_job_id == 42
+      assert teacher_co_curriculum_job.semester_id == 42
+      assert teacher_co_curriculum_job.teacher_id == 42
+    end
+
+    test "create_teacher_co_curriculum_job/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_teacher_co_curriculum_job(@invalid_attrs)
+    end
+
+    test "update_teacher_co_curriculum_job/2 with valid data updates the teacher_co_curriculum_job" do
+      teacher_co_curriculum_job = teacher_co_curriculum_job_fixture()
+      assert {:ok, teacher_co_curriculum_job} = Affairs.update_teacher_co_curriculum_job(teacher_co_curriculum_job, @update_attrs)
+      assert %TeacherCoCurriculumJob{} = teacher_co_curriculum_job
+      assert teacher_co_curriculum_job.co_curriculum_job_id == 43
+      assert teacher_co_curriculum_job.semester_id == 43
+      assert teacher_co_curriculum_job.teacher_id == 43
+    end
+
+    test "update_teacher_co_curriculum_job/2 with invalid data returns error changeset" do
+      teacher_co_curriculum_job = teacher_co_curriculum_job_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_teacher_co_curriculum_job(teacher_co_curriculum_job, @invalid_attrs)
+      assert teacher_co_curriculum_job == Affairs.get_teacher_co_curriculum_job!(teacher_co_curriculum_job.id)
+    end
+
+    test "delete_teacher_co_curriculum_job/1 deletes the teacher_co_curriculum_job" do
+      teacher_co_curriculum_job = teacher_co_curriculum_job_fixture()
+      assert {:ok, %TeacherCoCurriculumJob{}} = Affairs.delete_teacher_co_curriculum_job(teacher_co_curriculum_job)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_teacher_co_curriculum_job!(teacher_co_curriculum_job.id) end
+    end
+
+    test "change_teacher_co_curriculum_job/1 returns a teacher_co_curriculum_job changeset" do
+      teacher_co_curriculum_job = teacher_co_curriculum_job_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_teacher_co_curriculum_job(teacher_co_curriculum_job)
+    end
+  end
+
+  describe "teacher_hem_job" do
+    alias School.Affairs.TeacherHemJob
+
+    @valid_attrs %{hem_job_id: 42, semester_id: 42, teacher_id: 42}
+    @update_attrs %{hem_job_id: 43, semester_id: 43, teacher_id: 43}
+    @invalid_attrs %{hem_job_id: nil, semester_id: nil, teacher_id: nil}
+
+    def teacher_hem_job_fixture(attrs \\ %{}) do
+      {:ok, teacher_hem_job} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_teacher_hem_job()
+
+      teacher_hem_job
+    end
+
+    test "list_teacher_hem_job/0 returns all teacher_hem_job" do
+      teacher_hem_job = teacher_hem_job_fixture()
+      assert Affairs.list_teacher_hem_job() == [teacher_hem_job]
+    end
+
+    test "get_teacher_hem_job!/1 returns the teacher_hem_job with given id" do
+      teacher_hem_job = teacher_hem_job_fixture()
+      assert Affairs.get_teacher_hem_job!(teacher_hem_job.id) == teacher_hem_job
+    end
+
+    test "create_teacher_hem_job/1 with valid data creates a teacher_hem_job" do
+      assert {:ok, %TeacherHemJob{} = teacher_hem_job} = Affairs.create_teacher_hem_job(@valid_attrs)
+      assert teacher_hem_job.hem_job_id == 42
+      assert teacher_hem_job.semester_id == 42
+      assert teacher_hem_job.teacher_id == 42
+    end
+
+    test "create_teacher_hem_job/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_teacher_hem_job(@invalid_attrs)
+    end
+
+    test "update_teacher_hem_job/2 with valid data updates the teacher_hem_job" do
+      teacher_hem_job = teacher_hem_job_fixture()
+      assert {:ok, teacher_hem_job} = Affairs.update_teacher_hem_job(teacher_hem_job, @update_attrs)
+      assert %TeacherHemJob{} = teacher_hem_job
+      assert teacher_hem_job.hem_job_id == 43
+      assert teacher_hem_job.semester_id == 43
+      assert teacher_hem_job.teacher_id == 43
+    end
+
+    test "update_teacher_hem_job/2 with invalid data returns error changeset" do
+      teacher_hem_job = teacher_hem_job_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_teacher_hem_job(teacher_hem_job, @invalid_attrs)
+      assert teacher_hem_job == Affairs.get_teacher_hem_job!(teacher_hem_job.id)
+    end
+
+    test "delete_teacher_hem_job/1 deletes the teacher_hem_job" do
+      teacher_hem_job = teacher_hem_job_fixture()
+      assert {:ok, %TeacherHemJob{}} = Affairs.delete_teacher_hem_job(teacher_hem_job)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_teacher_hem_job!(teacher_hem_job.id) end
+    end
+
+    test "change_teacher_hem_job/1 returns a teacher_hem_job changeset" do
+      teacher_hem_job = teacher_hem_job_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_teacher_hem_job(teacher_hem_job)
+    end
+  end
+
+  describe "teacher_absent_reason" do
+    alias School.Affairs.TeacherAbsentReason
+
+    @valid_attrs %{absent_reason_id: 42, semester_id: 42, teacher_id: 42}
+    @update_attrs %{absent_reason_id: 43, semester_id: 43, teacher_id: 43}
+    @invalid_attrs %{absent_reason_id: nil, semester_id: nil, teacher_id: nil}
+
+    def teacher_absent_reason_fixture(attrs \\ %{}) do
+      {:ok, teacher_absent_reason} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_teacher_absent_reason()
+
+      teacher_absent_reason
+    end
+
+    test "list_teacher_absent_reason/0 returns all teacher_absent_reason" do
+      teacher_absent_reason = teacher_absent_reason_fixture()
+      assert Affairs.list_teacher_absent_reason() == [teacher_absent_reason]
+    end
+
+    test "get_teacher_absent_reason!/1 returns the teacher_absent_reason with given id" do
+      teacher_absent_reason = teacher_absent_reason_fixture()
+      assert Affairs.get_teacher_absent_reason!(teacher_absent_reason.id) == teacher_absent_reason
+    end
+
+    test "create_teacher_absent_reason/1 with valid data creates a teacher_absent_reason" do
+      assert {:ok, %TeacherAbsentReason{} = teacher_absent_reason} = Affairs.create_teacher_absent_reason(@valid_attrs)
+      assert teacher_absent_reason.absent_reason_id == 42
+      assert teacher_absent_reason.semester_id == 42
+      assert teacher_absent_reason.teacher_id == 42
+    end
+
+    test "create_teacher_absent_reason/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_teacher_absent_reason(@invalid_attrs)
+    end
+
+    test "update_teacher_absent_reason/2 with valid data updates the teacher_absent_reason" do
+      teacher_absent_reason = teacher_absent_reason_fixture()
+      assert {:ok, teacher_absent_reason} = Affairs.update_teacher_absent_reason(teacher_absent_reason, @update_attrs)
+      assert %TeacherAbsentReason{} = teacher_absent_reason
+      assert teacher_absent_reason.absent_reason_id == 43
+      assert teacher_absent_reason.semester_id == 43
+      assert teacher_absent_reason.teacher_id == 43
+    end
+
+    test "update_teacher_absent_reason/2 with invalid data returns error changeset" do
+      teacher_absent_reason = teacher_absent_reason_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_teacher_absent_reason(teacher_absent_reason, @invalid_attrs)
+      assert teacher_absent_reason == Affairs.get_teacher_absent_reason!(teacher_absent_reason.id)
+    end
+
+    test "delete_teacher_absent_reason/1 deletes the teacher_absent_reason" do
+      teacher_absent_reason = teacher_absent_reason_fixture()
+      assert {:ok, %TeacherAbsentReason{}} = Affairs.delete_teacher_absent_reason(teacher_absent_reason)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_teacher_absent_reason!(teacher_absent_reason.id) end
+    end
+
+    test "change_teacher_absent_reason/1 returns a teacher_absent_reason changeset" do
+      teacher_absent_reason = teacher_absent_reason_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_teacher_absent_reason(teacher_absent_reason)
+    end
+  end
+
+  describe "project_nilam" do
+    alias School.Affairs.ProjectNilam
+
+    @valid_attrs %{below_satisfy: 42, count_page: 42, import_from_library: 42, member_reading_quantity: 42, page: 42, standard_id: 42}
+    @update_attrs %{below_satisfy: 43, count_page: 43, import_from_library: 43, member_reading_quantity: 43, page: 43, standard_id: 43}
+    @invalid_attrs %{below_satisfy: nil, count_page: nil, import_from_library: nil, member_reading_quantity: nil, page: nil, standard_id: nil}
+
+    def project_nilam_fixture(attrs \\ %{}) do
+      {:ok, project_nilam} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_project_nilam()
+
+      project_nilam
+    end
+
+    test "list_project_nilam/0 returns all project_nilam" do
+      project_nilam = project_nilam_fixture()
+      assert Affairs.list_project_nilam() == [project_nilam]
+    end
+
+    test "get_project_nilam!/1 returns the project_nilam with given id" do
+      project_nilam = project_nilam_fixture()
+      assert Affairs.get_project_nilam!(project_nilam.id) == project_nilam
+    end
+
+    test "create_project_nilam/1 with valid data creates a project_nilam" do
+      assert {:ok, %ProjectNilam{} = project_nilam} = Affairs.create_project_nilam(@valid_attrs)
+      assert project_nilam.below_satisfy == 42
+      assert project_nilam.count_page == 42
+      assert project_nilam.import_from_library == 42
+      assert project_nilam.member_reading_quantity == 42
+      assert project_nilam.page == 42
+      assert project_nilam.standard_id == 42
+    end
+
+    test "create_project_nilam/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_project_nilam(@invalid_attrs)
+    end
+
+    test "update_project_nilam/2 with valid data updates the project_nilam" do
+      project_nilam = project_nilam_fixture()
+      assert {:ok, project_nilam} = Affairs.update_project_nilam(project_nilam, @update_attrs)
+      assert %ProjectNilam{} = project_nilam
+      assert project_nilam.below_satisfy == 43
+      assert project_nilam.count_page == 43
+      assert project_nilam.import_from_library == 43
+      assert project_nilam.member_reading_quantity == 43
+      assert project_nilam.page == 43
+      assert project_nilam.standard_id == 43
+    end
+
+    test "update_project_nilam/2 with invalid data returns error changeset" do
+      project_nilam = project_nilam_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_project_nilam(project_nilam, @invalid_attrs)
+      assert project_nilam == Affairs.get_project_nilam!(project_nilam.id)
+    end
+
+    test "delete_project_nilam/1 deletes the project_nilam" do
+      project_nilam = project_nilam_fixture()
+      assert {:ok, %ProjectNilam{}} = Affairs.delete_project_nilam(project_nilam)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_project_nilam!(project_nilam.id) end
+    end
+
+    test "change_project_nilam/1 returns a project_nilam changeset" do
+      project_nilam = project_nilam_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_project_nilam(project_nilam)
+    end
+  end
+
+  describe "jauhari" do
+    alias School.Affairs.Jauhari
+
+    @valid_attrs %{max: 42, min: 42, prize: "some prize"}
+    @update_attrs %{max: 43, min: 43, prize: "some updated prize"}
+    @invalid_attrs %{max: nil, min: nil, prize: nil}
+
+    def jauhari_fixture(attrs \\ %{}) do
+      {:ok, jauhari} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_jauhari()
+
+      jauhari
+    end
+
+    test "list_jauhari/0 returns all jauhari" do
+      jauhari = jauhari_fixture()
+      assert Affairs.list_jauhari() == [jauhari]
+    end
+
+    test "get_jauhari!/1 returns the jauhari with given id" do
+      jauhari = jauhari_fixture()
+      assert Affairs.get_jauhari!(jauhari.id) == jauhari
+    end
+
+    test "create_jauhari/1 with valid data creates a jauhari" do
+      assert {:ok, %Jauhari{} = jauhari} = Affairs.create_jauhari(@valid_attrs)
+      assert jauhari.max == 42
+      assert jauhari.min == 42
+      assert jauhari.prize == "some prize"
+    end
+
+    test "create_jauhari/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_jauhari(@invalid_attrs)
+    end
+
+    test "update_jauhari/2 with valid data updates the jauhari" do
+      jauhari = jauhari_fixture()
+      assert {:ok, jauhari} = Affairs.update_jauhari(jauhari, @update_attrs)
+      assert %Jauhari{} = jauhari
+      assert jauhari.max == 43
+      assert jauhari.min == 43
+      assert jauhari.prize == "some updated prize"
+    end
+
+    test "update_jauhari/2 with invalid data returns error changeset" do
+      jauhari = jauhari_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_jauhari(jauhari, @invalid_attrs)
+      assert jauhari == Affairs.get_jauhari!(jauhari.id)
+    end
+
+    test "delete_jauhari/1 deletes the jauhari" do
+      jauhari = jauhari_fixture()
+      assert {:ok, %Jauhari{}} = Affairs.delete_jauhari(jauhari)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_jauhari!(jauhari.id) end
+    end
+
+    test "change_jauhari/1 returns a jauhari changeset" do
+      jauhari = jauhari_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_jauhari(jauhari)
+    end
+  end
+
+  describe "rakan" do
+    alias School.Affairs.Rakan
+
+    @valid_attrs %{max: 42, min: 42, prize: "some prize", standard_id: 42}
+    @update_attrs %{max: 43, min: 43, prize: "some updated prize", standard_id: 43}
+    @invalid_attrs %{max: nil, min: nil, prize: nil, standard_id: nil}
+
+    def rakan_fixture(attrs \\ %{}) do
+      {:ok, rakan} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_rakan()
+
+      rakan
+    end
+
+    test "list_rakan/0 returns all rakan" do
+      rakan = rakan_fixture()
+      assert Affairs.list_rakan() == [rakan]
+    end
+
+    test "get_rakan!/1 returns the rakan with given id" do
+      rakan = rakan_fixture()
+      assert Affairs.get_rakan!(rakan.id) == rakan
+    end
+
+    test "create_rakan/1 with valid data creates a rakan" do
+      assert {:ok, %Rakan{} = rakan} = Affairs.create_rakan(@valid_attrs)
+      assert rakan.max == 42
+      assert rakan.min == 42
+      assert rakan.prize == "some prize"
+      assert rakan.standard_id == 42
+    end
+
+    test "create_rakan/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_rakan(@invalid_attrs)
+    end
+
+    test "update_rakan/2 with valid data updates the rakan" do
+      rakan = rakan_fixture()
+      assert {:ok, rakan} = Affairs.update_rakan(rakan, @update_attrs)
+      assert %Rakan{} = rakan
+      assert rakan.max == 43
+      assert rakan.min == 43
+      assert rakan.prize == "some updated prize"
+      assert rakan.standard_id == 43
+    end
+
+    test "update_rakan/2 with invalid data returns error changeset" do
+      rakan = rakan_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_rakan(rakan, @invalid_attrs)
+      assert rakan == Affairs.get_rakan!(rakan.id)
+    end
+
+    test "delete_rakan/1 deletes the rakan" do
+      rakan = rakan_fixture()
+      assert {:ok, %Rakan{}} = Affairs.delete_rakan(rakan)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_rakan!(rakan.id) end
+    end
+
+    test "change_rakan/1 returns a rakan changeset" do
+      rakan = rakan_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_rakan(rakan)
+    end
+  end
+
+  describe "standard_subject" do
+    alias School.Affairs.StandardSubject
+
+    @valid_attrs %{semester_id: 42, standard_id: 42, subject_id: 42, year: "some year"}
+    @update_attrs %{semester_id: 43, standard_id: 43, subject_id: 43, year: "some updated year"}
+    @invalid_attrs %{semester_id: nil, standard_id: nil, subject_id: nil, year: nil}
+
+    def standard_subject_fixture(attrs \\ %{}) do
+      {:ok, standard_subject} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_standard_subject()
+
+      standard_subject
+    end
+
+    test "list_standard_subject/0 returns all standard_subject" do
+      standard_subject = standard_subject_fixture()
+      assert Affairs.list_standard_subject() == [standard_subject]
+    end
+
+    test "get_standard_subject!/1 returns the standard_subject with given id" do
+      standard_subject = standard_subject_fixture()
+      assert Affairs.get_standard_subject!(standard_subject.id) == standard_subject
+    end
+
+    test "create_standard_subject/1 with valid data creates a standard_subject" do
+      assert {:ok, %StandardSubject{} = standard_subject} = Affairs.create_standard_subject(@valid_attrs)
+      assert standard_subject.semester_id == 42
+      assert standard_subject.standard_id == 42
+      assert standard_subject.subject_id == 42
+      assert standard_subject.year == "some year"
+    end
+
+    test "create_standard_subject/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_standard_subject(@invalid_attrs)
+    end
+
+    test "update_standard_subject/2 with valid data updates the standard_subject" do
+      standard_subject = standard_subject_fixture()
+      assert {:ok, standard_subject} = Affairs.update_standard_subject(standard_subject, @update_attrs)
+      assert %StandardSubject{} = standard_subject
+      assert standard_subject.semester_id == 43
+      assert standard_subject.standard_id == 43
+      assert standard_subject.subject_id == 43
+      assert standard_subject.year == "some updated year"
+    end
+
+    test "update_standard_subject/2 with invalid data returns error changeset" do
+      standard_subject = standard_subject_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_standard_subject(standard_subject, @invalid_attrs)
+      assert standard_subject == Affairs.get_standard_subject!(standard_subject.id)
+    end
+
+    test "delete_standard_subject/1 deletes the standard_subject" do
+      standard_subject = standard_subject_fixture()
+      assert {:ok, %StandardSubject{}} = Affairs.delete_standard_subject(standard_subject)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_standard_subject!(standard_subject.id) end
+    end
+
+    test "change_standard_subject/1 returns a standard_subject changeset" do
+      standard_subject = standard_subject_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_standard_subject(standard_subject)
+    end
+  end
 end

@@ -10,9 +10,57 @@ defmodule SchoolWeb.SubjectController do
     render(conn, "index.html", subject: subject)
   end
 
+     def new_standard_subject(conn, params) do
+
+      subjects =
+      Repo.all(
+        from(s in School.Affairs.Subject, select: %{id: s.id, code: s.code, name: s.description})
+      )
+
+    semester =
+      Repo.all(from(s in School.Affairs.Semester, select: %{id: s.id, start_date: s.start_date}))
+
+    level = Repo.all(from(s in School.Affairs.Level, select: %{id: s.id, name: s.name}))
+ 
+    render(conn, "index.html", subjects: subjects,semester: semester,level: level)
+  end
+
+   def create_new_test(conn, _params) do
+     subjects =
+      Repo.all(
+        from(s in School.Affairs.Subject, select: %{id: s.id, code: s.code, name: s.description})
+      )
+
+    semester =
+      Repo.all(from(s in School.Affairs.Semester, select: %{id: s.id, start_date: s.start_date}))
+
+    level = Repo.all(from(s in School.Affairs.Level, select: %{id: s.id, name: s.name}))
+ 
+    render(conn, "new_exam.html", subjects: subjects,semester: semester,level: level)
+  end
+
   def new(conn, _params) do
     changeset = Affairs.change_subject(%Subject{})
     render(conn, "new.html", changeset: changeset)
+  end
+
+    def standard_setting(conn,params) do
+ subject = Affairs.list_subject()
+
+  subjects =
+      Repo.all(
+        from(s in School.Affairs.Subject, select: %{id: s.id, code: s.code, name: s.description})
+      )
+
+    semester =
+      Repo.all(from(s in School.Affairs.Semester, select: %{id: s.id, start_date: s.start_date}))
+
+    level = Repo.all(from(s in School.Affairs.Level, select: %{id: s.id, name: s.name}))
+      grade = Affairs.list_grade()
+      co_grade = Affairs.list_co_grade()
+       standard_subject = Affairs.list_standard_subject()
+       exam_master = Affairs.list_exam_master()
+    render(conn, "standard_setting.html",exam_master: exam_master,standard_subject: standard_subject,co_grade: co_grade,grade: grade,subject: subject,subjects: subjects,semester: semester,level: level)
   end
 
   def create(conn, %{"subject" => subject_params}) do
@@ -94,7 +142,7 @@ defmodule SchoolWeb.SubjectController do
           for item <- content do
 
 
-            case Poison.decode(item) do
+            case item do
               {:ok, i} ->
                 i
 

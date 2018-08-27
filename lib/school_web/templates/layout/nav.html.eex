@@ -31,13 +31,25 @@
             <%= gettext "System Configuration" %></a>
           <a class="dropdown-item" href="/semesters">
             <%= gettext "Semesters" %> </a>
+             <a class="dropdown-item" href="/teacher_setting">
+            <%= gettext "Teacher Setting" %> </a>
+                  <a class="dropdown-item" href="/standard_setting">
+            <%= gettext "Standard Setting" %> </a>
+             <a class="dropdown-item" href="/nilam_setting">
+            <%= gettext "Nilam Setting" %> </a>
           <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="/subject"><%= gettext "Subjects" %></a>
-            <a class="dropdown-item" href="/teacher"><%= gettext "Teachers" %></a>
             <a class="dropdown-item" href="/parent"><%= gettext "Parents" %></a>
             <a class="dropdown-item" href="/students"><%= gettext "Students" %></a>
             <a class="dropdown-item" href="/period"><%= gettext "Period" %></a>
+<<<<<<< HEAD
             <a class="dropdown-item" href="/height_weight"><%= gettext "Height&Weight" %></a>
+=======
+
+               <a class="dropdown-item" href="/grade"><%= gettext "Grade" %></a>
+            <a class="dropdown-item" href="/co_grade"><%= gettext "Co Grade" %></a>
+
+>>>>>>> 164dea2e66ebe771ff4fc8c487f54d99fd773712
         </div>
       </li>
       <li class="nav-item dropdown">
@@ -45,16 +57,8 @@
           <%= gettext "Processing" %>
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-         
           <a class="dropdown-item" href="/new_exam"><%= gettext "Create Exam" %></a>
           <a class="dropdown-item" href="/generate_ranking"><%= gettext "Student Exam Result" %></a>
-     
-         
-  
-   
-
-       
-           
         </div>
 
       </li>

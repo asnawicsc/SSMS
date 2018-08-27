@@ -20,6 +20,10 @@
     <strong>Gpa:</strong>
     <%= @grade.gpa %>
   </li>
+      <li>
+    <strong>Standard:</strong>
+    <%= @grade.standard_id %>
+  </li>
 
 </ul>
 

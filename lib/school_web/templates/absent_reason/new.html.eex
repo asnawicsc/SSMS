@@ -1,0 +1,5 @@
+<h2>New Absent reason</h2>
+
+<%= render "form.html", Map.put(assigns, :action, absent_reason_path(@conn, :create)) %>
+
+<span><%= link "Back", to: absent_reason_path(@conn, :index) %></span>

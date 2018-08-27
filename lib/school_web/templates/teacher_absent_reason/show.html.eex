@@ -1,0 +1,23 @@
+<h2>Show Teacher absent reason</h2>
+
+<ul>
+
+  <li>
+    <strong>Teacher:</strong>
+    <%= @teacher_absent_reason.teacher_id %>
+  </li>
+
+  <li>
+    <strong>Absent reason:</strong>
+    <%= @teacher_absent_reason.absent_reason_id %>
+  </li>
+
+  <li>
+    <strong>Semester:</strong>
+    <%= @teacher_absent_reason.semester_id %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: teacher_absent_reason_path(@conn, :edit, @teacher_absent_reason) %></span>
+<span><%= link "Back", to: teacher_absent_reason_path(@conn, :index) %></span>

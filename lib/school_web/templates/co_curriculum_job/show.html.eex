@@ -1,0 +1,23 @@
+<h2>Show Co curriculum job</h2>
+
+<ul>
+
+  <li>
+    <strong>Code:</strong>
+    <%= @co_curriculum_job.code %>
+  </li>
+
+  <li>
+    <strong>Description:</strong>
+    <%= @co_curriculum_job.description %>
+  </li>
+
+  <li>
+    <strong>Cdesc:</strong>
+    <%= @co_curriculum_job.cdesc %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: co_curriculum_job_path(@conn, :edit, @co_curriculum_job) %></span>
+<span><%= link "Back", to: teacher_path(@conn, :teacher_setting) %></span>

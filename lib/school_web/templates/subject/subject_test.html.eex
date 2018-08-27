@@ -1,0 +1,31 @@
+<div class="row">
+ <p> <h4>List Test Subject Standard </h4>
+          <h4><div id="standard_level"></div>
+</div></h4></p>
+
+<table class="table" id="subject_test">
+  <thead>
+    <tr>
+      <th>Subject</th>
+      <th>Name</th>
+      <th>Semester</th>
+      <th>Level</th>
+      <th>Year</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+
+    
+    </tr>
+
+  </tbody>
+</table>
+
+<span><%= link "Create New Test", to: subject_path(@conn, :create_new_test) %></span>

@@ -10,17 +10,36 @@ defmodule SchoolWeb.TeacherController do
     render(conn, "index.html", teacher: teacher)
   end
 
+  def teacher_setting(conn, _params) do
+    teacher_school_job = Affairs.list_teacher_school_job()
+    teacher_co_curriculum_job = Affairs.list_teacher_co_curriculum_job()
+    teacher_hem_job = Affairs.list_teacher_hem_job()
+    teacher = Affairs.list_teacher()|>Enum.filter(fn x -> x.name !="Rehat" end)
+    school_job = Affairs.list_school_job()
+    co_curriculum_job = Affairs.list_cocurriculum_job()
+    hem_job = Affairs.list_hem_job()
+    absent_reason = Affairs.list_absent_reason()
+    render(conn, "teacher_setting.html",teacher_hem_job: teacher_hem_job,teacher_co_curriculum_job: teacher_co_curriculum_job,teacher_school_job: teacher_school_job, teacher: teacher,school_job: school_job,co_curriculum_job: co_curriculum_job,hem_job: hem_job,absent_reason: absent_reason)
+  end
+
+    def teacher_timetable(conn, _params) do
+    teacher = Affairs.list_teacher()
+    render(conn, "teacher_timetable.html", teacher: teacher)
+  end
+
   def new(conn, _params) do
     changeset = Affairs.change_teacher(%Teacher{})
     render(conn, "new.html", changeset: changeset)
   end
+
+
 
   def create(conn, %{"teacher" => teacher_params}) do
     case Affairs.create_teacher(teacher_params) do
       {:ok, teacher} ->
         conn
         |> put_flash(:info, "Teacher created successfully.")
-        |> redirect(to: teacher_path(conn, :show, teacher))
+         |> redirect(to: teacher_path(conn, :teacher_setting))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
@@ -67,7 +86,7 @@ defmodule SchoolWeb.TeacherController do
 
     conn
     |> put_flash(:info, "Teacher deleted successfully.")
-    |> redirect(to: teacher_path(conn, :index))
+     |> redirect(to: teacher_path(conn, :teacher_setting))
   end
 
   def upload_teachers(conn, params) do
@@ -128,6 +147,6 @@ defmodule SchoolWeb.TeacherController do
 
     conn
     |> put_flash(:info, "Teachers created successfully.")
-    |> redirect(to: teacher_path(conn, :index))
+     |> redirect(to: teacher_path(conn, :teacher_setting))
   end
 end

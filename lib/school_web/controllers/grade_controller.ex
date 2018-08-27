@@ -1,5 +1,6 @@
 defmodule SchoolWeb.GradeController do
   use SchoolWeb, :controller
+  require IEx
 
   alias School.Affairs
   alias School.Affairs.Grade
@@ -7,6 +8,22 @@ defmodule SchoolWeb.GradeController do
   def index(conn, _params) do
     grade = Affairs.list_grade()
     render(conn, "index.html", grade: grade)
+  end
+
+  def default_grade(conn,params)do
+
+    Repo.delete_all(Grade)
+
+  Affairs.create_grade(%{name: "A",mix: 80,max: 100,gpa: 12.00})
+  Affairs.create_grade(%{name: "B",mix: 60,max: 79,gpa: 8.00})
+  Affairs.create_grade(%{name: "C",mix: 50,max: 59,gpa: 6.00})
+  Affairs.create_grade(%{name: "D",mix: 40,max: 49,gpa: 4.00})
+  Affairs.create_grade(%{name: "E",mix: 0,max: 39,gpa: 2.00})
+
+ grade = Affairs.list_grade()
+   conn
+        |> put_flash(:info, "Grade updated successfully.")
+        |> redirect(to: grade_path(conn, :index, grade))
   end
 
   def new(conn, _params) do

@@ -2,6 +2,7 @@
 <h3>Students in <%= @class.name %>
 	
 <div class="btn btn-dark" aria-label="toggle_student_list">Manage students</div>
+ <h6><a href="/print_students/<%=@class.id %>">Print All Student</a></h6>
 </h3>
 
 <div class="row" aria-label="manage_student">

@@ -191,6 +191,7 @@ defmodule SchoolWeb.ClassController do
       classes = Affairs.list_classes(conn.private.plug_session["institution_id"])
       render(conn, "index.html", classes: classes)
     end
+ 
   end
 
   def new(conn, _params) do

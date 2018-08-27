@@ -1,0 +1,5 @@
+<h2>Edit Standard subject</h2>
+
+<%= render "form.html", Map.put(assigns, :action, standard_subject_path(@conn, :update, @standard_subject)) %>
+
+<span><%= link "Back", to: standard_subject_path(@conn, :index) %></span>

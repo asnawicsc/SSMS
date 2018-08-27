@@ -1,0 +1,5 @@
+<h2>Edit Co grade</h2>
+
+<%= render "form.html", Map.put(assigns, :action, co_grade_path(@conn, :update, @co_grade)) %>
+
+<span><%= link "Back", to: co_grade_path(@conn, :index) %></span>

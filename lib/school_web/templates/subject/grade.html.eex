@@ -1,0 +1,33 @@
+<h2>Listing Grade </h2><p><a href="/default_grade">Used Default Grade</a></p>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Max</th>
+      <th>Mix</th>
+      <th>Gpa</th>
+      <th>Standard</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for grade <- @grade do %>
+    <tr>
+      <td><%= grade.name %></td>
+      <td><%= grade.max %></td>
+      <td><%= grade.mix %></td>
+      <td><%= grade.gpa %></td>
+      <td><%= grade.standard_id %></td>
+      <td class="text-right">
+        <span><%= link "Show", to: grade_path(@conn, :show, grade), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: grade_path(@conn, :edit, grade), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: grade_path(@conn, :delete, grade), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Grade", to: grade_path(@conn, :new) %></span>
