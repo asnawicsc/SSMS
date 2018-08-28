@@ -15,6 +15,13 @@
 				<% end %>
 			  </ol>
 			</div>
+			<div class="card-footer" >
+                    <button type="button" rel="tooltip" title="" class="btn btn-primary btn-link btn-sm show_menu_cata" data-original-title="student_att">
+
+                       Select All -->
+                     
+                    </button>
+          </div>
 		</div>
 	</div>
 	<div class="col-lg-4">
@@ -27,6 +34,13 @@
 				<% end %>
 			  </ol>
 			</div>
+			<div class="card-footer" >
+                    <button type="button" rel="tooltip" title="" class="btn btn-primary btn-link btn-sm show_menu_cata" data-original-title="un student_att">
+
+                       <-- Unselect All
+                     
+                    </button>
+          </div>
 		</div>
 	</div>
 	<div class="col-lg-4">

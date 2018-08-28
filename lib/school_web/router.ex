@@ -166,6 +166,8 @@ get("/nilam_setting", ProjectNilamController, :nilam_setting)
    get("/mark_sheet", ExamController, :mark_sheet)
       get("/exam_result_class", ExamController, :exam_result_class)
         get("/exam_result_standard", ExamController, :exam_result_standard)
+             get("/exam_result_analysis_class", ExamController, :exam_result_analysis_class)
+                 get("/generate_attendance_report", AttendanceController, :generate_attendance_report)
   end
 
   # Other scopes may use custom stacks.

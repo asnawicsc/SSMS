@@ -243,6 +243,29 @@ defmodule SchoolWeb.AttendanceController do
     render(conn, "index.html", attendance: attendance, classes: classes)
   end
 
+
+  def generate_attendance_report(conn,params) do
+
+     attendance = Affairs.list_attendance()
+
+    classes =
+      Repo.all(
+        from(
+          c in Class,
+          left_join: l in Level,
+          on: c.level_id == l.id,
+          where: c.institution_id == ^School.Affairs.inst_id(conn),
+          select: %{id: c.id, level: l.name, class: c.name},
+          order_by: [c.name]
+        )
+      )
+      |> Enum.group_by(fn x -> x.level end)
+
+    render(conn, "generate_attendance_report.html", attendance: attendance, classes: classes)
+    
+  end
+
+
   def new(conn, _params) do
     changeset = Affairs.change_attendance(%Attendance{})
     render(conn, "new.html", changeset: changeset)

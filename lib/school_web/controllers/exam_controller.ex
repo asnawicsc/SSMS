@@ -462,6 +462,18 @@ defmodule SchoolWeb.ExamController do
     
   end
 
+    def exam_result_analysis_class(conn,params) do
+
+        class=Repo.all(from s in School.Affairs.Class,select: %{id: s.id,name: s.name})
+
+           render(
+        conn,
+        "exam_result_analysis_class.html",
+        class: class
+      )
+    
+  end
+
     def exam_result_standard(conn,params) do
 
 
