@@ -18,19 +18,16 @@
 
       <td class="text-right">
         <span><%= link (gettext "Sync Library Membership"), to: class_path(@conn, :sync_library_membership, class.id), class: "btn btn-default btn-xs" %></span>
-        <span><%= link (gettext "Class Exam Rank"), to: exam_path(@conn, :rank_exam, class.id), class: "btn btn-default btn-xs" %></span>
-         <span><%= link (gettext "Generate Exam Mark"), to: exam_path(@conn, :generate_exam, class.id), class: "btn btn-default btn-xs" %></span>
+    
+      
          <span><%= link (gettext "Generate Head Count"), to: head_count_path(@conn, :generate_head_count, class.id), class: "btn btn-default btn-xs" %></span>
         <span><%= link (gettext "Subject Head Count"), to: head_count_path(@conn, :head_count_subject, class.id), class: "btn btn-default btn-xs" %></span>
-         <span><%= link (gettext "Timetable"), to: timetable_path(@conn, :generated_timetable, class.id), class: "btn btn-default btn-xs" %></span>
-        <span><%= link (gettext "Students"), to: class_path(@conn, :students, class.id), class: "btn btn-default btn-xs" %></span>
-            <span><%= link (gettext "Mark Analyse By Grade"), to: exam_path(@conn, :generate_mark_analyse, class.id), class: "btn btn-default btn-xs" %></span>
-        <span><%= link (gettext "Edit"), to: class_path(@conn, :edit, class.id), class: "btn btn-default btn-xs" %></span>
-        <span><%= link (gettext "Delete"), to: class_path(@conn, :delete, class.id), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+  
+
       </td>
     </tr>
 <% end %>
   </tbody>
 </table>
 
-<span><%= link (gettext "New Class"), to: class_path(@conn, :new) %></span>
+

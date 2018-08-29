@@ -20,6 +20,7 @@ defmodule SchoolWeb.GradeController do
   Affairs.create_grade(%{name: "D",mix: 40,max: 49,gpa: 4.00})
   Affairs.create_grade(%{name: "E",mix: 0,max: 39,gpa: 2.00})
 
+
  grade = Affairs.list_grade()
    conn
         |> put_flash(:info, "Grade updated successfully.")
@@ -36,7 +37,7 @@ defmodule SchoolWeb.GradeController do
       {:ok, grade} ->
         conn
         |> put_flash(:info, "Grade created successfully.")
-        |> redirect(to: grade_path(conn, :show, grade))
+        |> redirect(to: subject_path(conn, :standard_setting))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end

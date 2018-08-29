@@ -1,6 +1,7 @@
 
 		<h3>Students in <%= @class.name %>
-
+	
+	<div class="btn btn-dark" aria-label="toggle_student_list">Manage students</div>
 	 <h6><a href="/print_students/<%=@class.id %>">Print All Student</a></h6>
 	</h3>
 
@@ -31,17 +32,35 @@
 		</div>
 	</div>
 
+<%= raw(@html)%>
 <script type="text/javascript">
 
 
-	
+
+		if (localStorage.getItem("toggle_student_list") == null) {
+			localStorage.setItem("toggle_student_list", "open")
+		}
+
+		if (localStorage.getItem("toggle_student_list") == "close") {
+			$("div[aria-label='manage_student']").hide()
+		}
+
+		$("div[aria-label='toggle_student_list']").click(function(){
+			$("div[aria-label='manage_student']").toggle("slide")
+			if (localStorage.getItem("toggle_student_list") == "close") {
+				localStorage.setItem("toggle_student_list", "open")
+			} else {
+				localStorage.setItem("toggle_student_list", "close")
+			}
+		})
+
 
 		$("ol.unselected").on("click", "li", function(){
 
 			var li = $(this)
 			var student_id = $(this).attr("student_id")
 			$("ol.selected").append(li)
-			var class_id = localStorage.getItem("class_id")
+			var class_id = location.pathname.split("/")[2]
 	    $.ajax({
 	      url: "/add_to_class_semester",
 	      dataType: "json",
@@ -59,7 +78,8 @@
 			var li = $(this)
 			var student_id = $(this).attr("student_id")
 			$("ol.selected").append(li)
-			var class_id = localStorage.getItem("class_id")
+			
+			var class_id = location.pathname.split("/")[2]
 	    $.ajax({
 	      url: "/add_to_class_semester",
 	      dataType: "json",

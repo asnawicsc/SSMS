@@ -1,33 +1,84 @@
-<h2>Listing Project nilam</h2>
 
-<table class="table" id="project_nilam">
-  <thead>
-    <tr>
-      <th>Below satisfy</th>
-      <th>Member reading quantity</th>
-      <th>Page</th>
-      <th>Import from library</th>
-      <th>Count page</th>
-      <th>Standard</th>
 
-    </tr>
-  </thead>
-  <tbody>
+   <div class="row">
+                <div class="col-lg-12">
+                  <div class="card">
+                    <div class="card-header"><%= gettext "Class Info" %></div>
+                    <div class="card-body">
+                        <input type="hidden" name="standard_id" disabled="" value="">
+                                    Below satisfy:<br>
+                                    <input type="text" name="below_satisfy" disabled="" value="">
+                                    <br>
+                                    Member reading quantity:<br>
+                                    <input type="text" name="member_reading_quantity" disabled="" value="">
+                                    <br>
+                                    Page:<br>
+                                    <input type="text" name="page" disabled="" value="">
+                                    <br><br>
+                                    Import from library:
+                                    <input type="checkbox" disabled="disabled" name="import_from_library" disabled="" value="">
+                                    <br><br>
+                                    Count Page Number:
+                                    <input type="checkbox" disabled="disabled" name="count_page_number" disabled="" value="">
+                     
+                    </div>
+                      <div class="card-footer">
+                           <button type="button" rel="tooltip" title="" class="btn btn-danger btn-link btn-sm" id="" name="class_id2"  value="" data-toggle="modal" aria-label="modelb" data-target="#modelb" data-original-title="Edit Item"><i class="material-icons">Edit Project Nilam</i><div class="ripple-container"></div>                 </button>
+                    </button>
+                            
+                     </div>
+                  </div>
+                </div>
+ 
+                </div>
 
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
 
-    </tr>
 
-  </tbody>
-</table>
+    
 
-<span><%= link "New Project nilam", to: project_nilam_path(@conn, :new) %></span>
+<div class="modal fade" id="modelb" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document" style="width: 1000px; margin-left: 550px;">
+    <div class="modal-content" style="width: 1000px;">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit Project Nilam</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="modal_form5">
+
+                              <form method="post" action="/edit_project_nilam" >
+                          <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+                                  <input type="hidden" name="standard_id"  value="">
+                                   <input type="hidden" name="id"  value="">
+                                    Below satisfy:<br>
+                                    <input type="text" name="below_satisfy"  value="">
+                                    <br>
+                                    Member reading quantity:<br>
+                                    <input type="text" name="member_reading_quantity"  value="">
+                                    <br>
+                                    Page:<br>
+                                    <input type="text" name="page"  value="">
+                                    <br><br>
+                                    Import from library:
+                                    <input type="checkbox" name="import_from_library" disabled="" value="1">
+                                    <br><br>
+                                    Count Page Number:
+                                    <input type="checkbox" name="count_page_number" disabled=""  value="1">
+
+                                    <br><br>
+        <input class="btn btn-primary" name="" value="Submit" type="submit">
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <input type="hidden" name="popup" value="0">
+      </div>
+    </div>
+  </div>
+</div>
+
 
 
 <script type="text/javascript">
@@ -36,3 +87,4 @@
 
   channel.push("nilam_setting", {user_id: window.currentUser,level: level})
 </script>
+

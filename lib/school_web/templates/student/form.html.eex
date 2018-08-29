@@ -194,18 +194,18 @@
     <%= label f, :gicno, class: "" %>
     <%= text_input f, :gicno, class: "form-control" %>
     <%= error_tag f, :gicno %>
-    <a href="/show_guardian/<%=@guardian %>" target="_blank"><< Guardian Information >></a> 
+    <a href="/show_guardian/<%=@guardian %>" target="_blank">Guardian Information</a> 
   </div>
     <div class="form-group col-md-2">
     <%= label f, :ficno, class: "" %>
     <%= text_input f, :ficno, class: "form-control" %>
-    <a href="/show_guardian/<%=@father %>" target="_blank"><< Father Information >></a> 
+    <a href="/show_guardian/<%=@father %>" target="_blank">Father Information</a> 
     <%= error_tag f, :ficno %>
   </div>
     <div class="form-group col-md-2">
     <%= label f, :micno, class: "" %>
     <%= text_input f, :micno, class: "form-control" %>
-    <a href="/show_guardian/<%=@mother %>" target="_blank"><< Mothers Information >></a> 
+    <a href="/show_guardian/<%=@mother %>" target="_blank">Mothers Information</a> 
     <%= error_tag f, :micno %>
   </div>
   <div  style="margin-top: 35px;">

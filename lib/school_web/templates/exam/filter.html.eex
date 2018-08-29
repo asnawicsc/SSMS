@@ -1,0 +1,70 @@
+
+   <div class="row">
+    <input type="hidden" name="_csrf_token" value="">
+              <div class="col-sm-2">
+                <div class="form-group bmd-form-group">
+                  <label class="bmd-label-floating"><%= gettext "Exam Name" %></label><br>
+                 <select class="select" onchange="getval(this)"  name="exam_id" required="" >
+                           <%= for a <- @exam|>Enum.uniq |> Enum.sort do %>
+                                            <option value="<%= a.id %>" ><%= a.exam_name %>
+                                            </option>
+                                          <% end %>
+                                        </select>
+                </div>
+              </div>
+                <div class="col-sm-2">
+             
+                  <label class="bmd-label-floating"><%= gettext "Subject Teaching" %></label><br>
+                 <select class="select" onchange="getval2(this)" name="subject_id" required="" >
+                           <%= for a <- @all|>Enum.uniq |> Enum.sort do %>
+                                            <option value="<%= a.id %>" >(<%= a.s_code %>)<%= a.subject %>
+                                            </option>
+                                          <% end %>
+                                        </select>
+                
+              </div>
+
+ 
+      
+</div>
+
+<script type="text/javascript">
+   $('select[name="exam_id"]').val(localStorage.getItem("exam_id"));
+    function getval(sel)
+{
+    d=sel.value
+
+localStorage.setItem("exam_id", d);
+
+   window.location.reload();
+
+ 
+}
+ $('select[name="subject_id"]').val(localStorage.getItem("subject_id"));
+    function getval2(sel)
+{
+   r=sel.value
+
+localStorage.setItem("subject_id", r);
+
+
+   window.location.reload();
+ 
+}
+csrf=localStorage.getItem("csrf")
+
+  channel.push("mark_fill_in", {class_id: localStorage.getItem("mark_sheet_class"),
+    user_id: window.currentUser,
+    exam_id: localStorage.getItem("exam_id"),
+    subject_id: localStorage.getItem("subject_id"),
+    csrf: csrf})
+
+
+          channel.on("show_mark_fill_in", payload => {
+
+    $("div#mark_fill_in").html(payload.html);
+
+  })
+
+
+</script>

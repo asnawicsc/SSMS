@@ -1,0 +1,41 @@
+<h2><%= gettext "Listing Classes" %></h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th><%= gettext "Name" %></th>
+      <th><%= gettext "Remarks" %></th>
+      <th><%= gettext "Level" %></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for class <- @classes do %>
+    <tr>
+      <td><%= class.name %></td>
+      <td><%= class.remarks %></td>
+       <td><%= class.level_id %></td>
+
+      <td class="text-right">
+        
+        <span ><%= link (gettext "Students"), to: class_path(@conn, :students, class.id), class: "btn btn-primary btn-xs" %></span>
+          
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link (gettext "New Class"), to: class_path(@conn, :new) %></span>
+
+
+<%# <script type="text/javascript">
+  
+  $("span#student").click(function() {
+
+var class_id = $(this).attr("ids")
+  var class_level=localStorage.getItem("class_level")
+  channel.push("student_in_class", {user_id: window.currentUser,class_level: class_level,class_id: class_id})
+
+ })
+</script> %>

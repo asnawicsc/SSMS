@@ -1,3 +1,4 @@
+ <div>
  <form method="post" action="/create_exam" class="form-horizontal">
   <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
    <div class="row">
@@ -99,13 +100,13 @@
       </div>
 
 
-     <div align="right" style="margin-top: 10px">
+     <div align="center" style="margin-top: 10px">
       <input class="btn btn-primary" name="" value="Submit" type="submit">
     </div>
 
 
 </form>
-
+</div>
 
 <script type="text/javascript">
   

@@ -1,0 +1,398 @@
+<link rel="stylesheet" href="/css/jquery.skedTape.css">
+<script type="text/javascript">
+    window.csrf = "<%= Phoenix.Controller.get_csrf_token %>"
+</script>
+
+<div aria-label="project_nilam">
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card ">
+
+                        <div class="card-header ">
+
+                            <div class="row">
+                                <h4 class="card-title">Class Setting
+                                </h4>
+
+
+                                <span> <select class="select" onchange="getval(this);" required="required" name="class_id">
+                                        <%= for a <- @class |> Enum.sort do %>
+                                        <option value="<%= a.id %>">
+                                            <%= a.name %>
+                                        </option>
+                                        <% end %>
+                                    </select></span>
+                                <button type="button" rel="tooltip" title="" class="btn btn-danger btn-link btn-sm" id="" name="" value="" data-toggle="modal" aria-label="modelj" data-target="#modelj" data-original-title="Edit Item" align="right" style=" position: absolute; right: 10px;"><i class="material-icons">Create Class</i>
+                                    <div class="ripple-container"></div>
+                                </button>
+                                </button>
+
+                            </div>
+                            <hr>
+                            <ul class="nav nav-pills nav-pills-warning" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-toggle="tab" href="" id="class_info" role="tablist">
+                                        Class Info
+                                    </a>
+
+
+
+
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="" id="class_subject" role="tablist">
+                                        Class Subject
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="" id="class_period" role="tablist">
+                                        Class Period
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="" id="class_student" role="tablist">
+                                        Class Student
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="" id="class_student_info" role="tablist">
+                                        Class Student Info
+                                    </a>
+                                </li>
+
+
+                            </ul>
+
+                        </div>
+                        <div class="card-body ">
+
+                            <div class="tab-content tab-space">
+                                <div class="tab-pane active" id="class_info">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <%= gettext "Class Info" %>
+                                                </div>
+                                                <div class="card-body">
+
+                                                    Class Name:<br>
+                                                    <input type="text" name="class_name" disabled="" value="Class">
+                                                    <br>
+                                                    Remark:<br>
+                                                    <input type="text" name="remark" disabled="" value="Remark">
+                                                    <br>
+                                                    Institution ID:<br>
+                                                    <input type="text" name="institution_id" disabled="" value="institution_id">
+                                                    <br>
+                                                    Level ID:<br>
+                                                    <input type="text" name="level_id" disabled="" value="level_id">
+                                                    <br><br>
+
+                                                </div>
+                                                <div class="card-footer">
+                                                    <button type="button" rel="tooltip" title="" class="btn btn-danger btn-link btn-sm" id="" name="class_id2" value="" data-toggle="modal" aria-label="modelb" data-target="#modelb" data-original-title="Edit Item"><i class="material-icons">Edit Class Info</i>
+                                                        <div class="ripple-container"></div>
+                                                    </button>
+                                                    </button>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+
+
+
+                                    <div class="modal fade" id="modelb" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document" style="width: 1000px; margin-left: 550px;">
+                                            <div class="modal-content" style="width: 1000px;">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Edit Class</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body" id="modal_form5">
+
+                                                    <form method="post" action="/edit_class">
+                                                        <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+                                                        <input type="hidden" name="edit_class" value="">
+
+                                                        Class Name:<br>
+                                                        <input type="text" name="class_name" value="Class">
+                                                        <br>
+                                                        Remark:<br>
+                                                        <input type="text" name="remark" value="Remark">
+                                                        <br><br>
+                                                        <input class="btn btn-primary" name="" value="Submit" type="submit">
+                                                    </form>
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                    <input type="hidden" name="popup" value="0">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="modal fade" id="modelj" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document" style="width: 1000px; margin-left: 550px;">
+                                            <div class="modal-content" style="width: 1000px;">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Edit Class</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body" id="modal_form5">
+
+                                                    <%= render "form.html", Map.put(assigns, :action, class_path(@conn, :create)) %>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                    <input type="hidden" name="popup" value="0">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+
+                                </div>
+                                <div class="tab-pane" id="class_subject">
+
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <%= gettext "Class Subject" %>
+                                                </div>
+                                                <div class="card-body">
+
+                                                    <table class="table" id="class_subject">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Subject Code </th>
+                                                                <th>Subject Name </th>
+                                                                <th>Teacher Code </th>
+                                                                <th>Teacher Name </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+
+
+
+                                                </div>
+                                                <div class="card-footer">
+
+                                                    <button type="button" rel="tooltip" title="" class="btn btn-danger btn-link btn-sm" id="" name="class_id" value="" data-toggle="modal" aria-label="modela" data-target="#modela" data-original-title="Edit Item"><i class="material-icons">New Standard Subject</i>
+                                                        <div class="ripple-container"></div>
+                                                    </button>
+                                                    </button>
+                                                </div>
+                                            </div>
+
+
+
+                                        </div>
+
+
+                                    </div>
+
+
+
+
+                                    <div class="modal fade" id="modela" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document" style="width: 1000px; margin-left: 550px;">
+                                            <div class="modal-content" style="width: 1000px;">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Assign Teacher for Subject</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body" id="modal_form1">
+
+                                                    <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                    <input type="hidden" name="popup" value="0">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+
+
+                                </div>
+                                <div class="tab-pane" id="class_period">
+
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <%= gettext "Class Subject" %>
+                                                </div>
+                                                <div class="card-body" id="period_body">
+
+                                                    <div class="container">
+                                                        <div class="mb-4">
+
+
+                                                            <div id="sked5"></div>
+                                                        </div>
+
+                                                    </div>
+
+
+
+                                                </div>
+                                                <div class="card-footer">
+
+                                                    <button type="button" rel="tooltip" title="" class="btn btn-danger btn-link btn-sm" id="" name="create_period" data-toggle="modal" aria-label="price" data-target="#model7" data-original-title="Edit Item"><i class="material-icons">New Period</i>
+                                                        <div class="ripple-container"></div>
+                                                    </button>
+                                                    </button>
+                                                    </button>
+                                                    <button type="button" rel="tooltip" title="" class="btn btn-danger btn-link btn-sm" id="" name="class_id" value="" data-toggle="modal" aria-label="modeli" data-target="#modeli" data-original-title="Edit Item"><i class="material-icons"> Edit Existing Period Subject</i>
+                                                        <div class="ripple-container"></div>
+                                                    </button>
+                                                    </button>
+                                                </div>
+                                            </div>
+
+
+
+                                        </div>
+
+
+                                    </div>
+
+
+
+
+
+                                    <div class="modal fade" id="model7" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document" style="width: 1000px; margin-left: 550px;">
+                                            <div class="modal-content" style="width: 1000px;">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">New Period</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body" id="period_bod">
+
+
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                    <input type="hidden" name="popup" value="0">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+
+
+                                </div>
+                                <div class="tab-pane" id="class_student">
+                                        <div id="m1">
+                                                            </div>
+
+
+                                </div>
+                                <div class="tab-pane" id="class_student_info">
+                                        <div id="h4">
+                                                            </div>
+
+
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+    $('select[name="class_id"]').val(localStorage.getItem("class_id"));
+
+    function getval(sel) {
+        d = sel.value
+        var level = localStorage.setItem("class_id", d);
+
+
+        window.location.reload();
+
+    }
+    $("input[name='edit_class']").val(localStorage.getItem("class_id"))
+
+
+    var class_id = localStorage.getItem("class_id")
+
+
+    channel.push("class_info", {
+        user_id: window.currentUser,
+        class_id: class_id
+    })
+
+    channel.on("show_student_class_info", payload => {
+
+$("div#class_info").hide();
+$("div#class_subject").hide();
+$("div#class_period").hide();
+$("div#class_student").hide();
+$("div#class_student_info").show();
+
+
+    $("#h4").html(payload.html);
+
+
+     $('.table').DataTable();
+
+  $("div.student").click(function(){
+    var student_id = $(this).attr("id")
+
+    channel.push("inquire_student_details", {user_id: window.currentUser, student_id: student_id})
+  })
+
+     
+
+  })
+</script>
+
+
+       
+   <script src="<%= static_path(@conn, "/js/jquery.skedTape.js") %> "></script>

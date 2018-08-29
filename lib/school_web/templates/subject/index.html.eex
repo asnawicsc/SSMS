@@ -2,7 +2,7 @@
   <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
    <div class="row">
 
-              <div class="col-sm-2">
+              <div class="col-sm-4">
                 <div class="form-group bmd-form-group">
                   <label class="bmd-label-floating"><%= gettext "Year" %></label><br>
                     <select class="select" required="required" name="year">
@@ -19,7 +19,7 @@
                 </div>
               </div>
            
-              <div class="col-sm-2">
+              <div class="col-sm-4">
                 <div class="form-group bmd-form-group">
                   <label class="bmd-label-floating"><%= gettext "Semester" %></label><br>
                  <select class="select" required="required" name="semester">
@@ -31,7 +31,7 @@
                 </div>
               </div>
    
-              <div class="col-sm-2">
+              <div class="col-sm-4">
                 <div class="form-group bmd-form-group">
                   <label class="bmd-label-floating"><%= gettext "Level" %></label><br>
                     <select class="select" required="required" name="level">
@@ -92,7 +92,7 @@
       </div>
 
 
-     <div align="right" style="margin-top: 10px">
+     <div align="center" style="margin-top: 10px">
       <input class="btn btn-primary" name="" value="Submit" type="submit">
     </div>
 

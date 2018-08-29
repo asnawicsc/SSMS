@@ -1,0 +1,5 @@
+<h2>New Subject teach class</h2>
+
+<%= render "form.html", Map.put(assigns, :action, subject_teach_class_path(@conn, :create)) %>
+
+<span><%= link "Back", to: subject_teach_class_path(@conn, :index) %></span>

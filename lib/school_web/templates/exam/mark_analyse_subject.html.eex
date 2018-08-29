@@ -28,9 +28,9 @@
   </head>
  <% require IEx %>
   <body>
-    <h4>CLASS: <%= @class.name %></h4>
+    <h4 align="center">CLASS: <%= @class.name %></h4>
 
-    <table id="example">
+    <table id="example" align="center">
       <colgroup>
         <col col span="2" >
       </colgroup>

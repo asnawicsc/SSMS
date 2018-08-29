@@ -3,6 +3,7 @@ defmodule SchoolWeb.ProjectNilamController do
 
   alias School.Affairs
   alias School.Affairs.ProjectNilam
+  require IEx
 
   def index(conn, _params) do
     project_nilam = Affairs.list_project_nilam()
@@ -17,6 +18,18 @@ defmodule SchoolWeb.ProjectNilamController do
     rakan = Affairs.list_rakan()
 
     render(conn, "nilam_setting.html",level: level, project_nilam: project_nilam,jauhari: jauhari,rakan: rakan)
+  end
+
+  def edit_project_nilam(conn,params) do
+      project_nilam = Affairs.get_project_nilam!(params["id"])
+
+      project_nilam_params=%{below_satisfy: params["below_satisfy"],member_reading_quantity: params["member_reading_quantity"],page: params["page"]}
+
+  Affairs.update_project_nilam(project_nilam, project_nilam_params)
+ conn
+        |> put_flash(:info, "Project nilam update successfully.")
+        |> redirect(to: project_nilam_path(conn, :nilam_setting))
+
   end
 
   def new(conn, _params) do

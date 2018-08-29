@@ -12,11 +12,6 @@
 
       </li>
 
-      <li class="nav-item dropdown">
-        
-       <a href="/attendance" class="nav-link" role="button"><%= gettext "Attendance" %></a>
-       
-      </li>
     
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -35,16 +30,18 @@
             <%= gettext "Teacher Setting" %> </a>
                   <a class="dropdown-item" href="/standard_setting">
             <%= gettext "Standard Setting" %> </a>
+                     <a class="dropdown-item" href="/class_setting">
+            <%= gettext "Class Setting" %> </a>
+                  <a class="dropdown-item" href="#">
+            <%= gettext "Segak Setting" %> </a>
+           
+           
              <a class="dropdown-item" href="/nilam_setting">
             <%= gettext "Nilam Setting" %> </a>
           <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="/subject"><%= gettext "Subjects" %></a>
-            <a class="dropdown-item" href="/parent"><%= gettext "Parents" %></a>
-            <a class="dropdown-item" href="/students"><%= gettext "Students" %></a>
-            <a class="dropdown-item" href="/period"><%= gettext "Period" %></a>
-
-               <a class="dropdown-item" href="/grade"><%= gettext "Grade" %></a>
-            <a class="dropdown-item" href="/co_grade"><%= gettext "Co Grade" %></a>
+            <a class="dropdown-item" href="/parent"><%= gettext "Parents Setting" %></a>
+            <a class="dropdown-item" href="/students"><%= gettext "Students Setting" %></a>
+   
 
         </div>
       </li>
@@ -53,9 +50,28 @@
           <%= gettext "Processing" %>
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="/new_exam"><%= gettext "Create Exam" %></a>
-          <a class="dropdown-item" href="/generate_ranking"><%= gettext "Student Exam Result" %></a>
+           <a class="dropdown-item" href="/attendance">
+            <%= gettext "Attendance" %> </a>
+           <a class="dropdown-item" href="/mark_sheet">
+            <%= gettext "Mark Sheet" %> </a>
+           
         </div>
+
+      </li>
+       <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <%= gettext "Report" %>
+        </a>
+       
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/generate_attendance_report"><%= gettext "Attendance Report" %></a>
+                   <a class="dropdown-item" href="/exam_result_class"><%= gettext "Exam Result (Class)" %></a>
+                     <a class="dropdown-item" href="/exam_result_analysis_class"><%= gettext "Exam Result Analysis(Class)" %></a>
+                           <a class="dropdown-item" href="/exam_result_standard"><%= gettext "Exam Result (Standard)" %></a>
+                            <a class="dropdown-item" href="/exam_result_standard"><%= gettext "Exam Result Analysis(Standard)" %></a>
+      
+        </div>
+
 
       </li>
 

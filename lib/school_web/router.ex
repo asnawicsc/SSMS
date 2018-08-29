@@ -24,6 +24,9 @@ defmodule SchoolWeb.Router do
     get("/", PageController, :index)
   end
 
+
+
+
   scope "/", SchoolWeb do
     # Use the default browser stack
     pipe_through(:browser)
@@ -76,7 +79,7 @@ defmodule SchoolWeb.Router do
     resources("/time_period", TimePeriodController)
 
     resources("/exam", ExamController)
-    get("/generate_exam/:id", ExamController, :generate_exam)
+    get("/generate_exam", ExamController, :generate_exam)
     post("/mark", ExamController, :mark)
     post("/create_mark", ExamController, :create_mark)
     post("/update_mark", ExamController, :update_mark)
@@ -149,6 +152,22 @@ get("/nilam_setting", ProjectNilamController, :nilam_setting)
    post("/create_standard_subject", StandardSubjectController, :create_standard_subject)
     get("/new_standard_subject", SubjectController, :new_standard_subject)
   get("/create_new_test", SubjectController, :create_new_test)
+
+  get("/class_setting", ClassController, :class_setting)
+
+  resources "/subject_teach_class", SubjectTeachClassController
+  post("/create_class_subject_teach", SubjectTeachClassController, :create_class_subject_teach)
+ post("/edit_class", ClassController, :edit_class)
+ post("/edit_class_subject_teach", SubjectTeachClassController, :edit_class_subject_teach)
+
+  post("/edit_project_nilam", ProjectNilamController, :edit_project_nilam)
+   post("/create_class_period", ClassController, :create_class_period)
+
+   get("/mark_sheet", ExamController, :mark_sheet)
+      get("/exam_result_class", ExamController, :exam_result_class)
+        get("/exam_result_standard", ExamController, :exam_result_standard)
+             get("/exam_result_analysis_class", ExamController, :exam_result_analysis_class)
+                 get("/generate_attendance_report", AttendanceController, :generate_attendance_report)
   end
 
   # Other scopes may use custom stacks.
