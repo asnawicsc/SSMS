@@ -8,6 +8,7 @@ use Mix.Config
 # with brunch.io to recompile .js and .css sources.
 config :school, SchoolWeb.Endpoint,
   http: [port: 4001],
+  http: [protocol_options: [max_request_line_length: 8192, max_header_value_length: 8192]],
   debug_errors: true,
   code_reloader: true,
   check_origin: false,
@@ -55,3 +56,6 @@ config :school, School.Repo,
   database: "school_dev",
   hostname: "localhost",
   pool_size: 10
+
+# config :api, url: "https://www.li6rary.net/api"
+config :school, :api, url: "http://0.0.0.0:4001/api"

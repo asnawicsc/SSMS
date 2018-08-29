@@ -35,10 +35,12 @@ defmodule School.Affairs.Student do
     field(:achievements, :binary)
     field(:remarks, :binary)
     field(:student_no, :string)
-     field(:guardtype, :string)
+    field(:guardtype, :string)
     field(:gicno, :string)
     field(:ficno, :string)
     field(:micno, :string)
+    field(:height, :string)
+    field(:weight, :string)
     timestamps()
   end
 
@@ -80,9 +82,10 @@ defmodule School.Affairs.Student do
       :guardtype,
       :gicno,
       :ficno,
-      :micno, 
+      :micno,
+      :weight,
+      :height
     ])
-     |> validate_required([:student_no])
-   
+    |> validate_required([:student_no])
   end
 end

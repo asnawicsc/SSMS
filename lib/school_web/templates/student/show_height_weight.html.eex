@@ -1,0 +1,18 @@
+<br>
+<h4><%= @student.name %>  <%= @student.chinese_name %></h4>
+<form>
+	<input type="hidden" name="std_id" value="<%= @std_id %>">
+	<div class="form-row">
+		<div class="form-group col-md-3">
+		    <label>Height (cm)</label>
+		    <input name="height" value="<%= @height %>" class="form-control">
+	  	</div>
+	  	<div class="form-group col-md-3">
+		    <label>Weight (kg)</label>
+		    <input name="weight" value="<%= @weight %>" class="form-control">
+	  	</div>
+	</div>
+</form>
+<div>
+	<button class="btn btn-info" id="submit_height_weight">Submit</button>
+</div>

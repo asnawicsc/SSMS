@@ -18,7 +18,7 @@
 				<tr>
 					<td><%= cat["name"] %></td>
 					<td><%= cat["prefix"] %></td>
-					<td><button  id="show_books" cat_id="<%= cat["id"] %>" class="btn btn-sm btn-info"  data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo"><%= gettext("Expand") %></button></td>
+					<td><button aria-label="<%= cat["id"] %>"  id="show_books" cat_id="<%= cat["id"] %>" class="btn btn-sm btn-info"  data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo"><%= gettext("Expand") %></button></td>
 				</tr>
 				<% end %>
 
@@ -48,54 +48,53 @@
          <div class="card-body border-top">
             <div class = "row">
                 <div class="col-lg-8">
-                     <table  id="books_result" class="display" style="width:100%">
+                	<div class="table-responsive">
+                     <table  id="books_result" class="display" >
 						<thead>
 							<tr>
 								<th>Title</th>
-								<th>Series</th>
-								<th>Volume</th>
+								
 								<th>Author</th>
-								<th>Coauthor</th>
+								
 								<th>Barcode</th>
-								<th>ISBN</th>
+								
 								<th>Publisher</th>
-								<th>Illustrator</th>
-								<th>Translator</th>
-								<th>Action</tr>
+								
+								<th>Action</th>
+							</tr>
 
 						
 							
 								
-							</tr>
+							
 						</thead>
 						<tbody>
 							<td></td>
+							
 							<td></td>
+							
 							<td></td>
+							
 							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
+							
 							<td></td>
 
 						</tbody>
 					</table>        
-                   </div>
+                		
+                	</div>
+                 </div>
+             
 
                 <div class="col-lg-4" >
                     <div id="details">
-
-
-
 <div class="card card-primary">
       <div class="card-body">
           <form method="post" action="/library/book/update_book" class="form-horizontal">
   <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
 
-
+   <input type="hidden" name="b_id" id="b_id" value="">
+  <input type="hidden" name="cat_id" id="cat_id" value="">
   <input type="hidden" name="id" value="">   
   
             <table align="center">
@@ -129,7 +128,7 @@
             	<tr>
             		<td> <label class="bmd-label-floating">Barcode:</label></td><td><input type="text" name="barcode"> </td>
             	</tr>
-            	<tr><td colspan="2" align="center"><input class="btn btn-primary" name="" value="Submit" type="submit"></td></tr>
+            	<tr><td colspan="2" align="center"><input class="btn btn-primary" id="submit" name="" value="Submit" type="submit"></td></tr>
             </table>
        
               
@@ -141,6 +140,9 @@
 
       </div>
 </div>
+
+
+
   
 
 
@@ -164,6 +166,7 @@
 	  $("button#show_books").click(function(){
 							    	var cat_id = $(this).attr("cat_id")
 							    	console.log(cat_id)
+							    	$("input#cat_id").val(cat_id)
 								    $.ajax({
 								      url: "/operations",
 								      dataType: "json",
@@ -180,23 +183,21 @@
 							            ],
 							            columns: [
 							            {data: 'title'},
-							            {data: 'series'},
-							            {data: 'volume'},
+							            
 							            {data: 'author'},
-							            {data: 'coauthor'},
+							            
 							            {data: 'barcode'},
-							            {data: 'isbn'},
-							            {data: 'publisher'},
-							            {data: 'illustrator'},
-							            {data: 'translator'},
-							            {data: 'id'}
+							            
+							            {data: 'publisher'}
+							            
+							            
 							           
 				 		  
 							            ],columnDefs: [
-		            {targets: 10,
+		            {targets: 4,
 		            	data: 'id',
 		            	render: function(data, type, row, meta){
-		            		return "<button id='show' b_id="+data+" class='btn btn-primary btn-sm api' >Update</button>";
+		            		return "<button aria-label='show_"+data+"' id='show' b_id="+data+" class='btn btn-primary btn-sm api' >Update</button>";
 		            	}}
 		            ]
 
@@ -208,6 +209,7 @@
 	    							$("button#show").click(function(){
 							    	var b_id = $(this).attr("b_id")
 									console.log(b_id)
+									$("input#b_id").val(b_id)
 								    $.ajax({
 								      url: "/operations",
 								      dataType: "json",
@@ -254,7 +256,22 @@
 								    })
 							    })
 
+	
+	  var url = window.location.href.split("?")
+	  
+	  if (url[1] != undefined) {
 
+	  	var params = url[1].split("&")
+	  	console.log(params[0].split("=")[1])
+	  	console.log(params[1].split("=")[1])
+	  	$("button[aria-label="+params[0].split("=")[1]+"]").click()
+
+	  	$("button[aria-label='show_"+params[1].split("=")[1]+"']").click()
+	  	
+	  	
+	  }
+
+	
 
 </script>
 

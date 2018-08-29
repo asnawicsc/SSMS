@@ -30,8 +30,7 @@ defmodule SchoolWeb.ClassController do
 
     inst = Repo.get(Institution, School.Affairs.inst_id(conn))
 
-    uri = "https://www.li6rary.net/api"
-
+    uri = Application.get_env(:school, :api)[:url]
     lib_id = inst.library_organization_id
 
     a =

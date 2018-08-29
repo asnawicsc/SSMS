@@ -72,6 +72,41 @@ channel
 
 $(document).ready(function(){
 
+
+
+  $("div[aria-label='std_height_weight']").click(function(){
+    $("#levels").show()
+    var std_id = $(this).attr('id')
+    $('select#levels').attr('aria-label', std_id);
+    console.log(std_id)
+    var lvl_id = document.getElementById("levels").value
+    channel.push("show_height_weight",{std_id: std_id, lvl_id: lvl_id})
+    channel.on("display_height_weight",payload =>{
+      $("div[aria-label='height_weight_details']").html(payload.html)
+      $("button#submit_height_weight").click(function(){
+        lvl_id = document.getElementById("levels").value
+        var map = $("form").serializeArray();
+
+        channel.push("submit_height_weight",{lvl_id: lvl_id, map: map})
+        channel.on("updated_height_weight",payload => {
+          $.notify({
+        // options
+          message: "Height and weight updated !"
+        },{
+          // settings
+          type: 'info'
+        });
+        })
+      })
+    })
+  })
+
+  $("select#levels").click(function(){
+    var std_id = $(this).attr('aria-label')
+    var lvl_id = document.getElementById("levels").value
+    channel.push("show_height_weight",{std_id: std_id, lvl_id: lvl_id})  
+  })
+  
   $("div.convert").click(function(){
     var txt = $("input[name='from']").val()
     var from = $("select[name='from']").val()

@@ -21,20 +21,22 @@
         </tr>
       </thead>
       <tbody>
-       
-    <%= for student <- @students do %>
-        <tr>
-       
+    <%= if @students == nil do %> 
+    <% else %>
+      <%= for student <- @students do %>
+          <tr>
+         
 
 
-          <td class="text-left">
-       
-       
-              <div id="<%= student.id %>" class="btn btn-link student"><%= student.name %> <%= student.chinese_name %></div>
+            <td class="text-left">
+         
+         
+                <div id="<%= student.id %>" class="btn btn-link student"><%= student.name %> <%= student.chinese_name %></div>
 
-       
-          </td>
-        </tr>
+         
+            </td>
+          </tr>
+      <% end %>
     <% end %>
 
       </tbody>
