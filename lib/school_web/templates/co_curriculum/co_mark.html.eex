@@ -1,0 +1,63 @@
+<div aria-label="project_nilam">
+      <div class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card ">
+               
+                <div class="card-header ">
+            <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+                  <div class="row">
+                  <h4 class="card-title">CoCurriculum :
+                  </h4>
+
+                   
+                  <span>  <select class="select" onchange="getval(this);" required="required" name="cocurriculum">
+                           <%= for a <- @cocurriculum |> Enum.sort do %>
+                                            <option value="<%= a.id %>" ><%= a.description %>
+                                            </option>
+                                          <% end %>
+                                        </select>  </span>   
+                    
+                   
+                  </div>
+
+            
+                </div>
+                <div class="card-body" id="cocurriculum">
+
+                  </div>
+                </div>
+              </div>
+            </div>
+         
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+<script type="text/javascript">
+  
+ $('select[name="cocurriculum"]').val(localStorage.getItem("cocurriculum"));
+  function getval(sel)
+{
+    d=sel.value
+var cocurriculum=  localStorage.setItem("cocurriculum", d);
+
+
+    window.location.reload();
+
+ 
+}
+
+var csrf =  $('input[name="_csrf_token"]').val()
+
+channel.push("cocurriculum", {csrf: csrf,suser_id: window.currentUser,cocurriculum: localStorage.getItem("cocurriculum")})
+
+
+ channel.on("show_cocurriculum", payload => {
+
+    $("div#cocurriculum").html(payload.html)
+  })
+</script>

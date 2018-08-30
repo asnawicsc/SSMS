@@ -2988,4 +2988,134 @@ defmodule School.AffairsTest do
       assert %Ecto.Changeset{} = Affairs.change_subject_teach_class(subject_teach_class)
     end
   end
+
+  describe "cocurriculum" do
+    alias School.Affairs.CoCurriculum
+
+    @valid_attrs %{code: "some code", description: "some description"}
+    @update_attrs %{code: "some updated code", description: "some updated description"}
+    @invalid_attrs %{code: nil, description: nil}
+
+    def co_curriculum_fixture(attrs \\ %{}) do
+      {:ok, co_curriculum} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_co_curriculum()
+
+      co_curriculum
+    end
+
+    test "list_cocurriculum/0 returns all cocurriculum" do
+      co_curriculum = co_curriculum_fixture()
+      assert Affairs.list_cocurriculum() == [co_curriculum]
+    end
+
+    test "get_co_curriculum!/1 returns the co_curriculum with given id" do
+      co_curriculum = co_curriculum_fixture()
+      assert Affairs.get_co_curriculum!(co_curriculum.id) == co_curriculum
+    end
+
+    test "create_co_curriculum/1 with valid data creates a co_curriculum" do
+      assert {:ok, %CoCurriculum{} = co_curriculum} = Affairs.create_co_curriculum(@valid_attrs)
+      assert co_curriculum.code == "some code"
+      assert co_curriculum.description == "some description"
+    end
+
+    test "create_co_curriculum/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_co_curriculum(@invalid_attrs)
+    end
+
+    test "update_co_curriculum/2 with valid data updates the co_curriculum" do
+      co_curriculum = co_curriculum_fixture()
+      assert {:ok, co_curriculum} = Affairs.update_co_curriculum(co_curriculum, @update_attrs)
+      assert %CoCurriculum{} = co_curriculum
+      assert co_curriculum.code == "some updated code"
+      assert co_curriculum.description == "some updated description"
+    end
+
+    test "update_co_curriculum/2 with invalid data returns error changeset" do
+      co_curriculum = co_curriculum_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_co_curriculum(co_curriculum, @invalid_attrs)
+      assert co_curriculum == Affairs.get_co_curriculum!(co_curriculum.id)
+    end
+
+    test "delete_co_curriculum/1 deletes the co_curriculum" do
+      co_curriculum = co_curriculum_fixture()
+      assert {:ok, %CoCurriculum{}} = Affairs.delete_co_curriculum(co_curriculum)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_co_curriculum!(co_curriculum.id) end
+    end
+
+    test "change_co_curriculum/1 returns a co_curriculum changeset" do
+      co_curriculum = co_curriculum_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_co_curriculum(co_curriculum)
+    end
+  end
+
+  describe "student_cocurriculum" do
+    alias School.Affairs.StudentCocurriculum
+
+    @valid_attrs %{cocurriculum_id: 42, grade: "some grade", mark: 42, standard_id: 42, student_id: 42}
+    @update_attrs %{cocurriculum_id: 43, grade: "some updated grade", mark: 43, standard_id: 43, student_id: 43}
+    @invalid_attrs %{cocurriculum_id: nil, grade: nil, mark: nil, standard_id: nil, student_id: nil}
+
+    def student_cocurriculum_fixture(attrs \\ %{}) do
+      {:ok, student_cocurriculum} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_student_cocurriculum()
+
+      student_cocurriculum
+    end
+
+    test "list_student_cocurriculum/0 returns all student_cocurriculum" do
+      student_cocurriculum = student_cocurriculum_fixture()
+      assert Affairs.list_student_cocurriculum() == [student_cocurriculum]
+    end
+
+    test "get_student_cocurriculum!/1 returns the student_cocurriculum with given id" do
+      student_cocurriculum = student_cocurriculum_fixture()
+      assert Affairs.get_student_cocurriculum!(student_cocurriculum.id) == student_cocurriculum
+    end
+
+    test "create_student_cocurriculum/1 with valid data creates a student_cocurriculum" do
+      assert {:ok, %StudentCocurriculum{} = student_cocurriculum} = Affairs.create_student_cocurriculum(@valid_attrs)
+      assert student_cocurriculum.cocurriculum_id == 42
+      assert student_cocurriculum.grade == "some grade"
+      assert student_cocurriculum.mark == 42
+      assert student_cocurriculum.standard_id == 42
+      assert student_cocurriculum.student_id == 42
+    end
+
+    test "create_student_cocurriculum/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_student_cocurriculum(@invalid_attrs)
+    end
+
+    test "update_student_cocurriculum/2 with valid data updates the student_cocurriculum" do
+      student_cocurriculum = student_cocurriculum_fixture()
+      assert {:ok, student_cocurriculum} = Affairs.update_student_cocurriculum(student_cocurriculum, @update_attrs)
+      assert %StudentCocurriculum{} = student_cocurriculum
+      assert student_cocurriculum.cocurriculum_id == 43
+      assert student_cocurriculum.grade == "some updated grade"
+      assert student_cocurriculum.mark == 43
+      assert student_cocurriculum.standard_id == 43
+      assert student_cocurriculum.student_id == 43
+    end
+
+    test "update_student_cocurriculum/2 with invalid data returns error changeset" do
+      student_cocurriculum = student_cocurriculum_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_student_cocurriculum(student_cocurriculum, @invalid_attrs)
+      assert student_cocurriculum == Affairs.get_student_cocurriculum!(student_cocurriculum.id)
+    end
+
+    test "delete_student_cocurriculum/1 deletes the student_cocurriculum" do
+      student_cocurriculum = student_cocurriculum_fixture()
+      assert {:ok, %StudentCocurriculum{}} = Affairs.delete_student_cocurriculum(student_cocurriculum)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_student_cocurriculum!(student_cocurriculum.id) end
+    end
+
+    test "change_student_cocurriculum/1 returns a student_cocurriculum changeset" do
+      student_cocurriculum = student_cocurriculum_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_student_cocurriculum(student_cocurriculum)
+    end
+  end
 end

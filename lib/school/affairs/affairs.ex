@@ -3289,4 +3289,196 @@ defmodule School.Affairs do
   def change_subject_teach_class(%SubjectTeachClass{} = subject_teach_class) do
     SubjectTeachClass.changeset(subject_teach_class, %{})
   end
+
+  alias School.Affairs.CoCurriculum
+
+  @doc """
+  Returns the list of cocurriculum.
+
+  ## Examples
+
+      iex> list_cocurriculum()
+      [%CoCurriculum{}, ...]
+
+  """
+  def list_cocurriculum do
+    Repo.all(CoCurriculum)
+  end
+
+  @doc """
+  Gets a single co_curriculum.
+
+  Raises `Ecto.NoResultsError` if the Co curriculum does not exist.
+
+  ## Examples
+
+      iex> get_co_curriculum!(123)
+      %CoCurriculum{}
+
+      iex> get_co_curriculum!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_co_curriculum!(id), do: Repo.get!(CoCurriculum, id)
+
+  @doc """
+  Creates a co_curriculum.
+
+  ## Examples
+
+      iex> create_co_curriculum(%{field: value})
+      {:ok, %CoCurriculum{}}
+
+      iex> create_co_curriculum(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_co_curriculum(attrs \\ %{}) do
+    %CoCurriculum{}
+    |> CoCurriculum.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a co_curriculum.
+
+  ## Examples
+
+      iex> update_co_curriculum(co_curriculum, %{field: new_value})
+      {:ok, %CoCurriculum{}}
+
+      iex> update_co_curriculum(co_curriculum, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_co_curriculum(%CoCurriculum{} = co_curriculum, attrs) do
+    co_curriculum
+    |> CoCurriculum.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a CoCurriculum.
+
+  ## Examples
+
+      iex> delete_co_curriculum(co_curriculum)
+      {:ok, %CoCurriculum{}}
+
+      iex> delete_co_curriculum(co_curriculum)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_co_curriculum(%CoCurriculum{} = co_curriculum) do
+    Repo.delete(co_curriculum)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking co_curriculum changes.
+
+  ## Examples
+
+      iex> change_co_curriculum(co_curriculum)
+      %Ecto.Changeset{source: %CoCurriculum{}}
+
+  """
+  def change_co_curriculum(%CoCurriculum{} = co_curriculum) do
+    CoCurriculum.changeset(co_curriculum, %{})
+  end
+
+  alias School.Affairs.StudentCocurriculum
+
+  @doc """
+  Returns the list of student_cocurriculum.
+
+  ## Examples
+
+      iex> list_student_cocurriculum()
+      [%StudentCocurriculum{}, ...]
+
+  """
+  def list_student_cocurriculum do
+    Repo.all(StudentCocurriculum)
+  end
+
+  @doc """
+  Gets a single student_cocurriculum.
+
+  Raises `Ecto.NoResultsError` if the Student cocurriculum does not exist.
+
+  ## Examples
+
+      iex> get_student_cocurriculum!(123)
+      %StudentCocurriculum{}
+
+      iex> get_student_cocurriculum!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_student_cocurriculum!(id), do: Repo.get!(StudentCocurriculum, id)
+
+  @doc """
+  Creates a student_cocurriculum.
+
+  ## Examples
+
+      iex> create_student_cocurriculum(%{field: value})
+      {:ok, %StudentCocurriculum{}}
+
+      iex> create_student_cocurriculum(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_student_cocurriculum(attrs \\ %{}) do
+    %StudentCocurriculum{}
+    |> StudentCocurriculum.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a student_cocurriculum.
+
+  ## Examples
+
+      iex> update_student_cocurriculum(student_cocurriculum, %{field: new_value})
+      {:ok, %StudentCocurriculum{}}
+
+      iex> update_student_cocurriculum(student_cocurriculum, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_student_cocurriculum(%StudentCocurriculum{} = student_cocurriculum, attrs) do
+    student_cocurriculum
+    |> StudentCocurriculum.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a StudentCocurriculum.
+
+  ## Examples
+
+      iex> delete_student_cocurriculum(student_cocurriculum)
+      {:ok, %StudentCocurriculum{}}
+
+      iex> delete_student_cocurriculum(student_cocurriculum)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_student_cocurriculum(%StudentCocurriculum{} = student_cocurriculum) do
+    Repo.delete(student_cocurriculum)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking student_cocurriculum changes.
+
+  ## Examples
+
+      iex> change_student_cocurriculum(student_cocurriculum)
+      %Ecto.Changeset{source: %StudentCocurriculum{}}
+
+  """
+  def change_student_cocurriculum(%StudentCocurriculum{} = student_cocurriculum) do
+    StudentCocurriculum.changeset(student_cocurriculum, %{})
+  end
 end

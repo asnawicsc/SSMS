@@ -1,0 +1,5 @@
+<h2>New Co curriculum</h2>
+
+<%= render "form.html", Map.put(assigns, :action, co_curriculum_path(@conn, :create)) %>
+
+<span><%= link "Back", to: co_curriculum_path(@conn, :co_curriculum_setting) %></span>
