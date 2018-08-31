@@ -43,6 +43,8 @@
     <script src="<%= static_path(@conn, "/js/phoenix.js") %>"></script>
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
     <script src="<%= static_path(@conn, "/js/library.js") %>"></script>
+     <link rel="stylesheet" href="/css/richtext.min.css">
+     <script src="/js/jquery.richtext.min.js"></script>
   </head>
 
 

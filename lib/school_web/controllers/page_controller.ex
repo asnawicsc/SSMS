@@ -246,4 +246,184 @@ defmodule SchoolWeb.PageController do
     |> put_flash(:info, "Library books updated!")
     |> redirect(to: page_path(conn, :books, cat_id: params["cat_id"], b_id: params["b_id"]))
   end
+
+  def student_cards(conn, params) do
+    uri = Application.get_env(:school, :api)[:url]
+
+    inst = Repo.get(Institution, School.Affairs.inst_id(conn))
+    path = "?scope=get_templates&lib_id=#{inst.library_organization_id}"
+
+    response =
+      HTTPoison.get!(
+        uri <> path,
+        [{"Content-Type", "application/json"}],
+        timeout: 50_000,
+        recv_timeout: 50_000
+      ).body
+
+    templates = response |> Poison.decode!() |> hd()
+
+    render(conn, "student_cards.html", templates: templates)
+  end
+
+  def update_template(conn, params) do
+    inst = Repo.get(Institution, School.Affairs.inst_id(conn))
+
+    uri = Application.get_env(:school, :api)[:url]
+
+    lib_id = inst.library_organization_id
+
+    template_params = %{
+      scope: "update_template",
+      front_bin: params["long"],
+      back_bin: params["long2"],
+      css_bin: params["styles"],
+      organization_id: lib_id
+    }
+
+    HTTPoison.request(
+      :post,
+      uri,
+      Poison.encode!(template_params),
+      [{"Content-Type", "application/json"}],
+      []
+    )
+
+    conn
+    |> put_flash(:info, "Student Card design updated!")
+    |> redirect(to: page_path(conn, :student_cards))
+  end
+
+  def generate_student_card(conn, params) do
+    uri = Application.get_env(:school, :api)[:url]
+    inst = Repo.get(Institution, School.Affairs.inst_id(conn))
+    path = "?scope=get_templates&lib_id=#{inst.library_organization_id}"
+
+    response =
+      HTTPoison.get!(
+        uri <> path,
+        [{"Content-Type", "application/json"}],
+        timeout: 50_000,
+        recv_timeout: 50_000
+      ).body
+
+    template = response |> Poison.decode!() |> hd()
+
+    lib_id = inst.library_organization_id
+    student_ids = params["ids"] |> String.split("\r\n")
+
+    map_list =
+      for id <- student_ids do
+        student = Repo.get_by(Student, student_no: id)
+        f_bin = template["front_bin"]
+        b_bin = template["back_bin"]
+
+        # front bin
+        f_bin = f_bin |> String.replace("_name_", student.name)
+        f_bin = f_bin |> String.replace("_cname_", student.chinese_name)
+        f_bin = f_bin |> String.replace("_stu_id_", student.student_no)
+        f_bin = f_bin |> String.replace("_ic_)", student.ic)
+
+        # back bin
+        b_bin = b_bin |> String.replace("_name_", student.name)
+        b_bin = b_bin |> String.replace("_cname_", student.chinese_name)
+        b_bin = b_bin |> String.replace("_stu_id_", student.student_no)
+        b_bin = b_bin |> String.replace("_ic_", student.ic)
+
+        image_path = Application.app_dir(:school, "priv/static/images")
+
+        Barlix.Code39.encode!(student.student_no)
+        |> Barlix.PNG.print(file: image_path <> "/#{student.student_no}.png", xdim: 5)
+
+        {:ok, bin} = File.read(image_path <> "/#{student.student_no}.png")
+
+        image_bin = Base.encode64(bin)
+        image_str = "<img style='width: 80%;' src='data:image/png;base64, #{image_bin}'>"
+
+        File.rm!(image_path <> "/#{student.student_no}.png")
+
+        f_bin = f_bin |> String.replace("_barcode_", image_str)
+        b_bin = b_bin |> String.replace("_barcode_", image_str)
+
+        map = %{contents: f_bin, styles: template["css_bin"], contents2: b_bin}
+        map
+      end
+
+    html =
+      Phoenix.View.render_to_string(
+        SchoolWeb.PageView,
+        "show_card.html",
+        contents: nil,
+        styles: nil,
+        contents2: nil,
+        map_lists: map_list
+      )
+
+    # IEx.pry()
+    pdf_params = %{"html" => html}
+
+    pdf_binary =
+      PdfGenerator.generate_binary!(
+        pdf_params["html"],
+        size: "A4",
+        shell_params: [
+          "--margin-left",
+          "1",
+          "--margin-right",
+          "1",
+          "--margin-top",
+          "1",
+          "--margin-bottom",
+          "1",
+          "--encoding",
+          "utf-8"
+        ],
+        delete_temporary: true
+      )
+
+    conn
+    |> put_resp_header("Content-Type", "application/pdf")
+    |> resp(200, pdf_binary)
+  end
+
+  def preview_template(conn, params) do
+    contents = params["long"]
+    contents2 = params["long2"]
+    styles = params["styles"]
+
+    html =
+      Phoenix.View.render_to_string(
+        SchoolWeb.PageView,
+        "show_card.html",
+        contents: contents,
+        styles: styles,
+        contents2: contents2,
+        map_lists: nil
+      )
+
+    pdf_params = %{"html" => html}
+
+    pdf_binary =
+      PdfGenerator.generate_binary!(
+        pdf_params["html"],
+        size: "A4",
+        shell_params: [
+          "--margin-left",
+          "1",
+          "--margin-right",
+          "1",
+          "--margin-top",
+          "1",
+          "--margin-bottom",
+          "1",
+          "--encoding",
+          "utf-8"
+        ],
+        delete_temporary: true
+      )
+
+    conn
+    |> put_resp_header("Content-Type", "application/pdf")
+    |> resp(200, pdf_binary)
+  end
 end

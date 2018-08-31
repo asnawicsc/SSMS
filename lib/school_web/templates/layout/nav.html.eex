@@ -42,14 +42,14 @@
             <a class="dropdown-item" href="/parent"><%= gettext "Parents" %></a>
             <a class="dropdown-item" href="/students"><%= gettext "Students" %></a>
             <a class="dropdown-item" href="/period"><%= gettext "Period" %></a>
-<<<<<<< HEAD
+
             <a class="dropdown-item" href="/height_weight"><%= gettext "Height&Weight" %></a>
-=======
+
 
                <a class="dropdown-item" href="/grade"><%= gettext "Grade" %></a>
             <a class="dropdown-item" href="/co_grade"><%= gettext "Co Grade" %></a>
 
->>>>>>> 164dea2e66ebe771ff4fc8c487f54d99fd773712
+
         </div>
       </li>
       <li class="nav-item dropdown">
@@ -71,6 +71,7 @@
           <a href="/library/books" class="dropdown-item api" call="get_lib"><%= gettext "Book List by Categories" %></a>
         <a href="/library/returns" class="dropdown-item api" call="get_loans"><%= gettext "Return List" %></a>
         <a href="/library/loans/new" class="dropdown-item api"><%= gettext "New Loans" %></a>
+         <a href="/library/book/student_cards" class="dropdown-item api" call="get_lib"><%= gettext "Student Cards" %></a>
 
           
         </div>

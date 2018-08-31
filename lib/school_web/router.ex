@@ -32,6 +32,10 @@ defmodule SchoolWeb.Router do
     get("/library/books", PageController, :books)
     post("/library/books/uploads", PageController, :upload_books)
     post("/library/book/update_book", PageController, :update_book)
+    get("/library/book/student_cards", PageController, :student_cards)
+    post("/library/book/update_template", PageController, :update_template)
+    post("/library/book/generate_student_card", PageController, :generate_student_card)
+    post("/library/book/preview_template", PageController, :preview_template)
     get("/library/loans/new", PageController, :new_loan)
     get("/library/returns", PageController, :return)
     resources("/parameters", ParameterController)
@@ -89,67 +93,70 @@ defmodule SchoolWeb.Router do
     post("/exam_ranking", ExamController, :exam_ranking)
     get("/generate_ranking", ExamController, :generate_ranking)
 
-        get("/rank_exam/:id", ExamController, :rank_exam)
+    get("/rank_exam/:id", ExamController, :rank_exam)
 
-  resources "/head_counts", HeadCountController
+    resources("/head_counts", HeadCountController)
 
- get("/generate_head_count/:id", HeadCountController, :generate_head_count)
-  post("/head_count_create", HeadCountController, :head_count_create)
+    get("/generate_head_count/:id", HeadCountController, :generate_head_count)
+    post("/head_count_create", HeadCountController, :head_count_create)
 
     post("/create_head_count", HeadCountController, :create_head_count)
 
-     post("/update_head_count_mark", HeadCountController, :update_head_count_mark)
-      get("/head_count_subject/:id", HeadCountController, :head_count_subject)
-       post("/head_count_subject_create", HeadCountController, :head_count_subject_create)
+    post("/update_head_count_mark", HeadCountController, :update_head_count_mark)
+    get("/head_count_subject/:id", HeadCountController, :head_count_subject)
+    post("/head_count_subject_create", HeadCountController, :head_count_subject_create)
 
-        get("/print_students/:id", StudentController, :print_students)
+    get("/print_students/:id", StudentController, :print_students)
 
     get("/report_card/:exam_name/:id", ExamController, :report_card)
     get("/show_guardian/:id", ParentController, :show_guardian)
     resources("/exam_mark", ExamMarkController)
     get("/generate_mark_analyse/:id", ExamController, :generate_mark_analyse)
-     post("/mark_analyse", ExamController, :mark_analyse)
-          get("/default_grade", GradeController, :default_grade)
-           get("/default_day", DayController, :default_day)
-          resources "/teacher_period", TeacherPeriodController
-              post("/create_teacher_period", TeacherPeriodController, :create_teacher_period)
+    post("/mark_analyse", ExamController, :mark_analyse)
+    get("/default_grade", GradeController, :default_grade)
+    get("/default_day", DayController, :default_day)
+    resources("/teacher_period", TeacherPeriodController)
+    post("/create_teacher_period", TeacherPeriodController, :create_teacher_period)
 
-               get("/teacher_timetable", TeacherController, :teacher_timetable)
-               resources "/co_grade", CoGradeController
-  get("/default_co_grade", CoGradeController, :default_co_grade)
-  resources "/school_job", SchoolJobController
+    get("/teacher_timetable", TeacherController, :teacher_timetable)
+    resources("/co_grade", CoGradeController)
+    get("/default_co_grade", CoGradeController, :default_co_grade)
+    resources("/school_job", SchoolJobController)
 
-  resources "/cocurriculum_job", CoCurriculumJobController
- resources "/hem_job", HemJobController
- resources "/absent_reason", AbsentReasonController
- get("/teacher_setting", TeacherController, :teacher_setting)
+    resources("/cocurriculum_job", CoCurriculumJobController)
+    resources("/hem_job", HemJobController)
+    resources("/absent_reason", AbsentReasonController)
+    get("/teacher_setting", TeacherController, :teacher_setting)
 
-  get("/school_job", TeacherController, :school_job)
+    get("/school_job", TeacherController, :school_job)
 
-  resources "/teacher_school_job", TeacherSchoolJobController
-  resources "/teacher_co_curriculum_job", TeacherCoCurriculumJobController
-   resources "/teacher_hem_job", TeacherHemJobController
+    resources("/teacher_school_job", TeacherSchoolJobController)
+    resources("/teacher_co_curriculum_job", TeacherCoCurriculumJobController)
+    resources("/teacher_hem_job", TeacherHemJobController)
 
-    resources "/teacher_absent_reason", TeacherAbsentReasonController
+    resources("/teacher_absent_reason", TeacherAbsentReasonController)
 
+    post("/create_teacher_school_job", TeacherSchoolJobController, :create_teacher_school_job)
 
-  post("/create_teacher_school_job", TeacherSchoolJobController, :create_teacher_school_job)
+    post(
+      "/create_teacher_cocurriculum_job",
+      TeacherCoCurriculumJobController,
+      :create_teacher_cocurriculum_job
+    )
 
-    post("/create_teacher_cocurriculum_job", TeacherCoCurriculumJobController, :create_teacher_cocurriculum_job)
-     post("/create_teacher_hem_job", TeacherHemJobController, :create_teacher_hem_job)
+    post("/create_teacher_hem_job", TeacherHemJobController, :create_teacher_hem_job)
 
+    get("/standard_setting", SubjectController, :standard_setting)
 
-      get("/standard_setting", SubjectController, :standard_setting)
+    resources("/project_nilam", ProjectNilamController)
+    resources("/jauhari", JauhariController)
+    resources("/rakan", RakanController)
+    get("/nilam_setting", ProjectNilamController, :nilam_setting)
+    resources("/standard_subject", StandardSubjectController)
 
-       resources "/project_nilam", ProjectNilamController
-  resources "/jauhari", JauhariController
- resources "/rakan", RakanController
-get("/nilam_setting", ProjectNilamController, :nilam_setting)
- resources "/standard_subject", StandardSubjectController
-
-   post("/create_standard_subject", StandardSubjectController, :create_standard_subject)
+    post("/create_standard_subject", StandardSubjectController, :create_standard_subject)
     get("/new_standard_subject", SubjectController, :new_standard_subject)
-  get("/create_new_test", SubjectController, :create_new_test)
+    get("/create_new_test", SubjectController, :create_new_test)
   end
 
   # Other scopes may use custom stacks.
