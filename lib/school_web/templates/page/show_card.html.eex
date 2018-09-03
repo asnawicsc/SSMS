@@ -1,0 +1,13 @@
+<link rel="stylesheet" href="<%= Application.app_dir(:school, "priv/static") %>/css/pdf.css">
+<%= if @map_lists == nil do %>
+	
+	<div style="<%= raw(@styles)%>"><%= raw(@contents)%></div>
+	<div style="<%= raw(@styles)%>"><%= raw(@contents2)%></div>
+<% else %>
+	<%= for list <- @map_lists do %>
+		
+		<div style="<%= raw(list.styles)%>"><%= raw(list.contents)%></div>
+		<div style="<%= raw(list.styles)%>"><%= raw(list.contents2)%></div>
+
+	<% end %>
+<% end %>

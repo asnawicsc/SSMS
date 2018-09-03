@@ -93,15 +93,18 @@
             <%= gettext "Nilam Setting" %> </a>
           <div class="dropdown-divider"></div>
 
-            <a class="dropdown-item" href="/parent"><%= gettext "Parents Setting" %></a>
-            <a class="dropdown-item" href="/students"><%= gettext "Students Setting" %></a>
-   
+            <a class="dropdown-item" href="/subject"><%= gettext "Subjects" %></a>
+            <a class="dropdown-item" href="/parent"><%= gettext "Parents" %></a>
+            <a class="dropdown-item" href="/students"><%= gettext "Students" %></a>
+            <a class="dropdown-item" href="/period"><%= gettext "Period" %></a>
+
 
             <a class="dropdown-item" href="/height_weight"><%= gettext "Height&Weight" %></a>
 
 
                <a class="dropdown-item" href="/grade"><%= gettext "Grade" %></a>
             <a class="dropdown-item" href="/co_grade"><%= gettext "Co Grade" %></a>
+
 
         </div>
       </li>
@@ -188,6 +191,7 @@
           <a href="/library/books" class="dropdown-item api" call="get_lib"><%= gettext "Book List by Categories" %></a>
         <a href="/library/returns" class="dropdown-item api" call="get_loans"><%= gettext "Return List" %></a>
         <a href="/library/loans/new" class="dropdown-item api"><%= gettext "New Loans" %></a>
+         <a href="/library/book/student_cards" class="dropdown-item api" call="get_lib"><%= gettext "Student Cards" %></a>
 
           
         </div>
