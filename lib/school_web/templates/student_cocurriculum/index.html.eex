@@ -1,0 +1,38 @@
+<h2>Listing Student cocurriculum</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Student</th>
+      <th>Cocurriculum</th>
+      <th>Standard</th>
+      <th>Grade</th>
+      <th>Mark</th>
+       <th>Year</th>
+        <th>Semester</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for student_cocurriculum <- @student_cocurriculum do %>
+    <tr>
+      <td><%= student_cocurriculum.student_id %></td>
+      <td><%= student_cocurriculum.cocurriculum_id %></td>
+      <td><%= student_cocurriculum.standard_id %></td>
+      <td><%= student_cocurriculum.grade %></td>
+      <td><%= student_cocurriculum.mark %></td>
+      <td><%= student_cocurriculum.year %></td>
+      <td><%= student_cocurriculum.semester_id %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: student_cocurriculum_path(@conn, :show, student_cocurriculum), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: student_cocurriculum_path(@conn, :edit, student_cocurriculum), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: student_cocurriculum_path(@conn, :delete, student_cocurriculum), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Student cocurriculum", to: student_cocurriculum_path(@conn, :new) %></span>

@@ -169,6 +169,17 @@ get("/nilam_setting", ProjectNilamController, :nilam_setting)
         get("/exam_result_standard", ExamController, :exam_result_standard)
              get("/exam_result_analysis_class", ExamController, :exam_result_analysis_class)
                  get("/generate_attendance_report", AttendanceController, :generate_attendance_report)
+                 resources "/cocurriculum", CoCurriculumController
+                   resources "/student_cocurriculum", StudentCocurriculumController
+  get("/co_curriculum_setting", CoCurriculumController, :co_curriculum_setting)
+
+   
+   post("/create_student_co", CoCurriculumController, :create_student_co)
+     get("/co_mark", CoCurriculumController, :co_mark)
+ post("/create_co_mark", CoCurriculumController, :create_co_mark)
+
+
+
   end
 
   # Other scopes may use custom stacks.

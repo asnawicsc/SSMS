@@ -1,0 +1,18 @@
+<h2>Show Co curriculum</h2>
+
+<ul>
+
+  <li>
+    <strong>Code:</strong>
+    <%= @co_curriculum.code %>
+  </li>
+
+  <li>
+    <strong>Description:</strong>
+    <%= @co_curriculum.description %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: co_curriculum_path(@conn, :edit, @co_curriculum) %></span>
+<span><%= link "Back", to: co_curriculum_path(@conn, :index) %></span>

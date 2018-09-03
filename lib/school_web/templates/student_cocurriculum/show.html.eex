@@ -1,0 +1,43 @@
+<h2>Show Student cocurriculum</h2>
+
+<ul>
+
+  <li>
+    <strong>Student:</strong>
+    <%= @student_cocurriculum.student_id %>
+  </li>
+
+  <li>
+    <strong>Cocurriculum:</strong>
+    <%= @student_cocurriculum.cocurriculum_id %>
+  </li>
+
+  <li>
+    <strong>Standard:</strong>
+    <%= @student_cocurriculum.standard_id %>
+  </li>
+
+  <li>
+    <strong>Grade:</strong>
+    <%= @student_cocurriculum.grade %>
+  </li>
+
+  <li>
+    <strong>Mark:</strong>
+    <%= @student_cocurriculum.mark %>
+  </li>
+
+    <li>
+    <strong>Grade:</strong>
+    <%= @student_cocurriculum.year %>
+  </li>
+
+  <li>
+    <strong>Mark:</strong>
+    <%= @student_cocurriculum.semester_id %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: student_cocurriculum_path(@conn, :edit, @student_cocurriculum) %></span>
+<span><%= link "Back", to: student_cocurriculum_path(@conn, :index) %></span>

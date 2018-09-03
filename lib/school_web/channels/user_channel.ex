@@ -1638,6 +1638,40 @@ defmodule SchoolWeb.UserChannel do
     {:noreply, socket}
   end
 
+  def handle_in("cocurriculum", payload, socket) do
+    csrf = payload["csrf"]
+    cocurriculum = payload["cocurriculum"]
+
+    students =
+      Repo.all(
+        from(
+          s in School.Affairs.StudentCocurriculum,
+          left_join: a in School.Affairs.Student,
+          on: s.student_id == a.id,
+          left_join: j in School.Affairs.StudentClass,
+          on: s.student_id == j.sudent_id,
+          left_join: p in School.Affairs.CoCurriculum,
+          on: s.cocurriculum_id == p.id,
+          left_join: c in School.Affairs.Class,
+          on: j.class_id == c.id,
+          where: s.cocurriculum_id == ^cocurriculum,
+          select: %{id: p.id, student_id: s.student_id, name: a.name, class_name: c.name}
+        )
+      )
+
+    html =
+      Phoenix.View.render_to_string(
+        SchoolWeb.CoCurriculumView,
+        "assign_mark.html",
+        csrf: csrf,
+        students: students,
+        cocurriculum: cocurriculum
+      )
+
+    broadcast(socket, "show_cocurriculum", %{html: html})
+    {:noreply, socket}
+  end
+
   # Add authorization logic here as required.
   defp authorized?(_payload) do
     true

@@ -1,0 +1,81 @@
+
+
+   <div class="row">
+                <div class="col-lg-12">
+                  <div class="card">
+                    <div class="card-header"><%= gettext "Co-Curriculum Info" %></div>
+                    <div class="card-body">
+                        <h2>Listing Cocurriculum</h2>
+
+                            <table class="table">
+                              <thead>
+                                <tr>
+                                  <th>Code</th>
+                                  <th>Description</th>
+
+                                  <th></th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                            <%= for co_curriculum <- @cocurriculum do %>
+                                <tr>
+                                  <td><%= co_curriculum.code %></td>
+                                  <td><%= co_curriculum.description %></td>
+
+                                  <td class="text-right">
+                                    <span><%= link "Show", to: co_curriculum_path(@conn, :show, co_curriculum), class: "btn btn-default btn-xs" %></span>
+                                    <span><%= link "Edit", to: co_curriculum_path(@conn, :edit, co_curriculum), class: "btn btn-default btn-xs" %></span>
+                                    <span><%= link "Delete", to: co_curriculum_path(@conn, :delete, co_curriculum), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+                                  </td>
+                                </tr>
+                            <% end %>
+                              </tbody>
+                            </table>
+
+
+                     
+                    </div>
+                      <div class="card-footer">
+                     <span><%= link "New Co curriculum", class: "btn btn-danger btn-link btn-sm", to: co_curriculum_path(@conn, :new) %></span>
+                                    <button type="button" rel="tooltip" title="" class="btn btn-danger btn-link btn-sm" id="" name="class_id2"  value="" data-toggle="modal" aria-label="modelb" data-target="#modelb" data-original-title="Edit Item"><i class="material-icons">Assign Student Co Curriculum</i><div class="ripple-container"></div>                 </button>
+                            
+                     </div>
+                  </div>
+                </div>
+ 
+                </div>
+
+
+
+    
+
+<div class="modal fade" id="modelb" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document" style="width: 1000px; margin-left: 550px;">
+    <div class="modal-content" style="width: 1000px;">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit Project Nilam</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="modal_form5">
+    <%= render("assign_student_co.html", conn: @conn,level: @level,students: @students,cocurriculum: @cocurriculum,semester: @semester) %>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <input type="hidden" name="popup" value="0">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<script type="text/javascript">
+  
+   var level=localStorage.getItem("level")
+
+  channel.push("nilam_setting", {user_id: window.currentUser,level: level})
+</script>
+
