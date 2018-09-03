@@ -29,4 +29,8 @@ defmodule School.Settings.User do
     |> validate_required([:crypted_password, :email])
     |> unique_constraint(:email)
   end
+
+  def institution_id(conn) do
+    conn.private.plug_session["institution_id"]
+  end
 end

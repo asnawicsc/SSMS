@@ -1,10 +1,16 @@
 defmodule SchoolWeb.ClassController do
   use SchoolWeb, :controller
   use Task
-  alias School.Affairs
-  alias School.Settings.Institution
-  alias School.Affairs.{Level, Class}
+
   require IEx
+
+  def class_analysis(conn, params) do
+    semesters = Repo.all(from(s in Semester))
+
+    classes = Repo.all(from(c in Class, where: c.institution_id == ^User.institution_id(conn)))
+
+    render(conn, "class_analysis.html", semesters: semesters, classes: classes)
+  end
 
   def sync_library_membership(conn, params) do
     students_in =
@@ -55,10 +61,11 @@ defmodule SchoolWeb.ClassController do
     response = HTTPoison.get!(uri <> path, [{"Content-Type", "application/json"}]).body
   end
 
-  def edit_class(conn,params) do
-        class = Affairs.get_class!(params["edit_class"])
+  def edit_class(conn, params) do
+    class = Affairs.get_class!(params["edit_class"])
 
-    class_params = %{remarks: params["remark"],name: params["class_name"]}
+    class_params = %{remarks: params["remark"], name: params["class_name"]}
+
     case Affairs.update_class(class, class_params) do
       {:ok, class} ->
         conn
@@ -68,12 +75,14 @@ defmodule SchoolWeb.ClassController do
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", class: class, changeset: changeset)
     end
-    
   end
 
-  def add_to_class_semester(conn, %{"institute_id" => institute_id,"semester_id" => semester_id,"student_id" => student_id,"class_id" => class_id}) do
-
-
+  def add_to_class_semester(conn, %{
+        "institute_id" => institute_id,
+        "semester_id" => semester_id,
+        "student_id" => student_id,
+        "class_id" => class_id
+      }) do
     class = Repo.get(Class, class_id)
     student = Repo.get(School.Affairs.Student, student_id)
 
@@ -110,9 +119,8 @@ defmodule SchoolWeb.ClassController do
     send_resp(conn, 200, map)
   end
 
-  def class_setting(conn,params) do
-
-        s1 = Repo.get_by(Level, name: "Standard 1")
+  def class_setting(conn, params) do
+    s1 = Repo.get_by(Level, name: "Standard 1")
     if s1 == nil, do: Level.changeset(%Level{}, %{name: "Standard 1"}) |> Repo.insert()
     s2 = Repo.get_by(Level, name: "Standard 2")
     if s2 == nil, do: Level.changeset(%Level{}, %{name: "Standard 2"}) |> Repo.insert()
@@ -124,15 +132,16 @@ defmodule SchoolWeb.ClassController do
     if s5 == nil, do: Level.changeset(%Level{}, %{name: "Standard 5"}) |> Repo.insert()
     s6 = Repo.get_by(Level, name: "Standard 6")
     if s6 == nil, do: Level.changeset(%Level{}, %{name: "Standard 6"}) |> Repo.insert()
-     changeset = Affairs.change_class(%Class{})
+    changeset = Affairs.change_class(%Class{})
 
-    class=Repo.all(from s in School.Affairs.Class,select: %{id: s.id,name: s.name})
+    class = Repo.all(from(s in School.Affairs.Class, select: %{id: s.id, name: s.name}))
 
-     render(
-        conn,
-        "class_setting.html",class: class,changeset: changeset
-       
-      )
+    render(
+      conn,
+      "class_setting.html",
+      class: class,
+      changeset: changeset
+    )
   end
 
   def students(conn, params) do
@@ -220,101 +229,89 @@ defmodule SchoolWeb.ClassController do
     end
   end
 
-  def create_class_period(conn,params) do
+  def create_class_period(conn, params) do
+    class_id = params["class_id"]
+    subject = params["subject"]
+    day = params["day"]
+    end_time = params["end_time"] |> String.reverse()
+    start_time = params["start_time"] |> String.reverse()
 
-    class_id=params["class_id"]
-    subject=params["subject"]
-    day=params["day"]
-    end_time=params["end_time"]|>String.reverse
-    start_time=params["start_time"]|>String.reverse
+    a = "00:"
+    new_end_time = (a <> end_time) |> String.reverse() |> Time.from_iso8601!()
+    new_start_time = (a <> start_time) |> String.reverse() |> Time.from_iso8601!()
 
+    n_time = new_start_time.hour
+    n_sm = new_start_time.minute
+    e_time = new_end_time.hour
+    n_em = new_start_time.minute
 
-    a="00:"
-    new_end_time=a<>end_time|>String.reverse|>Time.from_iso8601!()
-    new_start_time=a<>start_time|>String.reverse|>Time.from_iso8601!()
-
-    n_time=new_start_time.hour
-      n_sm=new_start_time.minute
-    e_time=new_end_time.hour
-      n_em=new_start_time.minute
-
-     if  n_time == 0 do 
-
-          n_time= 12
-      end
-
-      if  e_time == 0 do
-
-          e_time= 12
-      end 
-
-
-    subject=Repo.get_by(School.Affairs.SubjectTeachClass,id: subject)
-    class=Repo.get_by(Class,id: class_id)
-    teacher=Repo.get_by(Teacher,id: subject.teacher_id)
-    subject_period=Repo.get_by(Subject,id: subject.subject_id)
-
-    params=%{day: day, end_time: new_end_time, start_time: new_start_time,teacher_id: teacher.id,class_id: class.id,subject_id: subject_period.id}
-
-
-
-    period_class=Repo.all(from p in School.Affairs.Period, where: p.class_id ==^class.id and p.day ==^day)
-
-
-      all=for item <- period_class do
-      e=item.end_time.hour  
-      s=item.start_time.hour 
-        em=item.end_time.minute  
-      sm=item.start_time.minute 
-
-       if  e == 0 do 
-
-          e= 12
-      end
-
-      if  s == 0 do
-
-          s= 12
-      end 
-
-      %{end_time: e,start_time: s,start_minute: sm,end_minute: em}
-    
-   end
-
-   a=all|>Enum.filter(fn x -> x.start_time >= n_time and x.start_time <= e_time and x.start_minute >= n_sm and x.start_minute <= n_em end)
-
-
-   b=a|>Enum.count
-
-
-
-    if b == 0 do
-
-
-
-
-     case Affairs.create_period(params) do
-      {:ok, period} ->
-        conn
-        |> put_flash(:info, "Period created successfully.")
-         |> redirect(to: class_path(conn, :class_setting))
-      {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset)
-        end
-
-      else
-
-         conn
-        |> put_flash(:info, "That slot already been taken,please refer to period table.")
-        |> redirect(to: class_path(conn, :class_setting))
-   
+    if n_time == 0 do
+      n_time = 12
     end
 
+    if e_time == 0 do
+      e_time = 12
+    end
 
- 
-   
+    subject = Repo.get_by(School.Affairs.SubjectTeachClass, id: subject)
+    class = Repo.get_by(Class, id: class_id)
+    teacher = Repo.get_by(Teacher, id: subject.teacher_id)
+    subject_period = Repo.get_by(Subject, id: subject.subject_id)
 
-    
+    params = %{
+      day: day,
+      end_time: new_end_time,
+      start_time: new_start_time,
+      teacher_id: teacher.id,
+      class_id: class.id,
+      subject_id: subject_period.id
+    }
+
+    period_class =
+      Repo.all(from(p in School.Affairs.Period, where: p.class_id == ^class.id and p.day == ^day))
+
+    all =
+      for item <- period_class do
+        e = item.end_time.hour
+        s = item.start_time.hour
+        em = item.end_time.minute
+        sm = item.start_time.minute
+
+        if e == 0 do
+          e = 12
+        end
+
+        if s == 0 do
+          s = 12
+        end
+
+        %{end_time: e, start_time: s, start_minute: sm, end_minute: em}
+      end
+
+    a =
+      all
+      |> Enum.filter(fn x ->
+        x.start_time >= n_time and x.start_time <= e_time and x.start_minute >= n_sm and
+          x.start_minute <= n_em
+      end)
+
+    b = a |> Enum.count()
+
+    if b == 0 do
+      case Affairs.create_period(params) do
+        {:ok, period} ->
+          conn
+          |> put_flash(:info, "Period created successfully.")
+          |> redirect(to: class_path(conn, :class_setting))
+
+        {:error, %Ecto.Changeset{} = changeset} ->
+          render(conn, "new.html", changeset: changeset)
+      end
+    else
+      conn
+      |> put_flash(:info, "That slot already been taken,please refer to period table.")
+      |> redirect(to: class_path(conn, :class_setting))
+    end
   end
 
   def index(conn, _params) do
@@ -326,7 +323,6 @@ defmodule SchoolWeb.ClassController do
       classes = Affairs.list_classes(conn.private.plug_session["institution_id"])
       render(conn, "index.html", classes: classes)
     end
- 
   end
 
   def new(conn, _params) do
@@ -348,8 +344,6 @@ defmodule SchoolWeb.ClassController do
   end
 
   def create(conn, %{"class" => class_params}) do
-
-   
     class_params =
       Map.put(class_params, "institution_id", conn.private.plug_session["institution_id"])
 

@@ -26,6 +26,12 @@ defmodule SchoolWeb do
       import Ecto.Query
       alias School.Repo
       alias School.Affairs
+      alias School.Settings
+
+      alias School.Settings.{
+        User,
+        Institution
+      }
 
       alias School.Affairs.{
         Absent,
@@ -37,7 +43,8 @@ defmodule SchoolWeb do
         Student,
         Parent,
         Teacher,
-        Subject
+        Subject,
+        SubjectTeachClass
       }
     end
   end

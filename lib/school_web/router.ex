@@ -24,9 +24,18 @@ defmodule SchoolWeb.Router do
     get("/", PageController, :index)
   end
 
+  scope "/pdf", SchoolWeb do
+    # Use the default browser stack
+    pipe_through([:browser])
+    post("/class_analysis", PdfController, :class_analysis)
+    post("/class_listing_teacher", PdfController, :class_listing_teacher)
+  end
+
   scope "/", SchoolWeb do
     # Use the default browser stack
     pipe_through(:browser)
+
+    get("/class_analysis", ClassController, :class_analysis)
     get("/dashboard", PageController, :dashboard)
     get("/operations", PageController, :operations)
     get("/library/books", PageController, :books)

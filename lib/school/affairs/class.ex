@@ -2,12 +2,11 @@ defmodule School.Affairs.Class do
   use Ecto.Schema
   import Ecto.Changeset
 
-
   schema "classes" do
-    field :name, :string
-    field :remarks, :string
-        field :institution_id, :integer
-  field :level_id, :integer
+    field(:name, :string)
+    field(:remarks, :string)
+    field(:institution_id, :integer)
+    field(:level_id, :integer)
     timestamps()
   end
 

@@ -1,0 +1,89 @@
+<link rel="stylesheet" href="<%= Application.app_dir(:school, "priv/static") %>/css/bootstrap.min.css">
+<style type="text/css">
+	table tr{
+   height: 0px;
+
+
+}
+table tr td{
+   padding: 0px !important;;
+}
+</style>
+<% require IEx %>
+<h2><%= @school.name %></h2>
+<%= SchoolWeb.LayoutView.my_time(DateTime.utc_now) %>
+<h5 style="text-decoration: underline;">Class Analysis By Gender</h5>
+
+<% standard = @data |> Enum.group_by(fn x -> x.level end)%>
+<% standard_key = Map.keys(standard) %>
+
+<table class="table">
+
+<% gender = @data |> Enum.group_by(fn x -> x.gender end) |> Map.keys %>
+<%= for standard_name <- standard_key do %>
+
+	<tr>
+		<td>Class</td>
+		<%= for gender_o <- gender do %>
+		<td><%= gender_o %></td>
+		<% end %>
+		<td>Total</td>
+	</tr>
+	<% classes = standard[standard_name] %>
+
+	<% class_key = classes |> Enum.group_by(fn x -> x.class end) |> Map.keys %>
+	<%= for class <- class_key do %>
+	<tr>
+		<td><%= class %></td>
+		<%= for gender_o <- gender do %>
+		<td>
+			<% data = classes |> Enum.filter(fn x -> x.class == class end) |> Enum.filter(fn x -> x.gender == gender_o end) |> hd() %>
+			<%= data.gender_count %>
+		</td>
+		<% end %>
+		<td>
+			<%= classes |> Enum.filter(fn x -> x.class == class end) |> Enum.map(fn x -> x.gender_count end) |> Enum.sum() %>
+		</td>
+	</tr>
+	<% end %>
+	<tr style="background-color: grey; color: white;">
+		<td><%= standard_name %></td>
+		<%= for gender_o <- gender do %>
+		<td>
+			<%= classes  |> Enum.filter(fn x -> x.gender == gender_o end) |> Enum.map(fn x -> x.gender_count end) |> Enum.sum() %>
+		
+		</td>
+		<% end %>
+		<td>
+			<%= classes  |> Enum.map(fn x -> x.gender_count end) |> Enum.sum() %>
+		</td>
+	</tr>
+<% end %>
+
+<tr>
+	<td colspan="3"></td>
+</tr>
+<tr>
+	<td colspan="3"></td>
+</tr>
+	<tr>
+		<td></td>
+		<%= for gender_o <- gender do %>
+		<td><%= gender_o %></td>
+		<% end %>
+		<td>Total</td>
+	</tr>
+	<tr style="background-color: grey; color: white;">
+		<td>Grand Total</td>
+		<%= for gender_o <- gender do %>
+		<td>
+			<%= @data   |> Enum.filter(fn x -> x.gender == gender_o end) |> Enum.map(fn x -> x.gender_count end) |> Enum.sum() %>
+		
+		</td>
+		<% end %>
+		<td>
+			<%= @data   |> Enum.map(fn x -> x.gender_count end) |> Enum.sum() %>
+		</td>
+	</tr>
+
+</table>

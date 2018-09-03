@@ -58,7 +58,7 @@
           <div class="card-body">
             <ol class="s_unmark1" id="s_unmark1">
             <%= for subject <- @subjects do %>
-            <li id="<%= subject.id %>"><%= subject.name %></li>
+            <li id="<%= subject.id %>"><%= subject.description %></li>
             <% end %>
             </ol>
           </div>
