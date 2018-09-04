@@ -1,3 +1,4 @@
+<%require IEx%>
 <script type="text/javascript">
   window.csrf = "<%= Phoenix.Controller.get_csrf_token %>"
 </script>
@@ -17,6 +18,7 @@
 		    <%= if @students == nil do %> 
 		    <% else %>
 		      <%= for student <- @students do %>
+
 		          <tr>
 		         
 
