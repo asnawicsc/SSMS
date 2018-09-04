@@ -4,7 +4,7 @@
 	    <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token() %>">
 	  
 	    <div class="card b">
-	      <div class="card-header bg-gray-lighter text-bold">Design Member Card <br> <div class="badge badge-info">Legend: </div> <div class="badge badge-success"> Name => _name_ </div> <div class="badge badge-success"> Chinese Name => _cname_</div> <div class="badge badge-success"> Student ID => _stu_id_</div> <div class="badge badge-success">IC => _ic_ </div></div>
+	      <div class="card-header bg-gray-lighter text-bold">Design Member Card <br> <div class="badge badge-info">Legend: </div> <div class="badge badge-success"> Name => _name_ </div> <div class="badge badge-success"> Chinese Name => _cname_</div> <div class="badge badge-success"> Student ID => _stu_id_</div> <div class="badge badge-success">IC => _ic_ </div> <div class="badge badge-success">Barcode => _barcode_ </div></div>
 	      <div class="card-body">
 	      	<div class="btn btn-danger front">front</div>
 	      	<div class="btn btn-danger back">back</div>
@@ -17,7 +17,8 @@
 	            <%= if @templates != nil do %>
 	            	<textarea class="content" name="long"><%= @templates["front_bin"] %></textarea>
 	            <% else %>
-	            	<textarea class="content" name="long"></textarea>
+	            	<textarea class="content" name="long"><div style="text-align: center;"><span style="font-size: 0.875rem;"><b><span style="font-size:24px;">School Name</span></b></span></div><br><div style="font-size: 14px; text-align: center;"><span style="font-size: 18px;">Name: _cname_</span></div><div style="text-align: center;"><span style="font-size: 18px;">Member Code: _stu_id_</span></div><div style="text-align: center;"><br></div>
+<div style="text-align: center;"><span style="font-size: 0.875rem;"><span style="font-size:24px;"></span></span></div></textarea>
 	            <% end %>
 	              
 
@@ -34,7 +35,7 @@
 	            <%= if @templates != nil do %>
 	            	<textarea class="content" name="long2"><%= @templates["back_bin"] %></textarea>
 	            <% else %>
-	            	<textarea class="content" name="long2"></textarea>
+	            	<textarea class="content" name="long2"><div>_barcode_</div><div><br></div><div>Rules:</div><div>1.</div><div>2.</div><div>3.</div></textarea>
 	            <% end %>
 
 	            </div>

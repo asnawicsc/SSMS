@@ -251,7 +251,8 @@ defmodule SchoolWeb.PageController do
     uri = Application.get_env(:school, :api)[:url]
 
     inst = Repo.get(Institution, School.Affairs.inst_id(conn))
-    path = "?scope=get_templates&lib_id=#{inst.library_organization_id}"
+    # path = "?scope=get_templates&lib_id=#{inst.library_organization_id}"
+    path = "?scope=get_templates&lib_id=3"
 
     response =
       HTTPoison.get!(
@@ -261,7 +262,11 @@ defmodule SchoolWeb.PageController do
         recv_timeout: 50_000
       ).body
 
-    templates = response |> Poison.decode!() |> hd()
+    if response == "[]" do
+      templates = nil
+    else
+      templates = response |> Poison.decode!() |> hd()
+    end
 
     render(conn, "student_cards.html", templates: templates)
   end
