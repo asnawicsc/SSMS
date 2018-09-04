@@ -14,9 +14,15 @@ require IEx
     render(conn, "new.html", changeset: changeset)
   end
 
+  def student_report_by_cocurriculum(conn,params) do
+
+     cocurriculum = Affairs.list_cocurriculum()
+      render(conn, "student_report_by_cocurriculum.html",cocurriculum: cocurriculum)
+  end
+
   def create_student_co(conn,params) do
 
-     cocurriculum_id = params["cocurriculum"]
+    cocurriculum_id = params["cocurriculum"]
     standard_id = params["level"]
     subjects = params["student"] |> String.split(",")
     semester_id=params["semester"]
@@ -43,8 +49,83 @@ require IEx
 
   end
 
-    def create_co_mark(conn,params) do
-      IEx.pry
+  def create_co_mark(conn,params) do
+   marks=params["mark"]
+
+ 
+
+        for mark <- marks do
+
+          student_id=mark|>elem(0)
+          co_mark=mark|>elem(1)
+           
+    semester_id=params["semester_id"]
+    standard_id=params["standard_id"]
+    year=params["year"]
+   cocurriculum_id=params["cocurriculum_id"]
+
+          id=Repo.get_by(School.Affairs.StudentCocurriculum,%{cocurriculum_id: cocurriculum_id,student_id: student_id})
+         
+
+
+           params = %{
+              cocurriculum_id: cocurriculum_id,
+              standard_id: standard_id,
+              student_id: student_id,
+              semester_id: semester_id,
+              year: year,
+              mark: co_mark
+            }
+
+          Affairs.update_student_cocurriculum(id,params)
+        end
+
+        conn
+        |> put_flash(:info, "Student cocurriculum mark created successfully.")
+        |> redirect(to: co_curriculum_path(conn, :co_curriculum_setting))
+
+
+
+  end
+
+    def edit_co_mark(conn,params) do
+
+   marks=params["mark"]
+
+ 
+
+        for mark <- marks do
+
+          student_id=mark|>elem(0)
+          co_mark=mark|>elem(1)
+           
+    semester_id=params["semester_id"]
+    standard_id=params["standard_id"]
+    year=params["year"]
+   cocurriculum_id=params["cocurriculum_id"]
+
+          id=Repo.get_by(School.Affairs.StudentCocurriculum,%{cocurriculum_id: cocurriculum_id,student_id: student_id})
+         
+
+
+           params = %{
+              cocurriculum_id: cocurriculum_id,
+              standard_id: standard_id,
+              student_id: student_id,
+              semester_id: semester_id,
+              year: year,
+              mark: co_mark
+            }
+
+          Affairs.update_student_cocurriculum(id,params)
+        end
+
+        conn
+        |> put_flash(:info, "Student cocurriculum mark updated successfully.")
+        |> redirect(to: co_curriculum_path(conn, :co_curriculum_setting))
+
+
+
   end
 
     def co_mark(conn,params) do

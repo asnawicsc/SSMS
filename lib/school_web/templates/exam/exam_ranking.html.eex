@@ -40,7 +40,7 @@
         <th style="background-color:#97DB9A;"><%= gettext "Student Name" %></th>
         <%= for item <- @mark|>Enum.sort_by(fn x -> x end) do %>    
          
-        <th style="background-color:#97DB9A;"><%= item|>elem(0) %></th>
+        <th style="background-color:#97DB9A;" colspan="2"><%= item|>elem(0) %></th>
         <% end %>
         <th style="background-color:#97DB9A;"><%= gettext "Total Mark" %></th>
         <th style="background-color:#97DB9A;"><%= gettext "Total Average" %></th>
@@ -63,9 +63,11 @@
    
         <%= for subject <- item.subject do %>
          <%= if subject.grade != "G" and subject.grade != "E" and subject.grade != "F" do %>
-        <th><%= subject.student_mark %>(<%=  subject.grade %>)</th>
+         <th><%= subject.student_mark %></th>
+          <th><%=  subject.grade %></th>
        <% else %>
-         <th ><font color="red"><%= subject.student_mark %>(<%=  subject.grade %>)</font></th>
+         <th ><font color="red"><%= subject.student_mark %></font></th>
+           <th><font color="red"><%=  subject.grade %></font></th>
        <% end %>
         
         <%end %>

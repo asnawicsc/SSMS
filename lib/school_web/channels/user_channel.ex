@@ -883,10 +883,62 @@ class_id = payload["class_id"]
         )
       )
 
+
+
+
     if exam_mark != [] do
+
+             exam_standard=Repo.all(
+        from(
+          e in School.Affairs.Exam,
+          left_join: k in School.Affairs.ExamMaster,
+          on: k.id == e.exam_master_id,
+          left_join: p in School.Affairs.Subject,
+          on: p.id == e.subject_id,
+          where: e.exam_master_id==^exam_id,
+          select: %{
+            subject_code: p.code,
+            exam_name: k.name
+   
+          }
+        )
+      )
+
+    all=for item <- exam_standard do
+
+        exam_name = exam_mark |> Enum.map(fn x -> x.exam_name end) |> Enum.uniq() |> hd
+        student_list = exam_mark |> Enum.map(fn x -> x.student_name end) |> Enum.uniq()
+         all_mark = exam_mark |> Enum.filter(fn x -> x.subject_code==item.subject_code end)
+
+         subject_code=item.subject_code
+      
+        all=for item <- student_list do
+
+        student=Repo.get_by(School.Affairs.Student,%{name: item})
+           s_mark = all_mark |> Enum.filter(fn x -> x.student_name==item end)
+
+
+          a=if s_mark !=[]   do
+
+            s_mark
+
+          else
+
+            %{student_name: item,student_id: student.id, student_mark: -1,exam_name: exam_name,subject_code: subject_code }
+             
+           end
+
+         end
+
+   
+               
+    end|>List.flatten
+
+
+
       exam_name = exam_mark |> Enum.map(fn x -> x.exam_name end) |> Enum.uniq() |> hd
 
-      all_mark = exam_mark |> Enum.group_by(fn x -> x.subject_code end)
+      all_mark = all |> Enum.group_by(fn x -> x.subject_code end)
 
       mark1 =
         for item <- all_mark do
@@ -916,13 +968,12 @@ class_id = payload["class_id"]
         |> List.flatten()
         |> Enum.filter(fn x -> x != nil end)
 
-      news = mark1 |> Enum.group_by(fn x -> x.student_name end)
-
+ news = mark1 |> Enum.group_by(fn x -> x.student_name end)
       z =
         for new <- news do
-          total = new |> elem(1) |> Enum.map(fn x -> x.student_mark end) |> Enum.sum()
+          total = new |> elem(1) |> Enum.map(fn x -> x.student_mark end)|>Enum.filter(fn x-> x != -1 end) |> Enum.sum()
 
-          per = new |> elem(1) |> Enum.map(fn x -> x.student_mark end) |> Enum.count()
+          per = new |> elem(1) |> Enum.map(fn x -> x.student_mark end)|>Enum.filter(fn x-> x != -1 end) |> Enum.count()
           total_per = per * 100
 
           student_id = new |> elem(1) |> Enum.map(fn x -> x.student_id end) |> Enum.uniq() |> hd
@@ -939,6 +990,7 @@ class_id = payload["class_id"]
             new |> elem(1) |> Enum.map(fn x -> Decimal.to_float(x.gpa) end) |> Enum.sum()
 
           cgpa = (total_gpa / per) |> Float.round(2)
+
 
           %{
             subject: new |> elem(1) |> Enum.sort_by(fn x -> x.subject_code end),
@@ -960,6 +1012,8 @@ class_id = payload["class_id"]
         |> Enum.sort_by(fn x -> x.total_mark end)
         |> Enum.reverse()
         |>Enum.with_index
+
+
 
 
         k=for item <- z do
@@ -989,6 +1043,7 @@ class_id = payload["class_id"]
 
 
       mark = mark1 |> Enum.group_by(fn x -> x.subject_code end)
+
 
 
               html =
@@ -1061,9 +1116,62 @@ class_id = payload["class_id"]
       )
 
     if exam_mark != [] do
-      exam_name = exam_mark |> Enum.map(fn x -> x.exam_name end) |> Enum.uniq() |> hd
 
-      all_mark = exam_mark |> Enum.group_by(fn x -> x.subject_code end)
+             exam_standard=Repo.all(
+        from(
+          e in School.Affairs.Exam,
+          left_join: k in School.Affairs.ExamMaster,
+          on: k.id == e.exam_master_id,
+          left_join: p in School.Affairs.Subject,
+          on: p.id == e.subject_id,
+          where: e.exam_master_id==^exam_id.id,
+          select: %{
+            subject_code: p.code,
+            exam_name: k.name
+   
+          }
+        )
+      )
+
+    all=for item <- exam_standard do
+
+        exam_name = exam_mark |> Enum.map(fn x -> x.exam_name end) |> Enum.uniq() |> hd
+        student_list = exam_mark |> Enum.map(fn x -> x.student_name end) |> Enum.uniq()
+         all_mark = exam_mark |> Enum.filter(fn x -> x.subject_code==item.subject_code end)
+
+         subject_code=item.subject_code
+      
+        all=for item <- student_list do
+
+        student=Repo.get_by(School.Affairs.Student,%{name: item})
+        student_class=Repo.get_by(School.Affairs.StudentClass,%{sudent_id: student.id})
+           s_mark = all_mark |> Enum.filter(fn x -> x.student_name==item end)
+
+
+          a=if s_mark !=[]   do
+
+            s_mark
+
+          else
+
+            %{student_name: item,student_id: student.id, student_mark: -1,exam_name: exam_name,subject_code: subject_code,class_id: student_class.class_id }
+             
+           end
+
+
+
+         end
+
+ 
+               
+    end|>List.flatten
+
+
+
+
+      exam_name = all |> Enum.map(fn x -> x.exam_name end) |> Enum.uniq() |> hd
+
+      all_mark = all |> Enum.group_by(fn x -> x.subject_code end)
 
       mark1 =
         for item <- all_mark do
@@ -1100,9 +1208,9 @@ class_id = payload["class_id"]
         for new <- news do
 
         
-          total = new |> elem(1) |> Enum.map(fn x -> x.student_mark end) |> Enum.sum()
+          total = new |> elem(1) |> Enum.map(fn x -> x.student_mark end)|>Enum.filter(fn x -> x != -1 end) |> Enum.sum()
 
-          per = new |> elem(1) |> Enum.map(fn x -> x.student_mark end) |> Enum.count()
+          per = new |> elem(1) |> Enum.map(fn x -> x.student_mark end)|>Enum.filter(fn x -> x != -1 end) |> Enum.count()
           total_per = per * 100
 
           total_average=((total/total_per)*100)|>Float.round(2)
@@ -1224,8 +1332,6 @@ class_id = payload["class_id"]
 
       mark = mark1 |> Enum.group_by(fn x -> x.subject_code end)
 
-
-     
         html =
       Phoenix.View.render_to_string(
         SchoolWeb.ExamView,
@@ -1383,24 +1489,81 @@ class_id = payload["class_id"]
   def handle_in("cocurriculum", payload, socket) do
 csrf=payload["csrf"]
   cocurriculum= payload["cocurriculum"]
+  co_year= payload["co_year"]
+  co_level= payload["co_level"]
+  co_semester= payload["co_semester"]
 
     students=Repo.all(from s in School.Affairs.StudentCocurriculum,
             left_join: a in School.Affairs.Student, on: s.student_id==a.id,
              left_join: j in School.Affairs.StudentClass, on: s.student_id==j.sudent_id,
             left_join: p in School.Affairs.CoCurriculum, on: s.cocurriculum_id==p.id,
             left_join: c in School.Affairs.Class, on: j.class_id==c.id,
-            where: s.cocurriculum_id==^cocurriculum,
-        select: %{id: p.id,student_id: s.student_id, name: a.name,class_name: c.name})
+            where: s.cocurriculum_id==^cocurriculum and s.year==^co_year and s.semester_id==^co_semester and s.standard_id==^co_level,
+        select: %{id: p.id,student_id: s.student_id, name: a.name,class_name: c.name,mark: s.mark})
 
 
-              html =
+    condition=students|>Enum.map(fn x -> x.mark end)|>Enum.filter(fn x -> x != nil end)
+
+     html =if condition == [] do
+
+     
       Phoenix.View.render_to_string(
         SchoolWeb.CoCurriculumView,
-        "assign_mark.html",csrf: csrf,students: students,cocurriculum: cocurriculum)
+        "assign_mark.html",csrf: csrf,students: students,cocurriculum: cocurriculum,co_year: co_year,co_level: co_level,co_semester: co_semester)
 
+    else
+
+   
+      Phoenix.View.render_to_string(
+        SchoolWeb.CoCurriculumView,
+        "edit_mark.html",csrf: csrf,students: students,cocurriculum: cocurriculum,co_year: co_year,co_level: co_level,co_semester: co_semester)
+     
+    end
+
+
+            
 
 
      broadcast(socket, "show_cocurriculum", %{html: html})
+    {:noreply, socket}
+  end
+
+    def handle_in("report_cocurriculum", payload, socket) do
+csrf=payload["csrf"]
+  cocurriculum= payload["cocurriculum"]
+  co_year= payload["co_year"]
+  co_level= payload["co_level"]
+  co_semester= payload["co_semester"]
+
+    students=Repo.all(from s in School.Affairs.StudentCocurriculum,
+            left_join: a in School.Affairs.Student, on: s.student_id==a.id,
+             left_join: j in School.Affairs.StudentClass, on: s.student_id==j.sudent_id,
+            left_join: p in School.Affairs.CoCurriculum, on: s.cocurriculum_id==p.id,
+            left_join: c in School.Affairs.Class, on: j.class_id==c.id,
+            where: s.cocurriculum_id==^cocurriculum and s.year==^co_year and s.semester_id==^co_semester and s.standard_id==^co_level,
+        select: %{id: p.id,student_id: s.student_id,chinese_name: a.chinese_name, name: a.name,class_name: c.name,mark: s.mark})
+
+html =   if students != []  do
+  
+
+
+     
+      Phoenix.View.render_to_string(
+        SchoolWeb.CoCurriculumView,
+        "report_student_co.html",csrf: csrf,students: students,cocurriculum: cocurriculum,co_year: co_year,co_level: co_level,co_semester: co_semester)
+
+   else
+
+
+      "No Data inside..Please choose other."
+    
+    end
+
+
+            
+
+
+     broadcast(socket, "show_report_cocurriculum", %{html: html})
     {:noreply, socket}
   end
 

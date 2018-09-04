@@ -141,7 +141,7 @@
 
                       <a class="dropdown-item" href="#"><%= gettext "Student" %></a>
                         <a class="dropdown-item" href="#"><%= gettext "Student Report (Class)" %></a>
-                         <a class="dropdown-item" href="#"><%= gettext "Student Report (Co-Curriculum)" %></a>
+                         <a class="dropdown-item" href="/student_report_by_cocurriculum"><%= gettext "Student Report (Co-Curriculum)" %></a>
                           <a class="dropdown-item" href="#"><%= gettext "Student Report (Region)" %></a>
                            <a class="dropdown-item" href="#"><%= gettext "Student Report (Sport Group)" %></a>
                            <a class="dropdown-item" href="#"><%= gettext "Student Card" %></a>

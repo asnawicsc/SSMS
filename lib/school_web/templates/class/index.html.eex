@@ -6,6 +6,7 @@
       <th><%= gettext "Name" %></th>
       <th><%= gettext "Remarks" %></th>
       <th><%= gettext "Level" %></th>
+     
       <th></th>
     </tr>
   </thead>
@@ -15,6 +16,7 @@
       <td><%= class.name %></td>
       <td><%= class.remarks %></td>
        <td><%= class.level_id %></td>
+ 
 
       <td class="text-right">
         <span><%= link (gettext "Sync Library Membership"), to: class_path(@conn, :sync_library_membership, class.id), class: "btn btn-default btn-xs" %></span>

@@ -176,8 +176,8 @@ get("/nilam_setting", ProjectNilamController, :nilam_setting)
    post("/create_student_co", CoCurriculumController, :create_student_co)
      get("/co_mark", CoCurriculumController, :co_mark)
  post("/create_co_mark", CoCurriculumController, :create_co_mark)
-
-
+ post("/edit_co_mark", CoCurriculumController, :edit_co_mark)
+     get("/student_report_by_cocurriculum", CoCurriculumController, :student_report_by_cocurriculum)
 
   end
 
