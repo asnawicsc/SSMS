@@ -6,13 +6,14 @@ defmodule SchoolWeb.SubjectController do
   alias School.Affairs.Subject
 
   def index(conn, _params) do
+    semesters = Repo.all(from(s in Semester))
     subject = Affairs.list_subject()
-    render(conn, "index.html", subject: subject)
+    level = Affairs.list_levels()
+    render(conn, "index.html", subjects: subject, semester: semesters, level: level)
   end
 
-     def new_standard_subject(conn, params) do
-
-      subjects =
+  def new_standard_subject(conn, params) do
+    subjects =
       Repo.all(
         from(s in School.Affairs.Subject, select: %{id: s.id, code: s.code, name: s.description})
       )
@@ -21,12 +22,12 @@ defmodule SchoolWeb.SubjectController do
       Repo.all(from(s in School.Affairs.Semester, select: %{id: s.id, start_date: s.start_date}))
 
     level = Repo.all(from(s in School.Affairs.Level, select: %{id: s.id, name: s.name}))
- 
-    render(conn, "index.html", subjects: subjects,semester: semester,level: level)
+
+    render(conn, "index.html", subjects: subjects, semester: semester, level: level)
   end
 
-   def create_new_test(conn, _params) do
-     subjects =
+  def create_new_test(conn, _params) do
+    subjects =
       Repo.all(
         from(s in School.Affairs.Subject, select: %{id: s.id, code: s.code, name: s.description})
       )
@@ -35,8 +36,8 @@ defmodule SchoolWeb.SubjectController do
       Repo.all(from(s in School.Affairs.Semester, select: %{id: s.id, start_date: s.start_date}))
 
     level = Repo.all(from(s in School.Affairs.Level, select: %{id: s.id, name: s.name}))
- 
-    render(conn, "new_exam.html", subjects: subjects,semester: semester,level: level)
+
+    render(conn, "new_exam.html", subjects: subjects, semester: semester, level: level)
   end
 
   def new(conn, _params) do
@@ -44,23 +45,40 @@ defmodule SchoolWeb.SubjectController do
     render(conn, "new.html", changeset: changeset)
   end
 
-    def standard_setting(conn,params) do
- subject = Affairs.list_subject()
- period = Affairs.list_period()
-  subjects =
+  def standard_setting(conn, params) do
+    subject = Affairs.list_subject()
+    period = Affairs.list_period()
+
+    subjects =
       Repo.all(
-        from(s in School.Affairs.Subject, select: %{id: s.id, code: s.code, name: s.description})
+        from(
+          s in School.Affairs.Subject,
+          select: %{id: s.id, code: s.code, name: s.description, description: s.description}
+        )
       )
 
     semester =
       Repo.all(from(s in School.Affairs.Semester, select: %{id: s.id, start_date: s.start_date}))
 
     level = Repo.all(from(s in School.Affairs.Level, select: %{id: s.id, name: s.name}))
-      grade = Affairs.list_grade()
-      co_grade = Affairs.list_co_grade()
-       standard_subject = Affairs.list_standard_subject()
-       exam_master = Affairs.list_exam_master()
-    render(conn, "standard_setting.html",period: period,exam_master: exam_master,standard_subject: standard_subject,co_grade: co_grade,grade: grade,subject: subject,subjects: subjects,semester: semester,level: level)
+    grade = Affairs.list_grade()
+    co_grade = Affairs.list_co_grade()
+    standard_subject = Affairs.list_standard_subject()
+    exam_master = Affairs.list_exam_master()
+
+    render(
+      conn,
+      "standard_setting.html",
+      period: period,
+      exam_master: exam_master,
+      standard_subject: standard_subject,
+      co_grade: co_grade,
+      grade: grade,
+      subject: subject,
+      subjects: subjects,
+      semester: semester,
+      level: level
+    )
   end
 
   def create(conn, %{"subject" => subject_params}) do
@@ -69,6 +87,7 @@ defmodule SchoolWeb.SubjectController do
         conn
         |> put_flash(:info, "Subject created successfully.")
         |> redirect(to: subject_path(conn, :show, subject))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
@@ -86,11 +105,11 @@ defmodule SchoolWeb.SubjectController do
   end
 
   def update(conn, %{"id" => id, "subject" => subject_params}) do
-    subject = Repo.get_by(Subject,code: id)
+    subject = Repo.get_by(Subject, code: id)
 
     case Affairs.update_subject(subject, subject_params) do
       {:ok, subject} ->
-         url = subject_path(conn, :index, focus: subject.code)
+        url = subject_path(conn, :index, focus: subject.code)
         referer = conn.req_headers |> Enum.filter(fn x -> elem(x, 0) == "referer" end)
 
         if referer != [] do
@@ -106,17 +125,12 @@ defmodule SchoolWeb.SubjectController do
           |> redirect(to: url)
         end
 
-        {:error, %Ecto.Changeset{} = changeset} ->
+      {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", subject: subject, changeset: changeset)
-    
     end
-
   end
 
-
-
   def delete(conn, %{"id" => id}) do
-  
     subject = Affairs.get_subject!(id)
     {:ok, _subject} = Affairs.delete_subject(subject)
 
@@ -125,35 +139,33 @@ defmodule SchoolWeb.SubjectController do
     |> redirect(to: subject_path(conn, :index))
   end
 
-   def upload_subjects(conn, params) do
+  def upload_subjects(conn, params) do
     bin = params["item"]["file"].path |> File.read() |> elem(1)
-    data = bin |>String.split("\n")|>Enum.map(fn x-> String.split(x,",") end)
-    headers = hd(data)|>Enum.map(fn x-> String.trim(x," ")end)
+    data = bin |> String.split("\n") |> Enum.map(fn x -> String.split(x, ",") end)
+    headers = hd(data) |> Enum.map(fn x -> String.trim(x, " ") end)
     contents = tl(data)
-      
 
     subject_params =
       for content <- contents do
-
-        h = headers |>Enum.map(fn x-> String.downcase(x) end)
-
+        h = headers |> Enum.map(fn x -> String.downcase(x) end)
 
         c =
           for item <- content do
-
-
             case item do
               {:ok, i} ->
                 i
 
               _ ->
                 cond do
-                   item == " " ->
+                  item == " " ->
                     "null"
-                      item == "" ->
+
+                  item == "" ->
                     "null"
-                     item == "  " ->
+
+                  item == "  " ->
                     "null"
+
                   true ->
                     item
                     |> String.split("\"")
@@ -163,17 +175,14 @@ defmodule SchoolWeb.SubjectController do
             end
           end
 
-
         subject_params = Enum.zip(h, c) |> Enum.into(%{})
-
 
         if is_integer(subject_params["sysdef"]) do
           subject_params =
             Map.put(subject_params, "sysdef", Integer.to_string(subject_params["sysdef"]))
         end
 
-
-            cg = Subject.changeset(%Subject{}, subject_params)
+        cg = Subject.changeset(%Subject{}, subject_params)
 
         case Repo.insert(cg) do
           {:ok, subject} ->

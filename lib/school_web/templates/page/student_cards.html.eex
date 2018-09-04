@@ -1,0 +1,144 @@
+<div class="row">
+	<div class="col-lg-12">
+	  <form action="/library/book/update_template" id="card" method="post">
+	    <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token() %>">
+	  
+	    <div class="card b">
+	      <div class="card-header bg-gray-lighter text-bold">Design Member Card <br> <div class="badge badge-info">Legend: </div> <div class="badge badge-success"> Name => _name_ </div> <div class="badge badge-success"> Chinese Name => _cname_</div> <div class="badge badge-success"> Student ID => _stu_id_</div> <div class="badge badge-success">IC => _ic_ </div></div>
+	      <div class="card-body">
+	      	<div class="btn btn-danger front">front</div>
+	      	<div class="btn btn-danger back">back</div>
+
+	        <div class="row">
+	          <div class="col-lg-6">
+
+	            <div class="form-group">
+	            	<div aria-label="long"></div>
+	            <%= if @templates != nil do %>
+	            	<textarea class="content" name="long"><%= @templates["front_bin"] %></textarea>
+	            <% else %>
+	            	<textarea class="content" name="long"></textarea>
+	            <% end %>
+	              
+
+	            </div>
+	            <input type="submit" name="save_card" value="Save Card" class="btn btn-info">
+	            <input type="submit" name="card_preview" value="Card Preview" class="btn btn-info">
+	            <p>
+	              <small class="text-muted"></small>
+	            </p>
+	          </div>
+		        <div class="col-lg-6">
+	            <div class="form-group">
+	            	<div aria-label="long2"></div>
+	            <%= if @templates != nil do %>
+	            	<textarea class="content" name="long2"><%= @templates["back_bin"] %></textarea>
+	            <% else %>
+	            	<textarea class="content" name="long2"></textarea>
+	            <% end %>
+
+	            </div>
+		        </div>
+	        </div>
+	      </div>
+	      <div class="card-footer">
+			      	<div class="row">
+				      	<div class="col-lg-6">
+				      		<p>Edit CSS: </p>
+				      		<%= if @templates == nil do %>
+					      	<textarea name="styles" rows="10" cols="50">
+position: relative;
+border-radius:5px;
+border-size:0.1px;
+border-color:black ;
+border-style: solid;
+width: 45%;
+min-height: 190px;
+max-height: 200px; 
+float: left;
+margin: 35px 0px;
+padding-left: 2%;
+					      	</textarea>
+					   		<% else %> 
+					   			<textarea name="styles" rows="10" cols="50"><%= @templates["css_bin"] %></textarea>
+					   		<% end %>
+				      </div>
+				      <div class="col-lg-6">
+				      	<p>Please insert student ID : </p>
+					      	<textarea name="ids" rows="10" cols="50"></textarea>
+					      	<input type="submit" name="student_id" value="Generate Card!" class="btn btn-info">
+				      </div>
+	  			</div>
+	  		</div>
+
+	    </div>
+	  </form>
+	
+	</div>
+</div>
+
+ <script type="text/javascript">
+ 	$("textarea[name='long']").richText();
+
+ 	if (localStorage.getItem("card_front") != null) {
+	  		var cont = localStorage.getItem("card_front")
+	  		$("textarea[name='long']").html(cont)
+	  	}
+	  	if (localStorage.getItem("card_back") != null) {
+	  		var cont = localStorage.getItem("card_back")
+	  		$("textarea[name='long2']").html(cont)
+	  	}
+	  	if (localStorage.getItem("styles") != null) {
+	  		var cont = localStorage.getItem("styles")
+	  		$("textarea[name='styles']").html(cont)
+	  	}
+
+    	$("input[name='card_preview']").click(function(){
+    		var content = $("textarea[name='long']").val()
+			var content2 = $("textarea[name='long2']").val()
+			var content3 = $("textarea[name='styles']").val()
+			console.log(content)
+		    localStorage.setItem("card_front", content)
+		    localStorage.setItem("card_back", content2)
+		    localStorage.setItem("styles", content3)
+   			$('#card').attr('action', '/admin/card_preview');
+		});
+
+ 	$("div.back").click(function(){
+    
+
+	    		$("textarea[name='long']").unRichText();
+	    		$("textarea[name='long']").hide();
+	    		$("textarea[name='long2']").show();
+	    		$("textarea[name='long2']").richText();
+	    		var html = $("textarea[name='long']").val()
+	    		$("div[aria-label='long2']").html("")
+	    		$("div[aria-label='long']").html(html)
+    	
+    	})
+    	$("div.front").click(function(){
+  			
+
+	    		$("textarea[name='long']").show();
+	    		$("textarea[name='long']").richText();
+	    		$("textarea[name='long2']").unRichText();
+	    		$("textarea[name='long2']").hide()
+	    		var html = $("textarea[name='long2']").val()
+	    		$("div[aria-label='long']").html("")
+	    		$("div[aria-label='long2']").html(html)
+  			
+    	})
+
+    	$("input[name='save_card']").click(function(){
+			localStorage.clear();
+   			$('#card').attr('action', '/library/book/update_template');
+		});
+
+		$("input[name='card_preview']").click(function(){
+   			$('#card').attr('action', '/library/book/preview_template');
+		});
+
+		$("input[name='student_id']").click(function(){
+   			$('#card').attr('action', '/library/book/generate_student_card');
+		});
+ </script>

@@ -1,0 +1,31 @@
+<h1>Class Analysis</h1>
+<form action="/pdf/class_analysis" method="POST">
+	<input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+<select name="class">
+	<%= for class <- @classes do %>
+	<option><%= class.name %></option>
+	<% end %>
+</select>
+<select name="semester">
+	<%= for sem <- @semesters do %>
+	<option><%= sem.start_date %> - <%= sem.end_date %></option>
+	<% end %>
+</select>
+<input type="submit" name="" value="Generate!">
+</form>
+
+
+<form action="/pdf/class_listing_teacher" method="POST">
+	<input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+<select name="class">
+	<%= for class <- @classes do %>
+	<option><%= class.name %></option>
+	<% end %>
+</select>
+<select name="semester">
+	<%= for sem <- @semesters do %>
+	<option><%= sem.start_date %> - <%= sem.end_date %></option>
+	<% end %>
+</select>
+<input type="submit" name="" value="Generate!">
+</form>

@@ -57,7 +57,7 @@ config :logger, level: :info
 #
 config :school, SchoolWeb.Endpoint, server: true
 #
-
+config :school, :api, url: "https://www.li6rary.net/api"
 # Finally import the config/prod.secret.exs
 # which should be versioned separately.
 import_config "prod.secret.exs"

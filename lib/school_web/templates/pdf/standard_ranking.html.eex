@@ -1,50 +1,17 @@
-<% require IEx %>
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-    <style>
-    html {
-      font-family: sans-serif;
-    }
-    table {
-      border-collapse: collapse;
-      border: 2px solid rgb(200,200,200);
-      letter-spacing: 1px;
-      font-size: 0.8rem;
-    }
-    td, th {
-      border: 1px solid rgb(190,190,190);
-      padding: 10px 20px;
-    }
-    td {
-      text-align: center;
-    }
-    caption {
-      padding: 10px;
-    }
-    </style>
-  </head>
- <% require IEx %>
-  <body>
 
-        <div align="right" style="margin-right: 160px;">
-    <form action="/pdf/standard_ranking" method="POST">
-  <input type="hidden" name="exam_id" value="<%= @exam_id %>">
-  <input type="hidden" name="level_id" value="<%= @level_id %>">
-  <input type="hidden" name="_csrf_token" value="<%= @csrf %>">
-<input align="left" type="submit" name="" value="Print!">
-</form>
-</div>
-<Br>
-    <h1><%= @exam_name %></h1>
+    <h1><%= @exam_name %></h1> <h1><%= @level.name %></h1>
 
  
-    <table id="example">
+    <table id="example" class="table" style="border-collapse: collapse;" border="1" width="100%">
       <colgroup>
         <col col span="2" >
       </colgroup>
+      <tr align="center">
+        <th style="background-color:#97DB9A;" colspan="3">MAKLUMAT MURID</th>
+  
+        <th style="background-color:#97DB9A;" colspan="<%=@mark|>Enum.count()%>">MATA PELAJARAN</th>
+        <th style="background-color:#97DB9A;" colspan="4">KEPUTUSAN</th>
+      </tr>
       <tr>
 
         <th style="background-color:#97DB9A;"><%= gettext "No" %></th>
@@ -70,7 +37,7 @@
 
         <tr>
          <th ><%= no+1 %></th>
-          <th><a href="/report_card/<%= @exam_name %>/<%= item.student_id %>"><%=item.name %> (<%=item.chinese_name %>)</a></th>
+          <th><%=item.name %> (<%=item.chinese_name %>)</a></th>
         <th ><%=item.sex %></th>
         <%= for subject <- item.subject do %>
          <%= if subject.grade != "G" and subject.grade != "E" and subject.grade != "F" do %>
