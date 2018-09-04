@@ -10,21 +10,20 @@ defmodule SchoolWeb.GradeController do
     render(conn, "index.html", grade: grade)
   end
 
-  def default_grade(conn,params)do
-
+  def default_grade(conn, params) do
     Repo.delete_all(Grade)
 
-  Affairs.create_grade(%{name: "A",mix: 80,max: 100,gpa: 12.00})
-  Affairs.create_grade(%{name: "B",mix: 60,max: 79,gpa: 8.00})
-  Affairs.create_grade(%{name: "C",mix: 50,max: 59,gpa: 6.00})
-  Affairs.create_grade(%{name: "D",mix: 40,max: 49,gpa: 4.00})
-  Affairs.create_grade(%{name: "E",mix: 0,max: 39,gpa: 2.00})
+    Affairs.create_grade(%{name: "A", mix: 80, max: 100, gpa: 12.00, standard_id: 0})
+    Affairs.create_grade(%{name: "B", mix: 60, max: 79, gpa: 8.00, standard_id: 0})
+    Affairs.create_grade(%{name: "C", mix: 50, max: 59, gpa: 6.00, standard_id: 0})
+    Affairs.create_grade(%{name: "D", mix: 40, max: 49, gpa: 4.00, standard_id: 0})
+    Affairs.create_grade(%{name: "E", mix: 0, max: 39, gpa: 2.00, standard_id: 0})
 
+    grade = Affairs.list_grade()
 
- grade = Affairs.list_grade()
-   conn
-        |> put_flash(:info, "Grade updated successfully.")
-        |> redirect(to: grade_path(conn, :index, grade))
+    conn
+    |> put_flash(:info, "Grade updated successfully.")
+    |> redirect(to: grade_path(conn, :index, grade))
   end
 
   def new(conn, _params) do
@@ -38,6 +37,7 @@ defmodule SchoolWeb.GradeController do
         conn
         |> put_flash(:info, "Grade created successfully.")
         |> redirect(to: subject_path(conn, :standard_setting))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
@@ -62,6 +62,7 @@ defmodule SchoolWeb.GradeController do
         conn
         |> put_flash(:info, "Grade updated successfully.")
         |> redirect(to: grade_path(conn, :show, grade))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", grade: grade, changeset: changeset)
     end

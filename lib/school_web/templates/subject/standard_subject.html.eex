@@ -24,8 +24,9 @@
   </tbody>
 </table>
 
-<button type="button" rel="tooltip" title="" class="btn btn-danger btn-link btn-sm" id="" name=""  data-toggle="modal" aria-label="price" data-target="#model1" data-original-title="Edit Item"><i class="material-icons">New Standard Subject</i><div class="ripple-container"></div>                 </button>
-                    </button>
+<button type="button" rel="tooltip" title="" class="btn btn-danger btn-link btn-sm" id="" name=""  data-toggle="modal" aria-label="price" data-target="#model1" data-original-title="Edit Item"><i class="material-icons">New Standard Subject</i><div class="ripple-container"></div>                 
+</button>
+            
 
 
 <div class="modal fade" id="model1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

@@ -44,7 +44,11 @@ defmodule SchoolWeb do
         Parent,
         Teacher,
         Subject,
-        SubjectTeachClass
+        SubjectTeachClass,
+        StandardSubject,
+        ExamMark,
+        ExamMaster,
+        Exam
       }
     end
   end
@@ -67,6 +71,12 @@ defmodule SchoolWeb do
       import Ecto.Query
       alias School.Repo
       alias School.Affairs
+      alias School.Settings
+
+      alias School.Settings.{
+        User,
+        Institution
+      }
 
       alias School.Affairs.{
         Absent,
@@ -76,7 +86,14 @@ defmodule SchoolWeb do
         Attendance,
         Level,
         Student,
-        Parent
+        Parent,
+        Teacher,
+        Subject,
+        SubjectTeachClass,
+        StandardSubject,
+        ExamMark,
+        ExamMaster,
+        Exam
       }
     end
   end

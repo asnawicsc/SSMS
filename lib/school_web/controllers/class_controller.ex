@@ -4,6 +4,14 @@ defmodule SchoolWeb.ClassController do
 
   require IEx
 
+  def mark_analyse_by_grade(conn, params) do
+    semesters = Repo.all(from(s in Semester))
+
+    classes = Repo.all(from(c in Class, where: c.institution_id == ^User.institution_id(conn)))
+
+    render(conn, "mark_analyse_by_grade.html", semesters: semesters, classes: classes)
+  end
+
   def class_analysis(conn, params) do
     semesters = Repo.all(from(s in Semester))
 

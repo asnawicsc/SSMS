@@ -182,7 +182,7 @@
           <a class="dropdown-item" href="#">
             <%= gettext "Holiday Listing" %>
           </a>
-          <a class="dropdown-item" href="#">
+          <a class="dropdown-item" href="/standard_listing">
             <%= gettext "Standard Listing" %>
           </a>
           <a class="dropdown-item" href="#">
@@ -248,7 +248,7 @@
           <a class="dropdown-item" href="#">
             <%= gettext "Mark Analyse" %>
           </a>
-          <a class="dropdown-item" href="#">
+          <a class="dropdown-item" href="/mark_analyse_by_grade">
             <%= gettext "Mark Analayse by Grade" %>
           </a>
           <a class="dropdown-item" href="#">

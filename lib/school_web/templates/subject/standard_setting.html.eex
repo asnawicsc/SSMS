@@ -111,6 +111,22 @@
             </div>
          
           </div>
+          <div class="row">
+            <div class="col-lg-12">
+              
+<form action="/pdf/standard_listing" method="POST">
+    <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+    <select name="semester">
+      <%  semesters = Repo.all(from(s in Semester))%>
+  <%= for sem <- semesters do %>
+  <option><%= sem.start_date %> - <%= sem.end_date %></option>
+  <% end %>
+</select>
+    <input type="submit" value="Print All Standard Subject" class="btn btn-danger btn-link btn-sm">         
+
+</form>  
+            </div>
+          </div>
 
         </div>
       </div>
