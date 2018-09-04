@@ -4,6 +4,78 @@ defmodule SchoolWeb.PdfController do
 
   require IEx
 
+  def mark_sheet_listing(conn, params) do
+    school = Repo.get(Institution, User.institution_id(conn))
+
+    class_name = params["class"]
+    exam_mid = params["exam"] |> String.to_integer()
+
+    q =
+      from(
+        e in ExamMark,
+        left_join: s in Student,
+        on: s.id == e.student_id,
+        left_join: ss in Subject,
+        on: ss.id == e.subject_id,
+        left_join: c in Class,
+        on: c.id == e.class_id,
+        left_join: ex in Exam,
+        on: ex.id == e.exam_id,
+        left_join: em in ExamMaster,
+        on: ex.exam_master_id == em.id,
+        where: em.id == ^exam_mid and c.name == ^class_name,
+        select: %{
+          gender: s.sex,
+          student: s.name,
+          c_student: s.chinese_name,
+          class: c.name,
+          year: em.year,
+          exam: em.name,
+          exam_mid: em.id,
+          subject: ss.description,
+          mark: e.mark
+        },
+        order_by: [s.name]
+      )
+
+    data = Repo.all(q)
+
+    html =
+      Phoenix.View.render_to_string(
+        SchoolWeb.PdfView,
+        "mark_sheet_listing.html",
+        school: school,
+        data: data
+      )
+
+    pdf_params = %{"html" => html}
+
+    pdf_binary =
+      PdfGenerator.generate_binary!(
+        pdf_params["html"],
+        size: "A4",
+        shell_params: [
+          "--margin-left",
+          "5",
+          "--margin-right",
+          "5",
+          "--margin-top",
+          "5",
+          "--margin-bottom",
+          "5",
+          "--encoding",
+          "utf-8"
+        ],
+        delete_temporary: true
+      )
+
+    conn
+    |> put_resp_header("Content-Type", "application/pdf")
+    |> resp(200, pdf_binary)
+
+    # render(conn, "exam_result_standard.html", school: school, data: data)
+  end
+
   def exam_result_standard(conn, params) do
     school = Repo.get(Institution, User.institution_id(conn))
 

@@ -31,12 +31,14 @@ defmodule SchoolWeb.Router do
     post("/class_listing_teacher", PdfController, :class_listing_teacher)
     post("/standard_listing", PdfController, :standard_listing)
     post("/exam_result_standard", PdfController, :exam_result_standard)
+    post("/mark_sheet_listing", PdfController, :mark_sheet_listing)
   end
 
   scope "/", SchoolWeb do
     # Use the default browser stack
     pipe_through(:browser)
 
+    get("/mark_sheet_listing", ClassController, :mark_sheet_listing)
     get("/mark_analyse_by_grade", ClassController, :mark_analyse_by_grade)
     get("/class_analysis", ClassController, :class_analysis)
     get("/dashboard", PageController, :dashboard)

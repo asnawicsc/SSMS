@@ -245,7 +245,7 @@
           <a class="dropdown-item" href="#">
             <%= gettext "Mark" %>
           </a>
-          <a class="dropdown-item" href="#">
+          <a class="dropdown-item" href="/mark_sheet_listing">
             <%= gettext "Mark Sheet" %>
           </a>
           <a class="dropdown-item" href="#">
