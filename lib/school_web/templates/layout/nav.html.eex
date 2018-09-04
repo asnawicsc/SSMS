@@ -205,6 +205,9 @@
             <%= gettext "Student Report (Sport Group)" %>
           </a>
           <a class="dropdown-item" href="#">
+            <%= gettext "Student Report (Height&Weight)" %>
+          </a>
+          <a class="dropdown-item" href="#">
             <%= gettext "Student Card" %>
           </a>
           <a class="dropdown-item" href="#">

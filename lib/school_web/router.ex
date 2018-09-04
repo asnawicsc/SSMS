@@ -62,6 +62,8 @@ defmodule SchoolWeb.Router do
     resources("/students", StudentController)
     post("/upload_students", StudentController, :upload_students)
     get("/height_weight", StudentController, :height_weight)
+    get("/height_weight_class/:class_id", StudentController, :height_weight_class)
+
     resources("/levels", LevelController)
     resources("/semesters", SemesterController)
     resources("/classes", ClassController)

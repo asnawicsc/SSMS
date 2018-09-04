@@ -14,7 +14,7 @@ defmodule SchoolWeb.StudentController do
           order_by: [asc: s.name]
         )
       )
- 
+
     render(conn, "index.html", students: students)
   end
 
@@ -31,6 +31,30 @@ defmodule SchoolWeb.StudentController do
     levels = Repo.all(Level)
 
     render(conn, "height_weight.html", students: students, levels: levels)
+  end
+
+  def height_weight_class(conn, params) do
+    students =
+      Repo.all(
+        from(
+          s in Student,
+          left_join: c in StudentClass,
+          on: c.sudent_id == s.id,
+          where: c.class_id == ^params["class_id"],
+          order_by: [asc: s.name],
+          select: %{
+            id: s.id,
+            name: s.name,
+            chinese_name: s.chinese_name
+          }
+        )
+      )
+
+    student_class = Repo.all(from(s in StudentClass, where: s.class_id == ^params["class_id"]))
+    level_id = hd(student_class).level_id
+    level = Repo.all(from(l in Level, where: l.id == ^level_id))
+
+    render(conn, "height_weight.html", students: students, levels: level)
   end
 
   def new(conn, _params) do
@@ -142,17 +166,24 @@ defmodule SchoolWeb.StudentController do
   def print_students(conn, %{"id" => id}) do
     class = Affairs.get_class!(id)
 
-    all_student=Repo.all(from sc in School.Affairs.StudentClass,
-      left_join: s in School.Affairs.Student, on: s.id==sc.sudent_id,
-       where: sc.class_id ==^class.id,
-       select:
-        %{ name: s.name,
-       chinese_name: s.chinese_name,
-        sex: s.sex,
-        student_no: s.student_no
-      })|>Enum.with_index
+    all_student =
+      Repo.all(
+        from(
+          sc in School.Affairs.StudentClass,
+          left_join: s in School.Affairs.Student,
+          on: s.id == sc.sudent_id,
+          where: sc.class_id == ^class.id,
+          select: %{
+            name: s.name,
+            chinese_name: s.chinese_name,
+            sex: s.sex,
+            student_no: s.student_no
+          }
+        )
+      )
+      |> Enum.with_index()
 
-    render(conn, "print_students.html", all_student: all_student,class_name: class.name)
+    render(conn, "print_students.html", all_student: all_student, class_name: class.name)
   end
 
   def show(conn, %{"id" => id}) do

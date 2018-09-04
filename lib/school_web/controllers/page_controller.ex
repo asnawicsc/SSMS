@@ -251,8 +251,8 @@ defmodule SchoolWeb.PageController do
     uri = Application.get_env(:school, :api)[:url]
 
     inst = Repo.get(Institution, School.Affairs.inst_id(conn))
-    # path = "?scope=get_templates&lib_id=#{inst.library_organization_id}"
-    path = "?scope=get_templates&lib_id=3"
+    path = "?scope=get_templates&lib_id=#{inst.library_organization_id}"
+    # path = "?scope=get_templates&lib_id=3"
 
     response =
       HTTPoison.get!(
