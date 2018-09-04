@@ -1,52 +1,23 @@
-<% require IEx %>
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-    <style>
-    html {
-      font-family: sans-serif;
-    }
-    table {
-      border-collapse: collapse;
-      border: 2px solid rgb(200,200,200);
-      letter-spacing: 1px;
-      font-size: 0.8rem;
-    }
-    td, th {
-      border: 1px solid rgb(190,190,190);
-      padding: 10px 20px;
-    }
-    td {
-      text-align: center;
-    }
-    caption {
-      padding: 10px;
-    }
-    </style>
-  </head>
- <% require IEx %>
+
+
   <body>
-    <div align="right" style="margin-right: 160px;">
-    <form action="/pdf/class_ranking" method="POST">
-  <input type="hidden" name="class_id" value="<%= @class_id %>">
-  <input type="hidden" name="exam_id" value="<%= @exam_id %>">
-  <input type="hidden" name="_csrf_token" value="<%= @csrf %>">
-<input align="left" type="submit" name="" value="Print!">
-</form>
-</div>
-<Br>
+
     <div class="row" >
   
-     <h3 style="margin-left: 160px;">KELAS :<%= @class.name %></h3><br>
-      <h3 style="margin-left: 360px;">BIL MURID  :<%= @total_student %></h3><br>
-     <h3 style="margin-left: 420px;">EXAM  :<%= @exam_name %></h3>
+     <h3>KELAS :<%= @class.name %></h3>
+     <h3>BIL MURID  :<%= @total_student %></h3>
+     <h3>EXAM  :<%= @exam_name %></h3>
  </div>
-    <table id="example" align="center">
+    <table class="display" align="center" style="border-collapse: collapse;" border="1" width="100%">
       <colgroup>
         <col col span="2" >
       </colgroup>
+      <tr align="center">
+        <th style="background-color:#97DB9A;" colspan="3">MAKLUMAT MURID</th>
+  
+        <th style="background-color:#97DB9A;" colspan="<%=@mark|>Enum.count()%>">MATA PELAJARAN</th>
+        <th style="background-color:#97DB9A;" colspan="3">KEPUTUSAN</th>
+      </tr>
       <tr align="center">
         <th style="background-color:#97DB9A;">No</th>
         <th style="background-color:#97DB9A;">Name</th>
@@ -66,7 +37,7 @@
           <% item = item|>elem(0) %>
         <tr>
        <th ><%= no+1 %></th>
-          <th><a href="/report_card/<%= @exam_name %>/<%= item.student_id %>"><%=item.name %> (<%=item.chinese_name %>)</a></th>
+          <th align="left" ><%=item.name %> <%=item.chinese_name %></th>
       <th><%= item.sex %></th>
         <%= for subject <- item.subject do %>
          <%= if subject.grade != "G" and subject.grade != "E" and subject.grade != "F" do %>

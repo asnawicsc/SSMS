@@ -12,6 +12,11 @@
     <%= @class.remarks %>
   </li>
 
+    <li>
+    <strong>Teacher:</strong>
+    <%= @class.teacher_id %>
+  </li>
+
 </ul>
 <span><%= link "Students", to: class_path(@conn, :students, @class) %></span>
 <span><%= link "Edit", to: class_path(@conn, :edit, @class) %></span>

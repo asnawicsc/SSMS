@@ -14,7 +14,7 @@
               </div>
                 <div class="col-sm-2">
              
-                  <label class="bmd-label-floating"><%= gettext "Subject Teaching" %></label><br>
+                  <label class="bmd-label-floating"><%= gettext "Subject Exam" %></label><br>
                  <select class="select" onchange="getval2(this)" name="subject_id" required="" >
                            <%= for a <- @all|>Enum.uniq |> Enum.sort do %>
                                             <option value="<%= a.id %>" >(<%= a.s_code %>)<%= a.subject %>

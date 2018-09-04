@@ -29,7 +29,7 @@
  <% require IEx %>
   <body>
 
-<form method="post" action="/create_co_mark" class="form-horizontal">
+<form method="post" action="/edit_co_mark" class="form-horizontal">
    <input type="hidden" name="cocurriculum_id" value="<%= @cocurriculum %>">
     <input type="hidden" name="standard_id" value="<%= @co_level %>">
      <input type="hidden" name="year" value="<%= @co_year %>">
@@ -53,7 +53,7 @@
 
        <th ><%= item.name %></th>
          <th ><%= item.class_name %></th>
-        <th  ><input type="number" min="0" max="100" name="mark[<%=item.student_id %>]"></th>
+        <th  ><input type="number" min="0" max="100" name="mark[<%=item.student_id %>]" value="<%= item.mark %>"></th>
 
       </tr>
          <% end %>

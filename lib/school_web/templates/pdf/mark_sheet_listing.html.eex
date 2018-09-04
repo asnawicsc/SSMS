@@ -28,7 +28,7 @@ table tr td{
 <table class="table table-striped">
 	<%= for subject_o <- subject do %>
 		<% students = Enum.filter(data, fn x -> x.subject == subject_o end)%>
-		<% IEx.pry %>
+	
 		<%= for student <- students do %>
 		<tr>
 			<td><%= student.student%></td>

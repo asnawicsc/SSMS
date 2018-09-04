@@ -29,9 +29,13 @@ defmodule SchoolWeb.Router do
     pipe_through([:browser])
     post("/class_analysis", PdfController, :class_analysis)
     post("/class_listing_teacher", PdfController, :class_listing_teacher)
+
     post("/standard_listing", PdfController, :standard_listing)
     post("/exam_result_standard", PdfController, :exam_result_standard)
     post("/mark_sheet_listing", PdfController, :mark_sheet_listing)
+
+    post("/class_ranking", PdfController, :class_ranking)
+    post("/standard_ranking", PdfController, :standard_ranking)
   end
 
   scope "/", SchoolWeb do
@@ -177,6 +181,17 @@ defmodule SchoolWeb.Router do
 
     get("/class_setting", ClassController, :class_setting)
 
+    post("/create_student_co", CoCurriculumController, :create_student_co)
+    get("/co_mark", CoCurriculumController, :co_mark)
+    post("/create_co_mark", CoCurriculumController, :create_co_mark)
+    post("/edit_co_mark", CoCurriculumController, :edit_co_mark)
+
+    get(
+      "/student_report_by_cocurriculum",
+      CoCurriculumController,
+      :student_report_by_cocurriculum
+    )
+
     resources("/subject_teach_class", SubjectTeachClassController)
     post("/create_class_subject_teach", SubjectTeachClassController, :create_class_subject_teach)
     post("/edit_class", ClassController, :edit_class)
@@ -197,6 +212,7 @@ defmodule SchoolWeb.Router do
     post("/create_student_co", CoCurriculumController, :create_student_co)
     get("/co_mark", CoCurriculumController, :co_mark)
     post("/create_co_mark", CoCurriculumController, :create_co_mark)
+    get("/student_listing_by_class", ClassController, :student_listing_by_class)
   end
 
   # Other scopes may use custom stacks.

@@ -160,6 +160,18 @@ defmodule SchoolWeb.ClassController do
     )
   end
 
+  def student_listing_by_class(conn,params) do
+
+    class = Repo.all(from(s in School.Affairs.Class, select: %{id: s.id, name: s.name}))
+
+      render(
+      conn,
+      "student_listing_by_class.html",
+      class: class
+    )
+    
+  end
+
   def students(conn, params) do
     students =
       Repo.all(

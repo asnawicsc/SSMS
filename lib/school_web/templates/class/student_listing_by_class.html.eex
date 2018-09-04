@@ -1,0 +1,98 @@
+<link rel="stylesheet" href="/css/jquery.skedTape.css">
+<script type="text/javascript">
+    window.csrf = "<%= Phoenix.Controller.get_csrf_token %>"
+</script>
+
+<div aria-label="project_nilam">
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card ">
+
+                        <div class="card-header ">
+
+                            <div class="row">
+                                <h4 class="card-title">Class :
+                                </h4>
+
+
+                                <span> <select class="select" onchange="getval(this);" required="required" name="class_id">
+                                        <%= for a <- @class |> Enum.sort do %>
+                                        <option value="<%= a.id %>">
+                                            <%= a.name %>
+                                        </option>
+                                        <% end %>
+                                    </select></span>
+                               
+
+                            </div>
+                  
+               
+
+                        </div>
+                        <div class="card-body ">
+
+                        
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+    $('select[name="class_id"]').val(localStorage.getItem("class_id"));
+
+    function getval(sel) {
+        d = sel.value
+        var level = localStorage.setItem("class_id", d);
+
+
+        window.location.reload();
+
+    }
+    $("input[name='edit_class']").val(localStorage.getItem("class_id"))
+
+
+    var class_id = localStorage.getItem("class_id")
+
+
+    channel.push("student_class_listing", {
+        user_id: window.currentUser,
+        class_id: class_id
+    })
+
+    channel.on("show_student_class_info", payload => {
+
+$("div#class_info").hide();
+$("div#class_subject").hide();
+$("div#class_period").hide();
+$("div#class_student").hide();
+$("div#class_student_info").show();
+
+
+    $("#h4").html(payload.html);
+
+
+     $('.table').DataTable();
+
+  $("div.student").click(function(){
+    var student_id = $(this).attr("id")
+
+    channel.push("inquire_student_details", {user_id: window.currentUser, student_id: student_id})
+  })
+
+     
+
+  })
+</script>
+
+
+       
+   <script src="<%= static_path(@conn, "/js/jquery.skedTape.js") %> "></script>

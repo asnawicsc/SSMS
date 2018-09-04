@@ -29,7 +29,6 @@
  <% require IEx %>
   <body>
 
-<form method="post" action="/create_co_mark" class="form-horizontal">
    <input type="hidden" name="cocurriculum_id" value="<%= @cocurriculum %>">
     <input type="hidden" name="standard_id" value="<%= @co_level %>">
      <input type="hidden" name="year" value="<%= @co_year %>">
@@ -44,6 +43,7 @@
       <tr>
 
          <th style="background-color:#97DB9A;"><%= gettext "Student Name" %></th>
+          <th style="background-color:#97DB9A;"><%= gettext "Chinese Name" %></th>
           <th style="background-color:#97DB9A;"><%= gettext "Class" %></th>
         <th style="background-color:#97DB9A;"><%= gettext "Mark" %></th>
       </tr>
@@ -52,8 +52,9 @@
       <tr>
 
        <th ><%= item.name %></th>
+       <th ><%= item.chinese_name %></th>
          <th ><%= item.class_name %></th>
-        <th  ><input type="number" min="0" max="100" name="mark[<%=item.student_id %>]"></th>
+        <th  ><%=item.mark %></th>
 
       </tr>
          <% end %>
@@ -62,8 +63,5 @@
 
 
   </body>
-</html> <br>
-
-    <input class="btn btn-primary" name="" value="Submit" type="submit">
-</form>
+</html>
 

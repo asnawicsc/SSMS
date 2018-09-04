@@ -31,7 +31,7 @@ localStorage.setItem("exam_standard_result_id", d);
 
 
 
-  channel.push("exam_standard_result", {exam_standard_result_id: localStorage.getItem("exam_standard_result_id"),standard_id: localStorage.getItem("exam_result_standard"),user_id: window.currentUser})
+  channel.push("exam_standard_result", {exam_standard_result_id: localStorage.getItem("exam_standard_result_id"),standard_id: localStorage.getItem("exam_result_standard"),user_id: window.currentUser,csrf: localStorage.getItem("exam_standard_csrf")})
 
 
            channel.on("show_exam_record_standard", payload => {

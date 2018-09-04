@@ -157,6 +157,7 @@
 
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 
+
           <a class="dropdown-item" href="/generate_attendance_report">
             <%= gettext "Attendance Report" %>
           </a>
@@ -172,6 +173,7 @@
           <a class="dropdown-item" href="/exam_result_standard">
             <%= gettext "Exam Result Analysis(Standard)" %>
           </a>
+
 
           <a class="dropdown-item" href="#">
             <%= gettext "Table Listing" %>
@@ -189,8 +191,8 @@
             <%= gettext "User Listing" %>
           </a>
 
-          <a class="dropdown-item" href="#">
-            <%= gettext "Student" %>
+          <a class="dropdown-item" href="/student_listing_by_class">
+            <%= gettext "Student Listing" %>
           </a>
           <a class="dropdown-item" href="#">
             <%= gettext "Student Report (Class)" %>
