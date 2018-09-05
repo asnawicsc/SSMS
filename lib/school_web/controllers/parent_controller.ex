@@ -5,9 +5,20 @@ defmodule SchoolWeb.ParentController do
   alias School.Affairs.Parent
   require IEx
 
+  def guardian_listing(conn, _params) do
+    parent = Affairs.list_parent()
+    semesters = Repo.all(from(s in Semester))
+
+    classes = Repo.all(from(c in Class, where: c.institution_id == ^User.institution_id(conn)))
+    render(conn, "index.html", parent: parent, semesters: semesters, classes: classes)
+  end
+
   def index(conn, _params) do
     parent = Affairs.list_parent()
-    render(conn, "index.html", parent: parent)
+    semesters = Repo.all(from(s in Semester))
+
+    classes = Repo.all(from(c in Class, where: c.institution_id == ^User.institution_id(conn)))
+    render(conn, "index.html", parent: parent, semesters: semesters, classes: classes)
   end
 
   def new(conn, _params) do

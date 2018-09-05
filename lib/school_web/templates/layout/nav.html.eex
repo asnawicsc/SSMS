@@ -206,7 +206,7 @@
           <a class="dropdown-item" href="#">
             <%= gettext "Student Report (Sport Group)" %>
           </a>
-          <a class="dropdown-item" href="#">
+          <a class="dropdown-item" href="/height_weight_report">
             <%= gettext "Student Report (Height&Weight)" %>
           </a>
           <a class="dropdown-item" href="#">
@@ -227,7 +227,7 @@
           <a class="dropdown-item" href="#">
             <%= gettext "Student In/Out" %>
           </a>
-          <a class="dropdown-item" href="#">
+          <a class="dropdown-item" href="/show_guardian">
             <%= gettext "Parent Listing" %>
           </a>
           <a class="dropdown-item" href="/class_analysis">

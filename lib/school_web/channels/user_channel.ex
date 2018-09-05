@@ -14,6 +14,29 @@ defmodule SchoolWeb.UserChannel do
     end
   end
 
+  def handle_in("hw_get_classes", payload, socket) do
+    map =
+      payload["map"]
+      |> Enum.map(fn x -> %{x["name"] => x["value"]} end)
+      |> Enum.flat_map(fn x -> x end)
+      |> Enum.into(%{})
+
+    class =
+      Repo.all(
+        from(
+          s in StudentClass,
+          left_join: c in Class,
+          on: c.id == s.class_id,
+          group_by: [c.id],
+          where: s.semester_id == ^map["semester_id"],
+          select: %{id: c.id, name: c.name}
+        )
+      )
+
+    broadcast(socket, "hw_show_classes", %{classes: class})
+    {:noreply, socket}
+  end
+
   def handle_in("show_height_weight", payload, socket) do
     std_id = payload["std_id"]
     lvl_id = payload["lvl_id"]
@@ -1055,7 +1078,8 @@ defmodule SchoolWeb.UserChannel do
       Repo.all(
         from(
           s in School.Affairs.ExamMark,
-          where: s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
+          where:
+            s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
           select: %{
             class_id: s.class_id,
             subject_id: s.subject_id,
@@ -1617,7 +1641,10 @@ defmodule SchoolWeb.UserChannel do
       g =
         for group <- z do
           a =
-            group |> elem(1) |> Enum.sort_by(fn x -> x.total_mark end) |> Enum.reverse()
+            group
+            |> elem(1)
+            |> Enum.sort_by(fn x -> x.total_mark end)
+            |> Enum.reverse()
             |> Enum.with_index()
 
           for item <- a do

@@ -36,11 +36,16 @@ defmodule SchoolWeb.Router do
 
     post("/class_ranking", PdfController, :class_ranking)
     post("/standard_ranking", PdfController, :standard_ranking)
+
     post("/student_class_listing", PdfController, :student_class_listing)
     post("/teacher_listing", PdfController, :teacher_listing)
     post("/exam_result_analysis_class", PdfController, :exam_result_analysis_class)
     post("/exam_result_analysis_class_standard", PdfController, :exam_result_analysis_class_standard)
      post("/student_list_by_co", PdfController, :student_list_by_co)
+
+    post("/height_weight_report_show", PdfController, :height_weight_report_show)
+    post("/parent_listing", PdfController, :parent_listing)
+
   end
 
   scope "/", SchoolWeb do
@@ -50,6 +55,7 @@ defmodule SchoolWeb.Router do
     get("/mark_sheet_listing", ClassController, :mark_sheet_listing)
     get("/mark_analyse_by_grade", ClassController, :mark_analyse_by_grade)
     get("/class_analysis", ClassController, :class_analysis)
+    get("/height_weight_report", ClassController, :height_weight_report)
     get("/dashboard", PageController, :dashboard)
     get("/operations", PageController, :operations)
     get("/library/books", PageController, :books)
@@ -135,6 +141,7 @@ defmodule SchoolWeb.Router do
     get("/print_students/:id", StudentController, :print_students)
 
     get("/report_card/:exam_name/:id", ExamController, :report_card)
+    get("/show_guardian/", ParentController, :guardian_listing)
     get("/show_guardian/:id", ParentController, :show_guardian)
     resources("/exam_mark", ExamMarkController)
     get("/generate_mark_analyse/:id", ExamController, :generate_mark_analyse)

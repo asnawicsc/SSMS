@@ -18,7 +18,7 @@ table tr td{
 
 <%= for page <- pages do %>
 <% data = elem(page, 0) %>
-<% subject = data |> Enum.group_by(fn x -> x.subject end) |> Map.keys %>
+<% classes = data |> Enum.group_by(fn x -> x.class end) |> Map.keys %>
 <div  style="page-break-before: always;">
 <h2><%= @school.name %></h2>
 <div><%= SchoolWeb.LayoutView.my_time(DateTime.utc_now) %></div><div>page: <%= elem(page, 1) + 1 %> of <%= Enum.count(pages) %></div>
@@ -26,23 +26,33 @@ table tr td{
 		
 
 <table class="table table-striped">
-	<%= for subject_o <- subject do %>
-		<% students = Enum.filter(data, fn x -> x.subject == subject_o end)%>
-	
-		<%= for student <- students do %>
-		<tr>
-			<td><%= student.student%></td>
-			<td><%= student.c_student%></td>
-			<td><%= student.gender%></td>
-			<td><%= student.subject%></td>
-			<td><%= student.mark%></td>
+	<%= for class <- classes do %>
+
+		<% subjects = data |> Enum.group_by(fn x -> x.subject end) |> Map.keys %>
+
+
+		<%= for subject <- subjects do %>
+
+			<% students = Enum.filter(data, fn x -> x.subject == subject end) |> Enum.filter( fn x -> x.class == class end) %>
+			<tr>
+				<td colspan="4"><%= class %> - <%= subject %></td>
+			</tr>
+			<%= for student <- students |> Enum.sort_by(fn x -> x.student end) do %>
+			<tr>
+				<td><%= student.student%></td>
+				<td><%= student.c_student%></td>
+				<td><%= student.gender%></td>
+				
+				<td><%= student.mark%></td>
+			</tr>
+			<% end %>
+		<tr style="height: 20px;">
+			<td colspan="4" ></td>
+
 		</tr>
 		<% end %>
 
-	<tr style="height: 20px;">
-		<td colspan="5" ></td>
 
-	</tr>
 	<% end %>
 </table>
 

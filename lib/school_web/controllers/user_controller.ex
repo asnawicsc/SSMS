@@ -35,13 +35,13 @@ defmodule SchoolWeb.UserController do
             )
           )
 
-     current_sem=   if current_sem != [] do
-        hd(current_sem)
-        else
-          %{id: 0, start_date: "Not set", end_date: "Not set"}
-        end
+        current_sem =
+          if current_sem != [] do
+            hd(current_sem)
+          else
+            %{id: 0, start_date: "Not set", end_date: "Not set"}
+          end
 
-        
         if user.institution_id == nil do
           conn
           |> put_session(:user_id, user.id)
