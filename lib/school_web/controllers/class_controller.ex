@@ -4,6 +4,11 @@ defmodule SchoolWeb.ClassController do
 
   require IEx
 
+  def height_weight_report(conn, params) do
+    semesters = Repo.all(from(s in Semester))
+    render(conn, "hw_details.html", semesters: semesters)
+  end
+
   def class_analysis(conn, params) do
     semesters = Repo.all(from(s in Semester))
 

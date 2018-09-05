@@ -29,6 +29,7 @@ defmodule SchoolWeb.Router do
     pipe_through([:browser])
     post("/class_analysis", PdfController, :class_analysis)
     post("/class_listing_teacher", PdfController, :class_listing_teacher)
+    post("/height_weight_report_show", PdfController, :height_weight_report_show)
   end
 
   scope "/", SchoolWeb do
@@ -36,6 +37,7 @@ defmodule SchoolWeb.Router do
     pipe_through(:browser)
 
     get("/class_analysis", ClassController, :class_analysis)
+    get("/height_weight_report", ClassController, :height_weight_report)
     get("/dashboard", PageController, :dashboard)
     get("/operations", PageController, :operations)
     get("/library/books", PageController, :books)
