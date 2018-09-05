@@ -36,6 +36,8 @@ defmodule SchoolWeb.Router do
 
     post("/class_ranking", PdfController, :class_ranking)
     post("/standard_ranking", PdfController, :standard_ranking)
+
+    post("/height_weight_report_show", PdfController, :height_weight_report_show)
   end
 
   scope "/", SchoolWeb do
@@ -45,6 +47,7 @@ defmodule SchoolWeb.Router do
     get("/mark_sheet_listing", ClassController, :mark_sheet_listing)
     get("/mark_analyse_by_grade", ClassController, :mark_analyse_by_grade)
     get("/class_analysis", ClassController, :class_analysis)
+    get("/height_weight_report", ClassController, :height_weight_report)
     get("/dashboard", PageController, :dashboard)
     get("/operations", PageController, :operations)
     get("/library/books", PageController, :books)

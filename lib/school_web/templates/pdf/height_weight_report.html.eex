@@ -1,0 +1,58 @@
+<% require IEx %>
+<link rel="stylesheet" href="<%= Application.app_dir(:school, "priv/static") %>/css/bootstrap.min.css">
+<style type="text/css">
+	table tr{
+		height: 0px;
+
+
+	}
+	table tr td{
+	   padding: 0px !important;;
+	}
+
+	
+</style>
+
+<% pages = @students  |> Enum.chunk_every(45) |> Enum.with_index() %>
+<%= for page <- pages do %>
+<% data = elem(page, 0) %>
+
+<div  style="page-break-before: always;">
+
+	<h2><%= @school.name %></h2>
+	<div><%= SchoolWeb.LayoutView.my_time(DateTime.utc_now) %></div><div>page: <%= elem(page, 1) + 1 %> of <%= Enum.count(pages) %></div>
+	<h5><u><b>Height and Weight Listing</b></u></h5>
+
+
+
+	<table class="table">
+		<% classes = data |> Enum.group_by(fn x -> x.class end) |> Map.keys %>
+
+
+		<%= for class <- classes do %>
+			<tr style="font-weight: bolder;">
+				<td>Class</td>
+				<td>ID</td>
+				<td>Name</td>
+				<td></td>
+				<td>Sex</td>
+				<td>Height (cm)</td>
+				<td>Weight (kg)</td>
+			</tr>
+			<% students = data |> Enum.filter(fn x -> x.class == class end) %>
+		 	<%= for student <- students do %>
+			<tr>
+				<td><%= student.class %></td>
+				<td><%= student.id %></td>
+				<td><%= student.name %></td>
+				<td><%= student.chinese_name %></td>
+				<td><%= student.sex %></td>
+				<td><%= student.height %></td>
+				<td><%= student.weight %></td>
+			</tr>
+			<% end %>
+		<% end %>
+	</table>
+
+</div>
+<% end %>

@@ -4,6 +4,165 @@ defmodule SchoolWeb.PdfController do
 
   require IEx
 
+  def height_weight_report_show(conn, params) do
+    school = Repo.get(Institution, User.institution_id(conn))
+    semester = Repo.get(Semester, params["semester_id"])
+
+    if params["class_id"] != "all_class" do
+      class = Repo.get(Class, params["class_id"])
+
+      students =
+        Repo.all(
+          from(
+            s in Student,
+            left_join: c in StudentClass,
+            on: c.sudent_id == s.id,
+            where: c.class_id == ^params["class_id"] and c.semester_id == ^semester.id,
+            order_by: [asc: s.name],
+            select: %{
+              id: s.id,
+              sex: s.sex,
+              name: s.name,
+              chinese_name: s.chinese_name,
+              height: s.height,
+              weight: s.weight
+            }
+          )
+        )
+    else
+      students =
+        Repo.all(
+          from(
+            s in Student,
+            left_join: c in StudentClass,
+            on: c.sudent_id == s.id,
+            left_join: cl in Class,
+            on: cl.id == c.class_id,
+            where: c.semester_id == ^semester.id,
+            order_by: [cl.name, s.name],
+            select: %{
+              class: cl.name,
+              id: s.id,
+              sex: s.sex,
+              name: s.name,
+              chinese_name: s.chinese_name,
+              height: s.height,
+              weight: s.weight
+            }
+          )
+        )
+    end
+
+    filter_student =
+      for student <- students do
+        if params["class_id"] != "all_class" do
+          student = Map.put(student, :class, class.name)
+        else
+          student_class = Repo.get_by(StudentClass, sudent_id: student.id)
+          class = Repo.get(Class, student_class.class_id)
+        end
+
+        height_final =
+          if student.height != nil do
+            heights = String.split(student.height, ",")
+
+            height_d =
+              for height <- heights do
+                l_id =
+                  String.split(height, "-") |> List.to_tuple() |> elem(0) |> String.to_integer()
+
+                if l_id == class.level_id do
+                  height
+                else
+                  nil
+                end
+              end
+
+            height =
+              height_d
+              |> Enum.reject(fn x -> x == nil end)
+              |> List.to_string()
+              |> String.split("-")
+
+            if Enum.count(height) > 1 do
+              height
+              |> List.to_tuple()
+              |> elem(1)
+            else
+              nil
+            end
+          end
+
+        if student.weight != nil do
+          weights = String.split(student.weight, ",")
+
+          weight_d =
+            for weight <- weights do
+              l_id =
+                String.split(weight, "-") |> List.to_tuple() |> elem(0) |> String.to_integer()
+
+              if l_id == class.level_id do
+                weight
+              else
+                nil
+              end
+            end
+
+          weight =
+            weight_d
+            |> Enum.reject(fn x -> x == nil end)
+            |> List.to_string()
+            |> String.split("-")
+
+          if Enum.count(weight) > 1 do
+            weight
+            |> List.to_tuple()
+            |> elem(1)
+          else
+            nil
+          end
+        end
+
+        student = Map.put(student, :height, height_final)
+
+        student = Map.put(student, :weight, weight)
+        student
+      end
+
+    html =
+      Phoenix.View.render_to_string(
+        SchoolWeb.PdfView,
+        "height_weight_report.html",
+        students: filter_student,
+        school: school
+      )
+
+    pdf_params = %{"html" => html}
+
+    pdf_binary =
+      PdfGenerator.generate_binary!(
+        pdf_params["html"],
+        size: "A4",
+        shell_params: [
+          "--margin-left",
+          "5",
+          "--margin-right",
+          "5",
+          "--margin-top",
+          "5",
+          "--margin-bottom",
+          "5",
+          "--encoding",
+          "utf-8"
+        ],
+        delete_temporary: true
+      )
+
+    conn
+    |> put_resp_header("Content-Type", "application/pdf")
+    |> resp(200, pdf_binary)
+  end
+
   def mark_sheet_listing(conn, params) do
     school = Repo.get(Institution, User.institution_id(conn))
 

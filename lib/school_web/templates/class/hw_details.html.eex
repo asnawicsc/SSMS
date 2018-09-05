@@ -1,0 +1,24 @@
+<h1>Height and Weight Report</h1>
+<form id ="semester">
+	Please select a semester:
+	<select name="semester_id">
+		<%= for sem <- @semesters do %>
+			<option value = <%= sem.id %> ><%= sem.start_date %> - <%= sem.end_date %></option>
+		<% end %>
+	</select>
+	<input type="button" class="btn btn-info btn-sm" id="hw_show_class" value="Show Classes !">
+</form>
+
+<form id ="classes" action="/pdf/height_weight_report_show" method="POST">
+	<input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+	<input type="hidden" name="semester_id" id="semester_id" value="">
+	Please select a class:
+	<select name="class_id" id="class_lists">
+		
+	</select>
+	<input type="submit" class="btn btn-info btn-sm" id="hw_report" value="Generate report !">
+</form>
+
+<script type="text/javascript">
+	$("form#classes").hide()
+</script>

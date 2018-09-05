@@ -20,6 +20,11 @@ defmodule SchoolWeb.ClassController do
     render(conn, "mark_analyse_by_grade.html", semesters: semesters, classes: classes)
   end
 
+  def height_weight_report(conn, params) do
+    semesters = Repo.all(from(s in Semester))
+    render(conn, "hw_details.html", semesters: semesters)
+  end
+
   def class_analysis(conn, params) do
     semesters = Repo.all(from(s in Semester))
 
@@ -160,16 +165,14 @@ defmodule SchoolWeb.ClassController do
     )
   end
 
-  def student_listing_by_class(conn,params) do
-
+  def student_listing_by_class(conn, params) do
     class = Repo.all(from(s in School.Affairs.Class, select: %{id: s.id, name: s.name}))
 
-      render(
+    render(
       conn,
       "student_listing_by_class.html",
       class: class
     )
-    
   end
 
   def students(conn, params) do
