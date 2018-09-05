@@ -170,7 +170,7 @@
           <a class="dropdown-item" href="/exam_result_standard">
             <%= gettext "Exam Result (Standard)" %>
           </a>
-          <a class="dropdown-item" href="/exam_result_standard">
+          <a class="dropdown-item" href="/exam_result_analysis_standard">
             <%= gettext "Exam Result Analysis(Standard)" %>
           </a>
 
@@ -197,7 +197,7 @@
           <a class="dropdown-item" href="#">
             <%= gettext "Student Report (Class)" %>
           </a>
-          <a class="dropdown-item" href="#">
+          <a class="dropdown-item" href="/student_report_by_cocurriculum">
             <%= gettext "Student Report (Co-Curriculum)" %>
           </a>
           <a class="dropdown-item" href="#">
@@ -237,7 +237,7 @@
             <%= gettext "Class Analysis (Graph)" %>
           </a>
 
-          <a class="dropdown-item" href="#">
+          <a class="dropdown-item" href="/teacher_listing">
             <%= gettext "Teacher Listing" %>
           </a>
           <a class="dropdown-item" href="#">

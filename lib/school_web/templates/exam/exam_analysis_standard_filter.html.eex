@@ -1,0 +1,45 @@
+
+   <div class="row">
+            
+    <input type="hidden" name="_csrf_token" value="">
+              <div class="col-sm-2">
+                <div class="form-group bmd-form-group">
+                  <label class="bmd-label-floating"><%= gettext "Exam Name" %></label><br>
+                 <select class="select" onchange="getval99(this)"  name="exam_analysis_standard_result_id" required="" >
+                           <%= for a <- @exam|>Enum.uniq |> Enum.sort do %>
+                                            <option value="<%= a.id %>" ><%= a.exam_name %>
+                                            </option>
+                                          <% end %>
+                                        </select>
+                </div>
+              </div>
+   
+</div>
+
+<script type="text/javascript">
+   $('select[name="exam_analysis_standard_result_id"]').val(localStorage.getItem("exam_analysis_standard_result_id"));
+    function getval99(sel)
+{
+    d=sel.value
+
+localStorage.setItem("exam_analysis_standard_result_id", d);
+
+   window.location.reload();
+
+ 
+}
+
+
+  channel.push("exam_result_analysis_standard2", {exam_id: localStorage.getItem("exam_analysis_standard_result_id"),standard_id: localStorage.getItem("exam_analysis_result_standard"),user_id: window.currentUser,csrf: localStorage.getItem("exam_standard_csrf")})
+
+
+           channel.on("show_exam_result_analysis_record_standard", payload => {
+
+
+    $("div#exam_record_analysis_standard").html(payload.html);
+
+  })
+
+
+
+</script>

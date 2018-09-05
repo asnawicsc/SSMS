@@ -262,10 +262,10 @@ defmodule SchoolWeb.PageController do
         recv_timeout: 50_000
       ).body
 
-    if response == "[]" do
-      templates = nil
+     templates = if response == "[]" do
+     nil
     else
-      templates = response |> Poison.decode!() |> hd()
+     response |> Poison.decode!() |> hd()
     end
 
     render(conn, "student_cards.html", templates: templates)

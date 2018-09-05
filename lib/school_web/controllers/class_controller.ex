@@ -80,7 +80,7 @@ defmodule SchoolWeb.ClassController do
   def edit_class(conn, params) do
     class = Affairs.get_class!(params["edit_class"])
 
-    class_params = %{remarks: params["remark"], name: params["class_name"]}
+    class_params = %{remarks: params["remark"], name: params["class_name"],teacher_id: params["teacher_id"]}
 
     case Affairs.update_class(class, class_params) do
       {:ok, class} ->

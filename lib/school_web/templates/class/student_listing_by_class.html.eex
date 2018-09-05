@@ -1,7 +1,3 @@
-<link rel="stylesheet" href="/css/jquery.skedTape.css">
-<script type="text/javascript">
-    window.csrf = "<%= Phoenix.Controller.get_csrf_token %>"
-</script>
 
 <div aria-label="project_nilam">
     <div class="content">
@@ -15,7 +11,9 @@
                             <div class="row">
                                 <h4 class="card-title">Class :
                                 </h4>
-
+                                <form>
+   <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+</form>
 
                                 <span> <select class="select" onchange="getval(this);" required="required" name="class_id">
                                         <%= for a <- @class |> Enum.sort do %>
@@ -31,7 +29,7 @@
                
 
                         </div>
-                        <div class="card-body ">
+                        <div class="card-body " id="sl">
 
                         
                         </div>
@@ -49,6 +47,10 @@
 <script type="text/javascript">
     $('select[name="class_id"]').val(localStorage.getItem("class_id"));
 
+    var csrf= $("input[name='_csrf_token']").val()
+
+localStorage.setItem("student_class_listing_csrf", csrf);
+
     function getval(sel) {
         d = sel.value
         var level = localStorage.setItem("class_id", d);
@@ -65,30 +67,16 @@
 
     channel.push("student_class_listing", {
         user_id: window.currentUser,
-        class_id: class_id
+        class_id: class_id,
+        csrf: localStorage.getItem("student_class_listing_csrf")
     })
 
-    channel.on("show_student_class_info", payload => {
-
-$("div#class_info").hide();
-$("div#class_subject").hide();
-$("div#class_period").hide();
-$("div#class_student").hide();
-$("div#class_student_info").show();
+    channel.on("show_student_class_listing", payload => {
 
 
-    $("#h4").html(payload.html);
 
+    $("#sl").html(payload.html);
 
-     $('.table').DataTable();
-
-  $("div.student").click(function(){
-    var student_id = $(this).attr("id")
-
-    channel.push("inquire_student_details", {user_id: window.currentUser, student_id: student_id})
-  })
-
-     
 
   })
 </script>

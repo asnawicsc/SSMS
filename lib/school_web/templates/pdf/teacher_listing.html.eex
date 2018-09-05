@@ -1,0 +1,30 @@
+
+<h4><%= @institution.name %></h4>
+<Br>
+<table class="table" border="1" style="border-collapse: collapse;" width="100%" >
+  <thead>
+    <tr align="center">
+      <th><%= gettext "Bil." %></th>
+      <th><%= gettext "Kod" %></th>
+      <th><%= gettext "Nama (B.Mal)" %></th>
+      <th><%= gettext "Nama (Chinese)" %></th>
+
+
+    </tr>
+  </thead>
+  <tbody>
+<%= for item <- @teacher do %>
+<% no=item|>elem(1) %>
+<% item=item|>elem(0) %>
+
+    <tr align="center">
+      <td><%= no+1 %></td>
+       <td><%= item.code %></td>
+       <td><%= item.name %></td>
+       <td><%= item.cname %></td>
+ 
+
+    </tr>
+<% end %>
+  </tbody>
+</table>

@@ -24,7 +24,13 @@ defmodule SchoolWeb.TeacherController do
 
     def teacher_timetable(conn, _params) do
     teacher = Affairs.list_teacher()
+
     render(conn, "teacher_timetable.html", teacher: teacher)
+  end
+
+      def teacher_listing(conn, _params) do
+    teacher = Affairs.list_teacher()|>Enum.with_index
+    render(conn, "teacher_listing.html", teacher: teacher)
   end
 
   def new(conn, _params) do

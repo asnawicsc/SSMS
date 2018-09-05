@@ -36,6 +36,11 @@ defmodule SchoolWeb.Router do
 
     post("/class_ranking", PdfController, :class_ranking)
     post("/standard_ranking", PdfController, :standard_ranking)
+    post("/student_class_listing", PdfController, :student_class_listing)
+    post("/teacher_listing", PdfController, :teacher_listing)
+    post("/exam_result_analysis_class", PdfController, :exam_result_analysis_class)
+    post("/exam_result_analysis_class_standard", PdfController, :exam_result_analysis_class_standard)
+     post("/student_list_by_co", PdfController, :student_list_by_co)
   end
 
   scope "/", SchoolWeb do
@@ -85,6 +90,7 @@ defmodule SchoolWeb.Router do
 
     resources("/teacher", TeacherController)
     post("/upload_teachers", TeacherController, :upload_teachers)
+    get("/teacher_listing", TeacherController, :teacher_listing)
     resources("/subject", SubjectController)
     post("/upload_subjects", SubjectController, :upload_subjects)
     resources("/parent", ParentController)
@@ -203,6 +209,7 @@ defmodule SchoolWeb.Router do
     get("/mark_sheet", ExamController, :mark_sheet)
     get("/exam_result_class", ExamController, :exam_result_class)
     get("/exam_result_standard", ExamController, :exam_result_standard)
+    get("/exam_result_analysis_standard", ExamController, :exam_result_analysis_standard)
     get("/exam_result_analysis_class", ExamController, :exam_result_analysis_class)
     get("/generate_attendance_report", AttendanceController, :generate_attendance_report)
     resources("/cocurriculum", CoCurriculumController)

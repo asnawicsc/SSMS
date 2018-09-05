@@ -89,6 +89,9 @@
                                                     <br>
                                                     Level ID:<br>
                                                     <input type="text" name="level_id" disabled="" value="level_id">
+                                                    <br>
+                                                    Class Teacher:<br>
+                                                    <input type="text" name="teacher_name" disabled="" value="teacher_name">
                                                     <br><br>
 
                                                 </div>
@@ -127,8 +130,17 @@
                                                         <input type="text" name="class_name" value="Class">
                                                         <br>
                                                         Remark:<br>
-                                                        <input type="text" name="remark" value="Remark">
-                                                        <br><br>
+                                                        <input type="text" name="remark" value="Remark"><br>
+                                                         Class Teacher:<br>
+                                                        <span> <select class="select"  required="required" name="teacher_id" value="">
+
+                                                        <% teacher=Repo.all(School.Affairs.Teacher)  %>    
+                                                        <%= for a <- teacher |> Enum.sort do %>
+                                                        <option value="<%= a.id %>"><%= a.name %>
+                                                        </option>
+                                                        <% end %>
+                                                        </select></span>
+                                                        <Br><br>
                                                         <input class="btn btn-primary" name="" value="Submit" type="submit">
                                                     </form>
 

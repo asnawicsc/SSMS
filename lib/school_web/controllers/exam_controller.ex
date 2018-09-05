@@ -490,6 +490,22 @@ defmodule SchoolWeb.ExamController do
     
   end
 
+  def exam_result_analysis_standard(conn,params) do
+
+
+    level = Repo.all(from(l in School.Affairs.Level))
+
+
+    
+
+           render(
+        conn,
+        "exam_result_analysis_standard.html",
+        level: level
+      )
+    
+  end
+
   def create_mark(conn, params) do
     class_id = params["class_id"]
     mark = params["mark"]

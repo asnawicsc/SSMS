@@ -30,15 +30,15 @@
   <body>
 
         <div align="right" style="margin-right: 30px;">
-    <form action="/pdf/exam_result_analysis_class" method="POST">
+    <form action="/pdf/exam_result_analysis_class_standard" method="POST">
        <input type="hidden" name="exam_id" value="<%= @exam_id %>">
- <input type="hidden" name="class_id" value="<%= @class_id %>">
+ <input type="hidden" name="standard_id" value="<%= @standard_id %>">
   <input type="hidden" name="_csrf_token" value="<%= @csrf %>">
 <input align="left" type="submit" name="" value="Print!">
 </form>
 </div>
 <Br>
-    <h4 align="center">CLASS: <%= @class.name %></h4>
+    <h4 align="center">Standard: <%= @standard.name %></h4>
 
     <table id="example" align="center" width="100%">
       <colgroup>

@@ -1,0 +1,34 @@
+        <div align="right">
+    <form action="/pdf/teacher_listing" method="POST">
+  <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+<input align="left" type="submit" name="" value="Print!">
+</form>
+</div>
+<Br>
+<table class="table" border="1" style="border-collapse: collapse; margin-right: 10px; margin-left: 10px;"  >
+  <thead>
+    <tr align="center">
+      <th><%= gettext "Bil." %></th>
+      <th><%= gettext "Kod" %></th>
+      <th><%= gettext "Nama (B.Mal)" %></th>
+      <th><%= gettext "Nama (Chinese)" %></th>
+      <th></th>
+
+    </tr>
+  </thead>
+  <tbody>
+<%= for item <- @teacher do %>
+<% no=item|>elem(1) %>
+<% item=item|>elem(0) %>
+
+    <tr align="center">
+      <td><%= no+1 %></td>
+       <td><%= item.code %></td>
+       <td><%= item.name %></td>
+       <td><%= item.cname %></td>
+       <th></th>
+
+    </tr>
+<% end %>
+  </tbody>
+</table>

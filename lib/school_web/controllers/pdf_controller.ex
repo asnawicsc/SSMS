@@ -887,4 +887,508 @@ defmodule SchoolWeb.PdfController do
     |> put_resp_header("Content-Type", "application/pdf")
     |> resp(200, pdf_binary)
   end
+
+  def student_class_listing(conn,params) do
+
+    class_id = params["class_id"]
+
+    all =
+      Repo.all(
+        from(
+          s in School.Affairs.StudentClass,
+          left_join: g in School.Affairs.Class,
+          on: s.class_id == g.id,
+          left_join: r in School.Affairs.Student,
+          on: r.id == s.sudent_id,
+          where: s.class_id == ^class_id,
+          select: %{
+            id: s.sudent_id,
+            chinese_name: r.chinese_name,
+            name: r.name,
+            sex: r.sex,
+            dob: r.dob,
+            pob: r.pob,
+            b_cert: r.b_cert,
+            religion: r.religion,
+            race: r.race
+          }
+        )
+      )|>Enum.with_index
+
+            html =
+        Phoenix.View.render_to_string(
+          SchoolWeb.PdfView,
+          "student_class_listing.html",
+          all: all
+        )
+
+         pdf_params = %{"html" => html}
+
+    pdf_binary =
+      PdfGenerator.generate_binary!(
+        pdf_params["html"],
+        size: "A4",
+        shell_params: [
+          "--margin-left",
+          "5",
+          "--margin-right",
+          "5",
+          "--margin-top",
+          "5",
+          "--margin-bottom",
+          "5",
+          "--encoding",
+          "utf-8",
+          "--orientation",
+          "Landscape"
+        ],
+        delete_temporary: true
+      )
+
+    conn
+    |> put_resp_header("Content-Type", "application/pdf")
+    |> resp(200, pdf_binary)
+
+    
+  end
+
+    def teacher_listing(conn,params) do
+
+inst_id=conn.private.plug_session["institution_id"]
+
+institution=Repo.get_by(School.Settings.Institution, id: inst_id)
+
+
+    teacher = Affairs.list_teacher()|>Enum.with_index
+
+            html =
+        Phoenix.View.render_to_string(
+          SchoolWeb.PdfView,
+          "teacher_listing.html",
+          teacher: teacher,
+          institution: institution
+        )
+
+         pdf_params = %{"html" => html}
+
+    pdf_binary =
+      PdfGenerator.generate_binary!(
+        pdf_params["html"],
+        size: "A4",
+        shell_params: [
+          "--margin-left",
+          "5",
+          "--margin-right",
+          "5",
+          "--margin-top",
+          "5",
+          "--margin-bottom",
+          "5",
+          "--encoding",
+          "utf-8",
+          "--orientation",
+          "Landscape"
+        ],
+        delete_temporary: true
+      )
+
+    conn
+    |> put_resp_header("Content-Type", "application/pdf")
+    |> resp(200, pdf_binary)
+
+    
+  end
+
+  def exam_result_analysis_class(conn,params) do
+
+    class_id = params["class_id"]
+    exam_id = params["exam_id"]
+
+    class = Repo.get_by(School.Affairs.Class, %{id: class_id})
+
+    exam = Repo.get_by(School.Affairs.ExamMaster, %{id: exam_id})
+
+    all =
+      Repo.all(
+        from(
+          s in School.Affairs.ExamMark,
+          left_join: p in School.Affairs.Subject,
+          on: s.subject_id == p.id,
+          left_join: t in School.Affairs.ExamMaster,
+          on: s.exam_id == t.id,
+          left_join: r in School.Affairs.Class,
+          on: r.id == s.class_id,
+          where: s.class_id == ^class_id and s.exam_id == ^exam.id,
+          select: %{
+            class_name: r.name,
+            subject_code: p.code,
+            exam_name: t.name,
+            student_id: s.student_id,
+            mark: s.mark
+          }
+        )
+      )
+
+    all_mark = all |> Enum.group_by(fn x -> x.subject_code end)
+
+    mark1 =
+      for item <- all_mark do
+        subject_code = item |> elem(0)
+
+        datas = item |> elem(1)
+
+        for data <- datas do
+          student_mark = data.mark
+
+          grades = Repo.all(from(g in School.Affairs.Grade))
+
+          for grade <- grades do
+            if student_mark >= grade.mix and student_mark <= grade.max do
+              %{
+                student_id: data.student_id,
+                grade: grade.name,
+                gpa: grade.gpa,
+                subject_code: subject_code,
+                student_mark: student_mark,
+                class_name: data.class_name,
+                exam_name: data.exam_name
+              }
+            end
+          end
+        end
+      end
+      |> List.flatten()
+      |> Enum.filter(fn x -> x != nil end)
+
+    group = mark1 |> Enum.group_by(fn x -> x.subject_code end)
+
+    group_subject =
+      for item <- group do
+        subject = item |> elem(0)
+
+        total_student = item |> elem(1) |> Enum.count()
+        a = item |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "A" end)
+        b = item |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "B" end)
+        c = item |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "C" end)
+        d = item |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "D" end)
+        e = item |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "E" end)
+        f = item |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "F" end)
+        g = item |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "G" end)
+
+        lulus = a + b + c + d
+        fail = e + f + g
+
+        %{
+          subject: subject,
+          total_student: total_student,
+          a: a,
+          b: b,
+          c: c,
+          d: d,
+          e: e,
+          f: f,
+          g: g,
+          lulus: lulus,
+          tak_lulus: fail
+        }
+      end
+
+    a = group_subject |> Enum.map(fn x -> x.a end) |> Enum.sum()
+    b = group_subject |> Enum.map(fn x -> x.b end) |> Enum.sum()
+    c = group_subject |> Enum.map(fn x -> x.c end) |> Enum.sum()
+    d = group_subject |> Enum.map(fn x -> x.d end) |> Enum.sum()
+    e = group_subject |> Enum.map(fn x -> x.e end) |> Enum.sum()
+    f = group_subject |> Enum.map(fn x -> x.f end) |> Enum.sum()
+    g = group_subject |> Enum.map(fn x -> x.g end) |> Enum.sum()
+    lulus = group_subject |> Enum.map(fn x -> x.lulus end) |> Enum.sum()
+    tak_lulus = group_subject |> Enum.map(fn x -> x.tak_lulus end) |> Enum.sum()
+    total = group_subject |> Enum.map(fn x -> x.total_student end) |> Enum.sum()
+
+    html =
+      Phoenix.View.render_to_string(
+        SchoolWeb.PdfView,
+        "exam_result_analysis_by_class.html",
+        a: a,
+        b: b,
+        c: c,
+        d: d,
+        e: e,
+        f: f,
+        g: g,
+        lulus: lulus,
+        tak_lulus: tak_lulus,
+        total: total,
+        group_subject: group_subject,
+        exam: exam,
+        class: class
+      )
+
+          pdf_params = %{"html" => html}
+
+    pdf_binary =
+      PdfGenerator.generate_binary!(
+        pdf_params["html"],
+        size: "A4",
+        shell_params: [
+          "--margin-left",
+          "5",
+          "--margin-right",
+          "5",
+          "--margin-top",
+          "5",
+          "--margin-bottom",
+          "5",
+          "--encoding",
+          "utf-8",
+          "--orientation",
+          "Landscape"
+        ],
+        delete_temporary: true
+      )
+
+    conn
+    |> put_resp_header("Content-Type", "application/pdf")
+    |> resp(200, pdf_binary)
+
+    
+
+  end
+
+
+  def exam_result_analysis_class_standard(conn,params) do
+
+        standard_id = params["standard_id"]
+    exam_id = params["exam_id"]
+
+    standard = Repo.get_by(School.Affairs.Level, %{id: standard_id})
+
+    exam = Repo.get_by(School.Affairs.ExamMaster, %{id: exam_id})
+
+
+    all =
+      Repo.all(
+        from(
+          s in School.Affairs.ExamMark,
+          left_join: p in School.Affairs.Subject,
+          on: s.subject_id == p.id,
+          left_join: t in School.Affairs.ExamMaster,
+          on: s.exam_id == t.id,
+          left_join: r in School.Affairs.Class,
+          on: r.id == s.class_id,
+          left_join: d in School.Affairs.Level,
+          on: r.level_id == d.id,
+          where: r.level_id == ^standard.id and s.exam_id == ^exam.id,
+          select: %{
+            class_name: r.name,
+            subject_code: p.code,
+            exam_name: t.name,
+            student_id: s.student_id,
+            mark: s.mark
+          }
+        )
+      )
+
+    all_mark = all |> Enum.group_by(fn x -> x.subject_code end)
+
+    mark1 =
+      for item <- all_mark do
+        subject_code = item |> elem(0)
+
+        datas = item |> elem(1)
+
+        for data <- datas do
+          student_mark = data.mark
+
+          grades = Repo.all(from(g in School.Affairs.Grade))
+
+          for grade <- grades do
+            if student_mark >= grade.mix and student_mark <= grade.max do
+              %{
+                student_id: data.student_id,
+                grade: grade.name,
+                gpa: grade.gpa,
+                subject_code: subject_code,
+                student_mark: student_mark,
+                class_name: data.class_name,
+                exam_name: data.exam_name
+              }
+            end
+          end
+        end
+      end
+      |> List.flatten()
+      |> Enum.filter(fn x -> x != nil end)
+
+    group = mark1 |> Enum.group_by(fn x -> x.subject_code end)
+
+    group_subject =
+      for item <- group do
+        subject = item |> elem(0)
+
+        total_student = item |> elem(1) |> Enum.count()
+        a = item |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "A" end)
+        b = item |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "B" end)
+        c = item |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "C" end)
+        d = item |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "D" end)
+        e = item |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "E" end)
+        f = item |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "F" end)
+        g = item |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "G" end)
+
+        lulus = a + b + c + d
+        fail = e + f + g
+
+        %{
+          subject: subject,
+          total_student: total_student,
+          a: a,
+          b: b,
+          c: c,
+          d: d,
+          e: e,
+          f: f,
+          g: g,
+          lulus: lulus,
+          tak_lulus: fail
+        }
+      end
+
+    a = group_subject |> Enum.map(fn x -> x.a end) |> Enum.sum()
+    b = group_subject |> Enum.map(fn x -> x.b end) |> Enum.sum()
+    c = group_subject |> Enum.map(fn x -> x.c end) |> Enum.sum()
+    d = group_subject |> Enum.map(fn x -> x.d end) |> Enum.sum()
+    e = group_subject |> Enum.map(fn x -> x.e end) |> Enum.sum()
+    f = group_subject |> Enum.map(fn x -> x.f end) |> Enum.sum()
+    g = group_subject |> Enum.map(fn x -> x.g end) |> Enum.sum()
+    lulus = group_subject |> Enum.map(fn x -> x.lulus end) |> Enum.sum()
+    tak_lulus = group_subject |> Enum.map(fn x -> x.tak_lulus end) |> Enum.sum()
+    total = group_subject |> Enum.map(fn x -> x.total_student end) |> Enum.sum()
+
+    html =
+      Phoenix.View.render_to_string(
+        SchoolWeb.PdfView,
+        "result_analysis_by_standard.html",
+        a: a,
+        b: b,
+        c: c,
+        d: d,
+        e: e,
+        f: f,
+        g: g,
+        lulus: lulus,
+        tak_lulus: tak_lulus,
+        total: total,
+        group_subject: group_subject,
+        exam: exam,
+        standard: standard,
+        standard_id: standard_id,
+        exam_id: exam_id
+      
+      )
+
+                pdf_params = %{"html" => html}
+
+    pdf_binary =
+      PdfGenerator.generate_binary!(
+        pdf_params["html"],
+        size: "A4",
+        shell_params: [
+          "--margin-left",
+          "5",
+          "--margin-right",
+          "5",
+          "--margin-top",
+          "5",
+          "--margin-bottom",
+          "5",
+          "--encoding",
+          "utf-8",
+          "--orientation",
+          "Landscape"
+        ],
+        delete_temporary: true
+      )
+
+    conn
+    |> put_resp_header("Content-Type", "application/pdf")
+    |> resp(200, pdf_binary)
+
+
+    
+  end
+
+  def student_list_by_co(conn,params)  do
+
+    cocurriculum = params["cocurriculum_id"]
+    co_year = params["year"]
+    co_level = params["standard_id"]
+    co_semester = params["semester_id"]
+
+
+    students =
+      Repo.all(
+        from(
+          s in School.Affairs.StudentCocurriculum,
+          left_join: a in School.Affairs.Student,
+          on: s.student_id == a.id,
+          left_join: j in School.Affairs.StudentClass,
+          on: s.student_id == j.sudent_id,
+          left_join: p in School.Affairs.CoCurriculum,
+          on: s.cocurriculum_id == p.id,
+          left_join: c in School.Affairs.Class,
+          on: j.class_id == c.id,
+          where:
+            s.cocurriculum_id == ^cocurriculum and s.year == ^co_year and
+              s.semester_id == ^co_semester and s.standard_id == ^co_level,
+          select: %{
+            id: p.id,
+            student_id: s.student_id,
+            chinese_name: a.chinese_name,
+            name: a.name,
+            class_name: c.name,
+            mark: s.mark
+          }
+        )
+      )
+
+
+    html =
+        Phoenix.View.render_to_string(
+          SchoolWeb.PdfView,
+          "student_listing_by_cocurriculum.html",
+          students: students
+      
+        )
+
+            pdf_params = %{"html" => html}
+
+    pdf_binary =
+      PdfGenerator.generate_binary!(
+        pdf_params["html"],
+        size: "A4",
+        shell_params: [
+          "--margin-left",
+          "5",
+          "--margin-right",
+          "5",
+          "--margin-top",
+          "5",
+          "--margin-bottom",
+          "5",
+          "--encoding",
+          "utf-8",
+          "--orientation",
+          "Landscape"
+        ],
+        delete_temporary: true
+      )
+
+    conn
+    |> put_resp_header("Content-Type", "application/pdf")
+    |> resp(200, pdf_binary)
+
+
+     
+
+   
+  end
 end

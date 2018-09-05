@@ -651,19 +651,24 @@ var name = payload.name
 var institution_id = payload.institution_id
 var level_id = payload.level_id
 var remark = payload.remark
+var teacher_id = payload.teacher_id
+
+var teacher_name = payload.teacher_name
 
    $("input[name='class_name']").val(name)
 
    $("input[name='remark']").val(remark)
 
-    $("input[name='institution_id']").val(institution_id)
+   $("input[name='institution_id']").val(institution_id)
 
-     $("input[name='level_id']").val(level_id)
+   $("input[name='level_id']").val(level_id)
 
+   $("select[name='teacher_id']").val(teacher_id)
 
-
-      
+   $("input[name='teacher_name']").val(teacher_name)
+   
   })
+
 
 
 
