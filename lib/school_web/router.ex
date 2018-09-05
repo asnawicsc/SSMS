@@ -38,6 +38,7 @@ defmodule SchoolWeb.Router do
     post("/standard_ranking", PdfController, :standard_ranking)
 
     post("/height_weight_report_show", PdfController, :height_weight_report_show)
+    post("/parent_listing", PdfController, :parent_listing)
   end
 
   scope "/", SchoolWeb do

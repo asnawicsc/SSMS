@@ -382,11 +382,11 @@ $("div#class_student_info").show();
 
      $('.table').DataTable();
 
-  $("div.student").click(function(){
-    var student_id = $(this).attr("id")
+      $(".table").on("click", "div.student", function(){
+        var student_id = $(this).attr("id")
 
-    channel.push("inquire_student_details", {user_id: window.currentUser, student_id: student_id})
-  })
+        channel.push("inquire_student_details", {user_id: window.currentUser, student_id: student_id})
+      })
 
      
 

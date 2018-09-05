@@ -4,6 +4,131 @@ defmodule SchoolWeb.PdfController do
 
   require IEx
 
+  def parent_listing(conn, params) do
+    school = Repo.get(Institution, User.institution_id(conn))
+    class_id = params["class"] |> String.to_integer()
+    semester = Repo.get(Semester, params["semester_id"])
+
+    q =
+      from(
+        p in Parent,
+        left_join: s in Student,
+        on: s.gicno == p.icno,
+        left_join: sc in StudentClass,
+        on: sc.sudent_id == s.id,
+        left_join: c in Class,
+        on: c.id == sc.class_id,
+        where: sc.semester_id == ^semester.id,
+        select: %{
+          parent: p.name,
+          cparent: p.cname,
+          icno: p.icno,
+          child: s.name,
+          cchild: s.chinese_name,
+          student_no: s.student_no,
+          class: c.name,
+          sex: s.sex
+        },
+        order_by: [p.icno]
+      )
+
+    data1 = Repo.all(q)
+
+    q =
+      from(
+        p in Parent,
+        left_join: s in Student,
+        on: s.ficno == p.icno,
+        left_join: sc in StudentClass,
+        on: sc.sudent_id == s.id,
+        left_join: c in Class,
+        on: c.id == sc.class_id,
+        where: sc.semester_id == ^semester.id,
+        select: %{
+          parent: p.name,
+          cparent: p.cname,
+          icno: p.icno,
+          child: s.name,
+          cchild: s.chinese_name,
+          student_no: s.student_no,
+          class: c.name,
+          sex: s.sex
+        },
+        order_by: [p.icno]
+      )
+
+    data2 = Repo.all(q)
+
+    q =
+      from(
+        p in Parent,
+        left_join: s in Student,
+        on: s.micno == p.icno,
+        left_join: sc in StudentClass,
+        on: sc.sudent_id == s.id,
+        left_join: c in Class,
+        on: c.id == sc.class_id,
+        where: sc.semester_id == ^semester.id,
+        select: %{
+          parent: p.name,
+          cparent: p.cname,
+          icno: p.icno,
+          child: s.name,
+          cchild: s.chinese_name,
+          student_no: s.student_no,
+          class: c.name,
+          sex: s.sex
+        },
+        order_by: [p.icno]
+      )
+
+    data3 = Repo.all(q)
+    data = (data1 ++ data2 ++ data3) |> Enum.uniq()
+
+    data =
+      if class_id != 0 do
+        class = Repo.get(Class, class_id)
+        data |> Enum.filter(fn x -> x.class == class.name end)
+      else
+        data
+      end
+
+    html =
+      Phoenix.View.render_to_string(
+        SchoolWeb.PdfView,
+        "parent_listing.html",
+        school: school,
+        data: data
+      )
+
+    pdf_params = %{"html" => html}
+
+    pdf_binary =
+      PdfGenerator.generate_binary!(
+        pdf_params["html"],
+        size: "A4",
+        shell_params: [
+          "--margin-left",
+          "5",
+          "--margin-right",
+          "5",
+          "--margin-top",
+          "5",
+          "--margin-bottom",
+          "5",
+          "--encoding",
+          "utf-8"
+        ],
+        delete_temporary: true
+      )
+
+    conn
+    |> put_resp_header("Content-Type", "application/pdf")
+    |> resp(200, pdf_binary)
+
+    # render(conn, "parent_listing.html", school: school, data: data)
+  end
+
   def height_weight_report_show(conn, params) do
     school = Repo.get(Institution, User.institution_id(conn))
     semester = Repo.get(Semester, params["semester_id"])

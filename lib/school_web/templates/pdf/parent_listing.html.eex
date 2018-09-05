@@ -1,0 +1,56 @@
+<% require IEx %>
+<link rel="stylesheet" href="<%= Application.app_dir(:school, "priv/static") %>/css/bootstrap.min.css">
+<style type="text/css">
+	table tr{
+		height: 0px;
+
+
+	}
+	table tr td{
+	   padding: 0px !important;
+	}
+
+	
+</style>
+
+<% pages = @data  |> Enum.chunk_every(25) |> Enum.with_index() %>
+<%= for page <- pages do %>
+<% data = elem(page, 0) %>
+
+<div  style="page-break-before: always;">
+	<h2><%= @school.name %></h2>
+	<div><%= SchoolWeb.LayoutView.my_time(DateTime.utc_now) %></div><div>page: <%= elem(page, 1) + 1 %> of <%= Enum.count(pages) %></div>
+	<h5><u><b>Parent Listing</b></u></h5>
+
+	<table class="table table-striped" >
+	<% parents = data |> Enum.group_by(fn x -> x.icno end) |> Map.keys |> Enum.sort %>
+		
+		<%= for parent <- parents do %>
+		<% guardian = data |> Enum.filter(fn x -> x.icno == parent end) |> hd() %>
+		<tr style="font-weight:  bolder;">
+			<td colspan="2"><%= guardian.icno %></td>
+			<td><%= guardian.parent %></td>
+			<td><%= guardian.cparent %></td>
+			<td></td>
+		</tr>
+			<% childs = data |> Enum.filter(fn x -> x.parent == guardian.parent end) |> Enum.uniq()%>
+
+			<%= for child <- childs do %>
+			<tr>
+				<td><%= child.class %></td>
+				<td><%= child.student_no %></td>
+				<td><%= child.child %></td>
+				<td><%= child.cchild %>  </td>
+				<td > <%= child.sex %></td>
+			</tr>
+			<% end %>
+		
+		<% end %>
+
+		
+			
+
+	</table>
+
+</div>
+<% end %>
