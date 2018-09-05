@@ -227,7 +227,7 @@
           <a class="dropdown-item" href="#">
             <%= gettext "Student In/Out" %>
           </a>
-          <a class="dropdown-item" href="#">
+          <a class="dropdown-item" href="/show_guardian">
             <%= gettext "Parent Listing" %>
           </a>
           <a class="dropdown-item" href="/class_analysis">

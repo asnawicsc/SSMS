@@ -5,6 +5,11 @@ defmodule SchoolWeb.ParentController do
   alias School.Affairs.Parent
   require IEx
 
+  def guardian_listing(conn, _params) do
+    parent = Affairs.list_parent()
+    render(conn, "index.html", parent: parent)
+  end
+
   def index(conn, _params) do
     parent = Affairs.list_parent()
     render(conn, "index.html", parent: parent)

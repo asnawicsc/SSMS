@@ -33,7 +33,7 @@ defmodule SchoolWeb.PdfController do
           subject: ss.description,
           mark: e.mark
         },
-        order_by: [s.name]
+        order_by: [c.name, ss.description, s.name]
       )
 
     data = Repo.all(q)
