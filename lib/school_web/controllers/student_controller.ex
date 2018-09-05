@@ -18,6 +18,11 @@ defmodule SchoolWeb.StudentController do
     render(conn, "index.html", students: students)
   end
 
+  def student_certificate(conn, params) do
+    semesters = Repo.all(from(s in Semester))
+    render(conn, "student_certificate.html", semesters: semesters)
+  end
+
   def height_weight(conn, params) do
     students =
       Repo.all(

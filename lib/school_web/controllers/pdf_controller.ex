@@ -4,6 +4,62 @@ defmodule SchoolWeb.PdfController do
 
   require IEx
 
+  def display_student_certificate(conn, params) do
+    school = Repo.get(Institution, User.institution_id(conn))
+    semester = Repo.get(Semester, params["semester_id"])
+    class = Repo.get(Class, params["class_id"])
+
+    students =
+      Repo.all(
+        from(
+          s in Student,
+          left_join: c in StudentClass,
+          on: c.sudent_id == s.id,
+          where: c.class_id == ^params["class_id"] and c.semester_id == ^semester.id,
+          order_by: [asc: s.name],
+          select: %{
+            id: s.id,
+            ic: s.ic,
+            name: s.name,
+            b_cert: s.b_cert
+          }
+        )
+      )
+
+    html =
+      Phoenix.View.render_to_string(
+        SchoolWeb.PdfView,
+        "student_cert.html",
+        students: students,
+        school: school
+      )
+
+    pdf_params = %{"html" => html}
+
+    pdf_binary =
+      PdfGenerator.generate_binary!(
+        pdf_params["html"],
+        size: "A4",
+        shell_params: [
+          "--margin-left",
+          "5",
+          "--margin-right",
+          "5",
+          "--margin-top",
+          "5",
+          "--margin-bottom",
+          "5",
+          "--encoding",
+          "utf-8"
+        ],
+        delete_temporary: true
+      )
+
+    conn
+    |> put_resp_header("Content-Type", "application/pdf")
+    |> resp(200, pdf_binary)
+  end
+
   def height_weight_report_show(conn, params) do
     school = Repo.get(Institution, User.institution_id(conn))
     semester = Repo.get(Semester, params["semester_id"])
@@ -935,7 +991,10 @@ defmodule SchoolWeb.PdfController do
     g =
       for group <- z do
         a =
-          group |> elem(1) |> Enum.sort_by(fn x -> x.total_mark end) |> Enum.reverse()
+          group
+          |> elem(1)
+          |> Enum.sort_by(fn x -> x.total_mark end)
+          |> Enum.reverse()
           |> Enum.with_index()
 
         for item <- a do

@@ -1,0 +1,36 @@
+<% require IEx %>
+<link rel="stylesheet" href="<%= Application.app_dir(:school, "priv/static") %>/css/bootstrap.min.css">
+<style type="text/css">
+	
+</style>
+
+<%= for student <- @students do %>
+<div  style="page-break-before: always;">
+
+	<p style="text-align: center; padding-top: 180px;">KEMENTERIAN PENDIDIKAN MALAYSIA</p>
+	<h3 style="text-align: center;"><b>SIJIL TAMAT PELAJARAN SEKOLAH RENDAH</b></h3>
+	<p style="margin-top: 100px; margin-left: 100px; font-size: 17px">Nama Sekolah: <%= @school.name%></p>
+	<p style="margin-top: -40px;margin-left: 550px; font-size: 17px">State: </p>
+	<p style="margin-left: 100px; font-size: 17px">1. Nama Penuh: <%= student.name %></p>
+	<p style="margin-left: 100px; font-size: 17px">2. Tarikh Lahir: </p>
+	<p style="margin-top: -45px;margin-left: 550px; font-size: 17px">3. No. Surat Beranak: <%= student.b_cert %></p>
+	<p style="margin-top: 20px;margin-left: 100px; font-size: 17px">4. No. Kad Pengenalan: <%= student.ic %></p>
+	<p style="margin-left: 100px; font-size: 17px">5. Tarikh Masuk Sekolah: </p>
+	<p style="margin-left: 100px; font-size: 17px">6. Tarikh Keluar Sekolah: </p>
+	<p style="margin-left: 100px; font-size: 17px">7. Nilai kebolehan dalam pelajaran di sekolah: </p>
+	<p style="margin-left: 100px; font-size: 17px">8. Pangkat yang tercapai dalam peperiksaan masuk ke Sekolah Menengah: </p>
+	<p style="margin-left: 100px; font-size: 17px">9. Kelakuan: </p>
+	<p style="margin-left: 100px; font-size: 17px">10. Kebolehan yang istimewa / Kecenderungan yang tertentu: </p>
+
+
+
+
+	<p style="margin-top: 80px;margin-left: 100px; font-size: 17px">Dengan ini adalah diakui bahawa penuntut yang tersebut di atas telah tamat pelajaran<br>Sekolah Rendah.</p>
+
+
+	<p style="margin-top: 300px;margin-left: 100px; font-size: 17px">.........................................<br>Tandatangan Penuntut</p>
+	<p style="margin-top: -65px;margin-left: 600px; font-size: 17px">.........................................<br>Guru Besar</p>
+
+
+</div>
+<% end %>
