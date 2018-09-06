@@ -76,7 +76,7 @@
             <%= gettext "User Account" %>
               </span>
           </a>
-          <a class="dropdown-item" href="/system_config/<%= @conn.private.plug_session[" institution_id "]%>">
+          <a class="dropdown-item" href="/system_config/<%= @conn.private.plug_session["institution_id"]%>">
             <%= gettext "System Configuration" %>
           </a>
           <a class="dropdown-item" href="/semesters">
@@ -91,9 +91,7 @@
           <a class="dropdown-item" href="/class_setting">
             <%= gettext "Class Setting" %>
           </a>
-          <a class="dropdown-item" href="#">
-            <%= gettext "Segak Setting" %>
-          </a>
+     
           <a class="dropdown-item" href="/co_curriculum_setting">
             <%= gettext "Co-Curriculum Setting" %>
           </a>
@@ -103,29 +101,19 @@
           </a>
           <div class="dropdown-divider"></div>
 
-          <a class="dropdown-item" href="/subject">
-            <%= gettext "Subjects" %>
-          </a>
           <a class="dropdown-item" href="/parent">
             <%= gettext "Parents" %>
           </a>
           <a class="dropdown-item" href="/students">
             <%= gettext "Students" %>
           </a>
-          <a class="dropdown-item" href="/period">
-            <%= gettext "Period" %>
-          </a>
+    
 
           <a class="dropdown-item" href="/height_weight">
             <%= gettext "Height&Weight" %>
           </a>
 
-          <a class="dropdown-item" href="/grade">
-            <%= gettext "Grade" %>
-          </a>
-          <a class="dropdown-item" href="/co_grade">
-            <%= gettext "Co Grade" %>
-          </a>
+    
 
         </div>
       </li>
@@ -140,9 +128,7 @@
           <a class="dropdown-item" href="/mark_sheet">
             <%= gettext "Mark Sheet" %>
           </a>
-          <a class="dropdown-item" href="#">
-            <%= gettext "Segak"%>
-          </a>
+    
           <a class="dropdown-item" href="co_mark">
             <%= gettext "Co-Curriculum"%>
           </a>
@@ -173,59 +159,18 @@
           <a class="dropdown-item" href="/exam_result_analysis_standard">
             <%= gettext "Exam Result Analysis(Standard)" %>
           </a>
-
-
-          <a class="dropdown-item" href="#">
-            <%= gettext "Table Listing" %>
-          </a>
-          <a class="dropdown-item" href="#">
-            <%= gettext "Comment Listing" %>
-          </a>
-          <a class="dropdown-item" href="#">
-            <%= gettext "Holiday Listing" %>
-          </a>
-          <a class="dropdown-item" href="/standard_listing">
-            <%= gettext "Standard Listing" %>
-          </a>
-          <a class="dropdown-item" href="#">
-            <%= gettext "User Listing" %>
-          </a>
-
+      
           <a class="dropdown-item" href="/student_listing_by_class">
             <%= gettext "Student Listing" %>
-          </a>
-          <a class="dropdown-item" href="#">
-            <%= gettext "Student Report (Class)" %>
           </a>
           <a class="dropdown-item" href="/student_report_by_cocurriculum">
             <%= gettext "Student Report (Co-Curriculum)" %>
           </a>
-          <a class="dropdown-item" href="#">
-            <%= gettext "Student Report (Region)" %>
-          </a>
-          <a class="dropdown-item" href="#">
-            <%= gettext "Student Report (Sport Group)" %>
-          </a>
           <a class="dropdown-item" href="/height_weight_report">
             <%= gettext "Student Report (Height&Weight)" %>
           </a>
-          <a class="dropdown-item" href="#">
-            <%= gettext "Student Card" %>
-          </a>
-          <a class="dropdown-item" href="#">
-            <%= gettext "Student Master List" %>
-          </a>
           <a class="dropdown-item" href="/student_certificate">
             <%= gettext "Student Certificate" %>
-          </a>
-          <a class="dropdown-item" href="#">
-            <%= gettext "Student Statistic by Class (Race)" %>
-          </a>
-          <a class="dropdown-item" href="#">
-            <%= gettext "Student Statistic by Class (Region)" %>
-          </a>
-          <a class="dropdown-item" href="#">
-            <%= gettext "Student In/Out" %>
           </a>
           <a class="dropdown-item" href="/show_guardian">
             <%= gettext "Parent Listing" %>
@@ -233,50 +178,15 @@
           <a class="dropdown-item" href="/class_analysis">
             <%= gettext "Class Analysis" %>
           </a>
-          <a class="dropdown-item" href="#">
-            <%= gettext "Class Analysis (Graph)" %>
-          </a>
-
           <a class="dropdown-item" href="/teacher_listing">
             <%= gettext "Teacher Listing" %>
-          </a>
-          <a class="dropdown-item" href="#">
-            <%= gettext "Teacher Card" %>
-          </a>
-
-          <a class="dropdown-item" href="#">
-            <%= gettext "Mark" %>
           </a>
           <a class="dropdown-item" href="/mark_sheet_listing">
             <%= gettext "Mark Sheet" %>
           </a>
-          <a class="dropdown-item" href="#">
-            <%= gettext "Mark Analyse" %>
-          </a>
           <a class="dropdown-item" href="/mark_analyse_by_grade">
             <%= gettext "Mark Analayse by Grade" %>
           </a>
-          <a class="dropdown-item" href="#">
-            <%= gettext "Mark Analayse by Test" %>
-          </a>
-
-          <a class="dropdown-item" href="#">
-            <%= gettext "Attendence " %>
-          </a>
-
-          <a class="dropdown-item" href="#">
-            <%= gettext "Daily Attendence Analysis" %>
-          </a>
-          <a class="dropdown-item" href="#">
-            <%= gettext "Attendence Class Analysis (Monthly)" %>
-          </a>
-          <a class="dropdown-item" href="#">
-            <%= gettext "Monthly Absent Analysis" %>
-          </a>
-          <a class="dropdown-item" href="#">
-            <%= gettext "Student Absent Analysis" %>
-          </a>
-
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <%= gettext "Library" %>

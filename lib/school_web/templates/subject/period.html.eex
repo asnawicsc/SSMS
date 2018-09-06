@@ -30,9 +30,9 @@
   </tbody>
 </table>
 
-<button type="button" rel="tooltip" title="" class="btn btn-danger btn-link btn-sm" id="" name="create_period"  data-toggle="modal" aria-label="price" data-target="#model7" data-original-title="Edit Item"><i class="material-icons">New Period</i><div class="ripple-container"></div>                 </button>
+<%# <button type="button" rel="tooltip" title="" class="btn btn-danger btn-link btn-sm" id="" name="create_period"  data-toggle="modal" aria-label="price" data-target="#model7" data-original-title="Edit Item"><i class="material-icons">New Period</i><div class="ripple-container"></div>                 </button>
                     </button>
-
+ %>
 
              
 

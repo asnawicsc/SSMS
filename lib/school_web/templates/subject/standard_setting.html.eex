@@ -37,31 +37,31 @@
                         Subject ( Test )
                       </a>
                     </li>
-                    <li class="nav-item">
+                <%#     <li class="nav-item">
                       <a class="nav-link" data-toggle="tab" href="" id="test" role="tablist">
                         Test
                       </a>
-                    </li>
+                    </li> %>
                      <li class="nav-item">
                       <a class="nav-link" data-toggle="tab" href=""  id="result_grade" role="tablist">
                         Result Grade
                       </a>
                     </li>
-                     <li class="nav-item">
+                 <%#     <li class="nav-item">
                       <a class="nav-link" data-toggle="tab" href="" id="result_default" role="tablist">
                         Result Default
                       </a>
-                    </li>
-                      <li class="nav-item">
+                    </li> %>
+                <%#       <li class="nav-item">
                       <a class="nav-link" data-toggle="tab" href="" id="seq" role="tablist">
                         Seq No. Sorting Order
                       </a>
-                    </li>
-                    <li class="nav-item">
+                    </li> %>
+                 <%#    <li class="nav-item">
                       <a class="nav-link" data-toggle="tab" href="" id="co_curriculum" role="tablist">
                         Co-Curriculum
                       </a>
-                    </li>
+                    </li> %>
                     <li class="nav-item">
                       <a class="nav-link" data-toggle="tab" href="" id="grade_co" role="tablist">
                         Grade Co-C

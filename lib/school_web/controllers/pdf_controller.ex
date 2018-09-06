@@ -233,12 +233,14 @@ defmodule SchoolWeb.PdfController do
 
     filter_student =
       for student <- students do
-        if params["class_id"] != "all_class" do
+        {class,student}=if params["class_id"] != "all_class" do
           class = Repo.get(Class, params["class_id"])
           student = Map.put(student, :class, class.name)
+          {class,student}
         else
           student_class = Repo.get_by(StudentClass, sudent_id: student.id)
           class = Repo.get(Class, student_class.class_id)
+          {class,student_class}
         end
 
         height_final =
@@ -272,7 +274,7 @@ defmodule SchoolWeb.PdfController do
             end
           end
 
-        if student.weight != nil do
+         weight =if student.weight != nil do
           weights = String.split(student.weight, ",")
 
           weight_d =
@@ -293,7 +295,7 @@ defmodule SchoolWeb.PdfController do
             |> List.to_string()
             |> String.split("-")
 
-          if Enum.count(weight) > 1 do
+           weight =if Enum.count(weight) > 1 do
             weight
             |> List.to_tuple()
             |> elem(1)
@@ -480,6 +482,8 @@ defmodule SchoolWeb.PdfController do
   end
 
   def standard_listing(conn, params) do
+
+
     school = Repo.get(Institution, User.institution_id(conn))
 
     semester_start = params["semester"] |> String.split(" - ") |> hd()
