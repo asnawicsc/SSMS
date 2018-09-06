@@ -1,0 +1,28 @@
+<h2>Show Holiday</h2>
+
+<ul>
+
+  <li>
+    <strong>Date:</strong>
+    <%= @holiday.date %>
+  </li>
+
+  <li>
+    <strong>Description:</strong>
+    <%= @holiday.description %>
+  </li>
+
+  <li>
+    <strong>Semester:</strong>
+    <%= @holiday.semester_id %>
+  </li>
+
+  <li>
+    <strong>Institution:</strong>
+    <%= @holiday.institution_id %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: holiday_path(@conn, :edit, @holiday) %></span>
+<span><%= link "Back", to: holiday_path(@conn, :index) %></span>
