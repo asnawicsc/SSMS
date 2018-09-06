@@ -1,0 +1,17 @@
+
+<h1>Holiday Listing</h1>
+
+
+<form action="/pdf/holiday_listing" method="POST">
+	<input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+
+<select name="semester">
+	<%= for sem <- @semesters do %>
+
+	<option value="<%=sem.id %>" value=><%= sem.start_date %> - <%= sem.end_date %></option>
+	<% end %>
+</select>
+<input type="submit" name="" value="Generate!">
+</form>
+
+

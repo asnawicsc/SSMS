@@ -1710,4 +1710,47 @@ defmodule SchoolWeb.PdfController do
     |> put_resp_header("Content-Type", "application/pdf")
     |> resp(200, pdf_binary)
   end
+
+  def holiday_listing(conn,params) do
+   ins_id=conn.private.plug_session["institution_id"]
+    semester_id=params["semester"]|>String.to_integer
+    institution=Repo.get_by(School.Settings.Institution,id: ins_id)
+
+    holiday = Affairs.list_holiday()|>Enum.filter(fn x -> x.institution_id ==ins_id end)|>Enum.filter(fn x -> x.semester_id ==semester_id end)
+   
+      html =
+      Phoenix.View.render_to_string(
+        SchoolWeb.PdfView,
+        "holiday_report.html",
+        holiday: holiday,
+        institution: institution
+      )
+
+    pdf_params = %{"html" => html}
+
+    pdf_binary =
+      PdfGenerator.generate_binary!(
+        pdf_params["html"],
+        size: "A4",
+        shell_params: [
+          "--margin-left",
+          "5",
+          "--margin-right",
+          "5",
+          "--margin-top",
+          "5",
+          "--margin-bottom",
+          "5",
+          "--encoding",
+          "utf-8",
+          "--orientation",
+          "Landscape"
+        ],
+        delete_temporary: true
+      )
+
+    conn
+    |> put_resp_header("Content-Type", "application/pdf")
+    |> resp(200, pdf_binary)
+  end
 end

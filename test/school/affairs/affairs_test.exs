@@ -3118,4 +3118,70 @@ defmodule School.AffairsTest do
       assert %Ecto.Changeset{} = Affairs.change_student_cocurriculum(student_cocurriculum)
     end
   end
+
+  describe "holiday" do
+    alias School.Affairs.Holiday
+
+    @valid_attrs %{date: ~D[2010-04-17], description: "some description", institution_id: 42, semester_id: 42}
+    @update_attrs %{date: ~D[2011-05-18], description: "some updated description", institution_id: 43, semester_id: 43}
+    @invalid_attrs %{date: nil, description: nil, institution_id: nil, semester_id: nil}
+
+    def holiday_fixture(attrs \\ %{}) do
+      {:ok, holiday} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_holiday()
+
+      holiday
+    end
+
+    test "list_holiday/0 returns all holiday" do
+      holiday = holiday_fixture()
+      assert Affairs.list_holiday() == [holiday]
+    end
+
+    test "get_holiday!/1 returns the holiday with given id" do
+      holiday = holiday_fixture()
+      assert Affairs.get_holiday!(holiday.id) == holiday
+    end
+
+    test "create_holiday/1 with valid data creates a holiday" do
+      assert {:ok, %Holiday{} = holiday} = Affairs.create_holiday(@valid_attrs)
+      assert holiday.date == ~D[2010-04-17]
+      assert holiday.description == "some description"
+      assert holiday.institution_id == 42
+      assert holiday.semester_id == 42
+    end
+
+    test "create_holiday/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_holiday(@invalid_attrs)
+    end
+
+    test "update_holiday/2 with valid data updates the holiday" do
+      holiday = holiday_fixture()
+      assert {:ok, holiday} = Affairs.update_holiday(holiday, @update_attrs)
+      assert %Holiday{} = holiday
+      assert holiday.date == ~D[2011-05-18]
+      assert holiday.description == "some updated description"
+      assert holiday.institution_id == 43
+      assert holiday.semester_id == 43
+    end
+
+    test "update_holiday/2 with invalid data returns error changeset" do
+      holiday = holiday_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_holiday(holiday, @invalid_attrs)
+      assert holiday == Affairs.get_holiday!(holiday.id)
+    end
+
+    test "delete_holiday/1 deletes the holiday" do
+      holiday = holiday_fixture()
+      assert {:ok, %Holiday{}} = Affairs.delete_holiday(holiday)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_holiday!(holiday.id) end
+    end
+
+    test "change_holiday/1 returns a holiday changeset" do
+      holiday = holiday_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_holiday(holiday)
+    end
+  end
 end

@@ -54,6 +54,7 @@ defmodule SchoolWeb.Router do
     post("/parent_listing", PdfController, :parent_listing)
 
     post("/display_student_certificate", PdfController, :display_student_certificate)
+       post("/holiday_listing", PdfController, :holiday_listing)
   end
 
   scope "/", SchoolWeb do
@@ -242,6 +243,9 @@ defmodule SchoolWeb.Router do
     get("/co_mark", CoCurriculumController, :co_mark)
     post("/create_co_mark", CoCurriculumController, :create_co_mark)
     get("/student_listing_by_class", ClassController, :student_listing_by_class)
+    get("/holiday_report", HolidayController, :holiday_report)
+     resources "/holiday", HolidayController
+
   end
 
   # Other scopes may use custom stacks.
