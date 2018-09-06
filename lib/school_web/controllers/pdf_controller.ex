@@ -133,10 +133,10 @@ defmodule SchoolWeb.PdfController do
     school = Repo.get(Institution, User.institution_id(conn))
     semester = Repo.get(Semester, params["semester_id"])
 
-     students =if params["class_id"] != "all_class" do
-      class = Repo.get(Class, params["class_id"])
+    students =
+      if params["class_id"] != "all_class" do
+        class = Repo.get(Class, params["class_id"])
 
-     
         Repo.all(
           from(
             s in Student,
@@ -154,8 +154,7 @@ defmodule SchoolWeb.PdfController do
             }
           )
         )
-    else
-     
+      else
         Repo.all(
           from(
             s in Student,
@@ -176,16 +175,16 @@ defmodule SchoolWeb.PdfController do
             }
           )
         )
-    end
+      end
 
     filter_student =
       for student <- students do
         if params["class_id"] != "all_class" do
+          class = Repo.get(Class, params["class_id"])
           student = Map.put(student, :class, class.name)
         else
           student_class = Repo.get_by(StudentClass, sudent_id: student.id)
           class = Repo.get(Class, student_class.class_id)
-          
         end
 
         height_final =
@@ -1173,8 +1172,7 @@ defmodule SchoolWeb.PdfController do
     |> resp(200, pdf_binary)
   end
 
-  def student_class_listing(conn,params) do
-
+  def student_class_listing(conn, params) do
     class_id = params["class_id"]
 
     all =
@@ -1198,16 +1196,17 @@ defmodule SchoolWeb.PdfController do
             race: r.race
           }
         )
-      )|>Enum.with_index
+      )
+      |> Enum.with_index()
 
-            html =
-        Phoenix.View.render_to_string(
-          SchoolWeb.PdfView,
-          "student_class_listing.html",
-          all: all
-        )
+    html =
+      Phoenix.View.render_to_string(
+        SchoolWeb.PdfView,
+        "student_class_listing.html",
+        all: all
+      )
 
-         pdf_params = %{"html" => html}
+    pdf_params = %{"html" => html}
 
     pdf_binary =
       PdfGenerator.generate_binary!(
@@ -1233,28 +1232,24 @@ defmodule SchoolWeb.PdfController do
     conn
     |> put_resp_header("Content-Type", "application/pdf")
     |> resp(200, pdf_binary)
-
-    
   end
 
-    def teacher_listing(conn,params) do
+  def teacher_listing(conn, params) do
+    inst_id = conn.private.plug_session["institution_id"]
 
-inst_id=conn.private.plug_session["institution_id"]
+    institution = Repo.get_by(School.Settings.Institution, id: inst_id)
 
-institution=Repo.get_by(School.Settings.Institution, id: inst_id)
+    teacher = Affairs.list_teacher() |> Enum.with_index()
 
+    html =
+      Phoenix.View.render_to_string(
+        SchoolWeb.PdfView,
+        "teacher_listing.html",
+        teacher: teacher,
+        institution: institution
+      )
 
-    teacher = Affairs.list_teacher()|>Enum.with_index
-
-            html =
-        Phoenix.View.render_to_string(
-          SchoolWeb.PdfView,
-          "teacher_listing.html",
-          teacher: teacher,
-          institution: institution
-        )
-
-         pdf_params = %{"html" => html}
+    pdf_params = %{"html" => html}
 
     pdf_binary =
       PdfGenerator.generate_binary!(
@@ -1280,12 +1275,9 @@ institution=Repo.get_by(School.Settings.Institution, id: inst_id)
     conn
     |> put_resp_header("Content-Type", "application/pdf")
     |> resp(200, pdf_binary)
-
-    
   end
 
-  def exam_result_analysis_class(conn,params) do
-
+  def exam_result_analysis_class(conn, params) do
     class_id = params["class_id"]
     exam_id = params["exam_id"]
 
@@ -1408,7 +1400,7 @@ institution=Repo.get_by(School.Settings.Institution, id: inst_id)
         class: class
       )
 
-          pdf_params = %{"html" => html}
+    pdf_params = %{"html" => html}
 
     pdf_binary =
       PdfGenerator.generate_binary!(
@@ -1434,21 +1426,15 @@ institution=Repo.get_by(School.Settings.Institution, id: inst_id)
     conn
     |> put_resp_header("Content-Type", "application/pdf")
     |> resp(200, pdf_binary)
-
-    
-
   end
 
-
-  def exam_result_analysis_class_standard(conn,params) do
-
-        standard_id = params["standard_id"]
+  def exam_result_analysis_class_standard(conn, params) do
+    standard_id = params["standard_id"]
     exam_id = params["exam_id"]
 
     standard = Repo.get_by(School.Affairs.Level, %{id: standard_id})
 
     exam = Repo.get_by(School.Affairs.ExamMaster, %{id: exam_id})
-
 
     all =
       Repo.all(
@@ -1567,10 +1553,9 @@ institution=Repo.get_by(School.Settings.Institution, id: inst_id)
         standard: standard,
         standard_id: standard_id,
         exam_id: exam_id
-      
       )
 
-                pdf_params = %{"html" => html}
+    pdf_params = %{"html" => html}
 
     pdf_binary =
       PdfGenerator.generate_binary!(
@@ -1596,18 +1581,13 @@ institution=Repo.get_by(School.Settings.Institution, id: inst_id)
     conn
     |> put_resp_header("Content-Type", "application/pdf")
     |> resp(200, pdf_binary)
-
-
-    
   end
 
-  def student_list_by_co(conn,params)  do
-
+  def student_list_by_co(conn, params) do
     cocurriculum = params["cocurriculum_id"]
     co_year = params["year"]
     co_level = params["standard_id"]
     co_semester = params["semester_id"]
-
 
     students =
       Repo.all(
@@ -1635,16 +1615,14 @@ institution=Repo.get_by(School.Settings.Institution, id: inst_id)
         )
       )
 
-
     html =
-        Phoenix.View.render_to_string(
-          SchoolWeb.PdfView,
-          "student_listing_by_cocurriculum.html",
-          students: students
-      
-        )
+      Phoenix.View.render_to_string(
+        SchoolWeb.PdfView,
+        "student_listing_by_cocurriculum.html",
+        students: students
+      )
 
-            pdf_params = %{"html" => html}
+    pdf_params = %{"html" => html}
 
     pdf_binary =
       PdfGenerator.generate_binary!(
@@ -1670,10 +1648,5 @@ institution=Repo.get_by(School.Settings.Institution, id: inst_id)
     conn
     |> put_resp_header("Content-Type", "application/pdf")
     |> resp(200, pdf_binary)
-
-
-     
-
-   
   end
 end
