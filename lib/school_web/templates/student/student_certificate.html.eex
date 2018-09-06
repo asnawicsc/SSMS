@@ -1,6 +1,6 @@
-<h1>Height and Weight Report</h1>
+<h1>Student Certificate</h1>
 <form id ="semester">
-	<input type="hidden" name="report" value="height_weight">
+	<input type="hidden" name="report" value="certificate">
 	Please select a semester:
 	<select name="semester_id">
 		<%= for sem <- @semesters do %>
@@ -10,16 +10,26 @@
 	<input type="button" class="btn btn-info btn-sm" id="hw_show_class" value="Show Classes !">
 </form>
 
-<form id ="classes" action="/pdf/height_weight_report_show" method="POST">
+<form id ="classes" action="/pdf/display_student_certificate" method="POST">
 	<input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+
 	<input type="hidden" name="semester_id" id="semester_id" value="">
 	Please select a class:
 	<select name="class_id" id="class_lists">
 		
 	</select>
-	<input type="submit" class="btn btn-info btn-sm" id="hw_report" value="Generate report !">
+	<input type="submit" class="btn btn-info btn-sm" id="generate_certificate" value="Generate Certificate !">
 </form>
 
 <script type="text/javascript">
 	$("form#classes").hide()
+
+var arr = []
+
+$("a.dropdown-item").each(function(){
+var cn = $(this).html()
+console.log(cn)
+arr.push(cn)
+})
 </script>
+

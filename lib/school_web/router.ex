@@ -40,12 +40,20 @@ defmodule SchoolWeb.Router do
     post("/student_class_listing", PdfController, :student_class_listing)
     post("/teacher_listing", PdfController, :teacher_listing)
     post("/exam_result_analysis_class", PdfController, :exam_result_analysis_class)
-    post("/exam_result_analysis_class_standard", PdfController, :exam_result_analysis_class_standard)
-     post("/student_list_by_co", PdfController, :student_list_by_co)
+
+    post(
+      "/exam_result_analysis_class_standard",
+      PdfController,
+      :exam_result_analysis_class_standard
+    )
+
+    post("/student_list_by_co", PdfController, :student_list_by_co)
 
     post("/height_weight_report_show", PdfController, :height_weight_report_show)
+
     post("/parent_listing", PdfController, :parent_listing)
 
+    post("/display_student_certificate", PdfController, :display_student_certificate)
   end
 
   scope "/", SchoolWeb do
@@ -80,6 +88,7 @@ defmodule SchoolWeb.Router do
     post("/upload_students", StudentController, :upload_students)
     get("/height_weight", StudentController, :height_weight)
     get("/height_weight_class/:class_id", StudentController, :height_weight_class)
+    get("/student_certificate", StudentController, :student_certificate)
 
     resources("/levels", LevelController)
     resources("/semesters", SemesterController)
