@@ -1,0 +1,72 @@
+<% require IEx %>
+<style type="text/css">
+table {
+border: solid 1px black;
+border-collapse: collapse;
+}
+td {
+border: solid 1px grey;
+text-align: center;
+ white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-left: 5px;
+    padding-right: 5px;
+
+    max-width: 250px;
+}
+td.min {
+min-width: 250px;
+text-align: left;
+}
+</style>
+<% pages = Enum.with_index(@loans) %>
+
+
+<%= for loan_list <- pages do %>
+<% page_no = elem(loan_list, 1) %>
+<% loan_list = elem(loan_list, 0)%>
+<h2 style="page-break-before: always">Loan history for <%= @organization.name %> between <%= @loan_date %> and <%= @return_date %></h2>
+<table style="width: 100%;">
+  <thead>
+    <tr>
+    	<th>No</th>
+      <th>Member ID</th>
+      <th>Member</th>
+      <th>Location</th>
+      <th>Barcode </th>
+      <th>Book Title</th>
+      <th>Loan Date</th>
+      <th>Return Date</th>
+      <th>Actual Return Date</th>
+      <th>Fine</th>
+      <th>Paid</th>
+
+    </tr>
+  </thead>
+  <tbody>
+
+<%= for loan <- loan_list do %>
+<% id = elem(loan, 1)%>
+<% loan = elem(loan,0)%>
+    <tr>
+  	<td><%= id + 1 %></td>
+      <td><%= loan.membership_code %></td>
+      <td class="min"><%= loan.member_cname %> <%= loan.member_name %></td>
+      <td><%= loan.line1 %></td>
+      <td><%= loan.barcode %></td>
+      <td class="min"><%= loan.book_title %></td>
+      <td><%= loan.loan_date %></td>
+      <td><%= loan.return_date %></td>
+      <td><%= loan.actual_return_date %></td>
+      <td></td>
+      <td></td>
+     
+
+
+    </tr>
+<% end %>
+  </tbody>
+</table>
+Pg <%= page_no + 1%> <div style="width: 220px; float: right; ">Printed on: <%= Date.utc_today %></div> 
+<% end %>

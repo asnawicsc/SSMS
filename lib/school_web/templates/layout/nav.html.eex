@@ -198,6 +198,9 @@
               <a href="/library/returns" class="dropdown-item api" call="get_loans">
                 <%= gettext "Return List" %>
               </a>
+              <a href="/library/loan_report" class="dropdown-item " >
+                <%= gettext "Loan Report" %>
+              </a>
               <a href="/library/loans/new" class="dropdown-item api">
                 <%= gettext "New Loans" %>
               </a>

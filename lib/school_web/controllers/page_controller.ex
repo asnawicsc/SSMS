@@ -4,6 +4,225 @@ defmodule SchoolWeb.PageController do
   use Task
   alias School.Settings.Institution
 
+  def outstanding_all(conn, params) do
+    # uri = "https://www.li6rary.net/api"
+    uri = Application.get_env(:school, :api)[:url]
+
+    inst = Repo.get(Institution, School.Affairs.inst_id(conn))
+    loan_date = conn.params["loan_date"]
+    return_date = conn.params["return_date"]
+
+    path = "?scope=get_outstanding_all&lib_id=#{inst.library_organization_id}"
+
+    response =
+      HTTPoison.get!(
+        uri <> path,
+        [{"Content-Type", "application/json"}],
+        timeout: 50_000,
+        recv_timeout: 50_000
+      ).body
+
+    data =
+      response
+      |> Poison.decode!()
+
+    loans =
+      for data_o <- data do
+        for {key, val} <- data_o, into: %{}, do: {String.to_atom(key), val}
+      end
+
+    loans =
+      loans
+      |> Enum.with_index()
+      |> Enum.chunk_every(35)
+
+    html =
+      Phoenix.View.render_to_string(
+        SchoolWeb.PdfView,
+        "outstanding.html",
+        loans: loans,
+        conn: conn,
+        organization: inst,
+        loan_date: loan_date,
+        return_date: return_date
+      )
+
+    pdf_params = %{"html" => html}
+
+    pdf_binary =
+      PdfGenerator.generate_binary!(
+        pdf_params["html"],
+        size: "A4",
+        shell_params: [
+          "--margin-left",
+          "1",
+          "--margin-right",
+          "1",
+          "--margin-top",
+          "1",
+          "--margin-bottom",
+          "1",
+          "--encoding",
+          "utf-8",
+          "--orientation",
+          "Landscape"
+        ],
+        delete_temporary: true
+      )
+
+    conn
+    |> put_resp_header("Content-Type", "application/pdf")
+    |> resp(200, pdf_binary)
+  end
+
+  def outstanding(conn, params) do
+    # uri = "https://www.li6rary.net/api"
+    uri = Application.get_env(:school, :api)[:url]
+
+    inst = Repo.get(Institution, School.Affairs.inst_id(conn))
+    loan_date = conn.params["loan_date"]
+    return_date = conn.params["return_date"]
+
+    path =
+      "?scope=get_outstanding&lib_id=#{inst.library_organization_id}&loan_date=#{loan_date}&return_date=#{
+        return_date
+      }"
+
+    response =
+      HTTPoison.get!(
+        uri <> path,
+        [{"Content-Type", "application/json"}],
+        timeout: 50_000,
+        recv_timeout: 50_000
+      ).body
+
+    data =
+      response
+      |> Poison.decode!()
+
+    loans =
+      for data_o <- data do
+        for {key, val} <- data_o, into: %{}, do: {String.to_atom(key), val}
+      end
+
+    loans =
+      loans
+      |> Enum.with_index()
+      |> Enum.chunk_every(35)
+
+    html =
+      Phoenix.View.render_to_string(
+        SchoolWeb.PdfView,
+        "outstanding.html",
+        loans: loans,
+        conn: conn,
+        organization: inst,
+        loan_date: loan_date,
+        return_date: return_date
+      )
+
+    pdf_params = %{"html" => html}
+
+    pdf_binary =
+      PdfGenerator.generate_binary!(
+        pdf_params["html"],
+        size: "A4",
+        shell_params: [
+          "--margin-left",
+          "1",
+          "--margin-right",
+          "1",
+          "--margin-top",
+          "1",
+          "--margin-bottom",
+          "1",
+          "--encoding",
+          "utf-8",
+          "--orientation",
+          "Landscape"
+        ],
+        delete_temporary: true
+      )
+
+    conn
+    |> put_resp_header("Content-Type", "application/pdf")
+    |> resp(200, pdf_binary)
+  end
+
+  def history_data(conn, params) do
+    # uri = "https://www.li6rary.net/api"
+    uri = Application.get_env(:school, :api)[:url]
+
+    inst = Repo.get(Institution, School.Affairs.inst_id(conn))
+    loan_date = conn.params["loan_date"]
+    return_date = conn.params["return_date"]
+
+    path =
+      "?scope=get_history_data&lib_id=#{inst.library_organization_id}&loan_date=#{loan_date}&return_date=#{
+        return_date
+      }"
+
+    response =
+      HTTPoison.get!(
+        uri <> path,
+        [{"Content-Type", "application/json"}],
+        timeout: 50_000,
+        recv_timeout: 50_000
+      ).body
+
+    data =
+      response
+      |> Poison.decode!()
+
+    loans =
+      for data_o <- data do
+        for {key, val} <- data_o, into: %{}, do: {String.to_atom(key), val}
+      end
+
+    loans =
+      loans
+      |> Enum.with_index()
+      |> Enum.chunk_every(35)
+
+    html =
+      Phoenix.View.render_to_string(
+        SchoolWeb.PdfView,
+        "loan_history.html",
+        loans: loans,
+        conn: conn,
+        organization: inst,
+        loan_date: loan_date,
+        return_date: return_date
+      )
+
+    pdf_params = %{"html" => html}
+
+    pdf_binary =
+      PdfGenerator.generate_binary!(
+        pdf_params["html"],
+        size: "A4",
+        shell_params: [
+          "--margin-left",
+          "1",
+          "--margin-right",
+          "1",
+          "--margin-top",
+          "1",
+          "--margin-bottom",
+          "1",
+          "--encoding",
+          "utf-8",
+          "--orientation",
+          "Landscape"
+        ],
+        delete_temporary: true
+      )
+
+    conn
+    |> put_resp_header("Content-Type", "application/pdf")
+    |> resp(200, pdf_binary)
+  end
+
   def index(conn, _params) do
     current_sem =
       Repo.all(
@@ -21,6 +240,10 @@ defmodule SchoolWeb.PageController do
       end
 
     render(conn, "index.html", current_sem: current_sem)
+  end
+
+  def loan_report(conn, _params) do
+    render(conn, "loan_report.html", [])
   end
 
   def dashboard(conn, _params) do
@@ -93,16 +316,6 @@ defmodule SchoolWeb.PageController do
 
     IO.inspect(response)
     send_resp(conn, 200, response)
-  end
-
-  def api(request_scope) do
-    # uri<>"?scope=get_lib&lib_id=1",
-    # uri<>"?scope=get_books&cat_id=3&lib_id=1",
-    # uri<>"?scope=get_members&lib_id=1",
-
-    # uri<>"?scope=link_member&lib_id=1",
-    # uri<>"?scope=loan_book&lib_id=1",
-    # uri<>"?scope=return_loan&lib_id=1",
   end
 
   def upload_books(conn, params) do
@@ -262,11 +475,12 @@ defmodule SchoolWeb.PageController do
         recv_timeout: 50_000
       ).body
 
-     templates = if response == "[]" do
-     nil
-    else
-     response |> Poison.decode!() |> hd()
-    end
+    templates =
+      if response == "[]" do
+        nil
+      else
+        response |> Poison.decode!() |> hd()
+      end
 
     render(conn, "student_cards.html", templates: templates)
   end

@@ -75,6 +75,12 @@ defmodule SchoolWeb.Router do
     post("/library/book/preview_template", PageController, :preview_template)
     get("/library/loans/new", PageController, :new_loan)
     get("/library/returns", PageController, :return)
+    get("/library/loan_report", PageController, :loan_report)
+
+    post("/library/book/history_data", PageController, :history_data)
+    post("/library/book/outstanding", PageController, :outstanding)
+    get("/library/outstanding_all", PageController, :outstanding_all)
+
     resources("/parameters", ParameterController)
     get("/system_config/:institution_id", ParameterController, :system_config)
     resources("/institutions", InstitutionController)

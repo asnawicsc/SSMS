@@ -1,0 +1,46 @@
+<h2>Loans Report Generator</h2>
+<div class="row">
+	<div class="col-lg-3">
+		<div class="card  bg-purple">
+			<div class="card-header"><h3>Loan History</h3></div>
+			<div class="card-body  bg-purple-light">
+				
+				<form action="/library/book/history_data" method="POST">
+					<input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token() %>">
+					<div class="form-group">
+						<label class="control-label">Loan Date</label>
+					<input type="date" name="loan_date" required="required">
+					</div>
+					<div class="form-group"><label class="control-label">Return Date</label>
+					<input type="date" name="return_date" required="required">
+					</div>
+					<input type="submit" value="Search" class="btn btn-default">
+				</form>
+			</div>
+			
+		</div>
+		
+	</div>
+	<div class="col-lg-3">
+		<div class="card  bg-purple">
+			<div class="card-header"><h3>Outstanding Loans</h3></div>
+			<div class="card-body  bg-purple-light">
+				
+				<form action="/library/book/outstanding" method="POST">
+					<input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token() %>">
+					<div class="form-group">
+						<label class="control-label">Loan Date</label>
+					<input type="date" name="loan_date" required="required">
+					</div>
+					<div class="form-group"><label class="control-label">Return Date</label>
+					<input type="date" name="return_date" required="required">
+					</div>
+					<input type="submit" value="Search" class="btn btn-default">
+					<a class="btn btn-primary" href="/library/outstanding_all">ALL</a>
+				</form>
+			</div>
+			
+		</div>
+		
+	</div>
+</div>
