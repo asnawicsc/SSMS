@@ -10,6 +10,8 @@ defmodule SchoolWeb.PeriodController do
   require IEx
 
   def index(conn, _params) do
+
+
     period = Affairs.list_period()
     render(conn, "index.html", period: period)
   end

@@ -7,6 +7,8 @@ defmodule SchoolWeb.InstitutionController do
   import Mogrify
 
   def select(conn, %{"id" => id}) do
+
+ 
     institution = Settings.get_institution!(id)
     user = Settings.current_user(conn)
     User.changeset(user, %{institution_id: id}) |> Repo.update!()
@@ -18,6 +20,19 @@ defmodule SchoolWeb.InstitutionController do
   end
 
   def index(conn, _params) do
+
+    if User.institution_id(conn) != nil do
+
+      ins=User.institution_id(conn)
+
+       institution = Settings.get_institution!(ins)
+
+       param = Repo.get_by(Parameter, institution_id: ins)
+
+    render(conn, "show.html", institution: institution, param: param)
+      
+    end
+
     institutions = Settings.list_institutions()
     render(conn, "index.html", institutions: institutions)
   end

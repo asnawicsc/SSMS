@@ -205,11 +205,15 @@ defmodule SchoolWeb.UserChannel do
     student = Affairs.get_student!(id)
     changeset = Affairs.change_student(student)
 
+    institution_id=user.institution_id
+
     conn = %{
       private: %{
         plug_session: %{"institution_id" => user.institution_id, "user_id" => user.id}
       }
     }
+
+
 
     html =
       Phoenix.View.render_to_string(
@@ -221,6 +225,7 @@ defmodule SchoolWeb.UserChannel do
         mother: student.micno,
         changeset: changeset,
         conn: conn,
+        institution_id: institution_id,
         action: "/students/#{student.id}"
       )
 
@@ -464,6 +469,8 @@ defmodule SchoolWeb.UserChannel do
   end
 
   def handle_in("nilam_setting", payload, socket) do
+
+
     project_nilam =
       Repo.all(
         from(
@@ -480,7 +487,17 @@ defmodule SchoolWeb.UserChannel do
           }
         )
       )
-      |> hd
+  
+
+      project_nilam=if project_nilam == []  do
+
+      else
+
+        project_nilam|>hd
+ 
+      end
+
+
 
     # def handle_in("nilam_setting", payload, socket) do
     #   project_nilam =
@@ -670,11 +687,16 @@ defmodule SchoolWeb.UserChannel do
 
   def handle_in("class_info", payload, socket) do
     class_id = payload["class_id"]
+
     all = Repo.get_by(School.Affairs.Class, %{id: class_id})
 
+     teacher=if all.teacher_id != nil do
+       Repo.get_by(School.Affairs.Teacher, id: all.teacher_id)
+      else
+         Repo.get_by(School.Affairs.Teacher, id: 106)
+    end
+  
 
-
-    teacher=Repo.get_by(School.Affairs.Teacher, id: all.teacher_id)
 
 
     broadcast(socket, "show_class_info", %{
@@ -692,6 +714,8 @@ defmodule SchoolWeb.UserChannel do
 
   def handle_in("student_class_listing", payload, socket) do
     class_id = payload["class_id"]
+
+
 
     all =
       Repo.all(
@@ -737,7 +761,6 @@ defmodule SchoolWeb.UserChannel do
   def handle_in("class_subject", payload, socket) do
     class_id = payload["class_id"]
     class = Repo.get_by(School.Affairs.Class, %{id: class_id})
-    class = Repo.get_by(School.Affairs.Class, %{id: class_id})
 
     all =
       Repo.all(
@@ -778,15 +801,19 @@ defmodule SchoolWeb.UserChannel do
           on: t.id == r.teacher_id,
           left_join: d in School.Affairs.Day,
           on: d.name == p.day,
-          where: p.class_id == ^class_id,
+          where: p.class_id == ^class_id and r.class_id== ^class_id,
           select: %{
+            id: p.id,
             day_number: d.number,
+            day_name: d.name,
             end_time: p.end_time,
+            teacher_id: t.id,
             start_time: p.start_time,
             s_code: s.code
           }
         )
       )
+
 
     all =
       for item <- period do
@@ -843,7 +870,7 @@ defmodule SchoolWeb.UserChannel do
       end
       |> Enum.reject(fn x -> x == nil end)
 
-    broadcast(socket, "show_class_period", %{class_id: class_id, all2: Poison.encode!(all2)})
+    broadcast(socket, "show_class_period", %{period: period ,class_id: class_id, all2: Poison.encode!(all2)})
     {:noreply, socket}
   end
 
@@ -1024,6 +1051,26 @@ defmodule SchoolWeb.UserChannel do
       )
 
     broadcast(socket, "show_create_period", %{html: html})
+    {:noreply, socket}
+  end
+
+
+    def handle_in("edit_period_class", payload, socket) do
+    class_id = payload["class_id"]
+
+        classes = Repo.all(from(c in Class, where: c.id==^class_id))
+
+        period =Repo.all(from(c in School.Affairs.Period, where: c.class_id==^class_id))
+
+
+    html =
+      Phoenix.View.render_to_string(
+        SchoolWeb.ClassView,
+        "class_period.html",
+        period: period
+      )
+
+    broadcast(socket, "show_class_edit_period", %{html: html})
     {:noreply, socket}
   end
 
@@ -2138,6 +2185,64 @@ csrf=payload["csrf"]
     broadcast(socket, "show_report_cocurriculum", %{html: html})
     {:noreply, socket}
   end
+
+    def handle_in("student_comment", payload, socket) do
+
+
+    csrf = payload["csrf"]
+    sc_class = payload["sc_class"]
+    sc_semester = payload["sc_semester"]
+
+    comment = Affairs.list_comment()
+
+    students =
+      Repo.all(
+        from(
+          s in School.Affairs.StudentClass,
+          left_join: a in School.Affairs.Student,
+          on: s.sudent_id == a.id,
+           left_join: b in School.Affairs.StudentComment,
+          on: b.student_id == s.sudent_id,
+          left_join: c in School.Affairs.Class,
+          on: s.class_id == c.id,
+          where:
+            s.class_id == ^sc_class and 
+              s.semester_id == ^sc_semester ,
+          select: %{
+            student_id: a.id,
+            chinese_name: a.chinese_name,
+            name: a.name,
+            class_name: c.name,
+            coment1: b.comment1,
+            coment2: b.comment2,
+            coment3: b.comment3
+
+          }
+        )
+      )
+
+
+
+
+    html =
+      if students != [] do
+        Phoenix.View.render_to_string(
+          SchoolWeb.StudentCommentView,
+          "student_comments.html",
+          csrf: csrf,
+          students: students,
+          comment: comment,
+          semester_id: sc_semester,
+          class_id: sc_class
+        )
+      else
+        "No Data inside..Please choose other."
+      end
+
+    broadcast(socket, "show_student_comments", %{html: html})
+    {:noreply, socket}
+  end
+
 
   # Add authorization logic here as required.
   defp authorized?(_payload) do

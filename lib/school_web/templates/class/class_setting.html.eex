@@ -87,7 +87,7 @@
                                                     Institution ID:<br>
                                                     <input type="text" name="institution_id" disabled="" value="institution_id">
                                                     <br>
-                                                    Level ID:<br>
+                                                    Standard:<br>
                                                     <input type="text" name="level_id" disabled="" value="level_id">
                                                     <br>
                                                     Class Teacher:<br>
@@ -266,13 +266,52 @@
                                                     <%= gettext "Class Subject" %>
                                                 </div>
                                                 <div class="card-body" id="period_body">
+                                                    <div class="row">
+                                                             <div class="col-lg-4">
+                                                                <div class="table-responsive">
+                                                                  
+                                                                
+                                                                <table class="table" id="period_list">
+                                                                  <thead>
+                                                                    <tr>
+                                                                    
 
-                                                    <div class="container">
-                                                        <div class="mb-4">
+                                                                      <th>Day</th>
+                                                                      <th>Start time</th>
+                                                                      <th>End Time</th>
+                                                                      <th>Subject Code</th>
+                                                                      <th></th>
+                                                                    </tr>
+                                                                  </thead>
+                                                                  <tbody>
+                                                                   
+                                            
+                                                                    <tr>
+                                    
+                                                                      <td></td>
+                                                                       <td></td>
+                                                                        <td></td>
+                                                                         <td></td>
+                                                                         <td></td>
+                                                                    </tr>
+                                                              
+
+                                                                  </tbody>
+                                                                </table>
+                                                            </div>
+                                                              </div>
+                                                    <div class="col-lg-8">
+                                                    <div class="container" align="right">
+                                                       
+
+                                                         
+                                                     
 
 
                                                             <div id="sked5"></div>
                                                         </div>
+                                                        </div>
+                                                    </div>
 
                                                     </div>
 
@@ -284,12 +323,11 @@
                                                     <button type="button" rel="tooltip" title="" class="btn btn-danger btn-link btn-sm" id="" name="create_period" data-toggle="modal" aria-label="price" data-target="#model7" data-original-title="Edit Item"><i class="material-icons">New Period</i>
                                                         <div class="ripple-container"></div>
                                                     </button>
-                                                    </button>
-                                                    </button>
-                                                    <button type="button" rel="tooltip" title="" class="btn btn-danger btn-link btn-sm" id="" name="class_id" value="" data-toggle="modal" aria-label="modeli" data-target="#modeli" data-original-title="Edit Item"><i class="material-icons"> Edit Existing Period Subject</i>
+                                                  
+                                                    <button type="button" rel="tooltip" title="" class="btn btn-danger btn-link btn-sm" id="" name="edit_period" value="" data-toggle="modal" aria-label="fgg" data-target="#fgg" data-original-title="Edit Item"><i class="material-icons"> View Period Subject</i>
                                                         <div class="ripple-container"></div>
                                                     </button>
-                                                    </button>
+                                                
                                                 </div>
                                             </div>
 
@@ -314,6 +352,29 @@
                                                     </button>
                                                 </div>
                                                 <div class="modal-body" id="period_bod">
+
+
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                    <input type="hidden" name="popup" value="0">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                     <div class="modal fade" id="fgg" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document" style="width: 1000px; margin-left: 550px;">
+                                            <div class="modal-content" style="width: 1000px;">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">View Period</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body" id="drf">
 
 
 
@@ -377,7 +438,7 @@
 
     channel.push("class_info", {
         user_id: window.currentUser,
-        class_id: class_id
+        class_id: class_id,
     })
 
     channel.on("show_student_class_info", payload => {
@@ -400,9 +461,14 @@ $("div#class_student_info").show();
         channel.push("inquire_student_details", {user_id: window.currentUser, student_id: student_id})
       })
 
+
      
 
   })
+
+
+
+
 </script>
 
 

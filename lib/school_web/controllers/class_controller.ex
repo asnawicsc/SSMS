@@ -155,7 +155,7 @@ defmodule SchoolWeb.ClassController do
     if s6 == nil, do: Level.changeset(%Level{}, %{name: "Standard 6"}) |> Repo.insert()
     changeset = Affairs.change_class(%Class{})
 
-    class = Repo.all(from(s in School.Affairs.Class, select: %{id: s.id, name: s.name}))
+    class = Repo.all(from(s in School.Affairs.Class,where: s.institution_id ==^User.institution_id(conn), select: %{id: s.id, name: s.name}))
 
     render(
       conn,

@@ -245,6 +245,12 @@ defmodule SchoolWeb.Router do
     get("/student_listing_by_class", ClassController, :student_listing_by_class)
     get("/holiday_report", HolidayController, :holiday_report)
      resources "/holiday", HolidayController
+      resources "/comment", CommentController
+        resources "/student_comment", StudentCommentController
+
+ get("/student_comments", StudentCommentController, :student_comments)
+  post("/create_student_comment", StudentCommentController, :create_student_comment)
+
 
   end
 

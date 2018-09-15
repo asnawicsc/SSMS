@@ -254,6 +254,18 @@ channel.on("show_project_nilam", payload => {
     var data = payload.project_nilam
 
 
+
+      if (data == null) {
+
+
+
+
+        $("div#show_ni").hide();
+
+         $("div#var").val("Please Create Project Nilam")
+      }
+
+      if (data != null) {
        $("input[name='below_satisfy']").val(data.below_satisfy)
 
    $("input[name='member_reading_quantity']").val(data.member_reading_quantity)
@@ -265,6 +277,8 @@ channel.on("show_project_nilam", payload => {
  $("input[name='count_page_number']").val(data.count_page)
      $("input[name='standard_id']").val(data.standard_id)
         $("input[name='id']").val(data.ids)
+
+        }
   })
 
 
@@ -760,6 +774,42 @@ $("div#class_student").hide();
 $("div#class_student_info").hide();
 
 
+
+ var data = payload.period
+ $("table#period_list").DataTable({
+            
+            destroy: true,
+            data: data,
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
+            columns: [ {
+                    data: 'day_name'
+                },
+                {
+                    data: 'end_time'
+                },
+                {
+                    data: 'start_time'
+                },
+                {
+                    data: 's_code'
+                },
+                {
+                    data: 'id',
+                    'fnCreatedCell': function(nTd, sData, oData, iRow, iCol) {
+                   
+                          $(nTd).html("<a href='/period/"+ oData.id +"/edit' target='_blank' >Edit</button>")
+                    }
+                },
+               
+            ]
+        });
+
+
+
+
     var maps = JSON.parse(payload.all2)
 
    $(maps).each(function(i,v) {
@@ -888,6 +938,32 @@ var csrf = window.csrf
   })
 
 
+
+$("button[name='edit_period']").click(function() {
+
+  var class_id=localStorage.getItem("class_id")
+   var csrf = window.csrf
+
+  channel.push("edit_period_class", {csrf: csrf,user_id: window.currentUser,class_id: class_id})
+    
+  })
+
+      channel.on("show_class_edit_period", payload => {
+
+    $("#drf").html(payload.html);
+
+  })
+
+
+$("button[aria-label='edit_a_period']").click(function() {
+   var period_id = this.id
+
+
+alert(period_id)
+        channel2.push("edit_period", {period_id: period_id})
+     
+  });
+  
 
 
   
