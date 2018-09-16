@@ -13,9 +13,9 @@ defmodule SchoolWeb.UserController do
     case Settings.create_user(params) do
       {:ok, user} ->
         conn
-        |> put_session(:user_id, user.id)
-        |> put_flash(:info, "Please select a school.")
-        |> redirect(to: institution_path(conn, :index))
+        # |> put_session(:user_id, user.id)
+        # |> put_flash(:info, "Please select a school.")
+        |> redirect(to: user_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
@@ -25,7 +25,9 @@ defmodule SchoolWeb.UserController do
   def authenticate(conn, %{"email" => email, "password" => password}) do
     user = Repo.get_by(User, email: email)
 
+
     if user != nil do
+
       if Comeonin.Bcrypt.checkpw(password, user.crypted_password) do
         current_sem =
           Repo.all(
@@ -41,16 +43,17 @@ defmodule SchoolWeb.UserController do
           else
             %{id: 0, start_date: "Not set", end_date: "Not set"}
           end
-
-        if user.institution_id == nil do
+          access = Repo.get_by(Settings.UserAccess, user_id: user.id)
+        if access == nil do
           conn
-          |> put_session(:user_id, user.id)
-          |> redirect(to: institution_path(conn, :index))
+        |> put_flash(:error, "Please Contact Admin for Access!")
+        |> redirect(to: user_path(conn, :login))
         else
+
           conn
           |> put_session(:user_id, user.id)
           |> put_session(:semester_id, current_sem.id)
-          |> put_session(:institution_id, user.institution_id)
+          |> put_session(:institution_id, access.institution_id)
           |> redirect(to: page_path(conn, :dashboard))
         end
       else
@@ -78,6 +81,10 @@ defmodule SchoolWeb.UserController do
     |> redirect(to: user_path(conn, :login))
   end
 
+    def register_new_user(conn, _params) do
+   render(conn, "register_new_user.html")
+  end
+
   def index(conn, _params) do
     users = Settings.list_users()
     render(conn, "index.html", users: users)
@@ -99,6 +106,13 @@ defmodule SchoolWeb.UserController do
         render(conn, "new.html", changeset: changeset)
     end
   end
+
+   def user_info(conn, %{"id" => id}) do
+ 
+    user = Settings.get_user!(id)
+    render(conn, "show.html", user: user)
+  end
+
 
   def show(conn, %{"id" => id}) do
     user = Settings.get_user!(id)

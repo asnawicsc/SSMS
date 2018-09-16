@@ -7,6 +7,7 @@ defmodule School.Affairs.AbsentReason do
     field :code, :string
     field :description, :string
     field :type, :string
+    field :institution_id, :integer
 
     timestamps()
   end
@@ -14,6 +15,6 @@ defmodule School.Affairs.AbsentReason do
   @doc false
   def changeset(absent_reason, attrs) do
     absent_reason
-    |> cast(attrs, [:code, :description, :type])
+    |> cast(attrs, [:institution_id, :code, :description, :type])
   end
 end

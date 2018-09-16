@@ -15,6 +15,7 @@ defmodule SchoolWeb.CoCurriculumJobController do
   end
 
   def create(conn, %{"co_curriculum_job" => co_curriculum_job_params}) do
+    co_curriculum_job_params = Map.put(co_curriculum_job_params, "institution_id", conn.private.plug_session["institution_id"])
     case Affairs.create_co_curriculum_job(co_curriculum_job_params) do
       {:ok, co_curriculum_job} ->
         conn

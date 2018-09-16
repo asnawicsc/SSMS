@@ -1,4 +1,4 @@
-<h2>Listing Absent reason</h2> <a href="/teacher_period"><%= gettext " Insert Absent Record" %></a>
+<h2>Listing Absent reason</h2> 
 
 <table class="table">
   <thead>

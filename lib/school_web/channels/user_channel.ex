@@ -5,6 +5,9 @@ defmodule SchoolWeb.UserChannel do
   alias School.Affairs.Subject
   alias School.Affairs.Teacher
   alias School.Affairs.Parent
+   alias School.Settings.Institution
+   alias School.Settings.UserAccess
+   alias School.Settings.User
 
   def join("user:" <> user_id, payload, socket) do
     if authorized?(payload) do
@@ -200,16 +203,19 @@ defmodule SchoolWeb.UserChannel do
   end
 
   def handle_in("inquire_student_details", payload, socket) do
+    
+    institution_id = payload["institution_id"]
     id = payload["student_id"]
     user = Repo.get(School.Settings.User, payload["user_id"])
-    student = Affairs.get_student!(id)
+    user_access = Repo.get_by(School.Settings.UserAccess,user_id: payload["user_id"], institution_id: institution_id)
+    student = Repo.get_by(School.Affairs.Student,id: id,institution_id: institution_id)
     changeset = Affairs.change_student(student)
 
     institution_id=user.institution_id
 
     conn = %{
       private: %{
-        plug_session: %{"institution_id" => user.institution_id, "user_id" => user.id}
+        plug_session: %{"institution_id" => user_access.institution_id, "user_id" => user_access.user_id}
       }
     }
 
@@ -264,7 +270,8 @@ defmodule SchoolWeb.UserChannel do
 
     user = Repo.get(School.Settings.User, payload["user_id"])
 
-    teacher = Repo.get_by(Teacher, code: code)
+
+    teacher = Repo.get_by(Teacher, code: code, institution_id: payload["institution_id"])
     changeset = Affairs.change_teacher(teacher)
 
     conn = %{private: %{plug_session: %{"institution_id" => user.institution_id}}}
@@ -315,7 +322,7 @@ defmodule SchoolWeb.UserChannel do
 
     user = Repo.get(School.Settings.User, payload["user_id"])
 
-    teacher = Repo.get_by(Teacher, code: code)
+    teacher = Repo.get_by(Teacher, code: code,institution_id: payload["institution_id"])
     changeset = Affairs.change_teacher(teacher)
 
     school_job =
@@ -551,30 +558,13 @@ defmodule SchoolWeb.UserChannel do
   def handle_in("standard_subject", payload, socket) do
     standard_level = payload["standard_level"]
 
-    standard_subject =
-      Repo.all(
-        from(
-          s in School.Affairs.StandardSubject,
-          left_join: r in School.Affairs.Subject,
-          on: r.id == s.subject_id,
-          where: s.standard_id == ^payload["standard_level"],
-          select: %{
-            year: s.year,
-            semester_id: s.semester_id,
-            standard_id: s.standard_id,
-            subject_id: r.description
-          }
-        )
-      )
-
-    # def handle_in("standard_subject", payload, socket) do
-    #   standard_level = payload["standard_level"]
+      institution_id = payload["institution_id"]
 
     standard_subject =
       Repo.all(
         from(
           s in School.Affairs.StandardSubject,
-          where: s.standard_id == ^payload["standard_level"],
+          where: s.standard_id == ^payload["standard_level"] and s.institution_id ==^institution_id,
           select: %{
             year: s.year,
             semester_id: s.semester_id,
@@ -595,7 +585,7 @@ defmodule SchoolWeb.UserChannel do
   def handle_in("subject_test", payload, socket) do
     standard_level = payload["standard_level"]
 
-    standard_level = payload["standard_level"]
+    institution_id = payload["institution_id"]
 
     subject_test =
       Repo.all(
@@ -605,7 +595,7 @@ defmodule SchoolWeb.UserChannel do
           on: p.exam_master_id == s.id,
           left_join: r in School.Affairs.Subject,
           on: r.id == p.subject_id,
-          where: s.level_id == ^payload["standard_level"],
+          where: s.level_id == ^payload["standard_level"] and s.institution_id ==^institution_id,
           select: %{
             year: s.year,
             semester_id: s.semester_id,
@@ -2240,6 +2230,53 @@ csrf=payload["csrf"]
       end
 
     broadcast(socket, "show_student_comments", %{html: html})
+    {:noreply, socket}
+  end
+
+
+
+   def handle_in("insert_into_uba",%{"i_id" => i_id, "user_id" => user_id},socket) do
+
+    user = School.Settings.get_user!(String.to_integer(user_id))
+
+       institution = School.Settings.get_institution!(i_id)
+
+    uba =
+      Repo.all(
+        from(
+          u in School.Settings.UserAccess,
+          where: u.user_id == ^user.id,
+          select: u.institution_id
+        )
+      )
+
+
+ 
+    {action} =
+      if Enum.any?(uba, fn x -> x == institution.id end) do
+   
+        ub =
+          Repo.get_by(
+            School.Settings.UserAccess,
+            institution_id: institution.id,
+            user_id: user.id
+          )
+
+       School.Settings.delete_user_access(ub)
+
+        {"removed"}
+      else
+          params= %{institution_id: institution.id,user_id: user.id}
+
+      School.Settings.create_user_access(params)
+
+        {"inserted"}
+      end
+
+    broadcast(socket, "notify_user_branch_access_changed", %{
+      action: action
+    })
+
     {:noreply, socket}
   end
 

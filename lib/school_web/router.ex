@@ -88,8 +88,10 @@ defmodule SchoolWeb.Router do
     get("/institutions/:id/select", InstitutionController, :select)
     resources("/users", UserController)
     get("/login", UserController, :login)
+    get("/user_info/:id", UserController, :user_info)
     post("/authenticate", UserController, :authenticate)
     post("/create_user", UserController, :create_user)
+     get("/register_new_user", UserController, :register_new_user)
     get("/logout", UserController, :logout)
     resources("/students", StudentController)
     post("/upload_students", StudentController, :upload_students)
@@ -250,6 +252,9 @@ defmodule SchoolWeb.Router do
 
  get("/student_comments", StudentCommentController, :student_comments)
   post("/create_student_comment", StudentCommentController, :create_student_comment)
+  resources "/user_access", UserAccessController
+  get("/user_access_pass/:id", UserAccessController, :user_access_pass)
+
 
 
   end

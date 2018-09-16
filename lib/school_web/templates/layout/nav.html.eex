@@ -72,10 +72,28 @@
           <a class="dropdown-item" href="/institutions/<%= @conn.private.plug_session[" institution_id "]%>">
             <%= gettext "School Profile" %>
           </a>
-          <a class="dropdown-item" href="/users/<%= @conn.private.plug_session[" user_id "]%>">
+          <a class="dropdown-item" href="/user_info/<%= @conn.private.plug_session["user_id"]%>">
             <%= gettext "User Account" %>
               </span>
           </a>
+          <%= if   @conn.private.plug_session["user_id"] != nil do %>
+            
+        
+          <% user_id=@conn.private.plug_session["user_id"] %>
+          <% user=School.Settings.get_user!(user_id) %>
+          <%= if user.role == "Admin" do %>
+
+             <a class="dropdown-item" href="/institutions/new">
+            <%= gettext "Institution Setting" %>
+              </span>
+          </a>
+
+            <a class="dropdown-item" href="/users">
+            <%= gettext "User Setting" %>
+              </span>
+          </a>
+          <% end %>
+             <% end %>
           <a class="dropdown-item" href="/system_config/<%= @conn.private.plug_session["institution_id"]%>">
             <%= gettext "System Configuration" %>
           </a>
@@ -112,6 +130,10 @@
           </a>
           <a class="dropdown-item" href="/students">
             <%= gettext "Students" %>
+          </a>
+
+           <a class="dropdown-item" href="/subject/new">
+            <%= gettext "Subject" %>
           </a>
     
 

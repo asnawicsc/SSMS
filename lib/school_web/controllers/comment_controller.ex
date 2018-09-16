@@ -5,7 +5,7 @@ defmodule SchoolWeb.CommentController do
   alias School.Affairs.Comment
 
   def index(conn, _params) do
-    comment = Affairs.list_comment()
+    comment = Affairs.list_comment()|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
     render(conn, "index.html", comment: comment)
   end
 
@@ -15,6 +15,9 @@ defmodule SchoolWeb.CommentController do
   end
 
   def create(conn, %{"comment" => comment_params}) do
+
+        comment_params = Map.put(comment_params, "institution_id", conn.private.plug_session["institution_id"])
+        
     case Affairs.create_comment(comment_params) do
       {:ok, comment} ->
         conn

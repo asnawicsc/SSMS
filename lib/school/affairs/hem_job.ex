@@ -7,6 +7,7 @@ defmodule School.Affairs.HemJob do
     field :cdesc, :string
     field :code, :string
     field :description, :string
+    field :institution_id, :integer
 
     timestamps()
   end
@@ -14,6 +15,6 @@ defmodule School.Affairs.HemJob do
   @doc false
   def changeset(hem_job, attrs) do
     hem_job
-    |> cast(attrs, [:code, :description, :cdesc])
+    |> cast(attrs, [:institution_id, :code, :description, :cdesc])
   end
 end

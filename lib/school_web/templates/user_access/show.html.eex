@@ -1,0 +1,18 @@
+<h2>Show User access</h2>
+
+<ul>
+
+  <li>
+    <strong>User:</strong>
+    <%= @user_access.user_id %>
+  </li>
+
+  <li>
+    <strong>Institution:</strong>
+    <%= @user_access.institution_id %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: user_access_path(@conn, :edit, @user_access) %></span>
+<span><%= link "Back", to: user_access_path(@conn, :index) %></span>

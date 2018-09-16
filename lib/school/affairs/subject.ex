@@ -8,6 +8,7 @@ defmodule School.Affairs.Subject do
     field :code, :string
     field :description, :string
     field :sysdef, :integer
+    field :institution_id, :integer
 
     timestamps()
   end
@@ -15,7 +16,7 @@ defmodule School.Affairs.Subject do
   @doc false
   def changeset(subject, attrs) do
     subject
-    |> cast(attrs, [:code, :description, :cdesc, :sysdef])
+    |> cast(attrs, [:institution_id, :code, :description, :cdesc, :sysdef])
 
   end
 end

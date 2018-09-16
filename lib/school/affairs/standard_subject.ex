@@ -8,6 +8,7 @@ defmodule School.Affairs.StandardSubject do
     field :standard_id, :integer
     field :subject_id, :integer
     field :year, :string
+    field :institution_id, :integer
 
     timestamps()
   end
@@ -15,7 +16,7 @@ defmodule School.Affairs.StandardSubject do
   @doc false
   def changeset(standard_subject, attrs) do
     standard_subject
-    |> cast(attrs, [:year, :semester_id, :standard_id, :subject_id])
-    |> validate_required([:year, :semester_id, :standard_id, :subject_id])
+    |> cast(attrs, [:institution_id, :year, :semester_id, :standard_id, :subject_id])
+    |> validate_required([:institution_id, :year, :semester_id, :standard_id, :subject_id])
   end
 end

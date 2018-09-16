@@ -5,6 +5,7 @@ defmodule School.Affairs.Level do
 
   schema "levels" do
     field :name, :string
+    field :institution_id, :integer
 
     timestamps()
   end
@@ -12,7 +13,7 @@ defmodule School.Affairs.Level do
   @doc false
   def changeset(level, attrs) do
     level
-    |> cast(attrs, [:name])
-    |> validate_required([:name])
+    |> cast(attrs, [:institution_id, :name])
+    |> validate_required([:institution_id, :name])
   end
 end

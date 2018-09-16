@@ -173,7 +173,7 @@ $("footer").append(maintain)
     $("div.student").click(function(){
     var student_id = $(this).attr("id")
 
-    channel.push("inquire_student_details", {user_id: window.currentUser, student_id: student_id})
+    channel.push("inquire_student_details", {user_id: window.currentUser,institution_id: window.currentInstitute, student_id: student_id})
   })
 
 
@@ -197,7 +197,7 @@ $("footer").append(maintain)
 
     $("div.teacher").click(function(){
     var code = $(this).attr("id")
-    channel.push("inquire_teacher_details", {user_id: window.currentUser, code: code})
+    channel.push("inquire_teacher_details", {user_id: window.currentUser,institution_id: window.currentInstitute, code: code})
   })
 
           channel.on("show_teacher_details", payload => {
@@ -219,7 +219,7 @@ $("footer").append(maintain)
 
      $("div.teacher_timetable").click(function(){
     var code = $(this).attr("id")
-    channel.push("inquire_teacher_timetable", {user_id: window.currentUser, code: code})
+    channel.push("inquire_teacher_timetable", {user_id: window.currentUser, code: code,institution_id: window.currentInstitute})
   })
 
        channel.on("show_teacher_timetable", payload => {
@@ -389,7 +389,7 @@ $(".nav-link#standard_subject").click(function() {
 
    var standard_level=localStorage.getItem("standard_level")
 
-  channel.push("standard_subject", {user_id: window.currentUser,standard_level: standard_level})
+  channel.push("standard_subject", {user_id: window.currentUser,institution_id: window.currentInstitute,standard_level: standard_level})
     
   })
 
@@ -440,7 +440,7 @@ $(".nav-link#subject_test").click(function() {
 
    var standard_level=localStorage.getItem("standard_level")
 
-  channel.push("subject_test", {user_id: window.currentUser,standard_level: standard_level})
+  channel.push("subject_test", {user_id: window.currentUser,institution_id: window.currentInstitute,standard_level: standard_level})
     
   })
 

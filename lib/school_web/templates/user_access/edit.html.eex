@@ -1,0 +1,5 @@
+<h2>Edit User access</h2>
+
+<%= render "form.html", Map.put(assigns, :action, user_access_path(@conn, :update, @user_access)) %>
+
+<span><%= link "Back", to: user_access_path(@conn, :index) %></span>

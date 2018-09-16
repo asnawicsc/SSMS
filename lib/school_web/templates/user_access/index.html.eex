@@ -1,0 +1,28 @@
+<h2>Listing User access</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>User</th>
+      <th>Institution</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for user_access <- @user_access do %>
+    <tr>
+      <td><%= user_access.user_id %></td>
+      <td><%= user_access.institution_id %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: user_access_path(@conn, :show, user_access), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: user_access_path(@conn, :edit, user_access), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: user_access_path(@conn, :delete, user_access), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New User access", to: user_access_path(@conn, :new) %></span>

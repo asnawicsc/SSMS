@@ -5,7 +5,7 @@ defmodule SchoolWeb.SchoolJobController do
   alias School.Affairs.SchoolJob
 
   def index(conn, _params) do
-    school_job = Affairs.list_school_job()
+    school_job = Affairs.list_school_job()|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
     render(conn, "index.html", school_job: school_job)
   end
 
@@ -20,7 +20,11 @@ defmodule SchoolWeb.SchoolJobController do
     co_curriculum_job = Affairs.list_cocurriculum_job()
     hem_job = Affairs.list_hem_job()
     absent_reason = Affairs.list_absent_reason()
+
+      school_job_params = Map.put(school_job_params, "institution_id", conn.private.plug_session["institution_id"])
     case Affairs.create_school_job(school_job_params) do
+
+
       {:ok, school_job} ->
         conn
         |> put_flash(:info, "School job created successfully.")
