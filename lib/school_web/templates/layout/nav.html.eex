@@ -132,8 +132,12 @@
             <%= gettext "Students" %>
           </a>
 
-           <a class="dropdown-item" href="/subject/new">
+           <a class="dropdown-item" href="/standard/new">
             <%= gettext "Subject" %>
+          </a>
+
+           <a class="dropdown-item" href="/levels/new">
+            <%= gettext "Standard" %>
           </a>
     
 

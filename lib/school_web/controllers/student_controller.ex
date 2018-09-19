@@ -33,7 +33,7 @@ defmodule SchoolWeb.StudentController do
         )
       )
 
-    levels = Repo.all(Level)
+    levels = Repo.all(Level)|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
 
     render(conn, "height_weight.html", students: students, levels: levels)
   end

@@ -39,7 +39,7 @@
   </div>
   
 <div class="col-lg-8" >
-	<select name="level" id="levels" aria-label="">
+	<select name="level" id="levels" aria-label="" required="required">
 		<%= for level <- @levels do %>
 			<option value="<%= level.id %>">
 				<%= level.name %>

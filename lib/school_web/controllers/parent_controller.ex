@@ -6,18 +6,18 @@ defmodule SchoolWeb.ParentController do
   require IEx
 
   def guardian_listing(conn, _params) do
-    parent = Affairs.list_parent()
-    semesters = Repo.all(from(s in Semester))
+    parent = Affairs.list_parent()|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
+    semesters = Repo.all(from(s in Semester))|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
 
-    classes = Repo.all(from(c in Class, where: c.institution_id == ^User.institution_id(conn)))
+    classes = Repo.all(from(c in Class, where: c.institution_id == ^User.institution_id(conn)))|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
     render(conn, "index.html", parent: parent, semesters: semesters, classes: classes)
   end
 
   def index(conn, _params) do
-    parent = Affairs.list_parent()
-    semesters = Repo.all(from(s in Semester))
+    parent = Affairs.list_parent()|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
+    semesters = Repo.all(from(s in Semester))|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
 
-    classes = Repo.all(from(c in Class, where: c.institution_id == ^User.institution_id(conn)))
+    classes = Repo.all(from(c in Class, where: c.institution_id == ^User.institution_id(conn)))|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
     render(conn, "index.html", parent: parent, semesters: semesters, classes: classes)
   end
 

@@ -36,6 +36,7 @@ defmodule School.Affairs.Parent do
     field :religion, :string
     field :state, :string
     field :tanggn, :string
+    field :institution_id, :integer
 
     timestamps()
   end
@@ -43,7 +44,7 @@ defmodule School.Affairs.Parent do
   @doc false
   def changeset(parent, attrs) do
     parent
-    |> cast(attrs, [:icno, :name, :cname, :relation, :race, :religion, :nation, :country, :nacert, :pstatus, :tanggn, :oldic, :refno, :occup, :income, :addr1, :addr2, :addr3, :poscod, :district, :state, :htel, :otel, :hphone, :epname, :epaddr1, :epaddr2, :epaddr3, :epposcod, :epdistrict, :epstate, :inctaxno])
-    |> validate_required([:icno, :name, :cname, :relation, :race, :religion, :nation, :country, :nacert, :pstatus, :tanggn, :oldic, :refno, :occup, :income, :addr1, :addr2, :addr3, :poscod, :district, :state, :htel, :otel, :hphone, :epname, :epaddr1, :epaddr2, :epaddr3, :epposcod, :epdistrict, :epstate, :inctaxno])
+    |> cast(attrs, [:institution_id, :icno, :name, :cname, :relation, :race, :religion, :nation, :country, :nacert, :pstatus, :tanggn, :oldic, :refno, :occup, :income, :addr1, :addr2, :addr3, :poscod, :district, :state, :htel, :otel, :hphone, :epname, :epaddr1, :epaddr2, :epaddr3, :epposcod, :epdistrict, :epstate, :inctaxno])
+    |> validate_required([:institution_id, :icno, :name, :cname, :relation, :race, :religion, :nation, :country, :nacert, :pstatus, :tanggn, :oldic, :refno, :occup, :income, :addr1, :addr2, :addr3, :poscod, :district, :state, :htel, :otel, :hphone, :epname, :epaddr1, :epaddr2, :epaddr3, :epposcod, :epdistrict, :epstate, :inctaxno])
   end
 end

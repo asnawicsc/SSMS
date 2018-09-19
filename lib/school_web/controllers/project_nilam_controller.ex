@@ -6,14 +6,14 @@ defmodule SchoolWeb.ProjectNilamController do
   require IEx
 
   def index(conn, _params) do
-    project_nilam = Affairs.list_project_nilam()
+    project_nilam = Affairs.list_project_nilam()|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
     render(conn, "index.html", project_nilam: project_nilam)
   end
 
     def nilam_setting(conn, _params) do
 
-    level = Repo.all(from(s in School.Affairs.Level, select: %{id: s.id, name: s.name}))
-    project_nilam = Affairs.list_project_nilam()
+    level = Repo.all(from(s in School.Affairs.Level, select: %{institution_id: s.institution_id,id: s.id, name: s.name}))|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
+    project_nilam = Affairs.list_project_nilam()|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
     jauhari = Affairs.list_jauhari()
     rakan = Affairs.list_rakan()
 
@@ -38,6 +38,8 @@ defmodule SchoolWeb.ProjectNilamController do
   end
 
   def create(conn, %{"project_nilam" => project_nilam_params}) do
+
+       project_nilam_params = Map.put(project_nilam_params, "institution_id", conn.private.plug_session["institution_id"])
     case Affairs.create_project_nilam(project_nilam_params) do
       {:ok, project_nilam} ->
         conn

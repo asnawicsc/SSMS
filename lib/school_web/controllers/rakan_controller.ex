@@ -5,16 +5,18 @@ defmodule SchoolWeb.RakanController do
   alias School.Affairs.Rakan
 
   def index(conn, _params) do
-    rakan = Affairs.list_rakan()
+    rakan = Affairs.list_rakan()|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
     render(conn, "index.html", rakan: rakan)
   end
 
   def new(conn, _params) do
+    levels = School.Repo.all(from l in School.Affairs.Level, select: {l.name, l.id})
     changeset = Affairs.change_rakan(%Rakan{})
-    render(conn, "new.html", changeset: changeset)
+    render(conn, "new.html",levels: levels, changeset: changeset)
   end
 
   def create(conn, %{"rakan" => rakan_params}) do
+         rakan_params = Map.put(rakan_params, "institution_id", conn.private.plug_session["institution_id"])
     case Affairs.create_rakan(rakan_params) do
       {:ok, rakan} ->
         conn
