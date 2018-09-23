@@ -94,7 +94,7 @@ defmodule SchoolWeb.UserController do
           role: "Admin"
         })
 
-        Settings.create_institution!(%{
+        Settings.create_institution(%{
           name: "test"
         })
       end
