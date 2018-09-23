@@ -8,6 +8,7 @@ defmodule School.Affairs.CoGrade do
     field :max, :integer
     field :min, :integer
     field :name, :string
+    field :institution_id, :integer
 
     timestamps()
   end
@@ -15,7 +16,7 @@ defmodule School.Affairs.CoGrade do
   @doc false
   def changeset(co_grade, attrs) do
     co_grade
-    |> cast(attrs, [:name, :max, :min, :gpa])
-    |> validate_required([:name, :max, :min, :gpa])
+    |> cast(attrs, [:institution_id, :name, :max, :min, :gpa])
+    |> validate_required([:institution_id, :name, :max, :min, :gpa])
   end
 end

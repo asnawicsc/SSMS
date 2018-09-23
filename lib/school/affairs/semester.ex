@@ -9,6 +9,7 @@ defmodule School.Affairs.Semester do
     field :holiday_start, :date
     field :school_days, :integer
     field :start_date, :date
+    field :institution_id, :integer
 
     timestamps()
   end
@@ -16,7 +17,7 @@ defmodule School.Affairs.Semester do
   @doc false
   def changeset(semester, attrs) do
     semester
-    |> cast(attrs, [:start_date, :end_date, :holiday_start, :holiday_end, :school_days])
-    |> validate_required([:start_date, :end_date, :holiday_start, :holiday_end])
+    |> cast(attrs, [:start_date, :end_date, :holiday_start, :holiday_end, :school_days, :institution_id])
+    |> validate_required([:start_date, :end_date, :holiday_start, :holiday_end, :institution_id])
   end
 end

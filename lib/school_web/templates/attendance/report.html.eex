@@ -84,14 +84,14 @@
           <% all = dates|>Enum.count %>
             <% all = dates|>Enum.count %>
               <% all_dates = Enum.map(dates, fn x -> NaiveDateTime.to_date(x) end ) %>
-                <tr style="height: 52px;" align="center">
+                <tr style="height: 50px;" align="center">
                   <th colspan="<%= dates|>Enum.count %>">Jika Hadir: 1 Tidak Hadir: 0 Lewat: L Cuti Sebab: C Cuti Sakit: S<br> Tidak Hadir Dengan Kebenaran/Bersebab: K Ponteng: P</th>
                 </tr>
-                <tr style="height: 52px;">
+                <tr style="height: 50px;">
 
                   <%= for date <- dates do %>
 
-                    <td style="width: 52px; text-align: center;">
+                    <td style="text-align: center;">
                       <%= date.day %>
                     </td>
 
@@ -218,13 +218,13 @@
             </tr>
             <% end %>
               <tr>
-                <td style="height: 15px;"></td>
+                <td style="height: 20px;"></td>
               </tr>
               <tr>
-                <td style="height: 15px;"></td>
+                <td style="height: 20px;"></td>
               </tr>
               <tr>
-                <td style="height: 15px;"></td>
+                <td style="height: 20px;"></td>
               </tr>
 
       </table>
@@ -239,24 +239,24 @@
               <% all = dates|>Enum.count %>
                 <% all = dates|>Enum.count %>
                   <% all_dates = Enum.map(dates, fn x -> NaiveDateTime.to_date(x) end ) %>
-                    <tr style="height: 49px;" align="center">
+                    <tr style="height: 50px;" align="center">
                       <th colspan="<%= dates|>Enum.count %>">Jika Hadir: 1 Tidak Hadir: 0 Lewat: L Cuti Sebab: C Cuti Sakit: S<br> Tidak Hadir Dengan Kebenaran/Bersebab: K Ponteng: P</th>
                       <th colspan="3"> Jumlah yang tidak hadir</th>
                       <th>Ringkasan</th>
                     </tr>
 
-                    <tr style="height: 49px;">
+                    <tr style="height: 50px;">
 
                       <%= for date <- dates do %>
 
-                        <td style="width: 50px; text-align: center;">
+                        <td style="text-align: center;">
                           <%= date.day %>
                         </td>
 
                         <% end %>
                           <td style="width: 400px; text-align: center;">Bulan ini</td>
                           <td style="width: 400px; text-align: center;">Bulan lepas</td>
-                          <td style="width: 400px; text-align: center;">Jumlah</td>
+                          <td style="width: 400px; text-align: center; height: auto;">Jumlah</td>
                           <% c= dates2|>Enum.count  %>
                             <% c= c+4  %>
 

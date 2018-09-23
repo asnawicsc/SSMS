@@ -5,24 +5,24 @@ defmodule SchoolWeb.TeacherCoCurriculumJobController do
   alias School.Affairs.TeacherCoCurriculumJob
 
   def index(conn, _params) do
-    teacher_co_curriculum_job = Affairs.list_teacher_co_curriculum_job()
+    teacher_co_curriculum_job = Affairs.list_teacher_co_curriculum_job()|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
     render(conn, "index.html", teacher_co_curriculum_job: teacher_co_curriculum_job)
   end
 
   def new(conn, _params) do
 
       semester =
-      Repo.all(from(s in School.Affairs.Semester, select: %{id: s.id, start_date: s.start_date}))
+      Repo.all(from(s in School.Affairs.Semester, select: %{institution_id: s.institution_id,id: s.id, start_date: s.start_date}))|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
 
-      teacher=Repo.all(School.Affairs.Teacher)|>Enum.filter(fn x -> x.name !="Rehat" end)
-       co_curriculum=Repo.all(School.Affairs.CoCurriculumJob)
+      teacher=Repo.all(School.Affairs.Teacher)|>Enum.filter(fn x -> x.name !="Rehat" end)|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
+       co_curriculum=Repo.all(School.Affairs.CoCurriculumJob)|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
     changeset = Affairs.change_teacher_co_curriculum_job(%TeacherCoCurriculumJob{})
     render(conn, "new.html", changeset: changeset,semester: semester,teacher: teacher,co_curriculum: co_curriculum)
   end
 
     def create_teacher_cocurriculum_job(conn, params) do
 
-      teacher_co_curriculum_job_params=%{semester_id: params["semester"], teacher_id: params["teacher"],co_curriculum_job_id: params["co_curriculum"]}
+      teacher_co_curriculum_job_params=%{semester_id: params["semester"], teacher_id: params["teacher"],co_curriculum_job_id: params["co_curriculum"],institution_id: conn.private.plug_session["institution_id"]}
     case Affairs.create_teacher_co_curriculum_job(teacher_co_curriculum_job_params) do
       {:ok, teacher_co_curriculum_job} ->
         conn

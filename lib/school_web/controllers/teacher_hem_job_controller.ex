@@ -6,23 +6,23 @@ defmodule SchoolWeb.TeacherHemJobController do
   require IEx
 
   def index(conn, _params) do
-    teacher_hem_job = Affairs.list_teacher_hem_job()
+    teacher_hem_job = Affairs.list_teacher_hem_job()|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
     render(conn, "index.html", teacher_hem_job: teacher_hem_job)
   end
 
   def new(conn, _params) do
     changeset = Affairs.change_teacher_hem_job(%TeacherHemJob{})
           semester =
-      Repo.all(from(s in School.Affairs.Semester, select: %{id: s.id, start_date: s.start_date}))
+      Repo.all(from(s in School.Affairs.Semester, select: %{institution_id: s.institution_id,id: s.id, start_date: s.start_date}))|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
 
-      teacher=Repo.all(School.Affairs.Teacher)|>Enum.filter(fn x -> x.name !="Rehat" end)
-       hem=Repo.all(School.Affairs.HemJob)
+      teacher=Repo.all(School.Affairs.Teacher)|>Enum.filter(fn x -> x.name !="Rehat" end)|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
+       hem=Repo.all(School.Affairs.HemJob)|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
     render(conn, "new.html", changeset: changeset,semester: semester,teacher: teacher,hem: hem)
   end
 
      def create_teacher_hem_job(conn, params) do
 
-      teacher_hem_job_params=%{semester_id: params["semester"], teacher_id: params["teacher"],hem_job_id: params["hem"]}
+      teacher_hem_job_params=%{semester_id: params["semester"], teacher_id: params["teacher"],hem_job_id: params["hem"],institution_id: conn.private.plug_session["institution_id"]}
     case Affairs.create_teacher_hem_job(teacher_hem_job_params) do
       {:ok, teacher_hem_job} ->
         conn

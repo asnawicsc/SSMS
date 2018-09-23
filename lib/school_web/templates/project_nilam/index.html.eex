@@ -2,9 +2,10 @@
 
    <div class="row">
                 <div class="col-lg-12">
-                  <div class="card">
-                    <div class="card-header"><%= gettext "Class Info" %></div>
-                    <div class="card-body">
+                  <div class="card" id="show_ni">
+                    <div class="card-header" ><%= gettext "Class Info" %></div>
+                    <div id="var"></div>
+                    <div class="card-body" >
                         <input type="hidden" name="standard_id" disabled="" value="">
                                     Below satisfy:<br>
                                     <input type="text" name="below_satisfy" disabled="" value="">
@@ -23,11 +24,13 @@
                      
                     </div>
                       <div class="card-footer">
-                           <button type="button" rel="tooltip" title="" class="btn btn-danger btn-link btn-sm" id="" name="class_id2"  value="" data-toggle="modal" aria-label="modelb" data-target="#modelb" data-original-title="Edit Item"><i class="material-icons">Edit Project Nilam</i><div class="ripple-container"></div>                 </button>
-                    </button>
-                            
+                   
+                                   <button type="button" rel="tooltip" title="" class="btn btn-danger btn-link btn-sm" id="" name="class_id2"  value="" data-toggle="modal" aria-label="modelb" data-target="#modelb" data-original-title="Edit Item"><i class="material-icons">Edit Project Nilam</i><div class="ripple-container"></div>                 </button>
                      </div>
                   </div>
+
+                            <button type="button"  class="btn btn-danger btn-link btn-sm" id="" name="class_id2" onclick="window.location.href='/project_nilam/new'" ><i class="material-icons">Create Project Nilam</i><div class="ripple-container"></div>                 </button>
+                    </button>
                 </div>
  
                 </div>

@@ -586,4 +586,66 @@ defmodule School.SettingsTest do
       assert %Ecto.Changeset{} = Settings.change_te_subject(te_subject)
     end
   end
+
+  describe "user_access" do
+    alias School.Settings.UserAccess
+
+    @valid_attrs %{institution_id: 42, user_id: 42}
+    @update_attrs %{institution_id: 43, user_id: 43}
+    @invalid_attrs %{institution_id: nil, user_id: nil}
+
+    def user_access_fixture(attrs \\ %{}) do
+      {:ok, user_access} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Settings.create_user_access()
+
+      user_access
+    end
+
+    test "list_user_access/0 returns all user_access" do
+      user_access = user_access_fixture()
+      assert Settings.list_user_access() == [user_access]
+    end
+
+    test "get_user_access!/1 returns the user_access with given id" do
+      user_access = user_access_fixture()
+      assert Settings.get_user_access!(user_access.id) == user_access
+    end
+
+    test "create_user_access/1 with valid data creates a user_access" do
+      assert {:ok, %UserAccess{} = user_access} = Settings.create_user_access(@valid_attrs)
+      assert user_access.institution_id == 42
+      assert user_access.user_id == 42
+    end
+
+    test "create_user_access/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Settings.create_user_access(@invalid_attrs)
+    end
+
+    test "update_user_access/2 with valid data updates the user_access" do
+      user_access = user_access_fixture()
+      assert {:ok, user_access} = Settings.update_user_access(user_access, @update_attrs)
+      assert %UserAccess{} = user_access
+      assert user_access.institution_id == 43
+      assert user_access.user_id == 43
+    end
+
+    test "update_user_access/2 with invalid data returns error changeset" do
+      user_access = user_access_fixture()
+      assert {:error, %Ecto.Changeset{}} = Settings.update_user_access(user_access, @invalid_attrs)
+      assert user_access == Settings.get_user_access!(user_access.id)
+    end
+
+    test "delete_user_access/1 deletes the user_access" do
+      user_access = user_access_fixture()
+      assert {:ok, %UserAccess{}} = Settings.delete_user_access(user_access)
+      assert_raise Ecto.NoResultsError, fn -> Settings.get_user_access!(user_access.id) end
+    end
+
+    test "change_user_access/1 returns a user_access changeset" do
+      user_access = user_access_fixture()
+      assert %Ecto.Changeset{} = Settings.change_user_access(user_access)
+    end
+  end
 end

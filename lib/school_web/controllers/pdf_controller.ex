@@ -5,6 +5,8 @@ defmodule SchoolWeb.PdfController do
   require IEx
 
   def parent_listing(conn, params) do
+
+ 
     school = Repo.get(Institution, User.institution_id(conn))
     class_id = params["class"] |> String.to_integer()
     semester = Repo.get(Semester, params["semester_id"])
@@ -128,9 +130,11 @@ defmodule SchoolWeb.PdfController do
   end
 
   def display_student_certificate(conn, params) do
+
     school = Repo.get(Institution, User.institution_id(conn))
     semester = Repo.get(Semester, params["semester_id"])
     class = Repo.get(Class, params["class_id"])
+
 
     students =
       Repo.all(
@@ -1712,6 +1716,7 @@ defmodule SchoolWeb.PdfController do
   end
 
   def holiday_listing(conn,params) do
+
    ins_id=conn.private.plug_session["institution_id"]
     semester_id=params["semester"]|>String.to_integer
     institution=Repo.get_by(School.Settings.Institution,id: ins_id)

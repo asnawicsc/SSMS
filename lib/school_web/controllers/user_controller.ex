@@ -12,10 +12,10 @@ defmodule SchoolWeb.UserController do
 
     case Settings.create_user(params) do
       {:ok, user} ->
+        # |> put_session(:user_id, user.id)
+        # |> put_flash(:info, "Please select a school.")
         conn
-        |> put_session(:user_id, user.id)
-        |> put_flash(:info, "Please select a school.")
-        |> redirect(to: institution_path(conn, :index))
+        |> redirect(to: user_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
@@ -42,15 +42,27 @@ defmodule SchoolWeb.UserController do
             %{id: 0, start_date: "Not set", end_date: "Not set"}
           end
 
-        if user.institution_id == nil do
+        if user.role == "Admin" do
+          institution_id = Repo.get_by(Settings.Institution, name: "test")
+
           conn
           |> put_session(:user_id, user.id)
-          |> redirect(to: institution_path(conn, :index))
+          |> put_session(:semester_id, current_sem.id)
+          |> put_session(:institution_id, institution_id.id)
+          |> redirect(to: page_path(conn, :dashboard))
+        end
+
+        access = Repo.get_by(Settings.UserAccess, user_id: user.id)
+
+        if access == nil do
+          conn
+          |> put_flash(:error, "Please Contact Admin for Access!")
+          |> redirect(to: user_path(conn, :login))
         else
           conn
           |> put_session(:user_id, user.id)
           |> put_session(:semester_id, current_sem.id)
-          |> put_session(:institution_id, user.institution_id)
+          |> put_session(:institution_id, access.institution_id)
           |> redirect(to: page_path(conn, :dashboard))
         end
       else
@@ -66,6 +78,28 @@ defmodule SchoolWeb.UserController do
   end
 
   def login(conn, params) do
+    user = Repo.all(User)
+
+    if user != [] do
+      admin = user |> Enum.filter(fn x -> x.role == "Admin" end)
+
+      if admin == [] do
+        password = "abc123"
+        crypted_password = Comeonin.Bcrypt.hashpwsalt(password)
+
+        Settings.create_user(%{
+          email: "admin@gmail.com",
+          password: password,
+          crypted_password: crypted_password,
+          role: "Admin"
+        })
+
+        Settings.create_institution!(%{
+          name: "test"
+        })
+      end
+    end
+
     render(conn, "login.html")
   end
 
@@ -76,6 +110,10 @@ defmodule SchoolWeb.UserController do
     |> delete_session(:semester_id)
     |> put_flash(:info, "Logout successfully")
     |> redirect(to: user_path(conn, :login))
+  end
+
+  def register_new_user(conn, _params) do
+    render(conn, "register_new_user.html")
   end
 
   def index(conn, _params) do
@@ -98,6 +136,11 @@ defmodule SchoolWeb.UserController do
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
+  end
+
+  def user_info(conn, %{"id" => id}) do
+    user = Settings.get_user!(id)
+    render(conn, "show.html", user: user)
   end
 
   def show(conn, %{"id" => id}) do

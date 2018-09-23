@@ -15,6 +15,7 @@ defmodule SchoolWeb.HemJobController do
   end
 
   def create(conn, %{"hem_job" => hem_job_params}) do
+        hem_job_params = Map.put(hem_job_params, "institution_id", conn.private.plug_session["institution_id"])
     case Affairs.create_hem_job(hem_job_params) do
       {:ok, hem_job} ->
         conn

@@ -1,0 +1,38 @@
+<h2>Listing Student comment</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Student</th>
+      <th>Semester</th>
+      <th>Class</th>
+      <th>Year</th>
+      <th>Comment1</th>
+      <th>Comment2</th>
+      <th>Comment3</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for student_comment <- @student_comment do %>
+    <tr>
+      <td><%= student_comment.student_id %></td>
+      <td><%= student_comment.semester_id %></td>
+      <td><%= student_comment.class_id %></td>
+      <td><%= student_comment.year %></td>
+      <td><%= student_comment.comment1 %></td>
+      <td><%= student_comment.comment2 %></td>
+      <td><%= student_comment.comment3 %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: student_comment_path(@conn, :show, student_comment), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: student_comment_path(@conn, :edit, student_comment), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: student_comment_path(@conn, :delete, student_comment), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Student comment", to: student_comment_path(@conn, :new) %></span>

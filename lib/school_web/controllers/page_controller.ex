@@ -520,8 +520,13 @@ defmodule SchoolWeb.PageController do
         timeout: 50_000,
         recv_timeout: 50_000
       ).body
-
-    template = response |> Poison.decode!() |> hd()
+      
+   template =
+      if response == "[]" do
+        nil
+      else
+        response |> Poison.decode!() |> hd()
+      end
 
     lib_id = inst.library_organization_id
     student_ids = params["ids"] |> String.split("\r\n")

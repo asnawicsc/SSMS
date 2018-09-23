@@ -10,6 +10,7 @@ defmodule School.Affairs.ProjectNilam do
     field :member_reading_quantity, :integer
     field :page, :integer
     field :standard_id, :integer
+    field :institution_id, :integer
 
     timestamps()
   end
@@ -17,7 +18,7 @@ defmodule School.Affairs.ProjectNilam do
   @doc false
   def changeset(project_nilam, attrs) do
     project_nilam
-    |> cast(attrs, [:below_satisfy, :member_reading_quantity, :page, :import_from_library, :count_page, :standard_id])
-    |> validate_required([:below_satisfy, :member_reading_quantity, :page,:standard_id])
+    |> cast(attrs, [:institution_id, :below_satisfy, :member_reading_quantity, :page, :import_from_library, :count_page, :standard_id])
+    |> validate_required([:institution_id, :below_satisfy, :member_reading_quantity, :page,:standard_id])
   end
 end

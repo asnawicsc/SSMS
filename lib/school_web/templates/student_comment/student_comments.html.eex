@@ -1,0 +1,115 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>CoCurriculum Mark</title>
+    <style>
+    html {
+      font-family: sans-serif;
+    }
+    table {
+      border-collapse: collapse;
+      border: 2px solid rgb(200,200,200);
+      letter-spacing: 1px;
+      font-size: 0.8rem;
+    }
+    td, th {
+      border: 1px solid rgb(190,190,190);
+      padding: 10px 20px;
+    }
+    td {
+      text-align: center;
+    }
+    caption {
+      padding: 10px;
+    }
+    </style>
+  </head>
+ <% require IEx %>
+  <body>
+
+<form method="post" action="/create_student_comment" class="form-horizontal">
+         <input type="hidden" name="_csrf_token" value="<%= @csrf %>">
+    <input type="hidden" name="semester_id" value="<%= @semester_id %>">
+     <input type="hidden" name="class_id" value="<%= @class_id %>">
+    <table>
+      <colgroup>
+        <col col span="2" >
+      </colgroup>
+      <tr>
+      <th style="background-color:#97DB9A;"><%= gettext "Student ID" %></th>
+         <th style="background-color:#97DB9A;"><%= gettext "Student Name" %></th>
+          <th style="background-color:#97DB9A;"><%= gettext "Chinese Name" %></th>
+          <th style="background-color:#97DB9A;"><%= gettext "Class" %></th>
+        <th style="background-color:#97DB9A;"><%= gettext "Comment 1" %></th>
+        <th style="background-color:#97DB9A;"><%= gettext "Comment 1" %></th>
+        <th style="background-color:#97DB9A;"><%= gettext "Comment 1" %></th>
+      </tr>
+       <%= for item <- @students do %>
+
+      <tr>
+        <th ><%= item.student_id %></th>
+       <th ><%= item.name %></th>
+         <th ><%= item.chinese_name %></th>
+          <th ><%= item.class_name %></th>
+        <th  > <select class="select" name="comment1[<%= item.student_id %>]"  >
+
+          <%= if item.coment1 !=nil  do %>
+
+          <%  comment=Affairs.get_comment!(item.coment1) %>
+     
+         <option value="<%= item.coment1 %>">(<%= comment.code %>) <%= comment.c_malay %></option>
+         <% else %>
+              <%= for com <- @comment do %>
+               <option value="" selected disabled hidden>Choose Comment</option>
+              <option value="<%= com.id %>">(<%= com.code %>) <%= com.c_malay %></option>
+              <%end %>
+
+          <% end %>
+        </select></th>
+        <th  > <select class="select" name="comment1[<%= item.student_id %>]"  >
+
+          <%= if item.coment2 !=nil  do %>
+
+          <%  comment=Affairs.get_comment!(item.coment2) %>
+     
+         <option value="<%= item.coment1 %>">(<%= comment.code %>) <%= comment.c_malay %></option>
+         <% else %>
+              <%= for com <- @comment do %>
+               <option value="" selected disabled hidden>Choose Comment</option>
+              <option value="<%= com.id %>">(<%= com.code %>) <%= com.c_malay %></option>
+              <%end %>
+
+          <% end %>
+        </select></th>
+
+        <th  > <select class="select" name="comment1[<%= item.student_id %>]"  >
+
+          <%= if item.coment3 !=nil  do %>
+
+          <%  comment=Affairs.get_comment!(item.coment3) %>
+     
+         <option value="<%= item.coment1 %>">(<%= comment.code %>) <%= comment.c_malay %></option>
+         <% else %>
+              <%= for com <- @comment do %>
+               <option value="" selected disabled hidden>Choose Comment</option>
+              <option value="<%= com.id %>">(<%= com.code %>) <%= com.c_malay %></option>
+              <%end %>
+
+          <% end %>
+        </select></th>
+
+      </tr>
+         <% end %>
+
+    </table>
+
+
+
+  </body>
+</html> <br>
+
+    <input class="btn btn-primary" name="" value="Submit" type="submit">
+</form>
+

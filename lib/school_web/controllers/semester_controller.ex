@@ -3,9 +3,10 @@ defmodule SchoolWeb.SemesterController do
 
   alias School.Affairs
   alias School.Affairs.Semester
+  require IEx
 
   def index(conn, _params) do
-    semesters = Affairs.list_semesters()
+    semesters = Affairs.list_semesters()|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
     render(conn, "index.html", semesters: semesters)
   end
 
@@ -15,6 +16,9 @@ defmodule SchoolWeb.SemesterController do
   end
 
   def create(conn, %{"semester" => semester_params}) do
+
+    semester_params = Map.put(semester_params, "institution_id", conn.private.plug_session["institution_id"])
+
     case Affairs.create_semester(semester_params) do
       {:ok, semester} ->
         conn

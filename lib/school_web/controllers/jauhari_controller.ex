@@ -5,7 +5,7 @@ defmodule SchoolWeb.JauhariController do
   alias School.Affairs.Jauhari
 
   def index(conn, _params) do
-    jauhari = Affairs.list_jauhari()
+    jauhari = Affairs.list_jauhari()|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
     render(conn, "index.html", jauhari: jauhari)
   end
 
@@ -15,6 +15,7 @@ defmodule SchoolWeb.JauhariController do
   end
 
   def create(conn, %{"jauhari" => jauhari_params}) do
+        jauhari_params = Map.put(jauhari_params, "institution_id", conn.private.plug_session["institution_id"])
     case Affairs.create_jauhari(jauhari_params) do
       {:ok, jauhari} ->
         conn

@@ -272,7 +272,7 @@ defmodule SchoolWeb.ExamController do
 
       end
 
-    class=Repo.all(from s in School.Affairs.Class,select: %{id: s.id,name: s.name})
+    class=Repo.all(from s in School.Affairs.Class,where: s.institution_id==^conn.private.plug_session["institution_id"], select: %{id: s.id,name: s.name})
 
      render(
         conn,

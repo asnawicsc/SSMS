@@ -1,6 +1,7 @@
 <% levels = School.Repo.all(from l in School.Affairs.Level, select: {l.name, l.id}) %>
+<% teacher = School.Repo.all(from l in School.Affairs.Teacher, select: {l.name, l.id}) %>
 
-
+       levels = Affairs.list_levels()
 <%= form_for @changeset, @action, fn f -> %>
   <%= if @changeset.action do %>
     <div class="alert alert-danger">
@@ -24,6 +25,12 @@
     <%= label f, :level_id, class: "control-label" %>
     <%= select f, :level_id, levels, class: "form-control" %>
     <%= error_tag f, :level_id %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :teacher_id, class: "control-label" %>
+    <%= select f, :teacher_id, teacher, class: "form-control" %>
+    <%= error_tag f, :teacher_id %>
   </div>
 
   <div class="form-group">

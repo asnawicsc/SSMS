@@ -3184,4 +3184,140 @@ defmodule School.AffairsTest do
       assert %Ecto.Changeset{} = Affairs.change_holiday(holiday)
     end
   end
+
+  describe "comment" do
+    alias School.Affairs.Comment
+
+    @valid_attrs %{c_chinese: "some c_chinese", c_malay: "some c_malay", code: "some code"}
+    @update_attrs %{c_chinese: "some updated c_chinese", c_malay: "some updated c_malay", code: "some updated code"}
+    @invalid_attrs %{c_chinese: nil, c_malay: nil, code: nil}
+
+    def comment_fixture(attrs \\ %{}) do
+      {:ok, comment} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_comment()
+
+      comment
+    end
+
+    test "list_comment/0 returns all comment" do
+      comment = comment_fixture()
+      assert Affairs.list_comment() == [comment]
+    end
+
+    test "get_comment!/1 returns the comment with given id" do
+      comment = comment_fixture()
+      assert Affairs.get_comment!(comment.id) == comment
+    end
+
+    test "create_comment/1 with valid data creates a comment" do
+      assert {:ok, %Comment{} = comment} = Affairs.create_comment(@valid_attrs)
+      assert comment.c_chinese == "some c_chinese"
+      assert comment.c_malay == "some c_malay"
+      assert comment.code == "some code"
+    end
+
+    test "create_comment/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_comment(@invalid_attrs)
+    end
+
+    test "update_comment/2 with valid data updates the comment" do
+      comment = comment_fixture()
+      assert {:ok, comment} = Affairs.update_comment(comment, @update_attrs)
+      assert %Comment{} = comment
+      assert comment.c_chinese == "some updated c_chinese"
+      assert comment.c_malay == "some updated c_malay"
+      assert comment.code == "some updated code"
+    end
+
+    test "update_comment/2 with invalid data returns error changeset" do
+      comment = comment_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_comment(comment, @invalid_attrs)
+      assert comment == Affairs.get_comment!(comment.id)
+    end
+
+    test "delete_comment/1 deletes the comment" do
+      comment = comment_fixture()
+      assert {:ok, %Comment{}} = Affairs.delete_comment(comment)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_comment!(comment.id) end
+    end
+
+    test "change_comment/1 returns a comment changeset" do
+      comment = comment_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_comment(comment)
+    end
+  end
+
+  describe "student_comment" do
+    alias School.Affairs.StudentComment
+
+    @valid_attrs %{class_id: 42, comment1: "some comment1", comment2: "some comment2", comment3: "some comment3", semester_id: 42, student_id: 42, year: "some year"}
+    @update_attrs %{class_id: 43, comment1: "some updated comment1", comment2: "some updated comment2", comment3: "some updated comment3", semester_id: 43, student_id: 43, year: "some updated year"}
+    @invalid_attrs %{class_id: nil, comment1: nil, comment2: nil, comment3: nil, semester_id: nil, student_id: nil, year: nil}
+
+    def student_comment_fixture(attrs \\ %{}) do
+      {:ok, student_comment} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_student_comment()
+
+      student_comment
+    end
+
+    test "list_student_comment/0 returns all student_comment" do
+      student_comment = student_comment_fixture()
+      assert Affairs.list_student_comment() == [student_comment]
+    end
+
+    test "get_student_comment!/1 returns the student_comment with given id" do
+      student_comment = student_comment_fixture()
+      assert Affairs.get_student_comment!(student_comment.id) == student_comment
+    end
+
+    test "create_student_comment/1 with valid data creates a student_comment" do
+      assert {:ok, %StudentComment{} = student_comment} = Affairs.create_student_comment(@valid_attrs)
+      assert student_comment.class_id == 42
+      assert student_comment.comment1 == "some comment1"
+      assert student_comment.comment2 == "some comment2"
+      assert student_comment.comment3 == "some comment3"
+      assert student_comment.semester_id == 42
+      assert student_comment.student_id == 42
+      assert student_comment.year == "some year"
+    end
+
+    test "create_student_comment/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_student_comment(@invalid_attrs)
+    end
+
+    test "update_student_comment/2 with valid data updates the student_comment" do
+      student_comment = student_comment_fixture()
+      assert {:ok, student_comment} = Affairs.update_student_comment(student_comment, @update_attrs)
+      assert %StudentComment{} = student_comment
+      assert student_comment.class_id == 43
+      assert student_comment.comment1 == "some updated comment1"
+      assert student_comment.comment2 == "some updated comment2"
+      assert student_comment.comment3 == "some updated comment3"
+      assert student_comment.semester_id == 43
+      assert student_comment.student_id == 43
+      assert student_comment.year == "some updated year"
+    end
+
+    test "update_student_comment/2 with invalid data returns error changeset" do
+      student_comment = student_comment_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_student_comment(student_comment, @invalid_attrs)
+      assert student_comment == Affairs.get_student_comment!(student_comment.id)
+    end
+
+    test "delete_student_comment/1 deletes the student_comment" do
+      student_comment = student_comment_fixture()
+      assert {:ok, %StudentComment{}} = Affairs.delete_student_comment(student_comment)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_student_comment!(student_comment.id) end
+    end
+
+    test "change_student_comment/1 returns a student_comment changeset" do
+      student_comment = student_comment_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_student_comment(student_comment)
+    end
+  end
 end

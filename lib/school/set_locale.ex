@@ -13,8 +13,15 @@ defmodule School.SetLocale do
     lang = "en"
 
     if conn.private.plug_session["user_id"] != nil do
+
       user = Repo.get(User, conn.private.plug_session["user_id"])
-      lang = user.default_lang
+
+       lang =if  user == nil do
+        "en"
+      else
+        user.default_lang
+      end
+
     end
 
     Gettext.put_locale(SchoolWeb.Gettext, lang)

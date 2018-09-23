@@ -5,7 +5,7 @@ defmodule SchoolWeb.CoGradeController do
   alias School.Affairs.CoGrade
 
   def index(conn, _params) do
-    co_grade = Affairs.list_co_grade()
+    co_grade = Affairs.list_co_grade()|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
     render(conn, "index.html", co_grade: co_grade)
   end
 
@@ -31,6 +31,8 @@ defmodule SchoolWeb.CoGradeController do
   end
 
   def create(conn, %{"co_grade" => co_grade_params}) do
+
+      co_grade_params = Map.put(co_grade_params, "institution_id", conn.private.plug_session["institution_id"])
     case Affairs.create_co_grade(co_grade_params) do
       {:ok, co_grade} ->
         conn

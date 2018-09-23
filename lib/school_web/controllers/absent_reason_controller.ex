@@ -5,7 +5,7 @@ defmodule SchoolWeb.AbsentReasonController do
   alias School.Affairs.AbsentReason
 
   def index(conn, _params) do
-    absent_reason = Affairs.list_absent_reason()
+    absent_reason = Affairs.list_absent_reason()|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
     render(conn, "index.html", absent_reason: absent_reason)
   end
 
@@ -15,6 +15,7 @@ defmodule SchoolWeb.AbsentReasonController do
   end
 
   def create(conn, %{"absent_reason" => absent_reason_params}) do
+     absent_reason_params = Map.put(absent_reason_params, "institution_id", conn.private.plug_session["institution_id"])
     case Affairs.create_absent_reason(absent_reason_params) do
       {:ok, absent_reason} ->
         conn

@@ -27,6 +27,8 @@ require IEx
 
           changeset = Affairs.change_standard_subject(%StandardSubject{})
 
+  standard_subject_params = Map.put(standard_subject_params, "institution_id", conn.private.plug_session["institution_id"])
+  
           Affairs.create_standard_subject(standard_subject_params)
         end
 

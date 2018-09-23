@@ -43,6 +43,8 @@ defmodule SchoolWeb.ParameterController do
   end
 
   def system_config(conn, %{"institution_id" => id}) do
+
+  
     parameter = Repo.get_by(Parameter, institution_id: id)
 
     if parameter == nil do

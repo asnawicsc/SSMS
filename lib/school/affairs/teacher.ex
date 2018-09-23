@@ -44,6 +44,7 @@ defmodule School.Affairs.Teacher do
     field :icno, :string
     field :tscjob4, :string
     field :tccjob6, :string
+    field :institution_id, :integer
 
     timestamps()
   end
@@ -51,7 +52,7 @@ defmodule School.Affairs.Teacher do
   @doc false
   def changeset(teacher, attrs) do
     teacher
-    |> cast(attrs, [:code, :name, :cname, :icno, :sex, :race, :religion, :nation, :bdate, :addr1, :addr2, :addr3, :poscod, :district, :state, :tel, :regdate, :qdate, :qrem, :postitle, :job, :education, :remark, :secondid, :tchtype, :gid, :session, :bcenrlno, :tscjob1, :tscjob2, :tscjob3, :tscjob4, :tscjob5, :tscjob6, :tccjob1, :tccjob2, :tccjob3, :tccjob4, :tccjob5, :tccjob6])
+    |> cast(attrs, [:institution_id, :code, :name, :cname, :icno, :sex, :race, :religion, :nation, :bdate, :addr1, :addr2, :addr3, :poscod, :district, :state, :tel, :regdate, :qdate, :qrem, :postitle, :job, :education, :remark, :secondid, :tchtype, :gid, :session, :bcenrlno, :tscjob1, :tscjob2, :tscjob3, :tscjob4, :tscjob5, :tscjob6, :tccjob1, :tccjob2, :tccjob3, :tccjob4, :tccjob5, :tccjob6])
    
   end
 end

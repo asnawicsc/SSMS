@@ -72,10 +72,32 @@
           <a class="dropdown-item" href="/institutions/<%= @conn.private.plug_session[" institution_id "]%>">
             <%= gettext "School Profile" %>
           </a>
-          <a class="dropdown-item" href="/users/<%= @conn.private.plug_session[" user_id "]%>">
+          <a class="dropdown-item" href="/user_info/<%= @conn.private.plug_session["user_id"]%>">
             <%= gettext "User Account" %>
               </span>
           </a>
+          <%= if   @conn.private.plug_session["user_id"] != nil do %>
+            
+        
+          <% user_id=@conn.private.plug_session["user_id"] %>
+          <%= if user_id != nil do %>
+
+          <% user=Repo.get_by(Settings.User, %{id: user_id }) %>
+   
+          <%= if user.role == "Admin" do %>
+
+             <a class="dropdown-item" href="/institutions/new">
+            <%= gettext "Institution Setting" %>
+              </span>
+          </a>
+
+            <a class="dropdown-item" href="/users">
+            <%= gettext "User Setting" %>
+              </span>
+          </a>
+            <% end %>
+          <% end %>
+             <% end %>
           <a class="dropdown-item" href="/system_config/<%= @conn.private.plug_session["institution_id"]%>">
             <%= gettext "System Configuration" %>
           </a>
@@ -84,6 +106,9 @@
           </a>
            <a class="dropdown-item" href="/holiday">
             <%= gettext "Holiday Setting" %>
+          </a>
+             <a class="dropdown-item" href="/comment">
+            <%= gettext "Comment Setting" %>
           </a>
           <a class="dropdown-item" href="/teacher_setting">
             <%= gettext "Teacher Setting" %>
@@ -110,6 +135,14 @@
           <a class="dropdown-item" href="/students">
             <%= gettext "Students" %>
           </a>
+
+           <a class="dropdown-item" href="/standard/new">
+            <%= gettext "Subject" %>
+          </a>
+
+           <a class="dropdown-item" href="/levels/new">
+            <%= gettext "Standard" %>
+          </a>
     
 
           <a class="dropdown-item" href="/height_weight">
@@ -134,6 +167,10 @@
     
           <a class="dropdown-item" href="co_mark">
             <%= gettext "Co-Curriculum"%>
+          </a>
+
+            <a class="dropdown-item" href="student_comments">
+            <%= gettext "Student Comment"%>
           </a>
 
         </div>

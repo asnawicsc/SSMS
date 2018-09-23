@@ -32,6 +32,7 @@ defmodule SchoolWeb.GradeController do
   end
 
   def create(conn, %{"grade" => grade_params}) do
+        grade_params = Map.put(grade_params, "institution_id", conn.private.plug_session["institution_id"])
     case Affairs.create_grade(grade_params) do
       {:ok, grade} ->
         conn

@@ -1,0 +1,43 @@
+<h2>Show Student comment</h2>
+
+<ul>
+
+  <li>
+    <strong>Student:</strong>
+    <%= @student_comment.student_id %>
+  </li>
+
+  <li>
+    <strong>Semester:</strong>
+    <%= @student_comment.semester_id %>
+  </li>
+
+  <li>
+    <strong>Class:</strong>
+    <%= @student_comment.class_id %>
+  </li>
+
+  <li>
+    <strong>Year:</strong>
+    <%= @student_comment.year %>
+  </li>
+
+  <li>
+    <strong>Comment1:</strong>
+    <%= @student_comment.comment1 %>
+  </li>
+
+  <li>
+    <strong>Comment2:</strong>
+    <%= @student_comment.comment2 %>
+  </li>
+
+  <li>
+    <strong>Comment3:</strong>
+    <%= @student_comment.comment3 %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: student_comment_path(@conn, :edit, @student_comment) %></span>
+<span><%= link "Back", to: student_comment_path(@conn, :index) %></span>

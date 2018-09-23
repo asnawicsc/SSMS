@@ -28,6 +28,7 @@
    <%subject=School.Repo.get_by(School.Affairs.Subject,id: period.subject_id)%>
     <%class=School.Repo.get_by(School.Affairs.Class,id: period.class_id)%>
     <%teacher=School.Repo.get_by(School.Affairs.Teacher,id: period.teacher_id)%>
+
     <tr>
        <td><%= class.name %></td>
         <td><%= period.day %></td>

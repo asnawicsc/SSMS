@@ -7,6 +7,7 @@ defmodule School.Affairs.CoCurriculumJob do
     field :cdesc, :string
     field :code, :string
     field :description, :string
+    field :institution_id, :integer
 
     timestamps()
   end
@@ -14,6 +15,6 @@ defmodule School.Affairs.CoCurriculumJob do
   @doc false
   def changeset(co_curriculum_job, attrs) do
     co_curriculum_job
-    |> cast(attrs, [:code, :description, :cdesc])
+    |> cast(attrs, [:institution_id, :code, :description, :cdesc])
   end
 end

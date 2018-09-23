@@ -7,6 +7,7 @@ defmodule School.Affairs.TeacherSchoolJob do
     field :school_job_id, :integer
     field :semester_id, :integer
     field :teacher_id, :integer
+    field :institution_id, :integer
 
     timestamps()
   end
@@ -14,7 +15,7 @@ defmodule School.Affairs.TeacherSchoolJob do
   @doc false
   def changeset(teacher_school_job, attrs) do
     teacher_school_job
-    |> cast(attrs, [:teacher_id, :school_job_id, :semester_id])
-    |> validate_required([:teacher_id, :school_job_id, :semester_id])
+    |> cast(attrs, [:institution_id, :teacher_id, :school_job_id, :semester_id])
+    |> validate_required([:institution_id, :teacher_id, :school_job_id, :semester_id])
   end
 end

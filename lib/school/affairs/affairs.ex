@@ -3577,4 +3577,196 @@ defmodule School.Affairs do
   def change_holiday(%Holiday{} = holiday) do
     Holiday.changeset(holiday, %{})
   end
+
+  alias School.Affairs.Comment
+
+  @doc """
+  Returns the list of comment.
+
+  ## Examples
+
+      iex> list_comment()
+      [%Comment{}, ...]
+
+  """
+  def list_comment do
+    Repo.all(Comment)
+  end
+
+  @doc """
+  Gets a single comment.
+
+  Raises `Ecto.NoResultsError` if the Comment does not exist.
+
+  ## Examples
+
+      iex> get_comment!(123)
+      %Comment{}
+
+      iex> get_comment!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_comment!(id), do: Repo.get!(Comment, id)
+
+  @doc """
+  Creates a comment.
+
+  ## Examples
+
+      iex> create_comment(%{field: value})
+      {:ok, %Comment{}}
+
+      iex> create_comment(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_comment(attrs \\ %{}) do
+    %Comment{}
+    |> Comment.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a comment.
+
+  ## Examples
+
+      iex> update_comment(comment, %{field: new_value})
+      {:ok, %Comment{}}
+
+      iex> update_comment(comment, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_comment(%Comment{} = comment, attrs) do
+    comment
+    |> Comment.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a Comment.
+
+  ## Examples
+
+      iex> delete_comment(comment)
+      {:ok, %Comment{}}
+
+      iex> delete_comment(comment)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_comment(%Comment{} = comment) do
+    Repo.delete(comment)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking comment changes.
+
+  ## Examples
+
+      iex> change_comment(comment)
+      %Ecto.Changeset{source: %Comment{}}
+
+  """
+  def change_comment(%Comment{} = comment) do
+    Comment.changeset(comment, %{})
+  end
+
+  alias School.Affairs.StudentComment
+
+  @doc """
+  Returns the list of student_comment.
+
+  ## Examples
+
+      iex> list_student_comment()
+      [%StudentComment{}, ...]
+
+  """
+  def list_student_comment do
+    Repo.all(StudentComment)
+  end
+
+  @doc """
+  Gets a single student_comment.
+
+  Raises `Ecto.NoResultsError` if the Student comment does not exist.
+
+  ## Examples
+
+      iex> get_student_comment!(123)
+      %StudentComment{}
+
+      iex> get_student_comment!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_student_comment!(id), do: Repo.get!(StudentComment, id)
+
+  @doc """
+  Creates a student_comment.
+
+  ## Examples
+
+      iex> create_student_comment(%{field: value})
+      {:ok, %StudentComment{}}
+
+      iex> create_student_comment(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_student_comment(attrs \\ %{}) do
+    %StudentComment{}
+    |> StudentComment.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a student_comment.
+
+  ## Examples
+
+      iex> update_student_comment(student_comment, %{field: new_value})
+      {:ok, %StudentComment{}}
+
+      iex> update_student_comment(student_comment, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_student_comment(%StudentComment{} = student_comment, attrs) do
+    student_comment
+    |> StudentComment.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a StudentComment.
+
+  ## Examples
+
+      iex> delete_student_comment(student_comment)
+      {:ok, %StudentComment{}}
+
+      iex> delete_student_comment(student_comment)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_student_comment(%StudentComment{} = student_comment) do
+    Repo.delete(student_comment)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking student_comment changes.
+
+  ## Examples
+
+      iex> change_student_comment(student_comment)
+      %Ecto.Changeset{source: %StudentComment{}}
+
+  """
+  def change_student_comment(%StudentComment{} = student_comment) do
+    StudentComment.changeset(student_comment, %{})
+  end
 end
