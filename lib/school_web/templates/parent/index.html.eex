@@ -58,14 +58,14 @@
     </div>
     <form action="/pdf/parent_listing" method="POST">
   <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
-<select name="class">
+<select name="class" required="">
   <option value="0"><%= gettext("All Class")%></option>
   <%= for class <- @classes do %>
   <option value="<%= class.id %>"><%= class.name %></option>
   <% end %>
 </select>
 
-<select name="semester_id">
+<select name="semester_id" required="">
   <%= for sem <- @semesters do %>
   <option value="<%= sem.id %>"><%= sem.start_date %> - <%= sem.end_date %></option>
   <% end %>

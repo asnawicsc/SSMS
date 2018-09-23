@@ -1,4 +1,4 @@
-<% semesters = Repo.all( School.Affairs.Semester) %>
+        <% semesters= Repo.all(from(s in School.Affairs.Semester, select: %{institution_id: s.institution_id,id: s.id, start_date: s.start_date}))|>Enum.filter(fn x-> x.institution_id ==@conn.private.plug_session["institution_id"] end) %>
 <% levels = Map.keys(@classes) %>
 <div class="row">
   <div class="col-lg-12">
@@ -9,14 +9,14 @@
           <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
           <div class="form-row">
               <div class="form-group col-md-3">
-                <select name="semester">
+                <select name="semester" required="required">
                   <%= for semester <- semesters do %>
                   <option value="<%= semester.id%>"><%= semester.start_date%> -  <%= semester.end_date%></option>
                   <% end %>
                 </select>
               </div>
               <div class="form-group col-md-3">
-                <select name="class">
+                <select name="class" required="required">
                   <%= for level <- levels do %>
         
                    
@@ -35,7 +35,7 @@
 
               </div>
               <div class="form-group col-md-2">
-                <select name="month">
+                <select name="month" required="required">
                     <option value="1"><%= Timex.month_name(1)%></option>
                     <option value="2"><%= Timex.month_name(2)%></option>
                     <option value="3"><%= Timex.month_name(3)%></option>
@@ -53,7 +53,7 @@
                 
               </div>
               <div class="form-group col-md-2">
-                <select name="year">
+                <select name="year" required="required">
                     <option value="2018">2018</option>
                
                 </select>

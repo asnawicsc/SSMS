@@ -19,7 +19,7 @@
 </div>
 
 
-        <% semester= Repo.all(from(s in School.Affairs.Semester, select: %{id: s.id, start_date: s.start_date})) %>
+     <% semester= Repo.all(from(s in School.Affairs.Semester, select: %{institution_id: s.institution_id,id: s.id, start_date: s.start_date}))|>Enum.filter(fn x-> x.institution_id ==@conn.private.plug_session["institution_id"] end) %>
            
               <div class="col-sm-2">
            

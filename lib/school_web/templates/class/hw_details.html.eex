@@ -2,7 +2,7 @@
 <form id ="semester">
 	<input type="hidden" name="report" value="height_weight">
 	Please select a semester:
-	<select name="semester_id">
+	<select name="semester_id" required="required">
 		<%= for sem <- @semesters do %>
 			<option value = <%= sem.id %> ><%= sem.start_date %> - <%= sem.end_date %></option>
 		<% end %>

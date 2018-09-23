@@ -5,17 +5,17 @@
 
 <form action="/pdf/mark_sheet_listing" method="POST">
 	<input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
-<select name="class">
+<select name="class" required="required">
 	<%= for class <- @classes do %>
 	<option><%= class.name %></option>
 	<% end %>
 </select>
-<select name="exam">
+<select name="exam" required="required">
 	<%= for exam <- @exams do %>
 	<option value="<%= exam.id %>"><%= exam.name %>(<%= exam.year %>)</option>
 	<% end %>
 </select>
-<select name="semester">
+<select name="semester" required="required">
 	<%= for sem <- @semesters do %>
 	<option><%= sem.start_date %> - <%= sem.end_date %></option>
 	<% end %>

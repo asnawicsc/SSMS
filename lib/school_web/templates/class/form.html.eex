@@ -1,7 +1,7 @@
-<% levels = School.Repo.all(from l in School.Affairs.Level, select: {l.name, l.id}) %>
-<% teacher = School.Repo.all(from l in School.Affairs.Teacher, select: {l.name, l.id}) %>
+<% levels = School.Repo.all(from l in School.Affairs.Level,where: l.institution_id ==^@conn.private.plug_session["institution_id"], select: {l.name, l.id}) %>
+<% teacher = School.Repo.all(from l in School.Affairs.Teacher,where: l.institution_id ==^@conn.private.plug_session["institution_id"], select: {l.name, l.id}) %>
 
-       levels = Affairs.list_levels()
+  
 <%= form_for @changeset, @action, fn f -> %>
   <%= if @changeset.action do %>
     <div class="alert alert-danger">

@@ -5,7 +5,9 @@ defmodule SchoolWeb.ClassController do
   require IEx
 
   def mark_sheet_listing(conn, params) do
-    semesters = Repo.all(from(s in Semester))
+    semesters =
+      Repo.all(from(s in Semester))
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
 
     classes = Repo.all(from(c in Class, where: c.institution_id == ^User.institution_id(conn)))
     exams = Affairs.list_exam_master()
@@ -13,7 +15,9 @@ defmodule SchoolWeb.ClassController do
   end
 
   def mark_analyse_by_grade(conn, params) do
-    semesters = Repo.all(from(s in Semester))
+    semesters =
+      Repo.all(from(s in Semester))
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
 
     classes = Repo.all(from(c in Class, where: c.institution_id == ^User.institution_id(conn)))
 
@@ -21,12 +25,17 @@ defmodule SchoolWeb.ClassController do
   end
 
   def height_weight_report(conn, params) do
-    semesters = Repo.all(from(s in Semester))
+    semesters =
+      Repo.all(from(s in Semester))
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
     render(conn, "hw_details.html", semesters: semesters)
   end
 
   def class_analysis(conn, params) do
-    semesters = Repo.all(from(s in Semester))
+    semesters =
+      Repo.all(from(s in Semester))
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
 
     classes = Repo.all(from(c in Class, where: c.institution_id == ^User.institution_id(conn)))
 
@@ -85,7 +94,11 @@ defmodule SchoolWeb.ClassController do
   def edit_class(conn, params) do
     class = Affairs.get_class!(params["edit_class"])
 
-    class_params = %{remarks: params["remark"], name: params["class_name"],teacher_id: params["teacher_id"]}
+    class_params = %{
+      remarks: params["remark"],
+      name: params["class_name"],
+      teacher_id: params["teacher_id"]
+    }
 
     case Affairs.update_class(class, class_params) do
       {:ok, class} ->
@@ -155,7 +168,14 @@ defmodule SchoolWeb.ClassController do
     if s6 == nil, do: Level.changeset(%Level{}, %{name: "Standard 6"}) |> Repo.insert()
     changeset = Affairs.change_class(%Class{})
 
-    class = Repo.all(from(s in School.Affairs.Class,where: s.institution_id ==^User.institution_id(conn), select: %{id: s.id, name: s.name}))
+    class =
+      Repo.all(
+        from(
+          s in School.Affairs.Class,
+          where: s.institution_id == ^User.institution_id(conn),
+          select: %{id: s.id, name: s.name}
+        )
+      )
 
     render(
       conn,
@@ -166,7 +186,14 @@ defmodule SchoolWeb.ClassController do
   end
 
   def student_listing_by_class(conn, params) do
-    class = Repo.all(from(s in School.Affairs.Class, select: %{id: s.id, name: s.name}))
+    class =
+      Repo.all(
+        from(
+          s in School.Affairs.Class,
+          select: %{institution_id: s.institution_id, id: s.id, name: s.name}
+        )
+      )
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
 
     render(
       conn,

@@ -19,7 +19,10 @@ defmodule SchoolWeb.StudentController do
   end
 
   def student_certificate(conn, params) do
-    semesters = Repo.all(from(s in Semester))
+    semesters =
+      Repo.all(from(s in Semester))
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
     render(conn, "student_certificate.html", semesters: semesters)
   end
 
@@ -33,7 +36,9 @@ defmodule SchoolWeb.StudentController do
         )
       )
 
-    levels = Repo.all(Level)|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
+    levels =
+      Repo.all(Level)
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
 
     render(conn, "height_weight.html", students: students, levels: levels)
   end
