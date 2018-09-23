@@ -89,7 +89,7 @@
 
   <div class="form-group col-md-3">
     <%= label f, :library_organization_id, class: "" %>
-    <%= text_input f, :library_organization_id, class: "form-control" %>
+    <%= number_input f, :library_organization_id, class: "form-control" %>
     <%= error_tag f, :library_organization_id %>
   </div>
 

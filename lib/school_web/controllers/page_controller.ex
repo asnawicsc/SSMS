@@ -370,12 +370,7 @@ defmodule SchoolWeb.PageController do
     # uri = "https://www.li6rary.net/api"
     uri = Application.get_env(:school, :api)[:url]
 
-    lib_id =
-      if Application.get_env(:school, :env) == nil do
-        lib_id = 3
-      else
-        lib_id = School.Affairs.inst_id(conn)
-      end
+    lib_id = School.Affairs.inst_id(conn)
 
     path = "?scope=get_lib&inst_id=sa_#{lib_id}"
 

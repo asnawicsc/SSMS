@@ -1,5 +1,227 @@
 <h2>New Student</h2>
 
-<%= render "form.html", Map.put(assigns, :action, student_path(@conn, :create)) %>
+
+
+<%  institutes = Repo.all(from i in School.Settings.Institution, select: {i.name, i.id})%>
+
+<% parameters = Repo.get_by(School.Settings.Parameter, institution_id: @conn.private.plug_session["institution_id"])
+  %>
+  
+<% race = parameters.race |> String.split(",") %>
+<% religion = parameters.religion |> String.split(",") %>
+<% nationality = parameters.nationality |> String.split(",") %>
+<% blood_type = parameters.blood_type |> String.split(",") %>
+<% transport = parameters.transport |> String.split(",") %>
+<% user = Repo.get(School.Settings.User,@conn.private.plug_session["user_id"]) %>
+<% Gettext.put_locale(SchoolWeb.Gettext, user.default_lang) %>
+<%= form_for @changeset, student_path(@conn, :create), fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+  <div class="form-row">
+  <div class="form-group col-md-3">
+    <%= label f, (gettext "name"), class: "" %>
+    <%= text_input f, :name, class: "form-control" %>
+    <%= error_tag f, :name %>
+  </div>
+
+  <div class="form-group col-md-2">
+    <%= label f, (gettext "chinese_name"), class: "" %>
+    <%= text_input f, :chinese_name, class: "form-control" %>
+    <%= error_tag f, :chinese_name %>
+  </div>
+
+  <div class="form-group col-md-1">
+    <%= label f, (gettext "sex"), class: "" %>
+    <%= text_input f, :sex, class: "form-control" %>
+    <%= error_tag f, :sex %>
+  </div>
+
+  <div class="form-group col-md-2">
+    <%= label f, (gettext "ic"), class: "" %>
+    <%= text_input f, :ic, class: "form-control" %>
+    <%= error_tag f, :ic %>
+  </div>
+
+  <div class="form-group col-md-2">
+    <%= label f, (gettext "dob"), class: "" %>
+    <%= text_input f, :dob, class: "form-control" %>
+    <%= error_tag f, :dob %>
+  </div>
+
+  <div class="form-group col-md-2">
+    <%= label f, :pob, class: "" %>
+    <%= text_input f, :pob, class: "form-control" %>
+    <%= error_tag f, :pob %>
+  </div>
+  </div>
+  <div class="form-row">
+  <div class="form-group col-md-2">
+    <%= label f, :b_cert, class: "" %>
+    <%= text_input f, :b_cert, class: "form-control" %>
+    <%= error_tag f, :b_cert %>
+  </div>
+  <div class="form-group col-md-2">
+    <%= label f, :race, class: "" %>
+    <%= select f, :race, race, class: "form-control" %>
+    <%= error_tag f, :race %>
+  </div>
+
+  <div class="form-group col-md-2">
+    <%= label f, :religion, class: "" %>
+    <%= select f, :religion, religion, class: "form-control" %>
+    <%= error_tag f, :religion %>
+  </div>
+
+  <div class="form-group col-md-2">
+    <%= label f, :nationality, class: "" %>
+    <%= select f, :nationality,nationality, class: "form-control" %>
+    <%= error_tag f, :nationality %>
+  </div>
+  </div>
+  <div class="form-row">
+
+
+  <div class="form-group col-md-3">
+    <%= label f, :line1, class: "" %>
+    <%= text_input f, :line1, class: "form-control" %>
+    <%= error_tag f, :line1 %>
+  </div>
+
+  <div class="form-group col-md-3">
+    <%= label f, :line2, class: "" %>
+    <%= text_input f, :line2, class: "form-control" %>
+    <%= error_tag f, :line2 %>
+  </div>
+
+  <div class="form-group col-md-2">
+    <%= label f, :postcode, class: "" %>
+    <%= text_input f, :postcode, class: "form-control" %>
+    <%= error_tag f, :postcode %>
+  </div>
+
+  <div class="form-group col-md-2">
+    <%= label f, :town, class: "" %>
+    <%= text_input f, :town, class: "form-control" %>
+    <%= error_tag f, :town %>
+  </div>
+
+  <div class="form-group col-md-2">
+    <%= label f, :state, class: "" %>
+    <%= text_input f, :state, class: "form-control" %>
+    <%= error_tag f, :state %>
+  </div>
+
+  <div class="form-group col-md-2">
+    <%= label f, :country, class: "" %>
+    <%= text_input f, :country, class: "form-control" %>
+    <%= error_tag f, :country %>
+  </div>
+
+  <div class="form-group col-md-2">
+    <%= label f, :phone, class: "" %>
+    <%= text_input f, :phone, class: "form-control" %>
+    <%= error_tag f, :phone %>
+  </div>
+  </div>
+  
+
+
+<div class="form-row">
+  <div class="form-group col-md-2">
+    <%= label f, :is_oku, class: "" %>
+    <%= checkbox f, :is_oku, class: "checkbox" %>
+    <%= error_tag f, :is_oku %>
+  </div>
+
+  <div class="form-group col-md-2">
+    <%= label f, :oku_no, class: "" %>
+    <%= text_input f, :oku_no, class: "form-control" %>
+    <%= error_tag f, :oku_no %>
+  </div>
+
+  <div class="form-group col-md-2">
+    <%= label f, :oku_cat, class: "" %>
+    <%= text_input f, :oku_cat, class: "form-control" %>
+    <%= error_tag f, :oku_cat %>
+  </div>
+
+  <div class="form-group col-md-2">
+    <%= label f, :transport, class: "" %>
+    <%= select f, :transport, transport, class: "form-control" %>
+    <%= error_tag f, :transport %>
+  </div>
+
+  <div class="form-group col-md-2">
+    <%= label f, :distance, class: "" %>
+    <%= text_input f, :distance, class: "form-control" %>
+    <%= error_tag f, :distance %>
+  </div>
+
+  <div class="form-group col-md-2">
+    <%= label f, :blood_type, class: "" %>
+    <%= select f, :blood_type, blood_type, class: "form-control" %>
+    <%= error_tag f, :blood_type %>
+  </div>
+
+  <div class="form-group col-md-2">
+    <%= label f, :position_in_house, class: "" %>
+    <%= text_input f, :position_in_house, class: "form-control" %>
+    <%= error_tag f, :position_in_house %>
+  </div>
+
+  <div class="form-group col-md-2">
+    <%= label f, :subject_ids, class: "" %>
+    <%= text_input f, :subject_ids, class: "form-control" %>
+    <%= error_tag f, :subject_ids %>
+  </div>
+  <div class="form-group col-md-3">
+    <%= label f, :institution_id, class: "" %>
+    <%= select f, :institution_id, institutes, class: "form-control" %>
+    <%= error_tag f, :institution_id %>
+  </div>
+  <div class="form-group col-md-3">
+    <%= label f, :student_no, class: "" %>
+    <%= text_input f, :student_no, class: "form-control" %>
+    <%= error_tag f, :student_no %>
+  </div>
+</div>
+
+<div class="form-row">
+  <div class="form-group col-md-2">
+    <%= label f, :guardtype, class: "" %>
+    <%= text_input f, :guardtype, class: "form-control" %>
+    <%= error_tag f, :guardtype %>
+  </div>
+    <div class="form-group col-md-2">
+    <%= label f, :gicno, class: "" %>
+    <%= text_input f, :gicno, class: "form-control" %>
+    <%= error_tag f, :gicno %>
+    
+  </div>
+    <div class="form-group col-md-2">
+    <%= label f, :ficno, class: "" %>
+    <%= text_input f, :ficno, class: "form-control" %>
+   
+    <%= error_tag f, :ficno %>
+  </div>
+    <div class="form-group col-md-2">
+    <%= label f, :micno, class: "" %>
+    <%= text_input f, :micno, class: "form-control" %>
+
+    <%= error_tag f, :micno %>
+  </div>
+  <div  style="margin-top: 35px;">
+    
+
+  </div>
+</div>
+  <div class="form-group ">
+    <%= submit "Submit", class: "btn btn-primary" %>
+  </div>
+<% end %>
+
 
 <span><%= link "Back", to: student_path(@conn, :index) %></span>
