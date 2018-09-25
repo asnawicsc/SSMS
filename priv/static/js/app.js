@@ -401,8 +401,7 @@ $(".nav-link#standard_subject").click(function() {
 
 channel.on("show_standard_subject", payload => {
     var data = payload.standard_subject
-var standard_level=payload.standard_level
-
+    var standard_level=payload.standard_level
   $("div#standard_level").html(standard_level)
     console.log(data)
 

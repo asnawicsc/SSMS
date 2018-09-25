@@ -154,18 +154,6 @@ defmodule SchoolWeb.ClassController do
   end
 
   def class_setting(conn, params) do
-    s1 = Repo.get_by(Level, name: "Standard 1")
-    if s1 == nil, do: Level.changeset(%Level{}, %{name: "Standard 1"}) |> Repo.insert()
-    s2 = Repo.get_by(Level, name: "Standard 2")
-    if s2 == nil, do: Level.changeset(%Level{}, %{name: "Standard 2"}) |> Repo.insert()
-    s3 = Repo.get_by(Level, name: "Standard 3")
-    if s3 == nil, do: Level.changeset(%Level{}, %{name: "Standard 3"}) |> Repo.insert()
-    s4 = Repo.get_by(Level, name: "Standard 4")
-    if s4 == nil, do: Level.changeset(%Level{}, %{name: "Standard 4"}) |> Repo.insert()
-    s5 = Repo.get_by(Level, name: "Standard 5")
-    if s5 == nil, do: Level.changeset(%Level{}, %{name: "Standard 5"}) |> Repo.insert()
-    s6 = Repo.get_by(Level, name: "Standard 6")
-    if s6 == nil, do: Level.changeset(%Level{}, %{name: "Standard 6"}) |> Repo.insert()
     changeset = Affairs.change_class(%Class{})
 
     class =

@@ -1,6 +1,6 @@
 defmodule SchoolWeb.StandardSubjectController do
   use SchoolWeb, :controller
-require IEx
+  require IEx
   alias School.Affairs
   alias School.Affairs.StandardSubject
 
@@ -9,32 +9,37 @@ require IEx
     render(conn, "index.html", standard_subject: standard_subject)
   end
 
-  def create_standard_subject(conn,params) do
-   
-    level_id = params["level"]|>String.to_integer
-    semester_id = params["semester"]|>String.to_integer
+  def create_standard_subject(conn, params) do
+    level_id = params["level"] |> String.to_integer()
+    semester_id = params["semester"] |> String.to_integer()
     year = params["year"]
     subjects = params["standard_subject"] |> String.split(",")
 
-        for subject <- subjects do
-            subject=subject|>String.to_integer
-           standard_subject_params = %{
-                standard_id: level_id,
-                semester_id: semester_id,
-                year: year,
-                subject_id: subject
-              }
+    for subject <- subjects do
+      subject = subject |> String.to_integer()
 
-          changeset = Affairs.change_standard_subject(%StandardSubject{})
+      standard_subject_params = %{
+        standard_id: level_id,
+        semester_id: semester_id,
+        year: year,
+        subject_id: subject
+      }
 
-  standard_subject_params = Map.put(standard_subject_params, "institution_id", conn.private.plug_session["institution_id"])
-  
-          Affairs.create_standard_subject(standard_subject_params)
-        end
+      changeset = Affairs.change_standard_subject(%StandardSubject{})
 
-        conn
-        |> put_flash(:info, "Standard Subject Created.")
-        |> redirect(to: subject_path(conn, :standard_setting))
+      standard_subject_params =
+        Map.put(
+          standard_subject_params,
+          :institution_id,
+          conn.private.plug_session["institution_id"]
+        )
+
+      Affairs.create_standard_subject(standard_subject_params)
+    end
+
+    conn
+    |> put_flash(:info, "Standard Subject Created.")
+    |> redirect(to: subject_path(conn, :standard_setting))
   end
 
   def new(conn, _params) do
@@ -48,6 +53,7 @@ require IEx
         conn
         |> put_flash(:info, "Standard subject created successfully.")
         |> redirect(to: standard_subject_path(conn, :show, standard_subject))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
@@ -72,6 +78,7 @@ require IEx
         conn
         |> put_flash(:info, "Standard subject updated successfully.")
         |> redirect(to: standard_subject_path(conn, :show, standard_subject))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", standard_subject: standard_subject, changeset: changeset)
     end
