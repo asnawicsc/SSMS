@@ -174,13 +174,19 @@ $("footer").append(maintain)
     var student_id = $(this).attr("id")
 
     channel.push("inquire_student_details", {user_id: window.currentUser,institution_id: window.currentInstitute, student_id: student_id})
+     
   })
+
 
 
   channel.on("show_student_details", payload => {
     $("div[aria-label='student_details']").html(payload.html)
     var csrf = window.csrf
     $("input[name='_csrf_token']").val(csrf)
+    $("button#delete_student").click(function(){
+      var student_id = $("button#delete_student").attr("aria-label");
+      channel.push("delete_student",{student_id: student_id})
+    })
   })
 
     $("div.subject").click(function(){

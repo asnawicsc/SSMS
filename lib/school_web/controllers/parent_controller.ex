@@ -6,18 +6,34 @@ defmodule SchoolWeb.ParentController do
   require IEx
 
   def guardian_listing(conn, _params) do
-    parent = Affairs.list_parent()|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
-    semesters = Repo.all(from(s in Semester))|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
+    parent =
+      Affairs.list_parent()
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
 
-    classes = Repo.all(from(c in Class, where: c.institution_id == ^User.institution_id(conn)))|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
+    semesters =
+      Repo.all(from(s in Semester))
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
+    classes =
+      Repo.all(from(c in Class, where: c.institution_id == ^User.institution_id(conn)))
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
     render(conn, "index.html", parent: parent, semesters: semesters, classes: classes)
   end
 
   def index(conn, _params) do
-    parent = Affairs.list_parent()|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
-    semesters = Repo.all(from(s in Semester))|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
+    parent =
+      Affairs.list_parent()
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
 
-    classes = Repo.all(from(c in Class, where: c.institution_id == ^User.institution_id(conn)))|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
+    semesters =
+      Repo.all(from(s in Semester))
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
+    classes =
+      Repo.all(from(c in Class, where: c.institution_id == ^User.institution_id(conn)))
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
     render(conn, "index.html", parent: parent, semesters: semesters, classes: classes)
   end
 
@@ -150,6 +166,13 @@ defmodule SchoolWeb.ParentController do
           parents_params =
             Map.put(parents_params, "state", Integer.to_string(parents_params["state"]))
         end
+
+        parents_params =
+          Map.put(
+            parents_params,
+            "institution_id",
+            Integer.to_string(conn.private.plug_session["institution_id"])
+          )
 
         cg = Parent.changeset(%Parent{}, parents_params)
 
