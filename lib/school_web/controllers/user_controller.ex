@@ -87,16 +87,22 @@ defmodule SchoolWeb.UserController do
         password = "abc123"
         crypted_password = Comeonin.Bcrypt.hashpwsalt(password)
 
-        Settings.create_user(%{
+        user_params = %{
           email: "admin@gmail.com",
           password: password,
           crypted_password: crypted_password,
           role: "Admin"
-        })
+        }
 
-        Settings.create_institution(%{
-          name: "test"
-        })
+        case Settings.create_user(user_params) do
+          {:ok, user} ->
+            Settings.create_institution(%{
+              name: "test"
+            })
+
+          {:error, %Ecto.Changeset{} = changeset} ->
+            render(conn, "new.html", changeset: changeset)
+        end
       end
     end
 
