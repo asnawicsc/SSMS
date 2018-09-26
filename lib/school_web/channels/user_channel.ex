@@ -570,13 +570,18 @@ defmodule SchoolWeb.UserChannel do
       Repo.all(
         from(
           s in School.Affairs.StandardSubject,
+          left_join: i in Subject,
+          on: i.id == s.subject_id,
+          left_join: l in Level,
+          on: l.id == s.standard_id,
           where:
-            s.standard_id == ^payload["standard_level"] and s.institution_id == ^institution_id,
+            l.institution_id == ^institution_id and i.institution_id == ^institution_id and
+              s.standard_id == ^payload["standard_level"] and s.institution_id == ^institution_id,
           select: %{
             year: s.year,
             semester_id: s.semester_id,
-            standard_id: s.standard_id,
-            subject_id: s.subject_id
+            standard_id: l.name,
+            subject_id: i.description
           }
         )
       )

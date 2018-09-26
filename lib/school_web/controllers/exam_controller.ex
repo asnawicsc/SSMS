@@ -33,14 +33,17 @@ defmodule SchoolWeb.ExamController do
     exam_name = params["exam_name"]
     level_id = params["level"]
     semester_id = params["semester"]
+    institution_id = conn.private.plug_session["institution_id"]
     year = params["year"]
     subjects = params["subject"] |> String.split(",")
+    IEx.pry()
 
     exam_master_params = %{
       name: exam_name,
       level_id: level_id,
       semester_id: semester_id,
-      year: year
+      year: year,
+      institution_id: institution_id
     }
 
     case Affairs.create_exam_master(exam_master_params) do
@@ -55,7 +58,7 @@ defmodule SchoolWeb.ExamController do
 
         conn
         |> put_flash(:info, "Exam created successfully.")
-        |> redirect(to: exam_master_path(conn, :index))
+        |> redirect(to: subject_path(conn, :standard_setting))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
@@ -344,7 +347,8 @@ defmodule SchoolWeb.ExamController do
       Repo.all(
         from(
           s in School.Affairs.ExamMark,
-          where: s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
+          where:
+            s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
           select: %{
             class_id: s.class_id,
             subject_id: s.subject_id,
@@ -831,7 +835,8 @@ defmodule SchoolWeb.ExamController do
 
   def generate_ranking(conn, params) do
     exam =
-      Repo.all(from(e in School.Affairs.ExamMaster)) |> Enum.map(fn x -> %{name: x.name} end)
+      Repo.all(from(e in School.Affairs.ExamMaster))
+      |> Enum.map(fn x -> %{name: x.name} end)
       |> Enum.uniq()
 
     level = Repo.all(from(l in School.Affairs.Level))
@@ -966,7 +971,10 @@ defmodule SchoolWeb.ExamController do
       g =
         for group <- z do
           a =
-            group |> elem(1) |> Enum.sort_by(fn x -> x.total_mark end) |> Enum.reverse()
+            group
+            |> elem(1)
+            |> Enum.sort_by(fn x -> x.total_mark end)
+            |> Enum.reverse()
             |> Enum.with_index()
 
           for item <- a do

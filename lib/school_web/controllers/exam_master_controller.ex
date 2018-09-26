@@ -3,6 +3,7 @@ defmodule SchoolWeb.ExamMasterController do
 
   alias School.Affairs
   alias School.Affairs.ExamMaster
+  require IEx
 
   def index(conn, _params) do
     exam_master = Affairs.list_exam_master()
@@ -20,6 +21,7 @@ defmodule SchoolWeb.ExamMasterController do
         conn
         |> put_flash(:info, "Exam master created successfully.")
         |> redirect(to: exam_master_path(conn, :show, exam_master))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
@@ -44,6 +46,7 @@ defmodule SchoolWeb.ExamMasterController do
         conn
         |> put_flash(:info, "Exam master updated successfully.")
         |> redirect(to: exam_master_path(conn, :show, exam_master))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", exam_master: exam_master, changeset: changeset)
     end
