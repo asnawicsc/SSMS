@@ -19,165 +19,88 @@ msgstr "你好"
 msgid "welcome"
 msgstr "欢迎来到"
 
-#: lib/school_web/templates/layout/nav.html.eex:40
-msgid "Register Student"
-msgstr "注册学生"
-
-#: lib/school_web/templates/layout/nav.html.eex:31
+#: lib/school_web/templates/layout/nav.html.eex:22
 msgid "School Profile"
 msgstr "学校质料"
 
-#: lib/school_web/templates/layout/nav.html.eex:37
+#: lib/school_web/templates/layout/nav.html.eex:28
 msgid "Semesters"
 msgstr "学期"
 
-#: lib/school_web/templates/layout/nav.html.eex:27
+#: lib/school_web/templates/layout/nav.html.eex:18
 msgid "Setup"
 msgstr "安装"
 
-#: lib/school_web/templates/layout/nav.html.eex:42
-msgid "Student History"
-msgstr "学生历史"
-
-#: lib/school_web/templates/layout/nav.html.eex:35
+#: lib/school_web/templates/layout/nav.html.eex:26
 msgid "System Configuration"
 msgstr "系统设置"
 
-#: lib/school_web/templates/layout/nav.html.eex:33
+#: lib/school_web/templates/layout/nav.html.eex:24
 msgid "User Account"
 msgstr "个人质料"
 
-#: lib/school_web/templates/layout/nav.html.eex:21
-#: lib/school_web/templates/layout/nav.html.eex:51
+#: lib/school_web/templates/layout/nav.html.eex:61
 msgid "Attendance"
 msgstr "出席记录"
 
-#: lib/school_web/templates/layout/nav.html.eex:91
+#: lib/school_web/templates/layout/nav.html.eex:90
 msgid "Book List by Categories"
 msgstr "书籍"
-
-#: lib/school_web/templates/layout/nav.html.eex:77
-msgid "Class List"
-msgstr "班级"
 
 #: lib/school_web/templates/layout/nav.html.eex:11
 msgid "Classes"
 msgstr "班级"
 
-#: lib/school_web/templates/layout/nav.html.eex:60
-msgid "Co-curriculum"
-msgstr "课外活动"
-
-#: lib/school_web/templates/layout/nav.html.eex:74
-msgid "Comment List"
-msgstr "学生评语"
-
-#: lib/school_web/templates/layout/nav.html.eex:53
-msgid "Health Weight"
-msgstr "学生体重"
-
-#: lib/school_web/templates/layout/nav.html.eex:75
-msgid "Holiday List"
-msgstr "假期"
-
-#: lib/school_web/templates/layout/nav.html.eex:93
-msgid "Loan List"
-msgstr "借书记录"
-
-#: lib/school_web/templates/layout/nav.html.eex:50
+#: lib/school_web/templates/layout/nav.html.eex:63
 msgid "Mark Sheet"
 msgstr "改考卷"
 
 #: lib/school_web/templates/layout/nav.html.eex:92
-msgid "New Book"
-msgstr "新书"
-
-#: lib/school_web/templates/layout/nav.html.eex:94
 msgid "New Loans"
 msgstr "借书"
 
-#: lib/school_web/templates/layout/nav.html.eex:58
-msgid "Next Year Class"
-msgstr "明年班级"
-
-#: lib/school_web/templates/layout/nav.html.eex:47
+#: lib/school_web/templates/layout/nav.html.eex:57
 msgid "Processing"
 msgstr "操作"
 
-#: lib/school_web/templates/layout/nav.html.eex:95
-msgid "Returns"
-msgstr "还书"
-
-#: lib/school_web/templates/layout/nav.html.eex:76
-msgid "Standard List"
-msgstr "级别"
-
-#: lib/school_web/templates/layout/nav.html.eex:52
-msgid "Student Comment"
-msgstr "学生评语"
-
-#: lib/school_web/templates/layout/nav.html.eex:59
-msgid "Student Exam Result"
-msgstr "学生考试成绩"
-
-#: lib/school_web/templates/layout/nav.html.eex:54
-msgid "Student Fee"
-msgstr "学费"
-
-#: lib/school_web/templates/class/index.html.eex:20
-#: lib/school_web/templates/layout/nav.html.eex:16
+#: lib/school_web/templates/class/student_in_class.html.eex:21
 msgid "Students"
 msgstr "学生列表"
 
-#: lib/school_web/templates/layout/nav.html.eex:73
-msgid "Table List"
-msgstr "列表"
-
-#: lib/school_web/templates/layout/nav.html.eex:62
-msgid "Teacher"
-msgstr "教师列表"
-
-#: lib/school_web/templates/layout/nav.html.eex:79
-msgid "User List"
-msgstr "系统用户列表"
-
-#: lib/school_web/templates/layout/nav.html.eex:78
-msgid "Visitor List"
-msgstr "参观者列表"
-
-#: lib/school_web/templates/class/index.html.eex:22
-msgid "Delete"
-msgstr "删除"
-
-#: lib/school_web/templates/class/index.html.eex:21
-msgid "Edit"
-msgstr "更改"
-
 #: lib/school_web/templates/class/index.html.eex:8
+#: lib/school_web/templates/class/student_in_class.html.eex:8
+#: lib/school_web/templates/exam/generate_ranking.html.eex:21
+#: lib/school_web/templates/exam/new_exam.html.eex:44
+#: lib/school_web/templates/subject/index.html.eex:36
+#: lib/school_web/templates/subject/new_exam.html.eex:44
 msgid "Level"
 msgstr "级别"
 
-#: lib/school_web/templates/layout/nav.html.eex:88
+#: lib/school_web/templates/layout/nav.html.eex:87
 msgid "Library"
 msgstr "图书馆"
 
 #: lib/school_web/templates/class/index.html.eex:1
+#: lib/school_web/templates/class/student_in_class.html.eex:1
 msgid "Listing Classes"
 msgstr "班级列表"
 
-#: lib/school_web/templates/layout/nav.html.eex:102
+#: lib/school_web/templates/layout/nav.html.eex:100
 msgid "Logout"
 msgstr "登出"
 
 #: lib/school_web/templates/class/index.html.eex:6
+#: lib/school_web/templates/class/student_in_class.html.eex:6
+#: lib/school_web/templates/day/index.html.eex:6
 msgid "Name"
 msgstr "名字"
 
-#: lib/school_web/templates/class/index.html.eex:29
+#: lib/school_web/templates/class/student_in_class.html.eex:29
 msgid "New Class"
 msgstr "新班"
 
 #: lib/school_web/templates/class/index.html.eex:7
+#: lib/school_web/templates/class/student_in_class.html.eex:7
 msgid "Remarks"
 msgstr "记录"
 
@@ -185,22 +108,528 @@ msgstr "记录"
 msgid "Report"
 msgstr "报表"
 
-#: lib/school_web/templates/student/form.html.eex:24
+#: lib/school_web/templates/student/form.html.eex:28
 msgid "chinese_name"
 msgstr "名字"
 
-#: lib/school_web/templates/student/form.html.eex:42
+#: lib/school_web/templates/student/form.html.eex:46
 msgid "dob"
 msgstr "生日日期"
 
-#: lib/school_web/templates/student/form.html.eex:36
+#: lib/school_web/templates/student/form.html.eex:40
 msgid "ic"
 msgstr "身份证"
 
-#: lib/school_web/templates/student/form.html.eex:18
+#: lib/school_web/templates/parent/form.html.eex:16
+#: lib/school_web/templates/student/form.html.eex:22
+#: lib/school_web/templates/teacher/form.html.eex:15
 msgid "name"
 msgstr "英文名字"
 
-#: lib/school_web/templates/student/form.html.eex:30
+#: lib/school_web/templates/student/form.html.eex:34
+#: lib/school_web/templates/teacher/form.html.eex:32
 msgid "sex"
 msgstr "性别"
+
+#: lib/school_web/templates/teacher/absent_reason.html.eex:1
+msgid " Insert Absent Record"
+msgstr ""
+
+#: lib/school_web/templates/teacher/teacher_timetable.html.eex:46
+msgid " New Teacher Period"
+msgstr ""
+
+#: lib/school_web/templates/head_count/edit_head_count.html.eex:44
+msgid " Target Mark"
+msgstr ""
+
+#: lib/school_web/templates/page/books.html.eex:12
+msgid "Action"
+msgstr ""
+
+#: lib/school_web/templates/layout/nav.html.eex:74
+msgid "Attendance Report"
+msgstr ""
+
+#: lib/school_web/templates/parameter/show.html.eex:53
+msgid "Back"
+msgstr ""
+
+#: lib/school_web/templates/page/books.html.eex:2
+msgid "Books Categories"
+msgstr ""
+
+#: lib/school_web/templates/page/books.html.eex:10
+msgid "Category Name"
+msgstr ""
+
+#, fuzzy
+#: lib/school_web/templates/exam/generate_exam.html.eex:32
+msgid "Class"
+msgstr "班级"
+
+#: lib/school_web/templates/class/class_setting.html.eex:77
+#: lib/school_web/templates/project_nilam/index.html.eex:6
+msgid "Class Info"
+msgstr ""
+
+#: lib/school_web/templates/layout/nav.html.eex:34
+msgid "Class Setting"
+msgstr ""
+
+#: lib/school_web/templates/class/class_setting.html.eex:176
+#: lib/school_web/templates/class/class_setting.html.eex:254
+msgid "Class Subject"
+msgstr ""
+
+#: lib/school_web/templates/layout/nav.html.eex:51
+msgid "Co Grade"
+msgstr ""
+
+#: lib/school_web/templates/exam/exam_ranking.html.eex:48
+msgid "Darjah"
+msgstr ""
+
+#: lib/school_web/templates/exam/exam_filter.html.eex:6
+#: lib/school_web/templates/exam/exam_standard_filter.html.eex:6
+#: lib/school_web/templates/exam/filter.html.eex:6
+#: lib/school_web/templates/exam/generate_exam.html.eex:9
+#: lib/school_web/templates/exam/generate_mark_analyse.html.eex:6
+#: lib/school_web/templates/exam/generate_ranking.html.eex:9
+#: lib/school_web/templates/exam/new_exam.html.eex:7
+#: lib/school_web/templates/exam/rank_exam.html.eex:9
+#: lib/school_web/templates/subject/new_exam.html.eex:8
+msgid "Exam Name"
+msgstr ""
+
+#: lib/school_web/templates/layout/nav.html.eex:75
+msgid "Exam Result (Class)"
+msgstr ""
+
+#: lib/school_web/templates/layout/nav.html.eex:77
+msgid "Exam Result (Standard)"
+msgstr ""
+
+#: lib/school_web/templates/layout/nav.html.eex:76
+msgid "Exam Result Analysis(Class)"
+msgstr ""
+
+#: lib/school_web/templates/layout/nav.html.eex:78
+msgid "Exam Result Analysis(Standard)"
+msgstr ""
+
+#: lib/school_web/templates/exam/index.html.eex:7
+msgid "Exam master"
+msgstr ""
+
+#: lib/school_web/templates/page/books.html.eex:21
+msgid "Expand"
+msgstr ""
+
+#: lib/school_web/templates/class/index.html.eex:23
+msgid "Generate Head Count"
+msgstr ""
+
+#: lib/school_web/templates/layout/nav.html.eex:50
+msgid "Grade"
+msgstr ""
+
+#, fuzzy
+#: lib/school_web/templates/layout/nav.html.eex:47
+msgid "Height&Weight"
+msgstr "学生体重"
+
+#: lib/school_web/templates/teacher_hem_job/form.html.eex:21
+msgid "Hem Job"
+msgstr ""
+
+#: lib/school_web/templates/exam/exam_ranking.html.eex:49
+msgid "Kelas"
+msgstr ""
+
+#: lib/school_web/templates/exam/edit_mark.html.eex:44
+#: lib/school_web/templates/exam/edit_mark.html.eex:70
+#: lib/school_web/templates/exam/mark.html.eex:44
+msgid "Mark"
+msgstr ""
+
+#: lib/school_web/templates/layout/nav.html.eex:40
+msgid "Nilam Setting"
+msgstr ""
+
+#: lib/school_web/templates/exam/exam_ranking.html.eex:39
+msgid "No"
+msgstr ""
+
+#: lib/school_web/templates/day/index.html.eex:7
+msgid "Number"
+msgstr ""
+
+#: lib/school_web/templates/layout/nav.html.eex:43
+msgid "Parents Setting"
+msgstr ""
+
+#: lib/school_web/templates/page/books.html.eex:11
+msgid "Prefix"
+msgstr ""
+
+#, fuzzy
+#: lib/school_web/templates/layout/nav.html.eex:91
+#: lib/school_web/templates/page/return.html.eex:1
+msgid "Return List"
+msgstr "还书"
+
+#: lib/school_web/templates/teacher_co_curriculum_job/form.html.eex:21
+#: lib/school_web/templates/teacher_school_job/form.html.eex:21
+msgid "School Job"
+msgstr ""
+
+#: lib/school_web/templates/layout/nav.html.eex:36
+msgid "Segak Setting"
+msgstr ""
+
+#: lib/school_web/templates/exam/new_exam.html.eex:83
+#: lib/school_web/templates/subject/index.html.eex:77
+#: lib/school_web/templates/subject/new_exam.html.eex:85
+msgid "Selected Subject"
+msgstr ""
+
+#: lib/school_web/templates/exam/generate_ranking.html.eex:35
+#: lib/school_web/templates/exam/new_exam.html.eex:30
+#: lib/school_web/templates/subject/index.html.eex:24
+#: lib/school_web/templates/subject/new_exam.html.eex:32
+#: lib/school_web/templates/teacher_co_curriculum_job/form.html.eex:34
+#: lib/school_web/templates/teacher_hem_job/form.html.eex:34
+#: lib/school_web/templates/teacher_school_job/form.html.eex:34
+msgid "Semester"
+msgstr ""
+
+#, fuzzy
+#: lib/school_web/templates/layout/nav.html.eex:32
+msgid "Standard Setting"
+msgstr "级别"
+
+#, fuzzy
+#: lib/school_web/templates/exam/edit_mark.html.eex:43
+#: lib/school_web/templates/exam/edit_mark.html.eex:69
+#: lib/school_web/templates/exam/exam_ranking.html.eex:40
+#: lib/school_web/templates/exam/mark.html.eex:43
+#: lib/school_web/templates/head_count/edit_head_count.html.eex:43
+#: lib/school_web/templates/head_count/head_count_create.html.eex:42
+msgid "Student Name"
+msgstr "学费"
+
+#: lib/school_web/templates/layout/nav.html.eex:44
+msgid "Students Setting"
+msgstr ""
+
+#: lib/school_web/templates/exam/index.html.eex:6
+#: lib/school_web/templates/exam/new_exam.html.eex:64
+#: lib/school_web/templates/head_count/head_count_subject.html.eex:9
+#: lib/school_web/templates/subject/index.html.eex:57
+#: lib/school_web/templates/subject/new_exam.html.eex:65
+msgid "Subject"
+msgstr ""
+
+#: lib/school_web/templates/class/index.html.eex:24
+msgid "Subject Head Count"
+msgstr ""
+
+#: lib/school_web/templates/exam/filter.html.eex:17
+#: lib/school_web/templates/exam/generate_exam.html.eex:20
+#: lib/school_web/templates/head_count/generate_head_count.html.eex:9
+msgid "Subject Teaching"
+msgstr ""
+
+#: lib/school_web/templates/class/index.html.eex:20
+msgid "Sync Library Membership"
+msgstr ""
+
+#: lib/school_web/templates/head_count/head_count_create.html.eex:43
+msgid "Target Mark"
+msgstr ""
+
+#, fuzzy
+#: lib/school_web/templates/teacher_co_curriculum_job/form.html.eex:9
+#: lib/school_web/templates/teacher_hem_job/form.html.eex:9
+#: lib/school_web/templates/teacher_school_job/form.html.eex:9
+msgid "Teacher Name"
+msgstr "教师列表"
+
+#: lib/school_web/templates/layout/nav.html.eex:30
+msgid "Teacher Setting"
+msgstr ""
+
+#: lib/school_web/templates/exam/exam_ranking.html.eex:46
+msgid "Total Average"
+msgstr ""
+
+#: lib/school_web/templates/exam/exam_ranking.html.eex:47
+msgid "Total Grade"
+msgstr ""
+
+#: lib/school_web/templates/exam/exam_ranking.html.eex:45
+msgid "Total Mark"
+msgstr ""
+
+#: lib/school_web/templates/exam/new_exam.html.eex:13
+#: lib/school_web/templates/subject/index.html.eex:7
+#: lib/school_web/templates/subject/new_exam.html.eex:15
+msgid "Year"
+msgstr ""
+
+#: lib/school_web/templates/parent/form.html.eex:100
+#: lib/school_web/templates/teacher/form.html.eex:64
+msgid "addr1"
+msgstr ""
+
+#: lib/school_web/templates/parent/form.html.eex:106
+#: lib/school_web/templates/teacher/form.html.eex:69
+msgid "addr2"
+msgstr ""
+
+#: lib/school_web/templates/parent/form.html.eex:112
+#: lib/school_web/templates/teacher/form.html.eex:75
+msgid "addr3"
+msgstr ""
+
+#: lib/school_web/templates/teacher/form.html.eex:180
+msgid "bcenrlno"
+msgstr ""
+
+#: lib/school_web/templates/teacher/form.html.eex:58
+msgid "bdate"
+msgstr ""
+
+#: lib/school_web/templates/subject/form.html.eex:21
+msgid "cdesc"
+msgstr ""
+
+#: lib/school_web/templates/parent/form.html.eex:22
+#: lib/school_web/templates/teacher/form.html.eex:21
+msgid "cname"
+msgstr ""
+
+#: lib/school_web/templates/subject/form.html.eex:9
+#: lib/school_web/templates/teacher/form.html.eex:9
+msgid "code"
+msgstr ""
+
+#: lib/school_web/templates/parent/form.html.eex:52
+msgid "country"
+msgstr ""
+
+#: lib/school_web/templates/subject/form.html.eex:15
+msgid "description"
+msgstr ""
+
+#: lib/school_web/templates/parent/form.html.eex:124
+#: lib/school_web/templates/teacher/form.html.eex:90
+msgid "district"
+msgstr ""
+
+#: lib/school_web/templates/teacher/form.html.eex:140
+msgid "education"
+msgstr ""
+
+#: lib/school_web/templates/parent/form.html.eex:160
+msgid "epaddr1"
+msgstr ""
+
+#: lib/school_web/templates/parent/form.html.eex:166
+msgid "epaddr2"
+msgstr ""
+
+#: lib/school_web/templates/parent/form.html.eex:172
+msgid "epaddr3"
+msgstr ""
+
+#: lib/school_web/templates/parent/form.html.eex:184
+msgid "epdistrict"
+msgstr ""
+
+#: lib/school_web/templates/parent/form.html.eex:154
+msgid "epname"
+msgstr ""
+
+#: lib/school_web/templates/parent/form.html.eex:178
+msgid "epposcod"
+msgstr ""
+
+#: lib/school_web/templates/parent/form.html.eex:190
+msgid "epstate"
+msgstr ""
+
+#: lib/school_web/templates/teacher/form.html.eex:168
+msgid "gid"
+msgstr ""
+
+#: lib/school_web/templates/parent/form.html.eex:148
+msgid "hphone"
+msgstr ""
+
+#: lib/school_web/templates/parent/form.html.eex:136
+msgid "htel"
+msgstr ""
+
+#: lib/school_web/templates/parent/form.html.eex:10
+#: lib/school_web/templates/teacher/form.html.eex:27
+msgid "icno"
+msgstr ""
+
+#: lib/school_web/templates/parent/form.html.eex:94
+msgid "income"
+msgstr ""
+
+#: lib/school_web/templates/parent/form.html.eex:196
+msgid "inctaxno"
+msgstr ""
+
+#: lib/school_web/templates/teacher/form.html.eex:134
+msgid "job"
+msgstr ""
+
+#: lib/school_web/templates/parent/form.html.eex:58
+msgid "nacert"
+msgstr ""
+
+#: lib/school_web/templates/parent/form.html.eex:46
+#: lib/school_web/templates/teacher/form.html.eex:52
+msgid "nation"
+msgstr ""
+
+#: lib/school_web/templates/parent/form.html.eex:88
+msgid "occup"
+msgstr ""
+
+#: lib/school_web/templates/parent/form.html.eex:76
+msgid "oldic"
+msgstr ""
+
+#: lib/school_web/templates/parent/form.html.eex:142
+msgid "otel"
+msgstr ""
+
+#: lib/school_web/templates/parent/form.html.eex:118
+#: lib/school_web/templates/teacher/form.html.eex:84
+msgid "poscod"
+msgstr ""
+
+#: lib/school_web/templates/teacher/form.html.eex:129
+msgid "postitle"
+msgstr ""
+
+#: lib/school_web/templates/parent/form.html.eex:64
+msgid "pstatus"
+msgstr ""
+
+#: lib/school_web/templates/teacher/form.html.eex:113
+msgid "qdate"
+msgstr ""
+
+#: lib/school_web/templates/teacher/form.html.eex:123
+msgid "qrem"
+msgstr ""
+
+#: lib/school_web/templates/parent/form.html.eex:34
+#: lib/school_web/templates/teacher/form.html.eex:37
+msgid "race"
+msgstr ""
+
+#: lib/school_web/templates/parent/form.html.eex:82
+msgid "refno"
+msgstr ""
+
+#: lib/school_web/templates/teacher/form.html.eex:107
+msgid "regdate"
+msgstr ""
+
+#: lib/school_web/templates/parent/form.html.eex:28
+msgid "relation"
+msgstr ""
+
+#: lib/school_web/templates/parent/form.html.eex:40
+#: lib/school_web/templates/teacher/form.html.eex:46
+msgid "religion"
+msgstr ""
+
+#: lib/school_web/templates/teacher/form.html.eex:146
+msgid "remark"
+msgstr ""
+
+#: lib/school_web/templates/teacher/form.html.eex:152
+msgid "secondid"
+msgstr ""
+
+#: lib/school_web/templates/teacher/form.html.eex:174
+msgid "session"
+msgstr ""
+
+#: lib/school_web/templates/parent/form.html.eex:130
+#: lib/school_web/templates/teacher/form.html.eex:96
+msgid "state"
+msgstr ""
+
+#: lib/school_web/templates/subject/form.html.eex:27
+msgid "sysdef"
+msgstr ""
+
+#: lib/school_web/templates/parent/form.html.eex:70
+msgid "tanggn"
+msgstr ""
+
+#: lib/school_web/templates/teacher/form.html.eex:224
+msgid "tccjob1"
+msgstr ""
+
+#: lib/school_web/templates/teacher/form.html.eex:229
+msgid "tccjob2"
+msgstr ""
+
+#: lib/school_web/templates/teacher/form.html.eex:238
+msgid "tccjob3"
+msgstr ""
+
+#: lib/school_web/templates/teacher/form.html.eex:244
+msgid "tccjob4"
+msgstr ""
+
+#: lib/school_web/templates/teacher/form.html.eex:250
+msgid "tccjob5"
+msgstr ""
+
+#: lib/school_web/templates/teacher/form.html.eex:256
+msgid "tccjob6"
+msgstr ""
+
+#: lib/school_web/templates/teacher/form.html.eex:163
+msgid "tchtype"
+msgstr ""
+
+#: lib/school_web/templates/teacher/form.html.eex:101
+msgid "tel"
+msgstr ""
+
+#: lib/school_web/templates/teacher/form.html.eex:186
+msgid "tscjob1"
+msgstr ""
+
+#: lib/school_web/templates/teacher/form.html.eex:192
+msgid "tscjob2"
+msgstr ""
+
+#: lib/school_web/templates/teacher/form.html.eex:200
+msgid "tscjob3"
+msgstr ""
+
+#: lib/school_web/templates/teacher/form.html.eex:206
+msgid "tscjob4"
+msgstr ""
+
+#: lib/school_web/templates/teacher/form.html.eex:212
+msgid "tscjob5"
+msgstr ""
+
+#: lib/school_web/templates/teacher/form.html.eex:218
+msgid "tscjob6"
+msgstr ""
