@@ -1,6 +1,6 @@
 defmodule SchoolWeb.SubjectTeachClassController do
   use SchoolWeb, :controller
-require IEx
+  require IEx
   alias School.Affairs
   alias School.Affairs.SubjectTeachClass
 
@@ -14,70 +14,66 @@ require IEx
     render(conn, "new.html", changeset: changeset)
   end
 
-    def create_class_subject_teach(conn,params) do
-  class_id=params["class_id"]|>String.to_integer
-   standard_id=params["standard_id"]|>String.to_integer
+  def create_class_subject_teach(conn, params) do
+    class_id = params["class_id"] |> String.to_integer()
+    standard_id = params["standard_id"] |> String.to_integer()
 
-  subject=params["subject"]
-   teacher=params["teacher"]
+    subject = params["subject"]
+    teacher = params["teacher"]
 
+    for item <- subject do
+      id = item |> elem(0)
+      subject_id = item |> elem(1) |> String.to_integer()
 
-for item <- subject do
+      teacher = Enum.filter(teacher, fn x -> x |> elem(0) == id end) |> hd
 
-  id=item|>elem(0)
-  subject_id=item|>elem(1)|>String.to_integer
+      teacher_id = teacher |> elem(1) |> String.to_integer()
 
-  teacher=Enum.filter(teacher,fn x -> (x|>elem(0))==id end)|>hd
+      subject_teach_class_params = %{
+        subject_id: subject_id,
+        teacher_id: teacher_id,
+        class_id: class_id,
+        standard_id: standard_id
+      }
 
-  teacher_id=teacher|>elem(1)|>String.to_integer
+      Affairs.create_subject_teach_class(subject_teach_class_params)
+    end
 
-   subject_teach_class_params=%{subject_id: subject_id,teacher_id: teacher_id,class_id: class_id,standard_id: standard_id} 
-
-   Affairs.create_subject_teach_class(subject_teach_class_params)
-  
-end
-
-conn
-        |> put_flash(:info, "Subject Teachers Successfully Created.")
-        |> redirect(to: class_path(conn, :class_setting))
-
-
-
+    conn
+    |> put_flash(:info, "Subject Teachers Successfully Created.")
+    |> redirect(to: class_path(conn, :class_setting))
   end
 
-      def edit_class_subject_teach(conn,params) do
+  def edit_class_subject_teach(conn, params) do
+    class_id = params["class_id"] |> String.to_integer()
+    standard_id = params["standard_id"] |> String.to_integer()
 
-  
-  class_id=params["class_id"]|>String.to_integer
-   standard_id=params["standard_id"]|>String.to_integer
+    subject = params["subject"]
+    teacher = params["teacher"]
 
-  subject=params["subject"]
-   teacher=params["teacher"]
+    for item <- subject do
+      id = item |> elem(0)
+      subject_id = item |> elem(1) |> String.to_integer()
 
-for item <- subject do
+      teacher = Enum.filter(teacher, fn x -> x |> elem(0) == id end) |> hd
 
-  id=item|>elem(0)
-  subject_id=item|>elem(1)|>String.to_integer
+      teacher_id = teacher |> elem(1) |> String.to_integer()
 
-  teacher=Enum.filter(teacher,fn x -> (x|>elem(0))==id end)|>hd
+      subject_teach_class_params = %{
+        subject_id: subject_id,
+        teacher_id: teacher_id,
+        class_id: class_id,
+        standard_id: standard_id
+      }
 
-  teacher_id=teacher|>elem(1)|>String.to_integer
+      subject_teach_class = Affairs.get_subject_teach_class!(id)
 
-   subject_teach_class_params=%{subject_id: subject_id,teacher_id: teacher_id,class_id: class_id,standard_id: standard_id} 
+      Affairs.update_subject_teach_class(subject_teach_class, subject_teach_class_params)
+    end
 
-  subject_teach_class = Affairs.get_subject_teach_class!(id)
-
-   Affairs.update_subject_teach_class(subject_teach_class, subject_teach_class_params)
-  
-end
-
-conn
-        |> put_flash(:info, "Subject Teachers Successfully Assign.")
-        |> redirect(to: class_path(conn, :class_setting))
-
-
-
-
+    conn
+    |> put_flash(:info, "Subject Teachers Successfully Assign.")
+    |> redirect(to: class_path(conn, :class_setting))
   end
 
   def create(conn, %{"subject_teach_class" => subject_teach_class_params}) do
@@ -86,6 +82,7 @@ conn
         conn
         |> put_flash(:info, "Subject teach class created successfully.")
         |> redirect(to: subject_teach_class_path(conn, :show, subject_teach_class))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
@@ -110,6 +107,7 @@ conn
         conn
         |> put_flash(:info, "Subject teach class updated successfully.")
         |> redirect(to: subject_teach_class_path(conn, :show, subject_teach_class))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", subject_teach_class: subject_teach_class, changeset: changeset)
     end

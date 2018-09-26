@@ -185,22 +185,20 @@ defmodule SchoolWeb.AttendanceController do
 
     end_date = Timex.end_of_month(start_date)
 
-    range=(start_date.day)..(end_date.day)
+    range = start_date.day..end_date.day
 
-    all=for item <- range do
-      
-      item
-    end
+    all =
+      for item <- range do
+        item
+      end
 
-    st=all|>Enum.filter(fn x -> x <= 16 end)
-    nd=all|>Enum.filter(fn x -> x >= 16 and x <= 31 end)
+    st = all |> Enum.filter(fn x -> x <= 16 end)
+    nd = all |> Enum.filter(fn x -> x >= 16 and x <= 31 end)
 
-    start_month=st|>List.first
-    half_month=st|>List.last
-    start_2half=nd|>List.first
-    end_month=nd|>List.last
-
-
+    start_month = st |> List.first()
+    half_month = st |> List.last()
+    start_2half = nd |> List.first()
+    end_month = nd |> List.last()
 
     students =
       Repo.all(
@@ -211,7 +209,13 @@ defmodule SchoolWeb.AttendanceController do
           where:
             s.class_id == ^class_id and s.semester_id == ^semester_id and
               s.institute_id == ^conn.private.plug_session["institution_id"],
-          select: %{sudent_id: s.sudent_id, name: t.name,chinese_name: t.chinese_name,sex: t.sex,id: t.id},
+          select: %{
+            sudent_id: s.sudent_id,
+            name: t.name,
+            chinese_name: t.chinese_name,
+            sex: t.sex,
+            id: t.id
+          },
           order_by: [t.name]
         )
       )
@@ -228,11 +232,7 @@ defmodule SchoolWeb.AttendanceController do
         )
       )
 
-
-
-      estimate_total=(all|>Enum.count)*(students|>Enum.count)
-
-
+    estimate_total = (all |> Enum.count()) * (students |> Enum.count())
 
     semester = Repo.get(Semester, semester_id)
 
@@ -251,21 +251,44 @@ defmodule SchoolWeb.AttendanceController do
     #   estimate_total: estimate_total
     # )
 
-
-      html =
+    html =
       Phoenix.View.render_to_string(
         SchoolWeb.AttendanceView,
         "report.html",
-         class: class,
-      students: students,
-      attendance: attendance,
-      start_date: start_date,
-      end_date: end_date,
-      start_month: Date.new(String.to_integer(params["year"]), String.to_integer(params["month"]), start_month)|> elem(1),
-      half_month: Date.new(String.to_integer(params["year"]), String.to_integer(params["month"]), half_month)|> elem(1),
-      start_2half: Date.new(String.to_integer(params["year"]), String.to_integer(params["month"]), start_2half)|> elem(1),
-      end_month: Date.new(String.to_integer(params["year"]), String.to_integer(params["month"]), end_month)|> elem(1),
-      estimate_total: estimate_total
+        class: class,
+        students: students,
+        attendance: attendance,
+        start_date: start_date,
+        end_date: end_date,
+        start_month:
+          Date.new(
+            String.to_integer(params["year"]),
+            String.to_integer(params["month"]),
+            start_month
+          )
+          |> elem(1),
+        half_month:
+          Date.new(
+            String.to_integer(params["year"]),
+            String.to_integer(params["month"]),
+            half_month
+          )
+          |> elem(1),
+        start_2half:
+          Date.new(
+            String.to_integer(params["year"]),
+            String.to_integer(params["month"]),
+            start_2half
+          )
+          |> elem(1),
+        end_month:
+          Date.new(
+            String.to_integer(params["year"]),
+            String.to_integer(params["month"]),
+            end_month
+          )
+          |> elem(1),
+        estimate_total: estimate_total
       )
 
     pdf_params = %{"html" => html}
@@ -315,10 +338,8 @@ defmodule SchoolWeb.AttendanceController do
     render(conn, "index.html", attendance: attendance, classes: classes)
   end
 
-
-  def generate_attendance_report(conn,params) do
-
-     attendance = Affairs.list_attendance()
+  def generate_attendance_report(conn, params) do
+    attendance = Affairs.list_attendance()
 
     classes =
       Repo.all(
@@ -333,13 +354,8 @@ defmodule SchoolWeb.AttendanceController do
       )
       |> Enum.group_by(fn x -> x.level end)
 
-
-
-
     render(conn, "generate_attendance_report.html", attendance: attendance, classes: classes)
-    
   end
-
 
   def new(conn, _params) do
     changeset = Affairs.change_attendance(%Attendance{})
