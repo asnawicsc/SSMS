@@ -758,6 +758,7 @@ defmodule SchoolWeb.UserChannel do
   def handle_in("class_subject", payload, socket) do
     class_id = payload["class_id"]
     class = Repo.get_by(School.Affairs.Class, %{id: class_id})
+    institution_id = payload["institution_id"]
 
     all =
       Repo.all(
@@ -767,7 +768,9 @@ defmodule SchoolWeb.UserChannel do
           on: g.id == s.subject_id,
           left_join: r in School.Affairs.Teacher,
           on: r.id == s.teacher_id,
-          where: s.class_id == ^class_id and s.standard_id == ^class.level_id,
+          where:
+            s.class_id == ^class_id and s.standard_id == ^class.level_id and
+              g.institution_id == ^institution_id and r.institution_id == ^institution_id,
           select: %{
             subject_name: g.description,
             subject_code: g.code,

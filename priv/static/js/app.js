@@ -714,8 +714,9 @@ $(".nav-link#class_subject").click(function() {
    
 
    var class_id=localStorage.getItem("class_id")
+   var institution_id = window.currentInstitute;
 
-  channel.push("class_subject", {user_id: window.currentUser,class_id: class_id})
+  channel.push("class_subject", {user_id: window.currentUser,class_id: class_id,institution_id: institution_id})
     
   })
 

@@ -36,7 +36,6 @@ defmodule SchoolWeb.ExamController do
     institution_id = conn.private.plug_session["institution_id"]
     year = params["year"]
     subjects = params["subject"] |> String.split(",")
-    IEx.pry()
 
     exam_master_params = %{
       name: exam_name,
