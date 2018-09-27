@@ -75,14 +75,15 @@ $(document).ready(function(){
 
   $("input#hw_show_class").click(function(){
     var map = $("form#semester").serializeArray();
+    var institution_id = window.currentInstitute;
+
     if (map[0].value != "certificate") {
       $("select#class_lists").append("<option value='all_class' >All Classes</option>") 
     }
     $("input#semester_id").val(map[1].value)
-    channel.push("hw_get_classes",{map: map})
+    channel.push("hw_get_classes",{map: map, institution_id: institution_id})
     channel.on("hw_show_classes", payload=>{
       $("form#classes").show()
-      
       var i;
       for (i = 0; i < payload.classes.length; i++) { 
         
