@@ -1126,8 +1126,7 @@ defmodule SchoolWeb.UserChannel do
       Repo.all(
         from(
           s in School.Affairs.ExamMark,
-          where:
-            s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
+          where: s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
           select: %{
             class_id: s.class_id,
             subject_id: s.subject_id,
@@ -1263,6 +1262,7 @@ defmodule SchoolWeb.UserChannel do
     class_id = payload["class_id"] |> String.to_integer()
     exam_id = payload["exam_id"] |> String.to_integer()
     class = Repo.get_by(School.Affairs.Class, id: class_id)
+    inst_id = payload["institution_id"] |> String.to_integer()
 
     exam_mark =
       Repo.all(
@@ -1274,7 +1274,8 @@ defmodule SchoolWeb.UserChannel do
           on: s.id == e.student_id,
           left_join: p in School.Affairs.Subject,
           on: p.id == e.subject_id,
-          where: e.class_id == ^class_id and e.exam_id == ^exam_id,
+          where:
+            e.class_id == ^class_id and e.exam_id == ^exam_id and k.institution_id == ^inst_id,
           select: %{
             subject_code: p.code,
             exam_name: k.name,
@@ -1296,7 +1297,7 @@ defmodule SchoolWeb.UserChannel do
             on: k.id == e.exam_master_id,
             left_join: p in School.Affairs.Subject,
             on: p.id == e.subject_id,
-            where: e.exam_master_id == ^exam_id,
+            where: e.exam_master_id == ^exam_id and k.institution_id == ^inst_id,
             select: %{
               subject_code: p.code,
               exam_name: k.name
@@ -1314,7 +1315,15 @@ defmodule SchoolWeb.UserChannel do
 
           all =
             for item <- student_list do
-              student = Repo.get_by(School.Affairs.Student, %{name: item})
+              student =
+                Repo.all(
+                  from(
+                    s in School.Affairs.Student,
+                    where: s.name == ^item and s.institution_id == ^inst_id
+                  )
+                )
+                |> hd()
+
               s_mark = all_mark |> Enum.filter(fn x -> x.student_name == item end)
 
               a =
@@ -1348,7 +1357,8 @@ defmodule SchoolWeb.UserChannel do
           for data <- datas do
             student_mark = data.student_mark
 
-            grades = Repo.all(from(g in School.Affairs.Grade))
+            grades =
+              Repo.all(from(g in School.Affairs.Grade, where: g.institution_id == ^inst_id))
 
             for grade <- grades do
               if student_mark >= grade.mix and student_mark <= grade.max do
@@ -1510,6 +1520,7 @@ defmodule SchoolWeb.UserChannel do
     standard = Repo.get_by(School.Affairs.Level, id: level_id)
 
     exam_id = Repo.get_by(School.Affairs.ExamMaster, %{id: exam_id, level_id: level_id})
+    inst_id = payload["institution_id"] |> String.to_integer()
 
     exam_mark =
       Repo.all(
@@ -1521,7 +1532,8 @@ defmodule SchoolWeb.UserChannel do
           on: s.id == e.student_id,
           left_join: p in School.Affairs.Subject,
           on: p.id == e.subject_id,
-          where: e.exam_id == ^exam_id.id and k.level_id == ^level_id,
+          where:
+            e.exam_id == ^exam_id.id and k.level_id == ^level_id and k.institution_id == ^inst_id,
           select: %{
             subject_code: p.code,
             exam_name: k.name,
@@ -1544,7 +1556,7 @@ defmodule SchoolWeb.UserChannel do
             on: k.id == e.exam_master_id,
             left_join: p in School.Affairs.Subject,
             on: p.id == e.subject_id,
-            where: e.exam_master_id == ^exam_id.id,
+            where: e.exam_master_id == ^exam_id.id and k.institution_id == ^inst_id,
             select: %{
               subject_code: p.code,
               exam_name: k.name
@@ -1562,7 +1574,15 @@ defmodule SchoolWeb.UserChannel do
 
           all =
             for item <- student_list do
-              student = Repo.get_by(School.Affairs.Student, %{name: item})
+              student =
+                Repo.all(
+                  from(
+                    s in School.Affairs.Student,
+                    where: s.name == ^item and s.institution_id == ^inst_id
+                  )
+                )
+                |> hd()
+
               student_class = Repo.get_by(School.Affairs.StudentClass, %{sudent_id: student.id})
               s_mark = all_mark |> Enum.filter(fn x -> x.student_name == item end)
 
@@ -1598,7 +1618,8 @@ defmodule SchoolWeb.UserChannel do
           for data <- datas do
             student_mark = data.student_mark
 
-            grades = Repo.all(from(g in School.Affairs.Grade))
+            grades =
+              Repo.all(from(g in School.Affairs.Grade, where: g.institution_id == ^inst_id))
 
             for grade <- grades do
               if student_mark >= grade.mix and student_mark <= grade.max do

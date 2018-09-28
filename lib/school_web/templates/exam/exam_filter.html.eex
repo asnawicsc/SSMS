@@ -34,7 +34,8 @@ localStorage.setItem("exam_result_id", d);
   channel.push("exam_result_record", {class_id: localStorage.getItem("exam_result_class"),
     user_id: window.currentUser,
     exam_id: localStorage.getItem("exam_result_id"),
-    csrf: localStorage.getItem("exam_class_csrf")
+    csrf: localStorage.getItem("exam_class_csrf"),
+    institution_id: window.currentInstitute
 
   })
 
