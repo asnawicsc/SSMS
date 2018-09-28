@@ -520,8 +520,8 @@ defmodule SchoolWeb.PageController do
         timeout: 50_000,
         recv_timeout: 50_000
       ).body
-      
-   template =
+
+    template =
       if response == "[]" do
         nil
       else
@@ -533,7 +533,13 @@ defmodule SchoolWeb.PageController do
 
     map_list =
       for id <- student_ids do
-        student = Repo.get_by(Student, student_no: id)
+        student =
+          Repo.get_by(
+            Student,
+            student_no: id,
+            institution_id: conn.private.plug_session["institution_id"]
+          )
+
         f_bin = template["front_bin"]
         b_bin = template["back_bin"]
 

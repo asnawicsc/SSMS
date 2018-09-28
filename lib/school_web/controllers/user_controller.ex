@@ -124,6 +124,7 @@ defmodule SchoolWeb.UserController do
 
   def index(conn, _params) do
     users = Settings.list_users()
+
     render(conn, "index.html", users: users)
   end
 

@@ -31,7 +31,9 @@ defmodule SchoolWeb.UserChannel do
           left_join: c in Class,
           on: c.id == s.class_id,
           group_by: [c.id],
-          where: s.semester_id == ^map["semester_id"],
+          where:
+            s.semester_id == ^map["semester_id"] and s.institute_id == ^payload["institution_id"] and
+              c.institution_id == ^payload["institution_id"],
           select: %{id: c.id, name: c.name}
         )
       )
