@@ -171,10 +171,12 @@ $("footer").append(maintain)
     $("footer").append(maintain)
   })
 
-    $("div.student").click(function(){
-    var student_id = $(this).attr("id")
+  $("div.student").click(function(){
 
-    channel.push("inquire_student_details", {user_id: window.currentUser,institution_id: window.currentInstitute, student_id: student_id})
+    var student_id = $(this).attr("id")
+    var institution_id = window.currentInstitute
+
+    channel.push("inquire_student_details", {user_id: window.currentUser, institution_id: window.currentUser, student_id: student_id})
      
   })
 

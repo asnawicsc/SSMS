@@ -205,9 +205,9 @@ defmodule SchoolWeb.UserChannel do
   end
 
   def handle_in("inquire_student_details", payload, socket) do
-    institution_id = payload["institution_id"]
     id = payload["student_id"]
     user = Repo.get(School.Settings.User, payload["user_id"])
+    institution_id = user.institution_id
 
     user_access =
       Repo.get_by(
@@ -218,8 +218,6 @@ defmodule SchoolWeb.UserChannel do
 
     student = Repo.get_by(School.Affairs.Student, id: id, institution_id: institution_id)
     changeset = Affairs.change_student(student)
-
-    institution_id = user.institution_id
 
     conn = %{
       private: %{
@@ -1128,7 +1126,8 @@ defmodule SchoolWeb.UserChannel do
       Repo.all(
         from(
           s in School.Affairs.ExamMark,
-          where: s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
+          where:
+            s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
           select: %{
             class_id: s.class_id,
             subject_id: s.subject_id,

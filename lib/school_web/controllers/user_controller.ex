@@ -27,23 +27,25 @@ defmodule SchoolWeb.UserController do
 
     if user != nil do
       if Comeonin.Bcrypt.checkpw(password, user.crypted_password) do
-        current_sem =
-          Repo.all(
-            from(
-              s in School.Affairs.Semester,
-              where: s.end_date > ^Timex.today() and s.start_date < ^Timex.today()
-            )
-          )
-
-        current_sem =
-          if current_sem != [] do
-            hd(current_sem)
-          else
-            %{id: 0, start_date: "Not set", end_date: "Not set"}
-          end
-
         if user.role == "Admin" do
           institution_id = Repo.get_by(Settings.Institution, name: "test")
+
+          current_sem =
+            Repo.all(
+              from(
+                s in School.Affairs.Semester,
+                where:
+                  s.end_date > ^Timex.today() and s.start_date < ^Timex.today() and
+                    s.institution_id == ^institution_id.id
+              )
+            )
+
+          current_sem =
+            if current_sem != [] do
+              hd(current_sem)
+            else
+              %{id: 0, start_date: "Not set", end_date: "Not set"}
+            end
 
           conn
           |> put_session(:user_id, user.id)
@@ -53,6 +55,23 @@ defmodule SchoolWeb.UserController do
         end
 
         access = Repo.get_by(Settings.UserAccess, user_id: user.id)
+
+        current_sem =
+          Repo.all(
+            from(
+              s in School.Affairs.Semester,
+              where:
+                s.end_date > ^Timex.today() and s.start_date < ^Timex.today() and
+                  s.institution_id == ^access.institution_id
+            )
+          )
+
+        current_sem =
+          if current_sem != [] do
+            hd(current_sem)
+          else
+            %{id: 0, start_date: "Not set", end_date: "Not set"}
+          end
 
         if access == nil do
           conn
