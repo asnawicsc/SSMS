@@ -18,13 +18,15 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                        
                              <%= for item <- @school_job do %>
+                             <tr>
                                 <td><%= item.code %></td>
                                 <td><%= item.description %></td> 
-                                <td><%= item.cdesc %></td>  
+                                <td><%= item.cdesc %></td>
+                                 </tr>  
                            <% end%>
-                        </tr>
+                       
                     </tbody>
                 </table>
             </div>
@@ -40,14 +42,16 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                       
                             <%= for item <- @co_curriculum_job do %>
+                             <tr>
                                 <td><%= item.code %></td>
                                 <td><%= item.description %></td> 
-                                <td><%= item.cdesc %></td>  
+                                <td><%= item.cdesc %></td> 
+                                 </tr>
                            <% end%>
 
-                        </tr>
+                       
                     </tbody>
                 </table>
             </div>
@@ -63,13 +67,15 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                       
                              <%= for item <- @hem_job do %>
+                              <tr>
                                 <td><%= item.code %></td>
                                 <td><%= item.description %></td> 
                                 <td><%= item.cdesc %></td>  
+                                  </tr>
                            <% end%>
-                        </tr>
+                      
                     </tbody>
                 </table>
             </div>

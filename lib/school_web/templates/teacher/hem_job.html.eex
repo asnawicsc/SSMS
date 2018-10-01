@@ -49,8 +49,8 @@
   <tbody>
 
 <%= for hem_job <- @teacher_hem_job do %>
-<% teacher = School.Affairs.get_teacher!(hem_job.teacher_id) %>
-<% hem_job_job = School.Affairs.get_school_job!(hem_job.hem_job_id) %>
+<% teacher = Repo.get_by(School.Affairs.Teacher, %{id: hem_job.teacher_id, institution_id: @conn.private.plug_session["institution_id"] }) %>
+<% hem_job_job = Repo.get_by(School.Affairs.HemJob,id: hem_job.hem_job_id,institution_id: @conn.private.plug_session["institution_id"] ) %>
 
     <tr>
       <td><%= teacher.name %></td>

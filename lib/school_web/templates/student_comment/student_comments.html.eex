@@ -30,10 +30,11 @@
   <body>
 
 <form method="post" action="/create_student_comment" class="form-horizontal">
+  <h4 align="center"> Student Comment </h4>
          <input type="hidden" name="_csrf_token" value="<%= @csrf %>">
     <input type="hidden" name="semester_id" value="<%= @semester_id %>">
      <input type="hidden" name="class_id" value="<%= @class_id %>">
-    <table>
+    <table align="center">
       <colgroup>
         <col col span="2" >
       </colgroup>
@@ -43,8 +44,8 @@
           <th style="background-color:#97DB9A;"><%= gettext "Chinese Name" %></th>
           <th style="background-color:#97DB9A;"><%= gettext "Class" %></th>
         <th style="background-color:#97DB9A;"><%= gettext "Comment 1" %></th>
-        <th style="background-color:#97DB9A;"><%= gettext "Comment 1" %></th>
-        <th style="background-color:#97DB9A;"><%= gettext "Comment 1" %></th>
+        <th style="background-color:#97DB9A;"><%= gettext "Comment 2" %></th>
+        <th style="background-color:#97DB9A;"><%= gettext "Comment 3" %></th>
       </tr>
        <%= for item <- @students do %>
 
@@ -68,13 +69,13 @@
 
           <% end %>
         </select></th>
-        <th  > <select class="select" name="comment1[<%= item.student_id %>]"  >
+        <th  > <select class="select" name="comment2[<%= item.student_id %>]"  >
 
           <%= if item.coment2 !=nil  do %>
 
           <%  comment=Affairs.get_comment!(item.coment2) %>
      
-         <option value="<%= item.coment1 %>">(<%= comment.code %>) <%= comment.c_malay %></option>
+         <option value="<%= item.coment2 %>">(<%= comment.code %>) <%= comment.c_malay %></option>
          <% else %>
               <%= for com <- @comment do %>
                <option value="" selected disabled hidden>Choose Comment</option>
@@ -84,13 +85,13 @@
           <% end %>
         </select></th>
 
-        <th  > <select class="select" name="comment1[<%= item.student_id %>]"  >
+        <th  > <select class="select" name="comment3[<%= item.student_id %>]"  >
 
           <%= if item.coment3 !=nil  do %>
 
           <%  comment=Affairs.get_comment!(item.coment3) %>
      
-         <option value="<%= item.coment1 %>">(<%= comment.code %>) <%= comment.c_malay %></option>
+         <option value="<%= item.coment3 %>">(<%= comment.code %>) <%= comment.c_malay %></option>
          <% else %>
               <%= for com <- @comment do %>
                <option value="" selected disabled hidden>Choose Comment</option>
@@ -109,7 +110,7 @@
 
   </body>
 </html> <br>
-
-    <input class="btn btn-primary" name="" value="Submit" type="submit">
+  <center>   <input class="btn btn-primary" name=""  value="Submit" type="submit"></center>
+ 
 </form>
 

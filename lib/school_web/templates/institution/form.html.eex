@@ -102,7 +102,7 @@
     <center>
       <label>School Logo</label><br>
       <img id="preview1" alt="Click here to change school logo" style='width:auto; height: 200px;' src='data:image/png;base64, <%= @bin%>'>
-       <%= file_input f, :image1, accept: ".png, .jpg, .jpeg", id: "imgInp1", style: "display: none;"%>
+       <%= file_input f, :image1, accept: ".png, .jpg, .jpeg" ,required: true ,id: "imgInp1", style: "display: none;"%>
     </center>
   </div>
 

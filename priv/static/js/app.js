@@ -174,10 +174,11 @@ $("footer").append(maintain)
     $("div.student").click(function(){
     var student_id = $(this).attr("id")
 
-    channel.push("inquire_student_details", {user_id: window.currentUser,institution_id: window.currentInstitute, student_id: student_id})
+
+
+    channel.push("inquire_student_details", {user_id: window.currentUser ,student_id: student_id,inst_id: window.currentInstitute })
      
   })
-
 
 
   channel.on("show_student_details", payload => {
@@ -396,7 +397,7 @@ $(".nav-link#standard_subject").click(function() {
 
    var standard_level=localStorage.getItem("standard_level")
 
-  channel.push("standard_subject", {user_id: window.currentUser,institution_id: window.currentInstitute,standard_level: standard_level})
+  channel.push("standard_subject", {user_id: window.currentUser,standard_level: standard_level,ins_id: window.currentInstitute})
     
   })
 
@@ -485,6 +486,70 @@ var standard_level=payload.standard_level
         });
   })
 
+channel.on("show_standard_grade", payload => {
+    var data = payload.grade
+
+    console.log(data)
+
+        $("table#standard_grade").DataTable({
+            
+            destroy: true,
+            data: data,
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
+            columns: [ {
+                    data: 'name'
+                },
+                {
+                    data: 'max'
+                },
+                {
+                    data: 'min'
+                },
+                {
+                    data: 'gpa'
+                },
+                {
+                    data: 'standard_id'
+                }
+               
+            ]
+        });
+  })
+
+
+channel.on("show_grade_co", payload => {
+    var data = payload.grade
+
+    console.log(data)
+
+        $("table#co_grade").DataTable({
+            
+            destroy: true,
+            data: data,
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
+            columns: [ {
+                    data: 'name'
+                },
+                {
+                    data: 'max'
+                },
+                {
+                    data: 'min'
+                },
+                {
+                    data: 'gpa'
+                }
+            ]
+        });
+  })
+
+
 $(".nav-link#test").click(function() {
 
      $("div#standard_subject").hide();
@@ -519,7 +584,7 @@ $(".nav-link#result_grade").click(function() {
 
    var standard_level=localStorage.getItem("standard_level")
 
-  channel.push("result_grade", {user_id: window.currentUser,standard_level: standard_level})
+  channel.push("result_grade", {user_id: window.currentUser,inst_id: window.currentInstitute,standard_level: standard_level})
     
   })
 
@@ -592,10 +657,9 @@ $(".nav-link#grade_co").click(function() {
   $("div#grade_co").show();
     $("div#standard_period").hide();
 
-
    var standard_level=localStorage.getItem("standard_level")
 
-  channel.push("grade_co", {user_id: window.currentUser,standard_level: standard_level})
+  channel.push("grade_co", {user_id: window.currentUser,inst_id: window.currentInstitute,standard_level: standard_level})
     
   })
 
@@ -879,7 +943,7 @@ $(".nav-link#class_student").click(function() {
 
    var class_id=localStorage.getItem("class_id")
 
-  channel.push("class_student", {semester_id: window.currentSemester, inst_id: window.currentInstitute,user_id: window.currentUser,class_id: class_id})
+  channel.push("class_student", {semester_id: window.currentSemester,user_id: window.currentUser,class_id: class_id,inst_id: window.currentInstitute})
     
   })
 
@@ -970,6 +1034,31 @@ alert(period_id)
         channel2.push("edit_period", {period_id: period_id})
      
   });
+
+
+
+
+     $(document).on('click', 'button[name="view_co_student"]', function () {
+   var co_id = this.id
+
+
+        channel.push("view_co_student", {co_id: co_id, inst_id: window.currentInstitute})
+     
+  });
+
+
+      channel.on("show_class_edit_period", payload => {
+
+    $("#drf").html(payload.html);
+
+  })
+  
+
+        channel.on("show_co_student", payload => {
+
+    $("#hyg").html(payload.html);
+
+  })
   
 
 

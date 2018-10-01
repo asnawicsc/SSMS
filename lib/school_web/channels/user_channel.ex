@@ -205,9 +205,11 @@ defmodule SchoolWeb.UserChannel do
   end
 
   def handle_in("inquire_student_details", payload, socket) do
-    institution_id = payload["institution_id"]
+
+    institution_id = payload["inst_id"]
     id = payload["student_id"]
     user = Repo.get(School.Settings.User, payload["user_id"])
+
 
     user_access =
       Repo.get_by(
@@ -566,7 +568,7 @@ defmodule SchoolWeb.UserChannel do
   def handle_in("standard_subject", payload, socket) do
     standard_level = payload["standard_level"]
 
-    institution_id = payload["institution_id"]
+    institution_id = payload["ins_id"]
 
     standard_subject =
       Repo.all(
@@ -595,6 +597,7 @@ defmodule SchoolWeb.UserChannel do
 
     {:noreply, socket}
   end
+
 
   def handle_in("subject_test", payload, socket) do
     standard_level = payload["standard_level"]
@@ -640,6 +643,94 @@ defmodule SchoolWeb.UserChannel do
     broadcast(socket, "show_subject_test", %{
       standard_level: standard_level,
       subject_test: subject_test
+    })
+
+    {:noreply, socket}
+  end
+
+    def handle_in("result_grade", payload, socket) do
+    standard_level = payload["standard_level"]
+
+    institution_id = payload["inst_id"]
+
+    grade =
+      Repo.all(
+        from(
+          s in School.Affairs.Grade,
+          where: s.standard_id == ^payload["standard_level"] and s.institution_id == ^institution_id,
+          select: %{
+            name: s.name,
+            max: s.max,
+            min: s.mix,
+            gpa: s.gpa,
+            standard_id: s.standard_id
+          }
+        )
+      )
+
+    # subject_test =
+    #   Repo.all(
+    #     from(
+    #       s in School.Affairs.ExamMaster,
+    #       left_join: p in School.Affairs.Exam,
+    #       on: p.exam_master_id == s.id,
+    #       where: s.level_id == ^payload["standard_level"],
+    #       select: %{
+    #         year: s.year,
+    #         semester_id: s.semester_id,
+    #         standard_id: s.level_id,
+    #         subject_id: p.subject_id,
+    #         name: s.name
+    #       }
+    #     )
+    #   )
+
+    broadcast(socket, "show_standard_grade", %{
+      grade: grade
+    })
+
+    {:noreply, socket}
+  end
+
+
+    def handle_in("grade_co", payload, socket) do
+
+
+    institution_id = payload["inst_id"]
+
+    grade =
+      Repo.all(
+        from(
+          s in School.Affairs.CoGrade,
+          where:  s.institution_id == ^institution_id,
+          select: %{
+            name: s.name,
+            max: s.max,
+            min: s.min,
+            gpa: s.gpa
+          }
+        )
+      )
+
+    # subject_test =
+    #   Repo.all(
+    #     from(
+    #       s in School.Affairs.ExamMaster,
+    #       left_join: p in School.Affairs.Exam,
+    #       on: p.exam_master_id == s.id,
+    #       where: s.level_id == ^payload["standard_level"],
+    #       select: %{
+    #         year: s.year,
+    #         semester_id: s.semester_id,
+    #         standard_id: s.level_id,
+    #         subject_id: p.subject_id,
+    #         name: s.name
+    #       }
+    #     )
+    #   )
+
+    broadcast(socket, "show_grade_co", %{
+      grade: grade
     })
 
     {:noreply, socket}
@@ -881,6 +972,7 @@ defmodule SchoolWeb.UserChannel do
   end
 
   def handle_in("class_student", payload, socket) do
+
     students =
       Repo.all(
         from(
@@ -2112,7 +2204,7 @@ defmodule SchoolWeb.UserChannel do
     co_year = payload["co_year"]
     co_level = payload["co_level"]
     co_semester = payload["co_semester"]
-
+    institution_id = payload["ins_id"]
     students =
       Repo.all(
         from(
@@ -2127,7 +2219,9 @@ defmodule SchoolWeb.UserChannel do
           on: j.class_id == c.id,
           where:
             s.cocurriculum_id == ^cocurriculum and s.year == ^co_year and
-              s.semester_id == ^co_semester and s.standard_id == ^co_level,
+              s.semester_id == ^co_semester and s.standard_id == ^co_level
+              and a.institution_id==^institution_id and 
+              c.institution_id==^institution_id and p.institution_id==^institution_id,
           select: %{
             id: p.id,
             student_id: s.student_id,
@@ -2137,6 +2231,8 @@ defmodule SchoolWeb.UserChannel do
           }
         )
       )
+
+    
 
     condition = students |> Enum.map(fn x -> x.mark end) |> Enum.filter(fn x -> x != nil end)
 
@@ -2310,6 +2406,34 @@ defmodule SchoolWeb.UserChannel do
     })
 
     {:noreply, socket}
+  end
+
+  def handle_in("view_co_student", payload, socket) do
+
+          students_co=  Repo.all(from s in School.Affairs.StudentCocurriculum, 
+              left_join: sc in School.Affairs.StudentClass, on: s.student_id==sc.sudent_id,
+             left_join: a in School.Affairs.Student, on: s.student_id==a.id, 
+             left_join: c in School.Affairs.Class, on: sc.class_id==c.id,
+             where: a.institution_id==^payload["inst_id"] and s.cocurriculum_id==^payload["co_id"],
+               select: %{id: a.id, name: a.name,class_name: c.name})
+
+
+            html =
+      if students_co != [] do
+        Phoenix.View.render_to_string(
+          SchoolWeb.CoCurriculumView,
+          "show_student_co.html",
+          students_co: students_co
+        )
+      else
+        "No Data inside..Please choose other."
+      end
+
+    broadcast(socket, "show_co_student", %{html: html})
+    {:noreply, socket}
+
+
+
   end
 
   # Add authorization logic here as required.
