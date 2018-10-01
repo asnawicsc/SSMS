@@ -9,7 +9,7 @@ defmodule SchoolWeb.ClassController do
       Repo.all(from(s in Semester))
       |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
 
-    classes = Repo.all(from(c in Class, where: c.institution_id == ^User.institution_id(conn)))
+    classes = Repo.all(from(c in Class, where: c.institution_id == ^conn.private.plug_session["institution_id"]))
     exams = Affairs.list_exam_master()
     render(conn, "mark_sheet_listing.html", semesters: semesters, classes: classes, exams: exams)
   end
@@ -19,7 +19,7 @@ defmodule SchoolWeb.ClassController do
       Repo.all(from(s in Semester))
       |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
 
-    classes = Repo.all(from(c in Class, where: c.institution_id == ^User.institution_id(conn)))
+    classes = Repo.all(from(c in Class, where: c.institution_id == ^conn.private.plug_session["institution_id"]))
 
     render(conn, "mark_analyse_by_grade.html", semesters: semesters, classes: classes)
   end
@@ -37,7 +37,7 @@ defmodule SchoolWeb.ClassController do
       Repo.all(from(s in Semester))
       |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
 
-    classes = Repo.all(from(c in Class, where: c.institution_id == ^User.institution_id(conn)))
+    classes = Repo.all(from(c in Class, where: c.institution_id == ^conn.private.plug_session["institution_id"]))
 
     render(conn, "class_analysis.html", semesters: semesters, classes: classes)
   end
@@ -160,7 +160,7 @@ defmodule SchoolWeb.ClassController do
       Repo.all(
         from(
           s in School.Affairs.Class,
-          where: s.institution_id == ^User.institution_id(conn),
+          where: s.institution_id == ^conn.private.plug_session["institution_id"],
           select: %{id: s.id, name: s.name}
         )
       )

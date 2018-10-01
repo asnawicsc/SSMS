@@ -23,6 +23,9 @@
                                   <td><%= co_curriculum.description %></td>
 
                                   <td class="text-right">
+                                     <button type="button" rel="tooltip" title="" class="btn btn-danger btn-link btn-sm" id="<%= co_curriculum.id %>" name="view_co_student" value="" data-toggle="modal" aria-label="trg" data-target="#trg" data-original-title="Edit Item"><i class="material-icons"> View Student</i>
+                                                        <div class="ripple-container"></div>
+                                                    </button>
                                     <span><%= link "Show", to: co_curriculum_path(@conn, :show, co_curriculum), class: "btn btn-default btn-xs" %></span>
                                     <span><%= link "Edit", to: co_curriculum_path(@conn, :edit, co_curriculum), class: "btn btn-default btn-xs" %></span>
                                     <span><%= link "Delete", to: co_curriculum_path(@conn, :delete, co_curriculum), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
@@ -46,6 +49,28 @@
                 </div>
 
 
+<div class="modal fade" id="trg" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document" style="width: 1000px; margin-left: 550px;">
+                                            <div class="modal-content" style="width: 1000px;">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">View Period</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body" id="hyg">
+
+
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                    <input type="hidden" name="popup" value="0">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
 
     
 
@@ -53,7 +78,7 @@
   <div class="modal-dialog" role="document" style="width: 1000px; margin-left: 550px;">
     <div class="modal-content" style="width: 1000px;">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Edit Project Nilam</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Assingn Student CoCurriculum</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>

@@ -45,12 +45,14 @@
   </thead>
   <tbody>
 <%= for co_curriculum <- @teacher_co_curriculum_job do %>
-<% teacher = School.Affairs.get_teacher!(co_curriculum.teacher_id) %>
-<% teacher_co_curriculum_job = School.Affairs.get_co_curriculum_job!(co_curriculum.co_curriculum_job_id) %>
+
+
+<% teacher = Repo.get_by(School.Affairs.Teacher, %{id: co_curriculum.teacher_id, institution_id: @conn.private.plug_session["institution_id"] }) %>
+<% teacher_co_curriculum_job = Repo.get_by(School.Affairs.CoCurriculumJob,id: co_curriculum.co_curriculum_job_id,institution_id: @conn.private.plug_session["institution_id"] ) %>
 
     <tr>
       <td><%= teacher.name %></td>
-      <td><%= teacher_co_curriculum_job.description %></td>
+      <td><%= teacher_co_curriculum_job.description %> </td>
       <td><%= co_curriculum.semester_id %></td>
 
       <td class="text-right">

@@ -1,0 +1,20 @@
+<h2>Listing Student cocurriculum</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Student</th>
+      <th>Class </th>
+  
+    </tr>
+  </thead>
+  <tbody>
+<%= for student_cos <- @students_co do %>
+    <tr>
+      <td><%= student_cos.name %></td>
+      <td><%= student_cos.class_name %></td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+

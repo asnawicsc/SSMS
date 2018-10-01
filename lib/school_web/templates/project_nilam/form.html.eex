@@ -1,3 +1,6 @@
+<% levels = School.Repo.all(from l in School.Affairs.Level,where: l.institution_id ==^@conn.private.plug_session["institution_id"], select: {l.name, l.id}) %>
+<% teacher = School.Repo.all(from l in School.Affairs.Teacher,where: l.institution_id ==^@conn.private.plug_session["institution_id"], select: {l.name, l.id}) %>
+
 <%= form_for @changeset, @action, fn f -> %>
   <%= if @changeset.action do %>
     <div class="alert alert-danger">
@@ -23,21 +26,11 @@
     <%= error_tag f, :page %>
   </div>
 
-  <div class="form-group">
-    <%= label f, :import_from_library, class: "control-label" %>
-    <%= number_input f, :import_from_library, class: "form-control" %>
-    <%= error_tag f, :import_from_library %>
-  </div>
-
-  <div class="form-group">
-    <%= label f, :count_page, class: "control-label" %>
-    <%= number_input f, :count_page, class: "form-control" %>
-    <%= error_tag f, :count_page %>
-  </div>
+ 
 
   <div class="form-group">
     <%= label f, :standard_id, class: "control-label" %>
-    <%= number_input f, :standard_id, class: "form-control" %>
+    <%= select f, :standard_id,levels, class: "form-control" %>
     <%= error_tag f, :standard_id %>
   </div>
 

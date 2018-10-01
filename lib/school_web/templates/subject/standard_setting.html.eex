@@ -117,7 +117,8 @@
 <form action="/pdf/standard_listing" method="POST">
     <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
     <select name="semester">
-      <%  semesters = Repo.all(from(s in Semester))%>
+      <%  semesters = Repo.all(from(s in Semester,where: s.institution_id==^@conn.private.plug_session["institution_id"]))%>
+
   <%= for sem <- semesters do %>
   <option><%= sem.start_date %> - <%= sem.end_date %></option>
   <% end %>
@@ -136,7 +137,11 @@
 
  $('select[name="standard_level"]').val(localStorage.getItem("standard_level"));
 
-  
+     var standard_level=localStorage.getItem("standard_level")
+
+var id=window.currentInstitute
+
+ channel.push("standard_subject", {user_id: window.currentUser, standard_level: standard_level,ins_id: id})
 
   function getval(sel)
 {

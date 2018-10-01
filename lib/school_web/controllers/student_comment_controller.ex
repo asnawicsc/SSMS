@@ -116,7 +116,7 @@ end
 
 conn
         |> put_flash(:info, "Student comment created successfully.")
-        |> redirect(to: student_comment_path(conn, :index))
+        |> redirect(to: student_comment_path(conn, :student_comments))
   end
 
   def create(conn, %{"student_comment" => student_comment_params}) do
