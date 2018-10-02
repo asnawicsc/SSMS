@@ -48,7 +48,8 @@ defmodule SchoolWeb do
         StandardSubject,
         ExamMark,
         ExamMaster,
-        Exam
+        Exam,
+        CoCurriculum
       }
     end
   end
