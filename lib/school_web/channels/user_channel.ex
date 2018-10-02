@@ -309,7 +309,7 @@ defmodule SchoolWeb.UserChannel do
 
     user = Repo.get(School.Settings.User, payload["user_id"])
 
-    parent = Repo.get_by(Parent, icno: icno)
+    parent = Repo.get_by(Parent, icno: icno, institution_id: user.institution_id)
 
     changeset = Affairs.change_parent(parent)
 

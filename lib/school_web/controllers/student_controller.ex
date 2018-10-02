@@ -50,7 +50,9 @@ defmodule SchoolWeb.StudentController do
           s in Student,
           left_join: c in StudentClass,
           on: c.sudent_id == s.id,
-          where: c.class_id == ^params["class_id"],
+          where:
+            c.class_id == ^params["class_id"] and
+              s.institution_id == ^conn.private.plug_session["institution_id"],
           order_by: [asc: s.name],
           select: %{
             id: s.id,
