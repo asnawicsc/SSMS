@@ -5,8 +5,6 @@ defmodule SchoolWeb.PdfController do
   require IEx
 
   def parent_listing(conn, params) do
-
- 
     school = Repo.get(Institution, User.institution_id(conn))
     class_id = params["class"] |> String.to_integer()
     semester = Repo.get(Semester, params["semester_id"])
@@ -130,11 +128,9 @@ defmodule SchoolWeb.PdfController do
   end
 
   def display_student_certificate(conn, params) do
-
     school = Repo.get(Institution, User.institution_id(conn))
     semester = Repo.get(Semester, params["semester_id"])
     class = Repo.get(Class, params["class_id"])
-
 
     students =
       Repo.all(
@@ -237,15 +233,16 @@ defmodule SchoolWeb.PdfController do
 
     filter_student =
       for student <- students do
-        {class,student}=if params["class_id"] != "all_class" do
-          class = Repo.get(Class, params["class_id"])
-          student = Map.put(student, :class, class.name)
-          {class,student}
-        else
-          student_class = Repo.get_by(StudentClass, sudent_id: student.id)
-          class = Repo.get(Class, student_class.class_id)
-          {class,student_class}
-        end
+        {class, student} =
+          if params["class_id"] != "all_class" do
+            class = Repo.get(Class, params["class_id"])
+            student = Map.put(student, :class, class.name)
+            {class, student}
+          else
+            student_class = Repo.get_by(StudentClass, sudent_id: student.id)
+            class = Repo.get(Class, student_class.class_id)
+            {class, student_class}
+          end
 
         height_final =
           if student.height != nil do
@@ -278,35 +275,37 @@ defmodule SchoolWeb.PdfController do
             end
           end
 
-         weight =if student.weight != nil do
-          weights = String.split(student.weight, ",")
+        weight =
+          if student.weight != nil do
+            weights = String.split(student.weight, ",")
 
-          weight_d =
-            for weight <- weights do
-              l_id =
-                String.split(weight, "-") |> List.to_tuple() |> elem(0) |> String.to_integer()
+            weight_d =
+              for weight <- weights do
+                l_id =
+                  String.split(weight, "-") |> List.to_tuple() |> elem(0) |> String.to_integer()
 
-              if l_id == class.level_id do
+                if l_id == class.level_id do
+                  weight
+                else
+                  nil
+                end
+              end
+
+            weight =
+              weight_d
+              |> Enum.reject(fn x -> x == nil end)
+              |> List.to_string()
+              |> String.split("-")
+
+            weight =
+              if Enum.count(weight) > 1 do
                 weight
+                |> List.to_tuple()
+                |> elem(1)
               else
                 nil
               end
-            end
-
-          weight =
-            weight_d
-            |> Enum.reject(fn x -> x == nil end)
-            |> List.to_string()
-            |> String.split("-")
-
-           weight =if Enum.count(weight) > 1 do
-            weight
-            |> List.to_tuple()
-            |> elem(1)
-          else
-            nil
           end
-        end
 
         student = Map.put(student, :height, height_final)
 
@@ -486,8 +485,6 @@ defmodule SchoolWeb.PdfController do
   end
 
   def standard_listing(conn, params) do
-
-
     school = Repo.get(Institution, User.institution_id(conn))
 
     semester_start = params["semester"] |> String.split(" - ") |> hd()
@@ -1715,15 +1712,17 @@ defmodule SchoolWeb.PdfController do
     |> resp(200, pdf_binary)
   end
 
-  def holiday_listing(conn,params) do
+  def holiday_listing(conn, params) do
+    ins_id = conn.private.plug_session["institution_id"]
+    semester_id = params["semester"] |> String.to_integer()
+    institution = Repo.get_by(School.Settings.Institution, id: ins_id)
 
-   ins_id=conn.private.plug_session["institution_id"]
-    semester_id=params["semester"]|>String.to_integer
-    institution=Repo.get_by(School.Settings.Institution,id: ins_id)
+    holiday =
+      Affairs.list_holiday()
+      |> Enum.filter(fn x -> x.institution_id == ins_id end)
+      |> Enum.filter(fn x -> x.semester_id == semester_id end)
 
-    holiday = Affairs.list_holiday()|>Enum.filter(fn x -> x.institution_id ==ins_id end)|>Enum.filter(fn x -> x.semester_id ==semester_id end)
-   
-      html =
+    html =
       Phoenix.View.render_to_string(
         SchoolWeb.PdfView,
         "holiday_report.html",

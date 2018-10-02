@@ -10,7 +10,15 @@ defmodule SchoolWeb.ClassController do
       |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
 
     classes = Repo.all(from(c in Class, where: c.institution_id == ^User.institution_id(conn)))
-    exams = Affairs.list_exam_master()
+
+    exams =
+      Repo.all(
+        from(
+          e in ExamMaster,
+          where: e.institution_id == ^conn.private.plug_session["institution_id"]
+        )
+      )
+
     render(conn, "mark_sheet_listing.html", semesters: semesters, classes: classes, exams: exams)
   end
 

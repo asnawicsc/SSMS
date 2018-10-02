@@ -6,30 +6,78 @@ defmodule SchoolWeb.TeacherController do
   require IEx
 
   def index(conn, _params) do
-    teacher = Affairs.list_teacher()|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
+    teacher =
+      Affairs.list_teacher()
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
     render(conn, "index.html", teacher: teacher)
   end
 
   def teacher_setting(conn, _params) do
-    teacher_school_job = Affairs.list_teacher_school_job()|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
-    teacher_co_curriculum_job = Affairs.list_teacher_co_curriculum_job()|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
-    teacher_hem_job = Affairs.list_teacher_hem_job()|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
-    teacher = Affairs.list_teacher()|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)|>Enum.filter(fn x -> x.name !="Rehat" end)
-    school_job = Affairs.list_school_job()|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
-    co_curriculum_job = Affairs.list_cocurriculum_job()|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
-    hem_job = Affairs.list_hem_job()|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
-    absent_reason = Affairs.list_absent_reason()|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
-    render(conn, "teacher_setting.html",teacher_hem_job: teacher_hem_job,teacher_co_curriculum_job: teacher_co_curriculum_job,teacher_school_job: teacher_school_job, teacher: teacher,school_job: school_job,co_curriculum_job: co_curriculum_job,hem_job: hem_job,absent_reason: absent_reason)
+    teacher_school_job =
+      Affairs.list_teacher_school_job()
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
+    teacher_co_curriculum_job =
+      Affairs.list_teacher_co_curriculum_job()
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
+    teacher_hem_job =
+      Affairs.list_teacher_hem_job()
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
+    teacher =
+      Affairs.list_teacher()
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+      |> Enum.filter(fn x -> x.name != "Rehat" end)
+
+    school_job =
+      Affairs.list_school_job()
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
+    co_curriculum_job =
+      Affairs.list_cocurriculum_job()
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
+    hem_job =
+      Affairs.list_hem_job()
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
+    absent_reason =
+      Affairs.list_absent_reason()
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
+    render(
+      conn,
+      "teacher_setting.html",
+      teacher_hem_job: teacher_hem_job,
+      teacher_co_curriculum_job: teacher_co_curriculum_job,
+      teacher_school_job: teacher_school_job,
+      teacher: teacher,
+      school_job: school_job,
+      co_curriculum_job: co_curriculum_job,
+      hem_job: hem_job,
+      absent_reason: absent_reason
+    )
   end
 
-    def teacher_timetable(conn, _params) do
+  def teacher_timetable(conn, _params) do
     teacher = Affairs.list_teacher()
 
     render(conn, "teacher_timetable.html", teacher: teacher)
   end
 
-      def teacher_listing(conn, _params) do
-    teacher = Affairs.list_teacher()|>Enum.with_index
+  def teacher_listing(conn, _params) do
+    # teacher = Affairs.list_teacher() |> Enum.with_index()
+    teacher =
+      Repo.all(
+        from(
+          t in Teacher,
+          where: t.institution_id == ^conn.private.plug_session["institution_id"]
+        )
+      )
+      |> Enum.with_index()
+
     render(conn, "teacher_listing.html", teacher: teacher)
   end
 
@@ -38,16 +86,15 @@ defmodule SchoolWeb.TeacherController do
     render(conn, "new.html", changeset: changeset)
   end
 
-
-
   def create(conn, %{"teacher" => teacher_params}) do
+    teacher_params =
+      Map.put(teacher_params, "institution_id", conn.private.plug_session["institution_id"])
 
-    teacher_params = Map.put(teacher_params, "institution_id", conn.private.plug_session["institution_id"])
     case Affairs.create_teacher(teacher_params) do
       {:ok, teacher} ->
         conn
         |> put_flash(:info, "Teacher created successfully.")
-         |> redirect(to: teacher_path(conn, :teacher_setting))
+        |> redirect(to: teacher_path(conn, :teacher_setting))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
@@ -66,7 +113,8 @@ defmodule SchoolWeb.TeacherController do
   end
 
   def update(conn, %{"id" => id, "teacher" => teacher_params}) do
-    teacher = Repo.get_by(Teacher, code: id,institution_id: conn.private.plug_session["institution_id"])
+    teacher =
+      Repo.get_by(Teacher, code: id, institution_id: conn.private.plug_session["institution_id"])
 
     case Affairs.update_teacher(teacher, teacher_params) do
       {:ok, teacher} ->
@@ -94,7 +142,7 @@ defmodule SchoolWeb.TeacherController do
 
     conn
     |> put_flash(:info, "Teacher deleted successfully.")
-     |> redirect(to: teacher_path(conn, :teacher_setting))
+    |> redirect(to: teacher_path(conn, :teacher_setting))
   end
 
   def upload_teachers(conn, params) do
@@ -141,7 +189,10 @@ defmodule SchoolWeb.TeacherController do
           teachers_params =
             Map.put(teachers_params, "bcenrlno", Integer.to_string(teachers_params["bcenrlno"]))
         end
-           teachers_params = Map.put(teachers_params, "institution_id", conn.private.plug_session["institution_id"])
+
+        teachers_params =
+          Map.put(teachers_params, "institution_id", conn.private.plug_session["institution_id"])
+
         cg = Teacher.changeset(%Teacher{}, teachers_params)
 
         case Repo.insert(cg) do
@@ -155,6 +206,6 @@ defmodule SchoolWeb.TeacherController do
 
     conn
     |> put_flash(:info, "Teachers created successfully.")
-     |> redirect(to: teacher_path(conn, :teacher_setting))
+    |> redirect(to: teacher_path(conn, :teacher_setting))
   end
 end
