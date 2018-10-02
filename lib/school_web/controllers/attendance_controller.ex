@@ -115,7 +115,8 @@ defmodule SchoolWeb.AttendanceController do
         Attendance,
         attendance_date: Date.utc_today(),
         class_id: class.id,
-        semester_id: conn.private.plug_session["semester_id"]
+        semester_id: conn.private.plug_session["semester_id"],
+        institution_id: conn.private.plug_session["institution_id"]
       )
 
     {attendance} =
@@ -148,6 +149,7 @@ defmodule SchoolWeb.AttendanceController do
           where:
             sc.institute_id == ^Affairs.inst_id(conn) and
               sc.semester_id == ^conn.private.plug_session["semester_id"] and
+              s.institution_id == ^conn.private.plug_session["institution_id"] and
               sc.class_id == ^class.id
         )
       )
