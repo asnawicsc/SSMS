@@ -13,7 +13,7 @@ defmodule School.Affairs.CoCurriculum do
   @doc false
   def changeset(co_curriculum, attrs) do
     co_curriculum
-    |> cast(attrs, [:code, :description, :institution_id])
-    |> validate_required([:code, :description])
+    |> cast(attrs, [:institution_id, :code, :description])
+    |> validate_required([:institution_id, :code, :description])
   end
 end

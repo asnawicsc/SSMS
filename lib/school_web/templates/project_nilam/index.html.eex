@@ -28,9 +28,9 @@
                                    <button type="button" rel="tooltip" title="" class="btn btn-danger btn-link btn-sm" id="" name="class_id2"  value="" data-toggle="modal" aria-label="modelb" data-target="#modelb" data-original-title="Edit Item"><i class="material-icons">Edit Project Nilam</i><div class="ripple-container"></div>                 </button>
                      </div>
                   </div>
-
+                  <br>
                             <button type="button"  class="btn btn-danger btn-link btn-sm" id="" name="class_id2" onclick="window.location.href='/project_nilam/new'" ><i class="material-icons">Create Project Nilam</i><div class="ripple-container"></div>                 </button>
-                    </button>
+                   
                 </div>
  
                 </div>

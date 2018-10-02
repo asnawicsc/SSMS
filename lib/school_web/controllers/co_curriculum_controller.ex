@@ -6,7 +6,10 @@ defmodule SchoolWeb.CoCurriculumController do
   require IEx
 
   def index(conn, _params) do
-    cocurriculum = Affairs.list_cocurriculum()
+    cocurriculum =
+      Affairs.list_cocurriculum()
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
     render(conn, "index.html", cocurriculum: cocurriculum)
   end
 
@@ -24,6 +27,10 @@ defmodule SchoolWeb.CoCurriculumController do
         )
       )
 
+    cocurriculum =
+      Affairs.list_cocurriculum()
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
     render(conn, "student_report_by_cocurriculum.html", cocurriculum: cocurriculum)
   end
 
@@ -31,6 +38,7 @@ defmodule SchoolWeb.CoCurriculumController do
     cocurriculum_id = params["cocurriculum"]
     standard_id = params["level"]
     subjects = params["student"] |> String.split(",")
+
     semester_id = params["semester"]
     year = params["year"]
 
@@ -129,10 +137,23 @@ defmodule SchoolWeb.CoCurriculumController do
   end
 
   def co_curriculum_setting(conn, _params) do
-    level = Repo.all(from(s in School.Affairs.Level, select: %{id: s.id, name: s.name}))
+    level =
+      Repo.all(
+        from(
+          s in School.Affairs.Level,
+          select: %{institution_id: s.institution_id, id: s.id, name: s.name}
+        )
+      )
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
 
     semester =
-      Repo.all(from(s in School.Affairs.Semester, select: %{id: s.id, start_date: s.start_date}))
+      Repo.all(
+        from(
+          s in School.Affairs.Semester,
+          select: %{institution_id: s.institution_id, id: s.id, start_date: s.start_date}
+        )
+      )
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
 
     students =
       Repo.all(
@@ -144,12 +165,35 @@ defmodule SchoolWeb.CoCurriculumController do
           on: s.class_id == c.id,
           left_join: m in School.Affairs.StudentCocurriculum,
           on: s.sudent_id != m.id,
+          where:
+            a.institution_id == ^conn.private.plug_session["institution_id"] and
+              c.institution_id == ^conn.private.plug_session["institution_id"],
           select: %{id: a.id, name: a.name, class_name: c.name}
         )
       )
       |> Enum.uniq()
 
-    cocurriculum = Affairs.list_cocurriculum()
+    students_co =
+      Repo.all(
+        from(
+          s in School.Affairs.StudentCocurriculum,
+          left_join: sc in School.Affairs.StudentClass,
+          on: s.student_id == sc.sudent_id,
+          left_join: a in School.Affairs.Student,
+          on: s.student_id == a.id,
+          left_join: c in School.Affairs.Class,
+          on: sc.class_id == c.id,
+          where: a.institution_id == ^conn.private.plug_session["institution_id"],
+          select: %{id: a.id, name: a.name, class_name: c.name}
+        )
+      )
+
+    students = students -- students_co
+
+    cocurriculum =
+      Affairs.list_cocurriculum()
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
     changeset = Affairs.change_co_curriculum(%CoCurriculum{})
 
     render(

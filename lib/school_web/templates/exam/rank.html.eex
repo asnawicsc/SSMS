@@ -43,7 +43,7 @@
       <h3 style="margin-left: 360px;">BIL MURID  :<%= @total_student %></h3><br>
      <h3 style="margin-left: 420px;">EXAM  :<%= @exam_name %></h3>
  </div>
-    <table id="example" align="center">
+    <table id="example" align="center" style="width: auto;">
       <colgroup>
         <col col span="2" >
       </colgroup>

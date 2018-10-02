@@ -51,8 +51,10 @@
   </thead>
   <tbody>
 <%= for school_job <- @teacher_school_job do %>
-<% teacher = School.Affairs.get_teacher!(school_job.teacher_id) %>
-<% teacher_school_job = School.Affairs.get_school_job!(school_job.school_job_id) %>
+
+
+<% teacher = Repo.get_by(School.Affairs.Teacher, %{id: school_job.teacher_id, institution_id: @conn.private.plug_session["institution_id"] }) %>
+<% teacher_school_job = Repo.get_by(School.Affairs.SchoolJob,id: school_job.school_job_id,institution_id: @conn.private.plug_session["institution_id"] ) %>
 
     <tr>
       <td><%= teacher.name %></td>
