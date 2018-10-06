@@ -241,7 +241,8 @@ defmodule SchoolWeb.PdfController do
           else
             student_class = Repo.get_by(StudentClass, sudent_id: student.id)
             class = Repo.get(Class, student_class.class_id)
-            {class, student_class}
+            student = Map.put(student, :class, class.name)
+            {class, student}
           end
 
         height_final =

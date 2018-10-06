@@ -57,6 +57,7 @@ defmodule SchoolWeb.AttendanceController do
       }) do
     class = Repo.get(Class, class_id)
     student = Repo.get(School.Affairs.Student, student_id)
+    IO.inspect(student)
 
     attendance =
       Repo.get_by(
@@ -108,13 +109,18 @@ defmodule SchoolWeb.AttendanceController do
   end
 
   def mark_attendance(conn, params) do
-    class = Repo.get(Class, params["class_id"])
+    class =
+      Repo.get_by(
+        Class,
+        id: params["class_id"],
+        institution_id: conn.private.plug_session["institution_id"]
+      )
 
     attendance =
       Repo.get_by(
         Attendance,
         attendance_date: Date.utc_today(),
-        class_id: class.id,
+        class_id: params["class_id"],
         semester_id: conn.private.plug_session["semester_id"],
         institution_id: conn.private.plug_session["institution_id"]
       )
@@ -125,7 +131,7 @@ defmodule SchoolWeb.AttendanceController do
           Attendance.changeset(%Attendance{}, %{
             institution_id: Affairs.inst_id(conn),
             attendance_date: Date.utc_today(),
-            class_id: class.id,
+            class_id: params["class_id"],
             semester_id: conn.private.plug_session["semester_id"]
           })
 
@@ -135,7 +141,7 @@ defmodule SchoolWeb.AttendanceController do
         {Repo.get_by(
            Attendance,
            attendance_date: Date.utc_today(),
-           class_id: class.id,
+           class_id: params["class_id"],
            semester_id: conn.private.plug_session["semester_id"]
          )}
       end
@@ -150,7 +156,7 @@ defmodule SchoolWeb.AttendanceController do
             sc.institute_id == ^Affairs.inst_id(conn) and
               sc.semester_id == ^conn.private.plug_session["semester_id"] and
               s.institution_id == ^conn.private.plug_session["institution_id"] and
-              sc.class_id == ^class.id
+              sc.class_id == ^params["class_id"]
         )
       )
 
