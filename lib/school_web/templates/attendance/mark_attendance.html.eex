@@ -9,33 +9,33 @@
 		<div class="card">
 			<div class="card-header">Unmark Students</div>
 			<div class="card-body">
-				<ol class="unmark">
+				<ol id="unmark_list" class="unmark">
 				<%= for student <- @students do %>
-				<li student_id="<%= student.id %>"><%= student.name %></li>
+				<li id="<%= student.id %>"><%= student.name %></li>
 				<% end %>
 			  </ol>
 			</div>
-			<div class="card-footer" >
-                    <button type="button" rel="tooltip" title="" class="btn btn-primary btn-link btn-sm show_menu_cata" data-original-title="student_att">
+			<div class="card-footer">
+                    <button type="button" rel="tooltip" title="" class="btn btn-primary btn-link btn-sm show_menu_cata" id="select_all" data-original-title="student_att">
 
                        Select All -->
                      
                     </button>
-          </div>
+          	</div>
 		</div>
 	</div>
 	<div class="col-lg-4">
 		<div class="card">
 			<div class="card-header">Selected Students</div>
 			<div class="card-body">
-				<ol  class="mark">
+				<ol  class="mark" id ="mark_list">
 				<%= for attended_student <- @attended_students do %>
-				<li student_id="<%= attended_student.id %>"><%= attended_student.name %></li>
+				<li id="<%= attended_student.id %>"><%= attended_student.name %></li>
 				<% end %>
 			  </ol>
 			</div>
-			<div class="card-footer" >
-                    <button type="button" rel="tooltip" title="" class="btn btn-primary btn-link btn-sm show_menu_cata" data-original-title="un student_att">
+			<div class="card-footer">
+                    <button type="button" rel="tooltip" title="" class="btn btn-primary btn-link btn-sm show_menu_cata" id="unselect_all" data-original-title="un student_att">
 
                        <-- Unselect All
                      
@@ -77,7 +77,8 @@
 		$("ol.unmark").on("click", "li", function(){
 
 			var li = $(this)
-			var student_id = $(this).attr("student_id")
+			console.log(li)
+			var student_id = $(this).attr("id")
 			$("tr[student_id='"+student_id+"']").hide()
 			$("ol.mark").append(li)
 			var class_id = location.pathname.split("/")[2]
@@ -96,7 +97,7 @@
 		$("ol.mark").on("click", "li", function(){
 
 			var li = $(this)
-			var student_id = $(this).attr("student_id")
+			var student_id = $(this).attr("id")
 			$("tr[student_id='"+student_id+"']").show()
 			$("ol.mark").append(li)
 			var class_id = location.pathname.split("/")[2]
@@ -113,6 +114,10 @@
 
 			$("ol.unmark").append(li)
 		})
+
+		
+
+		
 
 $("form[aria-label='absent_reasons'] select").on("change", function(){
 			var class_id = location.pathname.split("/")[2]

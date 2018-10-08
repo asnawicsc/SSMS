@@ -17,6 +17,72 @@ defmodule SchoolWeb.UserChannel do
     end
   end
 
+  def handle_in("add_to_class_attendance", payload, socket) do
+    class = Repo.get(Class, payload["class_id"])
+    student = Repo.get(School.Affairs.Student, payload["student_id"])
+
+    attendance =
+      Repo.get_by(
+        School.Affairs.Attendance,
+        attendance_date: Date.utc_today(),
+        class_id: payload["class_id"],
+        semester_id: payload["semester_id"],
+        institution_id: payload["institution_id"]
+      )
+
+    student_ids = attendance.student_id |> String.split(",")
+
+    {action, type} =
+      if Enum.any?(student_ids, fn x -> x == payload["student_id"] end) do
+        student_ids = List.delete(student_ids, payload["student_id"]) |> Enum.join(",")
+
+        Attendance.changeset(attendance, %{student_id: student_ids}) |> Repo.update!()
+
+        {"has been marked as absent.", "danger"}
+      else
+        student_ids = List.insert_at(student_ids, 0, payload["student_id"]) |> Enum.join(",")
+
+        Attendance.changeset(attendance, %{student_id: student_ids}) |> Repo.update!()
+
+        abs =
+          Repo.all(
+            from(
+              a in Absent,
+              where: a.absent_date == ^Date.utc_today() and a.student_id == ^payload["student_id"]
+            )
+          )
+
+        if abs != [] do
+          Repo.delete_all(
+            from(
+              a in Absent,
+              where: a.absent_date == ^Date.utc_today() and a.student_id == ^payload["student_id"]
+            )
+          )
+        end
+
+        {"has been marked as attended.", "success"}
+      end
+
+    if type == "success" do
+      broadcast(socket, "show_add_results_attendance", %{
+        student: student.name,
+        class: class.name,
+        action: action,
+        type: type
+      })
+    else
+      broadcast(socket, "show_abs_results_attendance", %{
+        student: student.name,
+        class: class.name,
+        action: action,
+        type: type
+      })
+    end
+
+    {:noreply, socket}
+  end
+
   def handle_in("hw_get_classes", payload, socket) do
     map =
       payload["map"]
@@ -311,11 +377,11 @@ defmodule SchoolWeb.UserChannel do
 
     user = Repo.get(School.Settings.User, payload["user_id"])
 
-    parent = Repo.get_by(Parent, icno: icno, institution_id: user.institution_id)
+    parent = Repo.get_by(Parent, icno: icno, institution_id: payload["institution_id"])
 
     changeset = Affairs.change_parent(parent)
 
-    conn = %{private: %{plug_session: %{"institution_id" => user.institution_id}}}
+    conn = %{private: %{plug_session: %{"institution_id" => payload["institution_id"]}}}
 
     html =
       Phoenix.View.render_to_string(

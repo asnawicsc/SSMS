@@ -72,6 +72,53 @@ channel
 
 $(document).ready(function(){
 
+  $("button#select_all").click(function() {
+      var li_list = $("ol#unmark_list").find("li")
+      $(li_list).each(function() {
+
+          var li = $(this);
+          var student_id = $(this).attr("id");
+          var class_id = location.pathname.split("/")[2]
+          var name = $(this).html();
+
+
+          channel.push("add_to_class_attendance",{ student_id: student_id,
+            semester_id:  window.currentSemester, institution_id: window.currentInstitute,
+            class_id: class_id, name: name})
+          $("ol.mark").append(li);
+      })
+      channel.on("show_add_results_attendance", payload=>{
+        $.notify({message: payload.student+" "+payload.action+" "+payload.class},{type: payload.type});
+      })
+
+
+    })
+
+  $("button#unselect_all").click(function() {
+
+      var li_list = $("ol#mark_list").find("li")
+      console.log(li_list)
+      $(li_list).each(function() {
+
+          var li = $(this);
+          var student_id = $(this).attr("id");
+          var class_id = location.pathname.split("/")[2]
+          var name = $(this).html();
+
+
+
+          channel.push("add_to_class_attendance",{ student_id: student_id,
+            semester_id:  window.currentSemester, institution_id: window.currentInstitute,
+            class_id: class_id, name: name})
+          $("ol.unmark").append(li);
+      })
+      channel.on("show_abs_results_attendance", payload=>{
+        $.notify({message: payload.student+" "+payload.action+" "+payload.class},{type: payload.type});
+      })
+
+
+    })
+
 
   $("input#hw_show_class").click(function(){
     var map = $("form#semester").serializeArray();
@@ -218,7 +265,7 @@ $("footer").append(maintain)
 
        $("div.parent").click(function(){
     var icno = $(this).attr("id")
-    channel.push("inquire_parent_details", {user_id: window.currentUser, icno: icno})
+    channel.push("inquire_parent_details", {user_id: window.currentUser, institution_id: window.currentInstitute, icno: icno})
   }) 
 
             channel.on("show_parent_details", payload => {

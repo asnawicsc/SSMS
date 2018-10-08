@@ -69,7 +69,9 @@
           <%= gettext "Setup" %>
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="/institutions/<%= @conn.private.plug_session[" institution_id "]%>">
+          <% a = @conn %>
+
+          <a class="dropdown-item" href="/institutions/<%= a.private.plug_session["institution_id "]%>">
             <%= gettext "School Profile" %>
           </a>
           <a class="dropdown-item" href="/user_info/<%= @conn.private.plug_session["user_id"]%>">
