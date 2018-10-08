@@ -15,7 +15,7 @@
 				<% end %>
 			  </ol>
 			</div>
-			<div class="card-footer" style="display: none;">
+			<div class="card-footer">
                     <button type="button" rel="tooltip" title="" class="btn btn-primary btn-link btn-sm show_menu_cata" id="select_all" data-original-title="student_att">
 
                        Select All -->
@@ -28,13 +28,13 @@
 		<div class="card">
 			<div class="card-header">Selected Students</div>
 			<div class="card-body">
-				<ol  class="mark">
+				<ol  class="mark" id ="mark_list">
 				<%= for attended_student <- @attended_students do %>
 				<li id="<%= attended_student.id %>"><%= attended_student.name %></li>
 				<% end %>
 			  </ol>
 			</div>
-			<div class="card-footer" style="display: none;" >
+			<div class="card-footer">
                     <button type="button" rel="tooltip" title="" class="btn btn-primary btn-link btn-sm show_menu_cata" id="unselect_all" data-original-title="un student_att">
 
                        <-- Unselect All
@@ -115,28 +115,7 @@
 			$("ol.unmark").append(li)
 		})
 
-		$("button#select_all").click(function() {
-            var li_list = $("ol#unmark_list").find("li")
-            $(li_list).each(function() {
-
-                var li = $(this);
-                var student_id = $(this).attr("id");
-                var class_id = location.pathname.split("/")[2]
-                $.ajax({
-			      url: "/add_to_class_attendance",
-			      dataType: "json",
-			      data: { student_id: student_id, 
-			      	institute_id: window.currentInstitute, 
-			      	semester_id:  window.currentSemester,
-			      	class_id: class_id	}
-			    }).done(function(j) {
-			    	$.notify({message: j.student+" "+j.action+" "+j.class},{type: j.type});
-			    })
-                $("ol.mark").append(li);
-            })
-
-
-        	})
+		
 
 		
 
