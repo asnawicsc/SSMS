@@ -251,7 +251,7 @@ defmodule SchoolWeb.PdfController do
             where:
               c.semester_id == ^semester.id and
                 s.institution_id == ^conn.private.plug_session["institution_id"] and
-                c.institution_id == ^conn.private.plug_session["institution_id"],
+                c.institute_id == ^conn.private.plug_session["institution_id"],
             order_by: [cl.name, s.name],
             select: %{
               class: cl.name,
