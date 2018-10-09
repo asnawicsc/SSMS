@@ -375,11 +375,11 @@ defmodule SchoolWeb.UserChannel do
 
     user = Repo.get(School.Settings.User, payload["user_id"])
 
-    parent = Repo.get_by(Parent, icno: icno, institution_id: user.institution_id)
+    parent = Repo.get_by(Parent, icno: icno, institution_id: payload["institution_id"])
 
     changeset = Affairs.change_parent(parent)
 
-    conn = %{private: %{plug_session: %{"institution_id" => user.institution_id}}}
+    conn = %{private: %{plug_session: %{"institution_id" => payload["institution_id"]}}}
 
     html =
       Phoenix.View.render_to_string(

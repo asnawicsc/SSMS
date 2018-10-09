@@ -264,7 +264,7 @@ $("footer").append(maintain)
 
        $("div.parent").click(function(){
     var icno = $(this).attr("id")
-    channel.push("inquire_parent_details", {user_id: window.currentUser, icno: icno})
+    channel.push("inquire_parent_details", {user_id: window.currentUser, institution_id: window.currentInstitute, icno: icno})
   }) 
 
             channel.on("show_parent_details", payload => {
