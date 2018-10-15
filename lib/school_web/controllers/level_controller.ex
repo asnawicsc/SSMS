@@ -5,7 +5,10 @@ defmodule SchoolWeb.LevelController do
   alias School.Affairs.Level
 
   def index(conn, _params) do
-    levels = Affairs.list_levels()|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
+    levels =
+      Affairs.list_levels()
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
     render(conn, "index.html", levels: levels)
   end
 
@@ -15,12 +18,15 @@ defmodule SchoolWeb.LevelController do
   end
 
   def create(conn, %{"level" => level_params}) do
-     level_params = Map.put(level_params, "institution_id", conn.private.plug_session["institution_id"])
+    level_params =
+      Map.put(level_params, "institution_id", conn.private.plug_session["institution_id"])
+
     case Affairs.create_level(level_params) do
       {:ok, level} ->
         conn
         |> put_flash(:info, "Level created successfully.")
         |> redirect(to: level_path(conn, :show, level))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
@@ -45,6 +51,7 @@ defmodule SchoolWeb.LevelController do
         conn
         |> put_flash(:info, "Level updated successfully.")
         |> redirect(to: level_path(conn, :show, level))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", level: level, changeset: changeset)
     end

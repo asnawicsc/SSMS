@@ -54,7 +54,7 @@ defmodule SchoolWeb.Router do
     post("/parent_listing", PdfController, :parent_listing)
 
     post("/display_student_certificate", PdfController, :display_student_certificate)
-       post("/holiday_listing", PdfController, :holiday_listing)
+    post("/holiday_listing", PdfController, :holiday_listing)
   end
 
   scope "/", SchoolWeb do
@@ -91,7 +91,7 @@ defmodule SchoolWeb.Router do
     get("/user_info/:id", UserController, :user_info)
     post("/authenticate", UserController, :authenticate)
     post("/create_user", UserController, :create_user)
-     get("/register_new_user", UserController, :register_new_user)
+    get("/register_new_user", UserController, :register_new_user)
     get("/logout", UserController, :logout)
     resources("/students", StudentController)
     post("/upload_students", StudentController, :upload_students)
@@ -188,6 +188,9 @@ defmodule SchoolWeb.Router do
     resources("/teacher_absent_reason", TeacherAbsentReasonController)
 
     post("/create_teacher_school_job", TeacherSchoolJobController, :create_teacher_school_job)
+    post("/contact_us_feedback", ContactUsController, :contact_us_feedback)
+    resources("/contact_us", ContactUsController)
+    get("/contact_us", PageController, :contact_us)
 
     post(
       "/create_teacher_cocurriculum_job",
@@ -246,17 +249,14 @@ defmodule SchoolWeb.Router do
     post("/create_co_mark", CoCurriculumController, :create_co_mark)
     get("/student_listing_by_class", ClassController, :student_listing_by_class)
     get("/holiday_report", HolidayController, :holiday_report)
-     resources "/holiday", HolidayController
-      resources "/comment", CommentController
-        resources "/student_comment", StudentCommentController
+    resources("/holiday", HolidayController)
+    resources("/comment", CommentController)
+    resources("/student_comment", StudentCommentController)
 
- get("/student_comments", StudentCommentController, :student_comments)
-  post("/create_student_comment", StudentCommentController, :create_student_comment)
-  resources "/user_access", UserAccessController
-  get("/user_access_pass/:id", UserAccessController, :user_access_pass)
-
-
-
+    get("/student_comments", StudentCommentController, :student_comments)
+    post("/create_student_comment", StudentCommentController, :create_student_comment)
+    resources("/user_access", UserAccessController)
+    get("/user_access_pass/:id", UserAccessController, :user_access_pass)
   end
 
   # Other scopes may use custom stacks.

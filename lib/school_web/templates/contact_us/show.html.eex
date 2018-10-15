@@ -1,0 +1,23 @@
+<h2>Show Contact us</h2>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @contact_us.name %>
+  </li>
+
+  <li>
+    <strong>Email:</strong>
+    <%= @contact_us.email %>
+  </li>
+
+  <li>
+    <strong>Message:</strong>
+    <%= @contact_us.message %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: contact_us_path(@conn, :edit, @contact_us) %></span>
+<span><%= link "Back", to: contact_us_path(@conn, :index) %></span>

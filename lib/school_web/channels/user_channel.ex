@@ -841,6 +841,33 @@ defmodule SchoolWeb.UserChannel do
     {:noreply, socket}
   end
 
+  def handle_in("std_info", payload, socket) do
+    std_id = payload["std_id"]
+    institute_id = payload["institution_id"]
+
+    standard_id = Repo.get_by(School.Affairs.Level, %{id: std_id, institution_id: institute_id})
+
+    class =
+      Repo.all(
+        from(
+          s in School.Affairs.Class,
+          where: s.institution_id == ^institute_id and s.level_id == ^standard_id.id,
+          select: %{id: s.id, name: s.name}
+        )
+      )
+
+    html =
+      Phoenix.View.render_to_string(
+        SchoolWeb.ClassView,
+        "class_select.html",
+        class: class
+      )
+
+    broadcast(socket, "show_std_info", %{html: html})
+
+    {:noreply, socket}
+  end
+
   def handle_in("class_info", payload, socket) do
     class_id = payload["class_id"]
 
@@ -1280,7 +1307,8 @@ defmodule SchoolWeb.UserChannel do
       Repo.all(
         from(
           s in School.Affairs.ExamMark,
-          where: s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
+          where:
+            s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
           select: %{
             class_id: s.class_id,
             subject_id: s.subject_id,
