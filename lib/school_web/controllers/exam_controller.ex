@@ -125,7 +125,12 @@ defmodule SchoolWeb.ExamController do
         for data <- datas do
           student_mark = data.mark
 
-          grades = Repo.all(from(g in School.Affairs.Grade))
+          grades =
+            Repo.all(
+              from(g in School.Affairs.Grade,
+                where: g.institution_id == ^conn.private.plug_session["institution_id"]
+              )
+            )
 
           for grade <- grades do
             if student_mark >= grade.mix and student_mark <= grade.max do
@@ -638,7 +643,12 @@ defmodule SchoolWeb.ExamController do
           for data <- datas do
             student_mark = data.student_mark
 
-            grades = Repo.all(from(g in School.Affairs.Grade))
+            grades =
+              Repo.all(
+                from(g in School.Affairs.Grade,
+                  where: g.institution_id == ^conn.private.plug_session["institution_id"]
+                )
+              )
 
             for grade <- grades do
               if student_mark >= grade.mix and student_mark <= grade.max do
@@ -771,7 +781,12 @@ defmodule SchoolWeb.ExamController do
 
     all_data =
       for data <- all do
-        grades = Repo.all(from(g in School.Affairs.Grade))
+        grades =
+          Repo.all(
+            from(g in School.Affairs.Grade,
+              where: g.institution_id == ^conn.private.plug_session["institution_id"]
+            )
+          )
 
         for grade <- grades do
           if data.mark >= grade.mix and data.mark <= grade.max do
@@ -899,7 +914,12 @@ defmodule SchoolWeb.ExamController do
           for data <- datas do
             student_mark = data.student_mark
 
-            grades = Repo.all(from(g in School.Affairs.Grade))
+            grades =
+              Repo.all(
+                from(g in School.Affairs.Grade,
+                  where: g.institution_id == ^conn.private.plug_session["institution_id"]
+                )
+              )
 
             for grade <- grades do
               if student_mark >= grade.mix and student_mark <= grade.max do

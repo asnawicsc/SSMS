@@ -1,0 +1,33 @@
+<span>Class : <select class="select" onchange="getval(this);" required="required" name="class_id">
+                                        <%= for a <- @class |> Enum.sort do %>
+                                        <option value="<%= a.id %>">
+                                        <%= a.name %>
+                                        </option>
+                                        <% end %>
+                                    </select></span>
+
+                                    <script type="text/javascript">
+                                    	
+                                    	
+
+    $('select[name="class_id"]').val(localStorage.getItem("class_id"));
+
+    function getval(sel) {
+        d = sel.value
+        var level = localStorage.setItem("class_id", d);
+
+
+        window.location.reload();
+
+    }
+    $("input[name='edit_class']").val(localStorage.getItem("class_id"))
+
+
+    var class_id = localStorage.getItem("class_id")
+
+
+    channel.push("class_info", {
+        user_id: window.currentUser,
+        class_id: class_id,
+    })
+                                    </script>

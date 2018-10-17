@@ -1,75 +1,127 @@
-<h2>Show Institution</h2>
+ <center>
+ <div class="col-md-8" align="left">
+              <div class="card ">
+                <div class="card-header card-header-rose card-header-icon">
+              
+                  <h4 class="card-title">Institution Information</h4>
+                </div>
+                <div class="card-body ">
+                  <form class="form-horizontal">
 
-<ul>
+                      <div class="form-group">
+    <center>
 
-  <li>
-    <strong>Name:</strong>
-    <%= @institution.name %>
-  </li>
+      <img id="preview1" alt="Click here to change school logo" style='width:auto; height: 200px;' src='data:image/png;base64, <%= @institution.logo_bin %>'>
+     
+    </center>
+  </div>
+                    <div class="row">
+                      <label class="col-md-2 col-form-label">Name</label>
+                      <div class="col-md-9">
+                        <div class="form-group has-default">
+                          <input type="text" class="form-control" disabled="" value="<%= @institution.name %>">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <label class="col-md-2 col-form-label">Address </label>
+                      <div class="col-md-9">
+                        <div class="form-group">
+                        <input type="text" class="form-control" disabled="" value="<%= @institution.line1 %>">
+                        </div>
+                      </div>
+                    </div>
+                     <div class="row">
+                      <label class="col-md-2 col-form-label">Address 2</label>
+                      <div class="col-md-9">
+                        <div class="form-group">
+                        <input type="text" class="form-control" disabled="" value="<%= @institution.line2 %>">
+                        </div>
+                      </div>
+                    </div>
+                     <div class="row">
+                      <label class="col-md-2 col-form-label">Town</label>
+                      <div class="col-md-9">
+                        <div class="form-group">
+                        <input type="text" class="form-control" disabled="" value="<%= @institution.town %>">
+                        </div>
+                      </div>
+                    </div>
+                     <div class="row">
+                      <label class="col-md-2 col-form-label">Postcode</label>
+                      <div class="col-md-9">
+                        <div class="form-group">
+                        <input type="text" class="form-control" disabled="" value="<%= @institution.postcode %>">
+                        </div>
+                      </div>
+                    </div>
+                     <div class="row">
+                      <label class="col-md-2 col-form-label">State</label>
+                      <div class="col-md-9">
+                        <div class="form-group">
+                        <input type="text" class="form-control" disabled="" value="<%= @institution.state %>">
+                        </div>
+                      </div>
+                    </div>
+                     <div class="row">
+                      <label class="col-md-2 col-form-label">Country</label>
+                      <div class="col-md-9">
+                        <div class="form-group">
+                        <input type="text" class="form-control" disabled="" value="<%= @institution.country %>">
+                        </div>
+                      </div>
+                    </div>
+                     <div class="row">
+                      <label class="col-md-2 col-form-label">Phone</label>
+                      <div class="col-md-9">
+                        <div class="form-group">
+                        <input type="text" class="form-control" disabled="" value="<%= @institution.phone %>">
+                        </div>
+                      </div>
+                    </div>
+                      <div class="row">
+                      <label class="col-md-2 col-form-label">Phone 2</label>
+                      <div class="col-md-9">
+                        <div class="form-group">
+                        <input type="text" class="form-control" disabled="" value="<%= @institution.phone2 %>">
+                        </div>
+                      </div>
+                    </div>
+                     <div class="row">
+                      <label class="col-md-2 col-form-label">Email</label>
+                      <div class="col-md-9">
+                        <div class="form-group">
+                        <input type="text" class="form-control" disabled="" value="<%= @institution.email %>">
+                        </div>
+                      </div>
+                    </div>
+                     <div class="row">
+                      <label class="col-md-2 col-form-label">Email2</label>
+                      <div class="col-md-9">
+                        <div class="form-group">
+                        <input type="text" class="form-control" disabled="" value="<%= @institution.email2 %>">
+                        </div>
+                      </div>
+                    </div>
+                    
 
-  <li>
-    <strong>Line1:</strong>
-    <%= @institution.line1 %>
-  </li>
 
-  <li>
-    <strong>Line2:</strong>
-    <%= @institution.line2 %>
-  </li>
-
-  <li>
-    <strong>Town:</strong>
-    <%= @institution.town %>
-  </li>
-
-  <li>
-    <strong>Postcode:</strong>
-    <%= @institution.postcode %>
-  </li>
-
-  <li>
-    <strong>State:</strong>
-    <%= @institution.state %>
-  </li>
-
-  <li>
-    <strong>Country:</strong>
-    <%= @institution.country %>
-  </li>
-
-  <li>
-    <strong>Phone:</strong>
-    <%= @institution.phone %>
-  </li>
-
-  <li>
-    <strong>Phone2:</strong>
-    <%= @institution.phone2 %>
-  </li>
-
-  <li>
-    <strong>Email:</strong>
-    <%= @institution.email %>
-  </li>
-
-  <li>
-    <strong>Email2:</strong>
-    <%= @institution.email2 %>
-  </li>
-
-  <li>
-    <strong>Fax:</strong>
-    <%= @institution.maintained_by %>
-  </li>
-
-
-</ul>
-
+                  
+                </div>
+                <div class="card-footer ">
+                 <div class="row">
 <%= if @param == nil do %>
 
 <span><%= link "Set System Settings", to: parameter_path(@conn, :new), class: "btn btn-primary" %></span>
 <% else %>
 <span><%= link "Set System Settings", to: parameter_path(@conn, :show, @param), class: "btn btn-info" %></span>
 <% end %>
+&nbsp;
 <span><%= link "Edit", to: institution_path(@conn, :edit, @institution.id), class: "btn btn-info" %></span>
-<span><%= link "Back", to: institution_path(@conn, :index) %></span>
+&nbsp;
+
+</div>
+                </div>
+              </div>
+            </div>
+            </center>

@@ -1,0 +1,84 @@
+  <!DOCTYPE html>
+  <html lang="">
+    <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>21st Smart School Management System</title>
+  
+      <!-- Bootstrap CSS -->
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+      <!-- Google Fonts -->
+      <link href='https://fonts.googleapis.com/css?family=Poppins:400,300,500,600,700' rel='stylesheet' type='text/css'>
+      <!-- Font Awesome -->
+      <link href='https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css' rel='stylesheet' type='text/css'>
+      <!-- Style -->
+
+       <link rel="stylesheet" type="text/css" href="/css/style.css"/>
+  
+      <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+      <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+      <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+      <![endif]-->
+    </head>
+    <body>
+
+  
+    
+
+      <!-- START SECTION -->
+      <div class="section">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12 text-center">
+              <h2 class="section-title">Contact Us</h2>
+              <p class="section-description">Feel Free To Contact us.</p>
+            </div>
+            
+            <div class="col-md-8 col-md-offset-2">
+              <form id="contact" method="post" action="/contact_us_feedback" class="form" role="form">
+                           <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+              <div class="row">
+                <div class="col-md-6 form-group">
+                  <input class="form-control" id="name" name="name" placeholder="Name" type="text" required />
+                </div>
+                <div class="col-md-6 form-group">
+                  <input class="form-control" id="email" name="email" placeholder="Email" type="email" required />
+                </div>
+              </div>
+              <textarea class="form-control" id="message" name="message" placeholder="Message" rows="5"></textarea>
+              <br />
+              <div class="row">
+                <div class="col-md-12 form-group">
+                  <button class="btn btn-primary" type="submit">Submit</button>
+                </div>
+              </div>
+            </form>
+            </div>
+          </div><!--/.row-->
+        </div><!--/.container-->
+      </div>
+      <!--/.section -->
+
+
+
+
+
+      <!-- START SECTION -->
+<%#       <div class="section hero text-center background-light">
+        <div class="background-image" style="background: url(images/hero.jpg) no-repeat fixed center center; background-size: cover; opacity: .2;"></div>
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12">
+              <h3 class="text-uppercase letter-spacing-md font-weight-lg margin-zero">Laudantium ullam consequatur repellat debitis maxime.</h3>
+            </div>
+          </div>
+        </div>
+      </div> %>
+      <!--/.section -->
+
+      <!-- START SECTION -->
+     
+  </html>

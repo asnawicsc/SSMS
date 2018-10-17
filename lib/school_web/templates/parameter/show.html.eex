@@ -1,53 +1,105 @@
-<h2>Show Parameter</h2>
 
-<ul>
 
-  <li>
-    <strong>Nationality:</strong>
-    <%= @parameter.nationality %>
-  </li>
+ <center>
+ <div class="col-md-8" align="left">
+              <div class="card ">
+                <div class="card-header card-header-rose card-header-icon">
+              
+                  <h4 class="card-title">Parameter Information</h4>
+                </div>
+                <div class="card-body ">
+                  <form class="form-horizontal">
 
-  <li>
-    <strong>Race:</strong>
-    <%= @parameter.race %>
-  </li>
 
-  <li>
-    <strong>Religion:</strong>
-    <%= @parameter.religion %>
-  </li>
+                    <div class="row">
+                      <label class="col-md-2 col-form-label">Nationality</label>
+                      <div class="col-md-9">
+                        <div class="form-group has-default">
+                          <input type="text" class="form-control" disabled="" value="  <%= @parameter.nationality %>">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <label class="col-md-2 col-form-label">Race </label>
+                      <div class="col-md-9">
+                        <div class="form-group">
+                        <input type="text" class="form-control" disabled="" value="<%= @parameter.race %>">
+                        </div>
+                      </div>
+                    </div>
+                     <div class="row">
+                      <label class="col-md-2 col-form-label">Religion</label>
+                      <div class="col-md-9">
+                        <div class="form-group">
+                        <input type="text" class="form-control" disabled="" value="<%= @parameter.religion %>">
+                        </div>
+                      </div>
+                    </div>
+                     <div class="row">
+                      <label class="col-md-2 col-form-label">Blood type</label>
+                      <div class="col-md-9">
+                        <div class="form-group">
+                        <input type="text" class="form-control" disabled="" value="<%= @parameter.blood_type %>">
+                        </div>
+                      </div>
+                    </div>
+                     <div class="row">
+                      <label class="col-md-2 col-form-label">Transport</label>
+                      <div class="col-md-9">
+                        <div class="form-group">
+                        <input type="text" class="form-control" disabled="" value="<%= @parameter.transport %>">
+                        </div>
+                      </div>
+                    </div>
+                      <div class="row">
+                      <label class="col-md-2 col-form-label">Sickness</label>
+                      <div class="col-md-9">
+                        <div class="form-group">
+                        <input type="text" class="form-control" disabled="" value="<%= @parameter.sickness %>">
+                        </div>
+                      </div>
+                    </div>
+                      <div class="row">
+                      <label class="col-md-2 col-form-label">Career</label>
+                      <div class="col-md-9">
+                        <div class="form-group">
+                        <input type="text" class="form-control" disabled="" value="<%= @parameter.career %>">
+                        </div>
+                      </div>
+                    </div>
+                      <div class="row">
+                      <label class="col-md-2 col-form-label">Oku</label>
+                      <div class="col-md-9">
+                        <div class="form-group">
+                        <input type="text" class="form-control" disabled="" value="<%= @parameter.oku %>">
+                        </div>
+                      </div>
+                    </div>
+                      <div class="row">
+                      <label class="col-md-2 col-form-label">Absent Reason</label>
+                      <div class="col-md-9">
+                        <div class="form-group">
+                        <input type="text" class="form-control" disabled="" value="<%= @parameter.absent_reasons %>">
+                        </div>
+                      </div>
+                    </div>
+                     
+                    
 
-  <li>
-    <strong>Blood type:</strong>
-    <%= @parameter.blood_type %>
-  </li>
 
-  <li>
-    <strong>Transport:</strong>
-    <%= @parameter.transport %>
-  </li>
-
-  <li>
-    <strong>Sickness:</strong>
-    <%= @parameter.sickness %>
-  </li>
-
-  <li>
-    <strong>Career:</strong>
-    <%= @parameter.career %>
-  </li>
-
-  <li>
-    <strong>Oku:</strong>
-    <%= @parameter.oku %>
-  </li>
-  <li>
-    <strong>absent_reasons:</strong>
-    <%= @parameter.absent_reasons %>
-  </li>
-
-</ul>
-
-<span><%= link "Edit", to: parameter_path(@conn, :edit, @parameter) %></span>
-<span><a class="" href="/institutions/<%= @conn.private.plug_session["institution_id"]%>">
+                  
+                </div>
+                <div class="card-footer ">
+                 <div class="row">
+                  <span><%= link "Edit", to: parameter_path(@conn, :edit, @parameter), class: "btn btn-primary" %></span>
+                   &nbsp;
+                  <span><a class="btn btn-info" href="/institutions/<%= @conn.private.plug_session["institution_id"]%>">
             <%= gettext "Back" %></a></span>
+        
+
+              </div>
+                </div>
+              </div>
+            </div>
+            </center>
+           
