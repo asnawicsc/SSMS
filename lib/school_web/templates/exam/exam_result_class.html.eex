@@ -66,7 +66,7 @@ var csrf= $("input[name='_csrf_token']").val()
 localStorage.setItem("exam_class_csrf", csrf);
 
 
- channel.push("exam_result_class", {class_id: localStorage.getItem("exam_result_class"),user_id: window.currentUser})
+ channel.push("exam_result_class", {class_id: localStorage.getItem("exam_result_class"),user_id: window.currentUser,institution_id: window.currentInstitute})
     channel.on("show_exam_result_class", payload => {
 
 

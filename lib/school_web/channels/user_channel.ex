@@ -1423,7 +1423,7 @@ defmodule SchoolWeb.UserChannel do
       Repo.all(
         from(
           e in School.Affairs.ExamMaster,
-          where: e.level_id == ^class.level_id,
+          where: e.level_id == ^class.level_id and e.institution_id == ^payload["institution_id"],
           select: %{id: e.id, exam_name: e.name}
         )
       )
@@ -1465,10 +1465,13 @@ defmodule SchoolWeb.UserChannel do
             student_name: s.name,
             student_mark: e.mark,
             chinese_name: s.chinese_name,
-            sex: s.sex
+            sex: s.sex,
+            level_id: k.level_id
           }
         )
       )
+
+    level_id = hd(exam_mark).level_id
 
     if exam_mark != [] do
       exam_standard =
@@ -1540,17 +1543,22 @@ defmodule SchoolWeb.UserChannel do
             student_mark = data.student_mark
 
             grades =
-              Repo.all(from(g in School.Affairs.Grade, where: g.institution_id == ^inst_id))
+              Repo.all(
+                from(
+                  g in School.Affairs.Grade,
+                  where: g.institution_id == ^inst_id and g.standard_id == ^level_id
+                )
+              )
 
             for grade <- grades do
-              if student_mark >= grade.mix and student_mark <= grade.max do
+              if student_mark >= grade.mix and student_mark <= grade.max and student_mark != -1 do
                 %{
                   student_id: data.student_id,
                   student_name: data.student_name,
                   grade: grade.name,
                   gpa: grade.gpa,
-                  subject_code: subject_code,
-                  student_mark: student_mark,
+                  subject_code: data.subject_code,
+                  student_mark: data.student_mark,
                   chinese_name: data.chinese_name,
                   sex: data.sex
                 }
