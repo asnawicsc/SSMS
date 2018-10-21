@@ -772,6 +772,8 @@ var standard_level=payload.standard_level
   })
 
 
+
+
 $(".nav-link#class_info").click(function() {
 
    

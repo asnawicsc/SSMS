@@ -1,33 +1,70 @@
-<h2>Show User</h2>
 
-<ul>
 
-  <li>
-    <strong>Name:</strong>
-    <%= @user.name %>
-  </li>
+ <center>
+ <div class="col-md-8" align="left">
+              <div class="card ">
+                <div class="card-header card-header-rose card-header-icon">
+              
+                  <h4 class="card-title">User Information</h4>
+                </div>
+                <div class="card-body ">
+                  <form class="form-horizontal">
 
-  <li>
-    <strong>Password:</strong>
-    <%= @user.password %>
-  </li>
 
-  <li>
-    <strong>Crypted password:</strong>
-    <%= @user.crypted_password %>
-  </li>
+                    <div class="row">
+                      <label class="col-md-2 col-form-label">Name</label>
+                      <div class="col-md-9">
+                        <div class="form-group has-default">
+                          <input type="text" class="form-control" disabled="" value=" <%= @user.name %>">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <label class="col-md-2 col-form-label">Password </label>
+                      <div class="col-md-9">
+                        <div class="form-group">
+                        <input type="text" class="form-control" disabled="" value="<%= @user.password %>">
+                        </div>
+                      </div>
+                    </div>
+                     <div class="row">
+                      <label class="col-md-2 col-form-label">Crypted password</label>
+                      <div class="col-md-9">
+                        <div class="form-group">
+                        <input type="text" class="form-control" disabled="" value="<%= @user.crypted_password %>">
+                        </div>
+                      </div>
+                    </div>
+                     <div class="row">
+                      <label class="col-md-2 col-form-label">Institution</label>
+                      <div class="col-md-9">
+                        <div class="form-group">
+                        <input type="text" class="form-control" disabled="" value="<%= @user.institution_id %>">
+                        </div>
+                      </div>
+                    </div>
+                     <div class="row">
+                      <label class="col-md-2 col-form-label">Role</label>
+                      <div class="col-md-9">
+                        <div class="form-group">
+                        <input type="text" class="form-control" disabled="" value="<%= @user.role %>">
+                        </div>
+                      </div>
+                    </div>
+                     
+                    
 
-  <li>
-    <strong>Institution:</strong>
-    <%= @user.institution_id %>
-  </li>
 
-  <li>
-    <strong>Role:</strong>
-    <%= @user.role %>
-  </li>
+                  
+                </div>
+                <div class="card-footer ">
+                 <div class="row">
+                  <span><%= link "Edit", to: user_path(@conn, :edit, @user), class: "btn btn-primary" %></span>
+                  &nbsp;
+                <span><%= link "Back", to: user_path(@conn, :index), class: "btn btn-info" %></span>
 
-</ul>
-
-<span><%= link "Edit", to: user_path(@conn, :edit, @user) %></span>
-<span><%= link "Back", to: user_path(@conn, :index) %></span>
+              </div>
+                </div>
+              </div>
+            </div>
+            </center>

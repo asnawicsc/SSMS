@@ -27,5 +27,3 @@ Semester:
 </select>
 <input type="submit" name="" value="Generate!">
 </form>
-
-

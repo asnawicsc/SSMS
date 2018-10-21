@@ -170,6 +170,10 @@ defmodule SchoolWeb.ClassController do
   def class_setting(conn, params) do
     changeset = Affairs.change_class(%Class{})
 
+    levels =
+      Affairs.list_levels()
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
     class =
       Repo.all(
         from(
@@ -183,6 +187,7 @@ defmodule SchoolWeb.ClassController do
       conn,
       "class_setting.html",
       class: class,
+      levels: levels,
       changeset: changeset
     )
   end

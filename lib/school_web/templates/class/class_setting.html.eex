@@ -11,19 +11,29 @@
                     <div class="card ">
 
                         <div class="card-header ">
-
+                     
+                               
                             <div class="row">
-                                <h4 class="card-title">Class Setting
+                                   <h4 class="card-title">Class Setting
                                 </h4>
-
-
-                                <span> <select class="select" onchange="getval(this);" required="required" name="class_id">
-                                        <%= for a <- @class |> Enum.sort do %>
+                                  &nbsp;
+                                      &nbsp;
+                                       &nbsp;
+                                <span>Standard : <select class="select" onchange="getvalstd(this);" required="required" name="std_id">
+                                        <%= for a <- @levels |> Enum.sort do %>
                                         <option value="<%= a.id %>">
-                                            <%= a.name %>
+                                        <%= a.name %>
                                         </option>
                                         <% end %>
                                     </select></span>
+                                     &nbsp;
+                                      &nbsp;
+                                       &nbsp;
+
+                                      <div id="stc">
+                                      </div>
+
+
                                 <button type="button" rel="tooltip" title="" class="btn btn-danger btn-link btn-sm" id="" name="" value="" data-toggle="modal" aria-label="modelj" data-target="#modelj" data-original-title="Edit Item" align="right" style=" position: absolute; right: 10px;"><i class="material-icons">Create Class</i>
                                     <div class="ripple-container"></div>
                                 </button>
@@ -420,26 +430,32 @@
 
 
 <script type="text/javascript">
-    $('select[name="class_id"]').val(localStorage.getItem("class_id"));
+  $('select[name="class_id"]').val(localStorage.getItem("std_id"));
 
-    function getval(sel) {
+   function getvalstd(sel) {
         d = sel.value
-        var level = localStorage.setItem("class_id", d);
+        var level = localStorage.setItem("std_id", d);
 
 
         window.location.reload();
 
     }
-    $("input[name='edit_class']").val(localStorage.getItem("class_id"))
+
+     var std_id = localStorage.getItem("std_id")
 
 
-    var class_id = localStorage.getItem("class_id")
-
-
-    channel.push("class_info", {
+    channel.push("std_info", {
         user_id: window.currentUser,
-        class_id: class_id,
+        institution_id: window.currentInstitute,
+        std_id: std_id,
     })
+    
+
+
+ channel.on("show_std_info", payload => {
+
+ $("#stc").html(payload.html);
+ })
 
     channel.on("show_student_class_info", payload => {
 
