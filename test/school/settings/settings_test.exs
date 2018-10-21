@@ -648,4 +648,64 @@ defmodule School.SettingsTest do
       assert %Ecto.Changeset{} = Settings.change_user_access(user_access)
     end
   end
+
+  describe "role" do
+    alias School.Settings.Role
+
+    @valid_attrs %{name: "some name"}
+    @update_attrs %{name: "some updated name"}
+    @invalid_attrs %{name: nil}
+
+    def role_fixture(attrs \\ %{}) do
+      {:ok, role} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Settings.create_role()
+
+      role
+    end
+
+    test "list_role/0 returns all role" do
+      role = role_fixture()
+      assert Settings.list_role() == [role]
+    end
+
+    test "get_role!/1 returns the role with given id" do
+      role = role_fixture()
+      assert Settings.get_role!(role.id) == role
+    end
+
+    test "create_role/1 with valid data creates a role" do
+      assert {:ok, %Role{} = role} = Settings.create_role(@valid_attrs)
+      assert role.name == "some name"
+    end
+
+    test "create_role/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Settings.create_role(@invalid_attrs)
+    end
+
+    test "update_role/2 with valid data updates the role" do
+      role = role_fixture()
+      assert {:ok, role} = Settings.update_role(role, @update_attrs)
+      assert %Role{} = role
+      assert role.name == "some updated name"
+    end
+
+    test "update_role/2 with invalid data returns error changeset" do
+      role = role_fixture()
+      assert {:error, %Ecto.Changeset{}} = Settings.update_role(role, @invalid_attrs)
+      assert role == Settings.get_role!(role.id)
+    end
+
+    test "delete_role/1 deletes the role" do
+      role = role_fixture()
+      assert {:ok, %Role{}} = Settings.delete_role(role)
+      assert_raise Ecto.NoResultsError, fn -> Settings.get_role!(role.id) end
+    end
+
+    test "change_role/1 returns a role changeset" do
+      role = role_fixture()
+      assert %Ecto.Changeset{} = Settings.change_role(role)
+    end
+  end
 end

@@ -1,208 +1,237 @@
-<h2>Show Teacher</h2>
 
-<ul>
+ <div class="col-md-12" >
+              <div class="card ">
+                <div class="card-header card-header-rose card-header-icon">
+              
+                  <h4 class="card-title">Teacher Information</h4>
+                </div>
+                <div class="card-body ">
+                  <form class="form-horizontal">
 
-  <li>
-    <strong>Code:</strong>
-    <%= @teacher.code %>
-  </li>
+                    <div class="row">
+                      <label class="col-md-1 col-form-label">Code</label>
+                      <div class="col-md-3">
+                        <div class="form-group has-default">
+                          <input type="text" class="form-control" disabled="" value="<%= @teacher.code %>">
+                        </div>
+                      </div>
+                           <label class="col-md-1 col-form-label">Name :</label>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                        <input type="text" class="form-control" disabled="" value="<%= @teacher.name %>">
+                        </div>
+                      </div>
+                       <label class="col-md-1 col-form-label">C Name :</label>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                        <input type="text" class="form-control" disabled="" value="<%= @teacher.cname %>">
+                        </div>
+                      </div>
+                    </div>
+ 
+    
+                     <div class="row">
+                      <label class="col-md-1 col-form-label">Ic No :</label>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                        <input type="text" class="form-control" disabled="" value="<%= @teacher.icno %>">
+                        </div>
+                      </div>
+                    
+                      <label class="col-md-1 col-form-label">Sex :</label>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                        <input type="text" class="form-control" disabled="" value="<%= @teacher.sex %>">
+                        </div>
+                      </div>
+                   
+                      <label class="col-md-1 col-form-label">Race :</label>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                        <input type="text" class="form-control" disabled="" value="<%= @teacher.race %>">
+                        </div>
+                      </div>
+                    </div>
 
-  <li>
-    <strong>Name:</strong>
-    <%= @teacher.name %>
-  </li>
+                     <div class="row">
+                      <label class="col-md-1 col-form-label">Religion :</label>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                        <input type="text" class="form-control" disabled="" value="<%= @teacher.religion %>">
+                        </div>
+                      </div>
+                   
+                      <label class="col-md-1 col-form-label">Nation :</label>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                        <input type="text" class="form-control" disabled="" value="<%= @teacher.nation %>">
+                        </div>
+                      </div>
+                    
+                      <label class="col-md-1 col-form-label">Bdate :</label>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                        <input type="text" class="form-control" disabled="" value="<%= @teacher.bdate %>">
+                        </div>
+                      </div>
+                    </div>
 
-  <li>
-    <strong>Cname:</strong>
-    <%= @teacher.cname %>
-  </li>
 
-  <li>
-    <strong>Icno:</strong>
-    <%= @teacher.icno %>
-  </li>
+                     <div class="row">
+                      <label class="col-md-1 col-form-label">Address 1 :</label>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                        <input type="text" class="form-control" disabled="" value="<%= @teacher.addr1 %>">
+                        </div>
+                      </div>
+                  
+                      <label class="col-md-1 col-form-label">Address 2 :</label>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                        <input type="text" class="form-control" disabled="" value="<%= @teacher.addr2 %>">
+                        </div>
+                      </div>
+                   
+                      <label class="col-md-1 col-form-label">Poscode :</label>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                        <input type="text" class="form-control" disabled="" value="<%= @teacher.poscod %>">
+                        </div>
+                      </div>
+                    </div>
 
-  <li>
-    <strong>Sex:</strong>
-    <%= @teacher.sex %>
-  </li>
+                    <div class="row">
+                      <label class="col-md-1 col-form-label">Disctrict :</label>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                        <input type="text" class="form-control" disabled="" value="<%= @teacher.district %>">
+                        </div>
+                      </div>
+                    
+                      <label class="col-md-1 col-form-label">State :</label>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                        <input type="text" class="form-control" disabled="" value="<%= @teacher.state %>">
+                        </div>
+                      </div>
+                   
+                      <label class="col-md-1 col-form-label">Tel No :</label>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                        <input type="text" class="form-control" disabled="" value="<%= @teacher.tel %>">
+                        </div>
+                      </div>
+                    </div>
 
-  <li>
-    <strong>Race:</strong>
-    <%= @teacher.race %>
-  </li>
+                    <div class="row">
+                      <label class="col-md-1 col-form-label">Reg Date :</label>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                        <input type="text" class="form-control" disabled="" value="<%= @teacher.regdate %>">
+                        </div>
+                      </div>
+                    
+                      <label class="col-md-1 col-form-label">Q Date :</label>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                        <input type="text" class="form-control" disabled="" value="<%= @teacher.qdate %>">
+                        </div>
+                      </div>
+                   
+                      <label class="col-md-1 col-form-label">Q Rem :</label>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                        <input type="text" class="form-control" disabled="" value="<%= @teacher.qrem %>">
+                        </div>
+                      </div>
+                    </div>
 
-  <li>
-    <strong>Religion:</strong>
-    <%= @teacher.religion %>
-  </li>
 
-  <li>
-    <strong>Nation:</strong>
-    <%= @teacher.nation %>
-  </li>
+                    <div class="row">
+                      <label class="col-md-1 col-form-label">Postitle :</label>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                        <input type="text" class="form-control" disabled="" value="<%= @teacher.postitle %>">
+                        </div>
+                      </div>
+                   
+                      <label class="col-md-1 col-form-label">Job :</label>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                        <input type="text" class="form-control" disabled="" value="<%= @teacher.job %>">
+                        </div>
+                      </div>
+                    
+                      <label class="col-md-1 col-form-label">Education :</label>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                        <input type="text" class="form-control" disabled="" value="<%= @teacher.education %>">
+                        </div>
+                      </div>
+                    </div>
 
-  <li>
-    <strong>Bdate:</strong>
-    <%= @teacher.bdate %>
-  </li>
+                    <div class="row">
+                      <label class="col-md-1 col-form-label">Remark :</label>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                        <input type="text" class="form-control" disabled="" value="<%= @teacher.remark %>">
+                        </div>
+                      </div>
+                    
+                      <label class="col-md-1 col-form-label">Secondid :</label>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                        <input type="text" class="form-control" disabled="" value="<%= @teacher.secondid %>">
+                        </div>
+                      </div>
+                   
+                      <label class="col-md-1 col-form-label">Tchtype :</label>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                        <input type="text" class="form-control" disabled="" value="<%= @teacher.tchtype %>">
+                        </div>
+                      </div>
+                    </div>
+                         
+                    <div class="row">
+                      <label class="col-md-1 col-form-label">Gid :</label>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                        <input type="text" class="form-control" disabled="" value="<%= @teacher.gid %>">
+                        </div>
+                      </div>
+                   
+                      <label class="col-md-1 col-form-label">Session :</label>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                        <input type="text" class="form-control" disabled="" value="<%= @teacher.session %>">
+                        </div>
+                      </div>
+                  
+                      <label class="col-md-1 col-form-label">Bcencrlno :</label>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                        <input type="text" class="form-control" disabled="" value="<%= @teacher.bcenrlno %>">
+                        </div>
+                      </div>
+                    </div>
 
-  <li>
-    <strong>Addr1:</strong>
-    <%= @teacher.addr1 %>
-  </li>
+                    
 
-  <li>
-    <strong>Addr2:</strong>
-    <%= @teacher.addr2 %>
-  </li>
 
-  <li>
-    <strong>Addr3:</strong>
-    <%= @teacher.addr3 %>
-  </li>
+                  
+                </div>
+                <div class="card-footer ">
+                 <div class="row">
 
-  <li>
-    <strong>Poscod:</strong>
-    <%= @teacher.poscod %>
-  </li>
 
-  <li>
-    <strong>District:</strong>
-    <%= @teacher.district %>
-  </li>
+<span><%= link "Edit", to: teacher_path(@conn, :edit, @teacher), class: "btn btn-info" %></span>
+&nbsp;
+<span><%= link "Back", to: teacher_path(@conn, :index), class: "btn btn-danger" %></span>
 
-  <li>
-    <strong>State:</strong>
-    <%= @teacher.state %>
-  </li>
 
-  <li>
-    <strong>Tel:</strong>
-    <%= @teacher.tel %>
-  </li>
-
-  <li>
-    <strong>Regdate:</strong>
-    <%= @teacher.regdate %>
-  </li>
-
-  <li>
-    <strong>Qdate:</strong>
-    <%= @teacher.qdate %>
-  </li>
-
-  <li>
-    <strong>Qrem:</strong>
-    <%= @teacher.qrem %>
-  </li>
-
-  <li>
-    <strong>Postitle:</strong>
-    <%= @teacher.postitle %>
-  </li>
-
-  <li>
-    <strong>Job:</strong>
-    <%= @teacher.job %>
-  </li>
-
-  <li>
-    <strong>Education:</strong>
-    <%= @teacher.education %>
-  </li>
-
-  <li>
-    <strong>Remark:</strong>
-    <%= @teacher.remark %>
-  </li>
-
-  <li>
-    <strong>Secondid:</strong>
-    <%= @teacher.secondid %>
-  </li>
-
-  <li>
-    <strong>Tchtype:</strong>
-    <%= @teacher.tchtype %>
-  </li>
-
-  <li>
-    <strong>Gid:</strong>
-    <%= @teacher.gid %>
-  </li>
-
-  <li>
-    <strong>Session:</strong>
-    <%= @teacher.session %>
-  </li>
-
-  <li>
-    <strong>Bcenrlno:</strong>
-    <%= @teacher.bcenrlno %>
-  </li>
-
-  <li>
-    <strong>Tscjob1:</strong>
-    <%= @teacher.tscjob1 %>
-  </li>
-
-  <li>
-    <strong>Tscjob2:</strong>
-    <%= @teacher.tscjob2 %>
-  </li>
-
-  <li>
-    <strong>Tscjob3:</strong>
-    <%= @teacher.tscjob3 %>
-  </li>
-
-  <li>
-    <strong>Tscjob4:</strong>
-    <%= @teacher.tscjob4 %>
-  </li>
-
-  <li>
-    <strong>Tscjob5:</strong>
-    <%= @teacher.tscjob5 %>
-  </li>
-
-  <li>
-    <strong>Tscjob6:</strong>
-    <%= @teacher.tscjob6 %>
-  </li>
-
-  <li>
-    <strong>Tccjob1:</strong>
-    <%= @teacher.tccjob1 %>
-  </li>
-
-  <li>
-    <strong>Tccjob2:</strong>
-    <%= @teacher.tccjob2 %>
-  </li>
-
-  <li>
-    <strong>Tccjob3:</strong>
-    <%= @teacher.tccjob3 %>
-  </li>
-
-  <li>
-    <strong>Tccjob4:</strong>
-    <%= @teacher.tccjob4 %>
-  </li>
-
-  <li>
-    <strong>Tccjob5:</strong>
-    <%= @teacher.tccjob5 %>
-  </li>
-
-  <li>
-    <strong>Tccjob6:</strong>
-    <%= @teacher.tccjob6 %>
-  </li>
-
-</ul>
-
-<span><%= link "Edit", to: teacher_path(@conn, :edit, @teacher) %></span>
-<span><%= link "Back", to: teacher_path(@conn, :index) %></span>
+</div>
+                </div>
+              </div>
+            </div>
+            </center>

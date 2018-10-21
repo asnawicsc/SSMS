@@ -6,6 +6,7 @@ defmodule School.Affairs.CoCurriculum do
     field(:code, :string)
     field(:description, :string)
     field(:institution_id, :integer)
+    field(:teacher_id, :integer)
 
     timestamps()
   end
@@ -13,7 +14,6 @@ defmodule School.Affairs.CoCurriculum do
   @doc false
   def changeset(co_curriculum, attrs) do
     co_curriculum
-    |> cast(attrs, [:institution_id, :code, :description])
-    |> validate_required([:institution_id, :code, :description])
+    |> cast(attrs, [:teacher_id, :institution_id, :code, :description])
   end
 end

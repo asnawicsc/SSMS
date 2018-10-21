@@ -6,22 +6,42 @@ defmodule SchoolWeb.SubjectController do
   alias School.Affairs.Subject
 
   def index(conn, _params) do
-    semesters = Repo.all(from(s in Semester))|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
-    subject = Affairs.list_subject()|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
-    level = Affairs.list_levels()|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
-    render(conn, "index.html", subjects: subject, semester: semesters, level: level)
+    subjects =
+      Affairs.list_subject()
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
+    render(conn, "index.html", subjects: subjects)
   end
 
   def new_standard_subject(conn, params) do
     subjects =
       Repo.all(
-        from(s in School.Affairs.Subject, select: %{id: s.id, code: s.code, name: s.description,institution_id: s.institution_ids})|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
+        from(s in School.Affairs.Subject,
+          select: %{
+            id: s.id,
+            code: s.code,
+            name: s.description,
+            institution_id: s.institution_ids
+          }
+        )
+        |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
       )
 
     semester =
-      Repo.all(from(s in School.Affairs.Semester, select: %{id: s.id, start_date: s.start_date,institution_id: s.institution_id}))|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
+      Repo.all(
+        from(s in School.Affairs.Semester,
+          select: %{id: s.id, start_date: s.start_date, institution_id: s.institution_id}
+        )
+      )
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
 
-    level = Repo.all(from(s in School.Affairs.Level, select: %{id: s.id, name: s.name,institution_id: s.institution_id}))|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
+    level =
+      Repo.all(
+        from(s in School.Affairs.Level,
+          select: %{id: s.id, name: s.name, institution_id: s.institution_id}
+        )
+      )
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
 
     render(conn, "index.html", subjects: subjects, semester: semester, level: level)
   end
@@ -29,13 +49,27 @@ defmodule SchoolWeb.SubjectController do
   def create_new_test(conn, _params) do
     subjects =
       Repo.all(
-        from(s in School.Affairs.Subject, select: %{id: s.id, code: s.code, name: s.description,institution_id: s.institution_id})
-      )|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
+        from(s in School.Affairs.Subject,
+          select: %{id: s.id, code: s.code, name: s.description, institution_id: s.institution_id}
+        )
+      )
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
 
     semester =
-      Repo.all(from(s in School.Affairs.Semester, select: %{id: s.id, start_date: s.start_date,institution_id: s.institution_id}))|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
+      Repo.all(
+        from(s in School.Affairs.Semester,
+          select: %{id: s.id, start_date: s.start_date, institution_id: s.institution_id}
+        )
+      )
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
 
-    level = Repo.all(from(s in School.Affairs.Level, select: %{id: s.id, name: s.name,institution_id: s.institution_id}))|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
+    level =
+      Repo.all(
+        from(s in School.Affairs.Level,
+          select: %{id: s.id, name: s.name, institution_id: s.institution_id}
+        )
+      )
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
 
     render(conn, "new_exam.html", subjects: subjects, semester: semester, level: level)
   end
@@ -53,18 +87,48 @@ defmodule SchoolWeb.SubjectController do
       Repo.all(
         from(
           s in School.Affairs.Subject,
-          select: %{institution_id: s.institution_id,id: s.id, code: s.code, name: s.description, description: s.description}
+          select: %{
+            institution_id: s.institution_id,
+            id: s.id,
+            code: s.code,
+            name: s.description,
+            description: s.description
+          }
         )
-      )|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
+      )
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
 
     semester =
-      Repo.all(from(s in School.Affairs.Semester, select: %{institution_id: s.institution_id,id: s.id, start_date: s.start_date}))|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
+      Repo.all(
+        from(s in School.Affairs.Semester,
+          select: %{institution_id: s.institution_id, id: s.id, start_date: s.start_date}
+        )
+      )
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
 
-    level = Repo.all(from(s in School.Affairs.Level, select: %{institution_id: s.institution_id,id: s.id, name: s.name}))|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
-    grade = Affairs.list_grade()|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
-    co_grade = Affairs.list_co_grade()|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
-    standard_subject = Affairs.list_standard_subject()|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
-    exam_master = Affairs.list_exam_master()|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
+    level =
+      Repo.all(
+        from(s in School.Affairs.Level,
+          select: %{institution_id: s.institution_id, id: s.id, name: s.name}
+        )
+      )
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
+    grade =
+      Affairs.list_grade()
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
+    co_grade =
+      Affairs.list_co_grade()
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
+    standard_subject =
+      Affairs.list_standard_subject()
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
+    exam_master =
+      Affairs.list_exam_master()
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
 
     render(
       conn,
@@ -82,7 +146,9 @@ defmodule SchoolWeb.SubjectController do
   end
 
   def create(conn, %{"subject" => subject_params}) do
-      subject_params = Map.put(subject_params, "institution_id", conn.private.plug_session["institution_id"])
+    subject_params =
+      Map.put(subject_params, "institution_id", conn.private.plug_session["institution_id"])
+
     case Affairs.create_subject(subject_params) do
       {:ok, subject} ->
         conn

@@ -132,8 +132,23 @@ defmodule SchoolWeb.CoCurriculumController do
   end
 
   def co_mark(conn, params) do
-    cocurriculum = Affairs.list_cocurriculum()
-    render(conn, "co_mark.html", cocurriculum: cocurriculum)
+    user = Repo.get_by(School.Settings.User, %{id: conn.private.plug_session["user_id"]})
+    teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email})
+
+    cocurriculum =
+      if user.role == "Admin" or user.role == "Support" do
+        Affairs.list_cocurriculum()
+      else
+        Affairs.list_cocurriculum() |> Enum.filter(fn x -> x.teacher_id == teacher.id end)
+      end
+
+    if cocurriculum == [] do
+      conn
+      |> put_flash(:info, "You Are Not Assign to Any CoCurriculum Class")
+      |> redirect(to: page_path(conn, :dashboard))
+    else
+      render(conn, "co_mark.html", cocurriculum: cocurriculum)
+    end
   end
 
   def co_curriculum_setting(conn, _params) do

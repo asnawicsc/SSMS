@@ -1,158 +1,32 @@
- <form method="post" action="/create_standard_subject" class="form-horizontal">
-  <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
-   <div class="row">
+<h2>Listing Subject</h2>
 
-              <div class="col-sm-4">
-                <div class="form-group bmd-form-group">
-                  <label class="bmd-label-floating"><%= gettext "Year" %></label><br>
-                    <select class="select" required="required" name="year">
-                         
-                                            <option value="2018" >2018
-                                            </option>
-                                            <option value="2019" >2019
-                                            </option>
-                                            <option value="2020" >2020
-                                            </option>
-                                        
-                                        </select>
-                  
-                </div>
-              </div>
-           
-              <div class="col-sm-4">
-                <div class="form-group bmd-form-group">
-                  <label class="bmd-label-floating"><%= gettext "Semester" %></label><br>
-                 <select class="select" required="required" name="semester">
-                           <%= for a <- @semester |> Enum.sort do %>
-                                            <option value="<%= a.id %>" ><%= a.start_date %>
-                                            </option>
-                                          <% end %>
-                                        </select>
-                </div>
-              </div>
-   
-              <div class="col-sm-4">
-                <div class="form-group bmd-form-group">
-                  <label class="bmd-label-floating"><%= gettext "Level" %></label><br>
-                    <select class="select" required="required" name="level">
-                           <%= for a <- @level |> Enum.sort do %>
-                                            <option value="<%= a.id %>" ><%= a.name %>
-                                            </option>
-                                          <% end %>
-                                        </select>
-                  
-                </div>
-              </div>
-           
-              
-           
- </div>
-
-    <input type="hidden" name="standard_subject">
+<table class="table">
+  <thead>
+    <tr>
+      <th>Code</th>
+      <th>Name</th>
+      <th>Description</th>
 
 
-    <div class="row">
-      <div class="col-lg-6">
-        <div class="card">
-          <div class="card-header"><%= gettext "Subject" %></div>
-          <div class="card-body">
-            <ol class="s_unmark1" id="s_unmark1">
-            <%= for subject <- @subjects do %>
-            <li id="<%= subject.id %>"><%= subject.description %></li>
-            <% end %>
-            </ol>
-          </div>
-            <div class="card-footer">
-                    <button type="button" rel="tooltip" title="" class="btn btn-primary btn-link btn-sm show_menu_cata" data-original-title="standard_subject">
-
-                       Select All -->
-                     
-                    </button>
-           </div>
-        </div>
-      </div>
-
-          <div class="col-lg-6">
-        <div class="card">
-          <div class="card-header"><%= gettext "Selected Subject" %></div>
-          <div class="card-body">
-            <ol  class="s_mark1" id="s_mark1">
-           
-            </ol>
-          </div>
-          <div class="card-footer" >
-                    <button type="button" rel="tooltip" title="" class="btn btn-primary btn-link btn-sm show_menu_cata" data-original-title="un standard_subject">
-
-                       <-- Unselect All
-                     
-                    </button>
-          </div>
-        </div>
-        </div>
-      </div>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for subject <- @subjects do %>
+    <tr>
+      <td><%= subject.code %></td>
+      <td><%= subject.name %></td>
+      <td><%= subject.description %></td>
 
 
-     <div align="center" style="margin-top: 10px">
-      <input class="btn btn-primary" name="" value="Submit" type="submit">
-    </div>
+      <td class="text-right">
+        <span><%= link "Show", to: subject_path(@conn, :show, subject.id), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: subject_path(@conn, :edit,  subject.id), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: subject_path(@conn, :delete,  subject.id), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
 
-
-</form>
-
-
-<script type="text/javascript">
-  
-
-       $("ol#s_unmark1").on("click", "li", function(){
-
-    $("ol#s_mark1").append(this)
-    var list_ids = [] 
-    $("ol#s_mark1 li").each(function(){
-    var id = $(this).attr("id")
-      list_ids.push(id)
-    })
-    $("input[name='standard_subject']").val(list_ids)
-  })
-
-  $("ol#s_mark1").on("click", "li", function(){
-
-    $("ol#s_unmark1").append(this)
-
-  })
-
-
-  $('button[data-original-title="standard_subject"]').click(function() {
-            var li_list = $('ol#s_unmark1').find("li")
-             var list_ids = [] 
-            $(li_list).each(function() {
-              var id = $(this).attr("id")
-                 list_ids.push(id)
-                var li = $(this);
-      
-             
-              
-                $("ol#s_mark1").append(li);
-            })
-
-            $("input[name='standard_subject']").val(list_ids)
-
-
-  })
-
-
-
-        $('button[data-original-title="un standard_subject"]').click(function() {
-            var li_list = $('ol#s_mark1').find("li")
-            $(li_list).each(function() {
-
-                var li = $(this);
-           
-                
-                $("ol#s_unmark1").append(li);
-            })
-
-
-        })
-
-
-</script>
+<span><%= link "New Standard subject", to: subject_path(@conn, :new) %></span>

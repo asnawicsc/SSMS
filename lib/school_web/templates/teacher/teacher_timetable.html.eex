@@ -7,43 +7,75 @@
 <script type="text/javascript">
   window.csrf = "<%= Phoenix.Controller.get_csrf_token %>"
 </script>
-<div class="row">
-  <div class="col-lg-3">
-    <div class="table-responsive">
-      
-    
-    <table class="table">
-      <thead>
-        <tr>
+
+ <%= if   @conn.private.plug_session["user_id"] != nil do %>
+            
         
+              <% user_id=@conn.private.plug_session["user_id"] %>
 
-             <th>Name</th>
-        </tr>
-      </thead>
-      <tbody>
-           <%= for teacher <- @teacher do %>
-        <tr>
-       
+              <%= if user_id != nil do %>
+    <div class="row">
+ <% user=Repo.get_by(Settings.User, %{id: user_id }) %>
 
-
-          <td>   <div id="<%= teacher.code %> " class="btn btn-link teacher_timetable"><%= teacher.name %></div></td>
-        </tr>
-    <% end %>
-      </tbody>
-    </table>
-</div>
-  </div>
-  <div class="col-lg-9" aria-label="teacher_timetable">
-   <p class="lead">Click on a teacher name in the left panel. </p> 
- 
-  </div>
-</div>
-<div class="table-responsive">
+            <%= if user.role == "Admin" or user.role == "Support" do %>
 
 
-</div>
+                <div class="col-lg-3">
+                            <div class="table-responsive">
+                              
+                            
+                            <table class="table">
+                              <thead>
+                                <tr>
+                                
 
+                                     <th>Name</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                   <%= for teacher <- @teacher do %>
+                                <tr>
+                               
+
+
+                                  <td>   <div id="<%= teacher.code %> " class="btn btn-link teacher_timetable"><%= teacher.name %></div></td>
+                                </tr>
+                            <% end %>
+                              </tbody>
+                            </table>
+                        </div>
+                </div>
+            <div class="col-lg-9" aria-label="teacher_timetable">
+                  <p class="lead">Click on a teacher name in the left panel. </p> 
+           
+            </div>
+
+            <% end %>
+
+             <%= if user.role == "Teacher" do %>
+
+               <% teacher=Repo.get_by(Affairs.Teacher, %{email: user.email }) %>
+              <input type="hidden" name="teacher_code" id="teacher_code" value="<%= teacher.code %>">
+              <script type="text/javascript">
+                var code=  $("input[name='teacher_code']").val()
+
+                channel.push("inquire_teacher_timetable", {user_id: window.currentUser, code: code,institution_id: window.currentInstitute})</script>
+
+                 <div class="col-lg-12" aria-label="teacher_timetable">
+               
+           
+            </div>
+             <% end %>
+    </div>
+
+    <%= if user.role == "Admin" and user.role == "Support" do %>
 <a href="/teacher_period"><%= gettext " New Teacher Period" %></a>
+<% end %>
+    <% end %>
+    <% end %>
+
+
+
 <script type="text/javascript">
   $(window).ready(function(){
     var target = window.location.search.substring(1).split("=")[1]
@@ -51,4 +83,6 @@
 
      $('.table').DataTable();
   })
+
+   
 </script>

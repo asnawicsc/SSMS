@@ -10,11 +10,7 @@
     <%= text_input f, :name, class: "form-control" %>
     <%= error_tag f, :name %>
   </div>
-  <div class="form-group">
-    <%= label f, :email, class: "control-label" %>
-    <%= text_input f, :email, class: "form-control" %>
-    <%= error_tag f, :email %>
-  </div>
+
 
   <div class="form-group">
     <%= label f, :default_lang, class: "control-label" %>
@@ -28,6 +24,17 @@
     <%= error_tag f, :password %>
   </div>
 
+    <%= if   @conn.private.plug_session["user_id"] != nil do %>
+            
+        
+              <% user_id=@conn.private.plug_session["user_id"] %>
+
+              <%= if user_id != nil do %>
+
+                <% user=Repo.get_by(Settings.User, %{id: user_id }) %>
+
+                <%    if user.role == "Admin" or user.role == "Support" do %>
+
   <div class="form-group">
     <%= label f, :crypted_password, class: "control-label" %>
     <%= text_input f, :crypted_password, class: "form-control" %>
@@ -40,6 +47,10 @@
     <%= text_input f, :role, class: "form-control" %>
     <%= error_tag f, :role %>
   </div>
+
+  <% end %>
+  <% end %>
+  <% end %>
 
   <div class="form-group">
     <%= submit "Submit", class: "btn btn-primary" %>

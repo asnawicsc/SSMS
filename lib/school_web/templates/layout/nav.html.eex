@@ -53,218 +53,590 @@
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item dropdown">
-
-        <a href="/classes" class="nav-link" role="button">
-          <%= gettext "Classes" %>
-        </a>
-
-      </li>
-
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <%= gettext "Setup" %>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <% a = @conn %>
-
-          <a class="dropdown-item" href="/institutions/<%= a.private.plug_session["institution_id "]%>">
-            <%= gettext "School Profile" %>
-          </a>
-          <a class="dropdown-item" href="/user_info/<%= @conn.private.plug_session["user_id"]%>">
-            <%= gettext "User Account" %>
-              </span>
-          </a>
-          <%= if   @conn.private.plug_session["user_id"] != nil do %>
+            <%= if   @conn.private.plug_session["user_id"] != nil do %>
             
         
-          <% user_id=@conn.private.plug_session["user_id"] %>
-          <%= if user_id != nil do %>
+              <% user_id=@conn.private.plug_session["user_id"] %>
 
-          <% user=Repo.get_by(Settings.User, %{id: user_id }) %>
-   
-          <%= if user.role == "Admin" do %>
+              <%= if user_id != nil do %>
 
-             <a class="dropdown-item" href="/institutions/new">
-            <%= gettext "Institution Setting" %>
-              </span>
-          </a>
+                <% user=Repo.get_by(Settings.User, %{id: user_id }) %>
 
-            <a class="dropdown-item" href="/users">
-            <%= gettext "User Setting" %>
-              </span>
-          </a>
+                <%= if user.role == "Admin" do %>
+                  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                      <li class="nav-item dropdown">
+
+                        <a href="/classes" class="nav-link" role="button">
+                          <%= gettext "Classes" %>
+                        </a>
+
+                      </li>
+
+
+                      <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <%= gettext "Setup" %>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                          <% a = @conn %>
+
+                          <a class="dropdown-item" href="/institutions/<%= a.private.plug_session["institution_id "]%>">
+                            <%= gettext "School Profile" %>
+                          </a>
+                          <a class="dropdown-item" href="/user_info/<%= @conn.private.plug_session["user_id"]%>">
+                            <%= gettext "User Account" %>
+                              </span>
+                          </a>
+                          <a class="dropdown-item" href="/institutions/new">
+                            <%= gettext "Institution Setting" %>
+                              </span>
+                          </a>
+                            <a class="dropdown-item" href="/users">
+                            <%= gettext "User Setting" %>
+                              </span>
+                          </a>
+                          <a class="dropdown-item" href="/system_config/<%= @conn.private.plug_session["institution_id"]%>">
+                            <%= gettext "System Configuration" %>
+                          </a>
+                          <a class="dropdown-item" href="/semesters">
+                            <%= gettext "Semesters" %>
+                          </a>
+                           <a class="dropdown-item" href="/holiday">
+                            <%= gettext "Holiday Setting" %>
+                          </a>
+                             <a class="dropdown-item" href="/comment">
+                            <%= gettext "Comment Setting" %>
+                          </a>
+                          <a class="dropdown-item" href="/teacher_setting">
+                            <%= gettext "Teacher Setting" %>
+                          </a>
+                          <a class="dropdown-item" href="/standard_setting">
+                            <%= gettext "Standard Setting" %>
+                          </a>
+                          <a class="dropdown-item" href="/class_setting">
+                            <%= gettext "Class Setting" %>
+                          </a>
+                     
+                          <a class="dropdown-item" href="/co_curriculum_setting">
+                            <%= gettext "Co-Curriculum Setting" %>
+                          </a>
+
+                          <a class="dropdown-item" href="/nilam_setting">
+                            <%= gettext "Nilam Setting" %>
+                          </a>
+                          <div class="dropdown-divider"></div>
+
+                          <a class="dropdown-item" href="/parent">
+                            <%= gettext "Parents" %>
+                          </a>
+                          <a class="dropdown-item" href="/students">
+                            <%= gettext "Students" %>
+                          </a>
+
+                           <a class="dropdown-item" href="/subject">
+                            <%= gettext "Subject" %>
+                          </a>
+
+                           <a class="dropdown-item" href="/levels">
+                            <%= gettext "Standard" %>
+                          </a>
+                    
+
+                          <a class="dropdown-item" href="/height_weight">
+                            <%= gettext "Height&Weight" %>
+                          </a>
+
+                    
+
+                        </div>
+                      </li>
+                      <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <%= gettext "Processing" %>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                          <a class="dropdown-item" href="/attendance">
+                            <%= gettext "Attendance" %>
+                          </a>
+                          <a class="dropdown-item" href="/mark_sheet">
+                            <%= gettext "Mark Sheet" %>
+                          </a>
+                    
+                          <a class="dropdown-item" href="co_mark">
+                            <%= gettext "Co-Curriculum"%>
+                          </a>
+
+                            <a class="dropdown-item" href="student_comments">
+                            <%= gettext "Student Comment"%>
+                          </a>
+
+                        </div>
+
+                      </li>
+                      <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <%= gettext "Report" %>
+                        </a>
+
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+
+                          <a class="dropdown-item" href="/generate_attendance_report">
+                            <%= gettext "Attendance Report" %>
+                          </a>
+                             <a class="dropdown-item" href="/holiday_report">
+                            <%= gettext "Holiday Report" %>
+                          </a>
+
+                          <a class="dropdown-item" href="/exam_result_class">
+                            <%= gettext "Exam Result (Class)" %>
+                          </a>
+                          <a class="dropdown-item" href="/exam_result_analysis_class">
+                            <%= gettext "Exam Result Analysis(Class)" %>
+                          </a>
+                          <a class="dropdown-item" href="/exam_result_standard">
+                            <%= gettext "Exam Result (Standard)" %>
+                          </a>
+                          <a class="dropdown-item" href="/exam_result_analysis_standard">
+                            <%= gettext "Exam Result Analysis(Standard)" %>
+                          </a>
+                      
+                          <a class="dropdown-item" href="/student_listing_by_class">
+                            <%= gettext "Student Listing" %>
+                          </a>
+                          <a class="dropdown-item" href="/student_report_by_cocurriculum">
+                            <%= gettext "Student Report (Co-Curriculum)" %>
+                          </a>
+                          <a class="dropdown-item" href="/height_weight_report">
+                            <%= gettext "Student Report (Height&Weight)" %>
+                          </a>
+                          <a class="dropdown-item" href="/student_certificate">
+                            <%= gettext "Student Certificate" %>
+                          </a>
+                          <a class="dropdown-item" href="/show_guardian">
+                            <%= gettext "Parent Listing" %>
+                          </a>
+                          <a class="dropdown-item" href="/class_analysis">
+                            <%= gettext "Class Analysis" %>
+                          </a>
+                          <a class="dropdown-item" href="/teacher_listing">
+                            <%= gettext "Teacher Listing" %>
+                          </a>
+                          <a class="dropdown-item" href="/mark_sheet_listing">
+                            <%= gettext "Mark Sheet" %>
+                          </a>
+                          <a class="dropdown-item" href="/mark_analyse_by_grade">
+                            <%= gettext "Mark Analayse by Grade" %>
+                          </a>
+                          <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              <%= gettext "Library" %>
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                              <a href="/library/books" class="dropdown-item api" call="get_lib">
+                                <%= gettext "Book List by Categories" %>
+                              </a>
+                              <a href="/library/returns" class="dropdown-item api" call="get_loans">
+                                <%= gettext "Return List" %>
+                              </a>
+                              <a href="/library/loan_report" class="dropdown-item " >
+                                <%= gettext "Loan Report" %>
+                              </a>
+                              <a href="/library/loans/new" class="dropdown-item api">
+                                <%= gettext "New Loans" %>
+                              </a>
+                              <a href="/library/book/student_cards" class="dropdown-item api" call="get_lib">
+                                <%= gettext "Student Cards" %>
+                              </a>
+
+                            </div>
+
+                          </li>
+                          <li class="nav-item dropdown">
+                            <a class="nav-link " href="/logout" role="button">
+                              <%= gettext "Logout" %>
+                            </a>
+
+                          </li>
+
+                    </ul>
+
+                  </div>
+                <% end %>
+
+                <%= if user.role == "Support" do %>
+                  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                      <li class="nav-item dropdown">
+
+                        <a href="/classes" class="nav-link" role="button">
+                          <%= gettext "Classes" %>
+                        </a>
+
+                      </li>
+
+
+                      <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <%= gettext "Setup" %>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                          <% a = @conn %>
+
+                          <a class="dropdown-item" href="/institutions/<%= a.private.plug_session["institution_id "]%>">
+                            <%= gettext "School Profile" %>
+                          </a>
+                          <a class="dropdown-item" href="/user_info/<%= @conn.private.plug_session["user_id"]%>">
+                            <%= gettext "User Account" %>
+                              </span>
+                          </a>
+                          <a class="dropdown-item" href="/institutions/new">
+                            <%= gettext "Institution Setting" %>
+                              </span>
+                          </a>
+                            <a class="dropdown-item" href="/users">
+                            <%= gettext "User Setting" %>
+                              </span>
+                          </a>
+                          <a class="dropdown-item" href="/system_config/<%= @conn.private.plug_session["institution_id"]%>">
+                            <%= gettext "System Configuration" %>
+                          </a>
+                          <a class="dropdown-item" href="/semesters">
+                            <%= gettext "Semesters" %>
+                          </a>
+                           <a class="dropdown-item" href="/holiday">
+                            <%= gettext "Holiday Setting" %>
+                          </a>
+                             <a class="dropdown-item" href="/comment">
+                            <%= gettext "Comment Setting" %>
+                          </a>
+                          <a class="dropdown-item" href="/teacher_setting">
+                            <%= gettext "Teacher Setting" %>
+                          </a>
+                          <a class="dropdown-item" href="/standard_setting">
+                            <%= gettext "Standard Setting" %>
+                          </a>
+                          <a class="dropdown-item" href="/class_setting">
+                            <%= gettext "Class Setting" %>
+                          </a>
+                     
+                          <a class="dropdown-item" href="/co_curriculum_setting">
+                            <%= gettext "Co-Curriculum Setting" %>
+                          </a>
+
+                          <a class="dropdown-item" href="/nilam_setting">
+                            <%= gettext "Nilam Setting" %>
+                          </a>
+                          <div class="dropdown-divider"></div>
+
+                          <a class="dropdown-item" href="/parent">
+                            <%= gettext "Parents" %>
+                          </a>
+                          <a class="dropdown-item" href="/students">
+                            <%= gettext "Students" %>
+                          </a>
+
+                           <a class="dropdown-item" href="/subject">
+                            <%= gettext "Subject" %>
+                          </a>
+
+                           <a class="dropdown-item" href="/levels">
+                            <%= gettext "Standard" %>
+                          </a>
+                    
+
+                          <a class="dropdown-item" href="/height_weight">
+                            <%= gettext "Height&Weight" %>
+                          </a>
+
+                    
+
+                        </div>
+                      </li>
+                      <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <%= gettext "Processing" %>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                          <a class="dropdown-item" href="/attendance">
+                            <%= gettext "Attendance" %>
+                          </a>
+                          <a class="dropdown-item" href="/mark_sheet">
+                            <%= gettext "Mark Sheet" %>
+                          </a>
+                    
+                          <a class="dropdown-item" href="co_mark">
+                            <%= gettext "Co-Curriculum"%>
+                          </a>
+
+                            <a class="dropdown-item" href="student_comments">
+                            <%= gettext "Student Comment"%>
+                          </a>
+
+                        </div>
+
+                      </li>
+                      <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <%= gettext "Report" %>
+                        </a>
+
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+
+                          <a class="dropdown-item" href="/generate_attendance_report">
+                            <%= gettext "Attendance Report" %>
+                          </a>
+                             <a class="dropdown-item" href="/holiday_report">
+                            <%= gettext "Holiday Report" %>
+                          </a>
+
+                          <a class="dropdown-item" href="/exam_result_class">
+                            <%= gettext "Exam Result (Class)" %>
+                          </a>
+                          <a class="dropdown-item" href="/exam_result_analysis_class">
+                            <%= gettext "Exam Result Analysis(Class)" %>
+                          </a>
+                          <a class="dropdown-item" href="/exam_result_standard">
+                            <%= gettext "Exam Result (Standard)" %>
+                          </a>
+                          <a class="dropdown-item" href="/exam_result_analysis_standard">
+                            <%= gettext "Exam Result Analysis(Standard)" %>
+                          </a>
+                      
+                          <a class="dropdown-item" href="/student_listing_by_class">
+                            <%= gettext "Student Listing" %>
+                          </a>
+                          <a class="dropdown-item" href="/student_report_by_cocurriculum">
+                            <%= gettext "Student Report (Co-Curriculum)" %>
+                          </a>
+                          <a class="dropdown-item" href="/height_weight_report">
+                            <%= gettext "Student Report (Height&Weight)" %>
+                          </a>
+                          <a class="dropdown-item" href="/student_certificate">
+                            <%= gettext "Student Certificate" %>
+                          </a>
+                          <a class="dropdown-item" href="/show_guardian">
+                            <%= gettext "Parent Listing" %>
+                          </a>
+                          <a class="dropdown-item" href="/class_analysis">
+                            <%= gettext "Class Analysis" %>
+                          </a>
+                          <a class="dropdown-item" href="/teacher_listing">
+                            <%= gettext "Teacher Listing" %>
+                          </a>
+                          <a class="dropdown-item" href="/mark_sheet_listing">
+                            <%= gettext "Mark Sheet" %>
+                          </a>
+                          <a class="dropdown-item" href="/mark_analyse_by_grade">
+                            <%= gettext "Mark Analayse by Grade" %>
+                          </a>
+                          <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              <%= gettext "Library" %>
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                              <a href="/library/books" class="dropdown-item api" call="get_lib">
+                                <%= gettext "Book List by Categories" %>
+                              </a>
+                              <a href="/library/returns" class="dropdown-item api" call="get_loans">
+                                <%= gettext "Return List" %>
+                              </a>
+                              <a href="/library/loan_report" class="dropdown-item " >
+                                <%= gettext "Loan Report" %>
+                              </a>
+                              <a href="/library/loans/new" class="dropdown-item api">
+                                <%= gettext "New Loans" %>
+                              </a>
+                              <a href="/library/book/student_cards" class="dropdown-item api" call="get_lib">
+                                <%= gettext "Student Cards" %>
+                              </a>
+
+                            </div>
+
+                          </li>
+                          <li class="nav-item dropdown">
+                            <a class="nav-link " href="/logout" role="button">
+                              <%= gettext "Logout" %>
+                            </a>
+
+                          </li>
+
+                    </ul>
+
+                  </div>
+               
+                <% end %>
+
+                <%= if user.role == "Teacher" do %>
+                  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                      <li class="nav-item dropdown">
+
+                        <a href="/classes" class="nav-link" role="button">
+                          <%= gettext "Classes" %>
+                        </a>
+
+                      </li>
+
+
+                      <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <%= gettext "Setup" %>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                          <% a = @conn %>
+
+                          <a class="dropdown-item" href="/institutions/<%= a.private.plug_session["institution_id "]%>">
+                            <%= gettext "School Profile" %>
+                          </a>
+
+                           <a class="dropdown-item" href="/user_info/<%= @conn.private.plug_session["user_id"]%>">
+                            <%= gettext "User Account" %>
+                              </span>
+                          </a>
+
+                          <a class="dropdown-item" href="/teacher_setting">
+                            <%= gettext "Teacher Setting" %>
+                          </a>
+
+
+                         <% teacher=Repo.get_by(Affairs.Teacher, %{email: user.email }) %>
+                          <% class=Repo.get_by(Affairs.Class, %{teacher_id: teacher.id }) %>
+
+                          <%= if class != nil do %>
+                           
+                          <a class="dropdown-item" href="/class_setting">
+                            <%= gettext "Class Setting" %>
+                          </a>
+
+                           <%end %>
+                     
+
+                        </div>
+                      </li>
+                      <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <%= gettext "Processing" %>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                               <% teacher=Repo.get_by(Affairs.Teacher, %{email: user.email }) %>
+                          <% class=Repo.get_by(Affairs.Class, %{teacher_id: teacher.id }) %>
+
+                          <%= if class != nil do %>
+                          <a class="dropdown-item" href="/attendance">
+                            <%= gettext "Attendance" %>
+                          </a>
+
+                           <%end %>
+                          <a class="dropdown-item" href="/mark_sheet">
+                            <%= gettext "Mark Sheet" %>
+                          </a>
+                          
+                          <a class="dropdown-item" href="/co_mark">
+                            <%= gettext "Co-Curriculum"%>
+                          </a>
+
+                            <a class="dropdown-item" href="student_comments">
+                            <%= gettext "Student Comment"%>
+                          </a>
+
+                        </div>
+
+                      </li>
+                      <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <%= gettext "Report" %>
+                        </a>
+
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+
+                          <a class="dropdown-item" href="/generate_attendance_report">
+                            <%= gettext "Attendance Report" %>
+                          </a>
+                             <a class="dropdown-item" href="/holiday_report">
+                            <%= gettext "Holiday Report" %>
+                          </a>
+
+                          <a class="dropdown-item" href="/exam_result_class">
+                            <%= gettext "Exam Result (Class)" %>
+                          </a>
+                          <a class="dropdown-item" href="/exam_result_analysis_class">
+                            <%= gettext "Exam Result Analysis(Class)" %>
+                          </a>
+                          <a class="dropdown-item" href="/exam_result_standard">
+                            <%= gettext "Exam Result (Standard)" %>
+                          </a>
+                          <a class="dropdown-item" href="/exam_result_analysis_standard">
+                            <%= gettext "Exam Result Analysis(Standard)" %>
+                          </a>
+                      
+                          <a class="dropdown-item" href="/student_listing_by_class">
+                            <%= gettext "Student Listing" %>
+                          </a>
+                          <a class="dropdown-item" href="/student_report_by_cocurriculum">
+                            <%= gettext "Student Report (Co-Curriculum)" %>
+                          </a>
+                          <a class="dropdown-item" href="/height_weight_report">
+                            <%= gettext "Student Report (Height&Weight)" %>
+                          </a>
+                          <a class="dropdown-item" href="/student_certificate">
+                            <%= gettext "Student Certificate" %>
+                          </a>
+                          <a class="dropdown-item" href="/show_guardian">
+                            <%= gettext "Parent Listing" %>
+                          </a>
+                          <a class="dropdown-item" href="/class_analysis">
+                            <%= gettext "Class Analysis" %>
+                          </a>
+                          <a class="dropdown-item" href="/teacher_listing">
+                            <%= gettext "Teacher Listing" %>
+                          </a>
+                          <a class="dropdown-item" href="/mark_sheet_listing">
+                            <%= gettext "Mark Sheet" %>
+                          </a>
+                          <a class="dropdown-item" href="/mark_analyse_by_grade">
+                            <%= gettext "Mark Analayse by Grade" %>
+                          </a>
+                          <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              <%= gettext "Library" %>
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                              <a href="/library/books" class="dropdown-item api" call="get_lib">
+                                <%= gettext "Book List by Categories" %>
+                              </a>
+                              <a href="/library/returns" class="dropdown-item api" call="get_loans">
+                                <%= gettext "Return List" %>
+                              </a>
+                              <a href="/library/loan_report" class="dropdown-item " >
+                                <%= gettext "Loan Report" %>
+                              </a>
+                              <a href="/library/loans/new" class="dropdown-item api">
+                                <%= gettext "New Loans" %>
+                              </a>
+                              <a href="/library/book/student_cards" class="dropdown-item api" call="get_lib">
+                                <%= gettext "Student Cards" %>
+                              </a>
+
+                            </div>
+
+                          </li>
+                          <li class="nav-item dropdown">
+                            <a class="nav-link " href="/logout" role="button">
+                              <%= gettext "Logout" %>
+                            </a>
+
+                          </li>
+
+                    </ul>
+
+                  </div>
+                <% end %>
+
+              <% end %>
             <% end %>
-          <% end %>
-             <% end %>
-          <a class="dropdown-item" href="/system_config/<%= @conn.private.plug_session["institution_id"]%>">
-            <%= gettext "System Configuration" %>
-          </a>
-          <a class="dropdown-item" href="/semesters">
-            <%= gettext "Semesters" %>
-          </a>
-           <a class="dropdown-item" href="/holiday">
-            <%= gettext "Holiday Setting" %>
-          </a>
-             <a class="dropdown-item" href="/comment">
-            <%= gettext "Comment Setting" %>
-          </a>
-          <a class="dropdown-item" href="/teacher_setting">
-            <%= gettext "Teacher Setting" %>
-          </a>
-          <a class="dropdown-item" href="/standard_setting">
-            <%= gettext "Standard Setting" %>
-          </a>
-          <a class="dropdown-item" href="/class_setting">
-            <%= gettext "Class Setting" %>
-          </a>
-     
-          <a class="dropdown-item" href="/co_curriculum_setting">
-            <%= gettext "Co-Curriculum Setting" %>
-          </a>
-
-          <a class="dropdown-item" href="/nilam_setting">
-            <%= gettext "Nilam Setting" %>
-          </a>
-          <div class="dropdown-divider"></div>
-
-          <a class="dropdown-item" href="/parent">
-            <%= gettext "Parents" %>
-          </a>
-          <a class="dropdown-item" href="/students">
-            <%= gettext "Students" %>
-          </a>
-
-           <a class="dropdown-item" href="/subject/new">
-            <%= gettext "Subject" %>
-          </a>
-
-           <a class="dropdown-item" href="/levels">
-            <%= gettext "Standard" %>
-          </a>
-    
-
-          <a class="dropdown-item" href="/height_weight">
-            <%= gettext "Height&Weight" %>
-          </a>
-
-    
-
-        </div>
-      </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <%= gettext "Processing" %>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="/attendance">
-            <%= gettext "Attendance" %>
-          </a>
-          <a class="dropdown-item" href="/mark_sheet">
-            <%= gettext "Mark Sheet" %>
-          </a>
-    
-          <a class="dropdown-item" href="co_mark">
-            <%= gettext "Co-Curriculum"%>
-          </a>
-
-            <a class="dropdown-item" href="student_comments">
-            <%= gettext "Student Comment"%>
-          </a>
-
-        </div>
-
-      </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <%= gettext "Report" %>
-        </a>
-
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-
-
-          <a class="dropdown-item" href="/generate_attendance_report">
-            <%= gettext "Attendance Report" %>
-          </a>
-             <a class="dropdown-item" href="/holiday_report">
-            <%= gettext "Holiday Report" %>
-          </a>
-
-          <a class="dropdown-item" href="/exam_result_class">
-            <%= gettext "Exam Result (Class)" %>
-          </a>
-          <a class="dropdown-item" href="/exam_result_analysis_class">
-            <%= gettext "Exam Result Analysis(Class)" %>
-          </a>
-          <a class="dropdown-item" href="/exam_result_standard">
-            <%= gettext "Exam Result (Standard)" %>
-          </a>
-          <a class="dropdown-item" href="/exam_result_analysis_standard">
-            <%= gettext "Exam Result Analysis(Standard)" %>
-          </a>
-      
-          <a class="dropdown-item" href="/student_listing_by_class">
-            <%= gettext "Student Listing" %>
-          </a>
-          <a class="dropdown-item" href="/student_report_by_cocurriculum">
-            <%= gettext "Student Report (Co-Curriculum)" %>
-          </a>
-          <a class="dropdown-item" href="/height_weight_report">
-            <%= gettext "Student Report (Height&Weight)" %>
-          </a>
-          <a class="dropdown-item" href="/student_certificate">
-            <%= gettext "Student Certificate" %>
-          </a>
-          <a class="dropdown-item" href="/show_guardian">
-            <%= gettext "Parent Listing" %>
-          </a>
-          <a class="dropdown-item" href="/class_analysis">
-            <%= gettext "Class Analysis" %>
-          </a>
-          <a class="dropdown-item" href="/teacher_listing">
-            <%= gettext "Teacher Listing" %>
-          </a>
-          <a class="dropdown-item" href="/mark_sheet_listing">
-            <%= gettext "Mark Sheet" %>
-          </a>
-          <a class="dropdown-item" href="/mark_analyse_by_grade">
-            <%= gettext "Mark Analayse by Grade" %>
-          </a>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <%= gettext "Library" %>
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a href="/library/books" class="dropdown-item api" call="get_lib">
-                <%= gettext "Book List by Categories" %>
-              </a>
-              <a href="/library/returns" class="dropdown-item api" call="get_loans">
-                <%= gettext "Return List" %>
-              </a>
-              <a href="/library/loan_report" class="dropdown-item " >
-                <%= gettext "Loan Report" %>
-              </a>
-              <a href="/library/loans/new" class="dropdown-item api">
-                <%= gettext "New Loans" %>
-              </a>
-              <a href="/library/book/student_cards" class="dropdown-item api" call="get_lib">
-                <%= gettext "Student Cards" %>
-              </a>
-
-            </div>
-
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link " href="/logout" role="button">
-              <%= gettext "Logout" %>
-            </a>
-
-          </li>
-
-    </ul>
-
-    </div>
 </nav>

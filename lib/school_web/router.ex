@@ -257,6 +257,7 @@ defmodule SchoolWeb.Router do
     post("/create_student_comment", StudentCommentController, :create_student_comment)
     resources("/user_access", UserAccessController)
     get("/user_access_pass/:id", UserAccessController, :user_access_pass)
+    resources("/role", RoleController)
   end
 
   # Other scopes may use custom stacks.

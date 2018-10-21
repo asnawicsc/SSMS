@@ -6,7 +6,18 @@
               <div class="card ">
                
                 <div class="card-header ">
-            <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+                   <%= if   @conn.private.plug_session["user_id"] != nil do %>
+            
+        
+              <% user_id=@conn.private.plug_session["user_id"] %>
+
+              <%= if user_id != nil do %>
+
+                <% user=Repo.get_by(Settings.User, %{id: user_id }) %>
+
+            <%= if user.role == "Admin" or user.role == "Support" do %>     
+
+        
                   <div class="row">
                   <div class="col-sm-2">
                      <label class="bmd-label-floating"><%= gettext "Class" %></label><br>
@@ -39,10 +50,12 @@
                   </div>
 
 
-            
+            <% end %>
+             <% end %>
+              <% end %>
                 </div>
                 <div class="card-body" id="student_comments">
-
+    <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
                   </div>
                 </div>
               </div>

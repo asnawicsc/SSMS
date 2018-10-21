@@ -328,20 +328,50 @@ defmodule SchoolWeb.AttendanceController do
   end
 
   def index(conn, _params) do
-    attendance = Affairs.list_attendance()
+    user_id = conn.private.plug_session["user_id"]
 
-    classes =
-      Repo.all(
-        from(
-          c in Class,
-          left_join: l in Level,
-          on: c.level_id == l.id,
-          where: c.institution_id == ^School.Affairs.inst_id(conn),
-          select: %{id: c.id, level: l.name, class: c.name},
-          order_by: [c.name]
-        )
-      )
-      |> Enum.group_by(fn x -> x.level end)
+    user = Repo.get_by(School.Settings.User, %{id: user_id})
+
+    {attendance, classes} =
+      if user.role == "Admin" or user.role == "Support" do
+        attendance = Affairs.list_attendance()
+
+        classes =
+          Repo.all(
+            from(
+              c in Class,
+              left_join: l in Level,
+              on: c.level_id == l.id,
+              where: c.institution_id == ^School.Affairs.inst_id(conn),
+              select: %{id: c.id, level: l.name, class: c.name},
+              order_by: [c.name]
+            )
+          )
+          |> Enum.group_by(fn x -> x.level end)
+
+        {attendance, classes}
+      else
+        teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email})
+
+        class = Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
+
+        attendance = Affairs.list_attendance() |> Enum.filter(fn x -> x.class_id == class.id end)
+
+        classes =
+          Repo.all(
+            from(
+              c in Class,
+              left_join: l in Level,
+              on: c.level_id == l.id,
+              where: c.institution_id == ^School.Affairs.inst_id(conn) and c.id == ^class.id,
+              select: %{id: c.id, level: l.name, class: c.name},
+              order_by: [c.name]
+            )
+          )
+          |> Enum.group_by(fn x -> x.level end)
+
+        {attendance, classes}
+      end
 
     render(conn, "index.html", attendance: attendance, classes: classes)
   end
@@ -349,18 +379,38 @@ defmodule SchoolWeb.AttendanceController do
   def generate_attendance_report(conn, params) do
     attendance = Affairs.list_attendance()
 
+    user = Repo.get_by(School.Settings.User, %{id: conn.private.plug_session["user_id"]})
+
+    teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email})
+
+    class = Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
+
     classes =
-      Repo.all(
-        from(
-          c in Class,
-          left_join: l in Level,
-          on: c.level_id == l.id,
-          where: c.institution_id == ^School.Affairs.inst_id(conn),
-          select: %{id: c.id, level: l.name, class: c.name},
-          order_by: [c.name]
+      if user.role == "Admin" or user.role == "Support" do
+        Repo.all(
+          from(
+            c in Class,
+            left_join: l in Level,
+            on: c.level_id == l.id,
+            where: c.institution_id == ^School.Affairs.inst_id(conn),
+            select: %{id: c.id, level: l.name, class: c.name},
+            order_by: [c.name]
+          )
         )
-      )
-      |> Enum.group_by(fn x -> x.level end)
+        |> Enum.group_by(fn x -> x.level end)
+      else
+        Repo.all(
+          from(
+            c in Class,
+            left_join: l in Level,
+            on: c.level_id == l.id,
+            where: c.institution_id == ^School.Affairs.inst_id(conn) and c.id == ^class.id,
+            select: %{id: c.id, level: l.name, class: c.name},
+            order_by: [c.name]
+          )
+        )
+        |> Enum.group_by(fn x -> x.level end)
+      end
 
     render(conn, "generate_attendance_report.html", attendance: attendance, classes: classes)
   end

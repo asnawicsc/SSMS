@@ -315,6 +315,52 @@ defmodule SchoolWeb.UserChannel do
     {:noreply, socket}
   end
 
+  def handle_in("inquire_student_details_class", payload, socket) do
+    institution_id = payload["inst_id"]
+
+    id = payload["student_id"]
+    user = Repo.get(School.Settings.User, payload["user_id"])
+    # institution_id = user.institution_id
+
+    user_access =
+      Repo.get_by(
+        School.Settings.UserAccess,
+        user_id: payload["user_id"],
+        institution_id: institution_id
+      )
+
+    student = Repo.get_by(School.Affairs.Student, id: id, institution_id: institution_id)
+    changeset = Affairs.change_student(student)
+
+    conn = %{
+      private: %{
+        plug_session: %{
+          "institution_id" => user_access.institution_id,
+          "user_id" => user_access.user_id
+        }
+      }
+    }
+
+    html =
+      Phoenix.View.render_to_string(
+        SchoolWeb.StudentView,
+        "form.html",
+        student: student,
+        guardian: student.gicno,
+        father: student.ficno,
+        mother: student.micno,
+        changeset: changeset,
+        conn: conn,
+        csrf: payload["csrf"],
+        institution_id: institution_id,
+        action: "/students/#{student.id}"
+      )
+
+    csrf = payload["csrf"]
+    broadcast(socket, "show_student_details2", %{html: html, csrf: csrf})
+    {:noreply, socket}
+  end
+
   def handle_in("delete_student", payload, socket) do
     student = Affairs.get_student!(payload["student_id"])
     {:ok, _student} = Affairs.delete_student(student)
@@ -869,15 +915,28 @@ defmodule SchoolWeb.UserChannel do
   end
 
   def handle_in("class_info", payload, socket) do
-    class_id = payload["class_id"]
+    user = Repo.get_by(School.Settings.User, %{id: payload["user_id"]})
 
-    all = Repo.get_by(School.Affairs.Class, %{id: class_id})
+    {all, teacher} =
+      if user.role == "Admin" or user.role == "Support" do
+        class_id = payload["class_id"]
 
-    teacher =
-      if all.teacher_id != nil do
-        Repo.get_by(School.Affairs.Teacher, id: all.teacher_id)
+        all = Repo.get_by(School.Affairs.Class, %{id: class_id})
+
+        teacher =
+          if all.teacher_id != nil do
+            Repo.get_by(School.Affairs.Teacher, id: all.teacher_id)
+          else
+            Repo.get_by(School.Affairs.Teacher, id: 106)
+          end
+
+        {all, teacher}
       else
-        Repo.get_by(School.Affairs.Teacher, id: 106)
+        teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email})
+
+        all = Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
+
+        {all, teacher}
       end
 
     broadcast(socket, "show_class_info", %{
@@ -937,63 +996,137 @@ defmodule SchoolWeb.UserChannel do
   end
 
   def handle_in("class_subject", payload, socket) do
-    class_id = payload["class_id"]
-    class = Repo.get_by(School.Affairs.Class, %{id: class_id})
-    institution_id = payload["institution_id"]
+    user = Repo.get_by(School.Settings.User, %{id: payload["user_id"]})
 
-    all =
-      Repo.all(
-        from(
-          s in School.Affairs.SubjectTeachClass,
-          left_join: g in School.Affairs.Subject,
-          on: g.id == s.subject_id,
-          left_join: r in School.Affairs.Teacher,
-          on: r.id == s.teacher_id,
-          where:
-            s.class_id == ^class_id and s.standard_id == ^class.level_id and
-              g.institution_id == ^institution_id and r.institution_id == ^institution_id,
-          select: %{
-            subject_name: g.description,
-            subject_code: g.code,
-            teacher_name: r.name,
-            teacher_code: r.code
-          }
-        )
-      )
+    {all, class_id} =
+      if user.role == "Admin" or user.role == "Support" do
+        class_id = payload["class_id"]
+        class = Repo.get_by(School.Affairs.Class, %{id: class_id})
+        institution_id = payload["institution_id"]
+
+        all =
+          Repo.all(
+            from(
+              s in School.Affairs.SubjectTeachClass,
+              left_join: g in School.Affairs.Subject,
+              on: g.id == s.subject_id,
+              left_join: r in School.Affairs.Teacher,
+              on: r.id == s.teacher_id,
+              where:
+                s.class_id == ^class_id and s.standard_id == ^class.level_id and
+                  g.institution_id == ^institution_id and r.institution_id == ^institution_id,
+              select: %{
+                subject_name: g.description,
+                subject_code: g.code,
+                teacher_name: r.name,
+                teacher_code: r.code
+              }
+            )
+          )
+
+        {all, class_id}
+      else
+        teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email})
+
+        class = Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
+        class_id = class.id
+        institution_id = payload["institution_id"]
+
+        all =
+          Repo.all(
+            from(
+              s in School.Affairs.SubjectTeachClass,
+              left_join: g in School.Affairs.Subject,
+              on: g.id == s.subject_id,
+              left_join: r in School.Affairs.Teacher,
+              on: r.id == s.teacher_id,
+              where:
+                s.class_id == ^class_id and s.standard_id == ^class.level_id and
+                  g.institution_id == ^institution_id and r.institution_id == ^institution_id,
+              select: %{
+                subject_name: g.description,
+                subject_code: g.code,
+                teacher_name: r.name,
+                teacher_code: r.code
+              }
+            )
+          )
+
+        {all, class_id}
+      end
 
     broadcast(socket, "show_class_subject", %{class_id: class_id, all: all})
     {:noreply, socket}
   end
 
   def handle_in("class_period", payload, socket) do
-    class_id = payload["class_id"]
+    user = Repo.get_by(School.Settings.User, %{id: payload["user_id"]})
 
-    class = School.Affairs.get_class!(class_id)
+    {class_id, period} =
+      if user.role == "Admin" or user.role == "Support" do
+        class_id = payload["class_id"]
 
-    period =
-      Repo.all(
-        from(
-          p in School.Affairs.Period,
-          left_join: r in School.Affairs.SubjectTeachClass,
-          on: r.subject_id == p.subject_id,
-          left_join: s in School.Affairs.Subject,
-          on: s.id == r.subject_id,
-          left_join: t in School.Affairs.Teacher,
-          on: t.id == r.teacher_id,
-          left_join: d in School.Affairs.Day,
-          on: d.name == p.day,
-          where: p.class_id == ^class_id and r.class_id == ^class_id,
-          select: %{
-            id: p.id,
-            day_number: d.number,
-            day_name: d.name,
-            end_time: p.end_time,
-            teacher_id: t.id,
-            start_time: p.start_time,
-            s_code: s.code
-          }
-        )
-      )
+        class = School.Affairs.get_class!(class_id)
+
+        period =
+          Repo.all(
+            from(
+              p in School.Affairs.Period,
+              left_join: r in School.Affairs.SubjectTeachClass,
+              on: r.subject_id == p.subject_id,
+              left_join: s in School.Affairs.Subject,
+              on: s.id == r.subject_id,
+              left_join: t in School.Affairs.Teacher,
+              on: t.id == r.teacher_id,
+              left_join: d in School.Affairs.Day,
+              on: d.name == p.day,
+              where: p.class_id == ^class_id and r.class_id == ^class_id,
+              select: %{
+                id: p.id,
+                day_number: d.number,
+                day_name: d.name,
+                end_time: p.end_time,
+                teacher_id: t.id,
+                start_time: p.start_time,
+                s_code: s.code
+              }
+            )
+          )
+
+        {class_id, period}
+      else
+        teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email})
+
+        class = Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
+        class_id = class.id
+
+        period =
+          Repo.all(
+            from(
+              p in School.Affairs.Period,
+              left_join: r in School.Affairs.SubjectTeachClass,
+              on: r.subject_id == p.subject_id,
+              left_join: s in School.Affairs.Subject,
+              on: s.id == r.subject_id,
+              left_join: t in School.Affairs.Teacher,
+              on: t.id == r.teacher_id,
+              left_join: d in School.Affairs.Day,
+              on: d.name == p.day,
+              where: p.class_id == ^class_id and r.class_id == ^class_id,
+              select: %{
+                id: p.id,
+                day_number: d.number,
+                day_name: d.name,
+                end_time: p.end_time,
+                teacher_id: t.id,
+                start_time: p.start_time,
+                s_code: s.code
+              }
+            )
+          )
+
+        {class_id, period}
+      end
 
     all =
       for item <- period do
@@ -1116,13 +1249,25 @@ defmodule SchoolWeb.UserChannel do
   end
 
   def handle_in("class_student_info", payload, socket) do
+    user = Repo.get_by(School.Settings.User, %{id: payload["user_id"]})
+    teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email})
+
+    class = Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
+
+    class_id =
+      if user.role == "Admin" or user.role == "Support" do
+        payload["class_id"]
+      else
+        class.id
+      end
+
     students =
       Repo.all(
         from(
           s in Student,
           left_join: g in StudentClass,
           on: s.id == g.sudent_id,
-          where: s.institution_id == ^payload["inst_id"] and g.class_id == ^payload["class_id"],
+          where: s.institution_id == ^payload["inst_id"] and g.class_id == ^class_id,
           order_by: [asc: s.name]
         )
       )
@@ -1131,7 +1276,8 @@ defmodule SchoolWeb.UserChannel do
       Phoenix.View.render_to_string(
         SchoolWeb.ClassView,
         "student_class_info.html",
-        students: students
+        students: students,
+        csrf: payload["csrf"]
       )
 
     broadcast(socket, "show_student_class_info", %{html: html})
@@ -1224,7 +1370,17 @@ defmodule SchoolWeb.UserChannel do
   end
 
   def handle_in("create_period", payload, socket) do
-    class_id = payload["class_id"]
+    user = Repo.get_by(School.Settings.User, %{id: payload["user_id"]})
+    teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email})
+
+    class = Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
+
+    class_id =
+      if user.role == "Admin" or user.role == "Support" do
+        payload["class_id"]
+      else
+        class.id
+      end
 
     html =
       Phoenix.View.render_to_string(
@@ -1239,7 +1395,17 @@ defmodule SchoolWeb.UserChannel do
   end
 
   def handle_in("edit_period_class", payload, socket) do
-    class_id = payload["class_id"]
+    user = Repo.get_by(School.Settings.User, %{id: payload["user_id"]})
+    teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email})
+
+    class = Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
+
+    class_id =
+      if user.role == "Admin" or user.role == "Support" do
+        payload["class_id"]
+      else
+        class.id
+      end
 
     classes = Repo.all(from(c in Class, where: c.id == ^class_id))
 
@@ -1257,24 +1423,52 @@ defmodule SchoolWeb.UserChannel do
   end
 
   def handle_in("mark_sheet_class", payload, socket) do
+    user = Repo.get_by(School.Settings.User, %{id: payload["user_id"]})
+
     class_id = payload["class_id"]
     class = Repo.get_by(School.Affairs.Class, id: class_id)
 
-    all =
-      Repo.all(
-        from(
-          p in School.Affairs.Exam,
-          left_join: g in School.Affairs.ExamMaster,
-          on: g.id == p.exam_master_id,
-          left_join: sb in School.Affairs.Subject,
-          on: sb.id == p.subject_id,
-          left_join: s in School.Affairs.Class,
-          on: g.level_id == s.level_id,
-          where: s.id == ^class_id,
-          select: %{id: sb.id, s_code: sb.code, subject: sb.description}
-        )
-      )
-      |> Enum.uniq()
+    {all} =
+      if user.role == "Admin" or user.role == "Support" do
+        all =
+          Repo.all(
+            from(
+              p in School.Affairs.Exam,
+              left_join: g in School.Affairs.ExamMaster,
+              on: g.id == p.exam_master_id,
+              left_join: sb in School.Affairs.Subject,
+              on: sb.id == p.subject_id,
+              left_join: s in School.Affairs.Class,
+              on: g.level_id == s.level_id,
+              where: s.id == ^class_id,
+              select: %{id: sb.id, s_code: sb.code, subject: sb.description}
+            )
+          )
+
+        {all}
+      else
+        teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email})
+
+        all =
+          Repo.all(
+            from(
+              p in School.Affairs.Exam,
+              left_join: g in School.Affairs.ExamMaster,
+              on: g.id == p.exam_master_id,
+              left_join: st in School.Affairs.SubjectTeachClass,
+              on: st.subject_id == p.subject_id,
+              left_join: sb in School.Affairs.Subject,
+              on: sb.id == p.subject_id,
+              left_join: s in School.Affairs.Class,
+              on: g.level_id == s.level_id,
+              where:
+                s.id == ^class_id and st.class_id == ^class_id and st.teacher_id == ^teacher.id,
+              select: %{id: sb.id, s_code: sb.code, subject: sb.description}
+            )
+          )
+
+        {all}
+      end
 
     exam =
       Repo.all(
@@ -2294,32 +2488,72 @@ defmodule SchoolWeb.UserChannel do
     co_semester = payload["co_semester"]
     institution_id = payload["ins_id"]
 
-    students =
-      Repo.all(
-        from(
-          s in School.Affairs.StudentCocurriculum,
-          left_join: a in School.Affairs.Student,
-          on: s.student_id == a.id,
-          left_join: j in School.Affairs.StudentClass,
-          on: s.student_id == j.sudent_id,
-          left_join: p in School.Affairs.CoCurriculum,
-          on: s.cocurriculum_id == p.id,
-          left_join: c in School.Affairs.Class,
-          on: j.class_id == c.id,
-          where:
-            s.cocurriculum_id == ^cocurriculum and s.year == ^co_year and
-              s.semester_id == ^co_semester and s.standard_id == ^co_level and
-              a.institution_id == ^institution_id and c.institution_id == ^institution_id and
-              p.institution_id == ^institution_id,
-          select: %{
-            id: p.id,
-            student_id: s.student_id,
-            name: a.name,
-            class_name: c.name,
-            mark: s.mark
-          }
-        )
-      )
+    user = Repo.get_by(School.Settings.User, %{id: payload["user_id"]})
+
+    {students} =
+      if user.role == "Admin" or user.role == "Support" do
+        students =
+          Repo.all(
+            from(
+              s in School.Affairs.StudentCocurriculum,
+              left_join: a in School.Affairs.Student,
+              on: s.student_id == a.id,
+              left_join: j in School.Affairs.StudentClass,
+              on: s.student_id == j.sudent_id,
+              left_join: p in School.Affairs.CoCurriculum,
+              on: s.cocurriculum_id == p.id,
+              left_join: c in School.Affairs.Class,
+              on: j.class_id == c.id,
+              where:
+                s.cocurriculum_id == ^cocurriculum and s.year == ^co_year and
+                  s.semester_id == ^co_semester and s.standard_id == ^co_level and
+                  a.institution_id == ^institution_id and c.institution_id == ^institution_id and
+                  p.institution_id == ^institution_id,
+              select: %{
+                id: p.id,
+                student_id: s.student_id,
+                name: a.name,
+                class_name: c.name,
+                mark: s.mark
+              }
+            )
+          )
+
+        {students}
+      else
+        teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email})
+
+        all = Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
+
+        students =
+          Repo.all(
+            from(
+              s in School.Affairs.StudentCocurriculum,
+              left_join: a in School.Affairs.Student,
+              on: s.student_id == a.id,
+              left_join: j in School.Affairs.StudentClass,
+              on: s.student_id == j.sudent_id,
+              left_join: p in School.Affairs.CoCurriculum,
+              on: s.cocurriculum_id == p.id,
+              left_join: c in School.Affairs.Class,
+              on: j.class_id == c.id,
+              where:
+                s.cocurriculum_id == ^cocurriculum and s.year == ^co_year and
+                  s.semester_id == ^co_semester and s.standard_id == ^co_level and
+                  a.institution_id == ^institution_id and c.institution_id == ^institution_id and
+                  p.institution_id == ^institution_id,
+              select: %{
+                id: p.id,
+                student_id: s.student_id,
+                name: a.name,
+                class_name: c.name,
+                mark: s.mark
+              }
+            )
+          )
+
+        {students}
+      end
 
     condition = students |> Enum.map(fn x -> x.mark end) |> Enum.filter(fn x -> x != nil end)
 
@@ -2412,28 +2646,58 @@ defmodule SchoolWeb.UserChannel do
 
     comment = Affairs.list_comment()
 
+    user = Repo.get_by(School.Settings.User, %{id: String.to_integer(payload["user_id"])})
+
+    teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email})
+
+    class = Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
+
     students =
-      Repo.all(
-        from(
-          s in School.Affairs.StudentClass,
-          left_join: a in School.Affairs.Student,
-          on: s.sudent_id == a.id,
-          left_join: b in School.Affairs.StudentComment,
-          on: b.student_id == s.sudent_id,
-          left_join: c in School.Affairs.Class,
-          on: s.class_id == c.id,
-          where: s.class_id == ^sc_class and s.semester_id == ^sc_semester,
-          select: %{
-            student_id: a.id,
-            chinese_name: a.chinese_name,
-            name: a.name,
-            class_name: c.name,
-            coment1: b.comment1,
-            coment2: b.comment2,
-            coment3: b.comment3
-          }
+      if user.role == "Admin" or user.role == "Support" do
+        Repo.all(
+          from(
+            s in School.Affairs.StudentClass,
+            left_join: a in School.Affairs.Student,
+            on: s.sudent_id == a.id,
+            left_join: b in School.Affairs.StudentComment,
+            on: b.student_id == s.sudent_id,
+            left_join: c in School.Affairs.Class,
+            on: s.class_id == c.id,
+            where: s.class_id == ^sc_class and s.semester_id == ^sc_semester,
+            select: %{
+              student_id: a.id,
+              chinese_name: a.chinese_name,
+              name: a.name,
+              class_name: c.name,
+              coment1: b.comment1,
+              coment2: b.comment2,
+              coment3: b.comment3
+            }
+          )
         )
-      )
+      else
+        Repo.all(
+          from(
+            s in School.Affairs.StudentClass,
+            left_join: a in School.Affairs.Student,
+            on: s.sudent_id == a.id,
+            left_join: b in School.Affairs.StudentComment,
+            on: b.student_id == s.sudent_id,
+            left_join: c in School.Affairs.Class,
+            on: s.class_id == c.id,
+            where: s.class_id == ^class.id and s.semester_id == ^sc_semester,
+            select: %{
+              student_id: a.id,
+              chinese_name: a.chinese_name,
+              name: a.name,
+              class_name: c.name,
+              coment1: b.comment1,
+              coment2: b.comment2,
+              coment3: b.comment3
+            }
+          )
+        )
+      end
 
     html =
       if students != [] do
