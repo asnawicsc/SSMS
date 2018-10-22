@@ -5,7 +5,7 @@
                 <div class="form-group bmd-form-group">
                   <label class="bmd-label-floating"><%= gettext "Exam Name" %></label><br>
                  <select class="select" onchange="getval12(this)"  name="exam_result_id" required="" >
-                           <%= for a <- @exam|>Enum.uniq |> Enum.sort do %>
+                           <%= for a <- @exam |>Enum.uniq |> Enum.sort do %>
                                             <option value="<%= a.id %>" ><%= a.exam_name %>
                                             </option>
                                           <% end %>
