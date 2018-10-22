@@ -7,33 +7,33 @@
                     <div class="card-body">
                         <h2>Listing Cocurriculum</h2>
 
-                            <table class="table">
-                              <thead>
-                                <tr>
-                                  <th>Code</th>
-                                  <th>Description</th>
+                          <table class="table">
+                            <thead>
+                              <tr>
+                                <th>Code</th>
+                                <th>Description</th>
+                                <th>Teacher</th>
 
-                                  <th></th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                            <%= for co_curriculum <- @cocurriculum do %>
-                                <tr>
-                                  <td><%= co_curriculum.code %></td>
-                                  <td><%= co_curriculum.description %></td>
-
-                                  <td class="text-right">
-                                     <button type="button" rel="tooltip" title="" class="btn btn-danger btn-link btn-sm" id="<%= co_curriculum.id %>" name="view_co_student" value="" data-toggle="modal" aria-label="trg" data-target="#trg" data-original-title="Edit Item"><i class="material-icons"> View Student</i>
-                                                        <div class="ripple-container"></div>
-                                                    </button>
-                                    <span><%= link "Show", to: co_curriculum_path(@conn, :show, co_curriculum), class: "btn btn-default btn-xs" %></span>
-                                    <span><%= link "Edit", to: co_curriculum_path(@conn, :edit, co_curriculum), class: "btn btn-default btn-xs" %></span>
-                                    <span><%= link "Delete", to: co_curriculum_path(@conn, :delete, co_curriculum), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
-                                  </td>
-                                </tr>
-                            <% end %>
-                              </tbody>
-                            </table>
+                                <th></th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                          <%= for co_curriculum <- @cocurriculum do %>
+                              <tr>
+                                <td><%= co_curriculum.code %></td>
+                                <td><%= co_curriculum.description %></td>
+                                 <td><%= co_curriculum.teacher_id %></td>
+                          <%#  teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email}) %>
+                                <td class="text-right">
+                                   <button type="button" rel="tooltip" title="" class="btn btn-danger btn-link btn-sm" id="<%= co_curriculum.id %>" name="view_co_student" value="" data-toggle="modal" aria-label="trg" data-target="#trg" data-original-title="Edit Item"><i class="material-icons"> View Student</i>                                                         <div class="ripple-container"></div>                                                     </button>
+                                  <span><%= link "Show", to: co_curriculum_path(@conn, :show, co_curriculum), class: "btn btn-default btn-xs" %></span>
+                                  <span><%= link "Edit", to: co_curriculum_path(@conn, :edit, co_curriculum), class: "btn btn-default btn-xs" %></span>
+                                  <span><%= link "Delete", to: co_curriculum_path(@conn, :delete, co_curriculum), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+                                </td>
+                              </tr>
+                          <% end %>
+                            </tbody>
+                          </table>
 
 
                      

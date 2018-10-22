@@ -219,7 +219,6 @@ $("footer").append(maintain)
   })
 
   $("div.student").click(function(){
-
     var student_id = $(this).attr("id")
     var institution_id = window.currentInstitute
 
@@ -229,10 +228,24 @@ $("footer").append(maintain)
      
   })
 
-
-  channel.on("show_student_details", payload => {
+  channel.on("show_student_details_class", payload => {
     $("div[aria-label='student_details']").html(payload.html)
     var csrf = window.csrf
+    $("input[name='_csrf_token']").val(csrf)
+    $("button#delete_student").click(function(){
+      var student_id = $("button#delete_student").attr("aria-label");
+      channel.push("delete_student",{student_id: student_id})
+    })
+  })
+
+
+
+
+
+  channel.on("show_student_details2", payload => {
+    $("div[aria-label='student_details2']").html(payload.html)
+    var csrf = payload.csrf;
+
     $("input[name='_csrf_token']").val(csrf)
     $("button#delete_student").click(function(){
       var student_id = $("button#delete_student").attr("aria-label");
@@ -828,7 +841,6 @@ var teacher_name = payload.teacher_name
 $(".nav-link#class_subject").click(function() {
 
    
-
    var class_id=localStorage.getItem("class_id")
    var institution_id = window.currentInstitute;
 
@@ -994,7 +1006,7 @@ $(".nav-link#class_student").click(function() {
 
    var class_id=localStorage.getItem("class_id")
 
-  channel.push("class_student", {semester_id: window.currentSemester,user_id: window.currentUser,class_id: class_id,inst_id: window.currentInstitute})
+  channel.push("class_student", {semester_id: window.currentSemester,user_id: window.currentUser,class_id: class_id, inst_id: window.currentInstitute })
     
   })
 
@@ -1014,11 +1026,11 @@ $("div#class_student_info").hide();
 
 $(".nav-link#class_student_info").click(function() {
 
-   
+      var csrf = window.csrf
 
    var class_id=localStorage.getItem("class_id")
 
-  channel.push("class_student_info", {semester_id: window.currentSemester, inst_id: window.currentInstitute,user_id: window.currentUser,class_id: class_id})
+  channel.push("class_student_info", {csrf: csrf,semester_id: window.currentSemester, inst_id: window.currentInstitute,user_id: window.currentUser,class_id: class_id})
     
   })
 

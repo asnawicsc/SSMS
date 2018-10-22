@@ -4,7 +4,12 @@
   }
 </style>
 
+<script type="text/javascript">
+  window.csrf = "<%= Phoenix.Controller.get_csrf_token %>"
+</script>
+<form>
 
+</form>
 <div class="row">
   <div class="col-lg-4">
     <div class="table-responsive">
@@ -20,17 +25,16 @@
       </thead>
       <tbody>
        
-    <%= for student <- @students do %>
+    <%= for studen_class <- @students do %>
         <tr>
        
 
 
           <td class="text-left">
+         <input type="hidden" name="_csrf_token" value="<%= @csrf %>">
        
-       
-              <div id="<%= student.id %>" class="btn btn-link student"><%= student.name %> <%= student.chinese_name %></div>
+              <div id="<%= studen_class.id %>" class="btn btn-link studen_class"><%= studen_class.name %> <%= studen_class.chinese_name %></div>
 
-       
           </td>
         </tr>
     <% end %>
@@ -39,7 +43,7 @@
     </table>
 </div>
   </div>
-  <div class="col-lg-8" aria-label="student_details">
+  <div class="col-lg-8" aria-label="student_details2">
    <p class="lead">Click on a student name in the left panel. </p> 
   <div class="row" style="margin-top: 10px;">
       <div class="col-lg-12">
@@ -58,7 +62,19 @@
 <script type="text/javascript">
   $(window).ready(function(){
     var target = window.location.search.substring(1).split("=")[1]
-    $("div#"+target+".student").click()
+    console.log(target);
+    $("div#"+target+".studen_class").click()
 
+     $('.table').DataTable();
+  })
+
+    $("div.studen_class").click(function(){
+
+    var student_id = $(this).attr("id")
+    var institution_id = window.currentInstitute
+    var csrf= $("input[name='_csrf_token']").val()
+
+    channel.push("inquire_student_details_class", {csrf: csrf, user_id: window.currentUser ,student_id: student_id,inst_id: window.currentInstitute })
+     
   })
 </script>

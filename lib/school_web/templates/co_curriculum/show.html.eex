@@ -12,6 +12,12 @@
     <%= @co_curriculum.description %>
   </li>
 
+    <li>
+    <strong>Teacher ID:</strong>
+   <%  teacher = Repo.get_by(School.Affairs.Teacher, %{id: @co_curriculum.teacher_id}) %>
+    <%= teacher.name %>
+  </li>
+
 </ul>
 
 <span><%= link "Edit", to: co_curriculum_path(@conn, :edit, @co_curriculum) %></span>

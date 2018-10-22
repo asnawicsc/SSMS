@@ -220,5 +220,4 @@
     
   </div>
 <% end %>
-
-<span><button class= "btn btn-danger" id="delete_student" aria-label="<%= @student.id %>">Delete</button></span>
+<button class= "btn btn-danger" id="delete_student" aria-label="<%= @student.id %>">Delete</button>

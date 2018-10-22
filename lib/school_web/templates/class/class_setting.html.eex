@@ -11,11 +11,22 @@
                     <div class="card ">
 
                         <div class="card-header ">
-                     
+       <%= if   @conn.private.plug_session["user_id"] != nil do %>
+            
+        
+              <% user_id=@conn.private.plug_session["user_id"] %>
+
+              <%= if user_id != nil do %>
+
+                <% user=Repo.get_by(Settings.User, %{id: user_id }) %>
+
+            <%= if user.role == "Admin" or user.role == "Support" do %>     
+
+
+
                                
-                            <div class="row">
-                                   <h4 class="card-title">Class Setting
-                                </h4>
+                        <div class="row">
+                                   <h4 class="card-title">Class Setting</h4>
                                   &nbsp;
                                       &nbsp;
                                        &nbsp;
@@ -37,10 +48,33 @@
                                 <button type="button" rel="tooltip" title="" class="btn btn-danger btn-link btn-sm" id="" name="" value="" data-toggle="modal" aria-label="modelj" data-target="#modelj" data-original-title="Edit Item" align="right" style=" position: absolute; right: 10px;"><i class="material-icons">Create Class</i>
                                     <div class="ripple-container"></div>
                                 </button>
-                                </button>
+                        </div>
 
-                            </div>
                             <hr>
+
+                        <% end %>
+
+                              <%= if user.role == "Teacher" do %>
+                                    <% teacher=Repo.get_by(Affairs.Teacher, %{email: user.email }) %>
+                                            <% class=Repo.get_by(Affairs.Class, %{teacher_id: teacher.id }) %>
+                                            <input type="hidden" name="teacher_id" value="<%= class.id %>">
+                                    <script type="text/javascript">
+                                        
+                                        
+
+                                                    var class_id =  $("input[name='teacher_id']").val()
+
+                            
+
+                                                    channel.push("class_info", {
+                                                        user_id: window.currentUser,
+                                                        class_id: class_id,
+                                                    })
+                                    </script>
+                              <% end %>
+            <% end %>
+            <% end %>
+
                             <ul class="nav nav-pills nav-pills-warning" role="tablist">
                                 <li class="nav-item">
                                     <a class="nav-link active" data-toggle="tab" href="" id="class_info" role="tablist">
@@ -61,11 +95,25 @@
                                         Class Period
                                     </a>
                                 </li>
+                                   <%= if   @conn.private.plug_session["user_id"] != nil do %>
+            
+        
+              <% user_id=@conn.private.plug_session["user_id"] %>
+
+              <%= if user_id != nil do %>
+
+                <% user=Repo.get_by(Settings.User, %{id: user_id }) %>
+
+            <%= if user.role == "Admin" or user.role == "Support" do %>     
                                 <li class="nav-item">
                                     <a class="nav-link" data-toggle="tab" href="" id="class_student" role="tablist">
                                         Class Student
                                     </a>
                                 </li>
+
+                                <% end %>
+                                 <% end %>
+                                  <% end %>
                                 <li class="nav-item">
                                     <a class="nav-link" data-toggle="tab" href="" id="class_student_info" role="tablist">
                                         Class Student Info
@@ -105,13 +153,30 @@
                                                     <br><br>
 
                                                 </div>
+                              <%= if   @conn.private.plug_session["user_id"] != nil do %>
+            
+        
+                                  <% user_id=@conn.private.plug_session["user_id"] %>
+
+                                  <%= if user_id != nil do %>
+
+                                    <% user=Repo.get_by(Settings.User, %{id: user_id }) %>
+
+                                <%= if user.role == "Admin" or user.role == "Support" do %>  
                                                 <div class="card-footer">
+                     
+
+
                                                     <button type="button" rel="tooltip" title="" class="btn btn-danger btn-link btn-sm" id="" name="class_id2" value="" data-toggle="modal" aria-label="modelb" data-target="#modelb" data-original-title="Edit Item"><i class="material-icons">Edit Class Info</i>
                                                         <div class="ripple-container"></div>
                                                     </button>
-                                                    </button>
+                                           
 
                                                 </div>
+                                                <% end %>
+                                                <% end %>
+                                                    <% end %>
+
                                             </div>
                                         </div>
 
@@ -223,7 +288,7 @@
                                                 </div>
                                                 <div class="card-footer">
 
-                                                    <button type="button" rel="tooltip" title="" class="btn btn-danger btn-link btn-sm" id="" name="class_id" value="" data-toggle="modal" aria-label="modela" data-target="#modela" data-original-title="Edit Item"><i class="material-icons">New Standard Subject</i>
+                                                    <button type="button" rel="tooltip" title="" class="btn btn-danger btn-link btn-sm" id="" name="class_id" value="" data-toggle="modal" aria-label="modela" data-target="#modela" data-original-title="Edit Item"><i class="material-icons">Update Teacher Teaching</i>
                                                         <div class="ripple-container"></div>
                                                     </button>
                                                     </button>
@@ -467,18 +532,6 @@ $("div#class_student_info").show();
 
 
     $("#h4").html(payload.html);
-
-
-     $('.table').DataTable();
-
-      $(".table").on("click", "div.student", function(){
-        var student_id = $(this).attr("id")
-
-        channel.push("inquire_student_details", {user_id: window.currentUser, student_id: student_id})
-      })
-
-
-     
 
   })
 

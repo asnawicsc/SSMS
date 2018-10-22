@@ -12,7 +12,8 @@
                   </h4>
 
                    
-                    <select class="select" onchange="getval4(this);" required="required" name="mark_sheet_class">
+                    &nbsp &nbsp &nbsp &nbsp <label class="bmd-label-floating"><%= gettext "Class : " %></label><br>
+                     <select class="select" onchange="getval4(this);" required="required" name="mark_sheet_class">
                            <%= for a <- @class |> Enum.sort do %>
                                             <option value="<%= a.id %>" ><%= a.name %>
                                             </option>

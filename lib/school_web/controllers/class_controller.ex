@@ -193,14 +193,31 @@ defmodule SchoolWeb.ClassController do
   end
 
   def student_listing_by_class(conn, params) do
+    user = Repo.get_by(School.Settings.User, %{id: conn.private.plug_session["user_id"]})
+
+    teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email})
+
+    ad = Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
+
     class =
-      Repo.all(
-        from(
-          s in School.Affairs.Class,
-          select: %{institution_id: s.institution_id, id: s.id, name: s.name}
+      if user.role == "Admin" or user.role == "Support" do
+        Repo.all(
+          from(
+            s in School.Affairs.Class,
+            select: %{institution_id: s.institution_id, id: s.id, name: s.name}
+          )
         )
-      )
-      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+        |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+      else
+        Repo.all(
+          from(
+            s in School.Affairs.Class,
+            where: s.id == ^ad.id,
+            select: %{institution_id: s.institution_id, id: s.id, name: s.name}
+          )
+        )
+        |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+      end
 
     render(
       conn,

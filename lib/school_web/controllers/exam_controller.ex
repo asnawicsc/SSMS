@@ -226,62 +226,47 @@ defmodule SchoolWeb.ExamController do
   end
 
   def mark_sheet(conn, params) do
-    all =
-      Repo.all(
-        from(
-          p in School.Affairs.SubjectTeachClass,
-          left_join: sb in School.Affairs.Subject,
-          on: sb.id == p.subject_id,
-          left_join: s in School.Affairs.Class,
-          on: p.class_id == s.id,
-          left_join: t in School.Affairs.Teacher,
-          on: t.id == p.teacher_id,
-          select: %{id: sb.id, t_name: t.name, s_code: sb.code, subject: sb.description}
-        )
-      )
-      |> Enum.uniq()
-      |> Enum.filter(fn x -> x.t_name != "Rehat" end)
+    user = Repo.get_by(School.Settings.User, %{id: conn.private.plug_session["user_id"]})
 
-    exam =
-      Repo.all(
-        from(
-          e in School.Affairs.ExamMaster,
-          select: %{id: e.id, exam_name: e.name}
-        )
-      )
-
-    all =
-      if all == [] do
-        conn
-        |> put_flash(:info, "Please Create Exam Subject.")
-        |> redirect(to: class_path(conn, :index))
-      else
-        Repo.all(
-          from(
-            p in School.Affairs.SubjectTeachClass,
-            left_join: sb in School.Affairs.Subject,
-            on: sb.id == p.subject_id,
-            left_join: s in School.Affairs.Class,
-            on: p.class_id == s.id,
-            left_join: t in School.Affairs.Teacher,
-            on: t.id == p.teacher_id,
-            select: %{id: sb.id, t_name: t.name, s_code: sb.code, subject: sb.description}
+    {class} =
+      if user.role == "Admin" or user.role == "Support" do
+        class =
+          Repo.all(
+            from(
+              s in School.Affairs.Class,
+              where: s.institution_id == ^conn.private.plug_session["institution_id"],
+              select: %{id: s.id, name: s.name}
+            )
           )
-        )
-        |> Enum.uniq()
-        |> Enum.filter(fn x -> x.t_name != "Rehat" end)
+
+        {class}
+      else
+        teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email})
+
+        class =
+          Repo.all(
+            from(
+              p in School.Affairs.SubjectTeachClass,
+              left_join: s in School.Affairs.Class,
+              on: s.id == p.class_id,
+              where:
+                s.institution_id == ^conn.private.plug_session["institution_id"] and
+                  p.teacher_id == ^teacher.id,
+              select: %{id: s.id, name: s.name}
+            )
+          )
+          |> Enum.uniq()
+
+        {class}
       end
 
-    class =
-      Repo.all(
-        from(
-          s in School.Affairs.Class,
-          where: s.institution_id == ^conn.private.plug_session["institution_id"],
-          select: %{id: s.id, name: s.name}
-        )
-      )
-
-    render(conn, "mark_sheet.html", class: class, class: class, all: all, exam: exam)
+    if class == [] do
+      conn
+      |> put_flash(:info, "You Dont Teach Any Subject.")
+      |> redirect(to: page_path(conn, :dashboard))
+    else
+      render(conn, "mark_sheet.html", class: class)
+    end
   end
 
   def generate_exam(conn, params) do
@@ -455,14 +440,31 @@ defmodule SchoolWeb.ExamController do
   end
 
   def exam_result_class(conn, params) do
+    user = Repo.get_by(School.Settings.User, %{id: conn.private.plug_session["user_id"]})
+
+    teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email})
+
+    ad = Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
+
     class =
-      Repo.all(
-        from(
-          s in School.Affairs.Class,
-          select: %{institution_id: s.institution_id, id: s.id, name: s.name}
+      if user.role == "Admin" or user.role == "Support" do
+        Repo.all(
+          from(
+            s in School.Affairs.Class,
+            select: %{institution_id: s.institution_id, id: s.id, name: s.name}
+          )
         )
-      )
-      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+        |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+      else
+        Repo.all(
+          from(
+            s in School.Affairs.Class,
+            where: s.id == ^ad.id,
+            select: %{institution_id: s.institution_id, id: s.id, name: s.name}
+          )
+        )
+        |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+      end
 
     render(
       conn,
@@ -472,14 +474,31 @@ defmodule SchoolWeb.ExamController do
   end
 
   def exam_result_analysis_class(conn, params) do
+    user = Repo.get_by(School.Settings.User, %{id: conn.private.plug_session["user_id"]})
+
+    teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email})
+
+    ad = Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
+
     class =
-      Repo.all(
-        from(
-          s in School.Affairs.Class,
-          select: %{institution_id: s.institution_id, id: s.id, name: s.name}
+      if user.role == "Admin" or user.role == "Support" do
+        Repo.all(
+          from(
+            s in School.Affairs.Class,
+            select: %{institution_id: s.institution_id, id: s.id, name: s.name}
+          )
         )
-      )
-      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+        |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+      else
+        Repo.all(
+          from(
+            s in School.Affairs.Class,
+            where: s.id == ^ad.id,
+            select: %{institution_id: s.institution_id, id: s.id, name: s.name}
+          )
+        )
+        |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+      end
 
     render(
       conn,

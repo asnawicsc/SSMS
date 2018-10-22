@@ -8,6 +8,16 @@
                   </h4>
                     <hr>
                   <ul class="nav nav-pills nav-pills-warning" role="tablist">
+                      <%= if   @conn.private.plug_session["user_id"] != nil do %>
+            
+        
+                        <% user_id=@conn.private.plug_session["user_id"] %>
+
+                        <%= if user_id != nil do %>
+
+                        <% user=Repo.get_by(Settings.User, %{id: user_id }) %>
+
+                         <%= if user.role == "Admin" or user.role == "Support" do %>
                     <li class="nav-item">
                       <a class="nav-link active" data-toggle="tab" href="#link1" role="tablist">
                         Teacher Info
@@ -39,30 +49,74 @@
                         Absent Reason
                       </a>
                     </li>
+                    <% end %>
+                      <%= if user.role == "Teacher" do %>
+                       <li class="nav-item">
+                      <a class="nav-link active" data-toggle="tab" href="#link1" role="tablist">
+                        Teacher Info
+                      </a>
+
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" data-toggle="tab" href="#link2" role="tablist">
+                        Teacher Period
+                      </a>
+                    </li>
+                    <% end %>
+                    <% end %>
+                    <% end %>
                   </ul>
             
                 </div>
                 <div class="card-body ">
 
                   <div class="tab-content tab-space">
-                    <div class="tab-pane active" id="link1">
-                      <%= render("index.html", conn: @conn, teacher: @teacher)%>
-                    </div>
-                    <div class="tab-pane" id="link2">
-                       <%= render("teacher_timetable.html", conn: @conn, teacher: @teacher)%>
-                    </div>
-                    <div class="tab-pane" id="link3">
-                       <%= render("school_job.html", conn: @conn, school_job: @school_job, teacher_school_job: @teacher_school_job)%>
-                    </div>
-                     <div class="tab-pane" id="link4">
-                       <%= render("co-curriculum_job.html", conn: @conn, cocurriculum_job: @co_curriculum_job,teacher_co_curriculum_job: @teacher_co_curriculum_job)%>
-                    </div>
-                     <div class="tab-pane" id="link5">
-                       <%= render("hem_job.html", conn: @conn, hem_job: @hem_job,teacher_hem_job: @teacher_hem_job)%>
-                    </div>
-                     <div class="tab-pane" id="link6">
-                       <%= render("absent_reason.html", conn: @conn, absent_reason: @absent_reason)%>
-                    </div>
+
+                  <%= if   @conn.private.plug_session["user_id"] != nil do %>
+            
+        
+                        <% user_id=@conn.private.plug_session["user_id"] %>
+
+                        <%= if user_id != nil do %>
+
+                        <% user=Repo.get_by(Settings.User, %{id: user_id }) %>
+
+                         <%= if user.role == "Admin" or user.role == "Support" do %>
+                            <div class="tab-pane active" id="link1">
+                              <%= render("index.html", conn: @conn, teacher: @teacher)%>
+                            </div>
+                            <div class="tab-pane" id="link2">
+                               <%= render("teacher_timetable.html", conn: @conn, teacher: @teacher)%>
+                            </div>
+                            <div class="tab-pane" id="link3">
+                               <%= render("school_job.html", conn: @conn, school_job: @school_job, teacher_school_job: @teacher_school_job)%>
+                            </div>
+                             <div class="tab-pane" id="link4">
+                               <%= render("co-curriculum_job.html", conn: @conn, cocurriculum_job: @co_curriculum_job,teacher_co_curriculum_job: @teacher_co_curriculum_job)%>
+                            </div>
+                             <div class="tab-pane" id="link5">
+                               <%= render("hem_job.html", conn: @conn, hem_job: @hem_job,teacher_hem_job: @teacher_hem_job)%>
+                            </div>
+                             <div class="tab-pane" id="link6">
+                               <%= render("absent_reason.html", conn: @conn, absent_reason: @absent_reason)%>
+                            </div>
+                         <% end %>
+
+
+                         <%= if user.role == "Teacher" do %>
+                            <div class="tab-pane active" id="link1">
+                              <%= render("index.html", conn: @conn, teacher: @teacher)%>
+                            </div>
+                            <div class="tab-pane" id="link2">
+                               <%= render("teacher_timetable.html", conn: @conn, teacher: @teacher)%>
+                            </div>
+                            
+                         <% end %>
+
+                     
+                    <% end %>
+
+                <% end %>
                   </div>
                 </div>
               </div>

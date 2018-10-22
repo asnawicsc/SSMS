@@ -5,6 +5,7 @@
     <tr>
       <th>Code</th>
       <th>Description</th>
+      <th>Teacher</th>
 
       <th></th>
     </tr>
@@ -14,7 +15,10 @@
     <tr>
       <td><%= co_curriculum.code %></td>
       <td><%= co_curriculum.description %></td>
+         <%  teacher = Repo.get_by(School.Affairs.Teacher, %{id: co_curriculum.teacher_id}) %>
+       <td><%= teacher.name %></td>
 
+ 
       <td class="text-right">
         <span><%= link "Show", to: co_curriculum_path(@conn, :show, co_curriculum), class: "btn btn-default btn-xs" %></span>
         <span><%= link "Edit", to: co_curriculum_path(@conn, :edit, co_curriculum), class: "btn btn-default btn-xs" %></span>
