@@ -127,7 +127,8 @@ defmodule SchoolWeb.ExamController do
 
           grades =
             Repo.all(
-              from(g in School.Affairs.Grade,
+              from(
+                g in School.Affairs.Grade,
                 where: g.institution_id == ^conn.private.plug_session["institution_id"]
               )
             )
@@ -664,7 +665,8 @@ defmodule SchoolWeb.ExamController do
 
             grades =
               Repo.all(
-                from(g in School.Affairs.Grade,
+                from(
+                  g in School.Affairs.Grade,
                   where: g.institution_id == ^conn.private.plug_session["institution_id"]
                 )
               )
@@ -767,8 +769,11 @@ defmodule SchoolWeb.ExamController do
     end
   end
 
-  def report_card(conn, %{"id" => id, "exam_name" => exam_name}) do
+  def report_card(conn, %{"id" => id, "exam_name" => exam_name, "rank" => rank}) do
+    student_rank = rank |> String.split("-") |> List.to_tuple() |> elem(0)
+    total_student = rank |> String.split("-") |> List.to_tuple() |> elem(1)
     student = Affairs.get_student!(id)
+    institution = Repo.get(Institution, conn.private.plug_session["institution_id"])
 
     all =
       Repo.all(
@@ -789,11 +794,14 @@ defmodule SchoolWeb.ExamController do
           where: em.student_id == ^student.id and e.name == ^exam_name,
           select: %{
             student_name: s.name,
+            chinese_name: s.chinese_name,
             class_name: c.name,
             semester: j.id,
             subject_code: sb.code,
             subject_name: sb.description,
-            mark: em.mark
+            subject_cname: sb.cdesc,
+            mark: em.mark,
+            standard_id: sc.level_id
           }
         )
       )
@@ -802,8 +810,11 @@ defmodule SchoolWeb.ExamController do
       for data <- all do
         grades =
           Repo.all(
-            from(g in School.Affairs.Grade,
-              where: g.institution_id == ^conn.private.plug_session["institution_id"]
+            from(
+              g in School.Affairs.Grade,
+              where:
+                g.institution_id == ^conn.private.plug_session["institution_id"] and
+                  g.standard_id == ^data.standard_id
             )
           )
 
@@ -813,10 +824,12 @@ defmodule SchoolWeb.ExamController do
               class_name: data.class_name,
               semester: data.semester,
               student_name: data.student_name,
+              chinese_name: data.chinese_name,
               grade: grade.name,
               gpa: grade.gpa,
               subject_code: data.subject_code,
               subject_name: data.subject_name,
+              subject_cname: data.subject_cname,
               student_mark: data.mark
             }
           end
@@ -826,6 +839,7 @@ defmodule SchoolWeb.ExamController do
       |> Enum.filter(fn x -> x != nil end)
 
     student_name = all_data |> Enum.map(fn x -> x.student_name end) |> Enum.uniq() |> hd
+    student_cname = all_data |> Enum.map(fn x -> x.chinese_name end) |> Enum.uniq() |> hd
 
     class_name = all_data |> Enum.map(fn x -> x.class_name end) |> Enum.uniq() |> hd
 
@@ -846,24 +860,56 @@ defmodule SchoolWeb.ExamController do
 
     total_average = (total_mark / total_per * 100) |> Float.round(2)
 
-    render(
-      conn,
-      "report_card.html",
-      total_gpa: total_gpa,
-      total_mark: total_mark,
-      total_average: total_average,
-      a: a,
-      b: b,
-      c: c,
-      d: d,
-      e: e,
-      f: f,
-      g: g,
-      cgpa: cgpa,
-      all_data: all_data,
-      student_name: student_name,
-      class_name: class_name
-    )
+    html =
+      Phoenix.View.render_to_string(
+        SchoolWeb.ExamView,
+        "report_card.html",
+        total_gpa: total_gpa,
+        total_mark: total_mark,
+        total_average: total_average,
+        a: a,
+        b: b,
+        c: c,
+        d: d,
+        e: e,
+        f: f,
+        g: g,
+        cgpa: cgpa,
+        all_data: all_data,
+        student_name: student_name,
+        student_cname: student_cname,
+        class_name: class_name,
+        institution_name: institution.name,
+        rank: student_rank,
+        total_student: total_student
+      )
+
+    pdf_params = %{"html" => html}
+
+    pdf_binary =
+      PdfGenerator.generate_binary!(
+        pdf_params["html"],
+        size: "A4",
+        shell_params: [
+          "--margin-left",
+          "5",
+          "--margin-right",
+          "5",
+          "--margin-top",
+          "5",
+          "--margin-bottom",
+          "5",
+          "--encoding",
+          "utf-8",
+          "--orientation",
+          "Portrait"
+        ],
+        delete_temporary: true
+      )
+
+    conn
+    |> put_resp_header("Content-Type", "application/pdf")
+    |> resp(200, pdf_binary)
   end
 
   def generate_ranking(conn, params) do
@@ -935,7 +981,8 @@ defmodule SchoolWeb.ExamController do
 
             grades =
               Repo.all(
-                from(g in School.Affairs.Grade,
+                from(
+                  g in School.Affairs.Grade,
                   where: g.institution_id == ^conn.private.plug_session["institution_id"]
                 )
               )

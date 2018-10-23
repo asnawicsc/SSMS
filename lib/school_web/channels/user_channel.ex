@@ -2003,7 +2003,12 @@ defmodule SchoolWeb.UserChannel do
             student_mark = data.student_mark
 
             grades =
-              Repo.all(from(g in School.Affairs.Grade, where: g.institution_id == ^inst_id))
+              Repo.all(
+                from(
+                  g in School.Affairs.Grade,
+                  where: g.institution_id == ^inst_id and g.standard_id == ^payload["standard_id"]
+                )
+              )
 
             for grade <- grades do
               if student_mark >= grade.mix and student_mark <= grade.max do
