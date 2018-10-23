@@ -66,7 +66,7 @@
           <% item = item|>elem(0) %>
         <tr>
        <th ><%= no+1 %></th>
-          <th><a href="/report_card/<%= @exam_name %>/<%= item.student_id %>"><%=item.name %> (<%=item.chinese_name %>)</a></th>
+          <th><a href="/report_card/<%= @exam_name %>/<%= item.student_id %>/<%= item.rank %>-<%= @total_student%>"><%=item.name %> (<%=item.chinese_name %>)</a></th>
       <th><%= item.sex %></th>
         <%= for subject <- item.subject do %>
          <%= if subject.grade != "G" and subject.grade != "E" and subject.grade != "F" do %>

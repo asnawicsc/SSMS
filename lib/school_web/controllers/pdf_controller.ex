@@ -790,10 +790,15 @@ defmodule SchoolWeb.PdfController do
             student_name: s.name,
             student_mark: e.mark,
             chinese_name: s.chinese_name,
-            sex: s.sex
+            sex: s.sex,
+            standard_id: k.level_id
           }
         )
       )
+
+    if exam_mark != [] do
+      standard_id = hd(exam_mark).standard_id
+    end
 
     exam_standard =
       Repo.all(
@@ -867,7 +872,9 @@ defmodule SchoolWeb.PdfController do
             Repo.all(
               from(
                 g in School.Affairs.Grade,
-                where: g.institution_id == ^conn.private.plug_session["institution_id"]
+                where:
+                  g.institution_id == ^conn.private.plug_session["institution_id"] and
+                    g.standard_id == ^standard_id
               )
             )
 
