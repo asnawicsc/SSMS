@@ -442,10 +442,11 @@ defmodule SchoolWeb.ExamController do
 
   def exam_result_class(conn, params) do
     user = Repo.get_by(School.Settings.User, %{id: conn.private.plug_session["user_id"]})
-
     teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email})
 
-    ad = Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
+    if teacher != nil do
+      ad = Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
+    end
 
     class =
       if user.role == "Admin" or user.role == "Support" do
@@ -479,7 +480,9 @@ defmodule SchoolWeb.ExamController do
 
     teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email})
 
-    ad = Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
+    if teacher != nil do
+      ad = Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
+    end
 
     class =
       if user.role == "Admin" or user.role == "Support" do

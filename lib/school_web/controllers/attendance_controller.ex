@@ -383,7 +383,9 @@ defmodule SchoolWeb.AttendanceController do
 
     teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email})
 
-    class = Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
+    if teacher != nil do
+      class = Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
+    end
 
     classes =
       if user.role == "Admin" or user.role == "Support" do
