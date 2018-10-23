@@ -127,7 +127,8 @@ defmodule SchoolWeb.ExamController do
 
           grades =
             Repo.all(
-              from(g in School.Affairs.Grade,
+              from(
+                g in School.Affairs.Grade,
                 where: g.institution_id == ^conn.private.plug_session["institution_id"]
               )
             )
@@ -645,7 +646,8 @@ defmodule SchoolWeb.ExamController do
 
             grades =
               Repo.all(
-                from(g in School.Affairs.Grade,
+                from(
+                  g in School.Affairs.Grade,
                   where: g.institution_id == ^conn.private.plug_session["institution_id"]
                 )
               )
@@ -783,7 +785,8 @@ defmodule SchoolWeb.ExamController do
       for data <- all do
         grades =
           Repo.all(
-            from(g in School.Affairs.Grade,
+            from(
+              g in School.Affairs.Grade,
               where: g.institution_id == ^conn.private.plug_session["institution_id"]
             )
           )
@@ -916,7 +919,8 @@ defmodule SchoolWeb.ExamController do
 
             grades =
               Repo.all(
-                from(g in School.Affairs.Grade,
+                from(
+                  g in School.Affairs.Grade,
                   where: g.institution_id == ^conn.private.plug_session["institution_id"]
                 )
               )
