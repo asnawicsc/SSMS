@@ -1,0 +1,244 @@
+<%= for student <- @students do %>
+<div  style="page-break-before: always;">
+	<head>
+		<title a> Student Report Card </title>
+   	</head>
+	<p align="center"><%= student.institution_name %><br/><script>document.write(new Date().getFullYear())</script>成绩表 </p>
+</div>
+
+<body>
+  <table align="center" style="display: none">
+    <thead>
+      <tr >
+        <td colspan="4" align="left" >Name : <%= student.student_name %></td>
+      
+        <td colspan="3"> Darjah : <%= student.class_name %> </td>
+      </tr>
+      <tr>
+        <td colspan="3">Course </td>
+        <td rowspan="2"> Semester </td>
+        <td colspan="2"> Grade </td>
+      </tr>
+      <tr>
+        <td>Code </td>
+        <td colspan="2"> Name </td>
+        <td> Grade </td>
+        <td> Mark </td>
+      </tr>
+    </thead>
+    <tbody>
+      <%= for item <- student.all_data do %>
+      <tr>
+        <td><%= item.subject_code %></td>
+        <td colspan="2"><%= item.subject_name %></td>
+        <td align="center"> <%= item.semester %></td>
+        <td align="center"><%= item.grade %></td>
+        <td><%= item.student_mark %></td>
+      
+      </tr>       
+       <% end %>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="4" class="footer">Total</td>
+        <td><%= if student.a == 0 do %>
+            <% else %>
+           <%= student.a %>A, 
+           <%end %>
+           <%= if student.b == 0 do %>
+            <% else %>
+           <%= student.b %>B, 
+           <%end %>
+           <%= if student.c == 0 do %>
+            <% else %>
+           <%= student.c %>C, 
+           <%end %>
+           <%= if student.d == 0 do %>
+            <% else %>
+           <%= student.d %>D, 
+           <%end %>
+           <%= if student.e == 0 do %>
+            <% else %>
+           <%= student.e %>E, 
+           <%end %>
+           <%= if student.f == 0 do %>
+            <% else %>
+           <%= student.f %>F, 
+           <%end %>
+           <%= if student.g == 0 do %>
+            <% else %>
+           <%= student.g %>G, 
+           <%end %></td>
+        <td colspan="2"> <%= student.total_mark %></td>
+      </tr>
+      <tr>
+        <td colspan="4" class="footer">Total Average</td>
+        <td colspan="3"><%= student.total_average%> </td>
+      </tr>
+      <tr>
+        <td colspan="4" class="footer">Head Teacher Signiture</td>
+        <td colspan="3"></td>
+      </tr>
+      <tr>
+        <td colspan="4" class="footer">Teacher Signiture</td>
+        <td colspan="3"></td>
+      </tr>
+      <tr>
+        <td colspan="4" class="footer">Parent Signiture</td>
+        <td colspan="3"></td>
+      </tr>
+  </table>
+  <br>
+
+
+  <table align="center">
+    <thead>
+      <tr >
+        <td colspan="6" align="left" style="border-right: 0; width: 40%;">学生姓名 : <%= student.student_cname %><br/>Nama Murid : <%= student.student_name %></td>
+      
+        <td colspan="2" align="left" style="border-left: 0;"> 班级<br/>Darjah : <%= student.class_name %> </td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td colspan="4" style="width: 30%; font-size: 25px">科目名称 Mata Pelajaran</td>
+        <td align="center">评审一<br/>PKBS1</td>
+        <td align="center">评审二<br/>PKBS2</td>
+        <td align="center">评审三<br/>PKBS3</td>
+        <td align="center">平均<br/>Purata</td>     
+      </tr>
+      <%= for item <- student.all_data do %>
+      <tr>
+        <td colspan="2" style="border-right: 0;"><%= item.subject_cname %></td>
+        <td colspan="2"style="width: 40%; border-left: 0;"><%= item.subject_name %></td>
+        <td align="center" style="width: 13%;"><%= item.student_mark %> (<%= item.grade %>)</td>
+        <td align="center"></td>
+        <td align="center"></td>
+        <td align="center"></td>
+      
+      </tr>       
+       <% end %>
+       <tr>
+        <td colspan="4" style="width: 40%; padding: 13px"></td>
+        <td align="center"></td>
+        <td align="center"></td>
+        <td align="center"></td>
+        <td align="center"></td>     
+      </tr>
+      <tr>
+        <td colspan="4" style="width: 40%; padding: 13px"></td>
+        <td align="center"></td>
+        <td align="center"></td>
+        <td align="center"></td>
+        <td align="center"></td>     
+      </tr>
+      <tr>
+        <td colspan="2" style="border-right: 0;">操行</td>
+        <td colspan="2"style="width: 40%; border-left: 0;">Kelakuan</td>
+        <td align="center"></td>
+        <td align="center"></td>
+        <td align="center"></td> 
+        <td align="center"></td>     
+      </tr>
+      <tr>
+        <td colspan="2" style="border-right: 0;">出席日数</td>
+        <td colspan="2" style="width: 40%; border-left: 0;">Kedatangan</td>
+        <td align="center"></td>
+        <td align="center"></td>
+        <td align="center"></td>
+        <td align="center"></td>     
+      </tr>
+      <tr>
+        <td colspan="2" style="border-right: 0;">总分</td>
+        <td colspan="2" style="width: 40%; border-left: 0;">Jumlah Markah</td>
+        <td align="center"><%= student.total_mark %></td>
+        <td align="center"></td>
+        <td align="center"></td>
+        <td align="center"></td>     
+      </tr>
+      <tr>
+        <td colspan="2" style="border-right: 0;">平均</td>
+        <td colspan="2" style="width: 40%; border-left: 0;">Purata</td>
+        <td align="center"><%= student.total_average%></td>
+        <td align="center"></td>
+        <td align="center"></td>
+        <td align="center"></td>     
+      </tr>
+      <tr>
+        <td colspan="2" style="border-right: 0;">本班名次</td>
+        <td colspan="2" style="width: 40%; border-left: 0;">Kedudukan Dalam Kelas</td>
+        <td align="center"><%= student.rank %>/<%= student.total_student %></td>
+        <td align="center"></td>
+        <td align="center"></td>
+        <td align="center"></td>     
+      </tr>
+      <tr>
+        <td colspan="2" style="border-right: 0;">全级名次</td>
+        <td colspan="2" style="width: 40%; border-left: 0;">Kedudukan Dalam Darjah</td>
+        <td align="center"></td>
+        <td align="center"></td>
+        <td align="center"></td>
+        <td align="center"></td>     
+      </tr>
+      <tr>
+        <td colspan="4" style="width: 40%;">校长签名<br/>T.tangan Guru Besar</td>
+        <td align="center"></td>
+        <td align="center"></td>
+        <td align="center"></td>
+        <td align="center"></td>     
+      </tr>
+      <tr>
+        <td colspan="4" style="width: 40%;">级任签名<br/>T.tangan Guru Darjah</td>
+        <td align="center"></td>
+        <td align="center"></td>
+        <td align="center"></td>
+        <td align="center"></td>     
+      </tr>
+      <tr>
+        <td colspan="4" style="width: 40%;">家长/监护人签名<br/>T.tangan Ibubapa/Penjaga</td>
+        <td align="center"></td>
+        <td align="center"></td>
+        <td align="center"></td>
+        <td align="center"></td>     
+      </tr>
+      <tr>
+        <td colspan="8" style="width: 40%; border-bottom: 0;">评语Komen:</td>   
+      </tr>
+      <tr>
+        <td colspan="8" style="border-top: 0;border-top: 0; padding: 30px"></td>   
+      </tr>
+    </tbody>
+  </table>
+</body>
+
+<% end %>
+
+<style type="text/css">
+  html {
+  font-family:arial;
+  font-size: 18px;
+}
+
+td {
+  border: 1px solid #726E6D;
+  padding: 1px;
+  
+}
+
+thead{
+  text-align:center;
+
+}
+
+table {
+  border-collapse: collapse;
+}
+
+.footer {
+  text-align:right;
+  font-weight:bold;
+}
+
+
+
+</style>
