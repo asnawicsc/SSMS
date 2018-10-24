@@ -774,7 +774,16 @@ defmodule SchoolWeb.ExamController do
 
   def report_card(conn, %{"id" => id, "exam_name" => exam_name, "rank" => rank}) do
     student_rank = rank |> String.split("-") |> List.to_tuple() |> elem(0)
-    total_student = rank |> String.split("-") |> List.to_tuple() |> elem(1)
+    total_student_in_class = rank |> String.split("-") |> List.to_tuple() |> elem(1)
+
+    if rank |> String.split("-") |> Enum.count() == 4 do
+      standard_rank = rank |> String.split("-") |> List.to_tuple() |> elem(2)
+      total_student = rank |> String.split("-") |> List.to_tuple() |> elem(3)
+    else
+      standard_rank = nil
+      total_student = nil
+    end
+
     student = Affairs.get_student!(id)
     institution = Repo.get(Institution, conn.private.plug_session["institution_id"])
 
@@ -884,7 +893,9 @@ defmodule SchoolWeb.ExamController do
         class_name: class_name,
         institution_name: institution.name,
         rank: student_rank,
-        total_student: total_student
+        standard_rank: standard_rank,
+        total_student: total_student,
+        total_student_in_class: total_student_in_class
       )
 
     pdf_params = %{"html" => html}

@@ -165,7 +165,7 @@
       <tr>
         <td colspan="2" style="border-right: 0;">本班名次</td>
         <td colspan="2" style="width: 40%; border-left: 0;">Kedudukan Dalam Kelas</td>
-        <td align="center"><%= @rank %>/<%= @total_student %></td>
+        <td align="center"><%= @rank %>/<%= @total_student_in_class %></td>
         <td align="center"></td>
         <td align="center"></td>
         <td align="center"></td>     
@@ -173,7 +173,11 @@
       <tr>
         <td colspan="2" style="border-right: 0;">全级名次</td>
         <td colspan="2" style="width: 40%; border-left: 0;">Kedudukan Dalam Darjah</td>
+        <%= if @standard_rank != nil do %>
+        <td align="center"><%= @standard_rank %>/<%= @total_student %></td>
+        <% else %>
         <td align="center"></td>
+        <% end %>
         <td align="center"></td>
         <td align="center"></td>
         <td align="center"></td>     

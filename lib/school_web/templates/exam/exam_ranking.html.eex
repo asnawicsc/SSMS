@@ -70,7 +70,11 @@
 
         <tr>
          <th ><%= no+1 %></th>
-          <th><a href="/report_card/<%= @exam_name %>/<%= item.student_id %>"><%=item.name %> (<%=item.chinese_name %>)</a></th>
+        <%= for class <- @total_student_in_class do %>
+            <%= if item.class_id == class.class_id do %>
+              <th><a href="/report_card/<%= @exam_name %>/<%= item.student_id %>/<%= item.class_rank %>-<%= class.total_student %>-<%= item.all_rank %>-<%= @total_student%>"><%=item.name %> (<%=item.chinese_name %>)</a></th>
+            <% end %>
+        <% end %>
         <th ><%=item.sex %></th>
         <%= for subject <- item.subject do %>
          <%= if subject.grade != "G" and subject.grade != "E" and subject.grade != "F" do %>
