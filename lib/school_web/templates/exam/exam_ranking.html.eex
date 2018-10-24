@@ -41,7 +41,7 @@
     <h1><%= @exam_name %></h1>
 
  
-    <table id="example">
+    <table id="table_rank">
       <colgroup>
         <col col span="2" >
       </colgroup>
@@ -120,11 +120,34 @@
 
       </tr>
        <% end %>
-
+      
  
 
     </table>
-
+    <form action="/all_report_card" method="POST">
+      <input type="hidden" name="_csrf_token" value="<%= @csrf %>">
+      <input type="hidden" name="array" id="all_report_card_data" value="">
+      <button type="submit" class="btn btn-info btn-sm " id="all_report_card" style="float: right">Print all Report Card</button>
+    </form>
 
   </body>
 </html>
+
+<script type="text/javascript">
+  var table_rank = document.getElementById('table_rank');
+  var table_length = table_rank.rows.length;
+  var data_array = [];
+  for (i = 1; i < table_length; i++){
+     //gets cells of current row
+     var cells = table_rank.rows.item(i).cells;
+     //gets amount of cells of current row
+     var cell_length = cells.length;
+     //loops through each cell in current row
+     var href_data = cells.item(1).innerHTML;
+     var data = href_data.match(/href="([^"]*)/)[1].split("/report_card/")[1];
+     data_array.push(data);
+  }
+  $("input#all_report_card_data").val(data_array)
+
+  
+</script>

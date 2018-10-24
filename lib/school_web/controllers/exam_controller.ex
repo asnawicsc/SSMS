@@ -927,8 +927,8 @@ defmodule SchoolWeb.ExamController do
   end
 
   def all_report_card(conn, params) do
-    # the format of array is "exam_name/stu_id/rank-total_student"
-
+    # the format of class array is "exam_name/stu_id/rank - total_student"
+    # the format of standard array is "exam_name/stu_id/class_rank - total_student - standard_rank - total_student_standard"
     student_data_lists = params["array"] |> String.split(",")
 
     students =
@@ -953,6 +953,34 @@ defmodule SchoolWeb.ExamController do
           |> String.split("-")
           |> List.to_tuple()
           |> elem(1)
+
+        if list
+           |> String.split("/")
+           |> List.to_tuple()
+           |> elem(2)
+           |> String.split("-")
+           |> Enum.count() == 4 do
+          standard_rank =
+            list
+            |> String.split("/")
+            |> List.to_tuple()
+            |> elem(2)
+            |> String.split("-")
+            |> List.to_tuple()
+            |> elem(2)
+
+          total_student_standard =
+            list
+            |> String.split("/")
+            |> List.to_tuple()
+            |> elem(2)
+            |> String.split("-")
+            |> List.to_tuple()
+            |> elem(3)
+        else
+          standard_rank = nil
+          total_student_standard = nil
+        end
 
         student = Affairs.get_student!(student_id)
         institution = Repo.get(Institution, conn.private.plug_session["institution_id"])
@@ -1060,7 +1088,9 @@ defmodule SchoolWeb.ExamController do
           class_name: class_name,
           institution_name: institution.name,
           rank: rank,
-          total_student: total_student
+          total_student: total_student,
+          total_student_standard: total_student_standard,
+          standard_rank: standard_rank
         }
       end
 
