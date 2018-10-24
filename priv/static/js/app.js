@@ -72,6 +72,8 @@ channel
 
 $(document).ready(function(){
 
+  
+
   $("button#select_all").click(function() {
       var li_list = $("ol#unmark_list").find("li")
       $(li_list).each(function() {
