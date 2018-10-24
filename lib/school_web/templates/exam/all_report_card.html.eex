@@ -175,7 +175,11 @@
       <tr>
         <td colspan="2" style="border-right: 0;">全级名次</td>
         <td colspan="2" style="width: 40%; border-left: 0;">Kedudukan Dalam Darjah</td>
-        <td align="center"></td>
+        <%= if student.standard_rank != nil do %>
+          <td align="center"><%= student.standard_rank %>/<%= student.total_student_standard %></td>
+        <% else %>
+          <td align="center"></td>
+        <% end %>
         <td align="center"></td>
         <td align="center"></td>
         <td align="center"></td>     

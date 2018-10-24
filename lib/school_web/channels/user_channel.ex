@@ -1931,6 +1931,32 @@ defmodule SchoolWeb.UserChannel do
         )
       )
 
+    total_classes =
+      Repo.all(
+        from(
+          e in School.Affairs.ExamMark,
+          left_join: k in School.Affairs.ExamMaster,
+          on: k.id == e.exam_id,
+          left_join: s in School.Affairs.Student,
+          on: s.id == e.student_id,
+          left_join: p in School.Affairs.Subject,
+          on: p.id == e.subject_id,
+          where:
+            e.exam_id == ^exam_id.id and k.level_id == ^level_id and k.institution_id == ^inst_id,
+          select: %{
+            class_id: e.class_id
+          }
+        )
+      )
+
+    total_classes_no_rep = Enum.dedup(total_classes)
+
+    total_stud_in_class =
+      for class <- total_classes_no_rep do
+        total = Enum.count(total_classes, fn x -> x.class_id == class.class_id end)
+        %{class_id: class.class_id, total_student: total}
+      end
+
     if exam_mark != [] do
       exam_standard =
         Repo.all(
@@ -2172,6 +2198,8 @@ defmodule SchoolWeb.UserChannel do
 
       mark = mark1 |> Enum.group_by(fn x -> x.subject_code end)
 
+      total_student = t |> Enum.count()
+
       html =
         Phoenix.View.render_to_string(
           SchoolWeb.ExamView,
@@ -2182,7 +2210,9 @@ defmodule SchoolWeb.UserChannel do
           mark1: mark1,
           exam_id: payload["exam_standard_result_id"],
           level_id: payload["standard_id"],
-          csrf: payload["csrf"]
+          csrf: payload["csrf"],
+          total_student_in_class: total_stud_in_class,
+          total_student: total_student
         )
 
       broadcast(socket, "show_exam_record_standard", %{html: html})
