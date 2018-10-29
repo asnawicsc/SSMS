@@ -263,7 +263,10 @@ defmodule SchoolWeb.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", SchoolWeb do
-  #   pipe_through :api
-  # end
+
+  scope "/api", SchoolWeb do
+    pipe_through(:api)
+
+    get("/webhook_get", ApiController, :webhook_get)
+  end
 end
