@@ -18,7 +18,7 @@ defmodule SchoolWeb.ApiController do
 
   def get_student_list(conn, params) do
     messenger_user_id = params["messenger user id"]
-
+    IO.inspect(params)
     uri = Application.get_env(:school, :api)[:url]
 
     map =
