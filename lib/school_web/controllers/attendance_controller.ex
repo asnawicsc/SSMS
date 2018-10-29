@@ -383,16 +383,17 @@ defmodule SchoolWeb.AttendanceController do
 
     teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email})
 
-    if teacher != nil do
-      class = Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
-    end
+    class =
+      if teacher != nil do
+        Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
+      end
 
     classes =
       if user.role == "Admin" or user.role == "Support" do
         Repo.all(
           from(
-            c in Class,
-            left_join: l in Level,
+            c in School.Affairs.Class,
+            left_join: l in School.Affairs.Level,
             on: c.level_id == l.id,
             where: c.institution_id == ^School.Affairs.inst_id(conn),
             select: %{id: c.id, level: l.name, class: c.name},
@@ -403,8 +404,8 @@ defmodule SchoolWeb.AttendanceController do
       else
         Repo.all(
           from(
-            c in Class,
-            left_join: l in Level,
+            c in School.Affairs.Class,
+            left_join: l in School.Affairs.Level,
             on: c.level_id == l.id,
             where: c.institution_id == ^School.Affairs.inst_id(conn) and c.id == ^class.id,
             select: %{id: c.id, level: l.name, class: c.name},
@@ -413,6 +414,8 @@ defmodule SchoolWeb.AttendanceController do
         )
         |> Enum.group_by(fn x -> x.level end)
       end
+
+    IEx.pry()
 
     render(conn, "generate_attendance_report.html", attendance: attendance, classes: classes)
   end

@@ -30,13 +30,13 @@ environment :dev do
   # dev mode.
   set dev_mode: true
   set include_erts: false
-  set cookie: :"wOL|~[biLX66O$os&o9eM]V];FnVr4jqh.wE>H)mX<_D.<p!/HkSPP0_>!%sj0A1"
+  set cookie: :"XBZGn]x$fRf[zJ9MJWs0DVCf!}Z%9ehcB;Zie9hoHWWHiKi[tMcM!~yMIfntwm,W"
 end
 
 environment :prod do
   set include_erts: true
   set include_src: false
-  set cookie: :"h~g{mK2Qn`WJo8g}Pr_b/<6OEj{sTa,O1K1VT>qnY1Av]@G[cLk~Tj;hS%4(*fL&"
+  set cookie: :";g)@g,Cf`^iD6u,cq:5m$<.1nz)TzfbqHm~LSVIo{e>FZNt3P9eK)VHup)KF[Ab>"
 end
 
 # You may define one or more releases in this file.
@@ -48,9 +48,6 @@ release :school do
   set version: current_version(:school)
   set applications: [
     :runtime_tools
-  ]
-  set commands: [
-    "migrate": "rel/commands/migrate.sh"
   ]
 end
 

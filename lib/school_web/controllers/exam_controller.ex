@@ -444,9 +444,10 @@ defmodule SchoolWeb.ExamController do
     user = Repo.get_by(School.Settings.User, %{id: conn.private.plug_session["user_id"]})
     teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email})
 
-    if teacher != nil do
-      ad = Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
-    end
+    ad =
+      if teacher != nil do
+        Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
+      end
 
     class =
       if user.role == "Admin" or user.role == "Support" do
@@ -480,9 +481,10 @@ defmodule SchoolWeb.ExamController do
 
     teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email})
 
-    if teacher != nil do
-      ad = Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
-    end
+    ad =
+      if teacher != nil do
+        Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
+      end
 
     class =
       if user.role == "Admin" or user.role == "Support" do
@@ -776,13 +778,14 @@ defmodule SchoolWeb.ExamController do
     student_rank = rank |> String.split("-") |> List.to_tuple() |> elem(0)
     total_student_in_class = rank |> String.split("-") |> List.to_tuple() |> elem(1)
 
-    if rank |> String.split("-") |> Enum.count() == 4 do
-      standard_rank = rank |> String.split("-") |> List.to_tuple() |> elem(2)
-      total_student = rank |> String.split("-") |> List.to_tuple() |> elem(3)
-    else
-      standard_rank = nil
-      total_student = nil
-    end
+    {standard_rank, total_student} =
+      if rank |> String.split("-") |> Enum.count() == 4 do
+        standard_rank = rank |> String.split("-") |> List.to_tuple() |> elem(2)
+        total_student = rank |> String.split("-") |> List.to_tuple() |> elem(3)
+      else
+        standard_rank = nil
+        total_student = nil
+      end
 
     student = Affairs.get_student!(id)
     institution = Repo.get(Institution, conn.private.plug_session["institution_id"])
@@ -954,33 +957,34 @@ defmodule SchoolWeb.ExamController do
           |> List.to_tuple()
           |> elem(1)
 
-        if list
-           |> String.split("/")
-           |> List.to_tuple()
-           |> elem(2)
-           |> String.split("-")
-           |> Enum.count() == 4 do
-          standard_rank =
-            list
-            |> String.split("/")
-            |> List.to_tuple()
-            |> elem(2)
-            |> String.split("-")
-            |> List.to_tuple()
-            |> elem(2)
+        {standard_rank, total_student_standard} =
+          if list
+             |> String.split("/")
+             |> List.to_tuple()
+             |> elem(2)
+             |> String.split("-")
+             |> Enum.count() == 4 do
+            standard_rank =
+              list
+              |> String.split("/")
+              |> List.to_tuple()
+              |> elem(2)
+              |> String.split("-")
+              |> List.to_tuple()
+              |> elem(2)
 
-          total_student_standard =
-            list
-            |> String.split("/")
-            |> List.to_tuple()
-            |> elem(2)
-            |> String.split("-")
-            |> List.to_tuple()
-            |> elem(3)
-        else
-          standard_rank = nil
-          total_student_standard = nil
-        end
+            total_student_standard =
+              list
+              |> String.split("/")
+              |> List.to_tuple()
+              |> elem(2)
+              |> String.split("-")
+              |> List.to_tuple()
+              |> elem(3)
+          else
+            standard_rank = nil
+            total_student_standard = nil
+          end
 
         student = Affairs.get_student!(student_id)
         institution = Repo.get(Institution, conn.private.plug_session["institution_id"])

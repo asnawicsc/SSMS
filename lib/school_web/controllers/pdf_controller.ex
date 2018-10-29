@@ -796,9 +796,10 @@ defmodule SchoolWeb.PdfController do
         )
       )
 
-    if exam_mark != [] do
-      standard_id = hd(exam_mark).standard_id
-    end
+    standard_id =
+      if exam_mark != [] do
+        hd(exam_mark).standard_id
+      end
 
     exam_standard =
       Repo.all(

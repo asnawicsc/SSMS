@@ -197,9 +197,10 @@ defmodule SchoolWeb.ClassController do
 
     teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email})
 
-    if teacher != nil do
-      ad = Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
-    end
+    ad =
+      if teacher != nil do
+        Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
+      end
 
     class =
       if user.role == "Admin" or user.role == "Support" do
