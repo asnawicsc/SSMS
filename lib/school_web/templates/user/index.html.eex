@@ -14,7 +14,19 @@
             </div>
 
 
-            <div class="card-body table-responsive">
+       <%= if   @conn.private.plug_session["user_id"] != nil do %>
+            
+        
+              <% user_id=@conn.private.plug_session["user_id"] %>
+
+              <%= if user_id != nil do %>
+
+                <% user=Repo.get_by(Settings.User, %{id: user_id }) %>
+
+                <%= if user.role == "Admin" do %>
+
+
+        <div class="card-body table-responsive">
             <% group_user = @users |> Enum.group_by(fn x -> x.role end) %>
              <% groups = group_user |> Map.keys %>
 
@@ -105,6 +117,74 @@
                 </div>
               </div>
             </div>
+
+
+            <% end %>
+              <% end %>
+                <% end %>
+
+
+                       <%= if   @conn.private.plug_session["user_id"] != nil do %>
+            
+        
+              <% user_id=@conn.private.plug_session["user_id"] %>
+
+              <%= if user_id != nil do %>
+
+                <% user=Repo.get_by(Settings.User, %{id: user_id }) %>
+
+                <%= if user.role == "Support" do %>
+
+
+        <div class="card-body table-responsive">
+            <% group_user = @users |> Enum.group_by(fn x -> x.role end) %>
+
+              <div class="row">
+
+
+                <div class="col-md-12">
+                  <div class="tab-content">
+                    <div class="tab-pane active show" id="link4">
+                      <table class="table data">
+                          <thead>
+                              <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Action</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                           <%= for user <- @users|>Enum.filter(fn x -> x.role == "Teacher" end) do %>
+                                <tr>
+                                  <td><%= user.name %></td>
+                                  <td><%= user.email %></td>
+                                  <td><%= user.role %></td>
+                                  <td class="text-right">
+                                  <span><%= link "Show", to: user_path(@conn, :show, user), class: "btn btn-default btn-xs" %></span>
+                                 
+                                  <span><%= link "Edit", to: user_path(@conn, :edit, user), class: "btn btn-default btn-xs" %></span>
+                                  <span><%= link "Delete", to: user_path(@conn, :delete, user), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+                                   <span><a href="/user_access_pass/<%= user.id %>" type="button" rel="tooltip" title="" class="btn btn-primary btn-link btn-sm" data-original-title="Edit user">
+                                      <i class="material-icons">User Access</i>
+                                    <div class="ripple-container"></div></a></span>
+                                </td>
+                                </tr>
+                            <% end %>
+                          </tbody>
+                      </table>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <% end %>
+              <% end %>
+                <% end %>
+
     
         </div>
                 
