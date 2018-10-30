@@ -12,7 +12,7 @@ defmodule SchoolWeb.ApiController do
         send_resp(conn, 200, "please include request  in field.")
 
       params["fields"] == "get_student_list" ->
-        get_guardian_ic(conn, params)
+        get_student_list(conn, params)
 
    end
   end
