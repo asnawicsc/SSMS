@@ -11,53 +11,84 @@ defmodule SchoolWeb.ApiController do
       params["fields"] == nil ->
         send_resp(conn, 200, "please include request  in field.")
 
-      params["fields"] == "get_student_list" ->
-        get_student_list(conn, params)
-    end
+      params["fields"] == "get_guardian_ic" ->
+        get_guardian_ic(conn, params)
+        
+   end
   end
 
-  def get_student_list(conn, params) do
+  def get_guardian_ic(conn, params) do
     messenger_user_id = params["messenger user id"]
+    ic = params["IC"]
+
+    parent=Repo.all(from s in School.Affairs.Parent, where s.icno ==^ic)
+
     IO.inspect(params)
     uri = Application.get_env(:school, :api)[:url]
 
-    map =
-      %{
-        "messages" => [
-          %{
-            "attachment" => %{
-              "type" => "template",
-              "payload" => %{
-                "template_type" => "button",
-                 "text": "Hello!",
-                "buttons" => [
-                  %{
-                    "type" => "show_block",
-                    "block_names" => ["name of block"],
-                    "title" => "Show Block"
-                  },
-                  %{
-                    "type" => "web_url",
-                    "url" => uri,
-                    "title" => "Visit Website"
-                  },
-                  %{
-                    "set_attributes" => %{
-                      "some attribute" => "some value",
-                      "another attribute" => "another value"
-                    },
-                    "url" => uri,
-                    "type" => "json_plugin_url",
-                    "title" => "Postback"
-                  }
-                ]
-              }
-            }
-          }
-        ]
-      }
-      |> Poison.encode!()
+
+  
+
+   
+      {map} =if parent != [] do
+
+      	 students=Repo.all(from s in School.Affairs.Student, where s.gicno==^ic)
+
+      	
+      	 	 
+
+	   %{
+	        "messages" => [
+	          %{
+	            "attachment" => %{
+	              "type" => "template",
+	              "payload" => %{
+	                "template_type" => "button",
+	                 "text": "Please click on your children name.",
+	                "buttons" => [
+	         		
+	         			for stud <- students do
+
+			         	 		path = "?scope=get__stud=#{stud.id}"
+		      	 	 			 name=stud.name
+
+			      	 	 	%{
+			                    "url" => uri <> path,
+			                    "type" => "json_plugin_url",
+			                    "title" => name
+		                  	}
+
+		
+	                  	 end
+	                 
+	                ]
+	              }
+	            }
+	          }
+	        ]
+	    }|> Poison.encode!()
+
+      
+
+      	 {map}
+
+    else
+
+    	map=%{"messages" => 
+    	   [
+    		%{"text"=> "Sorry, we dont have your data!"},
+    		%{"text"=>"Please contact admin, for more info. 🤖"}
+    		]
+
+    	} |> Poison.encode!()
+
+    	{map}
+
+    	
+    end
+  
 
     send_resp(conn, 200, map)
   end
+
 end

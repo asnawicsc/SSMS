@@ -1250,15 +1250,15 @@ defmodule SchoolWeb.UserChannel do
 
   def handle_in("class_student_info", payload, socket) do
     user = Repo.get_by(School.Settings.User, %{id: payload["user_id"]})
-    teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email})
-
-    class = Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
 
     class_id =
       if user.role == "Admin" or user.role == "Support" do
-        payload["class_id"]
+        {payload["class_id"]}
       else
-        class.id
+        teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email})
+
+        class = Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
+        {class.id}
       end
 
     students =
