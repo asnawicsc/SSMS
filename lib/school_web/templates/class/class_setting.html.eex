@@ -209,7 +209,7 @@
                                                          Class Teacher:<br>
                                                         <span> <select class="select"  required="required" name="teacher_id" value="">
 
-                                                        <% teacher=Repo.all(School.Affairs.Teacher)  %>    
+                                                        <% teacher=Repo.all(from t in School.Affairs.Teacher, where: t.institution_id == ^@institution_id)  %>    
                                                         <%= for a <- teacher |> Enum.sort do %>
                                                         <option value="<%= a.id %>"><%= a.name %>
                                                         </option>

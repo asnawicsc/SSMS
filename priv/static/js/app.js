@@ -230,7 +230,8 @@ $("footer").append(maintain)
      
   })
 
-  channel.on("show_student_details_class", payload => {
+channel.on("show_student_details", payload => {
+
     $("div[aria-label='student_details']").html(payload.html)
     var csrf = window.csrf
     $("input[name='_csrf_token']").val(csrf)
