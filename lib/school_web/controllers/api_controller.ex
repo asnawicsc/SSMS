@@ -13,7 +13,7 @@ defmodule SchoolWeb.ApiController do
 
       params["fields"] == "get_guardian_ic" ->
         get_guardian_ic(conn, params)
-        
+
    end
   end
 
@@ -67,6 +67,8 @@ defmodule SchoolWeb.ApiController do
 	          }
 	        ]
 	    }|> Poison.encode!()
+
+
 
       
 
