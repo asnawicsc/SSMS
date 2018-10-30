@@ -183,12 +183,15 @@ defmodule SchoolWeb.ClassController do
         )
       )
 
+    institution_id = conn.private.plug_session["institution_id"]
+
     render(
       conn,
       "class_setting.html",
       class: class,
       levels: levels,
-      changeset: changeset
+      changeset: changeset,
+      institution_id: institution_id
     )
   end
 
