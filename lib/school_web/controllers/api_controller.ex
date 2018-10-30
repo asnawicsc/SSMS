@@ -11,13 +11,13 @@ defmodule SchoolWeb.ApiController do
       params["fields"] == nil ->
         send_resp(conn, 200, "please include request  in field.")
 
-      params["fields"] == "get_guardian_ic" ->
+      params["fields"] == "get_student_list" ->
         get_guardian_ic(conn, params)
 
    end
   end
 
-  def get_guardian_ic(conn, params) do
+  def get_student_list(conn, params) do
     messenger_user_id = params["messenger user id"]
     ic = params["IC"]
 
