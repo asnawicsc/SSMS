@@ -29,6 +29,7 @@ defmodule SchoolWeb.ApiController do
               "type" => "template",
               "payload" => %{
                 "template_type" => "button",
+                 "text": "Hello!",
                 "buttons" => [
                   %{
                     "type" => "show_block",
