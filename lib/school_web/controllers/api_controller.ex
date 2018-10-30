@@ -41,6 +41,10 @@ defmodule SchoolWeb.ApiController do
                     "title" => "Visit Website"
                   },
                   %{
+                    "set_attributes" => %{
+                      "some attribute" => "some value",
+                      "another attribute" => "another value"
+                    },
                     "url" => uri,
                     "type" => "json_plugin_url",
                     "title" => "Postback"
