@@ -1,34 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
 
-    <title>21st Smart School Management System</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
-    <script
-        src="https://code.jquery.com/jquery-3.3.1.min.js"
-        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-        crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
-
-
-    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
-     <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css"/>
-     <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="/css/tagsinput.css"/>
-    <script src="<%= static_path(@conn, "/js/tagsinput.js") %>"></script>
-    <script src="<%= static_path(@conn, "/js/bootstrap-notify.min.js") %>"></script>
-    <script src="<%= static_path(@conn, "/js/jqueryTranslator.min.js") %>"></script>
-
-
-
-    <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
-    <script type="text/javascript">
+<head>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+   <meta name="description" content="Bootstrap Admin App + jQuery">
+   <meta name="keywords" content="app, responsive, jquery, bootstrap, dashboard, admin">
+   <link rel="icon" type="image/x-icon" href="favicon.ico">
+   <title>Angle - Bootstrap Admin Template</title>
+   <!-- =============== VENDOR STYLES ===============-->
+   <!-- FONT AWESOME-->
+   <link rel="stylesheet" href="/vendor/@fortawesome/fontawesome-free-webfonts/css/fa-brands.css">
+   <link rel="stylesheet" href="/vendor/@fortawesome/fontawesome-free-webfonts/css/fa-regular.css">
+   <link rel="stylesheet" href="/vendor/@fortawesome/fontawesome-free-webfonts/css/fa-solid.css">
+   <link rel="stylesheet" href="/vendor/@fortawesome/fontawesome-free-webfonts/css/fontawesome.css">
+   <!-- SIMPLE LINE ICONS-->
+   <link rel="stylesheet" href="/vendor/simple-line-icons/css/simple-line-icons.css">
+   <!-- ANIMATE.CSS-->
+   <link rel="stylesheet" href="/vendor/animate.css/animate.css">
+   <!-- WHIRL (spinners)-->
+   <link rel="stylesheet" href="/vendor/whirl/dist/whirl.css">
+   <!-- =============== PAGE VENDOR STYLES ===============-->
+   <!-- =============== BOOTSTRAP STYLES ===============-->
+   <link rel="stylesheet" href="/css/bootstrap.css" id="bscss">
+   <!-- =============== APP STYLES ===============-->
+   <link rel="stylesheet" href="/css/app_angle.css" id="maincss">
+       <script type="text/javascript">
       
       window.userToken = "<%= assigns[:user_token] %>";
       <%= if @conn.private.plug_session["user_id"] == nil do %>
@@ -40,43 +37,36 @@
       <% end %>
     </script>
 
-    <script src="<%= static_path(@conn, "/js/phoenix.js") %>"></script>
-    <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
-    <script src="<%= static_path(@conn, "/js/library.js") %>"></script>
-     <link rel="stylesheet" href="/css/richtext.min.css">
-     <script src="/js/jquery.richtext.min.js"></script>
-  </head>
 
 
+   <!-- =============== VENDOR SCRIPTS ===============-->
+   <!-- MODERNIZR-->
+   <script src="/vendor/modernizr/modernizr.custom.js"></script>
+   <!-- JQUERY-->
+   <script src="/vendor/jquery/dist/jquery.js"></script>
+   <!-- BOOTSTRAP-->
+   <script src="/vendor/popper.js/dist/umd/popper.js"></script>
+   <script src="/vendor/bootstrap/dist/js/bootstrap.js"></script>
+   <!-- STORAGE API-->
+   <script src="/vendor/js-storage/js.storage.js"></script>
+   <!-- JQUERY EASING-->
+   <script src="/vendor/jquery.easing/jquery.easing.js"></script>
+   <!-- ANIMO-->
+   <script src="/vendor/animo/animo.js"></script>
+   <!-- SCREENFULL-->
+   <script src="/vendor/screenfull/dist/screenfull.js"></script>
+   <!-- LOCALIZE-->
+   <script src="/vendor/jquery-localize/dist/jquery.localize.js"></script>
 
 
+<script src="/vendor/datatables.net-bs4/dataTables.bootstrap4.css"></script>
+<script src="/vendor/datatables.net-bs4/keyTable.bootstrap.css"></script>
+<script src="/vendor/datatables.net-bs4/responsive.bootstrap.css"></script>
 
-       
-
-
-
-         
-  <body>
-    <div class="container-fluid" >
-
-        <%= render("nav.html", conn: @conn) %>
-        <div class="row" style="height: 75vh; overflow-y: scroll;">
-          <div class="col-lg-12">
-            <div class="card">
-              <div class="card-body">
-                
-                <%= render @view_module, @view_template, assigns %>
-              </div>
-            </div>
-          </div>
-        </div>
-  
-
-    </div> 
-    <footer style="position: inherit;bottom: 0;margin-bottom: 10px;margin-left: 10px;">
-  
-    </footer>
-    <script type="text/javascript">
+   <!-- =============== PAGE VENDOR SCRIPTS ===============-->
+   <!-- =============== APP SCRIPTS ===============-->
+   <script src="/js/app_angle.js"></script>
+       <script type="text/javascript">
     <%= cond do %>
     <% get_flash(@conn, :info) != nil -> %>
         $.notify({message: '<%= get_flash(@conn, :info) %>'},{type: 'success'});
@@ -91,7 +81,48 @@
       
     })
     </script>
+    <script src="<%= static_path(@conn, "/js/phoenix.js") %>"></script>
+    <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
+    <script src="<%= static_path(@conn, "/js/library.js") %>"></script>
+     <link rel="stylesheet" href="/css/richtext.min.css">
+     <script src="/js/jquery.richtext.min.js"></script>
 
+
+<script src="/vendor/datatables.net-bs4/jquery.dataTables.js"></script>
+<script src="/vendor/datatables.net-bs4/dataTables.bootstrap4.js"></script>
+<script src="/vendor/datatables.net-bs4/dataTables.buttons.js"></script>
+<script src="/vendor/datatables.net-bs4/buttons.bootstrap.js"></script>
+<script src="/vendor/datatables.net-bs4/buttons.colVis.js"></script>
+<script src="/vendor/datatables.net-bs4/buttons.flash.js"></script>
+<script src="/vendor/datatables.net-bs4/buttons.html5.js"></script>
+<script src="/vendor/datatables.net-bs4/buttons.print.js"></script>
+<script src="/vendor/datatables.net-bs4/dataTables.keyTable.js"></script>
+<script src="/vendor/datatables.net-bs4/dataTables.responsive.js"></script>
+<script src="/vendor/datatables.net-bs4/responsive.bootstrap.js"></script>
      
-  </body>
+</head>
+
+<body>
+   <div class="wrapper">
+    <%= render("_nav.html", conn: @conn)%>
+    <%= render("_leftsidebar.html", conn: @conn) %>
+    <%= render("_offsidebar.html", conn: @conn) %>
+
+      <!-- Main section-->
+      <section class="section-container">
+         <!-- Page content-->
+         <div class="content-wrapper">
+            
+ <%= render @view_module, @view_template, assigns %>
+         </div>
+      </section>
+      <!-- Page footer-->
+      <footer class="footer-container">
+         <span>&copy; 2018 - Angle</span>
+      </footer>
+   </div>
+
+
+</body>
+
 </html>

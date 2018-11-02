@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="/css/tagsinput.css">
+<script src="/js/tagsinput.js"></script>
 <%= form_for @changeset, @action, fn f -> %>
   <%= if @changeset.action do %>
     <div class="alert alert-danger">
