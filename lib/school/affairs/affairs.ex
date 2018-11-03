@@ -310,10 +310,15 @@ defmodule School.Affairs do
   end
 
   def list_classes(institution_id) do
-    Repo.all(from c in Class, left_join: l in Level, on: l.id == c.level_id, where: c.institution_id == ^institution_id,
-      select: %{id: c.id, name: c.name, remarks: c.remarks, level_id: l.name}
-
+    Repo.all(
+      from(
+        c in Class,
+        left_join: l in Level,
+        on: l.id == c.level_id,
+        where: c.institution_id == ^institution_id,
+        select: %{id: c.id, name: c.name, remarks: c.remarks, level_id: l.name}
       )
+    )
   end
 
   @doc """
@@ -494,7 +499,7 @@ defmodule School.Affairs do
   end
 
   def inst_id(conn) do
-     conn.private.plug_session["institution_id"]
+    conn.private.plug_session["institution_id"]
   end
 
   alias School.Affairs.Attendance
@@ -784,7 +789,6 @@ defmodule School.Affairs do
   def change_teacher(%Teacher{} = teacher) do
     Teacher.changeset(teacher, %{})
   end
-
 
   alias School.Affairs.Subject
 
@@ -1458,8 +1462,6 @@ defmodule School.Affairs do
     Exam.changeset(exam, %{})
   end
 
-
-
   alias School.Affairs.ExamMaster
 
   @doc """
@@ -1555,7 +1557,6 @@ defmodule School.Affairs do
   def change_exam_master(%ExamMaster{} = exam_master) do
     ExamMaster.changeset(exam_master, %{})
   end
-
 
   alias School.Affairs.ExamMark
 
@@ -1748,9 +1749,6 @@ defmodule School.Affairs do
   def change_time_period(%TimePeriod{} = time_period) do
     TimePeriod.changeset(time_period, %{})
   end
-
-
-
 
   alias School.Affairs.HeadCount
 
@@ -2039,8 +2037,6 @@ defmodule School.Affairs do
   def change_co_grade(%CoGrade{} = co_grade) do
     CoGrade.changeset(co_grade, %{})
   end
-
- 
 
   alias School.Affairs.SchoolJob
 
@@ -2583,7 +2579,10 @@ defmodule School.Affairs do
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_teacher_co_curriculum_job(%TeacherCoCurriculumJob{} = teacher_co_curriculum_job, attrs) do
+  def update_teacher_co_curriculum_job(
+        %TeacherCoCurriculumJob{} = teacher_co_curriculum_job,
+        attrs
+      ) do
     teacher_co_curriculum_job
     |> TeacherCoCurriculumJob.changeset(attrs)
     |> Repo.update()

@@ -242,6 +242,25 @@ defmodule SchoolWeb.PageController do
     render(conn, "index.html", current_sem: current_sem)
   end
 
+  def index_splash(conn, _params) do
+    current_sem =
+      Repo.all(
+        from(
+          s in School.Affairs.Semester,
+          where: s.end_date > ^Timex.today() and s.start_date < ^Timex.today()
+        )
+      )
+
+    current_sem =
+      if current_sem != [] do
+        hd(current_sem)
+      else
+        %{start_date: "Not set", end_date: "Not set"}
+      end
+
+    render(conn, "index_splash.html", current_sem: current_sem)
+  end
+
   def loan_report(conn, _params) do
     render(conn, "loan_report.html", [])
   end

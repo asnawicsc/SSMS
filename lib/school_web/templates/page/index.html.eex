@@ -1,7 +1,112 @@
+<link rel="stylesheet" href="/vendor/fullcalendar/dist/fullcalendar.css">
+<!-- MOMENT JS-->
+<script src="/vendor/moment/min/moment-with-locales.js"></script>
+<!-- FULLCALENDAR-->
+<script src="/vendor/fullcalendar/dist/fullcalendar.js"></script>
+<script src="/vendor/fullcalendar/dist/gcal.js"></script>
+<div class="content-heading">
+   <div>Dashboard
+      <small><%= gettext("welcome")%>!</small>
+   </div>
+   <!-- START Language list-->
+   <div class="ml-auto">
+      <div class="btn-group">
+         <button class="btn btn-secondary dropdown-toggle dropdown-toggle-nocaret" type="button" data-toggle="dropdown">English</button>
+         <div class="dropdown-menu dropdown-menu-right-forced animated fadeInUpShort" role="menu">
+            <a class="dropdown-item" href="#" data-set-lang="en">English</a>
+            <a class="dropdown-item" href="#" data-set-lang="cn">中文</a>
+            <a class="dropdown-item" href="#" data-set-lang="bm">Bahasa</a>
+         </div>
+      </div>
+   </div>
+   <!-- END Language list-->
+</div>
 
+<div class="row">
+  <div class="col-lg-7">
+    
+    <div class="jumbotron jumbotron-fluid">
+       <h1 class="display-4">Good Morning, Damien!</h1>
+       <p class="lead">This panel shows the timetable for this week for your class.</p>
+       <hr class="my-4">
+       <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
+       <button class="mb-1 btn btn-outline-info" type="button">Mark attendance</button>
+       <button class="mb-1 btn btn-outline-info" type="button">Modify Timetable</button>
+       <button class="mb-1 btn btn-outline-info" type="button">Info</button>
+<div id='calendar'></div>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $(function() {
 
-<div class="table-responsive">
-	<%= gettext("hello")%>
-	<%= gettext("welcome")%>
-	<h3>Current semester: </h3> <%= @current_sem.start_date %> - <%= @current_sem.end_date %> 
+  // page is now ready, initialize the calendar...
+
+  $('#calendar').fullCalendar({
+    // put your options and callbacks here
+  })
+
+});
+  })
+</script>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="card card-default mb-3">
+       <div class="card-header d-flex align-items-center">
+      
+            <em class="fa-2x mr-3 fas fa-child"></em>
+            <span style="font-weight: bolder;font-size: 17px;">Student</span>
+         
+       </div>
+       <div class="card-body">
+          <h5 class="card-title">Card Default card title</h5>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          <button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button>
+          <button class="mb-1 btn-sm btn btn-outline-primary" type="button">Enroll</button>
+       </div>
+    
+    </div>
+    <div class="card card-default mb-3">
+       <div class="card-header d-flex align-items-center">
+      
+            <em class="fa-2x mr-3 fas fa-pencil-alt"></em>
+            <span style="font-weight: bolder;font-size: 17px;">Exam</span>
+         
+       </div>
+       <div class="card-body">
+          <h5 class="card-title">Card Default card title</h5>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          <button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create</button>
+          <button class="mb-1 btn-sm btn btn-outline-primary" type="button">Mark</button>
+          <button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button>
+       </div>
+    </div>
+    <div class="card card-default mb-3">
+       <div class="card-header d-flex align-items-center">
+      
+            <em class="fa-2x mr-3 fas fa-chess"></em>
+            <span style="font-weight: bolder;font-size: 17px;">Cocurriculum</span>
+         
+       </div>
+       <div class="card-body">
+          <h5 class="card-title">Card Default card title</h5>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          <button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button>
+          <button class="mb-1 btn-sm btn btn-outline-primary" type="button">Enroll</button>
+       </div>
+    </div>
+    <div class="card card-default mb-3">
+       <div class="card-header d-flex align-items-center">
+      
+            <em class="fa-2x mr-3 fas fa-chalkboard-teacher"></em>
+            <span style="font-weight: bolder;font-size: 17px;">Teacher</span>
+         
+       </div>
+       <div class="card-body">
+          <h5 class="card-title">Card Default card title</h5>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          <button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button>
+          <button class="mb-1 btn-sm btn btn-outline-primary" type="button">Enroll</button>
+       </div>
+    </div>
+  </div>
 </div>

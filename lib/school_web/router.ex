@@ -21,7 +21,7 @@ defmodule SchoolWeb.Router do
   scope "/", SchoolWeb do
     # Use the default browser stack
     pipe_through([:browser, :splash_layout])
-    get("/", PageController, :index)
+    get("/", PageController, :index_splash)
   end
 
   scope "/pdf", SchoolWeb do

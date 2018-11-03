@@ -12,7 +12,7 @@ defmodule SchoolWeb.Endpoint do
     at: "/",
     from: :school,
     gzip: false,
-    only: ~w(css fonts images js favicon.ico vendor img server robots.txt)
+    only: ~w(css assets fonts images js favicon.ico vendor img server robots.txt)
   )
 
   # Code reloading can be explicitly enabled under the

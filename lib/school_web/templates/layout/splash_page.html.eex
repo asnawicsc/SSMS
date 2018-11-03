@@ -1,132 +1,67 @@
+
+
   <!DOCTYPE html>
-  <html lang="">
-  	<head>
-  		<meta charset="utf-8">
-  		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-  		<meta name="viewport" content="width=device-width, initial-scale=1">
-  		<title>21st Smart School Management System</title>
-    <link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
-  		<!-- Bootstrap CSS -->
-  		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-  		<!-- Google Fonts -->
-  		<link href='https://fonts.googleapis.com/css?family=Poppins:400,300,500,600,700' rel='stylesheet' type='text/css'>
-  		<!-- Font Awesome -->
-  		<link href='https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css' rel='stylesheet' type='text/css'>
-  		<!-- Style -->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
 
-       <link rel="stylesheet" type="text/css" href="/css/style.css"/>
-  
-  		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-  		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-  		<!--[if lt IE 9]>
-  			<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
-  			<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-  		<![endif]-->
-  	</head>
-  	<body>
-  		<nav class="navbar navbar-default" role="navigation">
-  			<div class="container">
-  				<!-- Brand and toggle get grouped for better mobile display -->
-  				<div class="navbar-header">
-  					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-  						<span class="sr-only">Toggle navigation</span>
-  						<span class="icon-bar"></span>
-  						<span class="icon-bar"></span>
-  						<span class="icon-bar"></span>
-  					</button>
-  					<a class="navbar-brand" href="#">21st Smart School Management System</a>
-  				</div>
-  		
-  				<!-- Collect the nav links, forms, and other content for toggling -->
-  				<div class="collapse navbar-collapse navbar-ex1-collapse">
-  					<ul class="nav navbar-nav navbar-right">
-  						<li><a href="/login">Login</a></li>
-  						
-  						<li><a href="/contact_us">Contact Us</a></li>
-  					</ul>
-  				</div><!-- /.navbar-collapse -->
-  			</div>
-  		</nav>
-		
-		<!-- START SECTION -->
-  		<div class="section hero text-center background-dark dark-bg">
-  			<div class="background-image" style="background: url(images/hero.jpg) no-repeat center center; background-size: cover; opacity: .2;"></div>
-  			<div class="container">
-  				<div class="row">
-  					<div class="col-md-12">
-  						<h2>21st Smart School Management System</h2>
-  					<h4><p class="lead"><b>  " The only software need to run your school Smarter. "</b></p></h4>
-  						<ul class="list-inline">
-  							<%# <li><a href="#" title="Learn More" class="btn btn-md btn-info">Learn More</a></li> %>
-  							<%# <li><a href="#" title="Learn More" class="btn btn-md btn-primary">Download Now</a></li> %>
-  						</ul>
-  					</div>
-  				</div>
-  			</div>
-  		</div>
-  		<!--/.section -->
+    <title>TheSaaS - Header image</title>
+
+    <!-- Styles -->
+    <link href="assets/css/core.min.css" rel="stylesheet">
+    <link href="assets/css/thesaas.min.css" rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
+
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+    <link rel="icon" href="assets/img/favicon.png">
+  </head>
+
+  <body>
 
 
-  		<!-- START SECTION -->
-<%#   		<div class="section hero text-center background-light">
-  			<div class="background-image" style="background: url(images/hero.jpg) no-repeat fixed center center; background-size: cover; opacity: .2;"></div>
-  			<div class="container">
-  				<div class="row">
-  					<div class="col-md-12">
-  						<h3 class="text-uppercase letter-spacing-md font-weight-lg margin-zero">Laudantium ullam consequatur repellat debitis maxime.</h3>
-  					</div>
-  				</div>
-  			</div>
-  		</div> %>
-  		<!--/.section -->
+    <!-- Topbar -->
+    <nav class="topbar topbar-inverse topbar-expand-md topbar-sticky">
+      <div class="container">
+        
+        <div class="topbar-left">
+          <button class="topbar-toggler">&#9776;</button>
+          <a class="topbar-brand" href="index.html">
+            <img class="logo-default" src="assets/img/logo.png" alt="logo">
+            <img class="logo-inverse" src="assets/img/logo-light.png" alt="logo">
+          </a>
+        </div>
 
-  		<!-- START SECTION -->
-  		<div class="section background-dark dark-bg">
-  			<div class="container">
-  				<div class="row">
-  					<div class="col-md-3">
-  						<h3 class="text-uppercase font-size-md letter-spacing-md font-weight-lg ">About Us</h3>
-  						<p>21st School Management System is a world's easiest and most user friendly <b> school management system .</b> Best tool to manage schools, colleges & Institutes .
-            </p>
-  					
-  					</div>
-  					<div class="col-md-4 col-md-offset-1">
-  						<h3 class="text-uppercase font-size-md letter-spacing-md font-weight-lg ">Resertech Technology Sdn Bhd</h3>
-  						<address>
-						
-						 	<abbr title="Phone">Phone :</abbr> (+60) 16 372 6580
-						</address>
-						<address>
-							<strong>Thomas Lim</strong><br>
-						 	<a href="mailto:#">sengteck@gmail.com</a>
-             </strong>
-						</address>
-  					</div>
-  					<div class="col-md-4">
-  						<h3 class="text-uppercase font-size-md letter-spacing-md font-weight-lg ">Resertech Technology Sdn Bhd</h3>
-  						<address>
-							
-						 	<abbr title="Phone">Phone :</abbr> (+60) 12 241 9646
-						</address>
-						<address>
-							<strong>Angeline</strong><br>
-						 	<a href="mailto:#">angeline@resertech.com</a>
-						</address>
-  					</div>
-  					<div class="col-md-12 margin-top-md margin-bottom-md" style="opacity: .2;">
-  						<hr/>
-  					</div>
-  					<div class="col-md-12 margin-top-md text-center font-size-sm text-upercase">
-  						<p>©<strong>Powered By</strong></a>: <a href="http://resertech.com" title="Free Bootstrap Template"><strong>Resertech Technology Sdn Bhd</strong></a>.</p>
-  					</div>
-  				</div>
-  			</div>
-  		</div>
-  		<!--/.section -->
-  
-  		<!-- jQuery -->
-  		<script src="//code.jquery.com/jquery.js"></script>
-  		<!-- Bootstrap JavaScript -->
-  		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-  	</body>
-  </html>
+
+        <div class="topbar-right">
+          <ul class="topbar-nav nav">
+            <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+             <li class="nav-item"><a class="nav-link" href="index.html">Contact</a></li>
+
+          </ul>
+        </div>
+
+      </div>
+    </nav>
+    <!-- END Topbar -->
+
+
+
+
+
+ <%= render @view_module, @view_template, assigns %>
+
+
+
+
+
+    <!-- Scripts -->
+    <script src="assets/js/core.min.js"></script>
+    <script src="assets/js/thesaas.min.js"></script>
+    <script src="assets/js/script.js"></script>
+
+  </body>
+</html>
