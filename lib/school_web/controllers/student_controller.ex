@@ -18,6 +18,10 @@ defmodule SchoolWeb.StudentController do
     render(conn, "index.html", students: students)
   end
 
+  def student_lists(conn, params) do
+    IEx.pry()
+  end
+
   def student_certificate(conn, params) do
     semesters =
       Repo.all(from(s in Semester))

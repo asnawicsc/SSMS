@@ -116,7 +116,11 @@ defmodule SchoolWeb.TeacherController do
     code = teacher_params["code"]
 
     teacher =
-      Repo.get_by(Teacher, code: code, institution_id: conn.private.plug_session["institution_id"])
+      Repo.get_by(
+        Teacher,
+        code: code,
+        institution_id: conn.private.plug_session["institution_id"]
+      )
 
     case Affairs.update_teacher(teacher, teacher_params) do
       {:ok, teacher} ->

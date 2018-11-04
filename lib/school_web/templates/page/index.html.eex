@@ -57,10 +57,13 @@
             <span style="font-weight: bolder;font-size: 17px;">Student</span>
          
        </div>
+       <% require IEx %>
+       <% a = @conn %>
+
        <div class="card-body">
           <h5 class="card-title">Card Default card title</h5>
           <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          <button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button>
+          <a href="/student_lists/<%= a.private.plug_session["user_id"]%>"><button class="mb-1 btn-sm btn btn-outline-primary"  type="button">List</button></a>
           <button class="mb-1 btn-sm btn btn-outline-primary" type="button">Enroll</button>
        </div>
     

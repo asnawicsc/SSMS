@@ -98,6 +98,7 @@ defmodule SchoolWeb.Router do
     get("/height_weight", StudentController, :height_weight)
     get("/height_weight_class/:class_id", StudentController, :height_weight_class)
     get("/student_certificate", StudentController, :student_certificate)
+    get("/student_lists/:user_id", StudentController, :student_lists)
 
     resources("/levels", LevelController)
     resources("/semesters", SemesterController)

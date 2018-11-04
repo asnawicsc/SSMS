@@ -2,85 +2,92 @@
   <div class="row justify-content-md-center login_form">
     <div class="col-lg-4 ml-3 mr-3">
       <div class="jumbotron">
-        
-        <form method="post" action="/create_user">
-          <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
-          <div class="form-group">
-            <label for="exampleInputEmail1">Email address</label>
-            <input type="email" class="form-control" name="email" aria-describedby="emailHelp" placeholder="Enter email">
-            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-          </div>
 
-           <div class="form-group">
-            <label for="exampleInputEmail1">Name</label>
-            <input type="text" class="form-control" name="name"  placeholder="Enter name">
-            
-          </div>
-
-
-
-          <div class="form-group">
-            <label for="exampleInputPassword1">Password</label>
-            <input type="password" class="form-control" name="password" placeholder="Password">
-          </div>
-
-
-                       <%= if   @conn.private.plug_session["user_id"] != nil do %>
+        <%= if   @conn.private.plug_session["user_id"] != nil do %>
             
         
               <% user_id=@conn.private.plug_session["user_id"] %>
-
-              <%= if user_id != nil do %>
-
-                <% user=Repo.get_by(Settings.User, %{id: user_id }) %>
-
-                <%= if user.role == "Admin" do %>
-
-
-                      <div class="form-group">
-            <span>Role : <select class="select" required="required" name="role">
-                                        <%= for a <- role|>Enum.filter(fn x -> x.name !="Admin" and x.name !="Teacher" end) |> Enum.sort do %>
-                                        <option value="<%= a.name %>">
-                                        <%= a.name %>
-                                        </option>
-                                        <% end %>
-                                    </select></span>
+              <% user=Repo.get_by(Settings.User, %{id: user_id }) %>
+          <%= if user.role != "Teacher" do %>
+          <form method="post" action="/create_user">
+            <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+            <div class="form-group">
+              <label for="exampleInputEmail1">Email address</label>
+              <input type="email" class="form-control" name="email" aria-describedby="emailHelp" placeholder="Enter email">
+              <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
             </div>
 
-            <% end %>
-              <% end %>
-                <% end %>
+             <div class="form-group">
+              <label for="exampleInputEmail1">Name</label>
+              <input type="text" class="form-control" name="name"  placeholder="Enter name">
+              
+            </div>
 
 
-          <%= if   @conn.private.plug_session["user_id"] != nil do %>
-            
-        
+
+            <div class="form-group">
+              <label for="exampleInputPassword1">Password</label>
+              <input type="password" class="form-control" name="password" placeholder="Password">
+            </div>
+
+
+                         <%= if   @conn.private.plug_session["user_id"] != nil do %>
+              
+          
                 <% user_id=@conn.private.plug_session["user_id"] %>
 
-              <%= if user_id != nil do %>
+                <%= if user_id != nil do %>
 
-                <% user=Repo.get_by(Settings.User, %{id: user_id }) %>
+                  <% user=Repo.get_by(Settings.User, %{id: user_id }) %>
 
-                <%= if user.role == "Support" do %>
+                  <%= if user.role == "Admin" do %>
 
 
-                      <div class="form-group">
-                                  <span>Role : <select class="select" required="required" name="role">
-                                        <%= for a <- role|>Enum.filter(fn x -> x.name !="Admin" and x.name !="Support" end) |> Enum.sort do %>
-                                        <option value="<%= a.name %>">
-                                        <%= a.name %>
-                                        </option>
-                                        <% end %>
-                                    </select></span>
-                      </div>
-                <% end %>
+                        <div class="form-group">
+              <span>Role : <select class="select" required="required" name="role">
+                                          <%= for a <- role|>Enum.filter(fn x -> x.name !="Admin" and x.name !="Teacher" end) |> Enum.sort do %>
+                                          <option value="<%= a.name %>">
+                                          <%= a.name %>
+                                          </option>
+                                          <% end %>
+                                      </select></span>
+              </div>
 
               <% end %>
-          <% end %>
+              <%= if user.role == "Support" do %>
 
-    
-          <button type="submit" class="btn btn-info form_submit">Create</button>
-        </form>
+
+                        <div class="form-group">
+                                    <span>Role : <select class="select" required="required" name="role">
+                                          <%= for a <- role|>Enum.filter(fn x -> x.name !="Admin" and x.name !="Support" end) |> Enum.sort do %>
+                                          <option value="<%= a.name %>">
+                                          <%= a.name %>
+                                          </option>
+                                          <% end %>
+                                      </select></span>
+                        </div>
+                  <% end %>
+                  <%= if user.role == "Teacher" do %>
+
+
+                       
+                  <% end %>
+                <% end %>
+                  <% end %>
+
+
+            
+                  
+
+       
+
+      
+            <button type="submit" class="btn btn-info form_submit">Create</button>
+          </form>
+          <% else %>
+            <h3>Sorry, teachers are not allow to register new user.</h3>
+          <% end%>
+        <% end %>
       </div>
       
     </div>

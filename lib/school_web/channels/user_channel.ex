@@ -2792,6 +2792,15 @@ defmodule SchoolWeb.UserChannel do
 
         School.Settings.create_user_access(params)
 
+        if user.role == "Teacher" do
+          teacher = Repo.all(from(t in Teacher, where: t.email == ^user.email))
+
+          if teacher != nil do
+            teacher = teacher |> hd()
+            Teacher.changeset(teacher, %{institution_id: institution.id}) |> Repo.update!()
+          end
+        end
+
         {"inserted"}
       end
 
