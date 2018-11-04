@@ -18,6 +18,7 @@
         
 
           <th>Name</th>
+          <th>Class</th>
         </tr>
       </thead>
       <tbody>
@@ -32,6 +33,13 @@
          
          
                 <div id="<%= student.id %>" class="btn btn-link student"><%= student.name %> <%= student.chinese_name %></div>
+
+         
+            </td>
+            <td class="text-left">
+         
+         
+                <div><%= student.class %></div>
 
          
             </td>

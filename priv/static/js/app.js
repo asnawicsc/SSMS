@@ -801,7 +801,7 @@ $(".nav-link#class_info").click(function() {
   })
 
 
-$("div#class_info").show();
+$("div#class_info").hide();
 $("div#class_subject").hide();
 $("div#class_period").hide();
 $("div#class_student").hide();
@@ -810,6 +810,7 @@ $("div#class_student_info").hide();
 channel.on("show_class_info", payload => {
 
 $("div#class_info").show();
+$("div#class_msg").hide();
 $("div#class_subject").hide();
 $("div#class_period").hide();
 $("div#class_student").hide();
@@ -856,6 +857,7 @@ $(".nav-link#class_subject").click(function() {
 channel.on("show_class_subject", payload => {
 
 $("div#class_info").hide();
+$("div#class_msg").hide();
 $("div#class_subject").show();
 $("div#class_period").hide();
 $("div#class_student").hide();
@@ -905,6 +907,7 @@ $(".nav-link#class_period").click(function() {
 channel.on("show_class_period", payload => {
 
 $("div#class_info").hide();
+$("div#class_msg").hide();
 $("div#class_subject").hide();
 $("div#class_period").show();
 $("div#class_student").hide();
@@ -1017,6 +1020,7 @@ $(".nav-link#class_student").click(function() {
 channel.on("show_class_student", payload => {
 
 $("div#class_info").hide();
+$("div#class_msg").hide();
 $("div#class_subject").hide();
 $("div#class_period").hide();
 $("div#class_student").show();
@@ -1028,6 +1032,7 @@ $("div#class_student_info").hide();
 
 
 $(".nav-link#class_student_info").click(function() {
+  $("div#class_msg").hide();
 
       var csrf = window.csrf
 

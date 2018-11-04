@@ -939,15 +939,27 @@ defmodule SchoolWeb.UserChannel do
         {all, teacher}
       end
 
-    broadcast(socket, "show_class_info", %{
-      id: all.id,
-      name: all.name,
-      remark: all.remarks,
-      institution_id: all.institution_id,
-      level_id: all.level_id,
-      teacher_id: all.teacher_id,
-      teacher_name: teacher.name
-    })
+    if teacher != nil do
+      broadcast(socket, "show_class_info", %{
+        id: all.id,
+        name: all.name,
+        remark: all.remarks,
+        institution_id: all.institution_id,
+        level_id: all.level_id,
+        teacher_id: all.teacher_id,
+        teacher_name: teacher.name
+      })
+    else
+      broadcast(socket, "show_class_info", %{
+        id: all.id,
+        name: all.name,
+        remark: all.remarks,
+        institution_id: all.institution_id,
+        level_id: all.level_id,
+        teacher_id: nil,
+        teacher_name: "No Teacher"
+      })
+    end
 
     {:noreply, socket}
   end
@@ -1253,12 +1265,12 @@ defmodule SchoolWeb.UserChannel do
 
     class_id =
       if user.role == "Admin" or user.role == "Support" do
-        {payload["class_id"]}
+        payload["class_id"]
       else
         teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email})
 
         class = Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
-        {class.id}
+        class.id
       end
 
     students =
