@@ -68,29 +68,30 @@ defmodule SchoolWeb.StudentController do
             details
           end
           |> List.flatten()
-      else
-        students =
-          Repo.all(
-            from(
-              s in Student,
-              left_join: c in StudentClass,
-              on: c.sudent_id == s.id,
-              left_join: cl in Class,
-              on: cl.id == c.class_id,
-              where: s.institution_id == ^conn.private.plug_session["institution_id"],
-              order_by: [asc: s.name],
-              select: %{
-                id: s.id,
-                name: s.name,
-                chinese_name: s.chinese_name,
-                class: cl.name
-              }
-            )
-          )
       end
-
-      render(conn, "index.html", students: students)
+    else
+      # for non teacher to view all students
+      students =
+        Repo.all(
+          from(
+            s in Student,
+            left_join: c in StudentClass,
+            on: c.sudent_id == s.id,
+            left_join: cl in Class,
+            on: cl.id == c.class_id,
+            where: s.institution_id == ^conn.private.plug_session["institution_id"],
+            order_by: [asc: s.name],
+            select: %{
+              id: s.id,
+              name: s.name,
+              chinese_name: s.chinese_name,
+              class: cl.name
+            }
+          )
+        )
     end
+
+    render(conn, "index.html", students: students)
   end
 
   def student_certificate(conn, params) do

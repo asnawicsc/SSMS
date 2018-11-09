@@ -53,6 +53,19 @@
     <div class="card card-default mb-3">
        <div class="card-header d-flex align-items-center">
       
+            <em class="fa-2x mr-3 fas fa-pencil-alt"></em>
+            <span style="font-weight: bolder;font-size: 17px;">Class</span>
+         
+       </div>
+       <div class="card-body">
+          <h5 class="card-title">Card Default card title</h5>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          <a  href="/class_setting"]"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Settings</button></a>
+       </div>
+    </div>
+    <div class="card card-default mb-3">
+       <div class="card-header d-flex align-items-center">
+      
             <em class="fa-2x mr-3 fas fa-child"></em>
             <span style="font-weight: bolder;font-size: 17px;">Student</span>
          
@@ -64,7 +77,6 @@
           <h5 class="card-title">Card Default card title</h5>
           <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
           <a href="/student_lists/<%= a.private.plug_session["user_id"]%>"><button class="mb-1 btn-sm btn btn-outline-primary"  type="button">List</button></a>
-          <button class="mb-1 btn-sm btn btn-outline-primary" type="button">Enroll</button>
        </div>
     
     </div>

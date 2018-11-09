@@ -934,7 +934,7 @@ defmodule SchoolWeb.UserChannel do
       else
         teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email})
 
-        all = Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
+        all = Repo.get(School.Affairs.Class, payload["class_id"])
 
         {all, teacher}
       end
@@ -1040,7 +1040,7 @@ defmodule SchoolWeb.UserChannel do
       else
         teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email})
 
-        class = Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
+        class = Repo.get(School.Affairs.Class, payload["class_id"])
         class_id = class.id
         institution_id = payload["institution_id"]
 
@@ -1109,7 +1109,7 @@ defmodule SchoolWeb.UserChannel do
       else
         teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email})
 
-        class = Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
+        class = Repo.get(School.Affairs.Class, payload["class_id"])
         class_id = class.id
 
         period =
@@ -1269,7 +1269,7 @@ defmodule SchoolWeb.UserChannel do
       else
         teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email})
 
-        class = Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
+        class = Repo.get(School.Affairs.Class, payload["class_id"])
         class.id
       end
 

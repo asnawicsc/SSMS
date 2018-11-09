@@ -170,18 +170,30 @@ defmodule SchoolWeb.ClassController do
   def class_setting(conn, params) do
     changeset = Affairs.change_class(%Class{})
 
+    user = Repo.get(User, conn.private.plug_session["user_id"])
+
+    if user.role == "Teacher" do
+      teacher = Repo.all(from(t in Teacher, where: t.email == ^user.email))
+
+      if teacher != nil do
+        teacher = teacher |> hd()
+
+        class =
+          Repo.all(
+            from(
+              c in Class,
+              where: c.teacher_id == ^teacher.id,
+              select: %{id: c.id, name: c.name}
+            )
+          )
+      end
+    else
+      class = []
+    end
+
     levels =
       Affairs.list_levels()
       |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
-
-    class =
-      Repo.all(
-        from(
-          s in School.Affairs.Class,
-          where: s.institution_id == ^conn.private.plug_session["institution_id"],
-          select: %{id: s.id, name: s.name}
-        )
-      )
 
     institution_id = conn.private.plug_session["institution_id"]
 
