@@ -416,7 +416,6 @@
 
 
 
-
                                     <div class="modal fade" id="model7" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                         <div class="modal-dialog" role="document" style="width: 1000px; margin-left: 550px;">
                                             <div class="modal-content" style="width: 1000px;">
@@ -479,6 +478,12 @@
 
 
                                 </div>
+
+                                <div class ="tab-pane" id ="class_student_info">
+                                    <div id="h4">
+                                    </div>
+
+                                
 
 
                             </div>
@@ -543,3 +548,5 @@ $("div#class_student_info").show();
 
        
    <script src="<%= static_path(@conn, "/js/jquery.skedTape.js") %> "></script>
+
+

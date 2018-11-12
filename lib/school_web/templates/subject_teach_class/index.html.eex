@@ -13,11 +13,15 @@
   </thead>
   <tbody>
 <%= for subject_teach_class <- @subject_teach_class do %>
+
+<% teacher = School.Repo.get_by(School.Affairs.Teacher,institution_id: @conn.private.plug_session["institution_id"],id: subject_teach_class.teacher_id) %>
+<% subject = School.Repo.get_by(School.Affairs.Subject,institution_id: @conn.private.plug_session["institution_id"],id: subject_teach_class.subject_id) %>
+<% class = School.Repo.get_by(School.Affairs.Class,institution_id: @conn.private.plug_session["institution_id"],id: subject_teach_class.class_id) %>
     <tr>
       <td><%= subject_teach_class.standard_id %></td>
-      <td><%= subject_teach_class.subject_id %></td>
-      <td><%= subject_teach_class.teacher_id %></td>
-      <td><%= subject_teach_class.class_id %></td>
+      <td><%= subject.description %></td>
+      <td><%= teacher.name %></td>
+      <td><%= class.name %></td>
 
       <td class="text-right">
         <span><%= link "Show", to: subject_teach_class_path(@conn, :show, subject_teach_class), class: "btn btn-default btn-xs" %></span>

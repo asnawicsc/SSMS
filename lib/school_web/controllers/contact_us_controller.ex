@@ -34,7 +34,7 @@ defmodule SchoolWeb.ContactUsController do
       {:ok, contact_us} ->
         conn
         |> put_flash(:info, "Thank you for getting in touch!")
-        |> redirect(to: user_path(conn, :login))
+        |> redirect(to: page_path(conn, :index_splash))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)

@@ -1,43 +1,692 @@
+<%= if   @conn.private.plug_session["user_id"] != nil do %>         
+       <% user_id=@conn.private.plug_session["user_id"] %>
+   <%= if user_id != nil do %>
+
+      <% user=Repo.get_by(Settings.User, %{id: user_id }) %>
       <!-- sidebar-->
-      <aside class="aside-container">
-         <!-- START Sidebar (left)-->
-         <div class="aside-inner">
-            <nav class="sidebar" data-sidebar-anyclick-close="">
-               <!-- START sidebar nav-->
-               <ul class="sidebar-nav">
-                  <!-- START user info-->
-                  <li class="has-user-block">
-                     <div class="collapse" id="user-block">
-                        <div class="item user-block">
-                           <!-- User picture-->
-                           <div class="user-block-picture">
-                              <div class="user-block-status">
-                                 <img class="img-thumbnail rounded-circle" src="img/user/02.jpg" alt="Avatar" width="60" height="60">
-                                 <div class="circle bg-success circle-lg"></div>
+      <%= if user.role == "Admin" do %>
+            <aside class="aside-container">
+               <!-- START Sidebar (left)-->
+               <div class="aside-inner">
+                  <nav class="sidebar" data-sidebar-anyclick-close="">
+                     <!-- START sidebar nav-->
+                     <ul class="sidebar-nav">
+                        <!-- START user info-->
+                        <li class="has-user-block">
+                           <div class="" id="user-block">
+                              <div class="item user-block">
+                                 <!-- User picture-->
+                                 <div class="user-block-picture">
+                                    <div class="user-block-status">
+                                       <img class="img-thumbnail rounded-circle" src="img/user/02.jpg" alt="Avatar" width="60" height="60">
+                                       <div class="circle bg-success circle-lg"></div>
+                                    </div>
+                                 </div>
+                                 <!-- Name and Job-->
+                                 <div class="user-block-info">
+                                     
+                                              <a href="/user_info/<%= user_id %>" title="User Profile" style="text-decoration:none;display:block;">
+                                    <span class="user-block-name" >Hello, <%= user.name %> </span>
+                                    <span class="user-block-role"><%= user.role %></span>
+                                    </a>
+                              
+
+                                 </div>
                               </div>
                            </div>
-                           <!-- Name and Job-->
-                           <div class="user-block-info">
-                              <span class="user-block-name">Hello, Mike</span>
-                              <span class="user-block-role">Designer</span>
+                        </li>
+                        <!-- END user info-->
+                        <!-- Iterates over all sidebar items-->
+                        <li class="nav-heading ">
+                           <span data-localize="sidebar.heading.HEADER">Menu Navigation</span>
+                        </li>
+                        <li class=" ">
+                           <a href="/dashboard" title="Dashboard">
+                             
+                              <em class="icon-speedometer"></em>
+                              <span data-localize="sidebar.nav.DASHBOARD"><%= gettext "Dashboard" %></span>
+                           </a>
+             
+                        </li>
+ 
+
+                        <li class=" ">
+                           <a href="#school_setting" title="Extras" data-toggle="collapse">
+                             <em class="fas fa-chalkboard-teacher"></em>
+                              <span data-localize="sidebar.nav.extra.EXTRA"><%= gettext "School Setting" %></span>
+                           </a>
+
+                           <ul class="sidebar-nav sidebar-subnav collapse" id="school_setting">
+                               <li class=" ">
+                           <a href="/users" title="User Settings" >
+                             
+                          
+                              <span data-localize="sidebar.nav.DASHBOARD">User Setting</span>
+                           </a>
+             
+                           </li>
+                         
+
+                           </ul>
+                        </li>
+                    
+                     </ul>
+                     <!-- END sidebar nav-->
+                  </nav>
+               </div>
+               <!-- END Sidebar (left)-->
+            </aside>
+      <% end %>
+      <%= if user.role == "Support" do %>
+            <aside class="aside-container">
+               <!-- START Sidebar (left)-->
+               <div class="aside-inner">
+                  <nav class="sidebar" data-sidebar-anyclick-close="">
+                     <!-- START sidebar nav-->
+                     <ul class="sidebar-nav">
+                        <!-- START user info-->
+                        <li class="has-user-block">
+                           <div class="" id="user-block">
+                              <div class="item user-block">
+                                 <!-- User picture-->
+                                 <div class="user-block-picture">
+                                    <div class="user-block-status">
+                                       <img class="img-thumbnail rounded-circle" src="img/user/02.jpg" alt="Avatar" width="60" height="60">
+                                       <div class="circle bg-success circle-lg"></div>
+                                    </div>
+                                 </div>
+                                 <!-- Name and Job-->
+                                 <div class="user-block-info">
+                                     
+                                              <a href="/user_info/<%= user_id %>" title="User Profile" style="text-decoration:none;display:block;">
+                                    <span class="user-block-name" >Hello, <%= user.name %> </span>
+                                    <span class="user-block-role"><%= user.role %></span>
+                                    </a>
+                              
+
+                                 </div>
+                              </div>
                            </div>
-                        </div>
-                     </div>
-                  </li>
-                  <!-- END user info-->
-                  <!-- Iterates over all sidebar items-->
-                  <li class="nav-heading ">
-                     <span data-localize="sidebar.heading.HEADER">Menu Navigation</span>
-                  </li>
-                  <li class=" active">
-                     <a href="singleview.html" title="Single View">
-                        <em class="far fa-file"></em>
-                        <span data-localize="sidebar.nav.SINGLEVIEW">Single View</span>
-                     </a>
-                  </li>
-               </ul>
-               <!-- END sidebar nav-->
-            </nav>
-         </div>
-         <!-- END Sidebar (left)-->
-      </aside>
+                        </li>
+                        <!-- END user info-->
+                        <!-- Iterates over all sidebar items-->
+                        <li class="nav-heading ">
+                           <span data-localize="sidebar.heading.HEADER">Menu Navigation</span>
+                        </li>
+                        <li class=" ">
+                           <a href="/dashboard" title="Dashboard">
+                             
+                              <em class="icon-speedometer"></em>
+                              <span data-localize="sidebar.nav.DASHBOARD"><%= gettext "Dashboard" %></span>
+                           </a>
+             
+                        </li>
+                        <li class=" ">
+                           <a href="#school" title="Extras" data-toggle="collapse">
+                            <em class="fas fa-school"></em>
+                              <span data-localize="sidebar.nav.extra.EXTRA"><%= gettext "School" %></span>
+                           </a>
+
+                           <ul class="sidebar-nav sidebar-subnav collapse" id="school">
+                              <li class=" ">
+                                 <a href="/institutions" title="School Profile">
+
+                                    <span><%= gettext "Profile" %></span>
+                                 </a>
+                              </li>
+                              <li class=" ">
+                                 <a href="/system_config/<%= @conn.private.plug_session['institution_id']%>" title="School Settings">
+                                    <span><%= gettext "Parameters" %></span>
+                                 </a>
+                              </li>
+
+                           </ul>
+                        </li>
+
+                        <li class=" ">
+                           <a href="#school_setting" title="Extras" data-toggle="collapse">
+                             <em class="fas fa-chalkboard-teacher"></em>
+                              <span data-localize="sidebar.nav.extra.EXTRA"><%= gettext "School Setting" %></span>
+                           </a>
+
+                           <ul class="sidebar-nav sidebar-subnav collapse" id="school_setting">
+                               <li class=" ">
+                           <a href="/users" title="User Settings" >
+                             
+                          
+                              <span data-localize="sidebar.nav.DASHBOARD">User Setting</span>
+                           </a>
+             
+                           </li>
+                           <li class=" ">
+                              <a href="/teacher_setting" title="Teacher Settings" >
+                                
+                                
+                                 <span data-localize="sidebar.nav.DASHBOARD">Teacher Setting</span>
+                              </a>
+                
+                           </li>
+                           <li class=" ">
+                              <a href="/standard_setting" title="Standard Settings" >
+                                
+                               
+                                 <span data-localize="sidebar.nav.DASHBOARD">Standard Setting</span>
+                              </a>
+                
+                           </li>
+                                <li class=" ">
+                              <a href="/class_setting" title="Class Settings" >
+                                
+                              
+                                 <span data-localize="sidebar.nav.DASHBOARD">Class Setting</span>
+                              </a>
+                
+                           </li>
+                                      <li class=" ">
+                              <a href="/co_curriculum_setting" title="Co-Curriculum Settings" >
+                                
+                              
+                                 <span data-localize="sidebar.nav.DASHBOARD">Co-Curriculum Setting</span>
+                              </a>
+                
+                           </li>
+
+                           </ul>
+                        </li>
+                    
+                        
+                        <li class=" ">
+                           <a href="#school_setup" title="School Setup" data-toggle="collapse">
+                            <em class="icon-settings"></em>
+                              <span data-localize="sidebar.nav.extra.EXTRA"><%= gettext "School Setup" %></span>
+                           </a>
+
+                           <ul class="sidebar-nav sidebar-subnav collapse" id="school_setup">
+                              <li class=" ">
+                                 <a href="/students" title="Students">
+
+                                    <span><%= gettext "Students" %></span>
+                                 </a>
+                              </li>
+                              <li class=" ">
+                                 <a href="/teacher" title="Teachers">
+
+                                    <span><%= gettext "Teachers" %></span>
+                                 </a>
+                              </li>
+                              <li class=" ">
+                                 <a href="/levels" title="Standards">
+                                    <span><%= gettext "Standards" %></span>
+                                 </a>
+                              </li>
+                              <li class=" ">
+                                 <a href="/subject" title="Subjects">
+                                    <span><%= gettext "Subjects" %></span>
+                                 </a>
+                              </li>
+                              <li class=" ">
+                                 <a href="/comment" title="Comments">
+                                    <span><%= gettext "Comments" %></span>
+                                 </a>
+                              </li>
+
+                               <li class=" ">
+                                 <a href="/semesters" title="Semesters">
+                                    <span><%= gettext "Semesters" %></span>
+                                 </a>
+                              </li>
+                                <li class=" ">
+                                 <a href="/parent" title="Parents">
+                                    <span><%= gettext "Parents" %></span>
+                                 </a>
+                              </li>
+                              </li>
+                               <li class=" ">
+                                 <a href="/holiday" title="Holidays">
+                                    <span><%= gettext "Holidays" %></span>
+                                 </a>
+                              </li>
+                              </li>
+                                   
+
+                           </ul>
+                        </li>
+                        <li class=" ">
+                           <a href="#school_processing" title="School Setup" data-toggle="collapse">
+                            <em class="icon-refresh"></em>
+                              <span data-localize="sidebar.nav.extra.EXTRA"><%= gettext "School Processing" %></span>
+                           </a>
+
+                           <ul class="sidebar-nav sidebar-subnav collapse" id="school_processing">
+                              <li class=" ">
+                                 <a href="/attendance" title="Attendance">
+
+                                    <span><%= gettext "Attendance" %></span>
+                                 </a>
+                              </li>
+                              <li class=" ">
+                                 <a href="/mark_sheet" title="Marking">
+
+                                    <span><%= gettext "Marking" %></span>
+                                 </a>
+                              </li>
+                              <li class=" ">
+                                 <a href="/co_mark" title="Co-Curriculum">
+                                    <span><%= gettext "Co-Curriculum" %></span>
+                                 </a>
+                              </li>
+                              <li class=" ">
+                                 <a href="/mark_comment" title="Comments">
+                                    <span><%= gettext "Comments" %></span>
+                                 </a>
+                              </li>
+                              
+                            
+                                   
+
+                           </ul>
+                        </li>
+                        <li class=" ">
+                           <a href="#report" title="School Setup" data-toggle="collapse">
+                            <em class="fas fa-file"></em>
+                              <span data-localize="sidebar.nav.extra.EXTRA"><%= gettext "Report" %></span>
+                           </a>
+
+                           <ul class="sidebar-nav sidebar-subnav collapse" id="report">
+                              <li class=" ">
+                                 <a href="/generate_attendance_report" title="Attendance Report">
+
+                                    <span><%= gettext "Attendance" %></span>
+                                 </a>
+                              </li>
+                              <li class=" ">
+                                 <a href="/exam_result_class" title="Exam Result Class">
+
+                                    <span><%= gettext "Exam Result Class" %></span>
+                                 </a>
+                              </li>
+                              <li class=" ">
+                                 <a href="/exam_result_standard" title="Exam Result Standard">
+                                    <span><%= gettext "Exam Result Standard" %></span>
+                                 </a>
+                              </li>
+                              <li class=" ">
+                                 <a href="/exam_result_analysis_class" title="Exam Result Analysis Class">
+                                    <span><%= gettext "Exam Result Analysis Class" %></span>
+                                 </a>
+                              </li>
+                              <li class=" ">
+                                 <a href="/exam_result_analysis_standard" title="Exam Result Analysis Standard">
+                                    <span><%= gettext "Exam Result Analysis Standard" %></span>
+                                 </a>
+                                <li class=" ">
+                                 <a href="/student_report_by_cocurriculum" title="Co-Curriculum Result">
+                                    <span><%= gettext "Co-Curriculum Result" %></span>
+                                 </a>
+                              </li>
+                                  <li class=" ">
+                                 <a href="/height_weight_report" title="Height & Weight">
+                                    <span><%= gettext "Height & Weight" %></span>
+                                 </a>
+                              </li>
+                              </li>
+                              <li class=" ">
+                                 <a href="/class_analysis" title="Class Analysis">
+                                    <span><%= gettext "Class Analysis" %></span>
+                                 </a>
+                              </li>
+                              <li class=" ">
+                                 <a href="/student_listing_by_class" title="Student Certificate">
+                                    <span><%= gettext "Student Certificate" %></span>
+                                 </a>
+                              </li>
+                               </li>
+                                 <li class=" ">
+                                 <a href="/teacher_listing" title="Teacher Listing">
+                                    <span><%= gettext "Teacher Listing" %></span>
+                                 </a>
+                              </li>
+                              <li class=" ">
+                                 <a href="/student_listing_by_class" title="Student Listing">
+                                    <span><%= gettext "Student Listing" %></span>
+                                 </a>
+                              </li>
+                                 <li class=" ">
+                                 <a href="/show_guardian" title="Parents Listing">
+                                    <span><%= gettext "Parents Listing" %></span>
+                                 </a>
+                              </li>
+                               </li>
+                                 <li class=" ">
+                                 <a href="/mark_sheet_listing" title="Mark Sheet Listing">
+                                    <span><%= gettext "Mark Sheet Listing" %></span>
+                                 </a>
+                              </li>
+                               </li>
+                                 <li class=" ">
+                                 <a href="/mark_analyse_by_grade" title="Mark Analysis(Grade)">
+                                    <span><%= gettext "Mark Analysis(Grade)" %></span>
+                                 </a>
+                              </li>
+
+                              
+                              
+                            
+                                   
+
+                           </ul>
+                        </li>
+                     </ul>
+                     <!-- END sidebar nav-->
+                  </nav>
+               </div>
+               <!-- END Sidebar (left)-->
+            </aside>
+      <% end %>
+      <%= if user.role == "Teacher" do %>
+            <aside class="aside-container">
+               <!-- START Sidebar (left)-->
+               <div class="aside-inner">
+                  <nav class="sidebar" data-sidebar-anyclick-close="">
+                     <!-- START sidebar nav-->
+                     <ul class="sidebar-nav">
+                        <!-- START user info-->
+                        <li class="has-user-block">
+                           <div class="" id="user-block">
+                              <div class="item user-block">
+                                 <!-- User picture-->
+                                 <div class="user-block-picture">
+                                    <div class="user-block-status">
+                                       <img class="img-thumbnail rounded-circle" src="img/user/02.jpg" alt="Avatar" width="60" height="60">
+                                       <div class="circle bg-success circle-lg"></div>
+                                    </div>
+                                 </div>
+                                 <!-- Name and Job-->
+                                 <div class="user-block-info">
+                                     
+                                              <a href="/user_info/<%= user_id %>" title="User Profile" style="text-decoration:none;display:block;">
+                                    <span class="user-block-name" >Hello, <%= user.name %> </span>
+                                    <span class="user-block-role"><%= user.role %></span>
+                                    </a>
+                              
+
+                                 </div>
+                              </div>
+                           </div>
+                        </li>
+                        <!-- END user info-->
+                        <!-- Iterates over all sidebar items-->
+                        <li class="nav-heading ">
+                           <span data-localize="sidebar.heading.HEADER">Menu Navigation</span>
+                        </li>
+                        <li class=" ">
+                           <a href="/dashboard" title="Dashboard">
+                             
+                              <em class="icon-speedometer"></em>
+                              <span data-localize="sidebar.nav.DASHBOARD"><%= gettext "Dashboard" %></span>
+                           </a>
+                        </li>
+                        <li class=" ">
+                           <a href="#school" title="School" data-toggle="collapse">
+                            <em class="fas fa-school"></em>
+                              <span data-localize="sidebar.nav.extra.EXTRA"><%= gettext "School" %></span>
+                           </a>
+
+                           <ul class="sidebar-nav sidebar-subnav collapse" id="school">
+                              <li class=" ">
+                                 <a href="/institutions" title="School Profile">
+
+                                    <span><%= gettext "Profile" %></span>
+                                 </a>
+                              </li>
+                              <li class=" ">
+                                 <a href="/system_config/<%= @conn.private.plug_session['institution_id']%>" title="School Settings">
+                                    <span><%= gettext "Parameters" %></span>
+                                 </a>
+                              </li>
+
+                           </ul>
+                        </li>
+                        <li class=" ">
+                           <a href="#school_setting" title="School Setting" data-toggle="collapse">
+                             <em class="fas fa-chalkboard-teacher"></em>
+                              <span data-localize="sidebar.nav.extra.EXTRA"><%= gettext "School Setting" %></span>
+                           </a>
+
+                           <ul class="sidebar-nav sidebar-subnav collapse" id="school_setting">
+                               <li class=" ">
+                           <a href="/users" title="User Settings" >
+                             
+                          
+                              <span data-localize="sidebar.nav.DASHBOARD">User Setting</span>
+                           </a>
+             
+                           </li>
+                           <li class=" ">
+                              <a href="/teacher_setting" title="Teacher Settings" >
+                                
+                                
+                                 <span data-localize="sidebar.nav.DASHBOARD">Teacher Setting</span>
+                              </a>
+                
+                           </li>
+                           <li class=" ">
+                              <a href="/standard_setting" title="Standard Settings" >
+                                
+                               
+                                 <span data-localize="sidebar.nav.DASHBOARD">Standard Setting</span>
+                              </a>
+                
+                           </li>
+                                <li class=" ">
+                              <a href="/class_setting" title="Class Settings" >
+                                
+                              
+                                 <span data-localize="sidebar.nav.DASHBOARD">Class Setting</span>
+                              </a>
+                
+                           </li>
+                            <li class=" ">
+                              <a href="/co_curriculum_setting" title="Co-Curriculum Settings" >
+                                
+                              
+                                 <span data-localize="sidebar.nav.DASHBOARD">Co-Curriculum Setting</span>
+                              </a>
+                
+                           </li>
+
+                           </ul>
+                        </li>
+                        <li class=" ">
+                           <a href="#school_setup" title="School Setup" data-toggle="collapse">
+                            <em class="icon-settings"></em>
+                              <span data-localize="sidebar.nav.extra.EXTRA"><%= gettext "School Setup" %></span>
+                           </a>
+
+                           <ul class="sidebar-nav sidebar-subnav collapse" id="school_setup">
+                              <li class=" ">
+                                 <a href="/students" title="Students">
+
+                                    <span><%= gettext "Students" %></span>
+                                 </a>
+                              </li>
+                              <li class=" ">
+                                 <a href="/teacher" title="Teachers">
+
+                                    <span><%= gettext "Teachers" %></span>
+                                 </a>
+                              </li>
+                              <li class=" ">
+                                 <a href="/levels" title="Standards">
+                                    <span><%= gettext "Standards" %></span>
+                                 </a>
+                              </li>
+                              <li class=" ">
+                                 <a href="/subject" title="Subjects">
+                                    <span><%= gettext "Subjects" %></span>
+                                 </a>
+                              </li>
+                              <li class=" ">
+                                 <a href="/comment" title="Comments">
+                                    <span><%= gettext "Comments" %></span>
+                                 </a>
+                              </li>
+
+                               <li class=" ">
+                                 <a href="/semesters" title="Semesters">
+                                    <span><%= gettext "Semesters" %></span>
+                                 </a>
+                              </li>
+                                <li class=" ">
+                                 <a href="/parent" title="Parents">
+                                    <span><%= gettext "Parents" %></span>
+                                 </a>
+                              </li>
+                              </li>
+                               <li class=" ">
+                                 <a href="/holiday" title="Holidays">
+                                    <span><%= gettext "Holidays" %></span>
+                                 </a>
+                              </li>
+
+                             
+                                   
+
+                           </ul>
+                        </li>
+                        <li class=" ">
+                           <a href="#school_processing" title="School Setup" data-toggle="collapse">
+                            <em class="icon-refresh"></em>
+                              <span data-localize="sidebar.nav.extra.EXTRA"><%= gettext "School Processing" %></span>
+                           </a>
+
+                           <ul class="sidebar-nav sidebar-subnav collapse" id="school_processing">
+                              <li class=" ">
+                                 <a href="/attendance" title="Attendance">
+
+                                    <span><%= gettext "Attendance" %></span>
+                                 </a>
+                              </li>
+                              <li class=" ">
+                                 <a href="/mark_sheet" title="Marking">
+
+                                    <span><%= gettext "Marking" %></span>
+                                 </a>
+                              </li>
+                              <li class=" ">
+                                 <a href="/co_mark" title="Co-Curriculum">
+                                    <span><%= gettext "Co-Curriculum" %></span>
+                                 </a>
+                              </li>
+                              <li class=" ">
+                                 <a href="/mark_comment" title="Comments">
+                                    <span><%= gettext "Comments" %></span>
+                                 </a>
+                              </li>
+                              
+                            
+                                   
+
+                           </ul>
+                        </li>
+                        <li class=" ">
+                           <a href="#report" title="School Setup" data-toggle="collapse">
+                            <em class="fas fa-file"></em>
+                              <span data-localize="sidebar.nav.extra.EXTRA"><%= gettext "Report" %></span>
+                           </a>
+
+                           <ul class="sidebar-nav sidebar-subnav collapse" id="report">
+                              <li class=" ">
+                                 <a href="/generate_attendance_report" title="Attendance Report">
+
+                                    <span><%= gettext "Attendance" %></span>
+                                 </a>
+                              </li>
+                              <li class=" ">
+                                 <a href="/exam_result_class" title="Exam Result Class">
+
+                                    <span><%= gettext "Exam Result Class" %></span>
+                                 </a>
+                              </li>
+                              <li class=" ">
+                                 <a href="/exam_result_standard" title="Exam Result Standard">
+                                    <span><%= gettext "Exam Result Standard" %></span>
+                                 </a>
+                              </li>
+                              <li class=" ">
+                                 <a href="/exam_result_analysis_class" title="Exam Result Analysis Class">
+                                    <span><%= gettext "Exam Result Analysis Class" %></span>
+                                 </a>
+                              </li>
+                              <li class=" ">
+                                 <a href="/exam_result_analysis_standard" title="Exam Result Analysis Standard">
+                                    <span><%= gettext "Exam Result Analysis Standard" %></span>
+                                 </a>
+                                <li class=" ">
+                                 <a href="/student_report_by_cocurriculum" title="Co-Curriculum Result">
+                                    <span><%= gettext "Co-Curriculum Result" %></span>
+                                 </a>
+                              </li>
+                                  <li class=" ">
+                                 <a href="/height_weight_report" title="Height & Weight">
+                                    <span><%= gettext "Height & Weight" %></span>
+                                 </a>
+                              </li>
+                              </li>
+                              <li class=" ">
+                                 <a href="/class_analysis" title="Class Analysis">
+                                    <span><%= gettext "Class Analysis" %></span>
+                                 </a>
+                              </li>
+                              <li class=" ">
+                                 <a href="/student_listing_by_class" title="Student Certificate">
+                                    <span><%= gettext "Student Certificate" %></span>
+                                 </a>
+                              </li>
+                               </li>
+                                 <li class=" ">
+                                 <a href="/teacher_listing" title="Teacher Listing">
+                                    <span><%= gettext "Teacher Listing" %></span>
+                                 </a>
+                              </li>
+                              <li class=" ">
+                                 <a href="/student_listing_by_class" title="Student Listing">
+                                    <span><%= gettext "Student Listing" %></span>
+                                 </a>
+                              </li>
+                                 <li class=" ">
+                                 <a href="/show_guardian" title="Parents Listing">
+                                    <span><%= gettext "Parents Listing" %></span>
+                                 </a>
+                              </li>
+                               </li>
+                                 <li class=" ">
+                                 <a href="/mark_sheet_listing" title="Mark Sheet Listing">
+                                    <span><%= gettext "Mark Sheet Listing" %></span>
+                                 </a>
+                              </li>
+                               </li>
+                                 <li class=" ">
+                                 <a href="/mark_analyse_by_grade" title="Mark Analysis(Grade)">
+                                    <span><%= gettext "Mark Analysis(Grade)" %></span>
+                                 </a>
+                              </li>
+
+                              
+                              
+                            
+                                   
+
+                           </ul>
+                        </li>
+                     </ul>
+                     <!-- END sidebar nav-->
+                  </nav>
+               </div>
+               <!-- END Sidebar (left)-->
+            </aside>
+      <% end %>
+   <% end %>
+<% end %>
+
+

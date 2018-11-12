@@ -16,7 +16,7 @@
     <tr>
       <td><%= subject.code %></td>
       <td><%= subject.description %></td>
-      <td><%= subject.cdesc %></td>
+      <td><%= subject.name %></td>
 
 
       <td class="text-right">
@@ -30,3 +30,4 @@
 </table>
 
 <span><%= link "New Standard subject", to: subject_path(@conn, :new) %></span>
+

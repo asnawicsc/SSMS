@@ -261,6 +261,10 @@ defmodule SchoolWeb.PageController do
     render(conn, "index_splash.html", current_sem: current_sem)
   end
 
+  def contacts_us(conn, _params) do
+    render(conn, "contacts_us.html")
+  end
+
   def loan_report(conn, _params) do
     render(conn, "loan_report.html", [])
   end

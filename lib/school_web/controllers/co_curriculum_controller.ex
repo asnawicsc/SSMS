@@ -93,7 +93,7 @@ defmodule SchoolWeb.CoCurriculumController do
 
     conn
     |> put_flash(:info, "Student cocurriculum mark created successfully.")
-    |> redirect(to: co_curriculum_path(conn, :co_curriculum_setting))
+    |> redirect(to: co_curriculum_path(conn, :co_mark))
   end
 
   def edit_co_mark(conn, params) do
@@ -128,7 +128,7 @@ defmodule SchoolWeb.CoCurriculumController do
 
     conn
     |> put_flash(:info, "Student cocurriculum mark updated successfully.")
-    |> redirect(to: co_curriculum_path(conn, :co_curriculum_setting))
+    |> redirect(to: co_curriculum_path(conn, :co_mark))
   end
 
   def co_mark(conn, params) do
@@ -139,7 +139,9 @@ defmodule SchoolWeb.CoCurriculumController do
       if user.role == "Admin" or user.role == "Support" do
         Affairs.list_cocurriculum()
       else
-        Affairs.list_cocurriculum() |> Enum.filter(fn x -> x.teacher_id == teacher.id end)
+        Affairs.list_cocurriculum()
+        |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+        |> Enum.filter(fn x -> x.teacher_id == teacher.id end)
       end
 
     if cocurriculum == [] do
@@ -148,6 +150,57 @@ defmodule SchoolWeb.CoCurriculumController do
       |> redirect(to: page_path(conn, :dashboard))
     else
       render(conn, "co_mark.html", cocurriculum: cocurriculum)
+    end
+  end
+
+  def marking(conn, params) do
+    cocurriculum = params["id"]
+
+    co = Repo.get_by(School.Affairs.CoCurriculum, %{id: cocurriculum})
+
+    students =
+      Repo.all(
+        from(
+          s in School.Affairs.StudentCocurriculum,
+          left_join: a in School.Affairs.Student,
+          on: s.student_id == a.id,
+          left_join: j in School.Affairs.StudentClass,
+          on: s.student_id == j.sudent_id,
+          left_join: p in School.Affairs.CoCurriculum,
+          on: s.cocurriculum_id == p.id,
+          left_join: c in School.Affairs.Class,
+          on: j.class_id == c.id,
+          where:
+            s.cocurriculum_id == ^cocurriculum and
+              a.institution_id == ^conn.private.plug_session["institution_id"] and
+              c.institution_id == ^conn.private.plug_session["institution_id"] and
+              p.institution_id == ^conn.private.plug_session["institution_id"],
+          select: %{
+            id: p.id,
+            student_id: s.student_id,
+            name: a.name,
+            class_name: c.name,
+            mark: s.mark
+          }
+        )
+      )
+
+    condition = students |> Enum.map(fn x -> x.mark end) |> Enum.filter(fn x -> x != nil end)
+
+    if condition == [] do
+      render(
+        conn,
+        "assign_mark.html",
+        students: students,
+        co: co
+      )
+    else
+      render(
+        conn,
+        "edit_mark.html",
+        students: students,
+        co: co
+      )
     end
   end
 

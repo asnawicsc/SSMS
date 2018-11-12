@@ -22,6 +22,7 @@ defmodule SchoolWeb.Router do
     # Use the default browser stack
     pipe_through([:browser, :splash_layout])
     get("/", PageController, :index_splash)
+    get("/contacts_us", PageController, :contacts_us)
   end
 
   scope "/pdf", SchoolWeb do
@@ -130,6 +131,8 @@ defmodule SchoolWeb.Router do
     resources("/exam_master", ExamMasterController)
     resources("/time_period", TimePeriodController)
 
+    get("/exam/marking/:id", ExamController, :marking)
+    get("/cocurriculum/marking/:id", CoCurriculumController, :marking)
     resources("/exam", ExamController)
     get("/generate_exam", ExamController, :generate_exam)
     post("/mark", ExamController, :mark)
@@ -254,12 +257,15 @@ defmodule SchoolWeb.Router do
     resources("/holiday", HolidayController)
     resources("/comment", CommentController)
     resources("/student_comment", StudentCommentController)
-
+    get("/list_class_comment", StudentCommentController, :list_class_comment)
     get("/student_comments", StudentCommentController, :student_comments)
+    get("/mark_comment", StudentCommentController, :mark_comment)
+    get("/mark_comments/:id", StudentCommentController, :mark_comments)
     post("/create_student_comment", StudentCommentController, :create_student_comment)
     resources("/user_access", UserAccessController)
     get("/user_access_pass/:id", UserAccessController, :user_access_pass)
     resources("/role", RoleController)
+    get("/exam_report/:class_id/:exam_id", ExamController, :exam_report)
   end
 
   # Other scopes may use custom stacks.

@@ -32,7 +32,7 @@
     <form action="/pdf/class_ranking" method="POST">
   <input type="hidden" name="class_id" value="<%= @class_id %>">
   <input type="hidden" name="exam_id" value="<%= @exam_id %>">
-  <input type="hidden" name="_csrf_token" value="<%= @csrf %>">
+   <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
 <input align="left" type="submit" name="" value="Print!">
 </form>
 </div>
@@ -116,7 +116,7 @@
 
     </table>
     <form action="/all_report_card" method="POST">
-      <input type="hidden" name="_csrf_token" value="<%= @csrf %>">
+      <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
       <input type="hidden" name="array" id="all_report_card_data" value="">
       <button type="submit" class="btn btn-info btn-sm " id="all_report_card" style="float: right">Print all Report Card</button>
     </form>

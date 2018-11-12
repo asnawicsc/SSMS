@@ -1251,7 +1251,7 @@ defmodule SchoolWeb.UserChannel do
   def handle_in("class_student_info", payload, socket) do
     user = Repo.get_by(School.Settings.User, %{id: payload["user_id"]})
 
-    class_id =
+    {class_id} =
       if user.role == "Admin" or user.role == "Support" do
         {payload["class_id"]}
       else

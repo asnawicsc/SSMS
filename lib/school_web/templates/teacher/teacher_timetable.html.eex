@@ -3,7 +3,8 @@
     line-height: 0em !important;
   }
 </style>
-
+    <link rel="stylesheet" href="/css/jquery.skedTape.css">
+           <script src=" /js/jquery.skedTape.js"></script>
 <script type="text/javascript">
   window.csrf = "<%= Phoenix.Controller.get_csrf_token %>"
 </script>
@@ -65,6 +66,8 @@
                
            
             </div>
+
+            
              <% end %>
     </div>
 

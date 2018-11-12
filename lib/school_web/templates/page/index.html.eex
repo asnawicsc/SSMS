@@ -24,15 +24,23 @@
 
 <div class="row">
   <div class="col-lg-7">
-    
+     <%= if   @conn.private.plug_session["user_id"] != nil do %>
+            
+                                      <% user_id=@conn.private.plug_session["user_id"] %>
+
+                                      <%= if user_id != nil do %>
+
+                                        <% user=Repo.get_by(Settings.User, %{id: user_id }) %>
+             
     <div class="jumbotron jumbotron-fluid">
-       <h1 class="display-4">Good Morning, Damien!</h1>
+       <h1 class="display-4">Hello, <%= user.name %></h1>
        <p class="lead">This panel shows the timetable for this week for your class.</p>
        <hr class="my-4">
        <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
        <button class="mb-1 btn btn-outline-info" type="button">Mark attendance</button>
        <button class="mb-1 btn btn-outline-info" type="button">Modify Timetable</button>
        <button class="mb-1 btn btn-outline-info" type="button">Info</button>
+
 <div id='calendar'></div>
 <script type="text/javascript">
   $(document).ready(function(){
@@ -48,6 +56,11 @@
   })
 </script>
     </div>
+
+    
+
+                              <% end %>
+                               <% end %>
   </div>
   <div class="col-lg-4">
     <div class="card card-default mb-3">

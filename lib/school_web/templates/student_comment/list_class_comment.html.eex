@@ -1,7 +1,5 @@
-
-
  <div class="card">
-               <div class="card-header"> List  Exam & Class 
+               <div class="card-header">Class List
         
                </div>
                <div class="card-body">
@@ -9,23 +7,22 @@
                      <table class="table table-striped" id="bootgrid-command3">
                         <thead>
                            <tr>
-                             <th data-visible="false"  data-column-id="id">ID</th>
-                              <th data-visible="false" data-column-id="e_id">Code</th>
-                              <th data-column-id="received" data-order="desc">Exam</th>
-                              <th data-column-id="" data-order="desc">Class Name</th>
+                             <th data-column-id="id">ID</th>
+                              <th data-column-id="sender">Class</th>
+                              <th data-column-id="" data-order="desc">Teacher</th>
 
-                              <th data-column-id="commands" data-formatter="command3" data-sortable="false">
+                              <th data-column-id="commands" data-formatter="commands3" data-sortable="false">
                                 Action</div>
                               </th>
                            </tr>
                         </thead>
                         <tbody>
-                           <%= for class <- @ds |> Enum.sort do %>
+                           <%= for a <- @class |> Enum.sort do %>
+                                 <% teacher = Repo.get_by(School.Affairs.Teacher, %{id: a.teacher_id}) %>
                            <tr>
-                            <td><%= class.class_id %></td>
-                              <td><%= class.exam_id %></td>
-                                <td><%= class.exam_name %></td>
-                                 <td><%= class.class_name %></td>
+                            <td><%= a.id %></td>
+                              <td><%= a.name %></td>
+                                 <td><%= teacher.name %></td>
                               <td></td>
                            </tr>
                           <% end %>
@@ -44,9 +41,8 @@
 
                 var grid = $('#bootgrid-command3').bootgrid({
             formatters: {
-                command3: function(column, row) {
-
-                    return '<button type="button" class="btn btn-sm btn-info mr-2 command3-edit" data-row-id="' + row.id + "/" + row.e_id + '"><em class="fa fa-edit fa-fw"></em> Marking</button>';
+                commands3: function(column, row) {
+                    return '<button type="button" class="btn btn-sm btn-info mr-2 command3-edit" data-row-id="' + row.id + '"><em class="fa fa-edit fa-fw"></em> Marking</button>';
                 }
             },
             templates: {
@@ -62,7 +58,7 @@
             grid.find('.command3-edit').on('click', function() {
 
 
-              window.location.href = "/exam_report/"+ $(this).data('row-id');
+              window.location.href = "/mark_comments/"+ $(this).data('row-id');
 
                 console.log('You pressed edit on row: ' + $(this).data('row-id'));
             }).end().find('.command3-delete').on('click', function() {

@@ -229,7 +229,7 @@ defmodule SchoolWeb.ExamController do
   def mark_sheet(conn, params) do
     user = Repo.get_by(School.Settings.User, %{id: conn.private.plug_session["user_id"]})
 
-    {class} =
+    {class, a} =
       if user.role == "Admin" or user.role == "Support" do
         class =
           Repo.all(
@@ -240,7 +240,31 @@ defmodule SchoolWeb.ExamController do
             )
           )
 
-        {class}
+        a =
+          Repo.all(
+            from(
+              p in School.Affairs.SubjectTeachClass,
+              left_join: s in School.Affairs.Class,
+              on: s.id == p.class_id,
+              left_join: g in School.Affairs.Subject,
+              on: g.id == p.subject_id,
+              left_join: q in School.Affairs.Level,
+              on: q.id == p.standard_id,
+              left_join: e in School.Affairs.Exam,
+              on: e.subject_id == p.subject_id,
+              left_join: m in School.Affairs.ExamMaster,
+              on: m.id == e.exam_master_id,
+              where:
+                q.institution_id == ^conn.private.plug_session["institution_id"] and
+                  s.institution_id == ^conn.private.plug_session["institution_id"] and
+                  g.institution_id == ^conn.private.plug_session["institution_id"] and
+                  m.institution_id == ^conn.private.plug_session["institution_id"],
+              select: %{id: p.id, class: s.name, exam: m.name, subject: g.description}
+            )
+          )
+          |> Enum.uniq()
+
+        {class, a}
       else
         teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email})
 
@@ -258,7 +282,31 @@ defmodule SchoolWeb.ExamController do
           )
           |> Enum.uniq()
 
-        {class}
+        a =
+          Repo.all(
+            from(
+              p in School.Affairs.SubjectTeachClass,
+              left_join: s in School.Affairs.Class,
+              on: s.id == p.class_id,
+              left_join: g in School.Affairs.Subject,
+              on: g.id == p.subject_id,
+              left_join: q in School.Affairs.Level,
+              on: q.id == p.standard_id,
+              left_join: e in School.Affairs.Exam,
+              on: e.subject_id == p.subject_id,
+              left_join: m in School.Affairs.ExamMaster,
+              on: m.id == e.exam_master_id,
+              where:
+                s.institution_id == ^conn.private.plug_session["institution_id"] and
+                  g.institution_id == ^conn.private.plug_session["institution_id"] and
+                  m.institution_id == ^conn.private.plug_session["institution_id"] and
+                  p.teacher_id == ^teacher.id,
+              select: %{id: p.id, class: s.name, exam: m.name, subject: g.description}
+            )
+          )
+          |> Enum.uniq()
+
+        {class, a}
       end
 
     if class == [] do
@@ -266,7 +314,7 @@ defmodule SchoolWeb.ExamController do
       |> put_flash(:info, "You Dont Teach Any Subject.")
       |> redirect(to: page_path(conn, :dashboard))
     else
-      render(conn, "mark_sheet.html", class: class)
+      render(conn, "mark_sheet.html", class: class, a: a)
     end
   end
 
@@ -326,6 +374,156 @@ defmodule SchoolWeb.ExamController do
       end
 
     render(conn, "generate_exam.html", class: class, all: all, exam: exam)
+  end
+
+  def marking(conn, params) do
+    a =
+      Repo.all(
+        from(
+          p in School.Affairs.SubjectTeachClass,
+          left_join: s in School.Affairs.Class,
+          on: s.id == p.class_id,
+          left_join: g in School.Affairs.Subject,
+          on: g.id == p.subject_id,
+          left_join: q in School.Affairs.Level,
+          on: q.id == p.standard_id,
+          left_join: e in School.Affairs.Exam,
+          on: e.subject_id == p.subject_id,
+          left_join: m in School.Affairs.ExamMaster,
+          on: m.id == e.exam_master_id,
+          where:
+            q.institution_id == ^conn.private.plug_session["institution_id"] and
+              s.institution_id == ^conn.private.plug_session["institution_id"] and
+              g.institution_id == ^conn.private.plug_session["institution_id"] and
+              m.institution_id == ^conn.private.plug_session["institution_id"] and
+              p.id == ^params["id"],
+          select: %{
+            class: s.id,
+            class_name: s.name,
+            exam_name: m.name,
+            exam: m.id,
+            subject_name: g.description,
+            subject: g.id
+          }
+        )
+      )
+      |> Enum.uniq()
+      |> hd()
+
+    all =
+      Repo.all(
+        from(
+          s in School.Affairs.ExamMark,
+          where: s.class_id == ^a.class and s.subject_id == ^a.subject and s.exam_id == ^a.exam,
+          select: %{
+            class_id: s.class_id,
+            subject_id: s.subject_id,
+            exam_id: s.exam_id,
+            student_id: s.student_id,
+            mark: s.mark
+          }
+        )
+      )
+
+    if all == [] do
+      class = Affairs.get_class!(a.class)
+      subject = Affairs.get_subject!(a.subject)
+
+      verify =
+        Repo.all(
+          from(
+            s in School.Affairs.Period,
+            where: s.class_id == ^a.class and s.subject_id == ^a.subject,
+            select: %{teacher_id: s.teacher_id}
+          )
+        )
+
+      student =
+        Repo.all(
+          from(
+            s in School.Affairs.StudentClass,
+            left_join: p in Student,
+            on: p.id == s.sudent_id,
+            where: s.class_id == ^a.class,
+            select: %{id: p.id, student_name: p.name}
+          )
+        )
+
+      render(
+        conn,
+        "mark.html",
+        all: all,
+        student: student,
+        class: class,
+        subject: subject,
+        exam_id: a.exam
+      )
+    else
+      class_id = all |> Enum.map(fn x -> x.class_id end) |> Enum.uniq() |> hd
+      exam_id = all |> Enum.map(fn x -> x.exam_id end) |> Enum.uniq() |> hd
+      subject_id = all |> Enum.map(fn x -> x.subject_id end) |> Enum.uniq() |> hd
+
+      class = Affairs.get_class!(class_id)
+      subject = Affairs.get_subject!(subject_id)
+
+      # all_student=Repo.all(from s in School.Affairs.StudentClass,   
+      #   where: e.subject_id==^subject.id and s.class_id==^class.id and e.exam_id==^exam_id and e.student_id != s.sudent_id,
+      #   select: %{
+      #     name: s.sudent_id,
+      #     mark: e.mark
+      #     })
+      t =
+        Repo.all(
+          from(
+            i in StudentClass,
+            left_join: s in Student,
+            on: s.id == i.sudent_id,
+            where: i.class_id == ^a.class,
+            select: %{name: s.name, student_id: s.id}
+          )
+        )
+
+      fi =
+        for item <- t do
+          a = Enum.filter(all, fn x -> x.student_id == item.student_id end)
+
+          if a == [] do
+            %{
+              class_id: class_id,
+              exam_id: exam_id,
+              student_id: item.student_id,
+              subject_id: subject_id,
+              student_name: item.name,
+              mark: 0
+            }
+          else
+          end
+        end
+        |> Enum.filter(fn x -> x != nil end)
+
+      # csrf = Phoenix.Controller.get_csrf_token()
+
+      # {Phoenix.View.render_to_string(
+      #    SchoolWeb.ExamView,
+      #    "edit_mark.html",
+      #    all: all,
+      #    fi: fi,
+      #    class: class,
+      #    exam_id: exam_id,
+      #    subject: subject,
+
+      #  )}
+
+      render(
+        conn,
+        "edit_mark.html",
+        all: all,
+        fi: fi,
+        class: class,
+        exam_id: exam_id,
+        subject: subject
+      )
+    end
   end
 
   def mark(conn, params) do
@@ -469,11 +667,274 @@ defmodule SchoolWeb.ExamController do
         |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
       end
 
+    ds =
+      Repo.all(
+        from(
+          s in School.Affairs.Class,
+          left_join: g in School.Affairs.Level,
+          on: s.level_id == g.id,
+          left_join: p in School.Affairs.ExamMaster,
+          on: g.id == p.level_id,
+          where:
+            s.institution_id == ^conn.private.plug_session["institution_id"] and
+              g.institution_id == ^conn.private.plug_session["institution_id"] and
+              p.institution_id == ^conn.private.plug_session["institution_id"],
+          select: %{class_id: s.id, exam_id: p.id, exam_name: p.name, class_name: s.name}
+        )
+      )
+
     render(
       conn,
       "exam_result_class.html",
-      class: class
+      class: class,
+      ds: ds
     )
+  end
+
+  def exam_report(conn, params) do
+    class_id = params["class_id"] |> String.to_integer()
+    exam_id = params["exam_id"] |> String.to_integer()
+    class = Repo.get_by(School.Affairs.Class, id: class_id)
+    inst_id = conn.private.plug_session["institution_id"]
+
+    exam_mark =
+      Repo.all(
+        from(
+          e in School.Affairs.ExamMark,
+          left_join: k in School.Affairs.ExamMaster,
+          on: k.id == e.exam_id,
+          left_join: s in School.Affairs.Student,
+          on: s.id == e.student_id,
+          left_join: p in School.Affairs.Subject,
+          on: p.id == e.subject_id,
+          where:
+            e.class_id == ^class_id and e.exam_id == ^exam_id and k.institution_id == ^inst_id,
+          select: %{
+            subject_code: p.code,
+            exam_name: k.name,
+            student_id: s.id,
+            student_name: s.name,
+            student_mark: e.mark,
+            chinese_name: s.chinese_name,
+            sex: s.sex,
+            level_id: k.level_id
+          }
+        )
+      )
+
+    if exam_mark != [] do
+      level_id = hd(exam_mark).level_id
+
+      exam_standard =
+        Repo.all(
+          from(
+            e in School.Affairs.Exam,
+            left_join: k in School.Affairs.ExamMaster,
+            on: k.id == e.exam_master_id,
+            left_join: p in School.Affairs.Subject,
+            on: p.id == e.subject_id,
+            where: e.exam_master_id == ^exam_id and k.institution_id == ^inst_id,
+            select: %{
+              subject_code: p.code,
+              exam_name: k.name
+            }
+          )
+        )
+
+      all =
+        for item <- exam_standard do
+          exam_name = exam_mark |> Enum.map(fn x -> x.exam_name end) |> Enum.uniq() |> hd
+          student_list = exam_mark |> Enum.map(fn x -> x.student_name end) |> Enum.uniq()
+          all_mark = exam_mark |> Enum.filter(fn x -> x.subject_code == item.subject_code end)
+
+          subject_code = item.subject_code
+
+          all =
+            for item <- student_list do
+              student =
+                Repo.all(
+                  from(
+                    s in School.Affairs.Student,
+                    where: s.name == ^item and s.institution_id == ^inst_id
+                  )
+                )
+                |> hd()
+
+              s_mark = all_mark |> Enum.filter(fn x -> x.student_name == item end)
+
+              a =
+                if s_mark != [] do
+                  s_mark
+                else
+                  %{
+                    chinese_name: student.chinese_name,
+                    sex: student.sex,
+                    student_name: item,
+                    student_id: student.id,
+                    student_mark: -1,
+                    exam_name: exam_name,
+                    subject_code: subject_code
+                  }
+                end
+            end
+        end
+        |> List.flatten()
+
+      exam_name = exam_mark |> Enum.map(fn x -> x.exam_name end) |> Enum.uniq() |> hd
+
+      all_mark = all |> Enum.group_by(fn x -> x.subject_code end)
+
+      mark1 =
+        for item <- all_mark do
+          subject_code = item |> elem(0)
+
+          datas = item |> elem(1)
+
+          for data <- datas do
+            student_mark = data.student_mark
+
+            grades =
+              Repo.all(
+                from(
+                  g in School.Affairs.Grade,
+                  where: g.institution_id == ^inst_id and g.standard_id == ^level_id
+                )
+              )
+
+            for grade <- grades do
+              if student_mark >= grade.mix and student_mark <= grade.max and student_mark != -1 do
+                %{
+                  student_id: data.student_id,
+                  student_name: data.student_name,
+                  grade: grade.name,
+                  gpa: grade.gpa,
+                  subject_code: data.subject_code,
+                  student_mark: data.student_mark,
+                  chinese_name: data.chinese_name,
+                  sex: data.sex
+                }
+              end
+            end
+          end
+        end
+        |> List.flatten()
+        |> Enum.filter(fn x -> x != nil end)
+
+      news = mark1 |> Enum.group_by(fn x -> x.student_name end)
+
+      z =
+        for new <- news do
+          total =
+            new
+            |> elem(1)
+            |> Enum.map(fn x -> x.student_mark end)
+            |> Enum.filter(fn x -> x != -1 end)
+            |> Enum.sum()
+
+          per =
+            new
+            |> elem(1)
+            |> Enum.map(fn x -> x.student_mark end)
+            |> Enum.filter(fn x -> x != -1 end)
+            |> Enum.count()
+
+          total_per = per * 100
+
+          student_id = new |> elem(1) |> Enum.map(fn x -> x.student_id end) |> Enum.uniq() |> hd
+
+          chinese_name =
+            new |> elem(1) |> Enum.map(fn x -> x.chinese_name end) |> Enum.uniq() |> hd
+
+          sex = new |> elem(1) |> Enum.map(fn x -> x.sex end) |> Enum.uniq() |> hd
+
+          a = new |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "A" end)
+          b = new |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "B" end)
+          c = new |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "C" end)
+          d = new |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "D" end)
+          e = new |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "E" end)
+          f = new |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "F" end)
+          g = new |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "G" end)
+
+          total_gpa =
+            new |> elem(1) |> Enum.map(fn x -> Decimal.to_float(x.gpa) end) |> Enum.sum()
+
+          cgpa = (total_gpa / per) |> Float.round(2)
+          total_average = (total / total_per * 100) |> Float.round(2)
+
+          %{
+            subject: new |> elem(1) |> Enum.sort_by(fn x -> x.subject_code end),
+            name: new |> elem(0),
+            chinese_name: chinese_name,
+            sex: sex,
+            student_id: student_id,
+            total_mark: total,
+            per: per,
+            total_per: total_per,
+            total_average: total_average,
+            a: a,
+            b: b,
+            c: c,
+            d: d,
+            e: e,
+            f: f,
+            g: g,
+            cgpa: cgpa
+          }
+        end
+        |> Enum.sort_by(fn x -> x.total_mark end)
+        |> Enum.reverse()
+        |> Enum.with_index()
+
+      k =
+        for item <- z do
+          rank = item |> elem(1)
+          item = item |> elem(0)
+
+          %{
+            subject: item.subject,
+            name: item.name,
+            chinese_name: item.chinese_name,
+            sex: item.sex,
+            student_id: item.student_id,
+            total_mark: item.total_mark,
+            per: item.per,
+            total_per: item.total_per,
+            total_average: item.total_average,
+            a: item.a,
+            b: item.b,
+            c: item.c,
+            d: item.d,
+            e: item.e,
+            f: item.f,
+            g: item.g,
+            cgpa: item.cgpa,
+            rank: rank + 1
+          }
+        end
+        |> Enum.sort_by(fn x -> x.name end)
+        |> Enum.with_index()
+
+      mark = mark1 |> Enum.group_by(fn x -> x.subject_code end)
+
+      total_student = news |> Map.keys() |> Enum.count()
+
+      render(
+        conn,
+        "rank.html",
+        z: k,
+        class: class,
+        exam_name: exam_name,
+        mark: mark,
+        mark1: mark1,
+        total_student: total_student,
+        class_id: params["class_id"],
+        exam_id: params["exam_id"]
+      )
+    else
+      conn
+      |> put_flash(:info, "Exam created successfully.")
+      |> redirect(to: exam_path(conn, :exam_result_class))
+    end
   end
 
   def exam_result_analysis_class(conn, params) do

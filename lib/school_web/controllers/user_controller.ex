@@ -76,7 +76,7 @@ defmodule SchoolWeb.UserController do
         if access == nil do
           conn
           |> put_flash(:error, "Please Contact Admin for Access!")
-          |> redirect(to: user_path(conn, :login))
+          |> redirect(to: page_path(conn, :index_splash))
         else
           conn
           |> put_session(:user_id, user.id)
@@ -87,12 +87,12 @@ defmodule SchoolWeb.UserController do
       else
         conn
         |> put_flash(:error, "Wrong password!")
-        |> redirect(to: user_path(conn, :login))
+        |> redirect(to: page_path(conn, :index_splash))
       end
     else
       conn
       |> put_flash(:error, "User not found")
-      |> redirect(to: user_path(conn, :login))
+      |> redirect(to: page_path(conn, :index_splash))
     end
   end
 
@@ -154,7 +154,7 @@ defmodule SchoolWeb.UserController do
     |> delete_session(:institution_id)
     |> delete_session(:semester_id)
     |> put_flash(:info, "Logout successfully")
-    |> redirect(to: user_path(conn, :login))
+    |> redirect(to: page_path(conn, :index_splash))
   end
 
   def register_new_user(conn, _params) do

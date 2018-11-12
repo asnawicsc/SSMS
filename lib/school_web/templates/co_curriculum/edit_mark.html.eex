@@ -1,69 +1,46 @@
 
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>CoCurriculum Mark</title>
-    <style>
-    html {
-      font-family: sans-serif;
-    }
-    table {
-      border-collapse: collapse;
-      border: 2px solid rgb(200,200,200);
-      letter-spacing: 1px;
-      font-size: 0.8rem;
-    }
-    td, th {
-      border: 1px solid rgb(190,190,190);
-      padding: 10px 20px;
-    }
-    td {
-      text-align: center;
-    }
-    caption {
-      padding: 10px;
-    }
-    </style>
-  </head>
- <% require IEx %>
-  <body>
 
 <form method="post" action="/edit_co_mark" class="form-horizontal">
-   <input type="hidden" name="cocurriculum_id" value="<%= @cocurriculum %>">
-    <input type="hidden" name="standard_id" value="<%= @co_level %>">
-     <input type="hidden" name="year" value="<%= @co_year %>">
-      <input type="hidden" name="semester_id" value="<%= @co_semester %>">
+   <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+   <input type="hidden" name="cocurriculum_id" value="<%= @co.id %>">
+     <div class="row">
+               <div class="col-12">
+                  <!-- START card-->
+                  <div class="card card-default">
+                     <div class="card-header">CoCurriculum Mark for <%= @co.description %> </div>
+                     <div class="card-body">
+                        <!-- START table-responsive-->
+                        <div class="table-responsive">
+                             <table class="table table-striped table-bordered table-hover">
+                              <thead>
+                                 <tr>
+                                    <th style="background-color:#97DB9A;"><%= gettext "Student Name" %></th>
+                                      <th style="background-color:#97DB9A;"><%= gettext "Class" %></th>
+                                    <th style="background-color:#97DB9A;"><%= gettext "Mark" %></th>
+                              
+                                 </tr>
+                              </thead>
+                              <tbody>
+                                <%= for item <- @students do %>
+                                 <tr>
+                                    <td><%= item.name %></td>
+                                    <td><%= item.class_name %></td>
+                                    <td><input type="number" min="0" max="100" name="mark[<%=item.student_id %>]" value="<%= item.mark %>"></td>
+                                
+                                 </tr>
+                                    <% end %>
+                              </tbody>
+                           </table>
+                        </div>
+                        <!-- END table-responsive-->
+                     </div>
+                        <center><input class="btn btn-primary" name="" value="Submit" type="submit" style="margin-bottom: 10px"></center> 
 
-       <input type="hidden" name="_csrf_token" value="<%= @csrf %>">
-
-    <table>
-      <colgroup>
-        <col col span="2" >
-      </colgroup>
-      <tr>
-
-         <th style="background-color:#97DB9A;"><%= gettext "Student Name" %></th>
-          <th style="background-color:#97DB9A;"><%= gettext "Class" %></th>
-        <th style="background-color:#97DB9A;"><%= gettext "Mark" %></th>
-      </tr>
-       <%= for item <- @students do %>
-
-      <tr>
-
-       <th ><%= item.name %></th>
-         <th ><%= item.class_name %></th>
-        <th  ><input type="number" min="0" max="100" name="mark[<%=item.student_id %>]" value="<%= item.mark %>"></th>
-
-      </tr>
-         <% end %>
-
-    </table>
+                  </div>
+                  <!-- END card-->
+               </div>
+            
+            </div>
 
 
-  </body>
-</html> <br>
-
-    <input class="btn btn-primary" name="" value="Submit" type="submit">
 </form>
-
