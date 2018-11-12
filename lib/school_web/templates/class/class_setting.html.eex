@@ -111,7 +111,7 @@
 
                 <% user=Repo.get_by(Settings.User, %{id: user_id }) %>
 
-            <%= if user.role == "Admin" or user.role == "Support" do %>     
+            <%= if user.role == "Admin" or user.role == "Support" or user.role == "Teacher" do %>     
                                 <li class="nav-item">
                                     <a class="nav-link" data-toggle="tab" href="" id="class_student" role="tablist">
                                         Class Student

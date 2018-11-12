@@ -65,6 +65,7 @@ defmodule SchoolWeb.Router do
     get("/mark_analyse_by_grade", ClassController, :mark_analyse_by_grade)
     get("/class_analysis", ClassController, :class_analysis)
     get("/height_weight_report", ClassController, :height_weight_report)
+    get("/create_class", ClassController, :create_class)
     get("/dashboard", PageController, :dashboard)
     get("/operations", PageController, :operations)
     get("/library/books", PageController, :books)

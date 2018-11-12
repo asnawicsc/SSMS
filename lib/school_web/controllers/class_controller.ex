@@ -443,6 +443,11 @@ defmodule SchoolWeb.ClassController do
     render(conn, "new.html", changeset: changeset)
   end
 
+  def create_class(conn, params) do
+    changeset = Affairs.change_class(%Class{})
+    render(conn, "create_class.html", changeset: changeset)
+  end
+
   def create(conn, %{"class" => class_params}) do
     class_params =
       Map.put(class_params, "institution_id", conn.private.plug_session["institution_id"])
