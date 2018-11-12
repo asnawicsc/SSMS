@@ -31,7 +31,9 @@
                <!-- END User avatar toggle-->
                <!-- START lock screen-->
                <li class="nav-item d-none d-md-block">
-                  <a class="nav-link" href="/logout" title="Logout">
+
+                  <a class="nav-link" href="/logout" title="Lock screen">
+
                      <em class="icon-lock"></em>
                   </a>
                </li>

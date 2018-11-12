@@ -18,6 +18,82 @@ defmodule SchoolWeb.StudentController do
     render(conn, "index.html", students: students)
   end
 
+  def student_lists(conn, params) do
+    user = Repo.get(User, params["user_id"])
+
+    if user.role == "Teacher" do
+      teacher = Repo.all(from(t in Teacher, where: t.email == ^user.email))
+
+      if teacher != nil do
+        teacher = teacher |> hd()
+        all_class = Repo.all(from(c in Class, where: c.teacher_id == ^teacher.id))
+
+        students =
+          for class <- all_class do
+            student_ids =
+              Repo.all(
+                from(
+                  s in StudentClass,
+                  where: s.class_id == ^class.id,
+                  select: %{student_id: s.sudent_id}
+                )
+              )
+
+            student_ids
+          end
+
+        students = students |> List.flatten()
+
+        students =
+          for student <- students do
+            details =
+              Repo.all(
+                from(
+                  s in Student,
+                  left_join: c in StudentClass,
+                  on: c.sudent_id == s.id,
+                  left_join: cl in Class,
+                  on: cl.id == c.class_id,
+                  where: s.id == ^student.student_id,
+                  order_by: [asc: s.name],
+                  select: %{
+                    id: s.id,
+                    name: s.name,
+                    chinese_name: s.chinese_name,
+                    class: cl.name
+                  }
+                )
+              )
+
+            details
+          end
+          |> List.flatten()
+      end
+    else
+      # for non teacher to view all students
+      students =
+        Repo.all(
+          from(
+            s in Student,
+            left_join: c in StudentClass,
+            on: c.sudent_id == s.id,
+            left_join: cl in Class,
+            on: cl.id == c.class_id,
+            where: s.institution_id == ^conn.private.plug_session["institution_id"],
+            order_by: [asc: s.name],
+            select: %{
+              id: s.id,
+              name: s.name,
+              chinese_name: s.chinese_name,
+              class: cl.name
+            }
+          )
+        )
+    end
+
+    render(conn, "index.html", students: students)
+  end
+
   def student_certificate(conn, params) do
     semesters =
       Repo.all(from(s in Semester))

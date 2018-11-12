@@ -30,10 +30,10 @@
                                   &nbsp;
                                       &nbsp;
                                        &nbsp;
-                                <span>Standard : <select class="select" onchange="getvalstd(this);" required="required" name="std_id">
-                                        <%= for a <- @levels |> Enum.sort do %>
-                                        <option value="<%= a.id %>">
-                                        <%= a.name %>
+                                <span>Choose a class : <select class="select" onchange="getvalclass(this);" required="required" name="class_id">
+                                        <%= for c <- @class |> Enum.sort do %>
+                                        <option value="<%= c.id %>">
+                                        <%= c.name %>
                                         </option>
                                         <% end %>
                                     </select></span>
@@ -41,13 +41,11 @@
                                       &nbsp;
                                        &nbsp;
 
-                                      <div id="stc">
-                                      </div>
-
 
                                 <button type="button" rel="tooltip" title="" class="btn btn-danger btn-link btn-sm" id="" name="" value="" data-toggle="modal" aria-label="modelj" data-target="#modelj" data-original-title="Edit Item" align="right" style=" position: absolute; right: 10px;"><i class="material-icons">Create Class</i>
                                     <div class="ripple-container"></div>
                                 </button>
+
                         </div>
 
                             <hr>
@@ -55,29 +53,38 @@
                         <% end %>
 
                               <%= if user.role == "Teacher" do %>
-                                    <% teacher=Repo.get_by(Affairs.Teacher, %{email: user.email }) %>
-                                            <% class=Repo.get_by(Affairs.Class, %{teacher_id: teacher.id }) %>
-                                            <input type="hidden" name="teacher_id" value="<%= class.id %>">
-                                    <script type="text/javascript">
-                                        
-                                        
+                                   <div class="row">
+                                   <h4 class="card-title">Class Setting</h4>
+                                  &nbsp;
+                                      &nbsp;
+                                       &nbsp;
+                                <span>Choose a class : <select class="select" onchange="getvalclass(this);" required="required" name="class_id">
+                                        <%= for c <- @class |> Enum.sort do %>
+                                        <option value="<%= c.id %>">
+                                        <%= c.name %>
+                                        </option>
+                                        <% end %>
+                                    </select></span>
+                                     &nbsp;
+                                      &nbsp;
+                                       &nbsp;
 
-                                                    var class_id =  $("input[name='teacher_id']").val()
 
-                            
+                                <button type="button" rel="tooltip" title="" class="btn btn-danger btn-link btn-sm" id="" name="" value="" data-toggle="modal" aria-label="modelj" data-target="#modelj" data-original-title="Edit Item" align="right" style=" position: absolute; right: 10px;"><i class="material-icons">Create Class</i>
+                                    <div class="ripple-container"></div>
+                                </button>
 
-                                                    channel.push("class_info", {
-                                                        user_id: window.currentUser,
-                                                        class_id: class_id,
-                                                    })
-                                    </script>
+                        </div>
+
+                            <hr>
+                                    
                               <% end %>
             <% end %>
             <% end %>
 
                             <ul class="nav nav-pills nav-pills-warning" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link active" data-toggle="tab" href="" id="class_info" role="tablist">
+                                    <a class="nav-link" data-toggle="tab" href="" id="class_info" role="tablist">
                                         Class Info
                                     </a>
 
@@ -104,7 +111,7 @@
 
                 <% user=Repo.get_by(Settings.User, %{id: user_id }) %>
 
-            <%= if user.role == "Admin" or user.role == "Support" do %>     
+            <%= if user.role == "Admin" or user.role == "Support" or user.role == "Teacher" do %>     
                                 <li class="nav-item">
                                     <a class="nav-link" data-toggle="tab" href="" id="class_student" role="tablist">
                                         Class Student
@@ -124,9 +131,10 @@
                             </ul>
 
                         </div>
-                        <div class="card-body ">
+                        <div class="card-body " id="class_details_tab">
 
                             <div class="tab-content tab-space">
+                                <div id="class_msg"><h1>Please click on tab to show information.</h1></div>
                                 <div class="tab-pane active" id="class_info">
                                     <div class="row">
                                         <div class="col-lg-12">
@@ -181,6 +189,7 @@
                                         </div>
 
                                     </div>
+                                </div>
 
 
 
@@ -500,6 +509,7 @@
 
 
 <script type="text/javascript">
+    $('div#class_details_tab').hide()
   $('select[name="class_id"]').val(localStorage.getItem("std_id"));
 
    function getvalstd(sel) {
@@ -519,6 +529,22 @@
         institution_id: window.currentInstitute,
         std_id: std_id,
     })
+
+    function getvalclass(params) {
+
+        var class_id =  params.value
+        localStorage.setItem("class_id", class_id);
+        document.getElementById("class_info").className = "nav-link active";
+        document.getElementById("class_subject").className = "nav-link";
+        document.getElementById("class_period").className = "nav-link";
+        document.getElementById("class_student_info").className = "nav-link";
+        $('div#class_details_tab').show()
+
+        channel.push("class_info", {
+            user_id: window.currentUser,
+            class_id: class_id,
+        })
+    }
     
 
 

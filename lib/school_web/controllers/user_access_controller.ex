@@ -16,11 +16,7 @@ defmodule SchoolWeb.UserAccessController do
     render(conn, "new.html", changeset: changeset)
   end
 
-   def user_access_pass(conn, %{"id" => id}) do
-
-
-
-
+  def user_access_pass(conn, %{"id" => id}) do
     institutions =
       Repo.all(
         from(
@@ -32,16 +28,13 @@ defmodule SchoolWeb.UserAccessController do
         )
       )
 
-
-
-
     selected =
       Repo.all(
         from(
           u in UserAccess,
           left_join: b in Institution,
           on: b.id == u.institution_id,
-          where:  u.user_id == ^id,
+          where: u.user_id == ^id,
           select: %{
             id: b.id,
             name: b.name
@@ -51,8 +44,7 @@ defmodule SchoolWeb.UserAccessController do
 
     not_selected = institutions -- selected
 
-
-    render(conn, "user_access_pass.html",id: id,not_selected: not_selected, selected: selected)
+    render(conn, "user_access_pass.html", id: id, not_selected: not_selected, selected: selected)
   end
 
   def create(conn, %{"user_access" => user_access_params}) do
@@ -61,6 +53,7 @@ defmodule SchoolWeb.UserAccessController do
         conn
         |> put_flash(:info, "User access created successfully.")
         |> redirect(to: user_access_path(conn, :show, user_access))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
@@ -85,6 +78,7 @@ defmodule SchoolWeb.UserAccessController do
         conn
         |> put_flash(:info, "User access updated successfully.")
         |> redirect(to: user_access_path(conn, :show, user_access))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", user_access: user_access, changeset: changeset)
     end

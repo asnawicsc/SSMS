@@ -37,7 +37,7 @@
        <p class="lead">This panel shows the timetable for this week for your class.</p>
        <hr class="my-4">
        <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
-       <button class="mb-1 btn btn-outline-info" type="button">Mark attendance</button>
+       <a href="/attendance"><button class="mb-1 btn btn-outline-info" type="button">Mark attendance</button></a>
        <button class="mb-1 btn btn-outline-info" type="button">Modify Timetable</button>
        <button class="mb-1 btn btn-outline-info" type="button">Info</button>
 
@@ -66,15 +66,31 @@
     <div class="card card-default mb-3">
        <div class="card-header d-flex align-items-center">
       
-            <em class="fa-2x mr-3 fas fa-child"></em>
-            <span style="font-weight: bolder;font-size: 17px;">Student</span>
+            <em class="fa-2x mr-3 fas fa-pencil-alt"></em>
+            <span style="font-weight: bolder;font-size: 17px;">Class</span>
          
        </div>
        <div class="card-body">
           <h5 class="card-title">Card Default card title</h5>
           <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          <button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button>
-          <button class="mb-1 btn-sm btn btn-outline-primary" type="button">Enroll</button>
+          <a  href="/create_class"]"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Class</button></a>
+          <a  href="/class_setting"]"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Settings</button></a>
+       </div>
+    </div>
+    <div class="card card-default mb-3">
+       <div class="card-header d-flex align-items-center">
+      
+            <em class="fa-2x mr-3 fas fa-child"></em>
+            <span style="font-weight: bolder;font-size: 17px;">Student</span>
+         
+       </div>
+       <% require IEx %>
+       <% a = @conn %>
+
+       <div class="card-body">
+          <h5 class="card-title">Card Default card title</h5>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          <a href="/student_lists/<%= a.private.plug_session["user_id"]%>"><button class="mb-1 btn-sm btn btn-outline-primary"  type="button">List</button></a>
        </div>
     
     </div>
@@ -117,7 +133,7 @@
        <div class="card-body">
           <h5 class="card-title">Card Default card title</h5>
           <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          <button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button>
+          <a href ="/teacher_setting"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
           <button class="mb-1 btn-sm btn btn-outline-primary" type="button">Enroll</button>
        </div>
     </div>

@@ -934,20 +934,32 @@ defmodule SchoolWeb.UserChannel do
       else
         teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email})
 
-        all = Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
+        all = Repo.get(School.Affairs.Class, payload["class_id"])
 
         {all, teacher}
       end
 
-    broadcast(socket, "show_class_info", %{
-      id: all.id,
-      name: all.name,
-      remark: all.remarks,
-      institution_id: all.institution_id,
-      level_id: all.level_id,
-      teacher_id: all.teacher_id,
-      teacher_name: teacher.name
-    })
+    if teacher != nil do
+      broadcast(socket, "show_class_info", %{
+        id: all.id,
+        name: all.name,
+        remark: all.remarks,
+        institution_id: all.institution_id,
+        level_id: all.level_id,
+        teacher_id: all.teacher_id,
+        teacher_name: teacher.name
+      })
+    else
+      broadcast(socket, "show_class_info", %{
+        id: all.id,
+        name: all.name,
+        remark: all.remarks,
+        institution_id: all.institution_id,
+        level_id: all.level_id,
+        teacher_id: nil,
+        teacher_name: "No Teacher"
+      })
+    end
 
     {:noreply, socket}
   end
@@ -1028,7 +1040,7 @@ defmodule SchoolWeb.UserChannel do
       else
         teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email})
 
-        class = Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
+        class = Repo.get(School.Affairs.Class, payload["class_id"])
         class_id = class.id
         institution_id = payload["institution_id"]
 
@@ -1097,7 +1109,7 @@ defmodule SchoolWeb.UserChannel do
       else
         teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email})
 
-        class = Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
+        class = Repo.get(School.Affairs.Class, payload["class_id"])
         class_id = class.id
 
         period =
@@ -1253,12 +1265,12 @@ defmodule SchoolWeb.UserChannel do
 
     {class_id} =
       if user.role == "Admin" or user.role == "Support" do
-        {payload["class_id"]}
+        payload["class_id"]
       else
         teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email})
 
-        class = Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
-        {class.id}
+        class = Repo.get(School.Affairs.Class, payload["class_id"])
+        class.id
       end
 
     students =
@@ -2791,6 +2803,15 @@ defmodule SchoolWeb.UserChannel do
         params = %{institution_id: institution.id, user_id: user.id}
 
         School.Settings.create_user_access(params)
+
+        if user.role == "Teacher" do
+          teacher = Repo.all(from(t in Teacher, where: t.email == ^user.email))
+
+          if teacher != nil do
+            teacher = teacher |> hd()
+            Teacher.changeset(teacher, %{institution_id: institution.id}) |> Repo.update!()
+          end
+        end
 
         {"inserted"}
       end

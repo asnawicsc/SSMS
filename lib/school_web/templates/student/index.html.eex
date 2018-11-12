@@ -17,15 +17,18 @@
                         <tr>
                         
 
-                          <th>Name</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                    <%= if @students == nil do %> 
-                    <% else %>
-                      <%= for student <- @students do %>
-                          <tr>
-                         
+
+          <th>Name</th>
+          <th>Class</th>
+        </tr>
+      </thead>
+      <tbody>
+    <%= if @students == nil do %> 
+    <% else %>
+      <%= for student <- @students do %>
+          <tr>
+         
+
 
 
                             <td class="text-left">
@@ -33,11 +36,20 @@
                          
                                 <div id="<%= student.id %>" class="btn btn-link student"><%= student.name %> <%= student.chinese_name %></div>
 
-                         
-                            </td>
-                          </tr>
-                      <% end %>
-                    <% end %>
+
+         
+            </td>
+            <td class="text-left">
+         
+         
+                <div><%= student.class %></div>
+
+         
+            </td>
+          </tr>
+      <% end %>
+    <% end %>
+
 
                       </tbody>
                     </table>
