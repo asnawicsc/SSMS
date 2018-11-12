@@ -30,7 +30,7 @@
        <p class="lead">This panel shows the timetable for this week for your class.</p>
        <hr class="my-4">
        <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
-       <button class="mb-1 btn btn-outline-info" type="button">Mark attendance</button>
+       <a href="/attendance"><button class="mb-1 btn btn-outline-info" type="button">Mark attendance</button></a>
        <button class="mb-1 btn btn-outline-info" type="button">Modify Timetable</button>
        <button class="mb-1 btn btn-outline-info" type="button">Info</button>
 <div id='calendar'></div>

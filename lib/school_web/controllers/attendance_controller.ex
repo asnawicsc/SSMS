@@ -353,21 +353,29 @@ defmodule SchoolWeb.AttendanceController do
       else
         teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email})
 
-        class = Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
+        # class = Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
+        class = Repo.all(from(c in Class, where: c.teacher_id == ^teacher.id))
 
-        attendance = Affairs.list_attendance() |> Enum.filter(fn x -> x.class_id == class.id end)
+        attendance =
+          for each_class <- class do
+            Affairs.list_attendance() |> Enum.filter(fn x -> x.class_id == each_class.id end)
+          end
 
         classes =
-          Repo.all(
-            from(
-              c in Class,
-              left_join: l in Level,
-              on: c.level_id == l.id,
-              where: c.institution_id == ^School.Affairs.inst_id(conn) and c.id == ^class.id,
-              select: %{id: c.id, level: l.name, class: c.name},
-              order_by: [c.name]
+          for each_class <- class do
+            Repo.all(
+              from(
+                c in Class,
+                left_join: l in Level,
+                on: c.level_id == l.id,
+                where:
+                  c.institution_id == ^School.Affairs.inst_id(conn) and c.id == ^each_class.id,
+                select: %{id: c.id, level: l.name, class: c.name},
+                order_by: [c.name]
+              )
             )
-          )
+          end
+          |> List.flatten()
           |> Enum.group_by(fn x -> x.level end)
 
         {attendance, classes}
