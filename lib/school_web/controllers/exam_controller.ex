@@ -7,8 +7,29 @@ defmodule SchoolWeb.ExamController do
   require IEx
 
   def index(conn, _params) do
-    exam = Affairs.list_exam()
-    render(conn, "index.html", exam: exam)
+    exam_semester =
+      Repo.all(
+        from(
+          e in Exam,
+          left_join: em in ExamMaster,
+          on: em.id == e.exam_master_id,
+          left_join: s in Subject,
+          on: e.subject_id == s.id,
+          left_join: sm in Semester,
+          on: em.semester_id == sm.id,
+          left_join: l in Level,
+          on: em.level_id == l.id,
+          group_by: [em.name, sm.start_date, sm.id],
+          where: em.institution_id == ^conn.private.plug_session["institution_id"],
+          select: %{
+            exam_name: em.name,
+            semester: sm.start_date,
+            semester_id: sm.id
+          }
+        )
+      )
+
+    render(conn, "exam_semester.html", exam_semester: exam_semester)
   end
 
   def new(conn, _params) do
@@ -25,7 +46,15 @@ defmodule SchoolWeb.ExamController do
     semester =
       Repo.all(from(s in School.Affairs.Semester, select: %{id: s.id, start_date: s.start_date}))
 
-    level = Repo.all(from(s in School.Affairs.Level, select: %{id: s.id, name: s.name}))
+    level =
+      Repo.all(
+        from(
+          s in School.Affairs.Level,
+          where: s.institution_id == ^conn.private.plug_session["institution_id"],
+          select: %{id: s.id, name: s.name}
+        )
+      )
+
     render(conn, "new_exam.html", subjects: subjects, semester: semester, level: level)
   end
 

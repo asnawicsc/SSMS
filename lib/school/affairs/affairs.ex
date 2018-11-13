@@ -3768,4 +3768,100 @@ defmodule School.Affairs do
   def change_student_comment(%StudentComment{} = student_comment) do
     StudentComment.changeset(student_comment, %{})
   end
+
+  alias School.Affairs.ExamPeriod
+
+  @doc """
+  Returns the list of examperiod.
+
+  ## Examples
+
+      iex> list_examperiod()
+      [%ExamPeriod{}, ...]
+
+  """
+  def list_examperiod do
+    Repo.all(ExamPeriod)
+  end
+
+  @doc """
+  Gets a single exam_period.
+
+  Raises `Ecto.NoResultsError` if the Exam period does not exist.
+
+  ## Examples
+
+      iex> get_exam_period!(123)
+      %ExamPeriod{}
+
+      iex> get_exam_period!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_exam_period!(id), do: Repo.get!(ExamPeriod, id)
+
+  @doc """
+  Creates a exam_period.
+
+  ## Examples
+
+      iex> create_exam_period(%{field: value})
+      {:ok, %ExamPeriod{}}
+
+      iex> create_exam_period(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_exam_period(attrs \\ %{}) do
+    %ExamPeriod{}
+    |> ExamPeriod.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a exam_period.
+
+  ## Examples
+
+      iex> update_exam_period(exam_period, %{field: new_value})
+      {:ok, %ExamPeriod{}}
+
+      iex> update_exam_period(exam_period, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_exam_period(%ExamPeriod{} = exam_period, attrs) do
+    exam_period
+    |> ExamPeriod.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a ExamPeriod.
+
+  ## Examples
+
+      iex> delete_exam_period(exam_period)
+      {:ok, %ExamPeriod{}}
+
+      iex> delete_exam_period(exam_period)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_exam_period(%ExamPeriod{} = exam_period) do
+    Repo.delete(exam_period)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking exam_period changes.
+
+  ## Examples
+
+      iex> change_exam_period(exam_period)
+      %Ecto.Changeset{source: %ExamPeriod{}}
+
+  """
+  def change_exam_period(%ExamPeriod{} = exam_period) do
+    ExamPeriod.changeset(exam_period, %{})
+  end
 end

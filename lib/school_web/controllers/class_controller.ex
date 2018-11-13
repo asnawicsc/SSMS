@@ -187,8 +187,19 @@ defmodule SchoolWeb.ClassController do
             )
           )
       end
-    else
-      class = []
+    end
+
+    if user.role == "Admin" or user.role == "Support" do
+      class =
+        Repo.all(
+          from(
+            c in Class,
+            left_join: l in Level,
+            on: c.level_id == l.id,
+            where: c.institution_id == ^conn.private.plug_session["institution_id"],
+            select: %{id: c.id, name: c.name, level_name: l.name}
+          )
+        )
     end
 
     levels =

@@ -30,19 +30,20 @@
                                   &nbsp;
                                       &nbsp;
                                        &nbsp;
-                                <span>Choose a class : <select class="select" onchange="getvalclass(this);" required="required" name="class_id">
-                                        <%= for c <- @class |> Enum.sort do %>
-                                        <option value="<%= c.id %>">
-                                        <%= c.name %>
-                                        </option>
-                                        <% end %>
-                                    </select></span>
+                               <span>Choose a class : <select class="select" onchange="getvalclass(this);" required="required" name="class_id">
+                                    <%= for c <- @class |> Enum.sort do %>
+                                    <option value="<%= c.id %>">
+                                    <%= c.name %> (<%= c.level_name %>)
+                                    </option>
+                                    <% end %>
+                                </select></span>
+                                
                                      &nbsp;
                                       &nbsp;
                                        &nbsp;
 
 
-                                <button type="button" rel="tooltip" title="" class="btn btn-danger btn-link btn-sm" id="" name="" value="" data-toggle="modal" aria-label="modelj" data-target="#modelj" data-original-title="Edit Item" align="right" style=" position: absolute; right: 10px;"><i class="material-icons">Create Class</i>
+                                <button type="button" rel="tooltip" title="" class="btn btn-danger btn-link btn-sm" id="" name="" value="" data-toggle="modal" aria-label="modelj" data-target="#modelj" data-original-title="Edit Item" align="right" style=" position: absolute; right: 10px; display: none;"><i class="material-icons">Create Class</i>
                                     <div class="ripple-container"></div>
                                 </button>
 
@@ -70,7 +71,7 @@
                                        &nbsp;
 
 
-                                <button type="button" rel="tooltip" title="" class="btn btn-danger btn-link btn-sm" id="" name="" value="" data-toggle="modal" aria-label="modelj" data-target="#modelj" data-original-title="Edit Item" align="right" style=" position: absolute; right: 10px;"><i class="material-icons">Create Class</i>
+                                <button type="button" rel="tooltip" title="" class="btn btn-danger btn-link btn-sm" id="" name="" value="" data-toggle="modal" aria-label="modelj" data-target="#modelj" data-original-title="Edit Item" align="right" style=" position: absolute; right: 10px; display: none;"><i class="material-icons">Create Class</i>
                                     <div class="ripple-container"></div>
                                 </button>
 
@@ -238,7 +239,7 @@
                                     </div>
 
 
-                                    <div class="modal fade" id="modelj" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal fade" id="modelj" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="display: none;">
                                         <div class="modal-dialog" role="document" style="width: 1000px; margin-left: 550px;">
                                             <div class="modal-content" style="width: 1000px;">
                                                 <div class="modal-header">
@@ -530,6 +531,7 @@
         std_id: std_id,
     })
 
+
     function getvalclass(params) {
 
         var class_id =  params.value
@@ -537,6 +539,7 @@
         document.getElementById("class_info").className = "nav-link active";
         document.getElementById("class_subject").className = "nav-link";
         document.getElementById("class_period").className = "nav-link";
+        document.getElementById("class_student").className = "nav-link";
         document.getElementById("class_student_info").className = "nav-link";
         $('div#class_details_tab').show()
 

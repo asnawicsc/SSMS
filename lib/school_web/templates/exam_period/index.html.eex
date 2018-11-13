@@ -1,0 +1,30 @@
+<h2>Listing Examperiod</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Start date</th>
+      <th>End date</th>
+      <th>Exam</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for exam_period <- @examperiod do %>
+    <tr>
+      <td><%= exam_period.start_date %></td>
+      <td><%= exam_period.end_date %></td>
+      <td><%= exam_period.exam_id %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: exam_period_path(@conn, :show, exam_period), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: exam_period_path(@conn, :edit, exam_period), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: exam_period_path(@conn, :delete, exam_period), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Exam period", to: exam_period_path(@conn, :new) %></span>

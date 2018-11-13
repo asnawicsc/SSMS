@@ -286,6 +286,48 @@
 
                            </ul>
                         </li>
+
+                        <li class=" ">
+                           <a href="#library" title="School Setup" data-toggle="collapse">
+                            <em class="fas fa-book"></em>
+                              <span data-localize="sidebar.nav.extra.EXTRA"><%= gettext "Library" %></span>
+                           </a>
+
+                           <ul class="sidebar-nav sidebar-subnav collapse" id="library">
+                              <li class=" ">
+                                 <a href="/library/books" title="Book Lists">
+
+                                    <span><%= gettext "Book Lists" %></span>
+                                 </a>
+                              </li>
+                              <li class=" ">
+                                 <a href="/library/returns" title="Return Lists">
+
+                                    <span><%= gettext "Return Lists" %></span>
+                                 </a>
+                              </li>
+                              <li class=" ">
+                                 <a href="/library/loan_report" title="Co-Loan Report">
+                                    <span><%= gettext "Loan Report" %></span>
+                                 </a>
+                              </li>
+                              <li class=" ">
+                                 <a href="/library/loans/new" title="New Loans">
+                                    <span><%= gettext "New Loans" %></span>
+                                 </a>
+                              </li>
+                              <li class=" ">
+                                 <a href="/library/book/student_cards" title="Student Cards">
+                                    <span><%= gettext "Student Cards" %></span>
+                                 </a>
+                              </li>
+                              
+                            
+                                   
+
+                           </ul>
+                        </li>
+
                         <li class=" ">
                            <a href="#report" title="School Setup" data-toggle="collapse">
                             <em class="fas fa-file"></em>

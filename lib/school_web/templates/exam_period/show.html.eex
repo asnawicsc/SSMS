@@ -1,0 +1,23 @@
+<h2>Show Exam period</h2>
+
+<ul>
+
+  <li>
+    <strong>Start date:</strong>
+    <%= @exam_period.start_date %>
+  </li>
+
+  <li>
+    <strong>End date:</strong>
+    <%= @exam_period.end_date %>
+  </li>
+
+  <li>
+    <strong>Exam:</strong>
+    <%= @exam_period.exam_id %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: exam_period_path(@conn, :edit, @exam_period) %></span>
+<span><%= link "Back", to: exam_period_path(@conn, :index) %></span>

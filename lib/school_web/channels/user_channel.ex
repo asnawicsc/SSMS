@@ -1263,7 +1263,7 @@ defmodule SchoolWeb.UserChannel do
   def handle_in("class_student_info", payload, socket) do
     user = Repo.get_by(School.Settings.User, %{id: payload["user_id"]})
 
-    {class_id} =
+    class_id =
       if user.role == "Admin" or user.role == "Support" do
         payload["class_id"]
       else
@@ -1279,7 +1279,9 @@ defmodule SchoolWeb.UserChannel do
           s in Student,
           left_join: g in StudentClass,
           on: s.id == g.sudent_id,
-          where: s.institution_id == ^payload["inst_id"] and g.class_id == ^class_id,
+          left_join: c in Class,
+          on: c.id == g.class_id,
+          where: s.institution_id == ^payload["inst_id"] and c.id == ^class_id,
           order_by: [asc: s.name]
         )
       )

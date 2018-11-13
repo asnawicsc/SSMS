@@ -1,0 +1,5 @@
+<h2>New Exam period</h2>
+
+<%= render "form.html", Map.put(assigns, :action, exam_period_path(@conn, :create)) %>
+
+<span><%= link "Back", to: exam_period_path(@conn, :index) %></span>

@@ -104,7 +104,8 @@
        <div class="card-body">
           <h5 class="card-title">Card Default card title</h5>
           <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          <button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create</button>
+          <a href="/new_exam"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create</button></a>
+          <a href="/exam"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Exam Period</button></a>
           <button class="mb-1 btn-sm btn btn-outline-primary" type="button">Mark</button>
           <button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button>
        </div>

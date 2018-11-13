@@ -84,6 +84,14 @@ defmodule SchoolWeb.Router do
     post("/library/book/outstanding", PageController, :outstanding)
     get("/library/outstanding_all", PageController, :outstanding_all)
 
+    resources("/examperiod", ExamPeriodController)
+
+    get(
+      "/show_exam_period/:exam_name/semester/:semester_id",
+      ExamPeriodController,
+      :show_exam_period
+    )
+
     resources("/parameters", ParameterController)
     get("/system_config/:institution_id", ParameterController, :system_config)
     resources("/institutions", InstitutionController)
@@ -136,6 +144,7 @@ defmodule SchoolWeb.Router do
     get("/exam/marking/:id", ExamController, :marking)
     get("/cocurriculum/marking/:id", CoCurriculumController, :marking)
     resources("/exam", ExamController)
+    get("/exam", ExamController, :index)
     get("/generate_exam", ExamController, :generate_exam)
     post("/mark", ExamController, :mark)
     post("/create_mark", ExamController, :create_mark)

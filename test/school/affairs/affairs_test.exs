@@ -3320,4 +3320,68 @@ defmodule School.AffairsTest do
       assert %Ecto.Changeset{} = Affairs.change_student_comment(student_comment)
     end
   end
+
+  describe "examperiod" do
+    alias School.Affairs.ExamPeriod
+
+    @valid_attrs %{end_date: ~N[2010-04-17 14:00:00.000000], exam_id: 42, start_date: ~N[2010-04-17 14:00:00.000000]}
+    @update_attrs %{end_date: ~N[2011-05-18 15:01:01.000000], exam_id: 43, start_date: ~N[2011-05-18 15:01:01.000000]}
+    @invalid_attrs %{end_date: nil, exam_id: nil, start_date: nil}
+
+    def exam_period_fixture(attrs \\ %{}) do
+      {:ok, exam_period} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_exam_period()
+
+      exam_period
+    end
+
+    test "list_examperiod/0 returns all examperiod" do
+      exam_period = exam_period_fixture()
+      assert Affairs.list_examperiod() == [exam_period]
+    end
+
+    test "get_exam_period!/1 returns the exam_period with given id" do
+      exam_period = exam_period_fixture()
+      assert Affairs.get_exam_period!(exam_period.id) == exam_period
+    end
+
+    test "create_exam_period/1 with valid data creates a exam_period" do
+      assert {:ok, %ExamPeriod{} = exam_period} = Affairs.create_exam_period(@valid_attrs)
+      assert exam_period.end_date == ~N[2010-04-17 14:00:00.000000]
+      assert exam_period.exam_id == 42
+      assert exam_period.start_date == ~N[2010-04-17 14:00:00.000000]
+    end
+
+    test "create_exam_period/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_exam_period(@invalid_attrs)
+    end
+
+    test "update_exam_period/2 with valid data updates the exam_period" do
+      exam_period = exam_period_fixture()
+      assert {:ok, exam_period} = Affairs.update_exam_period(exam_period, @update_attrs)
+      assert %ExamPeriod{} = exam_period
+      assert exam_period.end_date == ~N[2011-05-18 15:01:01.000000]
+      assert exam_period.exam_id == 43
+      assert exam_period.start_date == ~N[2011-05-18 15:01:01.000000]
+    end
+
+    test "update_exam_period/2 with invalid data returns error changeset" do
+      exam_period = exam_period_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_exam_period(exam_period, @invalid_attrs)
+      assert exam_period == Affairs.get_exam_period!(exam_period.id)
+    end
+
+    test "delete_exam_period/1 deletes the exam_period" do
+      exam_period = exam_period_fixture()
+      assert {:ok, %ExamPeriod{}} = Affairs.delete_exam_period(exam_period)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_exam_period!(exam_period.id) end
+    end
+
+    test "change_exam_period/1 returns a exam_period changeset" do
+      exam_period = exam_period_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_exam_period(exam_period)
+    end
+  end
 end
