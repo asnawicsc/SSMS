@@ -312,6 +312,32 @@ defmodule SchoolWeb.StudentController do
     end
   end
 
+  def update_changes(conn, params) do
+    student = Affairs.get_student!(params["student_id"])
+
+    case Affairs.update_student(student, params) do
+      {:ok, student} ->
+        url = student_path(conn, :index, focus: student.id)
+        referer = conn.req_headers |> Enum.filter(fn x -> elem(x, 0) == "referer" end)
+
+        if referer != [] do
+          refer = hd(referer)
+          url = refer |> elem(1) |> String.split("?") |> List.first()
+
+          conn
+          |> put_flash(:info, "#{student.name} updated successfully.")
+          |> redirect(external: url <> "?focus=#{student.id}")
+        else
+          conn
+          |> put_flash(:info, "#{student.name} updated successfully.")
+          |> redirect(to: url)
+        end
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        render(conn, "edit.html", student: student, changeset: changeset)
+    end
+  end
+
   def delete(conn, %{"id" => id}) do
     student = Affairs.get_student!(id)
     {:ok, _student} = Affairs.delete_student(student)

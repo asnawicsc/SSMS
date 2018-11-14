@@ -167,6 +167,73 @@ defmodule SchoolWeb.ClassController do
     send_resp(conn, 200, map)
   end
 
+  def chosen_class_setting(conn, params) do
+    changeset = Affairs.change_class(%Class{})
+    institution_id = conn.private.plug_session["institution_id"]
+    class_id = params["class_id"]
+
+    class =
+      Repo.all(
+        from(
+          c in Class,
+          left_join: l in Level,
+          on: c.level_id == l.id,
+          left_join: i in Institution,
+          on: c.institution_id == i.id,
+          where: c.id == ^class_id,
+          select: %{
+            name: c.name,
+            level: l.name,
+            teacher_id: c.teacher_id,
+            remark: c.remarks,
+            institution: i.name
+          }
+        )
+      )
+      |> hd()
+
+    teacher = Repo.get(Teacher, class.teacher_id)
+
+    students =
+      Repo.all(
+        from(
+          s in Student,
+          left_join: st in StudentClass,
+          on: s.id == st.sudent_id,
+          left_join: c in Class,
+          on: c.id == st.class_id,
+          where: c.id == ^class_id,
+          order_by: [asc: s.name]
+        )
+      )
+
+    render(
+      conn,
+      "chosen_class_setting.html",
+      teacher: teacher,
+      class: class,
+      changeset: changeset,
+      institution_id: institution_id,
+      students: students
+    )
+  end
+
+  def show_student_info(conn, params) do
+    student = Repo.get(Student, params["student_id"])
+    mother = Repo.get_by(Parent, icno: student.micno)
+    father = Repo.get_by(Parent, icno: student.ficno)
+    guardian = Repo.get_by(Parent, icno: student.gicno)
+
+    render(
+      conn,
+      "show_student_info.html",
+      student: student,
+      mother: mother,
+      father: father,
+      guardian: guardian
+    )
+  end
+
   def class_setting(conn, params) do
     changeset = Affairs.change_class(%Class{})
 

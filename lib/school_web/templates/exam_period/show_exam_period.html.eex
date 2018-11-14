@@ -1,4 +1,6 @@
 <% require IEx %>
+<link rel="stylesheet" href="/css/jquery.skedTape.css">
+<script src=" /js/jquery.skedTape.js"></script>
 <div class="row">
 	<div class="col-4">
 		<div class="card">
@@ -28,6 +30,7 @@
 		                <hr>
 		            </div>
 		      		<% end %>
+		      		<button class= "btn btn-primary" type="submit">Submit</button>
 		      		
 		      	</form>
 		    </div>
