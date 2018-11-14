@@ -83,6 +83,12 @@ defmodule SchoolWeb.TimetableController do
     |> send_resp(200, events)
   end
 
+  def teacher_timetable_list(conn, params) do
+    timetable = Affairs.get_timetable!(id)
+    changeset = Affairs.change_timetable(timetable)
+    render(conn, "teacher_timetable_list.html", timetable: timetable, changeset: changeset)
+  end
+
   def generated_timetable(conn, params) do
     changeset = Affairs.change_timetable(%Timetable{})
     class_id = params["id"]

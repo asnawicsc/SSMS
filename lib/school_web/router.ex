@@ -132,6 +132,7 @@ defmodule SchoolWeb.Router do
     post("/upload_parents", ParentController, :upload_parents)
 
     resources("/timetable", TimetableController)
+    get("/timetable/teacher/:teacher_id/list", TimetableController, :teacher_timetable_list)
     get("/timetable/teacher/:teacher_id", TimetableController, :teacher_timetable)
     get("/generated_timetable/:id", TimetableController, :generated_timetable)
     resources("/period", PeriodController)
@@ -286,5 +287,7 @@ defmodule SchoolWeb.Router do
     pipe_through(:api)
 
     get("/webhook_get", ApiController, :webhook_get)
+    get("/google_oauth", GoogleController, :open_google_oauth)
+    get("/callback", GoogleController, :callback)
   end
 end
