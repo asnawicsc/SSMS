@@ -1,11 +1,33 @@
-<div aria-label="project_nilam">
+<div class="content-heading">
+   <div>Co Curriculum Report
+      <small><%= gettext("welcome")%>!</small>
+   </div>
+   <!-- START Language list-->
+   <div class="ml-auto">
+
+   </div>
+   <!-- END Language list-->
+</div>
+
+
+ <div class="row">
+
+
+   <%= render( SchoolWeb.ExamView ,"report_nav.html",conn: @conn) %>
+
+<div class="col-lg-9">
+
+ <div class="card">
+ 
+               <div class="card-body">
+            <div aria-label="project_nilam">
       <div class="content">
         <div class="container-fluid">
           <div class="row">
             <div class="col-md-12">
               <div class="card ">
                
-                <div class="card-header ">
+                             <div class="card-header ">
             <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
                   <div class="row">
                   <div class="col-sm-2">
@@ -17,7 +39,7 @@
                                           <% end %>
                                         </select>  </span>  
 </div>
-                                            <div class="col-sm-2">
+             <div class="col-sm-2">
           
                   <label class="bmd-label-floating"><%= gettext "Year" %></label><br>
                     <select class="select" onchange="getvala(this);" required="required" name="co_year">
@@ -69,10 +91,14 @@
 
             
                 </div>
-                <div class="card-body" id="report_cocurriculum">
-
-                  </div>
-                </div>
+                
+                <hr>
+                    <div id="exam_filter_analysis" ></div>
+                   <div class="card-body" id="report_cocurriculum"></div>
+                   
+               
+               
+             
               </div>
             </div>
          
@@ -81,6 +107,11 @@
         </div>
       </div>
     </div>
+               </div>
+</div>  
+</div>
+</div>
+
 
 <script type="text/javascript">
   

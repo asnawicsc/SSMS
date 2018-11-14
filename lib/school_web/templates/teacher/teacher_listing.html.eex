@@ -1,5 +1,25 @@
-        <div align="right">
-    <form action="/pdf/teacher_listing" method="POST">
+<div class="content-heading">
+   <div>Teacher Listing
+      <small><%= gettext("welcome")%>!</small>
+   </div>
+   <!-- START Language list-->
+   <div class="ml-auto">
+
+   </div>
+   <!-- END Language list-->
+</div>
+
+<div class="row">
+
+
+   <%= render( SchoolWeb.ExamView ,"report_nav.html",conn: @conn) %>
+
+<div class="col-lg-9">
+
+ <div class="card">
+ 
+               <div class="card-body">
+<form action="/pdf/teacher_listing" method="POST">
   <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
 <input align="left" type="submit" name="" value="Print!">
 </form>
@@ -32,3 +52,8 @@
 <% end %>
   </tbody>
 </table>
+               </div>
+</div>  
+</div>
+</div>
+

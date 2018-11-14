@@ -329,94 +329,11 @@
                         </li>
 
                         <li class=" ">
-                           <a href="#report" title="School Setup" data-toggle="collapse">
+                           <a href="/list_report" title="School Setup" >
                             <em class="fas fa-file"></em>
                               <span data-localize="sidebar.nav.extra.EXTRA"><%= gettext "Report" %></span>
                            </a>
 
-                           <ul class="sidebar-nav sidebar-subnav collapse" id="report">
-                              <li class=" ">
-                                 <a href="/generate_attendance_report" title="Attendance Report">
-
-                                    <span><%= gettext "Attendance" %></span>
-                                 </a>
-                              </li>
-                              <li class=" ">
-                                 <a href="/exam_result_class" title="Exam Result Class">
-
-                                    <span><%= gettext "Exam Result Class" %></span>
-                                 </a>
-                              </li>
-                              <li class=" ">
-                                 <a href="/exam_result_standard" title="Exam Result Standard">
-                                    <span><%= gettext "Exam Result Standard" %></span>
-                                 </a>
-                              </li>
-                              <li class=" ">
-                                 <a href="/exam_result_analysis_class" title="Exam Result Analysis Class">
-                                    <span><%= gettext "Exam Result Analysis Class" %></span>
-                                 </a>
-                              </li>
-                              <li class=" ">
-                                 <a href="/exam_result_analysis_standard" title="Exam Result Analysis Standard">
-                                    <span><%= gettext "Exam Result Analysis Standard" %></span>
-                                 </a>
-                                <li class=" ">
-                                 <a href="/student_report_by_cocurriculum" title="Co-Curriculum Result">
-                                    <span><%= gettext "Co-Curriculum Result" %></span>
-                                 </a>
-                              </li>
-                                  <li class=" ">
-                                 <a href="/height_weight_report" title="Height & Weight">
-                                    <span><%= gettext "Height & Weight" %></span>
-                                 </a>
-                              </li>
-                              </li>
-                              <li class=" ">
-                                 <a href="/class_analysis" title="Class Analysis">
-                                    <span><%= gettext "Class Analysis" %></span>
-                                 </a>
-                              </li>
-                              <li class=" ">
-                                 <a href="/student_listing_by_class" title="Student Certificate">
-                                    <span><%= gettext "Student Certificate" %></span>
-                                 </a>
-                              </li>
-                               </li>
-                                 <li class=" ">
-                                 <a href="/teacher_listing" title="Teacher Listing">
-                                    <span><%= gettext "Teacher Listing" %></span>
-                                 </a>
-                              </li>
-                              <li class=" ">
-                                 <a href="/student_listing_by_class" title="Student Listing">
-                                    <span><%= gettext "Student Listing" %></span>
-                                 </a>
-                              </li>
-                                 <li class=" ">
-                                 <a href="/show_guardian" title="Parents Listing">
-                                    <span><%= gettext "Parents Listing" %></span>
-                                 </a>
-                              </li>
-                               </li>
-                                 <li class=" ">
-                                 <a href="/mark_sheet_listing" title="Mark Sheet Listing">
-                                    <span><%= gettext "Mark Sheet Listing" %></span>
-                                 </a>
-                              </li>
-                               </li>
-                                 <li class=" ">
-                                 <a href="/mark_analyse_by_grade" title="Mark Analysis(Grade)">
-                                    <span><%= gettext "Mark Analysis(Grade)" %></span>
-                                 </a>
-                              </li>
-
-                              
-                              
-                            
-                                   
-
-                           </ul>
                         </li>
                      </ul>
                      <!-- END sidebar nav-->
@@ -632,94 +549,11 @@
                            </ul>
                         </li>
                         <li class=" ">
-                           <a href="#report" title="School Setup" data-toggle="collapse">
+                           <a href="/list_report" title="School Setup">
                             <em class="fas fa-file"></em>
                               <span data-localize="sidebar.nav.extra.EXTRA"><%= gettext "Report" %></span>
                            </a>
 
-                           <ul class="sidebar-nav sidebar-subnav collapse" id="report">
-                              <li class=" ">
-                                 <a href="/generate_attendance_report" title="Attendance Report">
-
-                                    <span><%= gettext "Attendance" %></span>
-                                 </a>
-                              </li>
-                              <li class=" ">
-                                 <a href="/exam_result_class" title="Exam Result Class">
-
-                                    <span><%= gettext "Exam Result Class" %></span>
-                                 </a>
-                              </li>
-                              <li class=" ">
-                                 <a href="/exam_result_standard" title="Exam Result Standard">
-                                    <span><%= gettext "Exam Result Standard" %></span>
-                                 </a>
-                              </li>
-                              <li class=" ">
-                                 <a href="/exam_result_analysis_class" title="Exam Result Analysis Class">
-                                    <span><%= gettext "Exam Result Analysis Class" %></span>
-                                 </a>
-                              </li>
-                              <li class=" ">
-                                 <a href="/exam_result_analysis_standard" title="Exam Result Analysis Standard">
-                                    <span><%= gettext "Exam Result Analysis Standard" %></span>
-                                 </a>
-                                <li class=" ">
-                                 <a href="/student_report_by_cocurriculum" title="Co-Curriculum Result">
-                                    <span><%= gettext "Co-Curriculum Result" %></span>
-                                 </a>
-                              </li>
-                                  <li class=" ">
-                                 <a href="/height_weight_report" title="Height & Weight">
-                                    <span><%= gettext "Height & Weight" %></span>
-                                 </a>
-                              </li>
-                              </li>
-                              <li class=" ">
-                                 <a href="/class_analysis" title="Class Analysis">
-                                    <span><%= gettext "Class Analysis" %></span>
-                                 </a>
-                              </li>
-                              <li class=" ">
-                                 <a href="/student_listing_by_class" title="Student Certificate">
-                                    <span><%= gettext "Student Certificate" %></span>
-                                 </a>
-                              </li>
-                               </li>
-                                 <li class=" ">
-                                 <a href="/teacher_listing" title="Teacher Listing">
-                                    <span><%= gettext "Teacher Listing" %></span>
-                                 </a>
-                              </li>
-                              <li class=" ">
-                                 <a href="/student_listing_by_class" title="Student Listing">
-                                    <span><%= gettext "Student Listing" %></span>
-                                 </a>
-                              </li>
-                                 <li class=" ">
-                                 <a href="/show_guardian" title="Parents Listing">
-                                    <span><%= gettext "Parents Listing" %></span>
-                                 </a>
-                              </li>
-                               </li>
-                                 <li class=" ">
-                                 <a href="/mark_sheet_listing" title="Mark Sheet Listing">
-                                    <span><%= gettext "Mark Sheet Listing" %></span>
-                                 </a>
-                              </li>
-                               </li>
-                                 <li class=" ">
-                                 <a href="/mark_analyse_by_grade" title="Mark Analysis(Grade)">
-                                    <span><%= gettext "Mark Analysis(Grade)" %></span>
-                                 </a>
-                              </li>
-
-                              
-                              
-                            
-                                   
-
-                           </ul>
                         </li>
                      </ul>
                      <!-- END sidebar nav-->

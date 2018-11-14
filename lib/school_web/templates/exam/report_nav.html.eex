@@ -1,0 +1,84 @@
+
+			             <div class="col-lg-3">
+                
+                  <div class="card b">
+                     <div class="card-body">
+                        <strong class="text-muted">SHORTCUT</strong>
+                     </div>
+                     <div class="list-group" >
+                        <a class=" list-group-item list-group-item-action d-flex justify-content-between align-items-center rounded-0" href="/generate_attendance_report">
+                           <span class="circle bg-purple mr-2"></span>
+                           <span>Attendance</span>
+
+                           <span class="ml-auto badge"> <em class="fa-2x fas fa-book-open text-primary"></em></span>
+                        </a>
+                        <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" href="/exam_result_class">
+                           <span class="circle bg-green mr-2"></span>
+                           <span>Exam Result Class</span>
+                           <span class="ml-auto badge"> <em class="fa-2x fas fa-pen-square text-success"></em></span>
+                        </a>
+                        <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" href="/exam_result_standard">
+                           <span class="circle bg-danger mr-2"></span>
+                           <span>Exam Result Standard</span>
+                           <span class="ml-auto badge"><em class="fa-2x fas fa-pen-square text-danger"></em></span>
+                        </a>
+                        <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" href="/exam_result_analysis_class">
+                           <span class="circle bg-warning mr-2"></span>
+                           <span>Exam Analysis Class</span>
+                           <span class="ml-auto badge"> <em class="fa-2x far fa-list-alt text-success"></em></span>
+                        </a>
+                        <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center rounded-0" href="/exam_result_analysis_standard">
+                           <span class="circle bg-purple mr-2"></span>
+                           <span>Exam Analysis Standard</span>
+                           <span class="ml-auto badge"> <em class="fa-2x far fa-list-alt text-danger"></em></span>
+                        </a>
+                        <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center rounded-0" href="/student_report_by_cocurriculum">
+                           <span class="circle bg-warning mr-2"></span>
+                           <span>Co-Curriculum</span>
+                           <span class="ml-auto badge"><em class="fa-2x fas fa-baseball-ball text-warning"></em></span>
+                        </a>
+                        <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" href="/height_weight_report">
+                           <span class="circle bg-green mr-2"></span>
+                           <span>Height & Weight</span>
+                           <span class="ml-auto badge"><em class="fa-2x fas fa-weight text-purple"></em></span>
+                        </a>
+                        <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" href="/class_analysis">
+                           <span class="circle bg-danger mr-2"></span>
+                           <span>Class Analysis</span>
+                           <span class="ml-auto badge"><em class="fa-2x fas fa-chart-bar text-green"></em></span>
+                        </a>
+                        <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" href="/student_certificate">
+                           <span class="circle bg-warning mr-2"></span>
+                           <span>Student Certificate</span>
+                           <span class="ml-auto badge"><em class="fa-2x fas fa-certificate text-yellow"></em></span>
+                        </a>
+                        <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center rounded-0" href="/teacher_listing">
+                           <span class="circle bg-purple mr-2"></span>
+                           <span>Teacher Listing</span>
+                           <span class="ml-auto badge"><em class="fa-2x fas fa-chalkboard-teacher text-primary"></em></span>
+                        </a>
+                             <a class=" list-group-item list-group-item-action d-flex justify-content-between align-items-center rounded-0" href="/student_listing_by_class">
+                           <span class="circle bg-danger mr-2"></span>
+                           <span>Student Listing</span>
+                           <span class="ml-auto badge"><em class="fa-2x fas fa-chalkboard-teacher text-danger"></em></span>
+                        </a>
+                        <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" href="/parent_listing">
+                           <span class="circle bg-green mr-2"></span>
+                           <span>Parent Listing</span>
+                           <span class="ml-auto badge"><em class="fa-2x fas fa-chalkboard-teacher text-success"></em></span>
+                        </a>
+                        <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" href="/mark_sheet_listing">
+                           <span class="circle bg-danger mr-2"></span>
+                           <span>Mark Sheet Listing</span>
+                           <span class="ml-auto badge"><em class="fa-2x fas fa-file text-warning"></em></span>
+                        </a>
+                        <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" href="/mark_analyse_by_grade">
+                           <span class="circle bg-warning mr-2"></span>
+                           <span>Mark Analysis Grade</span>
+                           <span class="ml-auto badge"><em class="fa-2x fas fa-file-medical-alt text-purple"></em></span>
+                        </a>
+              
+                     </div>
+            
+                  </div>
+               </div>

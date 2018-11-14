@@ -1,5 +1,26 @@
-<h1>Height and Weight Report</h1>
-<form id ="semester">
+<div class="content-heading">
+   <div>Height and Weight Report
+      <small><%= gettext("welcome")%>!</small>
+   </div>
+   <!-- START Language list-->
+   <div class="ml-auto">
+
+   </div>
+   <!-- END Language list-->
+</div>
+
+
+ <div class="row">
+
+
+   <%= render( SchoolWeb.ExamView ,"report_nav.html",conn: @conn) %>
+
+<div class="col-lg-9">
+
+ <div class="card">
+ 
+               <div class="card-body">
+                <form id ="semester">
 	<input type="hidden" name="report" value="height_weight">
 	Please select a semester:
 	<select name="semester_id" required="required">
@@ -23,3 +44,7 @@
 <script type="text/javascript">
 	$("form#classes").hide()
 </script>
+               </div>
+</div>  
+</div>
+</div>

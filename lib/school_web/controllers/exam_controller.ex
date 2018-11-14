@@ -32,6 +32,14 @@ defmodule SchoolWeb.ExamController do
     render(conn, "exam_semester.html", exam_semester: exam_semester)
   end
 
+  def report_nav(conn, params) do
+    render(conn, "report_nav.html")
+  end
+
+  def list_report(conn, params) do
+    render(conn, "list_report.html")
+  end
+
   def new(conn, _params) do
     changeset = Affairs.change_exam(%Exam{})
     render(conn, "new.html", changeset: changeset)

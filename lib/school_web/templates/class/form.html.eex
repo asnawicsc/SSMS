@@ -1,10 +1,14 @@
 <% a = @conn %>
 <% user = School.Repo.get(School.Settings.User, a.private.plug_session["user_id"]) %>
-<% if user.role == "Teacher" do %>
-  <% teacher = School.Repo.all(from l in School.Affairs.Teacher,where: l.institution_id ==^@conn.private.plug_session["institution_id"] and l.email == ^user.email, select: {l.name, l.id}) %>
-<% else %>
-  <% teacher = School.Repo.all(from l in School.Affairs.Teacher,where: l.institution_id ==^@conn.private.plug_session["institution_id"], select: {l.name, l.id}) %>
-<% end %>
+
+
+<% teacher = if user.role == "Teacher" do
+  School.Repo.all(from l in School.Affairs.Teacher,where: l.institution_id ==^@conn.private.plug_session["institution_id"] and l.email == ^user.email, select: {l.name, l.id}) 
+
+ else 
+   School.Repo.all(from l in School.Affairs.Teacher,where: l.institution_id ==^@conn.private.plug_session["institution_id"], select: {l.name, l.id}) 
+ 
+ end %>
 
 <% levels = School.Repo.all(from l in School.Affairs.Level,where: l.institution_id ==^@conn.private.plug_session["institution_id"], select: {l.name, l.id}) %>
 

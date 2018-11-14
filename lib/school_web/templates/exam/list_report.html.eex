@@ -1,0 +1,336 @@
+<div class="content-heading">
+   <div>Report
+      <small><%= gettext("welcome")%>!</small>
+   </div>
+   <!-- START Language list-->
+   <div class="ml-auto">
+
+   </div>
+   <!-- END Language list-->
+</div>
+
+
+  
+            <div class="row">
+               <div class="col-lg-3">
+                
+                  <div class="card b">
+                     <div class="card-body">
+                        <strong class="text-muted">CATEGORY</strong>
+                     </div>
+                     <div class="list-group">
+                        <a class="active list-group-item list-group-item-action d-flex justify-content-between align-items-center rounded-0" href="#">
+                           <span class="circle bg-white mr-2"></span>
+                           <span>Attendance</span>
+                           <span class="ml-auto badge">14</span>
+                        </a>
+                        <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" href="#">
+                           <span class="circle bg-green mr-2"></span>
+                           <span>Exam</span>
+                           <span class="ml-auto badge">5</span>
+                        </a>
+                        <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" href="#">
+                           <span class="circle bg-danger mr-2"></span>
+                           <span>Co Curriculum</span>
+                           <span class="ml-auto badge">12</span>
+                        </a>
+                        <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" href="#">
+                           <span class="circle bg-warning mr-2"></span>
+                           <span>Class</span>
+                           <span class="ml-auto badge">22</span>
+                        </a>
+                        <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center rounded-0" href="#">
+                           <span class="circle bg-purple mr-2"></span>
+                           <span>Others</span>
+                           <span class="ml-auto badge">9</span>
+                        </a>
+                     </div>
+            
+                  </div>
+               </div>
+               <div class="col-lg-9">
+                  <div class="row">
+                     <div class="col-lg-3 col-md-5">
+                        <div class="card" data-filter-group="audio">
+                           <div class="card-body text-center">
+                              <div class="d-flex">
+                                 <div class="ml-auto">
+                                    <a class="text-muted mr-1" href="/generate_attendance_report" title="Download">
+                                       <em class="fa fa-download fa-fw"></em>
+                                    </a>
+                                 </div>
+                              </div>
+                              <a class="px-4" href="/generate_attendance_report">
+                                 <em class="fa-5x fas fa-book-open"></em>
+                              </a>
+                              <p>
+                                 <small class="text-dark">Attendance</small>
+                              </p>
+                          
+                           </div>
+                        </div>
+                     </div>
+                      <div class="col-lg-3 col-md-5">
+                        <div class="card" data-filter-group="movie">
+                           <div class="card-body text-center">
+                              <div class="d-flex">
+                                 <div class="ml-auto">
+                                    <a class="text-muted mr-1" href="/exam_result_class" title="Download">
+                                       <em class="fa fa-download fa-fw"></em>
+                                    </a>
+                                 </div>
+                              </div>
+                              <a class="px-4" href="/exam_result_class">
+                                 <em class="fa-5x fas fa-pen-square text-success"></em>
+                              </a>
+                              <p>
+                                 <small class="text-dark">Exam Result Class</small>
+                              </p>
+                           
+                           </div>
+                        </div>
+                     </div>
+                      <div class="col-lg-3 col-md-5">
+                        <div class="card" data-filter-group="audio">
+                           <div class="card-body text-center">
+                              <div class="d-flex">
+                                 <div class="ml-auto">
+                                    <a class="text-muted mr-1" href="/exam_result_standard" title="Download">
+                                       <em class="fa fas pen-square"></em>
+                                    </a>
+                                 </div>
+                              </div>
+                              <a class="px-4" href="/exam_result_standard">
+                                 <em class="fa-5x fas fa-pen-square text-danger"></em>
+                              </a>
+                              <p>
+                                 <small class="text-dark">Exam Result Standard</small>
+                              </p>
+                           
+                           </div>
+                        </div>
+                     </div>
+                       <div class="col-lg-3 col-md-5">
+                        <div class="card" data-filter-group="image">
+                           <div class="card-body text-center">
+                              <div class="d-flex">
+                                 <div class="ml-auto">
+                                    <a class="text-muted mr-1" href="/exam_result_analysis_class" title="Download">
+                                       <em class="fa fa-download fa-fw"></em>
+                                    </a>
+                                 </div>
+                              </div>
+                              <a class="px-4" href="/exam_result_analysis_class">
+                                 <em class="fa-5x far fa-list-alt text-success"></em>
+                              </a>
+                              <p>
+                                 <small class="text-dark">Exam Analysis Class</small>
+                              </p>
+                              
+                           </div>
+                        </div>
+                     </div>
+                      <div class="col-lg-3 col-md-5">
+                        <div class="card" data-filter-group="archive">
+                           <div class="card-body text-center">
+                              <div class="d-flex">
+                                 <div class="ml-auto">
+                                    <a class="text-muted mr-1" href="/exam_result_analysis_standard" title="Download">
+                                       <em class="fa fa-download fa-fw"></em>
+                                    </a>
+                                 </div>
+                              </div>
+                              <a class="px-4" href="/exam_result_analysis_standard">
+                                 <em class="fa-5x far fa-list-alt text-danger"></em>
+                              </a>
+                              <p>
+                                 <small class="text-dark">Exam Analysis Standard</small>
+                              </p>
+                              
+                           </div>
+                        </div>
+                     </div>
+                       <div class="col-lg-3 col-md-5">
+                        <div class="card" data-filter-group="audio">
+                           <div class="card-body text-center">
+                              <div class="d-flex">
+                                 <div class="ml-auto">
+                                    <a class="text-muted mr-1" href="/student_report_by_cocurriculum" title="Download">
+                                       <em class="fa fa-download fa-fw"></em>
+                                    </a>
+                                 </div>
+                              </div>
+                              <a class="px-4" href="/student_report_by_cocurriculum">
+                                 <em class="fa-5x fas fa-baseball-ball text-warning"></em>
+                              </a>
+                              <p>
+                                 <small class="text-dark">Co Curriculum Result</small>
+                              </p>
+                              
+                           </div>
+                        </div>
+                     </div>
+                      <div class="col-lg-3 col-md-5">
+                        <div class="card" data-filter-group="code">
+                           <div class="card-body text-center">
+                              <div class="d-flex">
+                                 <div class="ml-auto">
+                                    <a class="text-muted mr-1" href="/height_weight_report" title="Download">
+                                       <em class="fa fa-download fa-fw"></em>
+                                    </a>
+                                 </div>
+                              </div>
+                              <a class="px-4" href="/height_weight_report">
+                                 <em class="fa-5x fas fa-weight text-purple"></em>
+                              </a>
+                              <p>
+                                 <small class="text-dark">Height & Weight</small>
+                              </p>
+                            
+                           </div>
+                        </div>
+                     </div>
+                       <div class="col-lg-3 col-md-5">
+                        <div class="card" data-filter-group="image">
+                           <div class="card-body text-center">
+                              <div class="d-flex">
+                                 <div class="ml-auto">
+                                    <a class="text-muted mr-1" href="/class_analysis" title="Download">
+                                       <em class="fa fa-download fa-fw text-blue"></em>
+                                    </a>
+                                 </div>
+                              </div>
+                              <a class="px-4" href="/class_analysis">
+                                 <em class="fa-5x fas fa-chart-bar text-green"></em>
+                              </a>
+                              <p>
+                                 <small class="text-dark">Class Analysis</small>
+                              </p>
+                            
+                           </div>
+                        </div>
+                     </div>
+                      <div class="col-lg-3 col-md-5">
+                        <div class="card" data-filter-group="image">
+                           <div class="card-body text-center">
+                              <div class="d-flex">
+                                 <div class="ml-auto">
+                                    <a class="text-muted mr-1" href="/student_certificate" title="Download">
+                                       <em class="fa fa-download fa-fw"></em>
+                                    </a>
+                                 </div>
+                              </div>
+                              <a class="px-4" href="/student_certificate">
+                                 <em class="fa-5x fas fa-certificate text-yellow"></em>
+                              </a>
+                              <p>
+                                 <small class="text-dark">Student Certificate</small>
+                              </p>
+                              
+                           </div>
+                        </div>
+                     </div>
+                       <div class="col-lg-3 col-md-5">
+                        <div class="card" data-filter-group="code">
+                           <div class="card-body text-center">
+                              <div class="d-flex">
+                                 <div class="ml-auto">
+                                    <a class="text-muted mr-1" href="/teacher_listing" title="Download">
+                                       <em class="fa fa-download fa-fw"></em>
+                                    </a>
+                                 </div>
+                              </div>
+                              <a class="px-4" href="/teacher_listing">
+                                 <em class="fa-5x fas fa-chalkboard-teacher text-primary"></em>
+                              </a>
+                              <p>
+                                 <small class="text-dark">Teacher Listing</small>
+                              </p>
+                           
+                           </div>
+                        </div>
+                     </div>
+                       <div class="col-lg-3 col-md-5">
+                        <div class="card" data-filter-group="audio">
+                           <div class="card-body text-center">
+                              <div class="d-flex">
+                                 <div class="ml-auto">
+                                    <a class="text-muted mr-1" href="/student_listing_by_class" title="Download">
+                                       <em class="fa fa-download fa-fw"></em>
+                                    </a>
+                                 </div>
+                              </div>
+                              <a class="px-4" href="/student_listing_by_class">
+                                 <em class="fa-5x fas fa-chalkboard-teacher text-danger"></em>
+                              </a>
+                              <p>
+                                 <small class="text-dark">Student Listing</small>
+                              </p>
+                              
+                           </div>
+                        </div>
+                     </div>
+                       <div class="col-lg-3 col-md-5">
+                        <div class="card" data-filter-group="audio">
+                           <div class="card-body text-center">
+                              <div class="d-flex">
+                                 <div class="ml-auto">
+                                    <a class="text-muted mr-1" href="/show_guardian" title="Download">
+                                       <em class="fa fa-download fa-fw"></em>
+                                    </a>
+                                 </div>
+                              </div>
+                              <a class="px-4" href="/show_guardian">
+                                 <em class="fa-5x fas fa-chalkboard-teacher text-success"></em>
+                              </a>
+                              <p>
+                                 <small class="text-dark">Parent Listing</small>
+                              </p>
+                              
+                           </div>
+                        </div>
+                     </div>
+                      <div class="col-lg-3 col-md-5">
+                        <div class="card" data-filter-group="audio">
+                           <div class="card-body text-center">
+                              <div class="d-flex">
+                                 <div class="ml-auto">
+                                    <a class="text-muted mr-1" href="/mark_sheet_listing" title="Download">
+                                       <em class="fa fa-download fa-fw"></em>
+                                    </a>
+                                 </div>
+                              </div>
+                              <a class="px-4" href="/mark_sheet_listing">
+                                 <em class="fa-5x far fa-file text-warning"></em>
+                              </a>
+                              <p>
+                                 <small class="text-dark">Mark Sheet Listing</small>
+                              </p>
+                             
+                           </div>
+                        </div>
+                     </div>
+                       <div class="col-lg-3 col-md-5">
+                        <div class="card" data-filter-group="code">
+                           <div class="card-body text-center">
+                              <div class="d-flex">
+                                 <div class="ml-auto">
+                                    <a class="text-muted mr-1" href="/mark_analyse_by_grade" title="Download">
+                                       <em class="fa fa-download fa-fw"></em>
+                                    </a>
+                                 </div>
+                              </div>
+                              <a class="px-4" href="/mark_analyse_by_grade">
+                                 <em class="fa-5x fas fa-file-medical-alt text-purple"></em>
+                              </a>
+                              <p>
+                                 <small class="text-dark">Mark Analysis Grade</small>
+                              </p>
+                              
+                           </div>
+                        </div>
+                     </div>
+                     
+
+               </div>
+            </div>
