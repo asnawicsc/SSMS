@@ -1,18 +1,9 @@
-<% require IEx %>
-<%  institutes = Repo.all(from i in School.Settings.Institution, select: {i.name, i.id})%>
+<div class="content-heading">
+   	<div><%= @student.name %>'s Information
+   	</div>
+</div>
 
-<% parameters = Repo.get_by(School.Settings.Parameter, institution_id: @conn.private.plug_session["institution_id"])
-  %>
-
-<% race = parameters.race |> String.split(",") %>
-<% religion = parameters.religion |> String.split(",") %>
-<% nationality = parameters.nationality |> String.split(",") %>
-<% blood_type = parameters.blood_type |> String.split(",") %>
-<% transport = parameters.transport |> String.split(",") %>
-<% user = Repo.get(School.Settings.User,@conn.private.plug_session["user_id"]) %>
-<% Gettext.put_locale(SchoolWeb.Gettext, user.default_lang) %>
-<a href="/student_lists/<%= @conn.private.plug_session["user_id"] %>" ]"=""><button class="mb-1 btn-sm btn btn-outline-primary" type="button"><i class="fas fa-chevron-left"></i> Back</button></a>
-<div class="row">
+            <div class="row">
                <div class="col-lg-4">
                   <div class="card card-default d-none d-lg-block">
                      <div class="card-header">
@@ -22,14 +13,14 @@
                         <div class="media">
                            <div class="media-body py-2">
                               <div class="text-bold">Father
-                                <div class="text-sm text-muted"><a href="/show_guardian/<%= @student.ficno %>">Click here to show father's information</a></div>
+                              	<div class="text-sm text-muted"><a href="/show_guardian/<%= @student.ficno %>">Click here to show father's information</a></div>
                               </div>
                            </div>
                         </div>
                         <div class="media">
                            <div class="media-body py-2">
                               <div class="text-bold">Mother
-                                <div class="text-sm text-muted"><a href="/show_guardian/<%= @student.micno %>">Click here to show mother's information</a></div>
+                              	<div class="text-sm text-muted"><a href="/show_guardian/<%= @student.micno %>">Click here to show mother's information</a></div>
                                  
                               </div>
                            </div>
@@ -191,7 +182,6 @@
                                  <div class="form-group row">
                                     <div class="col-md-10">
                                        <button class="btn btn-info" type="submit">Update</button>
-                                       <button class= "btn btn-danger" id="delete_student" aria-label="<%= @student.id %>">Delete</button>
                                     </div>
                                  </div>
                               </form>
@@ -201,3 +191,4 @@
                   </div>
                </div>
             </div>
+  

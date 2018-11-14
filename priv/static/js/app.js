@@ -312,7 +312,8 @@ $(document).ready(function(){
   })
 
 channel.on("show_student_details", payload => {
-
+    $("div[aria-label='student_upload']").hide()
+    $("div[aria-label='student_table']").hide()
     $("div[aria-label='student_details']").html(payload.html)
     var csrf = window.csrf
     $("input[name='_csrf_token']").val(csrf)

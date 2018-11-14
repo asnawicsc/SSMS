@@ -1,0 +1,220 @@
+<link rel="stylesheet" href="/css/jquery.skedTape.css">
+<script type="text/javascript">
+    window.csrf = "<%= Phoenix.Controller.get_csrf_token %>"
+</script>
+
+<div class="content-heading">
+    <div>Class Settings
+    </div>
+</div>
+
+            <div class="container-md">
+               <div class="row">
+                  <div class="col-lg-3">
+                     <div class="card b">
+                        <div class="card-header bg-gray-lighter text-bold"><%= @class.name %> Class Settings</div>
+                        <div class="list-group">
+                           <a class="list-group-item list-group-item-action active" href="#tabSetting1" id="class_info" data-toggle="tab">Class Info</a>
+                           <a class="list-group-item list-group-item-action" href="#tabSetting2" id="class_subject" data-toggle="tab">Class Subject</a>
+                           <a class="list-group-item list-group-item-action" href="#tabSetting3" id="class_period" data-toggle="tab">Class Period</a>
+                           <a class="list-group-item list-group-item-action" href="#tabSetting4" id="class_student_info" data-toggle="tab">Class Student Info</a>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="col-lg-9">
+                     <div class="tab-content p-0 b0">
+                        <div class="tab-pane active" id="tabSetting1">
+                           <div class="card b">
+                              <div class="card-header bg-gray-lighter text-bold">Class Info</div>
+                              <div class="card-body">
+                                 <form action="#">
+                                    <div class="form-group">
+                                        Class Name:<br>
+                                        <input type="text" name="class_name" disabled="" value="<%= @class.name %>">
+                                    </div>
+                                    <div class="form-group">
+                                        Remark:<br>
+                                        <input type="text" name="remark" disabled="" value="<%= @class.remark %>">
+                                    </div>
+                                    <div class="form-group">
+                                        Institution ID:<br>
+                                        <input type="text" name="institution_id" disabled="" value="<%= @class.institution%>">
+                                    </div>
+                                    <div class="form-group">
+                                        Standard:<br>
+                                        <input type="text" name="level_id" disabled="" value="<%= @class.level%>">
+                                    </div>
+                                    <div class="form-group">
+                                        Class Teacher:<br>
+                                        <input type="text" name="teacher_name" disabled="" value="<%= @teacher.name %>">
+                                    </div>
+                                 </form>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="tab-pane" id="tabSetting2">
+                           <div class="card b">
+                              <div class="card-header bg-gray-lighter text-bold">Account</div>
+                              <div class="card-body">
+                                 <form action="#">
+                                    <div class="form-group">
+                                       <label>Current password</label>
+                                       <input class="form-control" type="password">
+                                    </div>
+                                    <div class="form-group">
+                                       <label>New password</label>
+                                       <input class="form-control" type="password">
+                                    </div>
+                                    <div class="form-group">
+                                       <label>Confirm new password</label>
+                                       <input class="form-control" type="password">
+                                    </div>
+                                    <button class="btn btn-info" type="button">Update password</button>
+                                    <p>
+                                       <small class="text-muted">* Integer fermentum accumsan metus, id sagittis ipsum molestie vitae</small>
+                                    </p>
+                                 </form>
+                              </div>
+                           </div>
+                           <div class="card b">
+                              <div class="card-header bg-danger text-bold">Delete account</div>
+                              <div class="card-body bt">
+                                 <p>You will be asked for confirmation before delete account.</p>
+                                 <button class="btn btn-secondary" type="button">
+                                    <span class="text-danger">Delete account</span>
+                                 </button>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="tab-pane" id="tabSetting3">
+                           <div class="card b">
+                              <div class="card-header bg-gray-lighter text-bold">Emails</div>
+                              <div class="card-body">
+                                 <p>Etiam eros nibh, condimentum in auctor et, aliquam quis elit. Donec id libero eros. Ut fringilla, justo id fringilla pretium, nibh nunc suscipit mauris, et suscipit nulla nisl ac dolor. Nam egestas, leo eu gravida tincidunt,
+                                    sem ipsum pellentesque quam, vel iaculis est quam et eros.</p>
+                                 <p>
+                                    <strong>Your email addresses</strong>
+                                 </p>
+                                 <p>
+                                    <span class="mr-2">email@someaddress.com</span>
+                                    <span class="badge badge-success">primary</span>
+                                 </p>
+                                 <p>
+                                    <span class="mr-2">another.email@someaddress.com</span>
+                                    <span class="badge bg-gray">private</span>
+                                 </p>
+                              </div>
+                              <div class="card-body bt">
+                                 <p>
+                                    <strong>Add email address</strong>
+                                 </p>
+                                 <form action="#">
+                                    <div class="row mb-2">
+                                       <div class="col-xl-6">
+                                          <div class="form-group">
+                                             <div class="input-group">
+                                                <input class="form-control" type="email" placeholder="email@server.com">
+                                                <span class="input-group-btn">
+                                                   <button class="btn btn-secondary" type="button">Add</button>
+                                                </span>
+                                             </div>
+                                          </div>
+                                          <div class="form-check">
+                                             <input class="form-check-input" id="defaultCheck1" type="checkbox" value="">
+                                             <label class="form-check-label">Keep my email address private</label>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <button class="btn btn-info" type="button">Update email</button>
+                                    <p>
+                                       <small class="text-muted">* Integer fermentum accumsan metus, id sagittis ipsum molestie vitae</small>
+                                    </p>
+                                 </form>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="tab-pane" id="tabSetting4">
+                              <div class="card b">
+                                 <div class="card-header bg-gray-lighter text-bold">Class Student Info</div>
+                                 <div class="card-body">
+                                    <ol>
+                                    <%= for student <- @students do %>
+                                      <li><b><%= student.name %></b>
+                                        <a href="/show_student_info/<%= student.id %>">
+                                        <button class="btn btn-labeled btn-info btn-xs mb-2" type="button">
+                                        <span class="btn-label"><i class="fa fa-search"></i></span>Info</button></a>
+                                    </li>
+                                    <% end %>
+                                    </ol> 
+                                 </div>
+                              </div>
+                        </div>
+                        <div class="tab-pane" id="tabSetting5">
+                           <div class="card b">
+                              <div class="card-header bg-gray-lighter text-bold">Applications</div>
+                              <div class="card-body">
+                                 <p>
+                                    <span>You have granted access for</span>
+                                    <strong>3 applications</strong>
+                                    <span>to your account.</span>
+                                 </p>
+                                 <div class="list-group">
+                                    <div class="list-group-item d-flex align-items-center">
+                                       <img class="mr-2 img-fluid thumb48" src="img/dummy.png" alt="App">
+                                       <div>
+                                          <p class="text-bold mb-0">Application #1</p>
+                                          <small>Ut turpis urna, tristique sed adipiscing nec, luctus quis leo.</small>
+                                       </div>
+                                       <div class="ml-auto">
+                                          <button class="btn btn-secondary" type="button">
+                                             <strong>Revoke</strong>
+                                          </button>
+                                       </div>
+                                    </div>
+                                    <div class="list-group-item d-flex align-items-center">
+                                       <img class="mr-2 img-fluid thumb48" src="img/dummy.png" alt="App">
+                                       <div>
+                                          <p class="text-bold mb-0">Application #2</p>
+                                          <small>Ut turpis urna, tristique sed adipiscing nec, luctus quis leo.</small>
+                                       </div>
+                                       <div class="ml-auto">
+                                          <button class="btn btn-secondary" type="button">
+                                             <strong>Revoke</strong>
+                                          </button>
+                                       </div>
+                                    </div>
+                                    <div class="list-group-item d-flex align-items-center">
+                                       <img class="mr-2 img-fluid thumb48" src="img/dummy.png" alt="App">
+                                       <div>
+                                          <p class="text-bold mb-0">Application #3</p>
+                                          <small>Ut turpis urna, tristique sed adipiscing nec, luctus quis leo.</small>
+                                       </div>
+                                       <div class="ml-auto">
+                                          <button class="btn btn-secondary" type="button">
+                                             <strong>Revoke</strong>
+                                          </button>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            
+
+
+<script type="text/javascript">
+
+
+
+
+</script>
+
+
+       
+   <script src="<%= static_path(@conn, "/js/jquery.skedTape.js") %> "></script>
+
+

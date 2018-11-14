@@ -8,39 +8,47 @@
 
 <% levels = School.Repo.all(from l in School.Affairs.Level,where: l.institution_id ==^@conn.private.plug_session["institution_id"], select: {l.name, l.id}) %>
 
-  
-<%= form_for @changeset, @action, fn f -> %>
-  <%= if @changeset.action do %>
-    <div class="alert alert-danger">
-      <p>Oops, something went wrong! Please check the errors below.</p>
+<div class="row">
+   <div class="col-lg-12">
+      <div class="card card-default d-none d-lg-block">
+        <div class="card-body">
+        <%= form_for @changeset, @action, fn f -> %>
+          <%= if @changeset.action do %>
+            <div class="alert alert-danger">
+              <p>Oops, something went wrong! Please check the errors below.</p>
+            </div>
+          <% end %>
+
+          <div class="form-group">
+            <%= label f, :name, class: "control-label" %>
+            <%= text_input f, :name, class: "form-control" %>
+            <%= error_tag f, :name %>
+          </div>
+
+          <div class="form-group">
+            <%= label f, :remarks, class: "control-label" %>
+            <%= text_input f, :remarks, class: "form-control" %>
+            <%= error_tag f, :remarks %>
+          </div>
+
+          <div class="form-group">
+            <%= label f, :level_id, class: "control-label" %>
+            <%= select f, :level_id, levels, class: "form-control" %>
+            <%= error_tag f, :level_id %>
+          </div>
+
+          <div class="form-group">
+            <%= label f, :teacher_id, class: "control-label" %>
+            <%= select f, :teacher_id, teacher, class: "form-control" %>
+            <%= error_tag f, :teacher_id %>
+          </div>
+
+          <div class="form-group">
+            <%= submit "Submit", class: "mb-1 btn btn-primary" %>
+            <a href="/dashboard" ]"=""><button class="mb-1 btn btn btn-outline-primary" type="button"><i class="fas fa-chevron-left"></i> Back</button></a>
+          </div>
+        <% end %>
+      </div>
     </div>
-  <% end %>
-
-  <div class="form-group">
-    <%= label f, :name, class: "control-label" %>
-    <%= text_input f, :name, class: "form-control" %>
-    <%= error_tag f, :name %>
   </div>
-
-  <div class="form-group">
-    <%= label f, :remarks, class: "control-label" %>
-    <%= text_input f, :remarks, class: "form-control" %>
-    <%= error_tag f, :remarks %>
-  </div>
-
-  <div class="form-group">
-    <%= label f, :level_id, class: "control-label" %>
-    <%= select f, :level_id, levels, class: "form-control" %>
-    <%= error_tag f, :level_id %>
-  </div>
-
-  <div class="form-group">
-    <%= label f, :teacher_id, class: "control-label" %>
-    <%= select f, :teacher_id, teacher, class: "form-control" %>
-    <%= error_tag f, :teacher_id %>
-  </div>
-
-  <div class="form-group">
-    <%= submit "Submit", class: "btn btn-primary" %>
-  </div>
-<% end %>
+</div>

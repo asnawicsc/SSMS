@@ -7,6 +7,7 @@ defmodule School.Affairs do
   alias School.Repo
 
   alias School.Affairs.Student
+  require IEx
 
   @doc """
   Returns the list of students.
@@ -3863,5 +3864,73 @@ defmodule School.Affairs do
   """
   def change_exam_period(%ExamPeriod{} = exam_period) do
     ExamPeriod.changeset(exam_period, %{})
+  end
+
+  def exam_period_list(institution_id) do
+    lists =
+      Repo.all(
+        from(
+          e in Exam,
+          left_join: em in ExamMaster,
+          on: e.exam_master_id == em.id,
+          left_join: ep in ExamPeriod,
+          on: ep.exam_id == e.id,
+          left_join: s in Subject,
+          on: s.id == e.subject_id,
+          where: em.institution_id == ^institution_id,
+          select: %{
+            exam_name: em.name,
+            subject: s.description,
+            start_date: ep.start_date,
+            end_date: ep.end_date
+          }
+        )
+      )
+
+    lists =
+      for list <- lists do
+        title = Enum.join([list.exam_name, list.subject], "-")
+        new_list = Map.put(list, :title, title)
+        new_list = Map.put(new_list, :description, "")
+        new_list = Map.delete(new_list, :exam_name)
+        new_list = Map.delete(new_list, :subject)
+        new_list
+      end
+
+    lists
+  end
+
+  def exam_period_list(institution_id) do
+    lists =
+      Repo.all(
+        from(
+          e in Exam,
+          left_join: em in ExamMaster,
+          on: e.exam_master_id == em.id,
+          left_join: ep in ExamPeriod,
+          on: ep.exam_id == e.id,
+          left_join: s in Subject,
+          on: s.id == e.subject_id,
+          where: em.institution_id == ^institution_id,
+          select: %{
+            exam_name: em.name,
+            subject: s.description,
+            start_date: ep.start_date,
+            end_date: ep.end_date
+          }
+        )
+      )
+
+    lists =
+      for list <- lists do
+        title = Enum.join([list.exam_name, list.subject], "-")
+        new_list = Map.put(list, :title, title)
+        new_list = Map.put(new_list, :description, "")
+        new_list = Map.delete(new_list, :exam_name)
+        new_list = Map.delete(new_list, :subject)
+        new_list
+      end
+
+    lists
   end
 end

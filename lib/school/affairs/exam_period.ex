@@ -2,11 +2,10 @@ defmodule School.Affairs.ExamPeriod do
   use Ecto.Schema
   import Ecto.Changeset
 
-
   schema "examperiod" do
-    field :end_date, :naive_datetime
-    field :exam_id, :integer
-    field :start_date, :naive_datetime
+    field(:end_date, :utc_datetime)
+    field(:exam_id, :integer)
+    field(:start_date, :utc_datetime)
 
     timestamps()
   end

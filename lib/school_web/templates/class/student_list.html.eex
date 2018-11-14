@@ -1,3 +1,4 @@
+
         <div align="right" style="margin-right: 30px;">
     <form action="/pdf/student_class_listing" method="POST">
  <input type="hidden" name="class_id" value="<%= @class_id %>">
