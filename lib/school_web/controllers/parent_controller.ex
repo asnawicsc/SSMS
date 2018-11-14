@@ -5,6 +5,22 @@ defmodule SchoolWeb.ParentController do
   alias School.Affairs.Parent
   require IEx
 
+  def parent_listing(conn, _params) do
+    parent =
+      Affairs.list_parent()
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
+    semesters =
+      Repo.all(from(s in Semester))
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
+    classes =
+      Repo.all(from(c in Class, where: c.institution_id == ^User.institution_id(conn)))
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
+    render(conn, "parent_listing.html", parent: parent, semesters: semesters, classes: classes)
+  end
+
   def guardian_listing(conn, _params) do
     parent =
       Affairs.list_parent()

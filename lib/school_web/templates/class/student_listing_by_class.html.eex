@@ -1,11 +1,23 @@
+<div class="content-heading">
+   <div>Student Listing
+      <small><%= gettext("welcome")%>!</small>
+   </div>
+   <!-- START Language list-->
+   <div class="ml-auto">
 
-<div aria-label="project_nilam">
-    <div class="content">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card ">
+   </div>
+   <!-- END Language list-->
+</div>
 
+<div class="row">
+
+
+   <%= render( SchoolWeb.ExamView ,"report_nav.html",conn: @conn) %>
+
+<div class="col-lg-9">
+
+ <div class="card">
+ 
                         <div class="card-header ">
 
                             <div class="row">
@@ -29,18 +41,14 @@
                
 
                         </div>
-                        <div class="card-body " id="sl">
-
-                        
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-    </div>
+                        <div class="card-body " id="sl"></div>
+               </div>
+</div>  
 </div>
+</div>
+
+
+
 
 
 

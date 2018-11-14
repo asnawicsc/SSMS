@@ -1,7 +1,15 @@
+<div class="content-heading">
+   <div>Co Curriculum List
+      <small><%= gettext("welcome")%>!</small>
+   </div>
+   <!-- START Language list-->
+   <div class="ml-auto">
+
+   </div>
+   <!-- END Language list-->
+</div>
  <div class="card">
-               <div class="card-header">Co Curriculum List
-        
-               </div>
+   
                <div class="card-body">
                   <div class="table-responsive bootgrid">
                      <table class="table table-striped" id="bootgrid-command2">

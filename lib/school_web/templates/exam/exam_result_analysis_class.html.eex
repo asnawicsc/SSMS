@@ -1,40 +1,55 @@
-<div aria-label="project_nilam">
+<div class="content-heading">
+   <div>Exam Result Analysis Class
+      <small><%= gettext("welcome")%>!</small>
+   </div>
+   <!-- START Language list-->
+   <div class="ml-auto">
+
+   </div>
+   <!-- END Language list-->
+</div>
+
+
+ <div class="row">
+
+
+   <%= render( SchoolWeb.ExamView ,"report_nav.html",conn: @conn) %>
+
+<div class="col-lg-9">
+
+ <div class="card">
+ 
+               <div class="card-body">
+            <div aria-label="project_nilam">
       <div class="content">
         <div class="container-fluid">
           <div class="row">
             <div class="col-md-12">
               <div class="card ">
                
-                <div class="card-header ">
+               <div class="card-header ">
           
                   <div class="row">
-                  <h4 class="card-title">Exam Result Analysis 
+                  <h4 class="card-title">Class :
                   </h4>
                   <form>
-   <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+                      <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
                </form>    
-                    <select class="select" onchange="getvalf(this);" required="required" name="exam_result_analysis_class">
+                    <span><select class="select" onchange="getvalf(this);" required="required" name="exam_result_analysis_class">
                            <%= for a <- @class |> Enum.sort do %>
                                             <option value="<%= a.id %>" ><%= a.name %>
                                             </option>
                                           <% end %>
-                                        </select>     
-                    
-                   
+                                        </select> 
+                                        </span>    
                   </div>
                 <hr>
-              <div id="exam_filter_analysis" >
-              </div>
-                <div class="card-body ">
-
-                  <div class="tab-content tab-space">
-                    <div class="tab-pane active" id="exam_record_analysis">
-                    
-                    </div>
+                    <div id="exam_filter_analysis" ></div>
+                    <div class="tab-pane active" id="exam_record_analysis"></div>
                    
-                    
-                  </div>
-                </div>
+               
+               
+              </div>
               </div>
             </div>
          
@@ -43,6 +58,12 @@
         </div>
       </div>
     </div>
+               </div>
+</div>  
+</div>
+</div>
+
+
 
 <script type="text/javascript">
 

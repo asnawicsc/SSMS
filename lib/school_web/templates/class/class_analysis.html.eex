@@ -1,5 +1,26 @@
-<h1>Class Analysis</h1>
-<form action="/pdf/class_analysis" method="POST">
+<div class="content-heading">
+   <div>Class Analysis
+      <small><%= gettext("welcome")%>!</small>
+   </div>
+   <!-- START Language list-->
+   <div class="ml-auto">
+
+   </div>
+   <!-- END Language list-->
+</div>
+
+<div class="row">
+
+
+   <%= render( SchoolWeb.ExamView ,"report_nav.html",conn: @conn) %>
+
+<div class="col-lg-9">
+
+ <div class="card">
+ 
+               <div class="card-body">
+               	Class Analysis By Gender
+        <form action="/pdf/class_analysis" method="POST">
 	<input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
 <select name="class" required="required">
 	<%= for class <- @classes do %>
@@ -14,7 +35,9 @@
 <input type="submit" name="" value="Generate!">
 </form>
 
+<hr>
 
+Class Listing With Teacher
 <form action="/pdf/class_listing_teacher" method="POST">
 	<input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
 <select name="class" required="required">
@@ -29,3 +52,8 @@
 </select>
 <input type="submit" name="" value="Generate!">
 </form>
+               </div>
+</div>  
+</div>
+</div>
+

@@ -189,8 +189,8 @@ defmodule SchoolWeb.ClassController do
       end
     end
 
-    if user.role == "Admin" or user.role == "Support" do
-      class =
+    class =
+      if user.role == "Admin" or user.role == "Support" do
         Repo.all(
           from(
             c in Class,
@@ -200,7 +200,7 @@ defmodule SchoolWeb.ClassController do
             select: %{id: c.id, name: c.name, level_name: l.name}
           )
         )
-    end
+      end
 
     levels =
       Affairs.list_levels()

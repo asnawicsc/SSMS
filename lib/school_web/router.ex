@@ -278,6 +278,11 @@ defmodule SchoolWeb.Router do
     get("/user_access_pass/:id", UserAccessController, :user_access_pass)
     resources("/role", RoleController)
     get("/exam_report/:class_id/:exam_id", ExamController, :exam_report)
+
+    get("/list_report", ExamController, :list_report)
+
+    get("/report_nav", ExamController, :report_nav)
+    get("/parent_listing", ParentController, :parent_listing)
   end
 
   # Other scopes may use custom stacks.

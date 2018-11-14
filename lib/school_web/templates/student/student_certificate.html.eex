@@ -1,4 +1,24 @@
-<h1>Student Certificate</h1>
+<div class="content-heading">
+   <div>Student Certificate
+      <small><%= gettext("welcome")%>!</small>
+   </div>
+   <!-- START Language list-->
+   <div class="ml-auto">
+
+   </div>
+   <!-- END Language list-->
+</div>
+
+<div class="row">
+
+
+   <%= render( SchoolWeb.ExamView ,"report_nav.html",conn: @conn) %>
+
+<div class="col-lg-9">
+
+ <div class="card">
+ 
+               <div class="card-body">
 <form id ="semester">
 	<input type="hidden" name="report" value="certificate">
 	Please select a semester:
@@ -20,6 +40,11 @@
 	</select>
 	<input type="submit" class="btn btn-info btn-sm" id="generate_certificate" value="Generate Certificate !">
 </form>
+               </div>
+</div>  
+</div>
+</div>
+
 
 <script type="text/javascript">
 	$("form#classes").hide()
