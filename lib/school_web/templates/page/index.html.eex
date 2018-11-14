@@ -38,7 +38,7 @@
        <hr class="my-4">
        <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
        <a href="/attendance"><button class="mb-1 btn btn-outline-info" type="button">Mark attendance</button></a>
-       <button class="mb-1 btn btn-outline-info" type="button">Modify Timetable</button>
+       <a href="/timetable/teacher/<%= @conn.private.plug_session["user_id"] %>/list"><button class="mb-1 btn btn-outline-info" type="button">Modify Timetable</button></a>
        <button class="mb-1 btn btn-outline-info" type="button">Info</button>
 
 <div id='calendar'></div>

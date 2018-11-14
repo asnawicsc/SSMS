@@ -132,8 +132,8 @@ defmodule SchoolWeb.Router do
     post("/upload_parents", ParentController, :upload_parents)
 
     resources("/timetable", TimetableController)
-    get("/timetable/teacher/:teacher_id/list", TimetableController, :teacher_timetable_list)
-    get("/timetable/teacher/:teacher_id", TimetableController, :teacher_timetable)
+    get("/timetable/teacher/:user_id/list", TimetableController, :teacher_timetable_list)
+    get("/timetable/teacher/:user_id", TimetableController, :teacher_timetable)
     get("/generated_timetable/:id", TimetableController, :generated_timetable)
     resources("/period", PeriodController)
     post("/create_period", PeriodController, :create_period)

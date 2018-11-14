@@ -6,7 +6,7 @@
    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
    <meta name="description" content="Bootstrap Admin App + jQuery">
    <meta name="keywords" content="app, responsive, jquery, bootstrap, dashboard, admin">
-   <link rel="icon" type="image/a-icon" href="favicon.ico">
+
    <title>SSMS</title>
    <!-- =============== VENDOR STYLES ===============-->
    <!-- FONT AWESOME-->
@@ -72,13 +72,15 @@
    <!-- =============== PAGE VENDOR SCRIPTS ===============-->
             <script src="/vendor/jquery-bootgrid/dist/jquery.bootgrid.js"></script>
    <script src="/vendor/jquery-bootgrid/dist/jquery.bootgrid.fa.js"></script>
-   <!-- DATETIMEPICKER-->
-   <script src="/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script>
-   <script src="/vendor/datetimepicker/js/jquery.timepicker.js"></script>
 
+    <script src="/vendor/components-jqueryui/jquery-ui.js"></script>
+    <script src="/vendor/jqueryui-touch-punch/jquery.ui.touch-punch.js"></script>
    <!-- =============== APP SCRIPTS ===============-->
    <script src="/js/app_angle.js"></script>
-       <script type="text/javascript">
+    <script type="text/javascript">
+
+    $(document).ready(function(){
+
     <%= cond do %>
     <% get_flash(@conn, :info) != nil -> %>
         $.notify({message: '<%= get_flash(@conn, :info) %>'},{type: 'success'});
@@ -87,17 +89,14 @@
     <% true -> %>
 
     <% end %>
-    $(document).ready(function(){
-
- 
       
     })
     </script>
     <script src="<%= static_path(@conn, "/js/phoenix.js") %>"></script>
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
     <script src="<%= static_path(@conn, "/js/library.js") %>"></script>
-     <link rel="stylesheet" href="/css/richtext.min.css">
-     <script src="/js/jquery.richtext.min.js"></script>
+    <link rel="stylesheet" href="/css/richtext.min.css">
+    <script src="/js/jquery.richtext.min.js"></script>
 
 
 <script src="/vendor/datatables.net-bs4/jquery.dataTables.js"></script>
@@ -110,8 +109,11 @@
 <script src="/vendor/datatables.net-bs4/buttons.print.js"></script>
 <script src="/vendor/datatables.net-bs4/dataTables.keyTable.js"></script>
 <script src="/vendor/datatables.net-bs4/dataTables.responsive.js"></script>
-<script src="/vendor/datatables.net-bs4/responsive.bootstrap.js"></script>
-     
+<script src="/vendor/datatables.net-bs4/responsive.bootstrap.js"></script>    
+
+
+<link rel="stylesheet" type="text/css" href="/vendor/jquery_datetimepicker/jquery.datetimepicker.min.css"/ >
+<script src="/vendor/jquery_datetimepicker/jquery.datetimepicker.full.min.js"></script>
 </head>
 
 <body>

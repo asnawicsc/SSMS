@@ -21,7 +21,7 @@ defmodule SchoolWeb.ApiController do
     ic = params["IC"]
 
     # parent = Repo.all(from(s in School.Affairs.Parent, where(s.icno == ^ic)))
-    parent = Repo.all(from(s in School.Affairs.Parentm, where: s.icno == ^ic))
+    parent = Repo.all(from(s in School.Affairs.Parent, where: s.icno == ^ic))
     IO.inspect(params)
     uri = Application.get_env(:school, :api)[:url]
 

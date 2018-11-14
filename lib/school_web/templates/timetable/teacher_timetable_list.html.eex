@@ -1,0 +1,146 @@
+<link rel="stylesheet" href="/vendor/fullcalendar/dist/fullcalendar.css">
+<!-- MOMENT JS-->
+<script src="/vendor/moment/min/moment-with-locales.js"></script>
+<!-- FULLCALENDAR-->
+<script src="/vendor/fullcalendar/dist/fullcalendar.js"></script>
+<script src="/vendor/fullcalendar/dist/gcal.js"></script>
+<div class="content-heading">
+   <div>Teacher's Timetable
+      <small><%= gettext("welcome")%>!</small>
+   </div>
+
+</div>
+<div class="row">
+  <div class="col-lg-9">
+  
+      <div class="card mb-3 border-default">
+         <div class="card-header text-white bg-primary">Weekly Timetable</div>
+         <div class="card-body">
+			<div id='calendar'></div>
+			<script type="text/javascript">
+			  $(document).ready(function(){
+
+			  $('#external-events .fc-event').each(function() {
+
+			    // store data so the calendar knows to render an event upon drop
+			    $(this).data('event', {
+			      title: $.trim($(this).text()), // use the element's text as the event title
+			      stick: true // maintain when user navigates (see docs on the renderEvent method)
+			    });
+
+			    // make the event draggable using jQuery UI
+			    $(this).draggable({
+			      zIndex: 999,
+			      revert: true,      // will cause the event to go back to its
+			      revertDuration: 0  //  original position after the drag
+			    });
+
+			  });
+
+
+			  $('#calendar').fullCalendar({
+			    // put your options and callbacks here
+			    header: { center: 'month,agendaWeek' }, 
+			    editable: true,
+    			eventLimit: true, // when too many events in a day, show the popover
+			    eventSources: [{
+			      url: '/timetable/teacher/<%= @conn.private.plug_session["user_id"] %>',
+			      color: 'yellow',    // an option!
+			      textColor: 'black'  // an option!
+			    }],
+			    droppable: true, // this allows things to be dropped onto the calendar
+			    drop: function() {
+			      $(this).remove();
+			    },
+			  	eventDrop: function(event, delta, revertFunc) {
+
+			    	alert(event.title + " was dropped on " + event.start.format());
+				    if (!confirm("Are you sure about this change?")) {
+				      revertFunc();
+				    }
+
+			  	},
+			  	eventClick: function(calEvent, jsEvent, view) {
+
+				    alert('Event: ' + calEvent.title);
+				    alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
+				    alert('View: ' + view.name);
+
+				  }
+			  });
+
+		
+			  })
+			</script>
+         </div>
+      </div>
+              
+  </div>
+  <div class="col-lg-3">
+  	<div class="card mb-3 border-default">
+         <div class="card-header text-white bg-primary">Subject - Class blocks</div>
+         <div class="card-body" data-toggle="portlet">
+            <h5 class="card-title">Drag blocks below:</h5>
+            <p class="card-text">The following 'Subject - Class' blocks are assigned by the school, therefore you must arrange your own schedule.</p>
+						<div id='external-events'>
+						  <p>
+						    <strong>Draggable Events</strong>
+						  </p>
+						  <div class='fc-event'>My Event 1</div>
+						  <div class='fc-event'>My Event 2</div>
+						  <div class='fc-event'>My Event 3</div>
+						  <div class='fc-event'>My Event 4</div>
+						  <div class='fc-event'>My Event 5</div>
+
+						</div>
+
+         </div>
+ 
+      </div>
+
+  	<div class="card mb-3 border-default">
+         <div class="card-header text-white bg-primary">Add new subject class block</div>
+         <div class="card-body">
+              <form method="POST" action="/timetable/teacher/<%= @conn.private.plug_session["user_id"] %>/create_event">
+              	 <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+                 <div class="form-group">
+                    <label>Email address</label>
+                    <input class="form-control" placeholder="Enter email" type="email">
+                 </div>
+                 <div class="form-group">
+                    <label>Password</label>
+                    <input class="form-control" placeholder="Password" type="password">
+                 </div>
+                 <div class="checkbox c-checkbox">
+	                  <label>
+	                     <input checked="" name="recurring_event" type="checkbox">
+	                     <span class="fa fa-check"></span>Recurring Event?</label>
+	               </div>
+
+	               <select class="custom-select " name="recurring_frequency">
+	                   <option selected="">Open this select menu</option>
+	                   <option value="daily">Daily</option>
+	                   <option value="weekly">Weekly</option>
+	                   <option value="monthly">Monthly</option>
+	                </select>
+
+	                <div class="form-group">
+                    <label>Until</label>
+                    <input class="form-control" id="datetimepicker" placeholder="Until" type="text">
+                 </div>
+
+                 <button class="btn btn-sm btn-secondary" type="submit">Submit</button>
+              </form>
+           </div>
+ 
+      </div>
+  </div>
+
+</div>
+
+<script type="text/javascript">
+
+
+jQuery('#datetimepicker').datetimepicker();
+
+</script>

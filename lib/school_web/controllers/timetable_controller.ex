@@ -84,9 +84,25 @@ defmodule SchoolWeb.TimetableController do
   end
 
   def teacher_timetable_list(conn, params) do
-    timetable = Affairs.get_timetable!(id)
-    changeset = Affairs.change_timetable(timetable)
-    render(conn, "teacher_timetable_list.html", timetable: timetable, changeset: changeset)
+    timetable_id = 0
+
+    case School.Affairs.get_teacher(params["user_id"]) do
+      {:ok, teacher} ->
+        true
+
+        {:ok, timetable} = School.Affairs.initialize_calendar(teacher.id)
+
+        periods = Repo.all(from(p in Period, where: p.timetable_id == ^timetable_id))
+
+        render(conn, "teacher_timetable_list.html", periods: periods)
+
+      {:error, message} ->
+        true
+
+        conn
+        |> put_flash(:info, message)
+        |> redirect(to: timetable_path(conn, :index))
+    end
   end
 
   def generated_timetable(conn, params) do

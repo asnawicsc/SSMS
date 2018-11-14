@@ -3864,4 +3864,41 @@ defmodule School.Affairs do
   def change_exam_period(%ExamPeriod{} = exam_period) do
     ExamPeriod.changeset(exam_period, %{})
   end
+
+  def has_calendar?(teacher_id) do
+    result = Repo.all(from(t in Timetable, where: t.teacher_id == ^teacher_id))
+
+    if result == [] do
+      {:no, 0}
+    else
+      {:yes, hd(result).id}
+    end
+  end
+
+  def initialize_calendar(teacher_id) do
+    # create a calendar
+
+    case School.Affairs.has_calendar?(teacher_id) do
+      {:yes, timetable_id} ->
+        timetable = Repo.get(Timetable, timetable_id)
+
+      {:no, timetable_id} ->
+        {:ok, timetable} =
+          Timetable.changeset(%Timetable{}, %{teacher_id: teacher_id}) |> Repo.insert()
+    end
+
+    {:ok, timetable}
+  end
+
+  def get_teacher(user_id) do
+    user = Repo.get(School.Settings.User, user_id)
+
+    teacher = Repo.get_by(Teacher, email: user.email)
+
+    if teacher == nil do
+      {:error, "no teacher assigned"}
+    else
+      {:ok, teacher}
+    end
+  end
 end

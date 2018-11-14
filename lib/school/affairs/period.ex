@@ -9,13 +9,29 @@ defmodule School.Affairs.Period do
     field(:subject_id, :integer)
     field(:teacher_id, :integer)
     field(:class_id, :integer)
-
+    field(:recurring_frequency, :string)
+    field(:recurring_until, :utc_datetime)
+    field(:timetable_id, :integer)
+    field(:start_datetime, :utc_datetime)
+    field(:end_datetime, :utc_datetime)
     timestamps()
   end
 
   @doc false
   def changeset(period, attrs) do
     period
-    |> cast(attrs, [:class_id, :start_time, :end_time, :day, :subject_id, :teacher_id])
+    |> cast(attrs, [
+      :recurring_frequency,
+      :recurring_until,
+      :timetable_id,
+      :start_datetime,
+      :end_datetime,
+      :class_id,
+      :start_time,
+      :end_time,
+      :day,
+      :subject_id,
+      :teacher_id
+    ])
   end
 end

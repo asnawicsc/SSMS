@@ -49,7 +49,8 @@ defmodule SchoolWeb do
         ExamMark,
         ExamMaster,
         Exam,
-        CoCurriculum
+        CoCurriculum,
+        Period
       }
     end
   end
