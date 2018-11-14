@@ -4,7 +4,7 @@ defmodule SchoolWeb.TimetableController do
 
   alias School.Affairs
   alias School.Affairs.Timetable
-    alias School.Affairs.Subject
+  alias School.Affairs.Subject
 
   def index(conn, _params) do
     timetable = Affairs.list_timetable()
@@ -22,6 +22,7 @@ defmodule SchoolWeb.TimetableController do
         conn
         |> put_flash(:info, "Timetable created successfully.")
         |> redirect(to: timetable_path(conn, :show, timetable))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
@@ -46,6 +47,7 @@ defmodule SchoolWeb.TimetableController do
         conn
         |> put_flash(:info, "Timetable updated successfully.")
         |> redirect(to: timetable_path(conn, :show, timetable))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", timetable: timetable, changeset: changeset)
     end
@@ -60,64 +62,108 @@ defmodule SchoolWeb.TimetableController do
     |> redirect(to: timetable_path(conn, :index))
   end
 
-   def generated_timetable(conn, params) do
-     changeset = Affairs.change_timetable(%Timetable{})
-    class_id=params["id"]
+  def teacher_timetable(conn, params) do
+    # IEx.pry()
+    start_date = params["start"] |> Date.from_iso8601!()
+    end_date = params["start"] |> Date.from_iso8601!()
 
-    class=School.Affairs.get_class!(class_id)
+    events =
+      [
+        %{
+          title: "Event Title2",
+          start: "2018-11-17T13:13:55-0400",
+          end: "2018-11-17T14:13:55-0400",
+          description: "God is Good all the time."
+        }
+      ]
+      |> Poison.encode!()
 
- 
-   period=Repo.all(from p in School.Affairs.Period,
-    left_join: s in School.Affairs.Subject, on: s.id==p.subject_id,
-    left_join: t in School.Affairs.Teacher, on: t.id==p.teacher_id,
-    left_join: d in School.Affairs.Day, on: d.name==p.day,
-    where: p.class_id==^class_id,select: %{day_number: d.number,end_time: p.end_time,start_time: p.start_time,s_code: s.code})
- 
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(200, events)
+  end
 
-   all=for item <- period do
-      e=item.end_time.hour  
-      s=item.start_time.hour 
+  def generated_timetable(conn, params) do
+    changeset = Affairs.change_timetable(%Timetable{})
+    class_id = params["id"]
 
-          e= if e == 0 do 
-         12
-       else
-        e
+    class = School.Affairs.get_class!(class_id)
+
+    period =
+      Repo.all(
+        from(
+          p in School.Affairs.Period,
+          left_join: s in School.Affairs.Subject,
+          on: s.id == p.subject_id,
+          left_join: t in School.Affairs.Teacher,
+          on: t.id == p.teacher_id,
+          left_join: d in School.Affairs.Day,
+          on: d.name == p.day,
+          where: p.class_id == ^class_id,
+          select: %{
+            day_number: d.number,
+            end_time: p.end_time,
+            start_time: p.start_time,
+            s_code: s.code
+          }
+        )
+      )
+
+    all =
+      for item <- period do
+        e = item.end_time.hour
+        s = item.start_time.hour
+
+        e =
+          if e == 0 do
+            12
+          else
+            e
+          end
+
+        s =
+          if s == 0 do
+            12
+          else
+            s
+          end
+
+        %{day_number: item.day_number, end_time: e, start_time: s, s_code: item.s_code}
       end
+      |> Enum.group_by(fn x -> x.day_number end)
 
-    s= if s == 0 do
-          12
-        else
-          s
-      end 
+    all2 =
+      for item <- period do
+        e = item.end_time.hour
+        s = item.start_time.hour
+        sm = item.start_time.minute
+        em = item.end_time.minute
 
-      %{day_number: item.day_number,end_time: e,start_time: s,s_code: item.s_code}
-    
-   end|>Enum.group_by(fn x -> x.day_number end)
+        e =
+          if e == 0 do
+            12
+          else
+            e
+          end
 
-    all2=for item <- period do
-      e=item.end_time.hour  
-      s=item.start_time.hour 
-sm=item.start_time.minute 
-em=item.end_time.minute 
-      e= if e == 0 do 
-         12
-       else
-        e
+        s =
+          if s == 0 do
+            12
+          else
+            s
+          end
+
+        %{
+          location: item.day_number,
+          end_hour: e,
+          end_minute: em,
+          start_minute: sm,
+          start_hour: s,
+          name: item.s_code
+        }
       end
+      |> Enum.reject(fn x -> x == nil end)
 
-    s= if s == 0 do
-          12
-        else
-          s
-      end 
-
-   %{location: item.day_number,end_hour: e,end_minute: em,start_minute: sm,start_hour: s,name: item.s_code}
-
-     
-    
-   end|>Enum.reject(fn x-> x == nil end)
-
-
-    render(conn, "generated_timetable.html",all2: Poison.encode!(all2))
+    render(conn, "generated_timetable.html", all2: Poison.encode!(all2))
   end
 end

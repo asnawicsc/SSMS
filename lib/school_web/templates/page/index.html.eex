@@ -46,11 +46,42 @@
   $(document).ready(function(){
     $(function() {
 
+  $('#calendar').fullCalendar({
+    googleCalendarApiKey: 'AIzaSyCKabclAJzKZg58RTMsfS_87ko8nr6FGzo',
+    events: {
+      googleCalendarId: 'k5l0pkn4jl16q8t42c9k8l5q4g@group.calendar.google.com'
+    }
+  });
+
+
   // page is now ready, initialize the calendar...
 
-  $('#calendar').fullCalendar({
-    // put your options and callbacks here
-  })
+  // $('#calendar').fullCalendar({
+  //   // put your options and callbacks here
+  //   header: { center: 'month,agendaWeek' },
+  //     eventSources: [
+
+  //   // your event source
+  //   {
+  //     url: '/timetable/teacher/<%= @conn.private.plug_session["user_id"] %>', // use the `url` property
+ 
+  //     color: 'yellow',    // an option!
+  //     textColor: 'black'  // an option!
+  //   }
+
+  //   // any other sources...
+
+  // ],  eventClick: function(calEvent, jsEvent, view) {
+
+  //   alert('Event: ' + calEvent.title);
+  //   alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
+  //   alert('View: ' + view.name);
+
+  //   // change the border color just for fun
+  //   $(this).css('border-color', 'red');
+
+  // }
+  // })
 
 });
   })
