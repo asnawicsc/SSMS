@@ -17,61 +17,7 @@
          <div class="card-header text-white bg-primary">Weekly Timetable</div>
          <div class="card-body">
 			<div id='calendar'></div>
-			<script type="text/javascript">
-			  $(document).ready(function(){
 
-			  $('#external-events .fc-event').each(function() {
-
-			    // store data so the calendar knows to render an event upon drop
-			    $(this).data('event', {
-			      title: $.trim($(this).text()), // use the element's text as the event title
-			      stick: true // maintain when user navigates (see docs on the renderEvent method)
-			    });
-
-			    // make the event draggable using jQuery UI
-			    $(this).draggable({
-			      zIndex: 999,
-			      revert: true,      // will cause the event to go back to its
-			      revertDuration: 0  //  original position after the drag
-			    });
-
-			  });
-
-
-			  $('#calendar').fullCalendar({
-			    // put your options and callbacks here
-			    header: { center: 'month,agendaWeek' }, 
-			    editable: true,
-    			eventLimit: true, // when too many events in a day, show the popover
-			    eventSources: [{
-			      url: '/timetable/teacher/<%= @conn.private.plug_session["user_id"] %>',
-			      color: 'yellow',    // an option!
-			      textColor: 'black'  // an option!
-			    }],
-			    droppable: true, // this allows things to be dropped onto the calendar
-			    drop: function() {
-			      $(this).remove();
-			    },
-			  	eventDrop: function(event, delta, revertFunc) {
-
-			    	alert(event.title + " was dropped on " + event.start.format());
-				    if (!confirm("Are you sure about this change?")) {
-				      revertFunc();
-				    }
-
-			  	},
-			  	eventClick: function(calEvent, jsEvent, view) {
-
-				    alert('Event: ' + calEvent.title);
-				    alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
-				    alert('View: ' + view.name);
-
-				  }
-			  });
-
-		
-			  })
-			</script>
          </div>
       </div>
               
@@ -86,11 +32,11 @@
 						  <p>
 						    <strong>Draggable Events</strong>
 						  </p>
-						  <div class='fc-event'>My Event 1</div>
-						  <div class='fc-event'>My Event 2</div>
-						  <div class='fc-event'>My Event 3</div>
-						  <div class='fc-event'>My Event 4</div>
-						  <div class='fc-event'>My Event 5</div>
+						  <div class='fc-event' period_id='1'>My Event 1</div>
+						  <div class='fc-event' period_id='2'>My Event 2</div>
+						  <div class='fc-event' period_id='3'>My Event 3</div>
+						  <div class='fc-event' period_id='4'>My Event 4</div>
+						  <div class='fc-event' period_id='5'>My Event 5</div>
 
 						</div>
 
@@ -139,8 +85,118 @@
 </div>
 
 <script type="text/javascript">
+			  $(document).ready(function(){
 
 
-jQuery('#datetimepicker').datetimepicker();
+			  
+				jQuery('#datetimepicker').datetimepicker();
 
-</script>
+					channel.on("show_period", payload => {
+						swal("Saved!", "Your event has been saved!", "success");
+						$("div.fc-event[period_id='"+payload.period_id+"']").remove();
+					})
+					channel.on("show_failed_period", payload => {
+						swal("No event saved!", "Block doesnt exist!", "info");
+	      		$('#calendar').fullCalendar( 'removeEvents', [payload.event_id_str ] );
+					})
+	
+
+			  $('#external-events .fc-event').each(function() {
+
+			    // store data so the calendar knows to render an event upon drop
+			   var period_id = $(this).attr("period_id")
+			    $(this).data('event', {
+			    	duration: '00:30',
+			      title: $.trim($(this).text()), // use the element's text as the event title
+			      stick: true, // maintain when user navigates (see docs on the renderEvent method)
+			      period_id: period_id
+			    });
+
+
+
+			    // make the event draggable using jQuery UI
+			    $(this).draggable({
+			      zIndex: 999,
+			      revert: true,      // will cause the event to go back to its
+			      revertDuration: 0  //  original position after the drag
+			    });
+
+			  });
+			
+
+
+			  $('#calendar').fullCalendar({
+			    // put your options and callbacks here
+			    header: { center: 'month,agendaWeek' }, 
+
+			    editable: true,
+    			eventLimit: true, // when too many events in a day, show the popover
+			    eventSources: [{
+			      url: '/timetable/teacher/<%= @conn.private.plug_session["user_id"] %>',
+			      timezone: 'UTC',
+			      color: 'yellow',    // an option!
+			      textColor: 'black'  // an option!
+			    }],
+			    droppable: true, // this allows things to be dropped onto the calendar
+			    drop: function(date, jsEvent, ui, resourceId) {
+			    		var target_date = date._d;
+						 	var dayWrapper = moment(target_date);
+						 	dayWrapper.subtract(8, 'hours');
+			    },
+			  	eventReceive: function(event) {
+
+						var title = event.title;
+						var start_date = event.start._d ;
+						var end_date = event.end._d ;
+						var dayWrapper = moment(start_date);
+						var e_dayWrapper = moment(end_date);
+							dayWrapper.subtract(8, 'hours');
+						  swal({
+						    title: "Are you sure?",
+						    text: "You want to save " + title + " on " + dayWrapper.format("dddd, MMMM Do YYYY, h:mm:ss a"),
+						    type: "warning",
+						    showCancelButton: true,
+						    confirmButtonColor: "#5d9cec",
+						    confirmButtonText: "Yes, save it!",
+						    cancelButtonText: "No, dont save it!",
+						    closeOnConfirm: false,
+						    closeOnCancel: false
+						  }, function(isConfirm) {
+						    if (isConfirm) {
+
+						   		channel.push("save_period", {
+						   			period_id: event.period_id, 
+						   			event_id_str: event._id,
+						   			user_id: window.currentUser, 
+						   			start_date: dayWrapper.toISOString(), 
+						   			end_date: e_dayWrapper.toISOString()})
+
+						    } else {
+						      swal("Cancelled", "No event saved!", "info");
+						 
+
+						      $('#calendar').fullCalendar( 'removeEvents', [event._id ] );
+						    }
+						  });
+
+				  },
+			  	eventDrop: function(event, delta, revertFunc) {
+
+			    	alert(event.title + " was dropped on " + event.start.format());
+				    if (!confirm("Are you sure about this change?")) {
+				      revertFunc();
+				    }
+
+			  	},
+			  	eventClick: function(calEvent, jsEvent, view) {
+
+				    alert('Event: ' + calEvent.title);
+				    alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
+				    alert('View: ' + view.name);
+
+				  }
+			  });
+
+		
+			  })
+			</script>

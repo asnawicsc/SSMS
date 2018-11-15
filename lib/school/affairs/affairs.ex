@@ -3970,4 +3970,27 @@ defmodule School.Affairs do
 
     lists
   end
+
+  def teacher_period_list(teacher_id) do
+    a =
+      Repo.all(
+        from(
+          p in School.Affairs.Period,
+          left_join: t in School.Affairs.Timetable,
+          on: p.timetable_id == t.id,
+          left_join: s in School.Affairs.Subject,
+          on: s.id == p.subject_id,
+          where: t.teacher_id == ^teacher_id,
+          select: %{
+            title: s.description,
+            description: "",
+            start: p.start_datetime,
+            end: p.end_datetime
+          }
+        )
+      )
+
+    IEx.pry()
+    a
+  end
 end

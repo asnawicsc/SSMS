@@ -63,19 +63,19 @@ defmodule SchoolWeb.TimetableController do
   end
 
   def teacher_timetable(conn, params) do
-    # IEx.pry()
     start_date = params["start"] |> Date.from_iso8601!()
     end_date = params["start"] |> Date.from_iso8601!()
 
     events =
-      [
-        %{
-          title: "Event Title2",
-          start: "2018-11-17T13:13:55-0400",
-          end: "2018-11-17T14:13:55-0400",
-          description: "God is Good all the time."
-        }
-      ]
+      case School.Affairs.get_teacher(params["user_id"]) do
+        {:ok, teacher} ->
+          {:ok, timetable} = School.Affairs.initialize_calendar(teacher.id)
+
+          School.Affairs.teacher_period_list(teacher.id)
+
+        {:error, message} ->
+          []
+      end
       |> Poison.encode!()
 
     conn

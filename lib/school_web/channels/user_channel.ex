@@ -1515,8 +1515,7 @@ defmodule SchoolWeb.UserChannel do
       Repo.all(
         from(
           s in School.Affairs.ExamMark,
-          where:
-            s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
+          where: s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
           select: %{
             class_id: s.class_id,
             subject_id: s.subject_id,
@@ -2854,6 +2853,54 @@ defmodule SchoolWeb.UserChannel do
       end
 
     broadcast(socket, "show_co_student", %{html: html})
+    {:noreply, socket}
+  end
+
+  def handle_in(
+        "save_period",
+        %{
+          "period_id" => period_id,
+          "user_id" => user_id,
+          "start_date" => start_date,
+          "end_date" => end_date,
+          "event_id_str" => event_id_str
+        },
+        socket
+      ) do
+    s_date = DateTime.from_iso8601(start_date)
+    e_date = DateTime.from_iso8601(end_date)
+
+    case School.Affairs.get_teacher(user_id) do
+      {:ok, teacher} ->
+        {:ok, timetable} = School.Affairs.initialize_calendar(teacher.id)
+
+        # need to find that period and update it
+        period = Repo.get(School.Affairs.Period, period_id)
+
+        if period != nil do
+          School.Affairs.update_period(period, %{start_datetime: s_date, end_datetime: e_date})
+
+          broadcast(socket, "show_period", %{
+            "period_id" => period_id,
+            "user_id" => user_id,
+            "start_date" => start_date,
+            "end_date" => end_date,
+            "event_id_str" => event_id_str
+          })
+        else
+          broadcast(socket, "show_failed_period", %{
+            "period_id" => period_id,
+            "user_id" => user_id,
+            "start_date" => start_date,
+            "end_date" => end_date,
+            "event_id_str" => event_id_str
+          })
+        end
+
+      {:error, "no teacher assigned"} ->
+        true
+    end
+
     {:noreply, socket}
   end
 
