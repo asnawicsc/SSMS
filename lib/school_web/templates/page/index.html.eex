@@ -113,17 +113,24 @@
              <% require IEx %>
              <% user = Repo.get(Settings.User,@conn.private.plug_session["user_id"]) %>
 
-             <% all_classes=if user.role == "Teacher" do 
-                 teacher = Repo.get_by(Affairs.Teacher,email: user.email) 
-                all_classes= Repo.all(from c in Affairs.Class, where: c.teacher_id == ^teacher.id) 
-                all_classes
-              end %>
+       
 
 
-             <%  all_classes =if user.role == "Admin" or user.role == "Support" do 
-                 all_classes =Repo.all(from c in Affairs.Class, where: c.institution_id == ^@conn.private.plug_session["institution_id"]) 
-                  all_classes
-             end %>
+             <%  all_classes = 
+
+             case user.role do 
+              "Admin" ->
+                Repo.all(from c in Affairs.Class, where: c.institution_id == ^@conn.private.plug_session["institution_id"]) 
+
+              "Support" ->
+                Repo.all(from c in Affairs.Class, where: c.institution_id == ^@conn.private.plug_session["institution_id"]) 
+
+              "Teacher" -> 
+                teacher = Repo.get_by(Affairs.Teacher,email: user.email) 
+                Repo.all(from c in Affairs.Class, where: c.teacher_id == ^teacher.id) 
+             end 
+
+             %>
 
 
              <div class="dropdown-menu" role="menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(67px, 33px, 0px);">
