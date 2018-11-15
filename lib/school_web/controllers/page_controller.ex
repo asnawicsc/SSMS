@@ -288,6 +288,66 @@ defmodule SchoolWeb.PageController do
     render(conn, "index.html", current_sem: current_sem)
   end
 
+  def admin_dashboard(conn, _params) do
+    current_sem =
+      Repo.all(
+        from(
+          s in School.Affairs.Semester,
+          where: s.end_date > ^Timex.today() and s.start_date < ^Timex.today()
+        )
+      )
+
+    changeset = Settings.change_institution(%Institution{})
+
+    current_sem =
+      if current_sem != [] do
+        hd(current_sem)
+      else
+        %{start_date: "Not set", end_date: "Not set"}
+      end
+
+    institution = Settings.list_institutions()
+
+    users = Settings.list_users()
+
+    render(conn, "admin_page.html",
+      current_sem: current_sem,
+      institution: institution,
+      users: users,
+      changeset: changeset
+    )
+  end
+
+  def support_dashboard(conn, _params) do
+    current_sem =
+      Repo.all(
+        from(
+          s in School.Affairs.Semester,
+          where: s.end_date > ^Timex.today() and s.start_date < ^Timex.today()
+        )
+      )
+
+    changeset = Settings.change_institution(%Institution{})
+
+    current_sem =
+      if current_sem != [] do
+        hd(current_sem)
+      else
+        %{start_date: "Not set", end_date: "Not set"}
+      end
+
+    institution = Settings.list_institutions()
+
+    users = Settings.list_users()
+
+    render(conn, "support_page.html",
+      current_sem: current_sem,
+      institution: institution,
+      users: users,
+      changeset: changeset
+    )
+  end
+
   def operations(conn, params) do
     inst = Repo.get(Institution, School.Affairs.inst_id(conn))
     uri = Application.get_env(:school, :api)[:url]

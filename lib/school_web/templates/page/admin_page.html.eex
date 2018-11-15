@@ -1,0 +1,60 @@
+
+<link rel="stylesheet" href="/vendor/fullcalendar/dist/fullcalendar.css">
+<!-- MOMENT JS-->
+<script src="/vendor/moment/min/moment-with-locales.js"></script>
+<!-- FULLCALENDAR-->
+<script src="/vendor/fullcalendar/dist/fullcalendar.js"></script>
+<script src="/vendor/fullcalendar/dist/gcal.js"></script>
+<div class="content-heading">
+   <div>Dashboard
+      <small><%= gettext("welcome")%>!</small>
+   </div>
+   <!-- START Language list-->
+   <div class="ml-auto">
+      <div class="btn-group">
+         <button class="btn btn-secondary dropdown-toggle dropdown-toggle-nocaret" type="button" data-toggle="dropdown">English</button>
+         <div class="dropdown-menu dropdown-menu-right-forced animated fadeInUpShort" role="menu">
+            <a class="dropdown-item" href="#" data-set-lang="en">English</a>
+            <a class="dropdown-item" href="#" data-set-lang="cn">中文</a>
+            <a class="dropdown-item" href="#" data-set-lang="bm">Bahasa</a>
+         </div>
+      </div>
+   </div>
+   <!-- END Language list-->
+</div>
+
+<div class="row">
+  <div class="col-lg-7">
+     <%= if   @conn.private.plug_session["user_id"] != nil do %>
+            
+                                      <% user_id=@conn.private.plug_session["user_id"] %>
+
+                                      <%= if user_id != nil do %>
+
+                                        <% user=Repo.get_by(Settings.User, %{id: user_id }) %>
+             
+    <div class="jumbotron jumbotron-fluid">
+       <h1 class="display-4">Hello, <%= user.name %></h1>
+       <p class="lead">This panel shows the list of institutions.</p>
+       <hr class="my-4">
+      
+       
+
+        <%= render( SchoolWeb.InstitutionView ,"list_institutions.html",conn: @conn, institution: @institution) %>
+
+    </div>
+
+
+  <%= render( SchoolWeb.UserView ,"index.html",conn: @conn, users: @users) %>
+
+    
+
+                              <% end %>
+                               <% end %>
+  </div>
+  <div class="col-lg-4">
+  	 <%= render( SchoolWeb.InstitutionView ,"new.html",conn: @conn, changeset: @changeset) %>
+    <%= render( SchoolWeb.UserView ,"register_new_user.html",conn: @conn) %>
+
+  </div>
+</div>

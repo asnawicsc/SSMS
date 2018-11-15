@@ -1,4 +1,7 @@
-
+            <!-- START card-->
+            <div class="card card-default">
+               <div class="card-header">Create Institution</div>
+               <div class="card-body">
 <%= form_for @changeset, @action,[ multipart: true], fn f -> %>
   <%= if @changeset.action do %>
     <div class="alert alert-danger">
@@ -7,23 +10,25 @@
   <% end %>
 
 
-  <div class="form-row">
-    <div class="form-group col-md-4">
+
+    <div class="form-group">
     <%= label f, :name, class: "" %>
     <%= text_input f, :name, class: "form-control",required: true %>
     <%= error_tag f, :name %>
   </div>
-  <div class="form-group col-md-4">
+   <div class="form-row">
+  <div class="form-group col-md-6">
     <%= label f, :line1, class: "" %>
     <%= text_input f, :line1, class: "form-control" %>
     <%= error_tag f, :line1 %>
   </div>
-    <div class="form-group col-md-4">
+    <div class="form-group col-md-6">
     <%= label f, :line2, class: "" %>
     <%= text_input f, :line2, class: "form-control" %>
     <%= error_tag f, :line2 %>
   </div>
 </div>
+
 
 
 
@@ -88,7 +93,7 @@
   </div>
 
   <div class="form-group col-md-3">
-    <%= label f, :library_organization_id, class: "" %>
+    <%= label f, :library_id, class: "" %>
     <%= number_input f, :library_organization_id, class: "form-control" %>
     <%= error_tag f, :library_organization_id %>
   </div>
@@ -110,6 +115,8 @@
     <%= submit "Submit", class: "btn btn-primary" %>
   </div>
 <% end %>
+ </div>
+</div>
 
    <script type="text/javascript">
       $(window).ready(function(){
@@ -130,3 +137,4 @@
 
       });
    </script>
+

@@ -284,9 +284,14 @@ defmodule SchoolWeb.Router do
     get("/exam_report/:class_id/:exam_id", ExamController, :exam_report)
 
     get("/list_report", ExamController, :list_report)
+    get("/list_institutions", InstitutionController, :list_institutions)
 
     get("/report_nav", ExamController, :report_nav)
     get("/parent_listing", ParentController, :parent_listing)
+
+    get("/admin_dashboard", PageController, :admin_dashboard)
+
+    get("/support_dashboard", PageController, :support_dashboard)
   end
 
   # Other scopes may use custom stacks.
