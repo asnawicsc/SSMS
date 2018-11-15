@@ -2,7 +2,10 @@
   %>
 <% absent_reasons = parameters.absent_reasons |> String.split(",") %>
 
-<h4>Mark attendance for <%= @class.name%> on <%= Date.utc_today%></h4>
+<div class="content-heading">
+   <div>Mark attendance for <%= @class.name%> on <%= Date.utc_today%>
+   </div>
+</div>
 
 <div class="row">
 	<div class="col-lg-4">

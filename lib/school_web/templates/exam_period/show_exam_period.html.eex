@@ -18,14 +18,12 @@
 		      			
 		                <div class='input-group display'>
 		                	<input type="text" class="form-control date" name="<%= detail.subject %>_start_date" />
-		                    <input type="text" class="form-control time" name="<%= detail.subject %>_start_time"/>
 		                </div>
 
 		      			<label class="" style="font-size: 14px">End Date and Time:</label>
 		      			
 		                <div class='input-group display'>
 		                	<input type="text" class="form-control date" name="<%= detail.subject %>_end_date"/>
-		                    <input type="text" class="form-control time" name="<%= detail.subject %>_end_time"/>
 		                </div>
 		                <hr>
 		            </div>
@@ -40,8 +38,7 @@
 
 <script type="text/javascript">
 	$(document).ready(function() {
-   		$('.display .date').datepicker();
-    	$('.display .time').timepicker();
+   		$('.display .date').datetimepicker();
 	} );
    
 </script>

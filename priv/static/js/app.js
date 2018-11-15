@@ -355,7 +355,9 @@ channel.on("show_student_details", payload => {
     channel.push("inquire_teacher_details", {user_id: window.currentUser,institution_id: window.currentInstitute, code: code})
   })
 
-          channel.on("show_teacher_details", payload => {
+    channel.on("show_teacher_details", payload => {
+    $("div[aria-label='student_upload']").hide()
+    $("div[aria-label='student_table']").hide()
     $("div[aria-label='teacher_details']").html(payload.html)
     var csrf = window.csrf
     $("input[name='_csrf_token']").val(csrf)

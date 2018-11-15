@@ -401,7 +401,9 @@ defmodule SchoolWeb.UserChannel do
     teacher = Repo.get_by(Teacher, code: code, institution_id: payload["institution_id"])
     changeset = Affairs.change_teacher(teacher)
 
-    conn = %{private: %{plug_session: %{"institution_id" => user.institution_id}}}
+    conn = %{
+      private: %{plug_session: %{"institution_id" => user.institution_id, "user_id" => user.id}}
+    }
 
     html =
       Phoenix.View.render_to_string(
