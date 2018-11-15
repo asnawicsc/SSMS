@@ -1,5 +1,6 @@
 defmodule SchoolWeb.InstitutionController do
   use SchoolWeb, :controller
+  require IEx
 
   alias School.Settings
   alias School.Settings.{Institution, User, Parameter}
@@ -15,6 +16,12 @@ defmodule SchoolWeb.InstitutionController do
     |> put_session(:institution_id, id)
     |> put_flash(:info, "#{institution.name} selected!")
     |> redirect(to: institution_path(conn, :index))
+  end
+
+  def list_institutions(conn, _params) do
+    institution = Settings.list_institutions()
+
+    render(conn, "list_institutions.html", institution: institution)
   end
 
   def index(conn, _params) do

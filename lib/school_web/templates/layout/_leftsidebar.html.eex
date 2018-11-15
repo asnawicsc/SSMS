@@ -41,7 +41,7 @@
                            <span data-localize="sidebar.heading.HEADER">Menu Navigation</span>
                         </li>
                         <li class=" ">
-                           <a href="/dashboard" title="Dashboard">
+                           <a href="/admin_dashboard" title="Dashboard">
                              
                               <em class="icon-speedometer"></em>
                               <span data-localize="sidebar.nav.DASHBOARD"><%= gettext "Dashboard" %></span>
@@ -62,6 +62,14 @@
                              
                           
                               <span data-localize="sidebar.nav.DASHBOARD">User Setting</span>
+                           </a>
+             
+                           </li>
+                                   <li class=" ">
+                           <a href="/list_institutions" title="Institutions" >
+                             
+                          
+                              <span data-localize="sidebar.nav.DASHBOARD">Institutions</span>
                            </a>
              
                            </li>
@@ -114,7 +122,7 @@
                            <span data-localize="sidebar.heading.HEADER">Menu Navigation</span>
                         </li>
                         <li class=" ">
-                           <a href="/dashboard" title="Dashboard">
+                           <a href="/support_dashboard" title="Dashboard">
                              
                               <em class="icon-speedometer"></em>
                               <span data-localize="sidebar.nav.DASHBOARD"><%= gettext "Dashboard" %></span>

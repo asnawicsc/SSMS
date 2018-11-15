@@ -51,7 +51,7 @@ defmodule SchoolWeb.UserController do
           |> put_session(:user_id, user.id)
           |> put_session(:semester_id, current_sem.id)
           |> put_session(:institution_id, institution_id.id)
-          |> redirect(to: page_path(conn, :dashboard))
+          |> redirect(to: page_path(conn, :admin_dashboard))
         end
 
         access = Repo.get_by(Settings.UserAccess, user_id: user.id)
@@ -66,6 +66,8 @@ defmodule SchoolWeb.UserController do
             )
           )
 
+        user = Repo.get_by(User, id: user.id)
+
         current_sem =
           if current_sem != [] do
             hd(current_sem)
@@ -78,11 +80,19 @@ defmodule SchoolWeb.UserController do
           |> put_flash(:error, "Please Contact Admin for Access!")
           |> redirect(to: page_path(conn, :index_splash))
         else
-          conn
-          |> put_session(:user_id, user.id)
-          |> put_session(:semester_id, current_sem.id)
-          |> put_session(:institution_id, access.institution_id)
-          |> redirect(to: page_path(conn, :dashboard))
+          if user.role == "Support" do
+            conn
+            |> put_session(:user_id, user.id)
+            |> put_session(:semester_id, current_sem.id)
+            |> put_session(:institution_id, access.institution_id)
+            |> redirect(to: page_path(conn, :support_dashboard))
+          else
+            conn
+            |> put_session(:user_id, user.id)
+            |> put_session(:semester_id, current_sem.id)
+            |> put_session(:institution_id, access.institution_id)
+            |> redirect(to: page_path(conn, :dashboard))
+          end
         end
       else
         conn

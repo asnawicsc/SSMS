@@ -1,0 +1,404 @@
+<link rel="stylesheet" href="/vendor/fullcalendar/dist/fullcalendar.css">
+<!-- MOMENT JS-->
+<script src="/vendor/moment/min/moment-with-locales.js"></script>
+<!-- FULLCALENDAR-->
+<script src="/vendor/fullcalendar/dist/fullcalendar.js"></script>
+<script src="/vendor/fullcalendar/dist/gcal.js"></script>
+<div class="content-heading">
+   <div>Dashboard
+      <small><%= gettext("welcome")%>!</small>
+   </div>
+   <!-- START Language list-->
+   <div class="ml-auto">
+      <div class="btn-group">
+         <button class="btn btn-secondary dropdown-toggle dropdown-toggle-nocaret" type="button" data-toggle="dropdown">English</button>
+         <div class="dropdown-menu dropdown-menu-right-forced animated fadeInUpShort" role="menu">
+            <a class="dropdown-item" href="#" data-set-lang="en">English</a>
+            <a class="dropdown-item" href="#" data-set-lang="cn">中文</a>
+            <a class="dropdown-item" href="#" data-set-lang="bm">Bahasa</a>
+         </div>
+      </div>
+   </div>
+   <!-- END Language list-->
+</div>
+
+<div class="row">
+  <div class="col-lg-4">
+
+           <div class="row">  
+            <div class="col-xl-12">
+                  <div class="card card-transparent" ">
+                     <!-- Nav tabs-->
+                     <ul class="nav nav-tabs nav-fill" role="tablist">
+                        <li class="nav-item" role="presentation">
+                           <a class="nav-link active bb0" href="#home" aria-controls="home" role="tab" data-toggle="tab">
+                              <em class="far fa-clock fa-fw"></em>Basic Tasks Card</a>
+                        </li>
+                   
+                     </ul>
+                     <!-- Tab panes-->
+
+                        <% subject = School.Repo.all(from l in School.Affairs.Subject,where: l.institution_id ==^@conn.private.plug_session["institution_id"], select: {l.id}) %>
+                        <% semesters = School.Repo.all(from l in School.Affairs.Semester,where: l.institution_id ==^@conn.private.plug_session["institution_id"], select: {l.id}) %>
+                         <% students = School.Repo.all(from l in School.Affairs.Student,where: l.institution_id ==^@conn.private.plug_session["institution_id"], select: {l.id}) %>
+                          <% teachers = School.Repo.all(from l in School.Affairs.Teacher,where: l.institution_id ==^@conn.private.plug_session["institution_id"], select: {l.id}) %>
+                           <% parents = School.Repo.all(from l in School.Affairs.Parent,where: l.institution_id ==^@conn.private.plug_session["institution_id"], select: {l.id}) %>
+                             <% level = School.Repo.all(from l in School.Affairs.Level,where: l.institution_id ==^@conn.private.plug_session["institution_id"], select: {l.id}) %>
+                              <% class = School.Repo.all(from l in School.Affairs.Class,where: l.institution_id ==^@conn.private.plug_session["institution_id"], select: {l.id}) %>
+                                <% subject = School.Repo.all(from l in School.Affairs.Subject,where: l.institution_id ==^@conn.private.plug_session["institution_id"], select: {l.id}) %>
+                                  <% comment = School.Repo.all(from l in School.Affairs.Holiday,where: l.institution_id ==^@conn.private.plug_session["institution_id"], select: {l.id}) %>
+                              <% holiday = School.Repo.all(from l in School.Affairs.Holiday,where: l.institution_id ==^@conn.private.plug_session["institution_id"], select: {l.id}) %>
+                                <% cocurriculum = School.Repo.all(from l in School.Affairs.CoCurriculum,where: l.institution_id ==^@conn.private.plug_session["institution_id"], select: {l.id}) %>
+
+
+                     <div class="tab-content p-0 bg-white">
+                        <div class="tab-pane active" id="home" role="tabpanel">
+                           <!-- START list group-->
+                           <div class="list-group mb-0">
+
+                              <a class="list-group-item bt0" href="#">
+                                 <%= if semesters == [] do  %>
+                                  <span class="badge badge-danger float-right">Not Set</span>
+                               <% else %>
+                                   <span class="badge badge-success float-right">Done</span>
+                               <% end %>
+                                
+                                 <em class="fa-fw fas fa-calendar-alt mr-2"></em>Create Semester</a>
+                              <a class="list-group-item" href="#">
+                                 <%= if students == [] do  %>
+                                  <span class="badge badge-danger float-right">Not Set</span>
+                               <% else %>
+                                    <span class="badge badge-success float-right">Done</span>
+                               <% end %>
+                               
+                                 <em class="fa-fw fa fa-address-card mr-2"></em>Create Student</a>
+                              <a class="list-group-item" href="#">
+                                <%= if teachers == [] do  %>
+                                  <span class="badge badge-danger float-right">Not Set</span>
+                               <% else %>
+                                    <span class="badge badge-success float-right">Done</span>
+                               <% end %>
+                                
+                                 <em class="fa-fw fa fa-address-book mr-2"></em>Create Teacher</a>
+                              <a class="list-group-item" href="#">
+                                 <%= if parents == [] do  %>
+                                   <span class="badge badge-danger float-right">Not Set</span>
+                               <% else %>
+                                   <span class="badge badge-success float-right">Done</span>
+                               <% end %>
+                                
+                                 <em class="fa-fw fas fa-user-friends mr-2"></em>Create Parent</a>
+                              <a class="list-group-item" href="#">
+                                 <%= if level == [] do  %>
+                                   <span class="badge badge-danger float-right">Not Set</span>
+                               <% else %>
+                                   <span class="badge badge-success float-right">Done</span>
+                               <% end %>
+                                
+                                 <em class="fa-fw fas fa-th mr-2"></em>Create Standard</a>
+                              <a class="list-group-item" href="#">
+                                    <%= if class == [] do  %>
+                                   <span class="badge badge-danger float-right">Not Set</span>
+                               <% else %>
+                                   <span class="badge badge-success float-right">Done</span>
+                               <% end %>
+                                
+                                 <em class="fa-fw fa fa-user mr-2"></em>Create Class</a>
+                              <a class="list-group-item" href="#">
+                                    <%= if subject == [] do  %>
+                                 <span class="badge badge-danger float-right">Not Set</span>
+                               <% else %>
+                                   <span class="badge badge-success float-right">Done</span>
+                               <% end %>
+                                
+                               
+                                 <em class="fa-fw fa fa-book mr-2"></em>Create Subject</a>
+                                  <a class="list-group-item" href="#">
+                                <%= if cocurriculum == [] do  %>
+                                  <span class="badge badge-danger float-right">Not Set</span>
+                               <% else %>
+                                   <span class="badge badge-success float-right">Done</span>
+                               <% end %>
+                                 
+                                 <em class="fa-fw fas fa-baseball-ball mr-2"></em>Create CoCurriculum</a>
+                              <a class="list-group-item" href="#">
+                                <%= if comment == [] do  %>
+                                  <span class="badge badge-danger float-right">Not Set</span>
+                               <% else %>
+                                   <span class="badge badge-success float-right">Done</span>
+                               <% end %>
+                                 
+                                 <em class="fa-fw fab fa-rocketchat mr-2"></em>Create Comments</a>
+                              <a class="list-group-item" href="#">
+                                 <%= if holiday == [] do  %>
+                                   <span class="badge badge-danger float-right">Not Set</span>
+                               <% else %>
+                                   <span class="badge badge-success float-right">Done</span>
+                               <% end %>
+                               
+                                 <em class="fa-fw fa fa-umbrella mr-2"></em>Create Holidays</a>
+                             
+                           </div>
+                           <!-- END list group-->
+                      
+                        </div>
+                     
+                     </div>
+                  </div>
+                  <!-- END card tab-->
+               </div>
+
+
+               <div class="col-xl-12">
+                  <!-- START loader widget-->
+                  <div class="card card-default">
+                     <div class="card-body">
+                        <a class="text-muted float-right" href="#">
+                           <em class="fa fa-arrow-right"></em>
+                        </a>
+                        <div class="text-info">Basic Task Completed</div>
+                        <div class="text-center py-4">
+                           <div class="easypie-chart easypie-chart-lg" id="percent" data-easypiechart data-percent="1" data-animate="{&quot;duration&quot;: &quot;800&quot;, &quot;enabled&quot;: &quot;true&quot;}" data-bar-color="#23b7e5" data-track-Color="rgba(200,200,200,0.4)"
+                              data-scale-Color="false" data-line-width="10" data-line-cap="round" data-size="145">
+                              <span id="percent">70%</span>
+                           </div>
+                        </div>
+                        <div class="text-center" data-sparkline="" data-bar-color="#23b7e5" data-height="30" data-bar-width="5" data-bar-spacing="2" data-values="5,4,8,7,8,5,4,6,5,5,9,4,6,3,4,7,5,4,7"></div>
+                     </div>
+
+
+                 
+                  </div>
+
+
+                   
+                  <!-- END loader widget-->
+               </div>
+           
+               <!-- END dashboard sidebar-->
+            </div>
+               
+                
+               
+            
+  </div>
+  <div class="col-lg-7">
+
+
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="card card-default mb-3">
+         <div class="card-header d-flex align-items-center">
+        
+              <em class="fa-2x mr-3 fas fa-pencil-alt"></em>
+              <span style="font-weight: bolder;font-size: 17px;">Class</span>
+           
+         </div>
+         <div class="card-body">
+            <h5 class="card-title">Card Default card title</h5>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+              <a href ="/classes"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
+            <a  href="/create_class"]"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Class</button></a>
+            <div class="btn-group">
+               <button class="mb-1 btn-sm btn btn-outline-primary" type="button">Manage</button>
+               <button class="mb-1 btn-sm dropdown-toggle btn btn-outline-primary" type="button" data-toggle="dropdown" aria-expanded="false">
+                  <span class="sr-only">info</span>
+               </button>
+               <% require IEx %>
+               <% user = Repo.get(Settings.User,@conn.private.plug_session["user_id"]) %>
+
+               <% if user.role == "Teacher" do 
+                   teacher = Repo.get_by(Affairs.Teacher,email: user.email) 
+                  all_classes= Repo.all(from c in Affairs.Class, where: c.teacher_id == ^teacher.id) 
+                  all_classes
+                end %>
+
+
+               <%  all_classes =if user.role == "Admin" or user.role == "Support" do 
+                   all_classes =Repo.all(from c in Affairs.Class, where: c.institution_id == ^@conn.private.plug_session["institution_id"]) 
+                    all_classes
+               end %>
+
+
+               <div class="dropdown-menu" role="menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(67px, 33px, 0px);">
+                <%= for class <- all_classes do %>
+                  <a class="dropdown-item" href="/class_setting/<%= class.id %>"><%= class.name %></a>
+                <% end %>
+               </div>
+            </div>
+            <a  href="/class_setting"]"><button class="mb-1 btn-sm btn btn-outline-primary" type="button" style="display: none;">Settings</button></a>
+         </div>
+      </div>
+    </div>
+     <div class="col-lg-6">
+      <div class="card card-default mb-3">
+         <div class="card-header d-flex align-items-center">
+        
+              <em class="fa-2x mr-3 fas fa-child"></em>
+              <span style="font-weight: bolder;font-size: 17px;">Student</span>
+           
+         </div>
+         <% require IEx %>
+         <% a = @conn %>
+
+          <div class="card-body">
+            <h5 class="card-title">Card Default card title</h5>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <a href="/student_lists/<%= a.private.plug_session["user_id"]%>"><button class="mb-1 btn-sm btn btn-outline-primary"  type="button">List</button></a>
+              <a href="/students/new"><button class="mb-1 btn-sm btn btn-outline-primary"  type="button">Create Student</button></a>
+          </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="card card-default mb-3">
+         <div class="card-header d-flex align-items-center">
+        
+              <em class="fa-2x mr-3 fas fa-pencil-alt"></em>
+              <span style="font-weight: bolder;font-size: 17px;">Exam</span>
+           
+         </div>
+         <div class="card-body">
+            <h5 class="card-title">Card Default card title</h5>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <a href="/new_exam"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create</button></a>
+            <a href="/exam"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Exam Period</button></a>
+             <a href ="/mark_sheet"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Mark</button></a>
+            <button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button>
+         </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="card card-default mb-3">
+         <div class="card-header d-flex align-items-center">
+        
+              <em class="fa-2x mr-3 fas fa-chess"></em>
+              <span style="font-weight: bolder;font-size: 17px;">Cocurriculum</span>
+           
+         </div>
+         <div class="card-body">
+            <h5 class="card-title">Card Default card title</h5>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <a href ="/cocurriculum"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
+             <a href ="/cocurriculum/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Cocurriculum</button></a>
+             <a href ="/co_mark"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Marking</button></a>
+           
+         </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="card card-default mb-3">
+         <div class="card-header d-flex align-items-center">
+        
+              <em class="fa-2x mr-3 fas fa-chalkboard-teacher"></em>
+              <span style="font-weight: bolder;font-size: 17px;">Teacher</span>
+           
+         </div>
+         <div class="card-body">
+            <h5 class="card-title">Card Default card title</h5>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <a href ="/teacher"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
+            <a href ="/teacher/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Teacher</button></a>
+         </div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="card card-default mb-3">
+         <div class="card-header d-flex align-items-center">
+        
+              <em class="fa-2x mr-3 fas fa-chalkboard-teacher"></em>
+              <span style="font-weight: bolder;font-size: 17px;">Parent</span>
+           
+         </div>
+         <div class="card-body">
+            <h5 class="card-title">Card Default card title</h5>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <a href ="/parent"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
+            <a href ="/parent/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Parent</button></a>
+      
+         </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-6">
+    <div class="card card-default mb-3">
+       <div class="card-header d-flex align-items-center">
+      
+            <em class="fa-2x mr-3 fas fa-chalkboard-teacher"></em>
+            <span style="font-weight: bolder;font-size: 17px;">Subject</span>
+         
+       </div>
+       <div class="card-body">
+          <h5 class="card-title">Card Default card title</h5>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          <a href ="/subject"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
+           <a href ="/subject/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Subject</button></a>
+            <a href ="/subject_teach_class"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List Subject Period</button></a>
+           <a href ="/subject_teach_class/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Subject Period</button></a>
+       </div>
+    </div>
+  </div>
+   <div class="col-lg-6">
+    <div class="card card-default mb-3">
+       <div class="card-header d-flex align-items-center">
+      
+            <em class="fa-2x mr-3 fas fa-chalkboard-teacher"></em>
+            <span style="font-weight: bolder;font-size: 17px;">Standard</span>
+         
+       </div>
+       <div class="card-body">
+          <h5 class="card-title">Card Default card title</h5>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          <a href ="/levels"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
+           <a href ="/levels/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Standard</button></a>
+    
+       </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+    <div class="card card-default mb-3">
+       <div class="card-header d-flex align-items-center">
+      
+            <em class="fa-2x mr-3 fas fa-chalkboard-teacher"></em>
+            <span style="font-weight: bolder;font-size: 17px;">Holiday</span>
+         
+       </div>
+       <div class="card-body">
+          <h5 class="card-title">Card Default card title</h5>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          <a href ="/holiday"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
+           <a href ="/holiday/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Holiday</button></a>
+    
+       </div>
+    </div>
+  </div>
+    <div class="col-lg-6">
+    <div class="card card-default mb-3">
+       <div class="card-header d-flex align-items-center">
+      
+            <em class="fa-2x mr-3 fas fa-chalkboard-teacher"></em>
+            <span style="font-weight: bolder;font-size: 17px;">Semesters</span>
+         
+       </div>
+       <div class="card-body">
+          <h5 class="card-title">Card Default card title</h5>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          <a href ="/semesters"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
+          <a href ="/semesters/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Semester</button></a>
+    
+       </div>
+    </div>
+  </div>
+</div>
+
+  </div>
+</div>

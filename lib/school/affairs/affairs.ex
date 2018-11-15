@@ -3879,14 +3879,15 @@ defmodule School.Affairs do
   def initialize_calendar(teacher_id) do
     # create a calendar
 
-    case School.Affairs.has_calendar?(teacher_id) do
-      {:yes, timetable_id} ->
-        timetable = Repo.get(Timetable, timetable_id)
+    {:ok, timetable} =
+      case School.Affairs.has_calendar?(teacher_id) do
+        {:yes, timetable_id} ->
+          {:ok, timetable} = Repo.get(Timetable, timetable_id)
 
-      {:no, timetable_id} ->
-        {:ok, timetable} =
-          Timetable.changeset(%Timetable{}, %{teacher_id: teacher_id}) |> Repo.insert()
-    end
+        {:no, timetable_id} ->
+          {:ok, timetable} =
+            Timetable.changeset(%Timetable{}, %{teacher_id: teacher_id}) |> Repo.insert()
+      end
 
     {:ok, timetable}
   end

@@ -1,3 +1,12 @@
+<% teacher = 
+  School.Repo.all(from l in School.Affairs.Teacher,where: l.institution_id ==^@conn.private.plug_session["institution_id"] , select: {l.name, l.id}) %>
+
+<% levels = School.Repo.all(from l in School.Affairs.Level,where: l.institution_id ==^@conn.private.plug_session["institution_id"], select: {l.name, l.id}) %>
+
+<% subject = School.Repo.all(from l in School.Affairs.Subject,where: l.institution_id ==^@conn.private.plug_session["institution_id"], select: {l.description, l.id}) %>
+
+<% class = School.Repo.all(from l in School.Affairs.Class,where: l.institution_id ==^@conn.private.plug_session["institution_id"], select: {l.name, l.id}) %>
+
 <%= form_for @changeset, @action, fn f -> %>
   <%= if @changeset.action do %>
     <div class="alert alert-danger">
@@ -7,25 +16,25 @@
 
   <div class="form-group">
     <%= label f, :standard_id, class: "control-label" %>
-    <%= number_input f, :standard_id, class: "form-control" %>
+    <%= select f, :standard_id,levels, class: "form-control" %>
     <%= error_tag f, :standard_id %>
   </div>
 
   <div class="form-group">
     <%= label f, :subject_id, class: "control-label" %>
-    <%= number_input f, :subject_id, class: "form-control" %>
+    <%= select f, :subject_id,subject, class: "form-control" %>
     <%= error_tag f, :subject_id %>
   </div>
 
   <div class="form-group">
     <%= label f, :teacher_id, class: "control-label" %>
-    <%= number_input f, :teacher_id, class: "form-control" %>
+    <%= select f, :teacher_id,teacher, class: "form-control" %>
     <%= error_tag f, :teacher_id %>
   </div>
 
   <div class="form-group">
     <%= label f, :class_id, class: "control-label" %>
-    <%= number_input f, :class_id, class: "form-control" %>
+    <%= select f, :class_id,class, class: "form-control" %>
     <%= error_tag f, :class_id %>
   </div>
 

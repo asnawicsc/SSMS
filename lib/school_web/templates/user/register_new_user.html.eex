@@ -1,7 +1,12 @@
-<% role = School.Repo.all(from l in School.Settings.Role, select: %{name: l.name, id: l.id}) %>
-  <div class="row justify-content-md-center login_form">
-    <div class="col-lg-4 ml-3 mr-3">
-      <div class="jumbotron">
+
+
+    
+            <!-- START card-->
+            <div class="card card-default">
+               <div class="card-header"> Create User</div>
+               <div class="card-body">
+              <% role = School.Repo.all(from l in School.Settings.Role, select: %{name: l.name, id: l.id}) %>
+
 
         <%= if   @conn.private.plug_session["user_id"] != nil do %>
             
@@ -88,7 +93,8 @@
             <h3>Sorry, teachers are not allow to register new user.</h3>
           <% end%>
         <% end %>
-      </div>
-      
-    </div>
-  </div>
+  
+               </div>
+            </div>
+            <!-- END card-->
+       
