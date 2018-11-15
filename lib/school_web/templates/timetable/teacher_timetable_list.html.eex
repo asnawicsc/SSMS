@@ -32,11 +32,10 @@
 						  <p>
 						    <strong>Draggable Events</strong>
 						  </p>
-						  <div class='fc-event' period_id='1'>My Event 1</div>
-						  <div class='fc-event' period_id='2'>My Event 2</div>
-						  <div class='fc-event' period_id='3'>My Event 3</div>
-						  <div class='fc-event' period_id='4'>My Event 4</div>
-						  <div class='fc-event' period_id='5'>My Event 5</div>
+						  <%= for period <- @periods do %>
+						  	<div class='fc-event' period_id='<%= period.id%>'><%= period.title%></div>
+						  <% end %>
+		
 
 						</div>
 

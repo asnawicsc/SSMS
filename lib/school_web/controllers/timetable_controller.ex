@@ -92,7 +92,7 @@ defmodule SchoolWeb.TimetableController do
 
         {:ok, timetable} = School.Affairs.initialize_calendar(teacher.id)
 
-        periods = Repo.all(from(p in Period, where: p.timetable_id == ^timetable_id))
+        periods = Affairs.get_inst_id(conn) |> Affairs.get_periods()
 
         render(conn, "teacher_timetable_list.html", periods: periods)
 

@@ -106,6 +106,15 @@ defmodule SchoolWeb.PeriodController do
     end
   end
 
+  def get_create_period(conn, params) do
+    {:ok, period} =
+      Affairs.create_period(%{subject_id: params["subject_id"], class_id: params["class_id"]})
+
+    conn
+    |> put_flash(:info, "Period created successfully.")
+    |> redirect(to: period_path(conn, :show, period))
+  end
+
   def create(conn, %{"period" => period_params}) do
     case Affairs.create_period(period_params) do
       {:ok, period} ->
@@ -135,7 +144,9 @@ defmodule SchoolWeb.PeriodController do
 
     changeset = Affairs.change_period(period)
 
-    render(conn, "edit.html",
+    render(
+      conn,
+      "edit.html",
       period: period,
       changeset: changeset,
       start_time: start_time,

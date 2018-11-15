@@ -3993,4 +3993,23 @@ defmodule School.Affairs do
 
     a
   end
+
+  def get_inst_id(conn) do
+    conn.private.plug_session["institution_id"]
+  end
+
+  def get_periods(institution_id) do
+    Repo.all(
+      from(
+        s in Subject,
+        left_join: p in Period,
+        on: p.subject_id == s.id,
+        left_join: c in Class,
+        on: c.id == p.class_id,
+        where: s.institution_id == ^institution_id,
+        select: %{period_id: p.id, subject: s.description, class: c.name}
+      )
+    )
+    |> Enum.map(fn x -> %{id: x.period_id, title: x.subject <> " - " <> x.class} end)
+  end
 end

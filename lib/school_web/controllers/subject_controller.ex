@@ -16,7 +16,8 @@ defmodule SchoolWeb.SubjectController do
   def new_standard_subject(conn, params) do
     subjects =
       Repo.all(
-        from(s in School.Affairs.Subject,
+        from(
+          s in School.Affairs.Subject,
           select: %{
             id: s.id,
             code: s.code,
@@ -29,7 +30,8 @@ defmodule SchoolWeb.SubjectController do
 
     semester =
       Repo.all(
-        from(s in School.Affairs.Semester,
+        from(
+          s in School.Affairs.Semester,
           select: %{id: s.id, start_date: s.start_date, institution_id: s.institution_id}
         )
       )
@@ -37,7 +39,8 @@ defmodule SchoolWeb.SubjectController do
 
     level =
       Repo.all(
-        from(s in School.Affairs.Level,
+        from(
+          s in School.Affairs.Level,
           select: %{id: s.id, name: s.name, institution_id: s.institution_id}
         )
       )
@@ -49,7 +52,8 @@ defmodule SchoolWeb.SubjectController do
   def create_new_test(conn, _params) do
     subjects =
       Repo.all(
-        from(s in School.Affairs.Subject,
+        from(
+          s in School.Affairs.Subject,
           select: %{id: s.id, code: s.code, name: s.description, institution_id: s.institution_id}
         )
       )
@@ -57,7 +61,8 @@ defmodule SchoolWeb.SubjectController do
 
     semester =
       Repo.all(
-        from(s in School.Affairs.Semester,
+        from(
+          s in School.Affairs.Semester,
           select: %{id: s.id, start_date: s.start_date, institution_id: s.institution_id}
         )
       )
@@ -65,7 +70,8 @@ defmodule SchoolWeb.SubjectController do
 
     level =
       Repo.all(
-        from(s in School.Affairs.Level,
+        from(
+          s in School.Affairs.Level,
           select: %{id: s.id, name: s.name, institution_id: s.institution_id}
         )
       )
@@ -100,7 +106,8 @@ defmodule SchoolWeb.SubjectController do
 
     semester =
       Repo.all(
-        from(s in School.Affairs.Semester,
+        from(
+          s in School.Affairs.Semester,
           select: %{institution_id: s.institution_id, id: s.id, start_date: s.start_date}
         )
       )
@@ -108,7 +115,8 @@ defmodule SchoolWeb.SubjectController do
 
     level =
       Repo.all(
-        from(s in School.Affairs.Level,
+        from(
+          s in School.Affairs.Level,
           select: %{institution_id: s.institution_id, id: s.id, name: s.name}
         )
       )
@@ -142,6 +150,19 @@ defmodule SchoolWeb.SubjectController do
       subjects: subjects,
       semester: semester,
       level: level
+    )
+  end
+
+  def assign_class(conn, %{"id" => id}) do
+    Affairs.get_inst_id(conn)
+    subject = Affairs.get_subject!(id)
+
+    classes = Affairs.get_inst_id(conn) |> Affairs.list_classes()
+
+    render(
+      conn,
+      "assign_class.html",
+      classes: classes
     )
   end
 

@@ -1,0 +1,25 @@
+
+
+
+<table class="table">
+	<thead>
+		<tr>
+			<td>ID</td>
+			<td>Class</td>
+			<td>Action</td>
+		</tr>
+	</thead>
+	<tbody>
+
+<%= for class <- @classes do %>
+
+
+
+		<tr>
+			<td><%= class.id %></td>
+			<td><%= class.name %></td>
+			<td><%= link "Create a period", to: period_path(@conn, :get_create_period, @conn.params["id"], class.id), class: "btn btn-default btn-xs" %></td>
+		</tr>
+<% end %>
+	</tbody>
+</table>
