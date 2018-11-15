@@ -9,24 +9,53 @@
 		     	<h4>Semester: <%= @semester %></h4>
 		     </div>
 		     <div class="card-body" >
-		     	<form action="">
-		     		
+		     	<form action="/submit_exam_period">
+		     		<input type="hidden" name="semester_id" value="<%= @semester_id %>">
+		     		<input type="hidden" name="exam_name" value="<%= @exam_name %>">
 		      		<%= for detail <- @exam_details |> Enum.sort() do %>
-		      		<div class="form-group">
-		      			<p style="font-size: 15px">Subject: <b><%= detail.subject %></b></p>
-		      			<label class="" style="font-size: 14px">Start Date and Time:</label>
+		      			<% exam_period = Repo.get_by(Affairs.ExamPeriod, exam_id: detail.exam_id) %>
 		      			
-		                <div class='input-group display'>
-		                	<input type="text" class="form-control date" name="<%= detail.subject %>_start_date" />
-		                </div>
+		      			<%= if exam_period != nil do %>
+		      				<%= if exam_period.start_date != nil do %>
+		      					<% start_date = exam_period.start_date |> Timex.shift(hours: 8) |> NaiveDateTime.to_string() |> String.trim(":00.000000") |> String.replace("-","/") %>
+		      				<% else %>
+		      					<% start_date = nil %>
+			      			<% end %>
+			      			<%= if exam_period.end_date != nil do %>
+			      				<% end_date = exam_period.end_date |> Timex.shift(hours: 8) |> NaiveDateTime.to_string() |> String.trim(":00.000000") |> String.replace("-","/") %>
+			      			<% else %>
+			      				<% end_date = nil %>
+			      			<% end %>
+			      		<div class="form-group">
+			      			<p style="font-size: 15px">Subject: <b><%= detail.subject %></b></p>
+			      			<label class="" style="font-size: 14px">Start Date and Time:</label>
 
-		      			<label class="" style="font-size: 14px">End Date and Time:</label>
-		      			
-		                <div class='input-group display'>
-		                	<input type="text" class="form-control date" name="<%= detail.subject %>_end_date"/>
-		                </div>
-		                <hr>
-		            </div>
+			                <div class='input-group display'>
+			                	<input type="text" class="form-control date" name="<%= detail.exam_id %>_start_date" value = "<%= start_date %>"/>
+			                </div>
+			      			<label class="" style="font-size: 14px">End Date and Time:</label>
+			      			
+			                <div class='input-group display'>
+			                	<input type="text" class="form-control date" name="<%= detail.exam_id %>_end_date" value = "<%= end_date %>"/>
+			                </div>
+			                <hr>
+			            </div>
+			           	<% else %>
+			           	<div class="form-group">
+			      			<p style="font-size: 15px">Subject: <b><%= detail.subject %></b></p>
+			      			<label class="" style="font-size: 14px">Start Date and Time:</label>
+
+			                <div class='input-group display'>
+			                	<input type="text" class="form-control date" name="<%= detail.exam_id %>_start_date" value = ""/>
+			                </div>
+			      			<label class="" style="font-size: 14px">End Date and Time:</label>
+			      			
+			                <div class='input-group display'>
+			                	<input type="text" class="form-control date" name="<%= detail.exam_id %>_end_date" value = ""/>
+			                </div>
+			                <hr>
+			            </div>
+			            <% end %>
 		      		<% end %>
 		      		<button class= "btn btn-primary" type="submit">Submit</button>
 		      		

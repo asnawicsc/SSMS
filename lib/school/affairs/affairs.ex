@@ -3908,6 +3908,94 @@ defmodule School.Affairs do
     user.role
   end
 
+  def get_exam_list_by_date(start_date, end_date, institution_id) do
+    s_date =
+      start_date
+      |> String.split(" ")
+      |> List.to_tuple()
+      |> elem(0)
+      |> String.split("/")
+      |> List.to_tuple()
+
+    s_time =
+      start_date
+      |> String.split(" ")
+      |> List.to_tuple()
+      |> elem(1)
+      |> String.split(":")
+      |> List.to_tuple()
+
+    e_date =
+      end_date
+      |> String.split(" ")
+      |> List.to_tuple()
+      |> elem(0)
+      |> String.split("/")
+      |> List.to_tuple()
+
+    e_time =
+      end_date
+      |> String.split(" ")
+      |> List.to_tuple()
+      |> elem(1)
+      |> String.split(":")
+      |> List.to_tuple()
+
+    {:ok, start_datetime} =
+      NaiveDateTime.new(
+        String.to_integer(elem(s_date, 0)),
+        String.to_integer(elem(s_date, 1)),
+        String.to_integer(elem(s_date, 2)),
+        String.to_integer(elem(s_time, 0)) - 8,
+        String.to_integer(elem(s_time, 1)),
+        0
+      )
+
+    {:ok, end_datetime} =
+      NaiveDateTime.new(
+        String.to_integer(elem(e_date, 0)),
+        String.to_integer(elem(e_date, 1)),
+        String.to_integer(elem(e_date, 2)),
+        String.to_integer(elem(e_time, 0)) - 8,
+        String.to_integer(elem(e_time, 1)),
+        0
+      )
+
+    lists =
+      Repo.all(
+        from(
+          e in ExamPeriod,
+          left_join: ex in Exam,
+          on: ex.id == e.exam_id,
+          left_join: s in Subject,
+          on: s.id == ex.subject_id,
+          left_join: em in ExamMaster,
+          on: em.id == ex.exam_master_id,
+          where:
+            e.start_date >= ^start_datetime and e.end_date <= ^end_datetime and
+              e.institution_id == ^institution_id,
+          select: %{
+            exam_name: em.name,
+            subject: s.description,
+            start_date: e.start_date,
+            end_date: e.end_date
+          }
+        )
+      )
+
+    lists =
+      for list <- lists do
+        title = Enum.join([list.exam_name, list.subject], "-")
+        new_list = Map.put(list, :title, title)
+        new_list = Map.put(new_list, :description, "")
+        new_list = Map.delete(new_list, :exam_name)
+        new_list = Map.delete(new_list, :subject)
+        new_list
+      end
+
+    lists
+  end
+
   def exam_period_list(institution_id) do
     lists =
       Repo.all(
