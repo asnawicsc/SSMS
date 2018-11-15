@@ -3990,7 +3990,6 @@ defmodule School.Affairs do
         )
       )
 
-    IEx.pry()
     a
   end
 end

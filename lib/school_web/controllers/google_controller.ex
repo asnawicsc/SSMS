@@ -81,3 +81,6 @@ defmodule SchoolWeb.GoogleController do
     |> redirect(to: page_path(conn, :dashboard))
   end
 end
+
+# uri = "https://www.googleapis.com/calendar/v3/calendars/#{cal_id}/events?access_token=#{access_token}"
+# response = HTTPoison.get!(uri, [], timeout: 10_000, recv_timeout: 10_000).body
