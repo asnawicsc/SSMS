@@ -61,7 +61,11 @@ defmodule SchoolWeb.GoogleController do
 
       IO.inspect(response)
       new_params = response |> Poison.decode!()
-      at = params["access_token"]
+      at = new_params["access_token"]
+
+      ["user_id", id] = params["state"] |> String.split("=")
+      user = School.Settings.get_user!(id)
+      School.Settings.update_user(user, %{g_token: at})
       # whatever the response go back to main page first
     end
 
@@ -69,6 +73,3 @@ defmodule SchoolWeb.GoogleController do
     |> redirect(to: page_path(conn, :dashboard))
   end
 end
-
-# uri = "https://www.googleapis.com/calendar/v3/calendars/#{cal_id}/events?access_token=#{access_token}"
-# response = HTTPoison.get!(uri, [], timeout: 10_000, recv_timeout: 10_000).body

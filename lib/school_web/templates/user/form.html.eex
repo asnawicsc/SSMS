@@ -23,6 +23,11 @@
     <%= text_input f, :password, class: "form-control" %>
     <%= error_tag f, :password %>
   </div>
+  <div class="form-group">
+    <%= label f, :g_token, class: "control-label" %>
+    <%= text_input f, :g_token, class: "form-control" %>
+    <%= error_tag f, :g_token %>
+  </div>
 
     <%= if   @conn.private.plug_session["user_id"] != nil do %>
             
