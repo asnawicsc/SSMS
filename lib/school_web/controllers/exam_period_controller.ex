@@ -65,37 +65,38 @@ defmodule SchoolWeb.ExamPeriodController do
         if String.contains?(exam, "_start_date") do
           exam_id = String.trim(exam, "_start_date")
 
-          if params[exam] != nil and params[exam] != "" do
-            date =
-              params[exam]
-              |> String.split(" ")
-              |> List.to_tuple()
-              |> elem(0)
-              |> String.split("/")
-              |> List.to_tuple()
+          utc_datetime =
+            if params[exam] != nil and params[exam] != "" do
+              date =
+                params[exam]
+                |> String.split(" ")
+                |> List.to_tuple()
+                |> elem(0)
+                |> String.split("/")
+                |> List.to_tuple()
 
-            time =
-              params[exam]
-              |> String.split(" ")
-              |> List.to_tuple()
-              |> elem(1)
-              |> String.split(":")
-              |> List.to_tuple()
+              time =
+                params[exam]
+                |> String.split(" ")
+                |> List.to_tuple()
+                |> elem(1)
+                |> String.split(":")
+                |> List.to_tuple()
 
-            {:ok, datetime} =
-              NaiveDateTime.new(
-                String.to_integer(elem(date, 0)),
-                String.to_integer(elem(date, 1)),
-                String.to_integer(elem(date, 2)),
-                String.to_integer(elem(time, 0)) - 8,
-                String.to_integer(elem(time, 1)),
-                0
-              )
+              {:ok, datetime} =
+                NaiveDateTime.new(
+                  String.to_integer(elem(date, 0)),
+                  String.to_integer(elem(date, 1)),
+                  String.to_integer(elem(date, 2)),
+                  String.to_integer(elem(time, 0)) - 8,
+                  String.to_integer(elem(time, 1)),
+                  0
+                )
 
-            utc_datetime = datetime |> DateTime.from_naive!("Etc/UTC")
-          else
-            utc_datetime = ""
-          end
+              utc_datetime = datetime |> DateTime.from_naive!("Etc/UTC")
+            else
+              utc_datetime = ""
+            end
 
           %{exam_id: exam_id, start_date: utc_datetime}
         end
@@ -107,37 +108,38 @@ defmodule SchoolWeb.ExamPeriodController do
         if String.contains?(exam, "_end_date") do
           exam_id = String.trim(exam, "_end_date")
 
-          if params[exam] != nil and params[exam] != "" do
-            date =
-              params[exam]
-              |> String.split(" ")
-              |> List.to_tuple()
-              |> elem(0)
-              |> String.split("/")
-              |> List.to_tuple()
+          utc_datetime =
+            if params[exam] != nil and params[exam] != "" do
+              date =
+                params[exam]
+                |> String.split(" ")
+                |> List.to_tuple()
+                |> elem(0)
+                |> String.split("/")
+                |> List.to_tuple()
 
-            time =
-              params[exam]
-              |> String.split(" ")
-              |> List.to_tuple()
-              |> elem(1)
-              |> String.split(":")
-              |> List.to_tuple()
+              time =
+                params[exam]
+                |> String.split(" ")
+                |> List.to_tuple()
+                |> elem(1)
+                |> String.split(":")
+                |> List.to_tuple()
 
-            {:ok, datetime} =
-              NaiveDateTime.new(
-                String.to_integer(elem(date, 0)),
-                String.to_integer(elem(date, 1)),
-                String.to_integer(elem(date, 2)),
-                String.to_integer(elem(time, 0)) - 8,
-                String.to_integer(elem(time, 1)),
-                0
-              )
+              {:ok, datetime} =
+                NaiveDateTime.new(
+                  String.to_integer(elem(date, 0)),
+                  String.to_integer(elem(date, 1)),
+                  String.to_integer(elem(date, 2)),
+                  String.to_integer(elem(time, 0)) - 8,
+                  String.to_integer(elem(time, 1)),
+                  0
+                )
 
-            utc_datetime = datetime |> DateTime.from_naive!("Etc/UTC")
-          else
-            utc_datetime = ""
-          end
+              utc_datetime = datetime |> DateTime.from_naive!("Etc/UTC")
+            else
+              utc_datetime = ""
+            end
 
           %{exam_id: exam_id, end_date: utc_datetime}
         end

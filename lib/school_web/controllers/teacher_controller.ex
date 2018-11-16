@@ -87,6 +87,7 @@ defmodule SchoolWeb.TeacherController do
 
         user_params = %{
           email: teacher.email,
+          name: teacher.name,
           password: teacher.icno,
           crypted_password: crypted_password,
           role: "Teacher"

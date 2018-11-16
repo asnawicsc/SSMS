@@ -1,32 +1,47 @@
-<h2>Listing Holiday</h2>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th>Date</th>
+
+<div class="content-heading">
+    <div>Listing Holiday
+    </div>
+</div>
+      <div class="row">
+          
+                <div class="col-lg-7" >
+                  <div class="card card-default d-none d-lg-block">
+                    <div class="card-body">
+                      <div class="table-responsive">
+                        <table class="table">
+                          <thead>
+                            <tr>
+                            
+                                <th>Date</th>
       <th>Description</th>
-      <th>Semester</th>
-      <th>Institution</th>
 
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-<%= for holiday <- @holiday do %>
-    <tr>
+
+                          
+                            </tr>
+                            </thead>
+                            <tbody>
+                          <%= for holiday <- @holiday do %>
+                             <tr>
       <td><%= holiday.date %></td>
       <td><%= holiday.description %></td>
-      <td><%= holiday.semester_id %></td>
-      <td><%= holiday.institution_id %></td>
+
+
 
       <td class="text-right">
-        <span><%= link "Show", to: holiday_path(@conn, :show, holiday), class: "btn btn-default btn-xs" %></span>
+      
         <span><%= link "Edit", to: holiday_path(@conn, :edit, holiday), class: "btn btn-default btn-xs" %></span>
         <span><%= link "Delete", to: holiday_path(@conn, :delete, holiday), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
       </td>
     </tr>
-<% end %>
-  </tbody>
-</table>
+                            <% end %>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+</div>
 
 <span><%= link "New Holiday", to: holiday_path(@conn, :new) %></span>

@@ -368,7 +368,9 @@ channel.on("show_student_details", payload => {
     channel.push("inquire_parent_details", {user_id: window.currentUser, institution_id: window.currentInstitute, icno: icno})
   }) 
 
-            channel.on("show_parent_details", payload => {
+   channel.on("show_parent_details", payload => {
+    $("div[aria-label='p_upload']").hide()
+    $("div[aria-label='p_table']").hide()
     $("div[aria-label='parent_details']").html(payload.html)
     var csrf = window.csrf
     $("input[name='_csrf_token']").val(csrf)

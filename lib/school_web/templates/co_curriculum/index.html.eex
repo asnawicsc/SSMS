@@ -1,32 +1,55 @@
-<h2>Listing Cocurriculum</h2>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th>Code</th>
-      <th>Description</th>
-      <th>Teacher</th>
 
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-<%= for co_curriculum <- @cocurriculum do %>
-    <tr>
-      <td><%= co_curriculum.code %></td>
-      <td><%= co_curriculum.description %></td>
-         <%  teacher = Repo.get_by(School.Affairs.Teacher, %{id: co_curriculum.teacher_id}) %>
-       <td><%= teacher.name %></td>
 
+
+<div class="content-heading">
+    <div><%= gettext "Listing Cocurriculum" %>
+    </div>
+</div>
+<div class="row">
+      <div class="col-lg-8" >
+        <div class="card card-default d-none d-lg-block">
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                  <th>Code</th>
+                  <th>Description</th>
+                  <th>Teacher</th>
+                  </tr>
+                </thead>
+                <tbody>
+            <%= for co_curriculum <- @cocurriculum do %>
+                    <tr>
+                       <td><%= co_curriculum.code %></td>
+                      <td><%= co_curriculum.description %></td>
+                      <% if @cocurriculum != [] do %>
+                      <%  teacher = Repo.get_by(School.Affairs.Teacher, %{id: co_curriculum.teacher_id}) %>
+                      <td><%= teacher.name %></td>
+                    
+                     <% else %>
+
+                      <td><%= co_curriculum.teacher_id %></td>
+                        
+                     <% end %>
+                      
+     <td class="text-right">
  
-      <td class="text-right">
-        <span><%= link "Show", to: co_curriculum_path(@conn, :show, co_curriculum), class: "btn btn-default btn-xs" %></span>
         <span><%= link "Edit", to: co_curriculum_path(@conn, :edit, co_curriculum), class: "btn btn-default btn-xs" %></span>
         <span><%= link "Delete", to: co_curriculum_path(@conn, :delete, co_curriculum), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
       </td>
-    </tr>
-<% end %>
-  </tbody>
-</table>
+                  </tr>
+                <% end %>
+               
 
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+     
+</div>
 <span><%= link "New Co curriculum", to: co_curriculum_path(@conn, :new) %></span>

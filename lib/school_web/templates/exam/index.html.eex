@@ -1,4 +1,7 @@
-<h2>Listing Exam</h2>
+<div class="content-heading">
+    <div>Listing Exam
+    </div>
+</div>
 
 <table class="table">
   <thead>
