@@ -33,7 +33,8 @@ defmodule SchoolWeb.ExamPeriodController do
             end_date: ep.end_date,
             exam_name: em.name,
             semester: sm.start_date,
-            subject: s.description
+            subject: s.description,
+            exam_id: e.id
           }
         )
       )
@@ -51,8 +52,159 @@ defmodule SchoolWeb.ExamPeriodController do
       changeset: changeset,
       exam_details: exam_details,
       exam_name: exam_name,
-      semester: semester
+      semester: semester,
+      semester_id: params["semester_id"]
     )
+  end
+
+  def submit_exam_period(conn, params) do
+    exams = Map.keys(params)
+
+    start_dates =
+      for exam <- exams do
+        if String.contains?(exam, "_start_date") do
+          exam_id = String.trim(exam, "_start_date")
+
+          if params[exam] != nil and params[exam] != "" do
+            date =
+              params[exam]
+              |> String.split(" ")
+              |> List.to_tuple()
+              |> elem(0)
+              |> String.split("/")
+              |> List.to_tuple()
+
+            time =
+              params[exam]
+              |> String.split(" ")
+              |> List.to_tuple()
+              |> elem(1)
+              |> String.split(":")
+              |> List.to_tuple()
+
+            {:ok, datetime} =
+              NaiveDateTime.new(
+                String.to_integer(elem(date, 0)),
+                String.to_integer(elem(date, 1)),
+                String.to_integer(elem(date, 2)),
+                String.to_integer(elem(time, 0)) - 8,
+                String.to_integer(elem(time, 1)),
+                0
+              )
+
+            utc_datetime = datetime |> DateTime.from_naive!("Etc/UTC")
+          else
+            utc_datetime = ""
+          end
+
+          %{exam_id: exam_id, start_date: utc_datetime}
+        end
+      end
+      |> Enum.filter(fn x -> x != nil end)
+
+    end_dates =
+      for exam <- exams do
+        if String.contains?(exam, "_end_date") do
+          exam_id = String.trim(exam, "_end_date")
+
+          if params[exam] != nil and params[exam] != "" do
+            date =
+              params[exam]
+              |> String.split(" ")
+              |> List.to_tuple()
+              |> elem(0)
+              |> String.split("/")
+              |> List.to_tuple()
+
+            time =
+              params[exam]
+              |> String.split(" ")
+              |> List.to_tuple()
+              |> elem(1)
+              |> String.split(":")
+              |> List.to_tuple()
+
+            {:ok, datetime} =
+              NaiveDateTime.new(
+                String.to_integer(elem(date, 0)),
+                String.to_integer(elem(date, 1)),
+                String.to_integer(elem(date, 2)),
+                String.to_integer(elem(time, 0)) - 8,
+                String.to_integer(elem(time, 1)),
+                0
+              )
+
+            utc_datetime = datetime |> DateTime.from_naive!("Etc/UTC")
+          else
+            utc_datetime = ""
+          end
+
+          %{exam_id: exam_id, end_date: utc_datetime}
+        end
+      end
+      |> Enum.filter(fn x -> x != nil end)
+
+    for date <- start_dates do
+      exam_period = Repo.get_by(ExamPeriod, exam_id: date.exam_id)
+      date = Map.put(date, :institution_id, conn.private.plug_session["institution_id"])
+
+      if exam_period == nil do
+        case Affairs.create_exam_period(date) do
+          {:ok, exam_period} ->
+            conn
+            |> put_flash(:info, "Exam period created successfully.")
+            |> redirect(
+              to: "/show_exam_period/#{params["exam_name"]}/semester/#{params["semester_id"]}"
+            )
+
+          {:error, %Ecto.Changeset{} = changeset} ->
+            nil
+        end
+      else
+        case Affairs.update_exam_period(exam_period, date) do
+          {:ok, exam_period} ->
+            conn
+            |> put_flash(:info, "Exam period updated successfully.")
+            |> redirect(
+              to: "/show_exam_period/#{params["exam_name"]}/semester/#{params["semester_id"]}"
+            )
+
+          {:error, %Ecto.Changeset{} = changeset} ->
+            nil
+        end
+      end
+    end
+
+    for date <- end_dates do
+      date = Map.put(date, :institution_id, conn.private.plug_session["institution_id"])
+      exam_period = Repo.get_by(ExamPeriod, exam_id: date.exam_id)
+
+      if exam_period == nil do
+        case Affairs.create_exam_period(date) do
+          {:ok, exam_period} ->
+            conn
+            |> put_flash(:info, "Exam period created successfully.")
+            |> redirect(
+              to: "/show_exam_period/#{params["exam_name"]}/semester/#{params["semester_id"]}"
+            )
+
+          {:error, %Ecto.Changeset{} = changeset} ->
+            nil
+        end
+      else
+        case Affairs.update_exam_period(exam_period, date) do
+          {:ok, exam_period} ->
+            conn
+            |> put_flash(:info, "Exam period updated successfully.")
+            |> redirect(
+              to: "/show_exam_period/#{params["exam_name"]}/semester/#{params["semester_id"]}"
+            )
+
+          {:error, %Ecto.Changeset{} = changeset} ->
+            nil
+        end
+      end
+    end
   end
 
   def new(conn, _params) do

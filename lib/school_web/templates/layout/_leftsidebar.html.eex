@@ -211,7 +211,7 @@
 
                            <ul class="sidebar-nav sidebar-subnav collapse" id="school_setup">
                               <li class=" ">
-                                 <a href="/students" title="Students">
+                                 <a href="/student_lists/<%= @conn.private.plug_session["user_id"]%>" title="Students">
 
                                     <span><%= gettext "Students" %></span>
                                  </a>

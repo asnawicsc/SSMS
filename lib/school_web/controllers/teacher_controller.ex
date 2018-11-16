@@ -133,16 +133,27 @@ defmodule SchoolWeb.TeacherController do
 
   def teacher_listing(conn, _params) do
     # teacher = Affairs.list_teacher() |> Enum.with_index()
-    teacher =
-      Repo.all(
-        from(
-          t in Teacher,
-          where: t.institution_id == ^conn.private.plug_session["institution_id"]
-        )
-      )
-      |> Enum.with_index()
+    user_id = conn.private.plug_session["user_id"]
+    user = Repo.get(User, user_id)
 
-    render(conn, "teacher_listing.html", teacher: teacher)
+    if user.role == "Teacher" do
+      teacher = Repo.get_by(Teacher, email: user.email)
+      changeset = Affairs.change_teacher(teacher)
+      action = "/teacher/#{teacher.code}"
+      render(conn, "form.html", changeset: changeset, action: action)
+    end
+
+    if user.role == "Support" or user.role == "Admin" do
+      teacher =
+        Repo.all(
+          from(
+            t in Teacher,
+            where: t.institution_id == ^conn.private.plug_session["institution_id"]
+          )
+        )
+
+      render(conn, "index.html", teacher: teacher)
+    end
   end
 
   def new(conn, _params) do

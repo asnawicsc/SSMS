@@ -92,6 +92,8 @@ defmodule SchoolWeb.Router do
       :show_exam_period
     )
 
+    get("/submit_exam_period", ExamPeriodController, :submit_exam_period)
+
     resources("/parameters", ParameterController)
     get("/system_config/:institution_id", ParameterController, :system_config)
     resources("/institutions", InstitutionController)
