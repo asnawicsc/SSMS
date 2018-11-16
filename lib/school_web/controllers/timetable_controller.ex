@@ -84,22 +84,30 @@ defmodule SchoolWeb.TimetableController do
   end
 
   def sync_to_gcal(conn, params) do
-    # events =
-    #   case School.Affairs.get_teacher(params["user_id"]) do
-    #     {:ok, teacher} ->
-    #       {:ok, timetable} = School.Affairs.initialize_calendar(teacher.id)
-
-    #       School.Affairs.teacher_period_list(teacher.id)
-
-    #     {:error, message} ->
-    #       []
-    #   end
-    #   |> Poison.encode!()
-
     user = School.Settings.current_user(conn)
 
-    conn
-    |> redirect(to: google_path(conn, :open_google_oauth, user_id: user.id))
+    case School.Affairs.get_teacher(params["user_id"]) do
+      {:ok, teacher} ->
+        {:ok, timetable} = School.Affairs.initialize_calendar(teacher.id)
+
+        if timetable.calender_id == nil do
+          conn
+          |> redirect(
+            to:
+              google_path(conn, :open_google_oauth, user_id: user.id, request: "create_calendar")
+          )
+        else
+          conn
+          |> redirect(
+            to: google_path(conn, :open_google_oauth, user_id: user.id, request: "sync_calendar")
+          )
+        end
+
+      {:error, message} ->
+        conn
+        |> put_flash(:info, message)
+        |> redirect(to: timetable_path(conn, :index))
+    end
   end
 
   def teacher_timetable_list(conn, params) do

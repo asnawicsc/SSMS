@@ -35,20 +35,18 @@ defmodule School.Google do
     {:ok, timetable} = Affairs.initialize_calendar(teacher.id)
     user = School.Settings.get_user!(user_id)
 
-    if timetable.calendar_id != nil do
-      cal_id = timetable.calendar_id
+    cal_id = timetable.calender_id
 
-      uri =
-        "https://www.googleapis.com/calendar/v3/calendars/#{cal_id}/events?access_token=#{
-          user.g_token
-        }"
+    uri =
+      "https://www.googleapis.com/calendar/v3/calendars/#{cal_id}/events?access_token=#{
+        user.g_token
+      }"
 
-      response = HTTPoison.get!(uri, [], timeout: 10_000, recv_timeout: 10_000).body
-      IO.inspect(response)
-    else
-      create_calendar(user_id)
-    end
+    response =
+      HTTPoison.get!(uri, [], timeout: 10_000, recv_timeout: 10_000).body |> Poison.decode!()
 
-    {:ok}
+    IO.inspect(response)
+
+    response["items"]
   end
 end

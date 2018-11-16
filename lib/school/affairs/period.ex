@@ -14,6 +14,7 @@ defmodule School.Affairs.Period do
     field(:timetable_id, :integer)
     field(:start_datetime, :utc_datetime)
     field(:end_datetime, :utc_datetime)
+    field(:google_event_id, :binary)
     timestamps()
   end
 
@@ -21,6 +22,7 @@ defmodule School.Affairs.Period do
   def changeset(period, attrs) do
     period
     |> cast(attrs, [
+      :google_event_id,
       :recurring_frequency,
       :recurring_until,
       :timetable_id,
