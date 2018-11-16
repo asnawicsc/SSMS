@@ -57,16 +57,35 @@
 	                                    </label>
                               		</div>
 			              		</td>
-			              		<td>
-			              			<div id="<%= student.id %>_select" style="display: block;">
-			              			<select class="custom-select custom-select" id="<%= student.id %>" name="<%= student.id %>-abs_reason">
-			              				<option selected=""></option>
-			              				<%= for reason <- absent_reasons do %>
-										<option value="<%= reason %>"><%= reason %></option>
-										<% end %>
-	                              	</select>
-	                              	</div>
-			              		</td>
+		              		<% absent = Repo.get_by(Absent, student_id: Integer.to_string(student.id), absent_date: @date) %>
+			              		<%= if absent != nil do %>
+				              		<td>
+				              			<div id="<%= student.id %>_select" style="display: block;">
+				              			<select class="custom-select custom-select" id="<%= student.id %>" name="<%= student.id %>-abs_reason">
+				              				
+				              				<%= for reason <- absent_reasons do %>
+				              					<%= if reason == absent.reason do %>
+				              					<option selected=""><%= absent.reason %></option>
+				              					<% else %>
+												<option value="<%= reason %>"><%= reason %></option>
+												<% end %>
+											<% end %>
+		                              	</select>
+		                              	</div>
+				              		</td>
+				              	<% else %>
+				              		<td>
+				              			<div id="<%= student.id %>_select" style="display: block;">
+				              			<select class="custom-select custom-select" id="<%= student.id %>" name="<%= student.id %>-abs_reason">
+				              				<option selected=""></option>
+				              				<%= for reason <- absent_reasons do %>
+											<option value="<%= reason %>"><%= reason %></option>
+											<% end %>
+		                              	</select>
+		                              	</div>
+				              		</td>
+
+			              		<% end %>
 		              		<% end %>
 		              	</tr>
 		              	<% end %>
