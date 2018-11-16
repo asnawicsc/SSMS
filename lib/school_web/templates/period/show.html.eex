@@ -4,7 +4,7 @@
     <%teacher_name=
 if @period.teacher_id != nil do
 
-    School.Repo.get_by(School.Affairs.Teacher,id: @period.teacher_id) 
+    School.Repo.get_by(School.Affairs.Teacher,id: @period.teacher_id).name
 else
 ""
 end 
