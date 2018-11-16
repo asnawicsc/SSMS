@@ -10,7 +10,7 @@ defmodule School.Settings.User do
     field(:role, :string, default: "Support")
     field(:email, :string)
     field(:default_lang, :string, default: "en")
-
+    field(:g_token, :binary)
     timestamps()
   end
 
@@ -18,6 +18,7 @@ defmodule School.Settings.User do
   def changeset(user, attrs) do
     user
     |> cast(attrs, [
+      :g_token,
       :default_lang,
       :email,
       :name,

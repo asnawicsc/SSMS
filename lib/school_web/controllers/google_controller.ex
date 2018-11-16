@@ -5,7 +5,6 @@ defmodule SchoolWeb.GoogleController do
   # open a page for google login or straight
 
   def open_google_oauth(conn, params) do
-    IEx.pry()
     uri = "https://accounts.google.com/o/oauth2/v2/auth"
 
     path = ""
@@ -13,7 +12,7 @@ defmodule SchoolWeb.GoogleController do
     redirect_uri = "https://www.5chool.net/api/callback"
     scope = "https://www.googleapis.com/auth/calendar"
     access_type = "online"
-    state = "testingdamien"
+    state = conn.query_string
 
     json_body = Poison.encode!(%{})
 
@@ -39,7 +38,6 @@ defmodule SchoolWeb.GoogleController do
       redirect_uri = "https://www.5chool.net/api/callback"
       scope = "https://www.googleapis.com/auth/calendar"
       access_type = "online"
-      state = "testingdamien"
 
       # from the state can identify which institution and user id... then from the response below to save the access_token
       json_body =
@@ -62,6 +60,8 @@ defmodule SchoolWeb.GoogleController do
         ).body
 
       IO.inspect(response)
+      new_params = response |> Poison.decode!()
+      at = params["access_token"]
       # whatever the response go back to main page first
     end
 
