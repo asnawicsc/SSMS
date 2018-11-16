@@ -94,7 +94,7 @@ defmodule SchoolWeb.ExamController do
 
         conn
         |> put_flash(:info, "Exam created successfully.")
-        |> redirect(to: subject_path(conn, :standard_setting))
+        |> redirect(to: exam_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
@@ -572,8 +572,7 @@ defmodule SchoolWeb.ExamController do
       Repo.all(
         from(
           s in School.Affairs.ExamMark,
-          where:
-            s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
+          where: s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
           select: %{
             class_id: s.class_id,
             subject_id: s.subject_id,

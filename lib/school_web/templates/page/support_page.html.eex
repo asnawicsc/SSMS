@@ -185,221 +185,221 @@
   <div class="col-lg-7">
 
 
-  <div class="row">
-    <div class="col-lg-6">
-      <div class="card card-default mb-3">
-         <div class="card-header d-flex align-items-center">
-        
-              <em class="fa-2x mr-3 fas fa-pencil-alt"></em>
-              <span style="font-weight: bolder;font-size: 17px;">Class</span>
-           
-         </div>
-         <div class="card-body">
-            <h5 class="card-title">Card Default card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-              <a href ="/classes"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
-            <a  href="/create_class"]"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Class</button></a>
-            <div class="btn-group">
-               <button class="mb-1 btn-sm btn btn-outline-primary" type="button">Manage</button>
-               <button class="mb-1 btn-sm dropdown-toggle btn btn-outline-primary" type="button" data-toggle="dropdown" aria-expanded="false">
-                  <span class="sr-only">info</span>
-               </button>
-               <% require IEx %>
-               <% user = Repo.get(Settings.User,@conn.private.plug_session["user_id"]) %>
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="card card-default mb-3">
+             <div class="card-header d-flex align-items-center">
+            
+                  <em class="fa-2x mr-3 fas fa-pencil-alt"></em>
+                  <span style="font-weight: bolder;font-size: 17px;">Class</span>
+               
+             </div>
+             <div class="card-body">
+                <h5 class="card-title">Card Default card title</h5>
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                  <a href ="/classes"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
+                <a  href="/create_class"]"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Class</button></a>
+                <div class="btn-group">
+                   <button class="mb-1 btn-sm btn btn-outline-primary" type="button">Manage</button>
+                   <button class="mb-1 btn-sm dropdown-toggle btn btn-outline-primary" type="button" data-toggle="dropdown" aria-expanded="false">
+                      <span class="sr-only">info</span>
+                   </button>
+                   <% require IEx %>
+                   <% user = Repo.get(Settings.User,@conn.private.plug_session["user_id"]) %>
 
-               <% if user.role == "Teacher" do 
-                   teacher = Repo.get_by(Affairs.Teacher,email: user.email) 
-                  all_classes= Repo.all(from c in Affairs.Class, where: c.teacher_id == ^teacher.id) 
-                  all_classes
-                end %>
-
-
-               <%  all_classes =if user.role == "Admin" or user.role == "Support" do 
-                   all_classes =Repo.all(from c in Affairs.Class, where: c.institution_id == ^@conn.private.plug_session["institution_id"]) 
-                    all_classes
-               end %>
+                   <% if user.role == "Teacher" do 
+                       teacher = Repo.get_by(Affairs.Teacher,email: user.email) 
+                      all_classes= Repo.all(from c in Affairs.Class, where: c.teacher_id == ^teacher.id) 
+                      all_classes
+                    end %>
 
 
-               <div class="dropdown-menu" role="menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(67px, 33px, 0px);">
-                <%= for class <- all_classes do %>
-                  <a class="dropdown-item" href="/class_setting/<%= class.id %>"><%= class.name %></a>
-                <% end %>
-               </div>
-            </div>
-            <a  href="/class_setting"]"><button class="mb-1 btn-sm btn btn-outline-primary" type="button" style="display: none;">Settings</button></a>
-         </div>
-      </div>
-    </div>
-     <div class="col-lg-6">
-      <div class="card card-default mb-3">
-         <div class="card-header d-flex align-items-center">
-        
-              <em class="fa-2x mr-3 fas fa-child"></em>
-              <span style="font-weight: bolder;font-size: 17px;">Student</span>
-           
-         </div>
-         <% require IEx %>
-         <% a = @conn %>
+                   <%  all_classes =if user.role == "Admin" or user.role == "Support" do 
+                       all_classes =Repo.all(from c in Affairs.Class, where: c.institution_id == ^@conn.private.plug_session["institution_id"]) 
+                        all_classes
+                   end %>
 
-          <div class="card-body">
-            <h5 class="card-title">Card Default card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="/student_lists/<%= a.private.plug_session["user_id"]%>"><button class="mb-1 btn-sm btn btn-outline-primary"  type="button">List</button></a>
-              <a href="/students/new"><button class="mb-1 btn-sm btn btn-outline-primary"  type="button">Create Student</button></a>
+
+                   <div class="dropdown-menu" role="menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(67px, 33px, 0px);">
+                    <%= for class <- all_classes do %>
+                      <a class="dropdown-item" href="/class_setting/<%= class.id %>"><%= class.name %></a>
+                    <% end %>
+                   </div>
+                </div>
+                <a  href="/class_setting"]"><button class="mb-1 btn-sm btn btn-outline-primary" type="button" style="display: none;">Settings</button></a>
+             </div>
           </div>
-      </div>
-    </div>
-  </div>
+        </div>
+         <div class="col-lg-6">
+          <div class="card card-default mb-3">
+             <div class="card-header d-flex align-items-center">
+            
+                  <em class="fa-2x mr-3 fas fa-child"></em>
+                  <span style="font-weight: bolder;font-size: 17px;">Student</span>
+               
+             </div>
+             <% require IEx %>
+             <% a = @conn %>
 
-  <div class="row">
-    <div class="col-lg-6">
-      <div class="card card-default mb-3">
-         <div class="card-header d-flex align-items-center">
-        
-              <em class="fa-2x mr-3 fas fa-pencil-alt"></em>
-              <span style="font-weight: bolder;font-size: 17px;">Exam</span>
-           
-         </div>
-         <div class="card-body">
-            <h5 class="card-title">Card Default card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="/new_exam"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create</button></a>
-            <a href="/exam"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Exam Period</button></a>
-             <a href ="/mark_sheet"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Mark</button></a>
-            <button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button>
-         </div>
+              <div class="card-body">
+                <h5 class="card-title">Card Default card title</h5>
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                <a href="/student_lists/<%= a.private.plug_session["user_id"]%>"><button class="mb-1 btn-sm btn btn-outline-primary"  type="button">List</button></a>
+                  <a href="/students/new"><button class="mb-1 btn-sm btn btn-outline-primary"  type="button">Create Student</button></a>
+              </div>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <div class="col-lg-6">
-      <div class="card card-default mb-3">
-         <div class="card-header d-flex align-items-center">
-        
-              <em class="fa-2x mr-3 fas fa-chess"></em>
-              <span style="font-weight: bolder;font-size: 17px;">Cocurriculum</span>
-           
-         </div>
-         <div class="card-body">
-            <h5 class="card-title">Card Default card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href ="/cocurriculum"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
-             <a href ="/cocurriculum/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Cocurriculum</button></a>
-             <a href ="/co_mark"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Marking</button></a>
-           
-         </div>
-      </div>
-    </div>
-  </div>
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="card card-default mb-3">
+             <div class="card-header d-flex align-items-center">
+            
+                  <em class="fa-2x mr-3 fas fa-pencil-alt"></em>
+                  <span style="font-weight: bolder;font-size: 17px;">Exam</span>
+               
+             </div>
+             <div class="card-body">
+                <h5 class="card-title">Card Default card title</h5>
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                <a href="/new_exam"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create</button></a>
+                <a href="/exam"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Exam Period</button></a>
+                 <a href ="/mark_sheet"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Mark</button></a>
+                <button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button>
+             </div>
+          </div>
+        </div>
 
-  <div class="row">
-    <div class="col-lg-6">
-      <div class="card card-default mb-3">
-         <div class="card-header d-flex align-items-center">
+        <div class="col-lg-6">
+          <div class="card card-default mb-3">
+             <div class="card-header d-flex align-items-center">
+            
+                  <em class="fa-2x mr-3 fas fa-chess"></em>
+                  <span style="font-weight: bolder;font-size: 17px;">Cocurriculum</span>
+               
+             </div>
+             <div class="card-body">
+                <h5 class="card-title">Card Default card title</h5>
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                <a href ="/cocurriculum"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
+                 <a href ="/cocurriculum/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Cocurriculum</button></a>
+                 <a href ="/co_mark"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Marking</button></a>
+               
+             </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="card card-default mb-3">
+             <div class="card-header d-flex align-items-center">
+            
+                  <em class="fa-2x mr-3 fas fa-chalkboard-teacher"></em>
+                  <span style="font-weight: bolder;font-size: 17px;">Teacher</span>
+               
+             </div>
+             <div class="card-body">
+                <h5 class="card-title">Card Default card title</h5>
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                <a href ="/teacher"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
+                <a href ="/teacher/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Teacher</button></a>
+                <a href ="/login_teacher"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Teacher Login</button></a>
+             </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="card card-default mb-3">
+             <div class="card-header d-flex align-items-center">
+            
+                  <em class="fa-2x mr-3 fas fa-chalkboard-teacher"></em>
+                  <span style="font-weight: bolder;font-size: 17px;">Parent</span>
+               
+             </div>
+             <div class="card-body">
+                <h5 class="card-title">Card Default card title</h5>
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                <a href ="/parent"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
+                <a href ="/parent/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Parent</button></a>
+          
+             </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-6">
+        <div class="card card-default mb-3">
+           <div class="card-header d-flex align-items-center">
+          
+                <em class="fa-2x mr-3 fas fa-chalkboard-teacher"></em>
+                <span style="font-weight: bolder;font-size: 17px;">Subject</span>
+             
+           </div>
+           <div class="card-body">
+              <h5 class="card-title">Card Default card title</h5>
+              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+              <a href ="/subject"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
+               <a href ="/subject/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Subject</button></a>
+                <a href ="/subject_teach_class"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List Subject Period</button></a>
+               <a href ="/subject_teach_class/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Subject Period</button></a>
+           </div>
+        </div>
+      </div>
+       <div class="col-lg-6">
+        <div class="card card-default mb-3">
+           <div class="card-header d-flex align-items-center">
+          
+                <em class="fa-2x mr-3 fas fa-chalkboard-teacher"></em>
+                <span style="font-weight: bolder;font-size: 17px;">Standard</span>
+             
+           </div>
+           <div class="card-body">
+              <h5 class="card-title">Card Default card title</h5>
+              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+              <a href ="/levels"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
+               <a href ="/levels/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Standard</button></a>
         
-              <em class="fa-2x mr-3 fas fa-chalkboard-teacher"></em>
-              <span style="font-weight: bolder;font-size: 17px;">Teacher</span>
-           
-         </div>
-         <div class="card-body">
-            <h5 class="card-title">Card Default card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href ="/teacher"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
-            <a href ="/teacher/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Teacher</button></a>
-            <a href ="/login_teacher"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Teacher Login</button></a>
-         </div>
+           </div>
+        </div>
       </div>
     </div>
-    <div class="col-lg-6">
-      <div class="card card-default mb-3">
-         <div class="card-header d-flex align-items-center">
+    <div class="row">
+        <div class="col-lg-6">
+        <div class="card card-default mb-3">
+           <div class="card-header d-flex align-items-center">
+          
+                <em class="fa-2x mr-3 fas fa-chalkboard-teacher"></em>
+                <span style="font-weight: bolder;font-size: 17px;">Holiday</span>
+             
+           </div>
+           <div class="card-body">
+              <h5 class="card-title">Card Default card title</h5>
+              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+              <a href ="/holiday"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
+               <a href ="/holiday/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Holiday</button></a>
         
-              <em class="fa-2x mr-3 fas fa-chalkboard-teacher"></em>
-              <span style="font-weight: bolder;font-size: 17px;">Parent</span>
-           
-         </div>
-         <div class="card-body">
-            <h5 class="card-title">Card Default card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href ="/parent"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
-            <a href ="/parent/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Parent</button></a>
-      
-         </div>
+           </div>
+        </div>
+      </div>
+        <div class="col-lg-6">
+        <div class="card card-default mb-3">
+           <div class="card-header d-flex align-items-center">
+          
+                <em class="fa-2x mr-3 fas fa-chalkboard-teacher"></em>
+                <span style="font-weight: bolder;font-size: 17px;">Semesters</span>
+             
+           </div>
+           <div class="card-body">
+              <h5 class="card-title">Card Default card title</h5>
+              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+              <a href ="/semesters"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
+              <a href ="/semesters/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Semester</button></a>
+        
+           </div>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-lg-6">
-    <div class="card card-default mb-3">
-       <div class="card-header d-flex align-items-center">
-      
-            <em class="fa-2x mr-3 fas fa-chalkboard-teacher"></em>
-            <span style="font-weight: bolder;font-size: 17px;">Subject</span>
-         
-       </div>
-       <div class="card-body">
-          <h5 class="card-title">Card Default card title</h5>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          <a href ="/subject"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
-           <a href ="/subject/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Subject</button></a>
-            <a href ="/subject_teach_class"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List Subject Period</button></a>
-           <a href ="/subject_teach_class/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Subject Period</button></a>
-       </div>
-    </div>
-  </div>
-   <div class="col-lg-6">
-    <div class="card card-default mb-3">
-       <div class="card-header d-flex align-items-center">
-      
-            <em class="fa-2x mr-3 fas fa-chalkboard-teacher"></em>
-            <span style="font-weight: bolder;font-size: 17px;">Standard</span>
-         
-       </div>
-       <div class="card-body">
-          <h5 class="card-title">Card Default card title</h5>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          <a href ="/levels"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
-           <a href ="/levels/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Standard</button></a>
-    
-       </div>
-    </div>
-  </div>
-</div>
-<div class="row">
-    <div class="col-lg-6">
-    <div class="card card-default mb-3">
-       <div class="card-header d-flex align-items-center">
-      
-            <em class="fa-2x mr-3 fas fa-chalkboard-teacher"></em>
-            <span style="font-weight: bolder;font-size: 17px;">Holiday</span>
-         
-       </div>
-       <div class="card-body">
-          <h5 class="card-title">Card Default card title</h5>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          <a href ="/holiday"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
-           <a href ="/holiday/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Holiday</button></a>
-    
-       </div>
-    </div>
-  </div>
-    <div class="col-lg-6">
-    <div class="card card-default mb-3">
-       <div class="card-header d-flex align-items-center">
-      
-            <em class="fa-2x mr-3 fas fa-chalkboard-teacher"></em>
-            <span style="font-weight: bolder;font-size: 17px;">Semesters</span>
-         
-       </div>
-       <div class="card-body">
-          <h5 class="card-title">Card Default card title</h5>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          <a href ="/semesters"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
-          <a href ="/semesters/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Semester</button></a>
-    
-       </div>
-    </div>
-  </div>
-</div>
 
   </div>
 </div>
