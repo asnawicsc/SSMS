@@ -295,6 +295,8 @@ defmodule SchoolWeb.Router do
     get("/admin_dashboard", PageController, :admin_dashboard)
 
     get("/support_dashboard", PageController, :support_dashboard)
+    get("/login_teacher", TeacherController, :login_teacher)
+    get("/create_teacher_login/:id", TeacherController, :create_teacher_login)
   end
 
   # Other scopes may use custom stacks.
