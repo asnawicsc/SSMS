@@ -16,12 +16,12 @@
 		      			<% exam_period = Repo.get_by(Affairs.ExamPeriod, exam_id: detail.exam_id) %>
 		      			
 		      			<%= if exam_period != nil do %>
-		      				<%= if exam_period.start_date != nil do %>
+		      				<%= start_date=if exam_period.start_date != nil do %>
 		      					<% start_date = exam_period.start_date |> Timex.shift(hours: 8) |> NaiveDateTime.to_string() |> String.trim(":00.000000") |> String.replace("-","/") %>
 		      				<% else %>
 		      					<% start_date = nil %>
 			      			<% end %>
-			      			<%= if exam_period.end_date != nil do %>
+			      			<%= end_date=if exam_period.end_date != nil do %>
 			      				<% end_date = exam_period.end_date |> Timex.shift(hours: 8) |> NaiveDateTime.to_string() |> String.trim(":00.000000") |> String.replace("-","/") %>
 			      			<% else %>
 			      				<% end_date = nil %>

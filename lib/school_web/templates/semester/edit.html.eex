@@ -1,5 +1,16 @@
-<h2>Edit Semester</h2>
-
+<div class="content-heading">
+    <div>Edit Semester
+    </div>
+</div>
+      <div class="row">
+          
+                <div class="col-lg-7" >
+                  <div class="card card-default d-none d-lg-block">
+                    <div class="card-body">
 <%= render "form.html", Map.put(assigns, :action, semester_path(@conn, :update, @semester)) %>
+         </div>
+                    </div>
+                  </div>
+                </div>
 
 <span><%= link "Back", to: semester_path(@conn, :index) %></span>

@@ -1,4 +1,12 @@
 <% teacher = School.Repo.all(from l in School.Affairs.Teacher,where: l.institution_id ==^@conn.private.plug_session["institution_id"], select: {l.name, l.id}) %>
+
+
+<div class="card">
+     <div class="card-header">
+
+     </div>
+     <div class="card-body">
+
 <%= form_for @changeset, @action, fn f -> %>
   <%= if @changeset.action do %>
     <div class="alert alert-danger">
@@ -29,3 +37,6 @@
     <%= submit "Submit", class: "btn btn-primary" %>
   </div>
 <% end %>
+
+</div>
+</div>

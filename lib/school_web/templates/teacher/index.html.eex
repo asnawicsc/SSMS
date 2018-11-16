@@ -18,7 +18,7 @@
 
       <div class="row">
             <%= if user.role == "Admin" or user.role == "Support" do %>
-                <div class="col-lg-8" aria-label="student_table">
+                <div class="col-lg-7" aria-label="student_table">
                   <div class="card card-default d-none d-lg-block">
                     <div class="card-body">
                       <div class="table-responsive">

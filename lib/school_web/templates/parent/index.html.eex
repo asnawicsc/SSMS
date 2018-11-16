@@ -1,3 +1,6 @@
+
+
+
 <style type="text/css">
   .btn.btn-link.teacher {
     line-height: 0em !important;
@@ -7,41 +10,45 @@
 <script type="text/javascript">
   window.csrf = "<%= Phoenix.Controller.get_csrf_token %>"
 </script>
-<div class="row">
-  <div class="col-lg-3">
-    <div class="table-responsive">
-      
-    
-    <table class="table">
-      <thead>
-        <tr>
-        
-
-             <th>Name</th>
-        </tr>
-      </thead>
-      <tbody>
-           <%= for parent <- @parent do %>
-        <tr>
-       
-
-
-          <td>   <div id="<%= parent.icno %>" class="btn btn-link parent"><%= parent.name %></div></td>
-        </tr>
-    <% end %>
-      </tbody>
-    </table>
+<div class="content-heading">
+    <div>Parent Lists
+    </div>
 </div>
-  </div>
-  <div class="col-lg-9" aria-label="parent_details">
-   <p class="lead">Click on a parent name in the left panel. </p> 
-  <div class="row" style="margin-top: 40px;">
-      <div class="col-lg-12">
-        <div class="panel">
-          <div class="panel-heading">Bulk Upload Parent</div>
-          <div class="panel-body">
+
+      <div class="row">
           
-            <%= form_for @conn, parent_path(@conn, :upload_parents), [as: :item, multipart: true], fn f -> %>
+                <div class="col-lg-7" aria-label="p_table">
+                  <div class="card card-default d-none d-lg-block">
+                    <div class="card-body">
+                      <div class="table-responsive">
+                        <table class="table">
+                          <thead>
+                            <tr>
+                                <th>Name</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                             <%= for parent <- @parent do %>
+                              <tr>
+                                 <td>   <div id="<%= parent.icno %>" class="btn btn-link parent"><%= parent.name %></div></td>
+                              </tr>
+                            <% end %>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4" aria-label="p_upload">
+                  <div class="card card-default d-none d-lg-block">
+                    <div class="card-body">
+                     <p class="lead">Click on a parent name in the left panel. </p> 
+                        <div class="row" style="margin-top: 40px;">
+                        <div class="col-lg-12">
+                          <div class="panel">
+                            <div class="panel-heading">Bulk Upload Parent</div>
+                            <div class="panel-body">
+                                <%= form_for @conn, parent_path(@conn, :upload_parents), [as: :item, multipart: true], fn f -> %>
 
                 <%= file_input f, :file, accept: ".csv"%>
                 <%= error_tag f, :file %>
@@ -52,34 +59,18 @@
             <% end %>
 
 
-          </div>
-        </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-12" aria-label="parent_details">
+                </div>
+
+  
       </div>
-    </div>
-    <form action="/pdf/parent_listing" method="POST">
-  <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
-<select name="class" required="">
-  <option value="0"><%= gettext("All Class")%></option>
-  <%= for class <- @classes do %>
-  <option value="<%= class.id %>"><%= class.name %></option>
-  <% end %>
-</select>
-
-<select name="semester_id" required="">
-  <%= for sem <- @semesters do %>
-  <option value="<%= sem.id %>"><%= sem.start_date %> - <%= sem.end_date %></option>
-  <% end %>
-</select>
-<input type="submit" name="" value="Generate!">
-</form>
-  </div>
-</div>
-<div class="table-responsive">
-
-
-
-
-</div>
 
 
 <span><%= link "New Parent", to: parent_path(@conn, :new) %></span>

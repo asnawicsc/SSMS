@@ -1,26 +1,39 @@
-<h2>Listing Levels</h2>
-
-<table class="table">
-  <thead>
-    <tr>
-      <th>Name</th>
-
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-<%= for level <- @levels do %>
-    <tr>
-      <td><%= level.name %></td>
-
-      <td class="text-right">
-        <span><%= link "Show", to: level_path(@conn, :show, level), class: "btn btn-default btn-xs" %></span>
+<div class="content-heading">
+    <div>Listing Standard
+    </div>
+</div>
+      <div class="row">
+          
+                <div class="col-lg-7" >
+                  <div class="card card-default d-none d-lg-block">
+                    <div class="card-body">
+                      <div class="table-responsive">
+                        <table class="table">
+                          <thead>
+                            <tr>
+                            
+                              <th>Name</th>
+                          
+                            </tr>
+                            </thead>
+                            <tbody>
+                          <%= for level <- @levels do %>
+                            <tr>
+                               <td><%= level.name %></td>
+                             
+                                <td class="text-right">
+      
         <span><%= link "Edit", to: level_path(@conn, :edit, level), class: "btn btn-default btn-xs" %></span>
         <span><%= link "Delete", to: level_path(@conn, :delete, level), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
-      </td>
-    </tr>
-<% end %>
-  </tbody>
-</table>
+                            </tr>
+                            <% end %>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+</div>
+
 
 <span><%= link "New Level", to: level_path(@conn, :new) %></span>

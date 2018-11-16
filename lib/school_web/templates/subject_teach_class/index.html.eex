@@ -1,5 +1,15 @@
-<h2>Listing Subject teach class</h2>
 
+
+<div class="content-heading">
+    <div>Listing Subject teach class
+    </div>
+</div>
+
+      <div class="row">
+          
+                <div class="col-lg-12" >
+                  <div class="card card-default d-none d-lg-block">
+                    <div class="card-body">
 <table class="table">
   <thead>
     <tr>
@@ -24,7 +34,7 @@
       <td><%= class.name %></td>
 
       <td class="text-right">
-        <span><%= link "Show", to: subject_teach_class_path(@conn, :show, subject_teach_class), class: "btn btn-default btn-xs" %></span>
+      
         <span><%= link "Edit", to: subject_teach_class_path(@conn, :edit, subject_teach_class), class: "btn btn-default btn-xs" %></span>
         <span><%= link "Delete", to: subject_teach_class_path(@conn, :delete, subject_teach_class), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
       </td>
@@ -32,5 +42,10 @@
 <% end %>
   </tbody>
 </table>
+
+</div>
+</div>
+</div>
+</div>
 
 <span><%= link "New Subject teach class", to: subject_teach_class_path(@conn, :new) %></span>

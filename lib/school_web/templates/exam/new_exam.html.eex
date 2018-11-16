@@ -1,168 +1,170 @@
- <form method="post" action="/create_exam" class="form-horizontal">
-  <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
-   <div class="row">
+<div class="content-heading">
+    <div>New Exam
+    </div>
+</div>
 
-              <div class="col-sm-6">
-                <div class="form-group bmd-form-group">
-                  <label class="bmd-label-floating"><%= gettext "Exam Name" %></label>
-                  <input name="exam_name" class="form-control" type="text"  required="">
+<form method="post" action="/create_exam" class="form-horizontal">
+    <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+    <div class="col-lg-12">
+        <div class="card card-default d-none d-lg-block">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group bmd-form-group">
+                        <label class="bmd-label-floating">
+                            <%= gettext "Exam Name" %>
+                        </label>
+                        <input name="exam_name" class="form-control" type="text" required="">
+                    </div>
                 </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-sm-2">
-                <div class="form-group bmd-form-group">
-                  <label class="bmd-label-floating"><%= gettext "Year" %></label><br>
-                    <select class="custom-select custom-select" required="required" name="year">
-                         
-                                            <option value="2018" >2018
-                                            </option>
-                                            <option value="2019" >2019
-                                            </option>
-                                            <option value="2020" >2020
-                                            </option>
-                                        
-                                        </select>
-                  
-                </div>
-              </div>
-           
-              <div class="col-sm-2">
-                <div class="form-group bmd-form-group">
-                  <label class="bmd-label-floating"><%= gettext "Semester" %></label><br>
-                 <select class="custom-select custom-select" required="required" name="semester">
-                           <%= for a <- @semester |> Enum.sort do %>
-                                            <option value="<%= a.id %>" ><%= a.start_date %>
-                                            </option>
-                                          <% end %>
-                                        </select>
-                </div>
-              </div>
+
                 
-            
-         
-               <div class="col-sm-2">
-                <div class="form-group bmd-form-group">
-                  <label class="bmd-label-floating"><%= gettext "Level" %></label><br>
-                    <select class="custom-select custom-select" required="required" name="level">
-                           <%= for a <- @level |> Enum.sort do %>
-                                            <option value="<%= a.id %>" ><%= a.name %>
-                                            </option>
-                                          <% end %>
-                                        </select>
-                  
+                    <div class="col-sm-2">
+                        <div class="form-group ">
+                            <label>
+                                <%= gettext "Year" %>
+                            </label>
+                            <select class="custom-select custom-select" required="required" name="year">
+
+                                <option value="2018">2018
+                                </option>
+                                <option value="2019">2019
+                                </option>
+                                <option value="2020">2020
+                                </option>
+
+                            </select>
+
+                        </div>
+                    </div>
+
+                    <div class="col-sm-2">
+                        <div class="form-group ">
+                            <label>
+                                <%= gettext "Semester" %>
+                            </label>
+                            <select class="custom-select custom-select" required="required" name="semester">
+                                <%= for a <- @semester |> Enum.sort do %>
+                                    <option value="<%= a.id %>">
+                                        <%= a.start_date %>
+                                    </option>
+                                    <% end %>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-2">
+                        <div class="form-group bmd-form-group">
+                            <label class="bmd-label-floating">
+                                <%= gettext "Level" %>
+                            </label>
+                            <select class="custom-select custom-select" required="required" name="level">
+                                <%= for a <- @level |> Enum.sort do %>
+                                    <option value="<%= a.id %>">
+                                        <%= a.name %>
+                                    </option>
+                                    <% end %>
+                            </select>
+
+                        </div>
+                    </div>
+
                 </div>
-              </div>
-           
-              
-           
-</div>
 
-   <input type="hidden" name="subject">
-   
-<div class="row">
-  <div class="col-lg-6">
-    <div class="card">
-      <div class="card-header"><%= gettext "Subject" %></div>
-      <div class="card-body">
-        <ol class="s_unmark" id="s_unmark">
-        <%= for subject <- @subjects do %>
-        <li id="<%= subject.id %>"><%= subject.name %></li>
-        <% end %>
-        </ol>
-      </div>
-        <div class="card-footer">
-                <button type="button" rel="tooltip" title="" class="btn btn-primary btn-link btn-sm show_menu_cata" data-original-title="subject">
+                <input type="hidden" name="subject">
 
-                   Select All -->
-                 
-                </button>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <%= gettext "Subject" %>
+                            </div>
+                            <div class="card-body">
+                                <ol class="s_unmark" id="s_unmark">
+                                    <%= for subject <- @subjects do %>
+                                        <li id="<%= subject.id %>">
+                                            <%= subject.name %>
+                                        </li>
+                                        <% end %>
+                                </ol>
+                            </div>
+                            <div class="card-footer">
+                                <button type="button" rel="tooltip" title="" class="btn btn-primary btn-link btn-sm show_menu_cata" data-original-title="subject">
+
+                                    Select All -->
+
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <%= gettext "Selected Subject" %>
+                            </div>
+                            <div class="card-body">
+                                <ol class="s_mark" id="s_mark">
+
+                                </ol>
+                            </div>
+                            <div class="card-footer">
+                                <button type="button" rel="tooltip" title="" class="btn btn-primary btn-link btn-sm show_menu_cata" data-original-title="un subject">
+
+                                    <-- Unselect All </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
+        </div>
     </div>
-  </div>
-  <div class="col-lg-6">
-    <div class="card">
-      <div class="card-header"><%= gettext "Selected Subject" %></div>
-      <div class="card-body">
-        <ol  class="s_mark" id="s_mark">
-       
-        </ol>
-      </div>
-      <div class="card-footer">
-                <button type="button" rel="tooltip" title="" class="btn btn-primary btn-link btn-sm show_menu_cata" data-original-title="un subject">
-
-                   <-- Unselect All
-                 
-                </button>
-            </div>
-    </div>
-    </div>
-  </div>
-
-
-</div>
-
-
-    
-        
-     
-      <input class="btn btn-primary" name="" value="Submit" type="submit">
-</form>
-
-
-<script type="text/javascript">
   
 
-       $("ol#s_unmark").on("click", "li", function(){
+    <input class="btn btn-primary" name="" value="Submit" type="submit">
+</form>
 
-    $("ol#s_mark").append(this)
-    var list_ids = [] 
-    $("ol#s_mark li").each(function(){
-    var id = $(this).attr("id")
-      list_ids.push(id)
+<script type="text/javascript">
+    $("ol#s_unmark").on("click", "li", function() {
+
+        $("ol#s_mark").append(this)
+        var list_ids = []
+        $("ol#s_mark li").each(function() {
+            var id = $(this).attr("id")
+            list_ids.push(id)
+        })
+        $("input[name='subject']").val(list_ids)
     })
-    $("input[name='subject']").val(list_ids)
-  })
 
-  $("ol#s_mark").on("click", "li", function(){
+    $("ol#s_mark").on("click", "li", function() {
 
-    $("ol#s_unmark").append(this)
+        $("ol#s_unmark").append(this)
 
-  })
+    })
 
+    $('button[data-original-title="subject"]').click(function() {
+        var li_list = $('ol#s_unmark').find("li")
+        var list_ids = []
+        $(li_list).each(function() {
+            var id = $(this).attr("id")
+            list_ids.push(id)
+            var li = $(this);
 
-  $('button[data-original-title="subject"]').click(function() {
-            var li_list = $('ol#s_unmark').find("li")
-             var list_ids = [] 
-            $(li_list).each(function() {
-              var id = $(this).attr("id")
-                 list_ids.push(id)
-                var li = $(this);
-      
-             
-              
-                $("ol#s_mark").append(li);
-            })
-
-            $("input[name='subject']").val(list_ids)
-
-
-  })
-
-
-
-        $('button[data-original-title="un subject"]').click(function() {
-            var li_list = $('ol#s_mark').find("li")
-            $(li_list).each(function() {
-
-                var li = $(this);
-           
-                
-                $("ol#s_unmark").append(li);
-            })
-
-
+            $("ol#s_mark").append(li);
         })
 
+        $("input[name='subject']").val(list_ids)
 
+    })
+
+    $('button[data-original-title="un subject"]').click(function() {
+        var li_list = $('ol#s_mark').find("li")
+        $(li_list).each(function() {
+
+            var li = $(this);
+
+            $("ol#s_unmark").append(li);
+        })
+
+    })
 </script>

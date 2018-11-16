@@ -1,4 +1,8 @@
-<h2>Edit Parent</h2>
+
+<div class="content-heading">
+    <div><%= gettext "Edit Parent" %>
+    </div>
+</div>
 
 <%= render "form.html", Map.put(assigns, :action, parent_path(@conn, :update, @parent)) %>
 

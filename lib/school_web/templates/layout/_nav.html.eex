@@ -1,10 +1,34 @@
-      <!-- top navbar-->
+   <%= if   @conn.private.plug_session["user_id"] != nil do %>         
+       <% user_id=@conn.private.plug_session["user_id"] %>
+   <%= if user_id != nil do %>
+
+      <% user=Repo.get_by(Settings.User, %{id: user_id }) %>
+
+      <% institution_id=@conn.private.plug_session["institution_id"] %>
+     
+       <% institutions=Repo.get_by(School.Settings.Institution, %{id: institution_id }) %>
+          <!-- top navbar-->
       <header class="topnavbar-wrapper">
          <!-- START Top Navbar-->
          <nav class="navbar topnavbar">
             <!-- START navbar header-->
-            <div class="navbar-header">
-               <a class="navbar-brand" href="#">
+          
+
+        <%= if user.role == "Admin" do %>
+          <div class="navbar-header">
+               <a class="navbar-brand" href="/admin_dashboard">
+                  <div class="brand-logo">
+                     <img class="img-fluid" src="/img/logo.png" alt="App Logo">
+                  </div>
+                  <div class="brand-logo-collapsed">
+                     <img class="img-fluid" src="/img/logo-single.png" alt="App Logo">
+                  </div>
+               </a>
+                </div>
+          <% end %>
+         <%= if user.role == "Support" do %>
+          <div class="navbar-header">
+               <a class="navbar-brand" href="/support_dashboard">
                   <div class="brand-logo">
                      <img class="img-fluid" src="/img/logo.png" alt="App Logo">
                   </div>
@@ -13,6 +37,23 @@
                   </div>
                </a>
             </div>
+          <% end %>
+          <%= if user.role == "Teacher" do %>
+           <div class="navbar-header">
+               <a class="navbar-brand" href="/dashboard">
+                  <div class="brand-logo">
+                     <img class="img-fluid" src="/img/logo.png" alt="App Logo">
+                  </div>
+                  <div class="brand-logo-collapsed">
+                     <img class="img-fluid" src="/img/logo-single.png" alt="App Logo">
+                  </div>
+               </a>
+            </div>
+          <% end %>
+
+   <% end %>
+<% end %>
+           
             <!-- END navbar header-->
             <!-- START Left navbar-->
             <ul class="navbar-nav mr-auto flex-row">

@@ -1,36 +1,48 @@
-<h2><%= gettext "Listing Classes" %></h2>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th><%= gettext "Name" %></th>
-      <th><%= gettext "Remarks" %></th>
-      <th><%= gettext "Level" %></th>
-     
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-<%= for class <- @classes do %>
-    <tr>
-      <td><%= class.name %></td>
-      <td><%= class.remarks %></td>
-       <td><%= class.level_id %></td>
- 
 
+<div class="content-heading">
+    <div><%= gettext "Listing Classes" %>
+    </div>
+</div>
+<div class="row">
+      <div class="col-lg-8" >
+        <div class="card card-default d-none d-lg-block">
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                  <th><%= gettext "Name" %></th>
+                  <th><%= gettext "Remarks" %></th>
+                  <th><%= gettext "Level" %></th>
+                  </tr>
+                </thead>
+                <tbody>
+               <%= for class <- @classes do %>
+                    <tr>
+                       <td><%= class.name %></td>
+                      <td><%= class.remarks %></td>
+                      <td><%= class.level_id %></td>
+                    
       <td class="text-right">
-        <span><%= link (gettext "Show Height and Weight"), to: student_path(@conn, :height_weight_class,class.id), class: "btn btn-default btn-xs" %></span>
+       
         <span><%= link (gettext "Sync Library Membership"), to: class_path(@conn, :sync_library_membership, class.id), class: "btn btn-default btn-xs" %></span>
     
       
-         <span><%= link (gettext "Generate Head Count"), to: head_count_path(@conn, :generate_head_count, class.id), class: "btn btn-default btn-xs" %></span>
-        <span><%= link (gettext "Subject Head Count"), to: head_count_path(@conn, :head_count_subject, class.id), class: "btn btn-default btn-xs" %></span>
+        
   
 
       </td>
-    </tr>
-<% end %>
-  </tbody>
-</table>
+                  </tr>
+                <% end %>
+               
 
 
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+     
+</div>

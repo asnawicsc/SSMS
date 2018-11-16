@@ -1,19 +1,31 @@
-<h2>Listing Semesters</h2>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th>Start date</th>
+
+
+<div class="content-heading">
+    <div>Listing Semesters
+    </div>
+</div>
+      <div class="row">
+          
+                <div class="col-lg-7" >
+                  <div class="card card-default d-none d-lg-block">
+                    <div class="card-body">
+                      <div class="table-responsive">
+                        <table class="table">
+                          <thead>
+                            <tr>
+                            
+                                <th>Start date</th>
       <th>End date</th>
       <th>Holiday start</th>
       <th>Holiday end</th>
       <th>School days</th>
 
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-<%= for semester <- @semesters do %>
+                          
+                            </tr>
+                            </thead>
+                            <tbody>
+                         <%= for semester <- @semesters do %>
     <tr>
       <td><%= semester.start_date %></td>
       <td><%= semester.end_date %></td>
@@ -22,13 +34,19 @@
       <td><%= semester.school_days %></td>
 
       <td class="text-right">
-        <span><%= link "Show", to: semester_path(@conn, :show, semester), class: "btn btn-default btn-xs" %></span>
+  
         <span><%= link "Edit", to: semester_path(@conn, :edit, semester), class: "btn btn-default btn-xs" %></span>
         <span><%= link "Delete", to: semester_path(@conn, :delete, semester), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
       </td>
     </tr>
 <% end %>
-  </tbody>
-</table>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+</div>
+
 
 <span><%= link "New Semester", to: semester_path(@conn, :new) %></span>

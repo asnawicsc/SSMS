@@ -3,6 +3,11 @@
    <%= if user_id != nil do %>
 
       <% user=Repo.get_by(Settings.User, %{id: user_id }) %>
+
+      <% institution_id=@conn.private.plug_session["institution_id"] %>
+     
+       <% institutions=Repo.get_by(School.Settings.Institution, %{id: institution_id }) %>
+
       <!-- sidebar-->
       <%= if user.role == "Admin" do %>
             <aside class="aside-container">
@@ -18,10 +23,13 @@
                                  <!-- User picture-->
                                  <div class="user-block-picture">
                                     <div class="user-block-status">
-                                       <img class="img-thumbnail rounded-circle" src="img/user/02.jpg" alt="Avatar" width="60" height="60">
+                                         <img  class="img-thumbnail rounded-circle" id="preview1" alt="Click here to change school logo"  src='data:image/png;base64, <%= institutions.logo_bin %>' width="60" height="60">
+                                      
                                        <div class="circle bg-success circle-lg"></div>
                                     </div>
                                  </div>
+
+
                                  <!-- Name and Job-->
                                  <div class="user-block-info">
                                      
@@ -99,7 +107,7 @@
                                  <!-- User picture-->
                                  <div class="user-block-picture">
                                     <div class="user-block-status">
-                                       <img class="img-thumbnail rounded-circle" src="img/user/02.jpg" alt="Avatar" width="60" height="60">
+                                      <img  class="img-thumbnail rounded-circle" id="preview1" alt="Click here to change school logo"  src='data:image/png;base64, <%= institutions.logo_bin %>' width="60" height="60">
                                        <div class="circle bg-success circle-lg"></div>
                                     </div>
                                  </div>
@@ -364,7 +372,7 @@
                                  <!-- User picture-->
                                  <div class="user-block-picture">
                                     <div class="user-block-status">
-                                       <img class="img-thumbnail rounded-circle" src="img/user/02.jpg" alt="Avatar" width="60" height="60">
+                                       <img  class="img-thumbnail rounded-circle" id="preview1" alt="Click here to change school logo"  src='data:image/png;base64, <%= institutions.logo_bin %>' width="60" height="60">
                                        <div class="circle bg-success circle-lg"></div>
                                     </div>
                                  </div>

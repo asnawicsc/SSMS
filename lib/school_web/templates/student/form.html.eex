@@ -1,3 +1,4 @@
+
 <% require IEx %>
 <%  institutes = Repo.all(from i in School.Settings.Institution, select: {i.name, i.id})%>
 

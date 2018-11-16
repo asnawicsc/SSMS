@@ -46,7 +46,7 @@
                              <% level = School.Repo.all(from l in School.Affairs.Level,where: l.institution_id ==^@conn.private.plug_session["institution_id"], select: {l.id}) %>
                               <% class = School.Repo.all(from l in School.Affairs.Class,where: l.institution_id ==^@conn.private.plug_session["institution_id"], select: {l.id}) %>
                                 <% subject = School.Repo.all(from l in School.Affairs.Subject,where: l.institution_id ==^@conn.private.plug_session["institution_id"], select: {l.id}) %>
-                                  <% comment = School.Repo.all(from l in School.Affairs.Holiday,where: l.institution_id ==^@conn.private.plug_session["institution_id"], select: {l.id}) %>
+                                  <% comment = School.Repo.all(from l in School.Affairs.Comment,where: l.institution_id ==^@conn.private.plug_session["institution_id"], select: {l.id}) %>
                               <% holiday = School.Repo.all(from l in School.Affairs.Holiday,where: l.institution_id ==^@conn.private.plug_session["institution_id"], select: {l.id}) %>
                                 <% cocurriculum = School.Repo.all(from l in School.Affairs.CoCurriculum,where: l.institution_id ==^@conn.private.plug_session["institution_id"], select: {l.id}) %>
 
@@ -56,87 +56,126 @@
                            <!-- START list group-->
                            <div class="list-group mb-0">
 
-                              <a class="list-group-item bt0" href="#">
+                           
                                  <%= if semesters == [] do  %>
+                                    <a class="list-group-item bt0" href="/semesters/new">
                                   <span class="badge badge-danger float-right" id="a1" as="0" >Not Set</span>
+                                     <em class="fa-fw fas fa-calendar-alt mr-2"></em>Create Semester</a>
                                <% else %>
+                                  <a class="list-group-item bt0" href="#">
                                    <span class="badge badge-success float-right" id="a1" value="10" >Done</span>
+                                     <em class="fa-fw fas fa-calendar-alt mr-2"></em>Create Semester</a>
                                <% end %>
                                 
-                                 <em class="fa-fw fas fa-calendar-alt mr-2"></em>Create Semester</a>
-                              <a class="list-group-item" href="#">
+                               
+                            
                                  <%= if students == [] do  %>
-                                  <span class="badge badge-danger float-right" id="a2">Not Set</span>
+                                   <a class="list-group-item" href="/students/new">
+                              <span class="badge badge-danger float-right" id="a2">Not Set</span>
+                                   <em class="fa-fw fa fa-address-card mr-2"></em>Create Student</a>
                                <% else %>
+                                 <a class="list-group-item" href="#">
                                     <span class="badge badge-success float-right" id="a2">Done</span>
+                                     <em class="fa-fw fa fa-address-card mr-2"></em>Create Student</a>
                                <% end %>
                                
-                                 <em class="fa-fw fa fa-address-card mr-2"></em>Create Student</a>
-                              <a class="list-group-item" href="#">
+                                
+                             
                                 <%= if teachers == [] do  %>
-                                  <span class="badge badge-danger float-right" id="a3">Not Set</span>
-                               <% else %>
-                                    <span class="badge badge-success float-right" id="a3">Done</span>
-                               <% end %>
-                                
+                                 <a class="list-group-item" href="/teacher/new">
+                                 <span class="badge badge-danger float-right" id="a3">Not Set</span>
                                  <em class="fa-fw fa fa-address-book mr-2"></em>Create Teacher</a>
-                              <a class="list-group-item" href="#">
+                               <% else %>
+                               <a class="list-group-item" href="#">
+                                    <span class="badge badge-success float-right" id="a3">Done</span>
+                                     <em class="fa-fw fa fa-address-book mr-2"></em>Create Teacher</a>
+                               <% end %>
+                                
+                                
+                             
                                  <%= if parents == [] do  %>
-                                   <span class="badge badge-danger float-right" id="a4">Not Set</span>
+                                  <a class="list-group-item" href="/parent/new">
+                                 <span class="badge badge-danger float-right" id="a4">Not Set</span>
+                                   <em class="fa-fw fas fa-user-friends mr-2"></em>Create Parent</a>
                                <% else %>
+                                <a class="list-group-item" href="#">
                                    <span class="badge badge-success float-right" id="a4">Done</span>
+                                   <em class="fa-fw fas fa-user-friends mr-2"></em>Create Parent</a>
                                <% end %>
                                 
-                                 <em class="fa-fw fas fa-user-friends mr-2"></em>Create Parent</a>
-                              <a class="list-group-item" href="#">
+                                 
+                             
                                  <%= if level == [] do  %>
+                                  <a class="list-group-item" href="/levels/new">
                                    <span class="badge badge-danger float-right" id="a5">Not Set</span>
+                                     <em class="fa-fw fas fa-th mr-2"></em>Create Standard</a>
                                <% else %>
+                                <a class="list-group-item" href="/levels/new">
                                    <span class="badge badge-success float-right" id="a5">Done</span>
+                                    <em class="fa-fw fas fa-th mr-2"></em>Create Standard</a>
                                <% end %>
                                 
-                                 <em class="fa-fw fas fa-th mr-2"></em>Create Standard</a>
-                              <a class="list-group-item" href="#">
+                                
+                          
                                     <%= if class == [] do  %>
-                                   <span class="badge badge-danger float-right" id="a6">Not Set</span>
+                                        <a class="list-group-item" href="/create_class"]">
+                                    <span class="badge badge-danger float-right" id="a6">Not Set</span>
+                                     <em class="fa-fw fa fa-user mr-2"></em>Create Class</a>
                                <% else %>
+                                   <a class="list-group-item" href="#">
                                    <span class="badge badge-success float-right" id="a6">Done</span>
+                                    <em class="fa-fw fa fa-user mr-2"></em>Create Class</a>
                                <% end %>
                                 
-                                 <em class="fa-fw fa fa-user mr-2"></em>Create Class</a>
-                              <a class="list-group-item" href="#">
+                                
+                              
                                     <%= if subject == [] do  %>
+                                    <a class="list-group-item" href="/subject/new">
                                  <span class="badge badge-danger float-right" id="a7">Not Set</span>
+                                 <em class="fa-fw fa fa-book mr-2"></em>Create Subject</a>
                                <% else %>
+                               <a class="list-group-item" href="#">
                                    <span class="badge badge-success float-right" id="a7">Done</span>
+                                   <em class="fa-fw fa fa-book mr-2"></em>Create Subject</a>
                                <% end %>
                                 
                                
-                                 <em class="fa-fw fa fa-book mr-2"></em>Create Subject</a>
-                                  <a class="list-group-item" href="#">
+                                 
+                              
                                 <%= if cocurriculum == [] do  %>
+                                 <a class="list-group-item" href="/cocurriculum/new">
                                   <span class="badge badge-danger float-right" id="a8">Not Set</span>
+                                      <em class="fa-fw fas fa-baseball-ball mr-2"></em>Create CoCurriculum</a>
                                <% else %>
+                                <a class="list-group-item" href="#">
                                    <span class="badge badge-success float-right" id="a8">Done</span>
+                                   <em class="fa-fw fas fa-baseball-ball mr-2"></em>Create CoCurriculum</a>
                                <% end %>
                                  
-                                 <em class="fa-fw fas fa-baseball-ball mr-2"></em>Create CoCurriculum</a>
-                              <a class="list-group-item" href="#">
+                                 
+                             
                                 <%= if comment == [] do  %>
-                                  <span class="badge badge-danger float-right" id="a9">Not Set</span>
+                                  <a class="list-group-item" href="/comment/new">
+                                <span class="badge badge-danger float-right" id="a9">Not Set</span>
+                                  <em class="fa-fw fab fa-rocketchat mr-2"></em>Create Comments</a>
                                <% else %>
+                               <a class="list-group-item" href="#">
                                    <span class="badge badge-success float-right" id="a9">Done</span>
+                                   <em class="fa-fw fab fa-rocketchat mr-2"></em>Create Comments</a>
                                <% end %>
-                                 
-                                 <em class="fa-fw fab fa-rocketchat mr-2"></em>Create Comments</a>
-                              <a class="list-group-item" href="#">
+      
+                            
                                  <%= if holiday == [] do  %>
-                                   <span class="badge badge-danger float-right" id="a10">Not Set</span>
+                                     <a class="list-group-item" href="/holiday/new">
+                                    <span class="badge badge-danger float-right" id="a10" >Not Set</span>
+                                       <em class="fa-fw fa fa-umbrella mr-2"></em>Create Holidays</a>
                                <% else %>
+                               <a class="list-group-item" href="#">
                                    <span class="badge badge-success float-right" id="a10">Done</span>
+                                   <em class="fa-fw fa fa-umbrella mr-2"></em>Create Holidays</a>
                                <% end %>
                                
-                                 <em class="fa-fw fa fa-umbrella mr-2"></em>Create Holidays</a>
+                                
                              
                            </div>
                            <!-- END list group-->
