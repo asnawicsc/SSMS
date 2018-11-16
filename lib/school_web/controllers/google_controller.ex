@@ -5,6 +5,7 @@ defmodule SchoolWeb.GoogleController do
   # open a page for google login or straight
 
   def open_google_oauth(conn, params) do
+    IEx.pry()
     uri = "https://accounts.google.com/o/oauth2/v2/auth"
 
     path = ""
@@ -15,19 +16,6 @@ defmodule SchoolWeb.GoogleController do
     state = "testingdamien"
 
     json_body = Poison.encode!(%{})
-
-    # response =
-    #   HTTPoison.request!(
-    #     :get,
-    #     uri <> path,
-    #     json_body,
-    #     [{"Content-Type", "application/json"}],
-    #     timeout: 50_000,
-    #     recv_timeout: 50_000
-    #   ).body
-
-    # IO.inspect(response)
-    # send_resp(conn, 200, response)
 
     url =
       "#{uri}?scope=#{scope}&access_type=#{access_type}&include_granted_scopes=true&state=#{state}&redirect_uri=#{

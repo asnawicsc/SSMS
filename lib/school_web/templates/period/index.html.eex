@@ -9,38 +9,33 @@
 
     <tr>
       <th id="">Class</th>
-      <th>Day</th>
+      <th>Subject </th>
+      <th>Teacher</th>
       <th>Start time</th>
       <th>End time</th>
-      <th>Subject</th>
-      <th>Teacher</th>
+      <th>Title</th>
+  
        
 
-      <th></th>
+
     </tr>
   </thead>
   <tbody>
 <%= for period <- @period do %>
 
-  <% start_time=period.start_time|>Time.to_string()|>String.split_at(5)|>elem(0) %>
-   <% end_time=period.end_time|>Time.to_string()|>String.split_at(5)|>elem(0) %>
 
-   <%subject=School.Repo.get_by(School.Affairs.Subject,id: period.subject_id)%>
-    <%class=School.Repo.get_by(School.Affairs.Class,id: period.class_id)%>
-    <%teacher=School.Repo.get_by(School.Affairs.Teacher,id: period.teacher_id)%>
+
+
 
     <tr>
-       <td><%= class.name %></td>
-        <td><%= period.day %></td>
-      <td><%= start_time %></td>
-      <td><%= end_time %></td>
-      <td><%= subject.description %></td>
-      <td><%= teacher.name %></td>
-      <td class="text-right">
-        <span><%= link "Show", to: period_path(@conn, :show, period), class: "btn btn-default btn-xs" %></span>
-        <span><%= link "Edit", to: period_path(@conn, :edit, period), class: "btn btn-default btn-xs" %></span>
-        <span><%= link "Delete", to: period_path(@conn, :delete, period), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
-      </td>
+       <td><%= period.class %></td>
+        <td><%= period.subject  %></td>
+         <td><%= period.teacher  %></td>
+      <td><%= period.start_datetime %></td>
+      <td><%= period.end_datetime %></td>
+      <td><%= period.title  %></td>
+     
+ 
     </tr>
 <% end %>
   </tbody>
@@ -49,29 +44,5 @@
 </table>
 
 <span><%= link "New Period", to: period_path(@conn, :new) %></span>
-    <script>
-    $(document).ready(function() {
-        $('#example').DataTable({
-            initComplete: function() {
-                this.api().columns().every(function() {
-                    var column = this;
-                    $(column.header()).append("<br>")
-                    var select = $('<select><option value=""></option></select>')
-                        .appendTo($(column.header()))
-                        .on('change', function() {
-                            var val = $.fn.dataTable.util.escapeRegex(
-                                $(this).val()
-                            );
-                            column
-                                .search(val ? '^' + val + '$' : '', true, false)
-                                .draw();
-                        });
-                    column.data().unique().sort().each(function(d, j) {
-                        select.append('<option value="' + d + '">' + d + '</option>')
-                    });
-                });
-            }
-        });
-    });
-    </script>
+
 

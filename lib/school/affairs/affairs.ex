@@ -3882,7 +3882,8 @@ defmodule School.Affairs do
     {:ok, timetable} =
       case School.Affairs.has_calendar?(teacher_id) do
         {:yes, timetable_id} ->
-          {:ok, timetable} = Repo.get(Timetable, timetable_id)
+          timetable = Repo.get(Timetable, timetable_id)
+          {:ok, timetable}
 
         {:no, timetable_id} ->
           {:ok, timetable} =
@@ -3977,19 +3978,34 @@ defmodule School.Affairs do
       Repo.all(
         from(
           p in School.Affairs.Period,
-          left_join: t in School.Affairs.Timetable,
-          on: p.timetable_id == t.id,
+          left_join: tt in School.Affairs.Timetable,
+          on: p.timetable_id == tt.id,
           left_join: s in School.Affairs.Subject,
           on: s.id == p.subject_id,
-          where: t.teacher_id == ^teacher_id,
+          left_join: c in School.Affairs.Class,
+          on: c.id == p.class_id,
+          left_join: t in School.Affairs.Teacher,
+          on: t.id == p.teacher_id,
+          where: tt.teacher_id == ^teacher_id,
           select: %{
-            title: s.description,
-            description: "",
-            start: p.start_datetime,
-            end: p.end_datetime
+            period_id: p.id,
+            subject: s.description,
+            class: c.name,
+            start_datetime: p.start_datetime,
+            end_datetime: p.end_datetime,
+            teacher: t.name
           }
         )
       )
+      |> Enum.map(fn x ->
+        %{
+          start: my_time(x.start_datetime),
+          end: my_time(x.end_datetime),
+          title: x.subject <> " - " <> x.class,
+          description: x.teacher,
+          period_id: x.period_id
+        }
+      end)
 
     a
   end
@@ -4006,10 +4022,38 @@ defmodule School.Affairs do
         on: p.subject_id == s.id,
         left_join: c in Class,
         on: c.id == p.class_id,
+        left_join: t in Teacher,
+        on: t.id == p.teacher_id,
         where: s.institution_id == ^institution_id,
-        select: %{period_id: p.id, subject: s.description, class: c.name}
+        select: %{
+          period_id: p.id,
+          subject: s.description,
+          class: c.name,
+          start_datetime: p.start_datetime,
+          end_datetime: p.end_datetime,
+          teacher: t.name
+        }
       )
     )
-    |> Enum.map(fn x -> %{id: x.period_id, title: x.subject <> " - " <> x.class} end)
+    |> Enum.reject(fn x -> x.class == nil end)
+    |> Enum.map(fn x ->
+      %{
+        start_datetime: my_time(x.start_datetime),
+        end_datetime: my_time(x.end_datetime),
+        id: x.period_id,
+        title: x.subject <> " - " <> x.class,
+        class: x.class,
+        subject: x.subject,
+        teacher: x.teacher
+      }
+    end)
+  end
+
+  def my_time(time) do
+    if time == nil do
+      nil
+    else
+      Timex.shift(time, hours: 8)
+    end
   end
 end

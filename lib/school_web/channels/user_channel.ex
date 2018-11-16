@@ -2867,8 +2867,8 @@ defmodule SchoolWeb.UserChannel do
         },
         socket
       ) do
-    s_date = DateTime.from_iso8601(start_date)
-    e_date = DateTime.from_iso8601(end_date)
+    {:ok, s_date, 0} = DateTime.from_iso8601(start_date)
+    {:ok, e_date, 0} = DateTime.from_iso8601(end_date)
 
     case School.Affairs.get_teacher(user_id) do
       {:ok, teacher} ->
@@ -2878,15 +2878,33 @@ defmodule SchoolWeb.UserChannel do
         period = Repo.get(School.Affairs.Period, period_id)
 
         if period != nil do
-          School.Affairs.update_period(period, %{start_datetime: s_date, end_datetime: e_date})
+          a =
+            School.Affairs.update_period(period, %{
+              start_datetime: s_date,
+              end_datetime: e_date,
+              timetable_id: timetable.id,
+              teacher_id: teacher.id
+            })
 
-          broadcast(socket, "show_period", %{
-            "period_id" => period_id,
-            "user_id" => user_id,
-            "start_date" => start_date,
-            "end_date" => end_date,
-            "event_id_str" => event_id_str
-          })
+          case a do
+            {:ok, period} ->
+              broadcast(socket, "show_period", %{
+                "period_id" => period_id,
+                "user_id" => user_id,
+                "start_date" => start_date,
+                "end_date" => end_date,
+                "event_id_str" => event_id_str
+              })
+
+            {:error, changeset} ->
+              broadcast(socket, "show_failed_period", %{
+                "period_id" => period_id,
+                "user_id" => user_id,
+                "start_date" => start_date,
+                "end_date" => end_date,
+                "event_id_str" => event_id_str
+              })
+          end
         else
           broadcast(socket, "show_failed_period", %{
             "period_id" => period_id,
