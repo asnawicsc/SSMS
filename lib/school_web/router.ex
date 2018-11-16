@@ -125,6 +125,7 @@ defmodule SchoolWeb.Router do
     get("/mark_attendance/:class_id", AttendanceController, :mark_attendance)
     get("/add_to_class_attendance", AttendanceController, :add_to_class_attendance)
     get("/add_to_class_absent", AttendanceController, :add_to_class_absent)
+    get("/record_attendance", AttendanceController, :record_attendance)
 
     resources("/teacher", TeacherController)
     post("/upload_teachers", TeacherController, :upload_teachers)

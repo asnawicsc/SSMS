@@ -1,3 +1,5 @@
+<link rel="stylesheet" type="text/css" href="/vendor/jquery_datetimepicker/jquery.datetimepicker.min.css"/ >
+<script src="/vendor/jquery_datetimepicker/jquery.datetimepicker.full.min.js"></script>
 <div class="content-heading">
    <div>Listing Attendance
    </div>
@@ -6,23 +8,56 @@
 <% semesters = Repo.all( School.Affairs.Semester) %>
 
 <% levels = Map.keys(@classes) %>
+<form action=""> 
+<div class="row">
+  <div class="col-4">
+    <div class="card">
+      <div class="card-body">
+        <h4>Choose a date: </h4>
+        <div class="input-group date" id="datetimepicker">
+            <input class="form-control date" type="text" name="date" value="<%= Date.utc_today() %>">
+            <span class="input-group-append input-group-addon">
+               <span class="input-group-text fas fa-calendar-alt"></span>
+            </span>
+         </div>
+     </div>
+   </div>
+ </div>
+</div>
 
 <div class="row">
-  <div class="col-lg-6">
-    <div class="card card-default d-none d-lg-block">
-      <div class="card-body">
-        <div class = "row">
-        <%= for level <- levels do %>
-        <div class="col-md-6">
-          <%= level %>
-          <ol>
-            <%= for class <- @classes[level] do %>
-            <li><%= class.class %> <a href="/mark_attendance/<%= class.id%>">Mark Attendance</a></li>
-            <% end %>
-          </ol>
-        </div>
-        <% end %>
+  
+    <%= for level <- levels do %>
+    <div class="col-lg-4">
+      <div class="card mb-3 border-success">
+         <div class="card-header text-white bg-success"><%= level %></div>
+         <div class="card-body">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th><%= gettext "Class" %></th>
+
+                  <th><%= gettext "Action" %></th>
+                </tr>
+              </thead>
+              <tbody>
+                <%= for class <- @classes[level] do %>
+                  <tr>
+                    <td><%= class.class %> </td>
+                    
+                    <td><button class="btn btn-labeled btn-info btn-xs" id="<%= class.id %>" type="submit" formaction="/mark_attendance/<%= class.id %>">
+                           <span class="btn-label"><i class="fa fa-check"></i></span>Mark Attendance</button></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>   
+         </div>
       </div>
-    </div>
-  </div>
+      </div>
+    <% end %>
 </div>
+</form>
+
+<script type="text/javascript">
+  $("input.date").datetimepicker({timepicker:false,format:'Y-m-d'})
+</script>
