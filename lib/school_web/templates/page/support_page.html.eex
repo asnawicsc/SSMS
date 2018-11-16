@@ -58,82 +58,82 @@
 
                               <a class="list-group-item bt0" href="#">
                                  <%= if semesters == [] do  %>
-                                  <span class="badge badge-danger float-right">Not Set</span>
+                                  <span class="badge badge-danger float-right" id="a1" as="0" >Not Set</span>
                                <% else %>
-                                   <span class="badge badge-success float-right">Done</span>
+                                   <span class="badge badge-success float-right" id="a1" value="10" >Done</span>
                                <% end %>
                                 
                                  <em class="fa-fw fas fa-calendar-alt mr-2"></em>Create Semester</a>
                               <a class="list-group-item" href="#">
                                  <%= if students == [] do  %>
-                                  <span class="badge badge-danger float-right">Not Set</span>
+                                  <span class="badge badge-danger float-right" id="a2">Not Set</span>
                                <% else %>
-                                    <span class="badge badge-success float-right">Done</span>
+                                    <span class="badge badge-success float-right" id="a2">Done</span>
                                <% end %>
                                
                                  <em class="fa-fw fa fa-address-card mr-2"></em>Create Student</a>
                               <a class="list-group-item" href="#">
                                 <%= if teachers == [] do  %>
-                                  <span class="badge badge-danger float-right">Not Set</span>
+                                  <span class="badge badge-danger float-right" id="a3">Not Set</span>
                                <% else %>
-                                    <span class="badge badge-success float-right">Done</span>
+                                    <span class="badge badge-success float-right" id="a3">Done</span>
                                <% end %>
                                 
                                  <em class="fa-fw fa fa-address-book mr-2"></em>Create Teacher</a>
                               <a class="list-group-item" href="#">
                                  <%= if parents == [] do  %>
-                                   <span class="badge badge-danger float-right">Not Set</span>
+                                   <span class="badge badge-danger float-right" id="a4">Not Set</span>
                                <% else %>
-                                   <span class="badge badge-success float-right">Done</span>
+                                   <span class="badge badge-success float-right" id="a4">Done</span>
                                <% end %>
                                 
                                  <em class="fa-fw fas fa-user-friends mr-2"></em>Create Parent</a>
                               <a class="list-group-item" href="#">
                                  <%= if level == [] do  %>
-                                   <span class="badge badge-danger float-right">Not Set</span>
+                                   <span class="badge badge-danger float-right" id="a5">Not Set</span>
                                <% else %>
-                                   <span class="badge badge-success float-right">Done</span>
+                                   <span class="badge badge-success float-right" id="a5">Done</span>
                                <% end %>
                                 
                                  <em class="fa-fw fas fa-th mr-2"></em>Create Standard</a>
                               <a class="list-group-item" href="#">
                                     <%= if class == [] do  %>
-                                   <span class="badge badge-danger float-right">Not Set</span>
+                                   <span class="badge badge-danger float-right" id="a6">Not Set</span>
                                <% else %>
-                                   <span class="badge badge-success float-right">Done</span>
+                                   <span class="badge badge-success float-right" id="a6">Done</span>
                                <% end %>
                                 
                                  <em class="fa-fw fa fa-user mr-2"></em>Create Class</a>
                               <a class="list-group-item" href="#">
                                     <%= if subject == [] do  %>
-                                 <span class="badge badge-danger float-right">Not Set</span>
+                                 <span class="badge badge-danger float-right" id="a7">Not Set</span>
                                <% else %>
-                                   <span class="badge badge-success float-right">Done</span>
+                                   <span class="badge badge-success float-right" id="a7">Done</span>
                                <% end %>
                                 
                                
                                  <em class="fa-fw fa fa-book mr-2"></em>Create Subject</a>
                                   <a class="list-group-item" href="#">
                                 <%= if cocurriculum == [] do  %>
-                                  <span class="badge badge-danger float-right">Not Set</span>
+                                  <span class="badge badge-danger float-right" id="a8">Not Set</span>
                                <% else %>
-                                   <span class="badge badge-success float-right">Done</span>
+                                   <span class="badge badge-success float-right" id="a8">Done</span>
                                <% end %>
                                  
                                  <em class="fa-fw fas fa-baseball-ball mr-2"></em>Create CoCurriculum</a>
                               <a class="list-group-item" href="#">
                                 <%= if comment == [] do  %>
-                                  <span class="badge badge-danger float-right">Not Set</span>
+                                  <span class="badge badge-danger float-right" id="a9">Not Set</span>
                                <% else %>
-                                   <span class="badge badge-success float-right">Done</span>
+                                   <span class="badge badge-success float-right" id="a9">Done</span>
                                <% end %>
                                  
                                  <em class="fa-fw fab fa-rocketchat mr-2"></em>Create Comments</a>
                               <a class="list-group-item" href="#">
                                  <%= if holiday == [] do  %>
-                                   <span class="badge badge-danger float-right">Not Set</span>
+                                   <span class="badge badge-danger float-right" id="a10">Not Set</span>
                                <% else %>
-                                   <span class="badge badge-success float-right">Done</span>
+                                   <span class="badge badge-success float-right" id="a10">Done</span>
                                <% end %>
                                
                                  <em class="fa-fw fa fa-umbrella mr-2"></em>Create Holidays</a>
@@ -158,9 +158,9 @@
                         </a>
                         <div class="text-info">Basic Task Completed</div>
                         <div class="text-center py-4">
-                           <div class="easypie-chart easypie-chart-lg" id="percent" data-easypiechart data-percent="1" data-animate="{&quot;duration&quot;: &quot;800&quot;, &quot;enabled&quot;: &quot;true&quot;}" data-bar-color="#23b7e5" data-track-Color="rgba(200,200,200,0.4)"
+                           <div class="easypie-chart easypie-chart-lg" id="percent1" data-easypiechart data-percent="1" data-animate="{&quot;duration&quot;: &quot;800&quot;, &quot;enabled&quot;: &quot;true&quot;}" data-bar-color="#23b7e5" data-track-Color="rgba(200,200,200,0.4)"
                               data-scale-Color="false" data-line-width="10" data-line-cap="round" data-size="145">
-                              <span id="percent">70%</span>
+                              <span id="percent"></span>
                            </div>
                         </div>
                         <div class="text-center" data-sparkline="" data-bar-color="#23b7e5" data-height="30" data-bar-width="5" data-bar-spacing="2" data-values="5,4,8,7,8,5,4,6,5,5,9,4,6,3,4,7,5,4,7"></div>
@@ -305,6 +305,7 @@
             <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
             <a href ="/teacher"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
             <a href ="/teacher/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Teacher</button></a>
+            <a href ="/login_teacher"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Teacher Login</button></a>
          </div>
       </div>
     </div>
@@ -402,3 +403,35 @@
 
   </div>
 </div>
+
+<script type="text/javascript">
+var a = document.getElementById("a1").innerText;
+var b = document.getElementById("a2").innerText;
+var c = document.getElementById("a3").innerText;
+var d = document.getElementById("a4").innerText;
+var e = document.getElementById("a5").innerText;
+var f = document.getElementById("a6").innerText;
+var g = document.getElementById("a7").innerText;
+var h = document.getElementById("a8").innerText;
+var i = document.getElementById("a9").innerText;
+var j = document.getElementById("a10").innerText;
+
+var list = [a,b,c,d,e,f,g,h,i,j];
+var arrayList = list.length;
+var total =0;
+
+for (i = 0; i < arrayList; i++) {
+
+
+  if (list[i]=="Done") 
+  {
+    total= total+10;
+  }
+   
+} 
+
+
+$('#percent1').attr("data-percent",total);
+
+$("#percent").html(total+"%");
+</script>

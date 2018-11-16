@@ -3,6 +3,8 @@ defmodule SchoolWeb.TeacherController do
 
   alias School.Affairs
   alias School.Affairs.Teacher
+  alias School.Settings.User
+  alias School.Settings.UserAccess
   require IEx
 
   def index(conn, _params) do
@@ -61,10 +63,72 @@ defmodule SchoolWeb.TeacherController do
     )
   end
 
+  def create_teacher_login(conn, params) do
+    teacher =
+      Repo.get_by(Teacher,
+        id: params["id"],
+        institution_id: conn.private.plug_session["institution_id"]
+      )
+
+    if teacher.email == nil do
+      conn
+      |> put_flash(:info, "Please assign teacher email before creating teacher login.")
+      |> redirect(to: teacher_path(conn, :login_teacher))
+    else
+      user = Repo.get_by(User, email: teacher.email)
+
+      if user != nil do
+        conn
+        |> put_flash(:info, "User/Email already exist.")
+        |> redirect(to: teacher_path(conn, :login_teacher))
+      else
+        password = teacher.icno
+        crypted_password = Comeonin.Bcrypt.hashpwsalt(password)
+
+        user_params = %{
+          email: teacher.email,
+          password: teacher.icno,
+          crypted_password: crypted_password,
+          role: "Teacher"
+        }
+
+        case Settings.create_user(user_params) do
+          {:ok, user} ->
+            Settings.create_user_access(%{
+              institution_id: conn.private.plug_session["institution_id"],
+              user_id: user.id
+            })
+
+            conn
+            |> put_flash(:info, "Teacher login succesfully created.")
+            |> redirect(to: teacher_path(conn, :login_teacher))
+
+          {:error, user} ->
+            conn
+            |> put_flash(:info, "Having Problem in Creating a Teacher Login.")
+            |> redirect(to: teacher_path(conn, :login_teacher))
+        end
+      end
+    end
+  end
+
   def teacher_timetable(conn, _params) do
     teacher = Affairs.list_teacher()
 
     render(conn, "teacher_timetable.html", teacher: teacher)
+  end
+
+  def login_teacher(conn, params) do
+    teacher =
+      Repo.all(
+        from(
+          t in Teacher,
+          where: t.institution_id == ^conn.private.plug_session["institution_id"]
+        )
+      )
+      |> Enum.with_index()
+
+    render(conn, "teachers.html", teacher: teacher)
   end
 
   def teacher_listing(conn, _params) do

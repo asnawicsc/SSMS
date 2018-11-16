@@ -1,0 +1,75 @@
+<div class="content-heading">
+   <div>Create Teacher Login
+      <small><%= gettext("welcome")%>!</small>
+   </div>
+   <!-- START Language list-->
+   <div class="ml-auto">
+
+   </div>
+   <!-- END Language list-->
+</div>
+
+<div class="row">
+
+
+
+
+<div class="col-lg-12">
+
+ <div class="card">
+ 
+               <div class="card-body">
+
+
+
+<table class="table table-striped"  >
+  <thead>
+    <tr align="center">
+      <th><%= gettext "Name " %></th>
+      <th><%= gettext "Nama (Chinese)" %></th>
+      <th><%= gettext "Email" %></th>
+      <th><%= gettext "Status" %></th>
+      <th><%= gettext "Action" %></th>
+      <th></th>
+
+    </tr>
+  </thead>
+  <tbody>
+<%= for item <- @teacher do %>
+
+<% item=item|>elem(0) %>
+
+<% exist=if item.email != nil do 
+
+
+ exist = Repo.get_by(User, email: item.email) else  exist = nil  end 
+
+ %>
+
+
+    <tr align="center">
+       <td><%= item.name %></td>
+       <td><%= item.cname %></td>
+       <td><%= item.email %></td>
+       <td>
+        <%= if exist != nil  do %>
+        <p style="color: green">Created</p>
+            <%= else %>
+          <p style="color: red"> Not Created</p>
+       <% end %>
+        
+       <td> <a href="/create_teacher_login/<%= item.id %>"><button class="btn btn-labeled btn-xs btn-info mb-2" type="button" >
+                        <span class="btn-label"><i class="fa fa-arrow-right"></i></span>
+                       Create
+                      </button></a></td>
+
+    </tr>
+<% end %>
+  </tbody>
+</table>
+</div>
+               </div>
+</div>  
+</div>
+</div>
+

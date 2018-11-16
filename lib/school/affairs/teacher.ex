@@ -84,5 +84,6 @@ defmodule School.Affairs.Teacher do
       :bcenrlno,
       :email
     ])
+    |> validate_required([:icno, :email])
   end
 end
