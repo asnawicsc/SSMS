@@ -152,7 +152,11 @@ defmodule SchoolWeb.GoogleController do
       event_params = response |> Poison.decode!()
       IO.inspect(event_params)
 
-      a = Repo.get_by(School.Affairs.SyncList, period_id: local.period_id) |> Repo.delete()
+      a =
+        Repo.delete_all(
+          from(s in School.Affairs.SyncList, where: s.period_id == ^local.period_id)
+        )
+
       IO.inspect(a)
     else
     end
