@@ -200,8 +200,10 @@ defmodule SchoolWeb.UserController do
     render(conn, "edit.html", user: user, changeset: changeset)
   end
 
-  def update(conn, %{"id" => id, "user" => user_params}) do
+  def update(conn, %{"id" => id, "user" => user_params, "is_librarian" => is_librarian}) do
     user = Settings.get_user!(id)
+    user_params = Map.put(user_params, "is_librarian", is_librarian)
+    IEx.pry()
 
     case Settings.update_user(user, user_params) do
       {:ok, user} ->

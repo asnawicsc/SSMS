@@ -24,16 +24,42 @@
     <%= error_tag f, :password %>
   </div>
 
+  <div class="form-group">
+    <%= label f, :password, class: "control-label" %>
+    <%= text_input f, :password, class: "form-control" %>
+    <%= error_tag f, :password %>
+  </div>
+
+  <%= if @changeset.data.is_librarian == true do %>
+  <input type="hidden" id="checkbox" name="is_librarian" value ="true">
+  <div class="checkbox c-checkbox">
+    <label>
+       <input type="checkbox" checked="">
+       <span class="fa fa-check"></span>Is Librarian?</label>
+  </div>
+  <% else %>
+  <input type="hidden" id="checkbox" name="is_librarian" value ="false">
+  <div class="checkbox c-checkbox">
+    <label>
+       <input type="checkbox" >
+       <span class="fa fa-check"></span>Is Librarian?</label>
+  </div>
+
+  <% end %>
+  
     <%= if   @conn.private.plug_session["user_id"] != nil do %>
             
         
               <% user_id=@conn.private.plug_session["user_id"] %>
-
               <%= if user_id != nil do %>
-
                 <% user=Repo.get_by(Settings.User, %{id: user_id }) %>
 
+
+
+
                 <%    if user.role == "Admin" or user.role == "Support" do %>
+
+  
 
   <div class="form-group">
     <%= label f, :crypted_password, class: "control-label" %>
@@ -62,3 +88,17 @@
 <% end %>
 
 
+<script type="text/javascript">
+  $('input[type="checkbox"]').click(function(){
+    console.log(this)
+            if($(this).is(":checked")){
+              
+
+                $("input#checkbox").val(true)
+            }
+            else if($(this).is(":not(:checked)")){
+                
+                $("input#checkbox").val(false)
+            }
+        });
+</script>
