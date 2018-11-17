@@ -18,10 +18,10 @@
           <div class="navbar-header">
                <a class="navbar-brand" href="/admin_dashboard">
                   <div class="brand-logo">
-                     <img class="img-fluid" src="/img/tail.png" width="100px" height="70px" alt="Logo">
+                     <img class="img-fluid" src="/img/tail.png" width="80px" height="70px" alt="Logo">
                   </div>
                   <div class="brand-logo-collapsed">
-                     <img class="img-fluid" src="/img/outside2.png" width="600px" >
+                     <img class="img-fluid" src="/img/head.png"  >
                   </div>
                </a>
                 </div>
@@ -30,10 +30,10 @@
           <div class="navbar-header">
                <a class="navbar-brand" href="/support_dashboard">
                   <div class="brand-logo">
-                     <img class="img-fluid" src="/img/logo.png" alt="App Logo">
+                     <img class="img-fluid" src="/img/tail.png" width="80px" height="70px" alt="App Logo">
                   </div>
                   <div class="brand-logo-collapsed">
-                     <img class="img-fluid" src="/img/logo-single.png" alt="App Logo">
+                     <img class="img-fluid" src="/img/head.png" alt="App Logo">
                   </div>
                </a>
             </div>
@@ -42,10 +42,10 @@
            <div class="navbar-header">
                <a class="navbar-brand" href="/dashboard">
                   <div class="brand-logo">
-                     <img class="img-fluid" src="/img/logo.png" alt="App Logo">
+                     <img class="img-fluid" src="/img/tail.png" width="80px" height="70px" alt="App Logo">
                   </div>
                   <div class="brand-logo-collapsed">
-                     <img class="img-fluid" src="/img/logo-single.png" alt="App Logo">
+                     <img class="img-fluid" src="/img/head.png" alt="App Logo">
                   </div>
                </a>
             </div>

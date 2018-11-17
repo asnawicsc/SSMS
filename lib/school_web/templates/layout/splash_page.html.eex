@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="keywords" content="">
 
-    <title>TheSaaS</title>
+    <title>Smart School Management System</title>
 
     <!-- Styles -->
     <link href="assets/css/core.min.css" rel="stylesheet">
@@ -16,8 +16,8 @@
     <link href="assets/css/style.css" rel="stylesheet">
 
     <!-- Favicons -->
-    <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
-    <link rel="icon" href="assets/img/favicon.png">
+    <link rel="apple-touch-icon" href="/img/outside2.png">
+    <link rel="icon" href="/img/outside2.png">
   </head>
 
   <body>
@@ -29,16 +29,16 @@
         
         <div class="topbar-left">
           <button class="topbar-toggler">&#9776;</button>
-          <a class="topbar-brand" href="index.html">
-            <img class="logo-default" src="assets/img/logo.png" alt="logo">
-            <img class="logo-inverse" src="assets/img/logo-light.png" alt="logo">
+          <a class="topbar-brand" href="/">
+            <img class="logo-default" src="/img/tail.png" alt="logo">
+            <img class="logo-inverse" src="/img/head.png" alt="logo">
           </a>
         </div>
 
 
         <div class="topbar-right">
           <ul class="topbar-nav nav">
-            <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
              <li class="nav-item"><a class="nav-link" href="/contact_us">Contact</a></li>
 
           </ul>
