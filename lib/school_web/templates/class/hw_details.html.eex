@@ -1,3 +1,6 @@
+
+
+
 <div class="content-heading">
    <div>Height and Weight Report
       <small><%= gettext("welcome")%>!</small>
@@ -9,42 +12,64 @@
    <!-- END Language list-->
 </div>
 
-
- <div class="row">
+<div class="row">
 
 
    <%= render( SchoolWeb.ExamView ,"report_nav.html",conn: @conn) %>
 
-<div class="col-lg-9">
+  				<div class="col-lg-9">
+                     <div class="card">
+                       <div class="card-header">Height and Weight Report</div>
+                         <div class="card-body">
+                          <div class="form-row">
+                          	<div class="form-group col-md-3">
+							<form id ="semester">
+								<input type="hidden" name="report" value="certificate">
+								
+							         <select class="custom-select -custom-select-sm" name="semester_id">
+									<%= for sem <- @semesters do %>
+										<option value = <%= sem.id %> ><%= sem.start_date %> - <%= sem.end_date %></option>
+									<% end %>
+										</select>
+									</div>
+									<div class="form-group col-md-3">		
+								<input type="button" class="btn btn-info btn-ml" id="hw_show_class" value="Show Classes !">
+								</div>
+							</form>
+							<div class="form-group col-md-3">
+							<form id ="classes" action="/pdf/height_weight_report_show" method="POST">
+								<input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
 
- <div class="card">
- 
-               <div class="card-body">
-                <form id ="semester">
-	<input type="hidden" name="report" value="height_weight">
-	Please select a semester:
-	<select name="semester_id" required="required">
-		<%= for sem <- @semesters do %>
-			<option value = <%= sem.id %> ><%= sem.start_date %> - <%= sem.end_date %></option>
-		<% end %>
-	</select>
-	<input type="button" class="btn btn-info btn-sm" id="hw_show_class" value="Show Classes !">
-</form>
+								<input type="hidden" name="semester_id" id="semester_id" value="">
+								
+								 
+							     <select class="custom-select -custom-select-sm" name="class_id" id="class_lists">
+									
+								</select>
+							</div>
+									<div id="gne" class="form-group col-md-3">		
+								<input type="submit" class="btn btn-info btn-ml" id="generate_certificate" value="Generate !">
+								</div>
+							</form>
 
-<form id ="classes" action="/pdf/height_weight_report_show" method="POST">
-	<input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
-	<input type="hidden" name="semester_id" id="semester_id" value="">
-	Please select a class:
-	<select name="class_id" id="class_lists">
-		
-	</select>
-	<input type="submit" class="btn btn-info btn-sm" id="hw_report" value="Generate report !">
-</form>
+               			</div>
+           				</div>
+					</div>  
+				</div>
+</div>
+
 
 <script type="text/javascript">
 	$("form#classes").hide()
+	$("div#gne").hide()
+
+
+var arr = []
+
+$("a.dropdown-item").each(function(){
+var cn = $(this).html()
+console.log(cn)
+arr.push(cn)
+})
 </script>
-               </div>
-</div>  
-</div>
-</div>
+

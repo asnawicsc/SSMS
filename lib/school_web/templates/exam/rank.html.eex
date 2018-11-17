@@ -1,64 +1,40 @@
-<% require IEx %>
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-    <style>
-    html {
-      font-family: sans-serif;
-    }
-    table {
-      border-collapse: collapse;
-      border: 2px solid rgb(200,200,200);
-      letter-spacing: 1px;
-      font-size: 0.8rem;
-    }
-    td, th {
-      border: 1px solid rgb(190,190,190);
-      padding: 10px 20px;
-    }
-    td {
-      text-align: center;
-    }
-    caption {
-      padding: 10px;
-    }
-    </style>
-  </head>
- <% require IEx %>
-  <body>
-    <div align="right" style="margin-right: 160px;">
+
+   <div class="row" >
+ 
     <form action="/pdf/class_ranking" method="POST">
   <input type="hidden" name="class_id" value="<%= @class_id %>">
   <input type="hidden" name="exam_id" value="<%= @exam_id %>">
-   <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+   <input type="hidden" name="_csrf_token" value="<%= @csrf %>">
 <input align="left" type="submit" name="" value="Print!">
 </form>
+    <form action="/all_report_card" method="POST">
+      <input type="hidden" name="_csrf_token" value="<%= @csrf %>">
+      <input type="hidden" name="array" id="all_report_card_data" value="">
+      <button type="submit" class="btn btn-info btn-sm " id="all_report_card" style="float: right">Print all Report Card</button>
+    </form>
 </div>
+
 <Br>
     <div class="row" >
   
-     <h3 style="margin-left: 160px;">KELAS :<%= @class.name %></h3><br>
-      <h3 style="margin-left: 360px;">BIL MURID  :<%= @total_student %></h3><br>
-     <h3 style="margin-left: 420px;">EXAM  :<%= @exam_name %></h3>
+  
  </div>
-
-    <table id="table_rank" align="center" style="width: auto;">
+ <div class="table-responsive table-bordered">
+    <table class="table" id="table_rank" align="center" ">
       <colgroup>
         <col col span="2" >
       </colgroup>
       <tr align="center">
-        <th style="background-color:#97DB9A;">No</th>
-        <th style="background-color:#97DB9A;">Name</th>
-        <th style="background-color:#97DB9A;">Jan</th>
+        <th >No</th>
+        <th >Name</th>
+        <th >Jan</th>
         <%= for item <- @mark|>Enum.sort_by(fn x -> x end) do %>    
          
-        <th style="background-color:#97DB9A;"  align="center"><%= item|>elem(0) %></th>
+        <th   align="center"><%= item|>elem(0) %></th>
         <% end %>
-        <th style="background-color:#97DB9A;">Jumlah</th>
-           <th style="background-color:#97DB9A;">Purata</th>
-         <th style="background-color:#97DB9A;">Class</th>
+        <th >Jumlah</th>
+           <th >Purata</th>
+         <th >Class</th>
       </tr>
      
 
@@ -106,20 +82,17 @@
        
     
  
-        <th style="background-color:grey;"><%= item.total_mark %>/<%= item.total_per %></th>
-         <th style="background-color:grey;"><%= item.total_average %></th>
-            <th style="background-color:grey;"><%= item.rank %></th>
+        <th ><%= item.total_mark %>/<%= item.total_per %></th>
+         <th ><%= item.total_average %></th>
+            <th ><%= item.rank %></th>
       </tr>
        <% end %>
 
  
 
     </table>
-    <form action="/all_report_card" method="POST">
-      <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
-      <input type="hidden" name="array" id="all_report_card_data" value="">
-      <button type="submit" class="btn btn-info btn-sm " id="all_report_card" style="float: right">Print all Report Card</button>
-    </form>
+  </div>
+
 
   </body>
 </html>

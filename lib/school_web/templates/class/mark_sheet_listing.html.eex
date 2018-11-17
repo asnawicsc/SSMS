@@ -1,51 +1,66 @@
 <div class="content-heading">
-   <div>Mark Sheet Listing
-      <small><%= gettext("welcome")%>!</small>
-   </div>
-   <!-- START Language list-->
-   <div class="ml-auto">
+    <div>Mark Sheet Listing
+        <small><%= gettext("welcome")%>!</small>
+    </div>
+    <!-- START Language list-->
+    <div class="ml-auto">
 
-   </div>
-   <!-- END Language list-->
+    </div>
+    <!-- END Language list-->
 </div>
 
+<div class="row">
 
- <div class="row">
+    <%= render( SchoolWeb.ExamView ,"report_nav.html",conn: @conn) %>
 
+        <div class="col-lg-9">
 
-   <%= render( SchoolWeb.ExamView ,"report_nav.html",conn: @conn) %>
+            <div class="card">
+            	 <div class="card-header">Mark Sheet Listing</div>
+                <div class="card-body">
+                	  
+                    <form action="/pdf/mark_sheet_listing" method="POST">
+                        <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>"> 
+                          <div class="form-row">
+                         	<div class="form-group col-md-2">
+                         <select class="custom-select -custom-select-sm" name="class" required="required">
+                            <%= for class <- @classes do %>
+                                <option>
+                                    <%= class.name %>
+                                </option>
+                                <% end %>
+                        </select>
+                    </div>
 
-<div class="col-lg-9">
+                       	<div class="form-group col-md-3">
+                        <select class="custom-select -custom-select-sm" name="exam" required="required">
 
- <div class="card">
- 
-               <div class="card-body">
-  <form action="/pdf/mark_sheet_listing" method="POST">
-	<input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
-	Class:
-<select name="class" required="required">
-	<%= for class <- @classes do %>
-	<option><%= class.name %></option>
-	<% end %>
-</select>
-
-	Exam:
-<select name="exam" required="required">
-
-	<%= for exam <- @exams do %>
-	<option value="<%= exam.id %>"><%= exam.name %>(<%= exam.year %>)(Standard :<%= exam.level_id %>)</option>
-	<% end %>
-</select>
-Semester:
-<select name="semester" required="required">
-	<%= for sem <- @semesters do %>
-	<option><%= sem.start_date %> - <%= sem.end_date %></option>
-	<% end %>
-</select>
-<input type="submit" name="" value="Generate!">
-</form>
-               </div>
-</div>  
-</div>
+                            <%= for exam <- @exams do %>
+                                <option value="<%= exam.id %>">
+                                    <%= exam.name %>(
+                                        <%= exam.year %>)(Standard :
+                                            <%= exam.level_id %>)</option>
+                                <% end %>
+                        </select>
+                    </div>
+                       	<div class="form-group col-md-2">
+                         <select class="custom-select -custom-select-sm" name="semester" required="required">
+                            <%= for sem <- @semesters do %>
+                                <option>
+                                    <%= sem.start_date %> -
+                                        <%= sem.end_date %>
+                                </option>
+                                <% end %>
+                        </select>
+                    </div>
+                      	 <div class="form-group col-md-2">
+                        <button class="mb-1 btn btn-primary" type="submit" name="" value="Generate">Generate</button>
+                     </div>
+                       </div>
+                    </form>
+                </div>
+          
+            </div>
+        </div>
 </div>
 

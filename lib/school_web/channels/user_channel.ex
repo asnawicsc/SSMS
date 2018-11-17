@@ -1517,7 +1517,8 @@ defmodule SchoolWeb.UserChannel do
       Repo.all(
         from(
           s in School.Affairs.ExamMark,
-          where: s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
+          where:
+            s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
           select: %{
             class_id: s.class_id,
             subject_id: s.subject_id,
@@ -1971,6 +1972,7 @@ defmodule SchoolWeb.UserChannel do
         total = Enum.count(total_classes, fn x -> x.class_id == class.class_id end)
         %{class_id: class.class_id, total_student: total}
       end
+      |> Enum.uniq()
 
     if exam_mark != [] do
       exam_standard =
@@ -2513,26 +2515,31 @@ defmodule SchoolWeb.UserChannel do
     total = group_subject |> Enum.map(fn x -> x.total_student end) |> Enum.sum()
 
     html =
-      Phoenix.View.render_to_string(
-        SchoolWeb.ExamView,
-        "mark_analyse_subject_standard.html",
-        a: a,
-        b: b,
-        c: c,
-        d: d,
-        e: e,
-        f: f,
-        g: g,
-        lulus: lulus,
-        tak_lulus: tak_lulus,
-        total: total,
-        group_subject: group_subject,
-        exam: exam,
-        standard: standard,
-        standard_id: standard_id,
-        exam_id: exam_id,
-        csrf: payload["csrf"]
-      )
+      if all != [] do
+        html =
+          Phoenix.View.render_to_string(
+            SchoolWeb.ExamView,
+            "mark_analyse_subject_standard.html",
+            a: a,
+            b: b,
+            c: c,
+            d: d,
+            e: e,
+            f: f,
+            g: g,
+            lulus: lulus,
+            tak_lulus: tak_lulus,
+            total: total,
+            group_subject: group_subject,
+            exam: exam,
+            standard: standard,
+            standard_id: standard_id,
+            exam_id: exam_id,
+            csrf: payload["csrf"]
+          )
+      else
+        html = "No Data for Analysis"
+      end
 
     broadcast(socket, "show_exam_result_analysis_record_standard", %{html: html})
     {:noreply, socket}

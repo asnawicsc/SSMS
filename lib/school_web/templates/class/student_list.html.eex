@@ -3,12 +3,14 @@
     <form action="/pdf/student_class_listing" method="POST">
  <input type="hidden" name="class_id" value="<%= @class_id %>">
   <input type="hidden" name="_csrf_token" value="<%= @csrf %>">
-<input align="left" type="submit" name="" value="Print!">
+  <button class="mb-1 btn btn-primary" type="submit" name="" value="Generate">Print!</button>
+
 </form>
 </div>
 <Br>
 
-<table class="table" border="1">
+ <div class="table-responsive table-bordered">
+  <table class="table">
   <thead>
     <tr>
       <th><%= gettext "Bil." %></th>
@@ -53,5 +55,6 @@
 <% end %>
   </tbody>
 </table>
+</div>
 
 

@@ -1,172 +1,175 @@
 <div class="content-heading">
-   <div>Co Curriculum Report
-      <small><%= gettext("welcome")%>!</small>
-   </div>
-   <!-- START Language list-->
-   <div class="ml-auto">
+    <div>Co Curriculum Report
+        <small><%= gettext("welcome")%>!</small>
+    </div>
+    <!-- START Language list-->
+    <div class="ml-auto">
 
-   </div>
-   <!-- END Language list-->
+    </div>
+    <!-- END Language list-->
 </div>
 
+<div class="row">
 
- <div class="row">
+    <%= render( SchoolWeb.ExamView ,"report_nav.html",conn: @conn) %>
 
+        <div class="col-lg-9">
 
-   <%= render( SchoolWeb.ExamView ,"report_nav.html",conn: @conn) %>
+            <div class="card">
+                <div class="card-header">Co Curriculum Report</div>
+                <div class="card-body">
+                    <div aria-label="project_nilam">
+                        <div class="content">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="card ">
 
-<div class="col-lg-9">
-
- <div class="card">
- 
-               <div class="card-body">
-            <div aria-label="project_nilam">
-      <div class="content">
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col-md-12">
-              <div class="card ">
-               
-                             <div class="card-header ">
-            <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
-                  <div class="row">
-                  <div class="col-sm-2">
-                     <label class="bmd-label-floating"><%= gettext "Co Class" %></label><br>
-                  <span>  <select class="select" onchange="getval(this);" required="required" name="cocurriculum">
+                                            <div class="card-header ">
+                                                <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+                                                <div class="row">
+                                                    <div class="col-sm-2">
+                                                        <label class="bmd-label-floating">
+                                                            <%= gettext "Co Class" %>
+                                                        </label>
+                                                        <br>
+                                                        <select class="custom-select -custom-select-sm" onchange="getval(this);" required="required" name="cocurriculum">
                            <%= for a <- @cocurriculum |> Enum.sort do %>
                                             <option value="<%= a.id %>" ><%= a.description %>
                                             </option>
                                           <% end %>
-                                        </select>  </span>  
-</div>
-             <div class="col-sm-2">
-          
-                  <label class="bmd-label-floating"><%= gettext "Year" %></label><br>
-                    <select class="select" onchange="getvala(this);" required="required" name="co_year">
-                         
-                                            <option value="2018" >2018
-                                            </option>
-                                            <option value="2019" >2019
-                                            </option>
-                                            <option value="2020" >2020
-                                            </option>
+                                        </select>
+                                                    </div>
+                                                    <div class="col-sm-2">
+
+                                                        <label class="bmd-label-floating">
+                                                            <%= gettext "Year" %>
+                                                        </label>
+                                                        <br>
+                                                        <select class="custom-select -custom-select-sm" onchange="getvala(this);" required="required" name="co_year">
+
+                                                            <option value="2018">2018
+                                                            </option>
+                                                            <option value="2019">2019
+                                                            </option>
+                                                            <option value="2020">2020
+                                                            </option>
+
+                                                        </select>
+
+                                                    </div>
+
+                                                    <% semester= Repo.all(from(s in School.Affairs.Semester, select: %{institution_id: s.institution_id,id: s.id, start_date: s.start_date}))|>Enum.filter(fn x-> x.institution_id ==@conn.private.plug_session["institution_id"] end) %>
+
+                                                        <div class="col-sm-2">
+
+                                                            <label class="bmd-label-floating">
+                                                                <%= gettext "Semester" %>
+                                                            </label>
+                                                            <br>
+                                                           <select class="custom-select -custom-select-sm" onchange="getvalb(this);" required="required" name="co_semester">
+                                                                <%= for a <- semester |> Enum.sort do %>
+                                                                    <option value="<%= a.id %>">
+                                                                        <%= a.start_date %>
+                                                                    </option>
+                                                                    <% end %>
+                                                            </select>
+
+                                                        </div>
+
+                                                        <% level = Repo.all(from(s in School.Affairs.Level, select: %{institution_id: s.institution_id,id: s.id, name: s.name}))|>Enum.filter(fn x-> x.institution_id ==@conn.private.plug_session["institution_id"] end) %>
+
+                                                            <div class="col-sm-2">
+
+                                                                <label class="bmd-label-floating">
+                                                                    <%= gettext "Level" %>
+                                                                </label>
+                                                                <br>
+                                                               <select class="custom-select -custom-select-sm" onchange="getvalc(this);" required="required" name="co_level">
+                                                                    <%= for a <- level |> Enum.sort do %>
+                                                                        <option value="<%= a.id %>">
+                                                                            <%= a.name %>
+                                                                        </option>
+                                                                        <% end %>
+                                                                </select>
+
+                                                            </div>
+
+                                                </div>
+
+                                            </div>
+
+                                       
                                         
-                                        </select>
-                  
-               
-              </div>
 
-        <% semester= Repo.all(from(s in School.Affairs.Semester, select: %{institution_id: s.institution_id,id: s.id, start_date: s.start_date}))|>Enum.filter(fn x-> x.institution_id ==@conn.private.plug_session["institution_id"] end) %>
-           
-              <div class="col-sm-2">
-           
-                  <label class="bmd-label-floating"><%= gettext "Semester" %></label><br>
-                 <select class="select" onchange="getvalb(this);" required="required" name="co_semester">
-                           <%= for a <- semester |> Enum.sort do %>
-                                            <option value="<%= a.id %>" ><%= a.start_date %>
-                                            </option>
-                                          <% end %>
-                                        </select>
-               
-              </div>
+                                        </div>
+                                    </div>
 
-                 <% level = Repo.all(from(s in School.Affairs.Level, select: %{institution_id: s.institution_id,id: s.id, name: s.name}))|>Enum.filter(fn x-> x.institution_id ==@conn.private.plug_session["institution_id"] end) %>
-   
-              <div class="col-sm-2">
-              
-                  <label class="bmd-label-floating"><%= gettext "Level" %></label><br>
-                    <select class="select" onchange="getvalc(this);" required="required" name="co_level">
-                           <%= for a <- level |> Enum.sort do %>
-                                            <option value="<%= a.id %>" ><%= a.name %>
-                                            </option>
-                                          <% end %>
-                                        </select>
-              
-              </div>
- 
-                    
-                   
-                  </div>
+                                </div>
 
-
-            
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                
-                <hr>
-                    <div id="exam_filter_analysis" ></div>
-                   <div class="card-body" id="report_cocurriculum"></div>
-                   
-               
-               
-             
-              </div>
             </div>
-         
-          </div>
-
+            <div class="card">
+                <div id="exam_filter_analysis"></div>
+              <div class="card-body" id="report_cocurriculum"></div>
+            </div>
         </div>
-      </div>
-    </div>
-               </div>
-</div>  
 </div>
-</div>
-
 
 <script type="text/javascript">
-  
- $('select[name="cocurriculum"]').val(localStorage.getItem("cocurriculum"));
-  $('select[name="co_year"]').val(localStorage.getItem("co_year"));
-   $('select[name="co_semester"]').val(localStorage.getItem("co_semester"));
+    $('select[name="cocurriculum"]').val(localStorage.getItem("cocurriculum"));
+    $('select[name="co_year"]').val(localStorage.getItem("co_year"));
+    $('select[name="co_semester"]').val(localStorage.getItem("co_semester"));
     $('select[name="co_level"]').val(localStorage.getItem("co_level"));
-  function getval(sel)
-{
-    d=sel.value
-var cocurriculum=  localStorage.setItem("cocurriculum", d);
 
+    function getval(sel) {
+        d = sel.value
+        var cocurriculum = localStorage.setItem("cocurriculum", d);
 
-    window.location.reload();
+        window.location.reload();
 
- 
-}
-function getvala(sel)
-{
-    d=sel.value
-var co_year=  localStorage.setItem("co_year", d);
+    }
 
+    function getvala(sel) {
+        d = sel.value
+        var co_year = localStorage.setItem("co_year", d);
 
-    window.location.reload();
+        window.location.reload();
 
- 
-}
-function getvalb(sel)
-{
-    d=sel.value
-var co_semester=  localStorage.setItem("co_semester", d);
+    }
 
+    function getvalb(sel) {
+        d = sel.value
+        var co_semester = localStorage.setItem("co_semester", d);
 
-    window.location.reload();
+        window.location.reload();
 
- 
-}
-function getvalc(sel)
-{
-    d=sel.value
-var co_level=  localStorage.setItem("co_level", d);
+    }
 
+    function getvalc(sel) {
+        d = sel.value
+        var co_level = localStorage.setItem("co_level", d);
 
-    window.location.reload();
+        window.location.reload();
 
- 
-}
+    }
 
-var csrf =  $('input[name="_csrf_token"]').val()
+    var csrf = $('input[name="_csrf_token"]').val()
 
-channel.push("report_cocurriculum", {csrf: csrf,suser_id: window.currentUser,co_year: localStorage.getItem("co_year"),co_semester: localStorage.getItem("co_semester"),co_level: localStorage.getItem("co_level"),cocurriculum: localStorage.getItem("cocurriculum")})
+    channel.push("report_cocurriculum", {
+        csrf: csrf,
+        suser_id: window.currentUser,
+        co_year: localStorage.getItem("co_year"),
+        co_semester: localStorage.getItem("co_semester"),
+        co_level: localStorage.getItem("co_level"),
+        cocurriculum: localStorage.getItem("cocurriculum")
+    })
 
+    channel.on("show_report_cocurriculum", payload => {
 
- channel.on("show_report_cocurriculum", payload => {
-
-    $("div#report_cocurriculum").html(payload.html)
-  })
+        $("div#report_cocurriculum").html(payload.html)
+    })
 </script>

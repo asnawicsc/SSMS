@@ -214,6 +214,7 @@ $(document).ready(function(){
     channel.push("hw_get_classes",{map: map, institution_id: institution_id})
     channel.on("hw_show_classes", payload=>{
       $("form#classes").show()
+      $("div#gne").show()
       var i;
       for (i = 0; i < payload.classes.length; i++) { 
         

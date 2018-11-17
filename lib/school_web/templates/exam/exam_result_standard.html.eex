@@ -1,105 +1,121 @@
 <div class="content-heading">
-   <div>List  Exam & Standard 
-      <small><%= gettext("welcome")%>!</small>
-   </div>
-   <!-- START Language list-->
-   <div class="ml-auto">
-
-   </div>
-   <!-- END Language list-->
-</div>
-
- <div class="row">
-
-
-   <%= render( SchoolWeb.ExamView ,"report_nav.html",conn: @conn) %>
-
-<div class="col-lg-9">
-
- <div class="card">
- 
-               <div class="card-body">
-            <div aria-label="project_nilam">
-      <div class="content">
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col-md-12">
-              <div class="card ">
-               
-                <div class="card-header ">
-          
-                  <div class="row">
-                  <h4 class="card-title">Exam Result 
-                  </h4>
-
-       <form>
-                    
-                    <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
-                  </form>
-                   
-                    <select class="select" onchange="getvalv(this);" required="required" name="exam_result_standard">
-
-                           <%= for a <- @level |> Enum.sort do %>
-                                            <option value="<%= a.id %>" ><%= a.name %>
-                                            </option>
-                                          <% end %>
-                                        </select>   
-
-                    
-                   
-                  </div>
-                <hr>
-              <div id="exam_standard_filter">
-              </div>
-
-        
-                    <div class="tab-pane active" id="exam_record_standard">
-                    
-                    </div>
-                   
-                    
-             
-                </div>
-              </div>
-            </div>
-         
-          </div>
-
-        </div>
-      </div>
+    <div>List Exam & Standard
+        <small><%= gettext("welcome")%>!</small>
     </div>
-               </div>
-</div>  
-</div>
+    <!-- START Language list-->
+    <div class="ml-auto">
+
+    </div>
+    <!-- END Language list-->
 </div>
 
+<div class="row">
 
+    <%= render( SchoolWeb.ExamView ,"report_nav.html",conn: @conn) %>
+
+       <div class="col-lg-9">
+
+            <div class="card">
+
+                <div class="card-body">
+                    <div aria-label="project_nilam">
+                        <div class="content">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="card ">
+
+                                            <div class="card-header ">
+
+                                                <div class="row">
+
+                                                    <form>
+                                                        <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+                                                    </form>
+                                                    <div id="gne" class="form-group col-md-3">
+                                                      <label class="bmd-label-floating"><%= gettext "Standard Name" %></label>
+                                                        <select class="custom-select -custom-select-sm" onchange="getvalv(this);" required="required" name="exam_result_standard">
+
+                                                        <%= for a <- @level |> Enum.sort do %>
+                                                            <option value="<%= a.id %>">
+                                                                <%= a.name %>
+                                                            </option>
+                                                            <% end %>
+                                                    </select>
+                                                    </div>
+
+                                                    <div id="exam_standard_filter">
+
+                                                </div>
+
+                                              
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+    
+
+            <div class="card">
+
+                <div class="card-body">
+                    <div aria-label="project_nilam">
+                        <div class="content">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="card ">
+
+                                            <div class="card-header ">
+
+
+                                                <div class="tab-pane active" id="exam_record_standard">
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+
+</div>
 
 <script type="text/javascript">
+    $('select[name="exam_result_standard"]').val(localStorage.getItem("exam_result_standard"));
 
- 
+    function getvalv(sel) {
+        d = sel.value
 
- $('select[name="exam_result_standard"]').val(localStorage.getItem("exam_result_standard"));
-  function getvalv(sel)
-{
-    d=sel.value
+        localStorage.setItem("exam_result_standard", d)
 
-localStorage.setItem("exam_result_standard", d)
+        window.location.reload();
 
-    window.location.reload();
+    }
+    var csrf = $("input[name='_csrf_token']").val()
 
-}
-var csrf= $("input[name='_csrf_token']").val()
+    localStorage.setItem("exam_standard_csrf", csrf);
 
-localStorage.setItem("exam_standard_csrf", csrf);
-
- channel.push("exam_result_standard", {standard_id: localStorage.getItem("exam_result_standard"),user_id: window.currentUser})
+    channel.push("exam_result_standard", {
+        standard_id: localStorage.getItem("exam_result_standard"),
+        user_id: window.currentUser
+    })
     channel.on("show_exam_standard_filter", payload => {
 
+        $("div#exam_standard_filter").html(payload.html);
 
-    $("div#exam_standard_filter").html(payload.html);
-
-
-  })
-
+    })
 </script>

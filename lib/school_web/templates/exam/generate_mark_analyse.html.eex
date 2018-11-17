@@ -1,19 +1,15 @@
 
-   <div class="row">
+
     <input type="hidden" name="_csrf_token" value="">
-              <div class="col-sm-2">
-                <div class="form-group bmd-form-group">
-                  <label class="bmd-label-floating"><%= gettext "Exam Name" %></label><br>
-                 <select class="select" onchange="getval9(this)"  name="exam_result_analysis_id" required="" >
+
+                  <label class="bmd-label-floating"><%= gettext "Exam Name" %></label>
+                 <select class="custom-select -custom-select-sm" onchange="getval9(this)"  name="exam_result_analysis_id" required="" >
                            <%= for a <- @exam|>Enum.uniq |> Enum.sort do %>
                                             <option value="<%= a.id %>" ><%= a.exam_name %>
                                             </option>
                                           <% end %>
                                         </select>
-                </div>
-              </div>
-    
-</div>
+
 
 <script type="text/javascript">
    $('select[name="exam_result_analysis_id"]').val(localStorage.getItem("exam_result_analysis_id"));

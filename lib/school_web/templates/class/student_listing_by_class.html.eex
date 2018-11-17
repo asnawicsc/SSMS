@@ -1,77 +1,70 @@
 <div class="content-heading">
-   <div>Student Listing
-      <small><%= gettext("welcome")%>!</small>
-   </div>
-   <!-- START Language list-->
-   <div class="ml-auto">
+    <div>Student Listing
+        <small><%= gettext("welcome")%>!</small>
+    </div>
+    <!-- START Language list-->
+    <div class="ml-auto">
 
-   </div>
-   <!-- END Language list-->
+    </div>
+    <!-- END Language list-->
 </div>
 
 <div class="row">
 
+    <%= render( SchoolWeb.ExamView ,"report_nav.html",conn: @conn) %>
 
-   <%= render( SchoolWeb.ExamView ,"report_nav.html",conn: @conn) %>
+        <div class="col-lg-9">
 
-<div class="col-lg-9">
+            <div class="card">
+               <div class="card-header">Student Listing</div>
+                <div class="card-body">
+                        <form>
+                            <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+                        </form>
 
- <div class="card">
- 
-                        <div class="card-header ">
-
-                            <div class="row">
-                                <h4 class="card-title">Class :
-                                </h4>
-                                <form>
-   <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
-</form>
-
-                                <span> <select class="select" onchange="getval(this);" required="required" name="class_id">
+                      <select class="custom-select -custom-select-sm" onchange="getval(this);" required="required" name="class_id">
                                         <%= for a <- @class |> Enum.sort do %>
                                         <option value="<%= a.id %>">
                                             <%= a.name %>
                                         </option>
                                         <% end %>
-                                    </select></span>
-                               
+                                    </select>
 
-                            </div>
-                  
+                    </div>
+
+                </div>
+
+                            <div class="card">
+             
+                <div class="card-body">
+           <div id="sl"></div>
+
+                    </div>
+
+                </div>
                
-
-                        </div>
-                        <div class="card-body " id="sl"></div>
-               </div>
-</div>  
+            </div>
+        </div>
 </div>
 </div>
-
-
-
-
-
 
 <script type="text/javascript">
     $('select[name="class_id"]').val(localStorage.getItem("class_id"));
 
-    var csrf= $("input[name='_csrf_token']").val()
+    var csrf = $("input[name='_csrf_token']").val()
 
-localStorage.setItem("student_class_listing_csrf", csrf);
+    localStorage.setItem("student_class_listing_csrf", csrf);
 
     function getval(sel) {
         d = sel.value
         var level = localStorage.setItem("class_id", d);
-
 
         window.location.reload();
 
     }
     $("input[name='edit_class']").val(localStorage.getItem("class_id"))
 
-
     var class_id = localStorage.getItem("class_id")
-
 
     channel.push("student_class_listing", {
         user_id: window.currentUser,
@@ -81,14 +74,8 @@ localStorage.setItem("student_class_listing_csrf", csrf);
 
     channel.on("show_student_class_listing", payload => {
 
+        $("#sl").html(payload.html);
 
-
-    $("#sl").html(payload.html);
-
-
-  })
+    })
 </script>
 
-
-       
-   <script src="<%= static_path(@conn, "/js/jquery.skedTape.js") %> "></script>

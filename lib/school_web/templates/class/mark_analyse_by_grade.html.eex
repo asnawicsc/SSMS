@@ -1,43 +1,53 @@
 <div class="content-heading">
-   <div>Mark Analaysis By Grade
-      <small><%= gettext("welcome")%>!</small>
-   </div>
-   <!-- START Language list-->
-   <div class="ml-auto">
+    <div>Mark Analaysis By Grade
+        <small><%= gettext("welcome")%>!</small>
+    </div>
+    <!-- START Language list-->
+    <div class="ml-auto">
 
-   </div>
-   <!-- END Language list-->
+    </div>
+    <!-- END Language list-->
 </div>
 
+<div class="row">
 
- <div class="row">
+    <%= render( SchoolWeb.ExamView ,"report_nav.html",conn: @conn) %>
+
+        <div class="col-lg-9">
+
+            <div class="card">
+                  <div class="card-header">Mark Analaysis By Grade</div>
+                <div class="card-body">
 
 
-   <%= render( SchoolWeb.ExamView ,"report_nav.html",conn: @conn) %>
-
-<div class="col-lg-9">
-
- <div class="card">
- 
-               <div class="card-body">
-
-<form action="/pdf/exam_result_standard" method="POST">
-	<input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
-<select name="class"  required="required">
-	<%= for class <- @classes do %>
-	<option value="<%= class.id %>"><%= class.name %></option>
-	<% end %>
-</select>
-<select name="semester"  required="required">
-	<%= for sem <- @semesters do %>
-	<option value="<%= sem.id %>"><%= sem.start_date %> - <%= sem.end_date %></option>
-	<% end %>
-</select>
-<input type="submit" name="" value="Generate!">
-</form>
-               </div>
-</div>  
+                    <form action="/pdf/exam_result_standard" method="POST">
+                        <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+                            <div class="form-row">
+                        <div class="form-group col-md-2">
+                            <select class="custom-select -custom-select-sm" name="class" required="required">
+                                <%= for class <- @classes do %>
+                                    <option value="<%= class.id %>">
+                                        <%= class.name %>
+                                    </option>
+                                    <% end %>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <select class="custom-select -custom-select-sm" name="semester" required="required">
+                                <%= for sem <- @semesters do %>
+                                    <option value="<%= sem.id %>">
+                                        <%= sem.start_date %> -
+                                            <%= sem.end_date %>
+                                    </option>
+                                    <% end %>
+                            </select>
+                        </div>
+                         <div class="form-group col-md-2">
+                        <button class="mb-1 btn btn-primary" type="submit" name="" value="Generate">Generate</button>
+                     </div>
+                  </div>
+                    </form>
+                </div>
+            </div>
+        </div>
 </div>
-</div>
-
-
