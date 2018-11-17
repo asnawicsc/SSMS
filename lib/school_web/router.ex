@@ -23,6 +23,7 @@ defmodule SchoolWeb.Router do
     pipe_through([:browser, :splash_layout])
     get("/", PageController, :index_splash)
     get("/contacts_us", PageController, :contacts_us)
+    get("/redirect_from_li6", PageController, :redirect_from_li6)
   end
 
   scope "/pdf", SchoolWeb do
@@ -70,6 +71,9 @@ defmodule SchoolWeb.Router do
     get("/dashboard", PageController, :dashboard)
     get("/operations", PageController, :operations)
     get("/library/books", PageController, :books)
+    get("/library/lib_access", PageController, :lib_access)
+    get("/library/lib_register", PageController, :lib_register)
+
     post("/library/books/uploads", PageController, :upload_books)
     post("/library/book/update_book", PageController, :update_book)
     get("/library/book/student_cards", PageController, :student_cards)
@@ -125,6 +129,7 @@ defmodule SchoolWeb.Router do
     get("/mark_attendance/:class_id", AttendanceController, :mark_attendance)
     get("/add_to_class_attendance", AttendanceController, :add_to_class_attendance)
     get("/add_to_class_absent", AttendanceController, :add_to_class_absent)
+    get("/record_attendance", AttendanceController, :record_attendance)
 
     resources("/teacher", TeacherController)
     post("/upload_teachers", TeacherController, :upload_teachers)

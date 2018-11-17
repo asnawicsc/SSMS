@@ -59,3 +59,4 @@ config :school, School.Repo,
 
 # config :api, url: "https://www.li6rary.net/api"
 config :school, :api, url: "http://0.0.0.0:4001/api"
+config :school, :library, url: "http://0.0.0.0:4001/"

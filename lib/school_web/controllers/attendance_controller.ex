@@ -119,7 +119,7 @@ defmodule SchoolWeb.AttendanceController do
     attendance =
       Repo.get_by(
         Attendance,
-        attendance_date: Date.utc_today(),
+        attendance_date: params["date"],
         class_id: params["class_id"],
         semester_id: conn.private.plug_session["semester_id"],
         institution_id: conn.private.plug_session["institution_id"]
@@ -130,7 +130,7 @@ defmodule SchoolWeb.AttendanceController do
         cg =
           Attendance.changeset(%Attendance{}, %{
             institution_id: Affairs.inst_id(conn),
-            attendance_date: Date.utc_today(),
+            attendance_date: params["date"],
             class_id: params["class_id"],
             semester_id: conn.private.plug_session["semester_id"]
           })
@@ -140,7 +140,7 @@ defmodule SchoolWeb.AttendanceController do
       else
         {Repo.get_by(
            Attendance,
-           attendance_date: Date.utc_today(),
+           attendance_date: params["date"],
            class_id: params["class_id"],
            semester_id: conn.private.plug_session["semester_id"]
          )}
@@ -156,7 +156,8 @@ defmodule SchoolWeb.AttendanceController do
             sc.institute_id == ^Affairs.inst_id(conn) and
               sc.semester_id == ^conn.private.plug_session["semester_id"] and
               s.institution_id == ^conn.private.plug_session["institution_id"] and
-              sc.class_id == ^params["class_id"]
+              sc.class_id == ^params["class_id"],
+          order_by: [s.name]
         )
       )
 
@@ -171,14 +172,77 @@ defmodule SchoolWeb.AttendanceController do
 
     rem = students -- attended_students
 
+    rem =
+      for each <- rem do
+        Map.put(each, :attend, false)
+      end
+
+    if attended_students != [] do
+      attended_students =
+        for each <- attended_students do
+          Map.put(each, :attend, true)
+        end
+    end
+
+    students = List.flatten(rem, attended_students)
+
     render(
       conn,
-      "mark_attendance.html",
+      "mark_attendance2.html",
       class: class,
       attendance: attendance,
-      students: rem,
-      attended_students: attended_students
+      students: students,
+      date: params["date"]
     )
+  end
+
+  def record_attendance(conn, params) do
+    attendance = Repo.get(Attendance, params["attendance_id"])
+    lists = Map.to_list(params)
+
+    student_ids =
+      for list <- lists do
+        if String.contains?(elem(list, 0), "-attend") do
+          params[elem(list, 0)]
+        end
+      end
+      |> Enum.filter(fn x -> x != nil end)
+      |> Enum.join(",")
+
+    Attendance.changeset(attendance, %{student_id: student_ids}) |> Repo.update!()
+
+    abs_ids =
+      for list <- lists do
+        if String.contains?(elem(list, 0), "-abs_reason") do
+          String.trim(elem(list, 0), "-abs_reason")
+        end
+      end
+      |> Enum.filter(fn x -> x != nil end)
+
+    attended_std = student_ids |> String.split(",")
+    abs_ids = abs_ids -- attended_std
+
+    for each <- abs_ids do
+      abs = Repo.get_by(Absent, absent_date: attendance.attendance_date, student_id: each)
+
+      if abs != nil do
+        Absent.changeset(abs, %{reason: params[each <> "-abs_reason"]}) |> Repo.update!()
+      else
+        Absent.changeset(%Absent{}, %{
+          institution_id: attendance.institution_id,
+          class_id: attendance.class_id,
+          student_id: each,
+          semester_id: attendance.semester_id,
+          reason: params[each <> "-abs_reason"],
+          absent_date: attendance.attendance_date
+        })
+        |> Repo.insert()
+      end
+    end
+
+    conn
+    |> put_flash(:info, "Attendance recorded successfully.")
+    |> redirect(to: attendance_path(conn, :index))
   end
 
   def attendance_report(conn, params) do

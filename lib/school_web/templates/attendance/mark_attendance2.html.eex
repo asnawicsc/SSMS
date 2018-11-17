@@ -1,0 +1,118 @@
+<% parameters = Repo.get_by(School.Settings.Parameter, institution_id: @conn.private.plug_session["institution_id"])
+  %>
+<% absent_reasons = parameters.absent_reasons |> String.split(",") %>
+<div class="content-heading">
+   <div>Mark attendance for <%= @class.name%> on <%= @date %>
+   </div>
+</div>
+
+		<div class="row">
+  
+		    <div class="col-lg-6">
+		      <div class="card mb-3 border-success">
+		         <div class="card-header text-white bg-success">Attendance of <%= @class.name %></div>
+		         <div class="card-body">
+		            <table class="table">
+		              <thead>
+		                <tr>
+		                  <th><%= gettext "Name" %></th>
+
+		                  <th><%= gettext "Action" %></th>
+		                  <th><%= gettext "Absent Reason" %></th>
+		                </tr>
+		              </thead>
+		              <tbody>
+		              	<form action="/record_attendance">
+		              		<input type="hidden" name="attendance_id" value="<%= @attendance.id %>">
+		              	<%= for student <- @students do %>
+		              	<tr>
+		              		<td>
+		              			<%= student.name %>
+		              		</td>
+		              		<%= if student.attend == true do %>
+			              		<td>
+			              			<div class="checkbox c-checkbox">
+	                                 	<label>
+	                                    	<input type="checkbox" name = "<%= student.id %>-attend" checked="" value="<%= student.id %>">
+	                                    	<span class="fa fa-check"></span>
+	                                    </label>
+                              		</div>
+			              		</td>
+			              		<td>
+			              			<div id="<%= student.id %>_select" style="display: none;">
+			              			<select class="custom-select custom-select" name="<%= student.id %>-abs_reason">
+			              				<option selected=""></option>
+			              				<%= for reason <- absent_reasons do %>
+										<option value="<%= reason %>"><%= reason %></option>
+										<% end %>
+	                              	</select>
+	                              </div>
+		              			</td>
+		              		<% else %>
+			              		<td>
+			              			<div class="checkbox c-checkbox">
+	                                 	<label>
+	                                    	<input type="checkbox" id="<%= student.id %>" name = "<%= student.id %>-attend" value="<%= student.id %>">
+	                                    	<span class="fa fa-check"></span>
+	                                    </label>
+                              		</div>
+			              		</td>
+		              		<% absent = Repo.get_by(Absent, student_id: Integer.to_string(student.id), absent_date: @date) %>
+			              		<%= if absent != nil do %>
+				              		<td>
+				              			<div id="<%= student.id %>_select" style="display: block;">
+				              			<select class="custom-select custom-select" id="<%= student.id %>" name="<%= student.id %>-abs_reason">
+				              				
+				              				<%= for reason <- absent_reasons do %>
+				              					<%= if reason == absent.reason do %>
+				              					<option selected=""><%= absent.reason %></option>
+				              					<% else %>
+												<option value="<%= reason %>"><%= reason %></option>
+												<% end %>
+											<% end %>
+		                              	</select>
+		                              	</div>
+				              		</td>
+				              	<% else %>
+				              		<td>
+				              			<div id="<%= student.id %>_select" style="display: block;">
+				              			<select class="custom-select custom-select" id="<%= student.id %>" name="<%= student.id %>-abs_reason">
+				              				<option selected=""></option>
+				              				<%= for reason <- absent_reasons do %>
+											<option value="<%= reason %>"><%= reason %></option>
+											<% end %>
+		                              	</select>
+		                              	</div>
+				              		</td>
+
+			              		<% end %>
+		              		<% end %>
+		              	</tr>
+		              	<% end %>
+		              </tbody>
+		            </table>
+		            <button class="mb-1 btn btn-info" type="submit">Submit</button> 
+
+		              </form>
+		              <a href="/attendance"><button class="mb-1 btn btn-warning" >Back</button></a>
+		         </div>
+		      </div>
+		      </div>
+
+
+<script type="text/javascript">
+	$('input[type="checkbox"]').click(function(){
+		console.log(this)
+            if($(this).is(":checked")){
+            	var std_id = $(this).val();
+                	console.log(std_id)
+
+                $('#'+std_id+'_select').css('display','none');
+            }
+            else if($(this).is(":not(:checked)")){
+                var std_id = $(this).val();
+       			console.log(std_id)
+                $('#'+std_id+'_select').css('display','block');
+            }
+        });
+</script>
