@@ -11,7 +11,7 @@ defmodule SchoolWeb.GoogleController do
     redirect_uri = "https://www.5chool.net/api/callback"
 
     scope =
-      "https://www.googleapis.com/auth/calendar&https://www.googleapis.com/auth/calendar.events"
+      "https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/calendar.events"
 
     access_type = "online"
     state = conn.query_string |> String.replace("&", ",")
@@ -83,8 +83,14 @@ defmodule SchoolWeb.GoogleController do
         end
 
       if state["request"] == "create_calendar" do
-        calendar_id = create_calendar(state, at)
+        calendar_id = create_calendar(user.id, at)
         sync_calendar_events(calendar_id, user.id, at)
+      end
+
+      if state["request"] == "sync_calendar" do
+        {:ok, teacher} = School.Affairs.get_teacher(user.id)
+        {:ok, timetable} = School.Affairs.initialize_calendar(teacher.id)
+        sync_calendar_events(timetable.calender_id, user.id, at)
       end
 
       # whatever the response go back to main page first
@@ -95,29 +101,72 @@ defmodule SchoolWeb.GoogleController do
   end
 
   def sync_calendar_events(calendar_id, user_id, at) do
-    # find the difference between 2 list
-
     # local list
     {:ok, teacher} = School.Affairs.get_teacher(user_id)
     local_list = School.Affairs.teacher_period_list(teacher.id)
-    # google list
-    google_list = School.Google.get_events(user_id)
-    # each of the local list, create the events
 
-    for local <- local_list do
+    unysnc = local_list |> Enum.filter(fn x -> x.google_event_id == nil end)
+
+    for local <- unysnc do
       create_event(calendar_id, local, at)
+    end
+
+    period_ids = School.Affairs.list_sync_list() |> Enum.map(fn x -> x.period_id end)
+
+    local_list2 = School.Affairs.teacher_period_list(teacher.id, period_ids)
+
+    for local2 <- local_list2 do
+      update_event(calendar_id, local2, at)
+    end
+  end
+
+  def update_event(calendar_id, local, at) do
+    local =
+      Map.put(local, :start, %{dateTime: DateTime.to_iso8601(Timex.shift(local.start, hours: -8))})
+
+    local =
+      Map.put(local, :end, %{dateTime: DateTime.to_iso8601(Timex.shift(local.end, hours: -8))})
+
+    local = Map.put(local, :summary, local.title)
+    json_body = Poison.encode!(local)
+
+    response =
+      HTTPoison.request!(
+        :put,
+        "https://www.googleapis.com/calendar/v3/calendars/#{calendar_id}/events/#{
+          local.google_event_id
+        }",
+        json_body,
+        [
+          {"Authorization", "Bearer #{at}"},
+          {"Accept", "application/json"},
+          {"Content-Type", "application/json"}
+        ],
+        timeout: 50_000,
+        recv_timeout: 50_000
+      ).body
+
+    IO.inspect(response)
+
+    if response != "Not Found" do
+      event_params = response |> Poison.decode!()
+      IO.inspect(event_params)
+
+      a = Repo.get_by(School.Affairs.SyncList, period_id: local.period_id) |> Repo.delete()
+      IO.inspect(a)
+    else
     end
   end
 
   def create_event(calendar_id, local, at) do
-    body =
+    local =
       Map.put(local, :start, %{dateTime: DateTime.to_iso8601(Timex.shift(local.start, hours: -8))})
 
-    body =
+    local =
       Map.put(local, :end, %{dateTime: DateTime.to_iso8601(Timex.shift(local.end, hours: -8))})
 
-    body = Map.put(local, :summary, local.title)
-    json_body = Poison.encode!(body)
+    local = Map.put(local, :summary, local.title)
+    json_body = Poison.encode!(local)
 
     response =
       HTTPoison.request!(
@@ -133,20 +182,25 @@ defmodule SchoolWeb.GoogleController do
         recv_timeout: 50_000
       ).body
 
-    event_params = response |> Poison.decode!()
+    IO.inspect(response)
 
-    google_event_id = event_params["id"]
-    period = School.Affairs.get_period!(local.period_id)
-    a = School.Affairs.update_period(period, %{google_event_id: google_event_id})
-    IO.inspect(event_params)
-    IO.inspect(a)
+    if response != "Not Found" do
+      event_params = response |> Poison.decode!()
+
+      google_event_id = event_params["id"]
+      period = School.Affairs.get_period!(local.period_id)
+      a = School.Affairs.update_period(period, %{google_event_id: google_event_id})
+      IO.inspect(event_params)
+      IO.inspect(a)
+    else
+    end
   end
 
-  def create_calendar(state, at) do
-    a = School.Settings.get_user!(state["user_id"])
+  def create_calendar(user_id, at) do
+    a = School.Settings.get_user!(user_id)
 
     body = %{
-      summary: a.name <> "@5chool.net teacher calendar",
+      summary: "#{a.name}@5chool.net teacher calendar",
       access_token: at
     }
 
@@ -169,7 +223,7 @@ defmodule SchoolWeb.GoogleController do
     calendar_params = response |> Poison.decode!()
     calendar_id = calendar_params["id"]
 
-    case School.Affairs.get_teacher(state["user_id"]) do
+    case School.Affairs.get_teacher(user_id) do
       {:ok, teacher} ->
         {:ok, timetable} = School.Affairs.initialize_calendar(teacher.id)
         School.Affairs.update_timetable(timetable, %{calender_id: calendar_id})

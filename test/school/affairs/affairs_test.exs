@@ -3384,4 +3384,68 @@ defmodule School.AffairsTest do
       assert %Ecto.Changeset{} = Affairs.change_exam_period(exam_period)
     end
   end
+
+  describe "sync_list" do
+    alias School.Affairs.SyncList
+
+    @valid_attrs %{executed_time: "2010-04-17 14:00:00.000000Z", period_id: 42, status: "some status"}
+    @update_attrs %{executed_time: "2011-05-18 15:01:01.000000Z", period_id: 43, status: "some updated status"}
+    @invalid_attrs %{executed_time: nil, period_id: nil, status: nil}
+
+    def sync_list_fixture(attrs \\ %{}) do
+      {:ok, sync_list} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_sync_list()
+
+      sync_list
+    end
+
+    test "list_sync_list/0 returns all sync_list" do
+      sync_list = sync_list_fixture()
+      assert Affairs.list_sync_list() == [sync_list]
+    end
+
+    test "get_sync_list!/1 returns the sync_list with given id" do
+      sync_list = sync_list_fixture()
+      assert Affairs.get_sync_list!(sync_list.id) == sync_list
+    end
+
+    test "create_sync_list/1 with valid data creates a sync_list" do
+      assert {:ok, %SyncList{} = sync_list} = Affairs.create_sync_list(@valid_attrs)
+      assert sync_list.executed_time == DateTime.from_naive!(~N[2010-04-17 14:00:00.000000Z], "Etc/UTC")
+      assert sync_list.period_id == 42
+      assert sync_list.status == "some status"
+    end
+
+    test "create_sync_list/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_sync_list(@invalid_attrs)
+    end
+
+    test "update_sync_list/2 with valid data updates the sync_list" do
+      sync_list = sync_list_fixture()
+      assert {:ok, sync_list} = Affairs.update_sync_list(sync_list, @update_attrs)
+      assert %SyncList{} = sync_list
+      assert sync_list.executed_time == DateTime.from_naive!(~N[2011-05-18 15:01:01.000000Z], "Etc/UTC")
+      assert sync_list.period_id == 43
+      assert sync_list.status == "some updated status"
+    end
+
+    test "update_sync_list/2 with invalid data returns error changeset" do
+      sync_list = sync_list_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_sync_list(sync_list, @invalid_attrs)
+      assert sync_list == Affairs.get_sync_list!(sync_list.id)
+    end
+
+    test "delete_sync_list/1 deletes the sync_list" do
+      sync_list = sync_list_fixture()
+      assert {:ok, %SyncList{}} = Affairs.delete_sync_list(sync_list)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_sync_list!(sync_list.id) end
+    end
+
+    test "change_sync_list/1 returns a sync_list changeset" do
+      sync_list = sync_list_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_sync_list(sync_list)
+    end
+  end
 end

@@ -2890,6 +2890,10 @@ defmodule SchoolWeb.UserChannel do
 
           case a do
             {:ok, period} ->
+              if period.google_event_id != nil do
+                flag_pending_sync(period.id)
+              end
+
               broadcast(socket, "show_period", %{
                 "period_id" => period_id,
                 "user_id" => user_id,
@@ -2922,6 +2926,11 @@ defmodule SchoolWeb.UserChannel do
     end
 
     {:noreply, socket}
+  end
+
+  def flag_pending_sync(period_id) do
+    School.Affairs.create_sync_list(%{period_id: period_id})
+    true
   end
 
   # Add authorization logic here as required.

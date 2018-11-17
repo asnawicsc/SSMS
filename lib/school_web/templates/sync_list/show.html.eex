@@ -1,0 +1,23 @@
+<h2>Show Sync list</h2>
+
+<ul>
+
+  <li>
+    <strong>Period:</strong>
+    <%= @sync_list.period_id %>
+  </li>
+
+  <li>
+    <strong>Status:</strong>
+    <%= @sync_list.status %>
+  </li>
+
+  <li>
+    <strong>Executed time:</strong>
+    <%= @sync_list.executed_time %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: sync_list_path(@conn, :edit, @sync_list) %></span>
+<span><%= link "Back", to: sync_list_path(@conn, :index) %></span>

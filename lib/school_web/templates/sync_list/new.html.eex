@@ -1,0 +1,5 @@
+<h2>New Sync list</h2>
+
+<%= render "form.html", Map.put(assigns, :action, sync_list_path(@conn, :create)) %>
+
+<span><%= link "Back", to: sync_list_path(@conn, :index) %></span>

@@ -4052,7 +4052,9 @@ defmodule School.Affairs do
             class: c.name,
             start_datetime: p.start_datetime,
             end_datetime: p.end_datetime,
-            teacher: t.name
+            teacher: t.name,
+            google_event_id: p.google_event_id,
+            updated_at: p.updated_at
           }
         )
       )
@@ -4062,7 +4064,50 @@ defmodule School.Affairs do
           end: my_time(x.end_datetime),
           title: x.subject <> " - " <> x.class,
           description: x.teacher,
-          period_id: x.period_id
+          period_id: x.period_id,
+          google_event_id: x.google_event_id,
+          updated_at: x.updated_at
+        }
+      end)
+
+    a
+  end
+
+  def teacher_period_list(teacher_id, period_ids) do
+    a =
+      Repo.all(
+        from(
+          p in School.Affairs.Period,
+          left_join: tt in School.Affairs.Timetable,
+          on: p.timetable_id == tt.id,
+          left_join: s in School.Affairs.Subject,
+          on: s.id == p.subject_id,
+          left_join: c in School.Affairs.Class,
+          on: c.id == p.class_id,
+          left_join: t in School.Affairs.Teacher,
+          on: t.id == p.teacher_id,
+          where: tt.teacher_id == ^teacher_id and p.id in ^period_ids,
+          select: %{
+            period_id: p.id,
+            subject: s.description,
+            class: c.name,
+            start_datetime: p.start_datetime,
+            end_datetime: p.end_datetime,
+            teacher: t.name,
+            google_event_id: p.google_event_id,
+            updated_at: p.updated_at
+          }
+        )
+      )
+      |> Enum.map(fn x ->
+        %{
+          start: my_time(x.start_datetime),
+          end: my_time(x.end_datetime),
+          title: x.subject <> " - " <> x.class,
+          description: x.teacher,
+          period_id: x.period_id,
+          google_event_id: x.google_event_id,
+          updated_at: x.updated_at
         }
       end)
 
@@ -4114,5 +4159,101 @@ defmodule School.Affairs do
     else
       Timex.shift(time, hours: 8)
     end
+  end
+
+  alias School.Affairs.SyncList
+
+  @doc """
+  Returns the list of sync_list.
+
+  ## Examples
+
+      iex> list_sync_list()
+      [%SyncList{}, ...]
+
+  """
+  def list_sync_list do
+    Repo.all(SyncList)
+  end
+
+  @doc """
+  Gets a single sync_list.
+
+  Raises `Ecto.NoResultsError` if the Sync list does not exist.
+
+  ## Examples
+
+      iex> get_sync_list!(123)
+      %SyncList{}
+
+      iex> get_sync_list!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_sync_list!(id), do: Repo.get!(SyncList, id)
+
+  @doc """
+  Creates a sync_list.
+
+  ## Examples
+
+      iex> create_sync_list(%{field: value})
+      {:ok, %SyncList{}}
+
+      iex> create_sync_list(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_sync_list(attrs \\ %{}) do
+    %SyncList{}
+    |> SyncList.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a sync_list.
+
+  ## Examples
+
+      iex> update_sync_list(sync_list, %{field: new_value})
+      {:ok, %SyncList{}}
+
+      iex> update_sync_list(sync_list, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_sync_list(%SyncList{} = sync_list, attrs) do
+    sync_list
+    |> SyncList.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a SyncList.
+
+  ## Examples
+
+      iex> delete_sync_list(sync_list)
+      {:ok, %SyncList{}}
+
+      iex> delete_sync_list(sync_list)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_sync_list(%SyncList{} = sync_list) do
+    Repo.delete(sync_list)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking sync_list changes.
+
+  ## Examples
+
+      iex> change_sync_list(sync_list)
+      %Ecto.Changeset{source: %SyncList{}}
+
+  """
+  def change_sync_list(%SyncList{} = sync_list) do
+    SyncList.changeset(sync_list, %{})
   end
 end

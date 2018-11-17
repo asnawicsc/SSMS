@@ -1,0 +1,30 @@
+<h2>Listing Sync list</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Period</th>
+      <th>Status</th>
+      <th>Executed time</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for sync_list <- @sync_list do %>
+    <tr>
+      <td><%= sync_list.period_id %></td>
+      <td><%= sync_list.status %></td>
+      <td><%= sync_list.executed_time %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: sync_list_path(@conn, :show, sync_list), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: sync_list_path(@conn, :edit, sync_list), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: sync_list_path(@conn, :delete, sync_list), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Sync list", to: sync_list_path(@conn, :new) %></span>
