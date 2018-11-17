@@ -10,6 +10,7 @@ defmodule School.Settings.User do
     field(:role, :string, default: "Support")
     field(:email, :string)
     field(:default_lang, :string, default: "en")
+    field(:is_librarian, :boolean, default: "false")
 
     timestamps()
   end
@@ -24,7 +25,8 @@ defmodule School.Settings.User do
       :password,
       :crypted_password,
       :institution_id,
-      :role
+      :role,
+      :is_librarian
     ])
     |> validate_required([:crypted_password, :email])
     |> unique_constraint(:email)

@@ -287,44 +287,21 @@
                            </ul>
                         </li>
 
+                        
+
                         <li class=" ">
-                           <a href="#library" title="School Setup" data-toggle="collapse">
+                           <a href="#library_access" title="School Setup" data-toggle="collapse">
                             <em class="fas fa-book"></em>
-                              <span data-localize="sidebar.nav.extra.EXTRA"><%= gettext "Library" %></span>
+                              <span data-localize="sidebar.nav.extra.EXTRA"><%= gettext "Access Library" %></span>
                            </a>
 
-                           <ul class="sidebar-nav sidebar-subnav collapse" id="library">
+                           <ul class="sidebar-nav sidebar-subnav collapse" id="library_access">
                               <li class=" ">
-                                 <a href="/library/books" title="Book Lists">
+                                 <a href="/library/lib_access" title="Book Lists">
 
-                                    <span><%= gettext "Book Lists" %></span>
+                                    <span><%= gettext "Access" %></span>
                                  </a>
                               </li>
-                              <li class=" ">
-                                 <a href="/library/returns" title="Return Lists">
-
-                                    <span><%= gettext "Return Lists" %></span>
-                                 </a>
-                              </li>
-                              <li class=" ">
-                                 <a href="/library/loan_report" title="Co-Loan Report">
-                                    <span><%= gettext "Loan Report" %></span>
-                                 </a>
-                              </li>
-                              <li class=" ">
-                                 <a href="/library/loans/new" title="New Loans">
-                                    <span><%= gettext "New Loans" %></span>
-                                 </a>
-                              </li>
-                              <li class=" ">
-                                 <a href="/library/book/student_cards" title="Student Cards">
-                                    <span><%= gettext "Student Cards" %></span>
-                                 </a>
-                              </li>
-                              
-                            
-                                   
-
                            </ul>
                         </li>
 
@@ -555,6 +532,23 @@
                            </a>
 
                         </li>
+                        <%= if user.is_librarian == true do %>
+                        <li class=" ">
+                           <a href="#library_access" title="School Setup" data-toggle="collapse">
+                            <em class="fas fa-book"></em>
+                              <span data-localize="sidebar.nav.extra.EXTRA"><%= gettext "Access Library" %></span>
+                           </a>
+
+                           <ul class="sidebar-nav sidebar-subnav collapse" id="library_access">
+                              <li class=" ">
+                                 <a href="/library/lib_access" title="Book Lists">
+
+                                    <span><%= gettext "Access" %></span>
+                                 </a>
+                              </li>
+                           </ul>
+                        </li>
+                        <% end %>
                      </ul>
                      <!-- END sidebar nav-->
                   </nav>

@@ -1,0 +1,103 @@
+<div class="block-center mt-4 wd-xl" id="login">
+         <!-- START card-->
+         <div class="card card-flat">
+            <div class="card-header text-center bg-dark">
+               <h3 style="color: white;">School Library</h3>
+            </div>
+            <div class="card-body">
+               <p class="text-center py-2">SIGN IN TO CONTINUE.</p>
+               <form class="mb-3" id="loginForm" novalidate="">
+                  <div class="form-group">
+                     <div class="input-group with-focus">
+                        <input class="form-control border-right-0" id="exampleInputEmail1" name="email" type="email" placeholder="Enter email" autocomplete="off" required="">
+                        <div class="input-group-append">
+                           <span class="input-group-text text-muted bg-transparent border-left-0">
+                              <em class="fa fa-envelope"></em>
+                           </span>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <div class="input-group with-focus">
+                        <input class="form-control border-right-0" id="exampleInputPassword1" name="password" type="password" placeholder="Password" required="">
+                        <div class="input-group-append">
+                           <span class="input-group-text text-muted bg-transparent border-left-0">
+                              <em class="fa fa-lock"></em>
+                           </span>
+                        </div>
+                     </div>
+                  </div>
+                  
+                  <button class="btn btn-block btn-primary mt-3" type="submit">Login</button>
+               </form>
+               <p class="pt-3 text-center">Need to Signup?</p>
+               <a class="btn btn-block btn-secondary" id="register">Register Now</a>
+            </div>
+         </div>
+         <!-- END card-->
+      </div>
+
+<div class="block-center mt-4 wd-xl" id="register">
+         <!-- START card-->
+         <div class="card card-flat">
+            <div class="card-header text-center bg-dark">
+              <h3 style="color: white;">School Library</h3>
+            </div>
+            <div class="card-body">
+               <p class="text-center py-2">SIGNUP TO GET INSTANT ACCESS.</p>
+               <form class="mb-3" id="registerForm" action="/library/lib_register">
+                  <div class="form-group">
+                     <label class="text-muted" for="signupInputEmail1">Email address</label>
+                     <div class="input-group with-focus">
+                        <input class="form-control border-right-0" id="signupInputEmail1" name="email" type="email" placeholder="Enter email" autocomplete="off" required="">
+                        <div class="input-group-append">
+                           <span class="input-group-text text-muted bg-transparent border-left-0">
+                              <em class="fa fa-envelope"></em>
+                           </span>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <label class="text-muted" for="signupInputPassword1">Password</label>
+                     <div class="input-group with-focus">
+                        <input class="form-control border-right-0" id="signupInputPassword1" name="password" type="password" placeholder="Password" autocomplete="off" required="">
+                        <div class="input-group-append">
+                           <span class="input-group-text text-muted bg-transparent border-left-0">
+                              <em class="fa fa-lock"></em>
+                           </span>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <label class="text-muted" for="signupInputRePassword1">Retype Password</label>
+                     <div class="input-group with-focus">
+                        <input class="form-control border-right-0" id="signupInputRePassword1" name="confirm_password" type="password" placeholder="Retype Password" autocomplete="off" required="" data-parsley-equalto="#signupInputPassword1">
+                        <div class="input-group-append">
+                           <span class="input-group-text text-muted bg-transparent border-left-0">
+                              <em class="fa fa-lock"></em>
+                           </span>
+                        </div>
+                     </div>
+                  </div>
+                 
+                  <button class="btn btn-block btn-primary mt-3" type="submit">Create account</button>
+               </form>
+               <p class="pt-3 text-center">Have an account?</p>
+               <a class="btn btn-block btn-secondary" id="signup">Signup</a>
+            </div>
+         </div>
+         <!-- END card-->
+         
+      </div>
+
+<script type="text/javascript">
+   $('div#register').hide();
+   $('a#register').click(function(){
+      $('div#register').show();
+      $('div#login').hide();
+   });
+   $('a#signup').click(function(){
+      $('div#register').hide();
+      $('div#login').show();
+   });
+</script>

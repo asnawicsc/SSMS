@@ -70,6 +70,9 @@ defmodule SchoolWeb.Router do
     get("/dashboard", PageController, :dashboard)
     get("/operations", PageController, :operations)
     get("/library/books", PageController, :books)
+    get("/library/lib_access", PageController, :lib_access)
+    get("/library/lib_register", PageController, :lib_register)
+
     post("/library/books/uploads", PageController, :upload_books)
     post("/library/book/update_book", PageController, :update_book)
     get("/library/book/student_cards", PageController, :student_cards)

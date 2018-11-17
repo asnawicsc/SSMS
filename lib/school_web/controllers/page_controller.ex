@@ -389,6 +389,105 @@ defmodule SchoolWeb.PageController do
     )
   end
 
+  def lib_access(conn, params) do
+    bin = Plug.Crypto.KeyGenerator.generate("resertech", "damien")
+    uri = Application.get_env(:school, :api)[:url]
+
+    lib_id = School.Affairs.inst_id(conn)
+    # access library
+    path = "?scope=get_lib&inst_id=sa_#{lib_id}"
+
+    response =
+      HTTPoison.get!(
+        uri <> path,
+        [{"Content-Type", "application/json"}],
+        timeout: 50_000,
+        recv_timeout: 50_000
+      ).body
+
+    library = response |> Poison.decode!()
+
+    library_organization_id = library["org_id"]
+    inst = Repo.get(Institution, School.Affairs.inst_id(conn))
+
+    Institution.changeset(inst, %{library_organization_id: library_organization_id})
+    |> Repo.update()
+
+    # create user
+    user = Repo.get(User, conn.private.plug_session["user_id"])
+
+    name = user.name |> String.split(" ") |> Enum.join("_")
+    email = user.email
+    encrypted_password = Plug.Crypto.MessageEncryptor.encrypt(user.crypted_password, bin, bin)
+
+    path2 =
+      "?scope=create_user&inst_id=sa_#{lib_id}&name=#{name}&email=#{email}&password=#{
+        encrypted_password
+      }"
+
+    response2 =
+      HTTPoison.get!(
+        uri <> path2,
+        [{"Content-Type", "application/json"}],
+        timeout: 50_000,
+        recv_timeout: 50_000
+      ).body
+
+    data = response2 |> Poison.decode!()
+
+    lib_uri = Application.get_env(:school, :library)[:url]
+    lib_path = "admin/authenticate_school/#{email}/#{encrypted_password}"
+    lib_uri = lib_uri <> lib_path
+
+    conn
+    |> put_flash(:info, "Library Accessed !")
+    |> redirect(external: lib_uri)
+  end
+
+  def lib_login(conn, params) do
+  end
+
+  def lib_register(conn, params) do
+    bin = Plug.Crypto.KeyGenerator.generate("resertech", "damien")
+
+    if params["password"] == params["confirm_password"] do
+      encrypted_password = Plug.Crypto.MessageEncryptor.encrypt(params["password"], bin, bin)
+      user = Repo.get_by(User, email: params["email"])
+      name = user.name |> String.split(" ") |> Enum.join("_")
+      uri = Application.get_env(:school, :api)[:url]
+
+      lib_id = School.Affairs.inst_id(conn)
+
+      path =
+        "?scope=create_user&inst_id=sa_#{lib_id}&name=#{name}&email=#{params["email"]}&password=#{
+          encrypted_password
+        }"
+
+      response =
+        HTTPoison.get!(
+          uri <> path,
+          [{"Content-Type", "application/json"}],
+          timeout: 50_000,
+          recv_timeout: 50_000
+        ).body
+
+      data = response |> Poison.decode!()
+
+      if data["message"] == "User created successfully!" do
+        user_params = %{is_librarian: true}
+        Settings.update_user(user, user_params)
+      end
+
+      conn
+      |> put_flash(:info, data["message"])
+      |> render("lib_login.html")
+    else
+      conn
+      |> put_flash(:error, "Password and Confirmation Password not match!")
+      |> render("lib_login.html")
+    end
+  end
+
   def books(conn, params) do
     # uri = "https://www.li6rary.net/api"
     uri = Application.get_env(:school, :api)[:url]
