@@ -1517,8 +1517,7 @@ defmodule SchoolWeb.UserChannel do
       Repo.all(
         from(
           s in School.Affairs.ExamMark,
-          where:
-            s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
+          where: s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
           select: %{
             class_id: s.class_id,
             subject_id: s.subject_id,
@@ -2862,6 +2861,15 @@ defmodule SchoolWeb.UserChannel do
       end
 
     broadcast(socket, "show_co_student", %{html: html})
+    {:noreply, socket}
+  end
+
+  def handle_in("save_ui_color", %{"color" => color, "user_id" => user_id}, socket) do
+    user = Repo.get(User, user_id)
+
+    School.Settings.update_user(user, %{styles: "/" <> color})
+
+    broadcast(socket, "load_ui_color", %{color: color})
     {:noreply, socket}
   end
 

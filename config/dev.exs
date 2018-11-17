@@ -7,9 +7,17 @@ use Mix.Config
 # watchers to your application. For example, we use it
 # with brunch.io to recompile .js and .css sources.
 config :school, SchoolWeb.Endpoint,
-  http: [port: 4001],
-  http: [protocol_options: [max_request_line_length: 8192, max_header_value_length: 8192]],
+  url: [host: "www.localhost:4002"],
+  http: [port: 4000],
+  force_ssl: [hsts: true],
+  https: [
+    port: 4002,
+    otp_app: :school,
+    keyfile: "priv/server.key",
+    certfile: "priv/server.pem"
+  ],
   debug_errors: true,
+  catch_errors: true,
   code_reloader: true,
   check_origin: false,
   watchers: []

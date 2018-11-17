@@ -4,6 +4,27 @@ defmodule SchoolWeb.PageController do
   use Task
   alias School.Settings.Institution
 
+  def apply_color(conn, params) do
+    user = Settings.current_user(conn)
+    role = user.role
+
+    location =
+      case role do
+        "Support" ->
+          :support_dashboard
+
+        "Admin" ->
+          :admin_dashboard
+
+        _ ->
+          :dashboard
+      end
+
+    conn
+    |> put_session(:style, user.styles)
+    |> redirect(to: page_path(conn, location))
+  end
+
   def redirect_from_li6(conn, params) do
     user = Repo.get_by(User, name: params["name"], email: params["email"])
     role = user.role

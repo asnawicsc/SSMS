@@ -8,18 +8,7 @@
    <div>Dashboard
       <small><%= gettext("welcome")%>!</small>
    </div>
-   <!-- START Language list-->
-   <div class="ml-auto">
-      <div class="btn-group">
-         <button class="btn btn-secondary dropdown-toggle dropdown-toggle-nocaret" type="button" data-toggle="dropdown">English</button>
-         <div class="dropdown-menu dropdown-menu-right-forced animated fadeInUpShort" role="menu">
-            <a class="dropdown-item" href="#" data-set-lang="en">English</a>
-            <a class="dropdown-item" href="#" data-set-lang="cn">中文</a>
-            <a class="dropdown-item" href="#" data-set-lang="bm">Bahasa</a>
-         </div>
-      </div>
-   </div>
-   <!-- END Language list-->
+
 </div>
 
 <div class="row">
@@ -98,12 +87,12 @@
        <div class="card-header d-flex align-items-center">
       
             <em class="fa-2x mr-3 fas fa-pencil-alt"></em>
-            <span style="font-weight: bolder;font-size: 17px;">Class</span>
+            <span style="font-weight: bolder;font-size: 17px;"><%= gettext("Class")%></span>
          
        </div>
        <div class="card-body">
-          <h5 class="card-title">Card Default card title</h5>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          <h5 class="card-title"><%= gettext("Manage class")%></h5>
+          <p class="card-text"><%= gettext("Allow school executives to manage classes.")%></p>
           <a  href="/create_class"]"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Class</button></a>
           <div class="btn-group">
              <button class="mb-1 btn-sm btn btn-outline-primary" type="button">Manage</button>

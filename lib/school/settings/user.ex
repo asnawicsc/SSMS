@@ -14,7 +14,7 @@ defmodule School.Settings.User do
     field(:g_token, :binary)
 
     field(:is_librarian, :boolean, default: "false")
-
+    field(:styles, :binary, default: "/css/theme-a.css")
     timestamps()
   end
 
@@ -22,6 +22,7 @@ defmodule School.Settings.User do
   def changeset(user, attrs) do
     user
     |> cast(attrs, [
+      :styles,
       :g_token,
       :default_lang,
       :email,

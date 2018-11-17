@@ -153,7 +153,16 @@ channel
 
 $(document).ready(function(){
 
-  
+  $("div.setting-color label").click(function(){
+    var color = $(this).attr("data-load-css")
+    console.log(color);
+
+    channel.push("save_ui_color", {color: color, user_id: window.currentUser})
+  })
+
+  channel.on("load_ui_color", payload => {
+    $("link#autoloaded-stylesheet").attr("href", "/" + payload.color)
+  })
 
   $("button#select_all").click(function() {
       var li_list = $("ol#unmark_list").find("li")

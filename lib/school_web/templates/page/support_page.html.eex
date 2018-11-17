@@ -8,18 +8,7 @@
    <div>Dashboard
       <small><%= gettext("welcome")%>!</small>
    </div>
-   <!-- START Language list-->
-   <div class="ml-auto">
-      <div class="btn-group">
-         <button class="btn btn-secondary dropdown-toggle dropdown-toggle-nocaret" type="button" data-toggle="dropdown">English</button>
-         <div class="dropdown-menu dropdown-menu-right-forced animated fadeInUpShort" role="menu">
-            <a class="dropdown-item" href="#" data-set-lang="en">English</a>
-            <a class="dropdown-item" href="#" data-set-lang="cn">中文</a>
-            <a class="dropdown-item" href="#" data-set-lang="bm">Bahasa</a>
-         </div>
-      </div>
-   </div>
-   <!-- END Language list-->
+
 </div>
 
 <div class="row">
