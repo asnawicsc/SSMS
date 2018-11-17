@@ -7,6 +7,7 @@ defmodule SchoolWeb.Router do
     plug(:fetch_flash)
     plug(:protect_from_forgery)
     plug(:put_secure_browser_headers)
+
     plug(School.SetLocale)
   end
 
@@ -305,6 +306,8 @@ defmodule SchoolWeb.Router do
     get("/login_teacher", TeacherController, :login_teacher)
     get("/create_teacher_login/:id", TeacherController, :create_teacher_login)
     resources("/sync_list", SyncListController)
+
+    get("/*path", PageController, :no_page_found)
   end
 
   # Other scopes may use custom stacks.

@@ -883,4 +883,25 @@ defmodule SchoolWeb.PageController do
     |> put_resp_header("Content-Type", "application/pdf")
     |> resp(200, pdf_binary)
   end
+
+  def no_page_found(conn, params) do
+    user = Settings.current_user(conn)
+    role = user.role
+
+    location =
+      case role do
+        "Support" ->
+          :support_dashboard
+
+        "Admin" ->
+          :admin_dashboard
+
+        _ ->
+          :dashboard
+      end
+
+    conn
+    |> put_flash(:error, "No page found!")
+    |> redirect(to: page_path(conn, location))
+  end
 end
