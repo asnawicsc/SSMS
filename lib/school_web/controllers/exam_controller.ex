@@ -572,7 +572,8 @@ defmodule SchoolWeb.ExamController do
       Repo.all(
         from(
           s in School.Affairs.ExamMark,
-          where: s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
+          where:
+            s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
           select: %{
             class_id: s.class_id,
             subject_id: s.subject_id,
@@ -1279,9 +1280,13 @@ defmodule SchoolWeb.ExamController do
       if rank |> String.split("-") |> Enum.count() == 4 do
         standard_rank = rank |> String.split("-") |> List.to_tuple() |> elem(2)
         total_student = rank |> String.split("-") |> List.to_tuple() |> elem(3)
+
+        {standard_rank, total_student}
       else
         standard_rank = nil
         total_student = nil
+
+        {standard_rank, total_student}
       end
 
     student = Affairs.get_student!(id)
@@ -1478,9 +1483,13 @@ defmodule SchoolWeb.ExamController do
               |> String.split("-")
               |> List.to_tuple()
               |> elem(3)
+
+            {standard_rank, total_student_standard}
           else
             standard_rank = nil
             total_student_standard = nil
+
+            {standard_rank, total_student_standard}
           end
 
         student = Affairs.get_student!(student_id)

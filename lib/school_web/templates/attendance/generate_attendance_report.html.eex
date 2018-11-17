@@ -1,84 +1,117 @@
 <div class="content-heading">
-   <div>Attendance Report Generator
-      <small><%= gettext("welcome")%>!</small>
-   </div>
-   <!-- START Language list-->
-   <div class="ml-auto">
-
-   </div>
-   <!-- END Language list-->
-</div>
-       <% require IEx %>
-        <% semesters= Repo.all(from(s in School.Affairs.Semester, select: %{institution_id: s.institution_id,id: s.id, start_date: s.start_date, end_date: s.end_date }))|>Enum.filter(fn x-> x.institution_id ==@conn.private.plug_session["institution_id"] end) %>
-        
-<% levels = Map.keys(@classes) %>
-<div class="row">
-
-      <%= render( SchoolWeb.ExamView ,"report_nav.html",conn: @conn) %>
-  <div class="col-lg-9">
-    <div class="card">
-      <div class="card-header">Attendance Report Generator</div>
-      <div class="card-body">
-        <form method="get" action="/attendance/report">
-          <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
-          <div class="form-row">
-
-        
-              <div class="form-group col-md-3">
-                 <select class="custom-select -custom-select-sm"  name="semester" required="required">
-                  <%= for semester <- semesters do %>
-                  <option value="<%= semester.id%>"><%= semester.start_date%> -  <%= semester.end_date%></option>
-                  <% end %>
-                </select>
-              </div>
-              <div class="form-group col-md-3">
-                 <select class="custom-select -custom-select-sm"  name="class" required="required">
-                  <%= for level <- levels do %>
-        
-                   
-              
-                      <%= for class <- @classes[level] do %>
-                         <option value="<%= class.id %>">
-                            <%= level %> - <%= class.class %> 
-                           
-                         </option>
-                      <% end %>
-              
-            
-                  <% end %>
-               
-                </select>
-
-              </div>
-              <div class="form-group col-md-2">
-                 <select class="custom-select -custom-select-sm"  name="month" required="required">
-                    <option value="1"><%= Timex.month_name(1)%></option>
-                    <option value="2"><%= Timex.month_name(2)%></option>
-                    <option value="3"><%= Timex.month_name(3)%></option>
-                    <option value="4"><%= Timex.month_name(4)%></option>
-                    <option value="5"><%= Timex.month_name(5)%></option>
-                    <option value="6"><%= Timex.month_name(6)%></option>
-                    <option value="7"><%= Timex.month_name(7)%></option>
-                    <option value="8"><%= Timex.month_name(8)%></option>
-                    <option value="9"><%= Timex.month_name(9)%></option>
-                    <option value="10"><%= Timex.month_name(10)%></option>
-                    <option value="11"><%= Timex.month_name(11)%></option>
-                    <option value="12"><%= Timex.month_name(12)%></option>
-               
-                </select>
-                
-              </div>
-              <div class="form-group col-md-2">
-                 <select class="custom-select -custom-select-sm"  name="year" required="required">
-                    <option value="2018">2018</option>
-               
-                </select>
-                
-              </div>
-          </div>
-          <input type="submit" name="" value="Generate">
-        </form>
-      </div>
+    <div>Attendance Report Generator
+        <small><%= gettext("welcome")%>!</small>
     </div>
-  </div>
+    <!-- START Language list-->
+    <div class="ml-auto">
+
+    </div>
+    <!-- END Language list-->
 </div>
+<% require IEx %>
+    <% semesters= Repo.all(from(s in School.Affairs.Semester, select: %{institution_id: s.institution_id,id: s.id, start_date: s.start_date, end_date: s.end_date }))|>Enum.filter(fn x-> x.institution_id ==@conn.private.plug_session["institution_id"] end) %>
+
+        <% levels = Map.keys(@classes) %>
+            <div class="row">
+
+                <%= render( SchoolWeb.ExamView ,"report_nav.html",conn: @conn) %>
+                    <div class="col-lg-9">
+                        <div class="card">
+                            <div class="card-header">Attendance Report Generator</div>
+                            <div class="card-body">
+                                <form method="get" action="/attendance/report">
+                                    <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+                                    <div class="form-row">
+
+                                        <div class="form-group col-md-3">
+                                            <select class="custom-select -custom-select-sm" name="semester" required="required">
+
+                                                <%= for semester <- semesters do %>
+
+                                                    <option value="<%= semester.id%>">
+                                                        <%= semester.start_date%> -
+                                                            <%= semester.end_date%>
+                                                    </option>
+                                                    <% end %>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <select class="custom-select -custom-select-sm" name="class" required="required">
+
+                                                <%= for level <- levels do %>
+
+                                                    <%= for class <- @classes[level] do %>
+                                                        <option value="<%= class.id %>">
+                                                            <%= level %> -
+                                                                <%= class.class %>
+
+                                                        </option>
+                                                        <% end %>
+
+                                                            <% end %>
+
+                                            </select>
+
+                                        </div>
+                                        <div class="form-group col-md-2">
+
+                                            <select class="custom-select -custom-select-sm" name="month" required="required">
+
+                                                <option value="1">
+                                                    <%= Timex.month_name(1)%>
+                                                </option>
+                                                <option value="2">
+                                                    <%= Timex.month_name(2)%>
+                                                </option>
+                                                <option value="3">
+                                                    <%= Timex.month_name(3)%>
+                                                </option>
+                                                <option value="4">
+                                                    <%= Timex.month_name(4)%>
+                                                </option>
+                                                <option value="5">
+                                                    <%= Timex.month_name(5)%>
+                                                </option>
+                                                <option value="6">
+                                                    <%= Timex.month_name(6)%>
+                                                </option>
+                                                <option value="7">
+                                                    <%= Timex.month_name(7)%>
+                                                </option>
+                                                <option value="8">
+                                                    <%= Timex.month_name(8)%>
+                                                </option>
+                                                <option value="9">
+                                                    <%= Timex.month_name(9)%>
+                                                </option>
+                                                <option value="10">
+                                                    <%= Timex.month_name(10)%>
+                                                </option>
+                                                <option value="11">
+                                                    <%= Timex.month_name(11)%>
+                                                </option>
+                                                <option value="12">
+                                                    <%= Timex.month_name(12)%>
+                                                </option>
+
+                                            </select>
+
+                                        </div>
+                                        <div class="form-group col-md-2">
+                                            <select class="custom-select -custom-select-sm" name="year" required="required">
+
+                                                <option value="2018">2018</option>
+
+                                            </select>
+
+                                        </div>
+                                        <div class="form-group col-md-2">
+                                        <button class="mb-1 btn btn-primary" type="submit" name="" value="Generate">Generate</button>
+                                      </div>
+                                    </div>
+                                    
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+            </div>

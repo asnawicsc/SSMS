@@ -4,27 +4,7 @@
   <head>
     <meta charset="utf-8">
     <title>CoCurriculum Mark</title>
-    <style>
-    html {
-      font-family: sans-serif;
-    }
-    table {
-      border-collapse: collapse;
-      border: 2px solid rgb(200,200,200);
-      letter-spacing: 1px;
-      font-size: 0.8rem;
-    }
-    td, th {
-      border: 1px solid rgb(190,190,190);
-      padding: 10px 20px;
-    }
-    td {
-      text-align: center;
-    }
-    caption {
-      padding: 10px;
-    }
-    </style>
+
   </head>
  <% require IEx %>
   <body>
@@ -36,22 +16,20 @@
       <input type="hidden" name="semester_id" value="<%= @co_semester %>">
 
        <input type="hidden" name="_csrf_token" value="<%= @csrf %>">
-<input align="left" type="submit" name="" value="Print!">
+<input align="left" class="btn btn-info btn-ml" type="submit" name="" value="Print!">
 </form>
 </div>
 <br>
 
+<div class="table-responsive table-bordered">
+    <table class="table">
 
-    <table width="100%">
-      <colgroup>
-        <col col span="2" >
-      </colgroup>
-      <tr>
+      <tr >
 
-         <th style="background-color:#97DB9A;"><%= gettext "Student Name" %></th>
-          <th style="background-color:#97DB9A;"><%= gettext "Chinese Name" %></th>
-          <th style="background-color:#97DB9A;"><%= gettext "Class" %></th>
-        <th style="background-color:#97DB9A;"><%= gettext "Mark" %></th>
+         <th><%= gettext "Student Name" %></th>
+          <th ><%= gettext "Chinese Name" %></th>
+          <th ><%= gettext "Class" %></th>
+        <th ><%= gettext "Mark" %></th>
       </tr>
        <%= for item <- @students do %>
 
@@ -66,7 +44,7 @@
          <% end %>
 
     </table>
-
+</div>
 
   </body>
 </html>

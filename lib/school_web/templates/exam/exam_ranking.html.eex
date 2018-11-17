@@ -1,63 +1,42 @@
-<% require IEx %>
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-    <style>
-    html {
-      font-family: sans-serif;
-    }
-    table {
-      border-collapse: collapse;
-      border: 2px solid rgb(200,200,200);
-      letter-spacing: 1px;
-      font-size: 0.8rem;
-    }
-    td, th {
-      border: 1px solid rgb(190,190,190);
-      padding: 10px 20px;
-    }
-    td {
-      text-align: center;
-    }
-    caption {
-      padding: 10px;
-    }
-    </style>
-  </head>
+
  <% require IEx %>
   <body>
-
-        <div align="right" style="margin-right: 160px;">
+     <div class="row">
+     
     <form action="/pdf/standard_ranking" method="POST">
   <input type="hidden" name="exam_id" value="<%= @exam_id %>">
   <input type="hidden" name="level_id" value="<%= @level_id %>">
   <input type="hidden" name="_csrf_token" value="<%= @csrf %>">
 <input align="left" type="submit" name="" value="Print!">
 </form>
-</div>
-<Br>
-    <h1><%= @exam_name %></h1>
 
- 
-    <table id="table_rank">
+    <form action="/all_report_card" method="POST">
+      <input type="hidden" name="_csrf_token" value="<%= @csrf %>">
+      <input type="hidden" name="array" id="all_report_card_data" value="">
+      <button type="submit" align="left" class="btn btn-info btn-sm " id="all_report_card" style="float: right">Print all Report Card</button>
+    </form>
+
+</div>
+
+<Br>
+ <div class="table-responsive table-bordered">
+    <table class="table" id="table_rank">
       <colgroup>
         <col col span="2" >
       </colgroup>
       <tr>
 
-        <th style="background-color:#97DB9A;"><%= gettext "No" %></th>
-        <th style="background-color:#97DB9A;"><%= gettext "Name" %></th>
-         <th style="background-color:#97DB9A;"><%= gettext "Jan" %></th>
+        <th><%= gettext "No" %></th>
+        <th ><%= gettext "Name" %></th>
+         <th ><%= gettext "Jan" %></th>
         <%= for item <- @mark|>Enum.sort_by(fn x -> x end) do %>    
          
-        <th style="background-color:#97DB9A;" ><%= item|>elem(0) %></th>
+        <th  ><%= item|>elem(0) %></th>
         <% end %>
-        <th style="background-color:#97DB9A;"><%= gettext "Jumlah" %></th>
-        <th style="background-color:#97DB9A;"><%= gettext "Purata" %></th>
-                <th style="background-color:#97DB9A;"><%= gettext "Ked" %></th>
-         <th style="background-color:#97DB9A;"><%= gettext "KMT" %></th>
+        <th ><%= gettext "Jumlah" %></th>
+        <th ><%= gettext "Purata" %></th>
+                <th ><%= gettext "Ked" %></th>
+         <th ><%= gettext "KMT" %></th>
       </tr>
      
 
@@ -111,12 +90,12 @@
         
         <%end %>
      
-        <th style="background-color:grey;"><%= item.total_mark %>/<%= item.total_per %></th>
-         <th style="background-color:grey;"><%= item.total_average %></th>
+        <th><%= item.total_mark %>/<%= item.total_per %></th>
+         <th ><%= item.total_average %></th>
          
 
-            <th style="background-color:grey;"><%= item.all_rank %></th>
-           <th style="background-color:grey;"><%= item.class_rank %></th>
+            <th ><%= item.all_rank %></th>
+           <th ><%= item.class_rank %></th>
 
       </tr>
        <% end %>
@@ -124,11 +103,7 @@
  
 
     </table>
-    <form action="/all_report_card" method="POST">
-      <input type="hidden" name="_csrf_token" value="<%= @csrf %>">
-      <input type="hidden" name="array" id="all_report_card_data" value="">
-      <button type="submit" class="btn btn-info btn-sm " id="all_report_card" style="float: right">Print all Report Card</button>
-    </form>
+  </div>
 
   </body>
 </html>

@@ -34,27 +34,27 @@
        <input type="hidden" name="exam_id" value="<%= @exam_id %>">
  <input type="hidden" name="standard_id" value="<%= @standard_id %>">
   <input type="hidden" name="_csrf_token" value="<%= @csrf %>">
-<input align="left" type="submit" name="" value="Print!">
+<input align="left"  class="btn btn-info btn-ml" type="submit" name="" value="Print!">
 </form>
 </div>
 <Br>
     <h4 align="center">Standard: <%= @standard.name %></h4>
 
-    <table id="example" align="center" width="100%">
+    <table class="table" id="example" align="center" width="100%">
       <colgroup>
         <col col span="2" >
       </colgroup>
       <tr align="center">
-        <th style="background-color:#97DB9A;">Subject</th>
-        <th style="background-color:#97DB9A;" colspan="2">Grade A</th>
-        <th style="background-color:#97DB9A;" colspan="2">Grade B</th>
-        <th style="background-color:#97DB9A;" colspan="2">Grade C</th>
-        <th style="background-color:#97DB9A;" colspan="2">Grade D</th>
-        <th style="background-color:#97DB9A;" colspan="2">Grade E</th>
+        <th >Subject</th>
+        <th  colspan="2">Grade A</th>
+        <th colspan="2">Grade B</th>
+        <th  colspan="2">Grade C</th>
+        <th  colspan="2">Grade D</th>
+        <th  colspan="2">Grade E</th>
         
-        <th style="background-color:#97DB9A;" colspan="2">Pass</th>
-        <th style="background-color:#97DB9A;" colspan="2">Fail</th>
-         <th style="background-color:#97DB9A;" >GPS</th>
+        <th  colspan="2">Pass</th>
+        <th  colspan="2">Fail</th>
+         <th  >GPS</th>
 
       </tr>
      
@@ -83,7 +83,7 @@
       </tr>
        <% end %>
 
-    <tr style="background-color: grey">
+    <tr >
        <th >AVG</a></th>
           <th ><%= @a %></th>
           <th ><%= (@a/@total)*100|>Float.round(2) %>%</th>

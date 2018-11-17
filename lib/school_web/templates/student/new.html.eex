@@ -239,4 +239,3 @@
 </div>
 
 
-<span><%= link "Back", to: student_path(@conn, :index) %></span>

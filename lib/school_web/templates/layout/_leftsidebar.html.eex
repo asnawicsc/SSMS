@@ -151,7 +151,7 @@
                                  </a>
                               </li>
                               <li class=" ">
-                                 <a href="/system_config/<%= @conn.private.plug_session['institution_id']%>" title="School Settings">
+                                 <a href="/parameters/<%= @conn.private.plug_session['institution_id']%>" title="School Settings">
                                     <span><%= gettext "Parameters" %></span>
                                  </a>
                               </li>

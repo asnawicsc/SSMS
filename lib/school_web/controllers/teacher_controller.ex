@@ -152,8 +152,9 @@ defmodule SchoolWeb.TeacherController do
             where: t.institution_id == ^conn.private.plug_session["institution_id"]
           )
         )
+        |> Enum.with_index()
 
-      render(conn, "index.html", teacher: teacher)
+      render(conn, "teacher_listing.html", teacher: teacher)
     end
   end
 
