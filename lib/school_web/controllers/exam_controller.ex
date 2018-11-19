@@ -679,10 +679,10 @@ defmodule SchoolWeb.ExamController do
     user = Repo.get_by(School.Settings.User, %{id: conn.private.plug_session["user_id"]})
     teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email})
 
-    ad =
-      if teacher != nil do
-        Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
-      end
+    # ad =
+    #  if teacher != nil do
+    #    Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
+    #  end
 
     class =
       if user.role == "Admin" or user.role == "Support" do
@@ -697,7 +697,7 @@ defmodule SchoolWeb.ExamController do
         Repo.all(
           from(
             s in School.Affairs.Class,
-            where: s.id == ^ad.id,
+            where: s.teacher_id == ^teacher.id,
             select: %{institution_id: s.institution_id, id: s.id, name: s.name}
           )
         )
@@ -979,10 +979,10 @@ defmodule SchoolWeb.ExamController do
 
     teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email})
 
-    ad =
-      if teacher != nil do
-        Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
-      end
+    # ad =
+    #  if teacher != nil do
+    #   Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
+    # end
 
     class =
       if user.role == "Admin" or user.role == "Support" do
@@ -997,7 +997,7 @@ defmodule SchoolWeb.ExamController do
         Repo.all(
           from(
             s in School.Affairs.Class,
-            where: s.id == ^ad.id,
+            where: s.teacher_id == ^teacher.id,
             select: %{institution_id: s.institution_id, id: s.id, name: s.name}
           )
         )
