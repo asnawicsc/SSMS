@@ -1,30 +1,40 @@
-<h2>Listing Comment</h2>
+<div class="content-heading">
+   <div>Listing Comments
+   </div>
+</div>
+<div class="row">
+  
+        <div class="col-lg-12">
+          <div class="card">
+             <div class="card-body">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Code</th>
+                      <th>Chinese Comment</th>
+                      <th>Malay Comment</th>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th>Code</th>
-      <th>Chinese Comment</th>
-      <th>Malay Comment</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                <%= for comment <- @comment do %>
+                    <tr>
+                      <td><%= comment.code %></td>
+                      <td><%= comment.c_chinese %></td>
+                      <td><%= comment.c_malay %></td>
 
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-<%= for comment <- @comment do %>
-    <tr>
-      <td><%= comment.code %></td>
-      <td><%= comment.c_chinese %></td>
-      <td><%= comment.c_malay %></td>
+                      <td class="text-right">
+                        <span><%= link "Show", to: comment_path(@conn, :show, comment), class: "btn btn-default btn-xs" %></span>
+                        <span><%= link "Edit", to: comment_path(@conn, :edit, comment), class: "btn btn-default btn-xs" %></span>
+                        <span><%= link "Delete", to: comment_path(@conn, :delete, comment), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+                      </td>
+                    </tr>
+                <% end %>
+                  </tbody>
+                </table>
 
-      <td class="text-right">
-        <span><%= link "Show", to: comment_path(@conn, :show, comment), class: "btn btn-default btn-xs" %></span>
-        <span><%= link "Edit", to: comment_path(@conn, :edit, comment), class: "btn btn-default btn-xs" %></span>
-        <span><%= link "Delete", to: comment_path(@conn, :delete, comment), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
-      </td>
-    </tr>
-<% end %>
-  </tbody>
-</table>
-
-<span><%= link "New Comment", to: comment_path(@conn, :new) %></span>
+                <span><%= link "New Comment", to: comment_path(@conn, :new) %></span>
+              </div>
+            </div>
+        </div>
