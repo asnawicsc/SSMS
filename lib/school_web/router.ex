@@ -27,6 +27,16 @@ defmodule SchoolWeb.Router do
     get("/redirect_from_li6", PageController, :redirect_from_li6)
   end
 
+  # Other scopes may use custom stacks.
+
+  scope "/api", SchoolWeb do
+    pipe_through(:api)
+
+    get("/webhook_get", ApiController, :webhook_get)
+    get("/google_oauth", GoogleController, :open_google_oauth)
+    get("/callback", GoogleController, :callback)
+  end
+
   scope "/pdf", SchoolWeb do
     # Use the default browser stack
     pipe_through([:browser])
@@ -309,15 +319,5 @@ defmodule SchoolWeb.Router do
     resources("/sync_list", SyncListController)
     get("/apply_color", PageController, :apply_color)
     get("/*path", PageController, :no_page_found)
-  end
-
-  # Other scopes may use custom stacks.
-
-  scope "/api", SchoolWeb do
-    pipe_through(:api)
-
-    get("/webhook_get", ApiController, :webhook_get)
-    get("/google_oauth", GoogleController, :open_google_oauth)
-    get("/callback", GoogleController, :callback)
   end
 end

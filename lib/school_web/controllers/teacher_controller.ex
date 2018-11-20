@@ -65,7 +65,8 @@ defmodule SchoolWeb.TeacherController do
 
   def create_teacher_login(conn, params) do
     teacher =
-      Repo.get_by(Teacher,
+      Repo.get_by(
+        Teacher,
         id: params["id"],
         institution_id: conn.private.plug_session["institution_id"]
       )
@@ -90,7 +91,8 @@ defmodule SchoolWeb.TeacherController do
           name: teacher.name,
           password: teacher.icno,
           crypted_password: crypted_password,
-          role: "Teacher"
+          role: "Teacher",
+          is_librarian: false
         }
 
         case Settings.create_user(user_params) do

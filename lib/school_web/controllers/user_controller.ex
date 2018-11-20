@@ -51,6 +51,7 @@ defmodule SchoolWeb.UserController do
           |> put_session(:user_id, user.id)
           |> put_session(:semester_id, current_sem.id)
           |> put_session(:institution_id, institution_id.id)
+          |> put_session(:style, user.styles)
           |> redirect(to: page_path(conn, :admin_dashboard))
         end
 
@@ -85,12 +86,14 @@ defmodule SchoolWeb.UserController do
             |> put_session(:user_id, user.id)
             |> put_session(:semester_id, current_sem.id)
             |> put_session(:institution_id, access.institution_id)
+            |> put_session(:style, user.styles)
             |> redirect(to: page_path(conn, :support_dashboard))
           else
             conn
             |> put_session(:user_id, user.id)
             |> put_session(:semester_id, current_sem.id)
             |> put_session(:institution_id, access.institution_id)
+            |> put_session(:style, user.styles)
             |> redirect(to: page_path(conn, :dashboard))
           end
         end
@@ -163,6 +166,7 @@ defmodule SchoolWeb.UserController do
     |> delete_session(:user_id)
     |> delete_session(:institution_id)
     |> delete_session(:semester_id)
+    |> delete_session(:style)
     |> put_flash(:info, "Logout successfully")
     |> redirect(to: page_path(conn, :index_splash))
   end

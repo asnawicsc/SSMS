@@ -13,7 +13,7 @@ defmodule School.Settings.User do
 
     field(:g_token, :binary)
 
-    field(:is_librarian, :boolean, default: "false")
+    field(:is_librarian, :boolean, default: false)
     field(:styles, :binary, default: "/css/theme-a.css")
     timestamps()
   end
