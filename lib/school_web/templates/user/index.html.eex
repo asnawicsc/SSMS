@@ -1,4 +1,5 @@
 <div class="content-heading">
+
    <div>Users
       <small><%= gettext("welcome")%>!</small>
    </div>
@@ -24,10 +25,13 @@
      <div class="tab-content p-0 b0">
 
 
+
         <div class="tab-pane active show" id="tabSetting5">
            <div class="card b">
 
+
               <div class="card-body">
+
                       <table class="table data">
                           <thead>
                               <tr>
@@ -38,7 +42,7 @@
                               </tr>
                           </thead>
                           <tbody>
-                           <%= for user <- @users do %>
+                           <%= for user <- @users|>Enum.filter(fn x -> x.role == "Support" end) do %>
                                 <tr>
                                   <td><%= user.name %></td>
                                   <td><%= user.email %></td>
@@ -56,6 +60,7 @@
                             <% end %>
                           </tbody>
                       </table>
+
               </div>
            </div>
         </div>
@@ -96,6 +101,7 @@
                               <% end %>
                             </tbody>
                         </table>
+
 
                  </div>
               </div>

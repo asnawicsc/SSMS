@@ -49,4 +49,4 @@
 </div>
 
 
-<span><%= link "New Semester", to: semester_path(@conn, :new) %></span>
+<span><%= link "New Semester", to: semester_path(@conn, :create_semesters) %></span>

@@ -112,7 +112,7 @@ defmodule SchoolWeb.PeriodController do
 
     conn
     |> put_flash(:info, "Period created successfully.")
-    |> redirect(to: period_path(conn, :show, period))
+    |> redirect(to: subject_teach_class_path(conn, :index))
   end
 
   def create(conn, %{"period" => period_params}) do

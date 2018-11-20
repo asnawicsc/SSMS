@@ -207,14 +207,28 @@ defmodule SchoolWeb.ClassController do
         )
       )
 
+    subject_class =
+      Repo.all(
+        from(s in SubjectTeachClass,
+          left_join: g in Subject,
+          on: s.subject_id == g.id,
+          where:
+            s.class_id == ^class_id and
+              g.institution_id == ^conn.private.plug_session["institution_id"],
+          select: %{s_name: g.description, s_id: s.subject_id, c_id: s.class_id}
+        )
+      )
+
     render(
       conn,
       "chosen_class_setting.html",
       teacher: teacher,
       class: class,
+      class_id: class_id,
       changeset: changeset,
       institution_id: institution_id,
-      students: students
+      students: students,
+      subject_class: subject_class
     )
   end
 

@@ -275,12 +275,12 @@
                            <div class="card-body text-center">
                               <div class="d-flex">
                                  <div class="ml-auto">
-                                    <a class="text-muted mr-1" href="/show_guardian" title="Download">
+                                    <a class="text-muted mr-1" href="/parent_listing" title="Download">
                                        <em class="fa fa-download fa-fw"></em>
                                     </a>
                                  </div>
                               </div>
-                              <a class="px-4" href="/show_guardian">
+                              <a class="px-4" href="/parent_listing">
                                  <em class="fa-5x fas fa-chalkboard-teacher text-success"></em>
                               </a>
                               <p>

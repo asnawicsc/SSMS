@@ -35,6 +35,7 @@
                                                     <div id="gne" class="form-group col-md-3">
                                                       <label class="bmd-label-floating"><%= gettext "Class Name" %></label>
                                                         <select class="custom-select -custom-select-sm" onchange="getval0(this);" required="required" name="exam_result_class">
+                                                              <option selected="">Choose a class</option>
                            <%= for a <- @class |> Enum.sort do %>
                                             <option value="<%= a.id %>" ><%= a.name %>
                                             </option>
@@ -44,7 +45,7 @@
 
                                                     <div id="exam_filter">
 
-                                                </div>
+                                                    </div>
 
                                               
                                             </div>
@@ -97,28 +98,17 @@
 
    
 
- $('select[name="exam_result_class"]').val(localStorage.getItem("exam_result_class"));
-  function getval0(sel)
-{
-    d=sel.value
 
-localStorage.setItem("exam_result_class", d)
+    function getval0(sel){
+        d = sel.value
 
-    window.location.reload();
-
-}
-
-var csrf= $("input[name='_csrf_token']").val()
-localStorage.setItem("exam_class_csrf", csrf);
+        channel.push("exam_result_class", {class_id: d, user_id: window.currentUser,institution_id: window.currentInstitute})
+        .receive("ok", payload => {
+             $("div#exam_filter").html(payload.html);
+        })
 
 
- channel.push("exam_result_class", {class_id: localStorage.getItem("exam_result_class"),user_id: window.currentUser,institution_id: window.currentInstitute})
-    channel.on("show_exam_result_class", payload => {
+    }
 
-
-    $("div#exam_filter").html(payload.html);
-
-
-  })
 
 </script>

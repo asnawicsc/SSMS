@@ -6,6 +6,7 @@ defmodule SchoolWeb.SubjectTeachClassController do
 
   def index(conn, _params) do
     subject_teach_class = Affairs.list_subject_teach_class()
+
     render(conn, "index.html", subject_teach_class: subject_teach_class)
   end
 

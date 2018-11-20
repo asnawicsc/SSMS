@@ -99,7 +99,7 @@
                                    <span class="badge badge-danger float-right" id="a5">Not Set</span>
                                      <em class="fa-fw fas fa-th mr-2"></em>Create Standard</a>
                                <% else %>
-                                <a class="list-group-item" href="/levels/new">
+                                <a class="list-group-item" href="#">
                                    <span class="badge badge-success float-right" id="a5">Done</span>
                                     <em class="fa-fw fas fa-th mr-2"></em>Create Standard</a>
                                <% end %>
@@ -367,7 +367,6 @@
            <div class="card-body">
               <h5 class="card-title">Card Default card title</h5>
               <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-              <a href ="/subject"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
                <a href ="/subject/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Subject</button></a>
                 <a href ="/subject_teach_class"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List Subject Period</button></a>
                <a href ="/subject_teach_class/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Subject Period</button></a>

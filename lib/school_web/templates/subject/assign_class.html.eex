@@ -1,11 +1,26 @@
+<div class="content-heading">
+    <div>Assign Class
+        <small><%= gettext("welcome")%>!</small>
+    </div>
+    <!-- START Language list-->
+    <div class="ml-auto">
 
+    </div>
+    <!-- END Language list-->
+</div>
 
+     <div class="col-lg-9">
 
-<table class="table">
+            <div class="card">
+
+                <div class="card-body">
+                	<div class="table-responsive ">
+<table class="table" id="datatable1">
 	<thead>
 		<tr>
 			<td>ID</td>
 			<td>Class</td>
+			<td>Standard</td>
 			<td>Action</td>
 		</tr>
 	</thead>
@@ -18,8 +33,14 @@
 		<tr>
 			<td><%= class.id %></td>
 			<td><%= class.name %></td>
+			<td><%= class.level_id %></td>
 			<td><%= link "Create a period", to: period_path(@conn, :get_create_period, @conn.params["id"], class.id), class: "btn btn-default btn-xs" %></td>
 		</tr>
 <% end %>
 	</tbody>
 </table>
+</div>
+
+</div>
+</div>
+</div>

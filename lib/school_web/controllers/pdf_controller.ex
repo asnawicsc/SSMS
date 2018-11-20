@@ -1346,9 +1346,9 @@ defmodule SchoolWeb.PdfController do
         delete_temporary: true
       )
 
-    conn
-    |> put_resp_header("Content-Type", "application/pdf")
-    |> resp(200, pdf_binary)
+    # conn
+    # |> put_resp_header("Content-Type", "application/pdf")
+    # |> resp(200, pdf_binary)
   end
 
   def student_class_listing(conn, params) do

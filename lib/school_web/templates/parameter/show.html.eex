@@ -1,4 +1,13 @@
+<div class="content-heading">
+   <div>Parameter Information
+      <small><%= gettext("welcome")%>!</small>
+   </div>
+   <!-- START Language list-->
+   <div class="ml-auto">
 
+   </div>
+   <!-- END Language list-->
+</div>
 
  <center>
  <div class="col-md-8" align="left">

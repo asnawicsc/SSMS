@@ -46,24 +46,20 @@ defmodule SchoolWeb.ExamController do
   end
 
   def new_exam(conn, params) do
+    inst_id = Affairs.get_inst_id(conn)
+
     subjects =
       Repo.all(
-        from(s in School.Affairs.Subject, select: %{id: s.id, code: s.code, name: s.description})
-      )
-
-    semester =
-      Repo.all(from(s in School.Affairs.Semester, select: %{id: s.id, start_date: s.start_date}))
-
-    level =
-      Repo.all(
         from(
-          s in School.Affairs.Level,
-          where: s.institution_id == ^conn.private.plug_session["institution_id"],
-          select: %{id: s.id, name: s.name}
+          s in School.Affairs.Subject,
+          where: s.institution_id == ^inst_id,
+          select: %{id: s.id, code: s.code, name: s.description}
         )
       )
 
-    render(conn, "new_exam.html", subjects: subjects, semester: semester, level: level)
+    semester = Affairs.list_semesters(inst_id)
+
+    render(conn, "new_exam.html", subjects: subjects, semester: semester)
   end
 
   def create_exam(conn, params) do
@@ -308,7 +304,7 @@ defmodule SchoolWeb.ExamController do
         class =
           Repo.all(
             from(
-              p in School.Affairs.SubjectTeachClass,
+              p in School.Affairs.Period,
               left_join: s in School.Affairs.Class,
               on: s.id == p.class_id,
               where:
@@ -322,13 +318,13 @@ defmodule SchoolWeb.ExamController do
         a =
           Repo.all(
             from(
-              p in School.Affairs.SubjectTeachClass,
+              p in School.Affairs.Period,
               left_join: s in School.Affairs.Class,
               on: s.id == p.class_id,
               left_join: g in School.Affairs.Subject,
               on: g.id == p.subject_id,
               left_join: q in School.Affairs.Level,
-              on: q.id == p.standard_id,
+              on: q.id == s.level_id,
               left_join: e in School.Affairs.Exam,
               on: e.subject_id == p.subject_id,
               left_join: m in School.Affairs.ExamMaster,
@@ -572,8 +568,7 @@ defmodule SchoolWeb.ExamController do
       Repo.all(
         from(
           s in School.Affairs.ExamMark,
-          where:
-            s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
+          where: s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
           select: %{
             class_id: s.class_id,
             subject_id: s.subject_id,
@@ -684,47 +679,12 @@ defmodule SchoolWeb.ExamController do
     #    Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
     #  end
 
-    class =
-      if user.role == "Admin" or user.role == "Support" do
-        Repo.all(
-          from(
-            s in School.Affairs.Class,
-            select: %{institution_id: s.institution_id, id: s.id, name: s.name}
-          )
-        )
-        |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
-      else
-        Repo.all(
-          from(
-            s in School.Affairs.Class,
-            where: s.teacher_id == ^teacher.id,
-            select: %{institution_id: s.institution_id, id: s.id, name: s.name}
-          )
-        )
-        |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
-      end
-
-    ds =
-      Repo.all(
-        from(
-          s in School.Affairs.Class,
-          left_join: g in School.Affairs.Level,
-          on: s.level_id == g.id,
-          left_join: p in School.Affairs.ExamMaster,
-          on: g.id == p.level_id,
-          where:
-            s.institution_id == ^conn.private.plug_session["institution_id"] and
-              g.institution_id == ^conn.private.plug_session["institution_id"] and
-              p.institution_id == ^conn.private.plug_session["institution_id"],
-          select: %{class_id: s.id, exam_id: p.id, exam_name: p.name, class_name: s.name}
-        )
-      )
+    class = Affairs.list_classes(Affairs.get_inst_id(conn))
 
     render(
       conn,
       "exam_result_class.html",
-      class: class,
-      ds: ds
+      class: class
     )
   end
 

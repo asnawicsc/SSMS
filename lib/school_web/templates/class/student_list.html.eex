@@ -1,5 +1,5 @@
 
-        <div align="right" style="margin-right: 30px;">
+        <div align="right" >
     <form action="/pdf/student_class_listing" method="POST">
  <input type="hidden" name="class_id" value="<%= @class_id %>">
   <input type="hidden" name="_csrf_token" value="<%= @csrf %>">
@@ -9,8 +9,8 @@
 </div>
 <Br>
 
- <div class="table-responsive table-bordered">
-  <table class="table">
+ <div class="table-responsive ">
+  <table class="table" id="datatable1">
   <thead>
     <tr>
       <th><%= gettext "Bil." %></th>

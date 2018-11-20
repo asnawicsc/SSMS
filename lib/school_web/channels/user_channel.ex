@@ -1645,8 +1645,7 @@ defmodule SchoolWeb.UserChannel do
         class_id: class_id
       )
 
-    broadcast(socket, "show_exam_result_class", %{html: html})
-    {:noreply, socket}
+    {:reply, {:ok, %{html: html}}, socket}
   end
 
   def handle_in("exam_result_record", payload, socket) do
@@ -1680,203 +1679,216 @@ defmodule SchoolWeb.UserChannel do
         )
       )
 
-    level_id = hd(exam_mark).level_id
+    level_id = class.level_id
 
-    if exam_mark != [] do
-      exam_standard =
-        Repo.all(
-          from(
-            e in School.Affairs.Exam,
-            left_join: k in School.Affairs.ExamMaster,
-            on: k.id == e.exam_master_id,
-            left_join: p in School.Affairs.Subject,
-            on: p.id == e.subject_id,
-            where: e.exam_master_id == ^exam_id and k.institution_id == ^inst_id,
-            select: %{
-              subject_code: p.code,
-              exam_name: k.name
-            }
-          )
+    exam_standard =
+      Repo.all(
+        from(
+          e in School.Affairs.Exam,
+          left_join: k in School.Affairs.ExamMaster,
+          on: k.id == e.exam_master_id,
+          left_join: p in School.Affairs.Subject,
+          on: p.id == e.subject_id,
+          where: e.exam_master_id == ^exam_id and k.institution_id == ^inst_id,
+          select: %{
+            subject_code: p.code,
+            exam_name: k.name
+          }
         )
+      )
 
-      all =
-        for item <- exam_standard do
-          exam_name = exam_mark |> Enum.map(fn x -> x.exam_name end) |> Enum.uniq() |> hd
-          student_list = exam_mark |> Enum.map(fn x -> x.student_name end) |> Enum.uniq()
-          all_mark = exam_mark |> Enum.filter(fn x -> x.subject_code == item.subject_code end)
+    all =
+      for item <- exam_standard do
+        exam_name = exam_mark |> Enum.map(fn x -> x.exam_name end) |> Enum.uniq()
 
-          subject_code = item.subject_code
+        exam_name =
+          if exam_name != [] do
+            exam_name |> hd
+          else
+            []
+          end
 
-          all =
-            for item <- student_list do
-              student =
-                Repo.all(
-                  from(
-                    s in School.Affairs.Student,
-                    where: s.name == ^item and s.institution_id == ^inst_id
-                  )
-                )
-                |> hd()
+        student_list = exam_mark |> Enum.map(fn x -> x.student_name end) |> Enum.uniq()
+        all_mark = exam_mark |> Enum.filter(fn x -> x.subject_code == item.subject_code end)
 
-              s_mark = all_mark |> Enum.filter(fn x -> x.student_name == item end)
+        subject_code = item.subject_code
 
-              a =
-                if s_mark != [] do
-                  s_mark
-                else
-                  %{
-                    chinese_name: student.chinese_name,
-                    sex: student.sex,
-                    student_name: item,
-                    student_id: student.id,
-                    student_mark: -1,
-                    exam_name: exam_name,
-                    subject_code: subject_code
-                  }
-                end
-            end
-        end
-        |> List.flatten()
-
-      exam_name = exam_mark |> Enum.map(fn x -> x.exam_name end) |> Enum.uniq() |> hd
-
-      all_mark = all |> Enum.group_by(fn x -> x.subject_code end)
-
-      mark1 =
-        for item <- all_mark do
-          subject_code = item |> elem(0)
-
-          datas = item |> elem(1)
-
-          for data <- datas do
-            student_mark = data.student_mark
-
-            grades =
+        all =
+          for item <- student_list do
+            student =
               Repo.all(
                 from(
-                  g in School.Affairs.Grade,
-                  where: g.institution_id == ^inst_id and g.standard_id == ^level_id
+                  s in School.Affairs.Student,
+                  where: s.name == ^item and s.institution_id == ^inst_id
                 )
               )
+              |> hd()
 
-            for grade <- grades do
-              if student_mark >= grade.mix and student_mark <= grade.max and student_mark != -1 do
+            s_mark = all_mark |> Enum.filter(fn x -> x.student_name == item end)
+
+            a =
+              if s_mark != [] do
+                s_mark
+              else
                 %{
-                  student_id: data.student_id,
-                  student_name: data.student_name,
-                  grade: grade.name,
-                  gpa: grade.gpa,
-                  subject_code: data.subject_code,
-                  student_mark: data.student_mark,
-                  chinese_name: data.chinese_name,
-                  sex: data.sex
+                  chinese_name: student.chinese_name,
+                  sex: student.sex,
+                  student_name: item,
+                  student_id: student.id,
+                  student_mark: -1,
+                  exam_name: exam_name,
+                  subject_code: subject_code
                 }
               end
+          end
+      end
+      |> List.flatten()
+
+    exam_name = exam_mark |> Enum.map(fn x -> x.exam_name end) |> Enum.uniq()
+
+    exam_name =
+      if exam_name != [] do
+        exam_name |> hd
+      else
+        []
+      end
+
+    all_mark = all |> Enum.group_by(fn x -> x.subject_code end)
+
+    mark1 =
+      for item <- all_mark do
+        subject_code = item |> elem(0)
+
+        datas = item |> elem(1)
+
+        for data <- datas do
+          student_mark = data.student_mark
+
+          grades =
+            Repo.all(
+              from(
+                g in School.Affairs.Grade,
+                where: g.institution_id == ^inst_id and g.standard_id == ^level_id
+              )
+            )
+
+          for grade <- grades do
+            if student_mark >= grade.mix and student_mark <= grade.max and student_mark != -1 do
+              %{
+                student_id: data.student_id,
+                student_name: data.student_name,
+                grade: grade.name,
+                gpa: grade.gpa,
+                subject_code: data.subject_code,
+                student_mark: data.student_mark,
+                chinese_name: data.chinese_name,
+                sex: data.sex
+              }
             end
           end
         end
-        |> List.flatten()
-        |> Enum.filter(fn x -> x != nil end)
+      end
+      |> List.flatten()
+      |> Enum.filter(fn x -> x != nil end)
 
-      news = mark1 |> Enum.group_by(fn x -> x.student_name end)
+    news = mark1 |> Enum.group_by(fn x -> x.student_name end)
 
-      z =
-        for new <- news do
-          total =
-            new
-            |> elem(1)
-            |> Enum.map(fn x -> x.student_mark end)
-            |> Enum.filter(fn x -> x != -1 end)
-            |> Enum.sum()
+    z =
+      for new <- news do
+        total =
+          new
+          |> elem(1)
+          |> Enum.map(fn x -> x.student_mark end)
+          |> Enum.filter(fn x -> x != -1 end)
+          |> Enum.sum()
 
-          per =
-            new
-            |> elem(1)
-            |> Enum.map(fn x -> x.student_mark end)
-            |> Enum.filter(fn x -> x != -1 end)
-            |> Enum.count()
+        per =
+          new
+          |> elem(1)
+          |> Enum.map(fn x -> x.student_mark end)
+          |> Enum.filter(fn x -> x != -1 end)
+          |> Enum.count()
 
-          total_per = per * 100
+        total_per = per * 100
 
-          student_id = new |> elem(1) |> Enum.map(fn x -> x.student_id end) |> Enum.uniq() |> hd
+        student_id = new |> elem(1) |> Enum.map(fn x -> x.student_id end) |> Enum.uniq() |> hd
 
-          chinese_name =
-            new |> elem(1) |> Enum.map(fn x -> x.chinese_name end) |> Enum.uniq() |> hd
+        chinese_name = new |> elem(1) |> Enum.map(fn x -> x.chinese_name end) |> Enum.uniq() |> hd
 
-          sex = new |> elem(1) |> Enum.map(fn x -> x.sex end) |> Enum.uniq() |> hd
+        sex = new |> elem(1) |> Enum.map(fn x -> x.sex end) |> Enum.uniq() |> hd
 
-          a = new |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "A" end)
-          b = new |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "B" end)
-          c = new |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "C" end)
-          d = new |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "D" end)
-          e = new |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "E" end)
-          f = new |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "F" end)
-          g = new |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "G" end)
+        a = new |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "A" end)
+        b = new |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "B" end)
+        c = new |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "C" end)
+        d = new |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "D" end)
+        e = new |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "E" end)
+        f = new |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "F" end)
+        g = new |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "G" end)
 
-          total_gpa =
-            new |> elem(1) |> Enum.map(fn x -> Decimal.to_float(x.gpa) end) |> Enum.sum()
+        total_gpa = new |> elem(1) |> Enum.map(fn x -> Decimal.to_float(x.gpa) end) |> Enum.sum()
 
-          cgpa = (total_gpa / per) |> Float.round(2)
-          total_average = (total / total_per * 100) |> Float.round(2)
+        cgpa = (total_gpa / per) |> Float.round(2)
+        total_average = (total / total_per * 100) |> Float.round(2)
 
-          %{
-            subject: new |> elem(1) |> Enum.sort_by(fn x -> x.subject_code end),
-            name: new |> elem(0),
-            chinese_name: chinese_name,
-            sex: sex,
-            student_id: student_id,
-            total_mark: total,
-            per: per,
-            total_per: total_per,
-            total_average: total_average,
-            a: a,
-            b: b,
-            c: c,
-            d: d,
-            e: e,
-            f: f,
-            g: g,
-            cgpa: cgpa
-          }
-        end
-        |> Enum.sort_by(fn x -> x.total_mark end)
-        |> Enum.reverse()
-        |> Enum.with_index()
+        %{
+          subject: new |> elem(1) |> Enum.sort_by(fn x -> x.subject_code end),
+          name: new |> elem(0),
+          chinese_name: chinese_name,
+          sex: sex,
+          student_id: student_id,
+          total_mark: total,
+          per: per,
+          total_per: total_per,
+          total_average: total_average,
+          a: a,
+          b: b,
+          c: c,
+          d: d,
+          e: e,
+          f: f,
+          g: g,
+          cgpa: cgpa
+        }
+      end
+      |> Enum.sort_by(fn x -> x.total_mark end)
+      |> Enum.reverse()
+      |> Enum.with_index()
 
-      k =
-        for item <- z do
-          rank = item |> elem(1)
-          item = item |> elem(0)
+    k =
+      for item <- z do
+        rank = item |> elem(1)
+        item = item |> elem(0)
 
-          %{
-            subject: item.subject,
-            name: item.name,
-            chinese_name: item.chinese_name,
-            sex: item.sex,
-            student_id: item.student_id,
-            total_mark: item.total_mark,
-            per: item.per,
-            total_per: item.total_per,
-            total_average: item.total_average,
-            a: item.a,
-            b: item.b,
-            c: item.c,
-            d: item.d,
-            e: item.e,
-            f: item.f,
-            g: item.g,
-            cgpa: item.cgpa,
-            rank: rank + 1
-          }
-        end
-        |> Enum.sort_by(fn x -> x.name end)
-        |> Enum.with_index()
+        %{
+          subject: item.subject,
+          name: item.name,
+          chinese_name: item.chinese_name,
+          sex: item.sex,
+          student_id: item.student_id,
+          total_mark: item.total_mark,
+          per: item.per,
+          total_per: item.total_per,
+          total_average: item.total_average,
+          a: item.a,
+          b: item.b,
+          c: item.c,
+          d: item.d,
+          e: item.e,
+          f: item.f,
+          g: item.g,
+          cgpa: item.cgpa,
+          rank: rank + 1
+        }
+      end
+      |> Enum.sort_by(fn x -> x.name end)
+      |> Enum.with_index()
 
-      mark = mark1 |> Enum.group_by(fn x -> x.subject_code end)
+    mark = mark1 |> Enum.group_by(fn x -> x.subject_code end)
 
-      total_student = news |> Map.keys() |> Enum.count()
+    total_student = news |> Map.keys() |> Enum.count()
 
-      html =
+    html =
+      if exam_mark != [] do
         Phoenix.View.render_to_string(
           SchoolWeb.ExamView,
           "rank.html",
@@ -1890,13 +1902,12 @@ defmodule SchoolWeb.UserChannel do
           exam_id: payload["exam_id"],
           csrf: payload["csrf"]
         )
+      else
+        "No Data Inside"
+      end
 
-      broadcast(socket, "show_exam_record_class", %{html: html})
-      {:noreply, socket}
-    else
-      broadcast(socket, "show_exam_error", %{action: "Please Insert Exam Record First"})
-      {:noreply, socket}
-    end
+    broadcast(socket, "show_exam_record_class", %{html: html})
+    {:noreply, socket}
   end
 
   def handle_in("exam_result_standard", payload, socket) do
