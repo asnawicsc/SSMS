@@ -1,3 +1,13 @@
+<div class="content-heading">
+   <div>List Users
+      <small><%= gettext("welcome")%>!</small>
+   </div>
+   <!-- START Language list-->
+   <div class="ml-auto">
+
+   </div>
+   <!-- END Language list-->
+</div>
 
 
 
@@ -28,27 +38,11 @@
 
         <div class="card-body table-responsive">
             <% group_user = @users |> Enum.group_by(fn x -> x.role end) %>
-             <% groups = group_user |> Map.keys %>
-
+      
               <div class="row">
-                <div class="col-md-2">
-                  <ul class="nav nav-pills nav-pills-rose flex-column" role="tablist">
-                    <li class="nav-item">
-                      <a class="nav-link active show" data-toggle="tab" href="#link4" role="tablist">
-                        ALL
-                      </a>
-                    </li>
-                   <%= for group <- groups do %>
-                    <li class="nav-item">
-                      <a class="nav-link" data-toggle="tab" href="#<%= group %>" role="tablist">
-                        <%= group%>
-                      </a>
-                    </li>
-                    <% end %>
-                  </ul>
-                </div>
 
-                <div class="col-md-10">
+
+                <div class="col-md-12">
                   <div class="tab-content">
                     <div class="tab-pane active show" id="link4">
                       <table class="table data">
@@ -61,7 +55,7 @@
                               </tr>
                           </thead>
                           <tbody>
-                           <%= for user <- @users do %>
+                           <%= for user <- @users|>Enum.filter(fn x -> x.role == "Support" end) do %>
                                 <tr>
                                   <td><%= user.name %></td>
                                   <td><%= user.email %></td>
@@ -80,39 +74,7 @@
                           </tbody>
                       </table>
                     </div>
-                  <%= for group <- groups do %>
-                      <div class="tab-pane" id="<%= group %>">
-                        <table class="table data">
-                            <thead>
-                                <tr>
-                                  <th>Name</th>
-                                  <th>Email</th>
-                                <th>Institution ID</th>
-                                <th>Role</th>
-                                <th>Action</th>
-
-                                </tr>
-                            </thead>
-                            <tbody>
-                             <%= for user <- group_user[group] do %>
-                                  <tr>
-                                  <td><%= user.name %></td>
-                                  <td><%= user.email %></td>
-                                  <td><%= user.institution_id %></td>
-                                  <td><%= user.role %></td>
-                                  <td ">
-                                 
-                                  <span><%= link "Edit", to: user_path(@conn, :edit, user), class: "btn btn-primary " %></span>
-                                
-                                 <span><a href="/user_access_pass/<%= user.id %>" type="button" rel="tooltip" title="" class="btn btn-success " data-original-title="Edit user">
-                                      <i class="material-icons">User Access</i>
-                                    <div class="ripple-container"></div></a></span></td>
-                                  </tr>
-                              <% end %>
-                            </tbody>
-                        </table>
-                      </div>
-                  <% end %>
+    
                   </div>
                 </div>
               </div>

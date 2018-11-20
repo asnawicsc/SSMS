@@ -62,6 +62,22 @@ defmodule SchoolWeb.TimetableController do
     |> redirect(to: timetable_path(conn, :index))
   end
 
+  def class_timetable(conn, params) do
+    events =
+      case School.Affairs.get_class!(params["class_id"]) do
+        class ->
+          School.Affairs.class_period_list(class.id)
+
+        {:error, message} ->
+          []
+      end
+      |> Poison.encode!()
+
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(200, events)
+  end
+
   def teacher_timetable(conn, params) do
     start_date = params["start"] |> Date.from_iso8601!()
     end_date = params["start"] |> Date.from_iso8601!()

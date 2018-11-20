@@ -4073,6 +4073,47 @@ defmodule School.Affairs do
     a
   end
 
+  def class_period_list(class_id) do
+    a =
+      Repo.all(
+        from(
+          p in School.Affairs.Period,
+          left_join: tt in School.Affairs.Timetable,
+          on: p.timetable_id == tt.id,
+          left_join: s in School.Affairs.Subject,
+          on: s.id == p.subject_id,
+          left_join: c in School.Affairs.Class,
+          on: c.id == p.class_id,
+          left_join: t in School.Affairs.Teacher,
+          on: t.id == p.teacher_id,
+          where: p.class_id == ^class_id,
+          select: %{
+            period_id: p.id,
+            subject: s.description,
+            class: c.name,
+            start_datetime: p.start_datetime,
+            end_datetime: p.end_datetime,
+            teacher: t.name,
+            google_event_id: p.google_event_id,
+            updated_at: p.updated_at
+          }
+        )
+      )
+      |> Enum.map(fn x ->
+        %{
+          start: my_time(x.start_datetime),
+          end: my_time(x.end_datetime),
+          title: x.subject <> " - " <> x.class,
+          description: x.teacher,
+          period_id: x.period_id,
+          google_event_id: x.google_event_id,
+          updated_at: x.updated_at
+        }
+      end)
+
+    a
+  end
+
   def teacher_period_list(teacher_id, period_ids) do
     a =
       Repo.all(

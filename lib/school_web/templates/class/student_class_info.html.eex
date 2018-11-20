@@ -15,11 +15,9 @@
     <div class="table-responsive">
       
     
-    <table class="table">
+    <table class="table" >
       <thead>
         <tr>
-        
-
           <th>Name</th>
         </tr>
       </thead>
@@ -27,18 +25,12 @@
        
     <%= for studen_class <- @students do %>
         <tr>
-       
-
-
           <td class="text-left">
          <input type="hidden" name="_csrf_token" value="<%= @csrf %>">
-       
               <div id="<%= studen_class.id %>" class="btn btn-link studen_class"><%= studen_class.name %> <%= studen_class.chinese_name %></div>
-
           </td>
         </tr>
     <% end %>
-
       </tbody>
     </table>
 </div>

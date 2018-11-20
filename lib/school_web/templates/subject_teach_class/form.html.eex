@@ -1,5 +1,4 @@
-<% teacher = 
-  School.Repo.all(from l in School.Affairs.Teacher,where: l.institution_id ==^@conn.private.plug_session["institution_id"] , select: {l.name, l.id}) %>
+
 
 <% levels = School.Repo.all(from l in School.Affairs.Level,where: l.institution_id ==^@conn.private.plug_session["institution_id"], select: {l.name, l.id}) %>
 
@@ -26,11 +25,7 @@
     <%= error_tag f, :subject_id %>
   </div>
 
-  <div class="form-group">
-    <%= label f, :teacher_id, class: "control-label" %>
-    <%= select f, :teacher_id,teacher, class: "form-control" %>
-    <%= error_tag f, :teacher_id %>
-  </div>
+
 
   <div class="form-group">
     <%= label f, :class_id, class: "control-label" %>

@@ -6,24 +6,50 @@ defmodule SchoolWeb.SemesterController do
   require IEx
 
   def index(conn, _params) do
-    semesters = Affairs.list_semesters()|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
+    semesters =
+      Affairs.list_semesters()
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
     render(conn, "index.html", semesters: semesters)
   end
 
   def new(conn, _params) do
-    changeset = Affairs.change_semester(%Semester{start_date: Timex.today, end_date: Timex.today, holiday_start: Timex.today, holiday_end: Timex.today})
+    changeset =
+      Affairs.change_semester(%Semester{
+        start_date: Timex.today(),
+        end_date: Timex.today(),
+        holiday_start: Timex.today(),
+        holiday_end: Timex.today()
+      })
+
     render(conn, "new.html", changeset: changeset)
   end
 
-  def create(conn, %{"semester" => semester_params}) do
+  def create_semesters(conn, params) do
+    render(conn, "create_semesters.html")
+  end
 
-    semester_params = Map.put(semester_params, "institution_id", conn.private.plug_session["institution_id"])
+  def create_semesters_data(conn, params) do
+    params = Map.put(params, "institution_id", conn.private.plug_session["institution_id"])
+
+    case Affairs.create_semester(params) do
+      {:ok, semester} ->
+        conn
+        |> put_flash(:info, "Semester created successfully.")
+        |> redirect(to: semester_path(conn, :show, semester))
+    end
+  end
+
+  def create(conn, %{"semester" => semester_params}) do
+    semester_params =
+      Map.put(semester_params, "institution_id", conn.private.plug_session["institution_id"])
 
     case Affairs.create_semester(semester_params) do
       {:ok, semester} ->
         conn
         |> put_flash(:info, "Semester created successfully.")
         |> redirect(to: semester_path(conn, :show, semester))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
@@ -48,6 +74,7 @@ defmodule SchoolWeb.SemesterController do
         conn
         |> put_flash(:info, "Semester updated successfully.")
         |> redirect(to: semester_path(conn, :show, semester))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", semester: semester, changeset: changeset)
     end

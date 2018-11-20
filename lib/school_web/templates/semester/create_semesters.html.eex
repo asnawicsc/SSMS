@@ -1,0 +1,96 @@
+<div class="content-heading">
+   <div>Create Semester
+   </div>
+</div>
+
+<form action="/create_semesters_data" method="post"> 
+    <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+<div class="row">
+  <div class="col-4">
+    <div class="card">
+      <div class="card-body">
+        <h4>Start date: </h4>
+        <div class="input-group date" id="datetimepicker">
+            <input class="form-control date" type="text" name="start_date" value="<%= Date.utc_today() %>">
+            <span class="input-group-append input-group-addon">
+               <span class="input-group-text fas fa-calendar-alt"></span>
+            </span>
+         </div>
+     </div>
+   </div>
+ </div>
+
+   <div class="col-4">
+    <div class="card">
+      <div class="card-body">
+        <h4>End date: </h4>
+        <div class="input-group date" id="datetimepicker">
+            <input class="form-control date" type="text" name="end_date" value="<%= Date.utc_today() %>">
+            <span class="input-group-append input-group-addon">
+               <span class="input-group-text fas fa-calendar-alt"></span>
+            </span>
+         </div>
+     </div>
+   </div>
+ </div>
+
+</div>
+
+<div class="row">
+   <div class="col-4">
+    <div class="card">
+      <div class="card-body">
+        <h4>Holiday start: </h4>
+        <div class="input-group date" id="datetimepicker">
+            <input class="form-control date" type="text" name="holiday_start" value="<%= Date.utc_today() %>">
+            <span class="input-group-append input-group-addon">
+               <span class="input-group-text fas fa-calendar-alt"></span>
+            </span>
+         </div>
+     </div>
+   </div>
+ </div>
+
+   <div class="col-4">
+    <div class="card">
+      <div class="card-body">
+        <h4>Holiday end: </h4>
+        <div class="input-group date" id="datetimepicker">
+            <input class="form-control date" type="text" name="holiday_end" value="<%= Date.utc_today() %>">
+            <span class="input-group-append input-group-addon">
+               <span class="input-group-text fas fa-calendar-alt"></span>
+            </span>
+         </div>
+     </div>
+   </div>
+ </div>
+
+
+</div>
+
+<div class="row">
+   <div class="col-8">
+    <div class="card">
+      <div class="card-body">
+        <h4>School Days: </h4>
+        <div class="input-group date" id="datetimepicker">
+            <input class="form-control input" type="number" name="school_days" >
+            <span class="input-group-append input-group-addon">
+             
+            </span>
+         </div>
+     </div>
+   </div>
+ </div>
+
+
+
+</div>
+
+
+ <input class="btn btn-primary" name="" value="Submit" type="submit">
+</form>
+
+<script type="text/javascript">
+  $("input.date").datetimepicker({timepicker:false,format:'Y-m-d'})
+</script>

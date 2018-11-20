@@ -1,9 +1,24 @@
 
-<h2>Listing Period</h2>
+<div class="content-heading">
+   <div>List Period
+      <small><%= gettext("welcome")%>!</small>
+   </div>
+   <!-- START Language list-->
+   <div class="ml-auto">
+
+   </div>
+   <!-- END Language list-->
+</div>
+
+<div class="row">
+<div class="col-lg-12">
+
+ <div class="card">
+ 
+               <div class="card-body">
 
 
-
-<table class="display" style="width:100%" id="example">
+<table class="table"  id="datatable1">
 <% require IEx %>
   <thead>
 
@@ -42,6 +57,10 @@
 
 
 </table>
+</div>
+</div>
+</div>
+</div>
 
 <span><%= link "New Period", to: period_path(@conn, :new) %></span>
 

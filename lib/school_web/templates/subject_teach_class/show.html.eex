@@ -12,10 +12,7 @@
     <%= @subject_teach_class.subject_id %>
   </li>
 
-  <li>
-    <strong>Teacher:</strong>
-    <%= @subject_teach_class.teacher_id %>
-  </li>
+
 
   <li>
     <strong>Class:</strong>

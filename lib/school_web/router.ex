@@ -146,6 +146,7 @@ defmodule SchoolWeb.Router do
     get("/timetable/teacher/:user_id/list", TimetableController, :teacher_timetable_list)
     get("/timetable/teacher/:user_id/sync_to_gcal", TimetableController, :sync_to_gcal)
     get("/timetable/teacher/:user_id", TimetableController, :teacher_timetable)
+    get("/timetable/class/:class_id", TimetableController, :class_timetable)
     get("/generated_timetable/:id", TimetableController, :generated_timetable)
     resources("/period", PeriodController)
     get("/create_period/:subject_id/:class_id", PeriodController, :get_create_period)
@@ -308,6 +309,8 @@ defmodule SchoolWeb.Router do
     get("/create_teacher_login/:id", TeacherController, :create_teacher_login)
     resources("/sync_list", SyncListController)
     get("/apply_color", PageController, :apply_color)
+    get("/create_semesters", SemesterController, :create_semesters)
+    post("/create_semesters_data", SemesterController, :create_semesters_data)
     get("/*path", PageController, :no_page_found)
   end
 

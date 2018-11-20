@@ -1,14 +1,26 @@
+<link rel="stylesheet" href="/vendor/fullcalendar/dist/fullcalendar.css">
+<!-- MOMENT JS-->
+<script src="/vendor/moment/min/moment-with-locales.js"></script>
+<!-- FULLCALENDAR-->
+<script src="/vendor/fullcalendar/dist/fullcalendar.js"></script>
+<script src="/vendor/fullcalendar/dist/gcal.js"></script>
 <link rel="stylesheet" href="/css/jquery.skedTape.css">
 <script type="text/javascript">
     window.csrf = "<%= Phoenix.Controller.get_csrf_token %>"
 </script>
+
+
 
 <div class="content-heading">
     <div>Class Settings
     </div>
 </div>
 
-            <div class="container-md">
+      <div class="card">
+
+                <div class="card-body">
+
+
                <div class="row">
                   <div class="col-lg-3">
                      <div class="card b">
@@ -54,83 +66,41 @@
                         </div>
                         <div class="tab-pane" id="tabSetting2">
                            <div class="card b">
-                              <div class="card-header bg-gray-lighter text-bold">Account</div>
+                              <div class="card-header bg-gray-lighter text-bold">Class Subject</div>
                               <div class="card-body">
-                                 <form action="#">
-                                    <div class="form-group">
-                                       <label>Current password</label>
-                                       <input class="form-control" type="password">
-                                    </div>
-                                    <div class="form-group">
-                                       <label>New password</label>
-                                       <input class="form-control" type="password">
-                                    </div>
-                                    <div class="form-group">
-                                       <label>Confirm new password</label>
-                                       <input class="form-control" type="password">
-                                    </div>
-                                    <button class="btn btn-info" type="button">Update password</button>
-                                    <p>
-                                       <small class="text-muted">* Integer fermentum accumsan metus, id sagittis ipsum molestie vitae</small>
-                                    </p>
-                                 </form>
+                              <table class="table data">
+                          <thead>
+                              <tr>
+                                <th>Subject</th>
+                                 <th>Total Period</th>
+                          
+                              </tr>
+                          </thead>
+                          <tbody>
+                           <%= for subject <- @subject_class do %>
+
+                           <% period = Repo.all(from s in School.Affairs.Period,where: s.subject_id ==^subject.s_id and s.class_id==^subject.c_id)|>Enum.count %>
+                                <tr>
+                                  <td><%= subject.s_name %></td>
+                                  <td><%= period %></td>
+                     
+                              
+                                </tr>
+                            <% end %>
+                          </tbody>
+                      </table>
+                         
                               </div>
                            </div>
-                           <div class="card b">
-                              <div class="card-header bg-danger text-bold">Delete account</div>
-                              <div class="card-body bt">
-                                 <p>You will be asked for confirmation before delete account.</p>
-                                 <button class="btn btn-secondary" type="button">
-                                    <span class="text-danger">Delete account</span>
-                                 </button>
-                              </div>
-                           </div>
+                         
                         </div>
                         <div class="tab-pane" id="tabSetting3">
                            <div class="card b">
                               <div class="card-header bg-gray-lighter text-bold">Emails</div>
                               <div class="card-body">
-                                 <p>Etiam eros nibh, condimentum in auctor et, aliquam quis elit. Donec id libero eros. Ut fringilla, justo id fringilla pretium, nibh nunc suscipit mauris, et suscipit nulla nisl ac dolor. Nam egestas, leo eu gravida tincidunt,
-                                    sem ipsum pellentesque quam, vel iaculis est quam et eros.</p>
-                                 <p>
-                                    <strong>Your email addresses</strong>
-                                 </p>
-                                 <p>
-                                    <span class="mr-2">email@someaddress.com</span>
-                                    <span class="badge badge-success">primary</span>
-                                 </p>
-                                 <p>
-                                    <span class="mr-2">another.email@someaddress.com</span>
-                                    <span class="badge bg-gray">private</span>
-                                 </p>
+                                 <div id='calendar'></div>
                               </div>
-                              <div class="card-body bt">
-                                 <p>
-                                    <strong>Add email address</strong>
-                                 </p>
-                                 <form action="#">
-                                    <div class="row mb-2">
-                                       <div class="col-xl-6">
-                                          <div class="form-group">
-                                             <div class="input-group">
-                                                <input class="form-control" type="email" placeholder="email@server.com">
-                                                <span class="input-group-btn">
-                                                   <button class="btn btn-secondary" type="button">Add</button>
-                                                </span>
-                                             </div>
-                                          </div>
-                                          <div class="form-check">
-                                             <input class="form-check-input" id="defaultCheck1" type="checkbox" value="">
-                                             <label class="form-check-label">Keep my email address private</label>
-                                          </div>
-                                       </div>
-                                    </div>
-                                    <button class="btn btn-info" type="button">Update email</button>
-                                    <p>
-                                       <small class="text-muted">* Integer fermentum accumsan metus, id sagittis ipsum molestie vitae</small>
-                                    </p>
-                                 </form>
-                              </div>
+                             
                            </div>
                         </div>
                         <div class="tab-pane" id="tabSetting4">
@@ -200,11 +170,12 @@
                            </div>
                         </div>
                      </div>
-                  </div>
+                
                </div>
             </div>
             
-
+</div>
+</div>
 
 <script type="text/javascript">
 
@@ -217,4 +188,68 @@
        
    <script src="<%= static_path(@conn, "/js/jquery.skedTape.js") %> "></script>
 
+<script type="text/javascript">
+           $(document).ready(function(){
 
+
+           
+            jQuery('#datetimepicker').datetimepicker();
+
+               channel.on("show_period", payload => {
+                  swal("Saved!", "Your event has been saved!", "success");
+                  $("div.fc-event[period_id='"+payload.period_id+"']").remove();
+               })
+               channel.on("show_failed_period", payload => {
+                  swal("No event saved!", "Block doesnt exist!", "info");
+               $('#calendar').fullCalendar( 'removeEvents', [payload.event_id_str ] );
+               })
+   
+
+           $('#external-events .fc-event').each(function() {
+
+             // store data so the calendar knows to render an event upon drop
+            var period_id = $(this).attr("period_id")
+             $(this).data('event', {
+               duration: '00:30',
+               title: $.trim($(this).text()), // use the element's text as the event title
+               stick: true, // maintain when user navigates (see docs on the renderEvent method)
+               period_id: period_id
+             });
+
+
+
+             // make the event draggable using jQuery UI
+             $(this).draggable({
+               zIndex: 999,
+               revert: true,      // will cause the event to go back to its
+               revertDuration: 0  //  original position after the drag
+             });
+
+           });
+         
+
+
+           $('#calendar').fullCalendar({
+             // put your options and callbacks here
+             header: { center: 'month,agendaWeek' }, 
+
+             editable: true,
+            eventLimit: true, // when too many events in a day, show the popover
+             eventSources: [{
+               url: '/timetable/class/<%= @class_id %>',
+               timezone: 'UTC',
+               color: 'yellow',    // an option!
+               textColor: 'black'  // an option!
+             }],
+             droppable: true, // this allows things to be dropped onto the calendar
+             drop: function(date, jsEvent, ui, resourceId) {
+                  var target_date = date._d;
+                     var dayWrapper = moment(target_date);
+                     dayWrapper.subtract(8, 'hours');
+             }
+
+           });
+
+      
+           })
+         </script>
