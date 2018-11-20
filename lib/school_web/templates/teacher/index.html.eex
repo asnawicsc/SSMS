@@ -11,7 +11,7 @@
     <div>Teacher Lists
     </div>
 </div>
- <%= if   @conn.private.plug_session["user_id"] != nil do %>
+ <%= if @conn.private.plug_session["user_id"] != nil do %>
               <% user_id=@conn.private.plug_session["user_id"] %>
               <%= if user_id != nil do %>
               <% user=Repo.get_by(Settings.User, %{id: user_id }) %>
@@ -26,12 +26,23 @@
                           <thead>
                             <tr>
                                 <th>Name</th>
+                                <th>User Login</th>
                             </tr>
                             </thead>
                             <tbody>
                             <%= for teacher <- @teacher do %>
                               <tr>
                                 <td>   <div id="<%= teacher.code %> " class="btn btn-link teacher"><%= teacher.name %></div></td>
+                                <td>
+                                  <%= if Repo.get_by(User, email: teacher.email) != nil  do  %>
+                                      <p style="color: green">Created</p>
+                                  <% else %>
+                                    <a href="/create_teacher_login/<%= teacher.id %>"><button class="btn btn-labeled btn-xs btn-info mb-2" type="button" >
+                                      <span class="btn-label"><i class="fa fa-arrow-right"></i></span>
+                                     Create
+                                    </button></a>
+                                  <% end %>
+                                </td>
                               </tr>
                             <% end %>
                           </tbody>
@@ -73,17 +84,16 @@
 
              <%= if user.role == "Teacher" do %>
 
-               <% teacher=Repo.get_by(Affairs.Teacher, %{email: user.email }) %>
-          
+               <% teacher = Repo.get_by(Affairs.Teacher, %{email: user.email }) %>
 
                   <%= render("show.html", conn: @conn, teacher: teacher)%>
 
              <% end %>
   
       </div>
-<%= if user.role == "Admin" and user.role == "Support" do %>
+
 <span><%= link "New Teacher", to: teacher_path(@conn, :new) %></span>
-<% end %>
+
  <% end %>
     <% end %>
 

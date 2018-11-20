@@ -23,14 +23,14 @@
                         <div class="media">
                            <div class="media-body py-2">
                               <div class="text-bold">Father
-                                <div class="text-sm text-muted"><a href="/show_guardian/<%= @student.ficno %>">Click here to show father's information</a></div>
+                                <div class="text-sm text-muted"><a target="_blank" href="/show_guardian/<%= @student.ficno %>">Click here to show father's information</a></div>
                               </div>
                            </div>
                         </div>
                         <div class="media">
                            <div class="media-body py-2">
                               <div class="text-bold">Mother
-                                <div class="text-sm text-muted"><a href="/show_guardian/<%= @student.micno %>">Click here to show mother's information</a></div>
+                                <div class="text-sm text-muted"><a target="_blank" href="/show_guardian/<%= @student.micno %>">Click here to show mother's information</a></div>
                                  
                               </div>
                            </div>
@@ -38,7 +38,7 @@
                         <div class="media">
                            <div class="media-body py-2">
                               <div class="text-bold">Guardian
-                                 <div class="text-sm text-muted"><a href="/show_guardian/<%= @student.gicno %>">Click here to show guardian's information</a></div>
+                                 <div class="text-sm text-muted"><a target="_blank" href="/show_guardian/<%= @student.gicno %>">Click here to show guardian's information</a></div>
                               </div>
                            </div>
                         </div>

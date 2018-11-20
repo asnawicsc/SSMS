@@ -74,14 +74,14 @@ defmodule SchoolWeb.TeacherController do
     if teacher.email == nil do
       conn
       |> put_flash(:info, "Please assign teacher email before creating teacher login.")
-      |> redirect(to: teacher_path(conn, :login_teacher))
+      |> redirect(to: teacher_path(conn, :index))
     else
       user = Repo.get_by(User, email: teacher.email)
 
       if user != nil do
         conn
         |> put_flash(:info, "User/Email already exist.")
-        |> redirect(to: teacher_path(conn, :login_teacher))
+        |> redirect(to: teacher_path(conn, :index))
       else
         password = teacher.icno
         crypted_password = Comeonin.Bcrypt.hashpwsalt(password)
@@ -104,12 +104,12 @@ defmodule SchoolWeb.TeacherController do
 
             conn
             |> put_flash(:info, "Teacher login succesfully created.")
-            |> redirect(to: teacher_path(conn, :login_teacher))
+            |> redirect(to: teacher_path(conn, :index))
 
           {:error, user} ->
             conn
             |> put_flash(:info, "Having Problem in Creating a Teacher Login.")
-            |> redirect(to: teacher_path(conn, :login_teacher))
+            |> redirect(to: teacher_path(conn, :index))
         end
       end
     end
@@ -173,7 +173,7 @@ defmodule SchoolWeb.TeacherController do
       {:ok, teacher} ->
         conn
         |> put_flash(:info, "Teacher created successfully.")
-        |> redirect(to: teacher_path(conn, :teacher_setting))
+        |> redirect(to: teacher_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)

@@ -63,9 +63,6 @@ defmodule SchoolWeb.TimetableController do
   end
 
   def teacher_timetable(conn, params) do
-    start_date = params["start"] |> Date.from_iso8601!()
-    end_date = params["start"] |> Date.from_iso8601!()
-
     events =
       case School.Affairs.get_teacher(params["user_id"]) do
         {:ok, teacher} ->

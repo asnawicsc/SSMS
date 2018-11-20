@@ -352,7 +352,22 @@ defmodule SchoolWeb.PageController do
         %{start_date: "Not set", end_date: "Not set"}
       end
 
-    render(conn, "index.html", current_sem: current_sem)
+    user = Settings.current_user(conn)
+    role = user.role
+
+    location =
+      case role do
+        "Support" ->
+          "support_page.html"
+
+        "Admin" ->
+          "admin_page.html"
+
+        _ ->
+          "index.html"
+      end
+
+    render(conn, location, current_sem: current_sem)
   end
 
   def admin_dashboard(conn, _params) do

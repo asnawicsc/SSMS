@@ -214,6 +214,10 @@ defmodule School.Affairs do
     Repo.all(Semester)
   end
 
+  def list_semesters(institution_id) do
+    Repo.all(from(s in Semester, where: s.institution_id == ^institution_id))
+  end
+
   @doc """
   Gets a single semester.
 
@@ -4159,6 +4163,18 @@ defmodule School.Affairs do
     else
       Timex.shift(time, hours: 8)
     end
+  end
+
+  def get_student_list(class_id, semester_id) do
+    Repo.all(
+      from(
+        s in StudentClass,
+        left_join: ss in Student,
+        on: s.sudent_id == ss.id,
+        where: s.class_id == ^class_id and s.semester_id == ^semester_id,
+        select: %{name: ss.name, id: ss.id}
+      )
+    )
   end
 
   alias School.Affairs.SyncList

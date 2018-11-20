@@ -218,6 +218,13 @@ defmodule SchoolWeb.ClassController do
     )
   end
 
+  def enroll_students(conn, params) do
+    inst_id = Affairs.get_inst_id(conn)
+    classes = Affairs.list_classes(inst_id)
+    semesters = Affairs.list_semesters(inst_id)
+    render(conn, "enroll_students.html", classes: classes, semesters: semesters)
+  end
+
   def show_student_info(conn, params) do
     student = Repo.get(Student, params["student_id"])
     mother = Repo.get_by(Parent, icno: student.micno)

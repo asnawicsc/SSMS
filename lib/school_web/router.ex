@@ -122,6 +122,7 @@ defmodule SchoolWeb.Router do
     get("/register_new_user", UserController, :register_new_user)
     get("/logout", UserController, :logout)
     resources("/students", StudentController)
+
     get("/update_changes/:student_id", StudentController, :update_changes)
     post("/upload_students", StudentController, :upload_students)
     get("/height_weight", StudentController, :height_weight)
@@ -131,6 +132,7 @@ defmodule SchoolWeb.Router do
 
     resources("/levels", LevelController)
     resources("/semesters", SemesterController)
+    get("/classes/enroll_students", ClassController, :enroll_students)
     resources("/classes", ClassController)
     get("/classes/:id/students", ClassController, :students)
     get("/classes/:id/sync_library_membership", ClassController, :sync_library_membership)

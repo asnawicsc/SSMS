@@ -219,13 +219,13 @@
              <div class="card-header d-flex align-items-center">
             
                   <em class="fa-2x mr-3 fas fa-pencil-alt"></em>
-                  <span style="font-weight: bolder;font-size: 17px;">Class</span>
+                  <span style="font-weight: bolder;font-size: 17px;"><%= gettext("Class")%></span>
                
              </div>
              <div class="card-body">
-                <h5 class="card-title">Card Default card title</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                  <a href ="/classes"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
+                <h5 class="card-title"><%= gettext("Manage class")%></h5>
+                <p class="card-text"><%= gettext("Allow school executives to manage classes.")%></p>
+                  <a href ="/classes/enroll_students"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Enroll Students</button></a>
                 <a  href="/create_class"]"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Class</button></a>
                 <div class="btn-group">
                    <button class="mb-1 btn-sm btn btn-outline-primary" type="button">Manage</button>
@@ -263,14 +263,14 @@
              <div class="card-header d-flex align-items-center">
             
                   <em class="fa-2x mr-3 fas fa-child"></em>
-                  <span style="font-weight: bolder;font-size: 17px;">Student</span>
+                  <span style="font-weight: bolder;font-size: 17px;"><%= gettext("Student")%></span>
                
              </div>
-             <% require IEx %>
+        
              <% a = @conn %>
 
               <div class="card-body">
-                <h5 class="card-title">Card Default card title</h5>
+                <h5 class="card-title"><%= gettext("Student")%></h5>
                 <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                 <a href="/student_lists/<%= a.private.plug_session["user_id"]%>"><button class="mb-1 btn-sm btn btn-outline-primary"  type="button">List</button></a>
                   <a href="/students/new"><button class="mb-1 btn-sm btn btn-outline-primary"  type="button">Create Student</button></a>

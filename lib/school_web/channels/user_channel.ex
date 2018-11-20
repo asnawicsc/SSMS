@@ -2948,6 +2948,96 @@ defmodule SchoolWeb.UserChannel do
     true
   end
 
+  def handle_in(
+        "qs_term",
+        %{"term" => term, "user_id" => user_id, "institution_id" => institution_id},
+        socket
+      ) do
+    user = Repo.get(User, user_id)
+    term = "%#{term}%"
+
+    students =
+      Repo.all(
+        from(
+          s in Student,
+          where:
+            s.institution_id == ^institution_id and
+              (ilike(s.phone, ^term) or ilike(s.name, ^term) or ilike(s.chinese_name, ^term) or
+                 ilike(s.ic, ^term) or ilike(s.b_cert, ^term) or ilike(s.gicno, ^term) or
+                 ilike(s.ficno, ^term) or ilike(s.micno, ^term)),
+          select: %{
+            name: s.name,
+            c_name: s.chinese_name,
+            ic: s.ic,
+            b_cert: s.b_cert,
+            gicno: s.gicno,
+            ficno: s.ficno,
+            micno: s.micno,
+            phone: s.phone,
+            id: s.id
+          },
+          limit: 100
+        )
+      )
+
+    {:reply, {:ok, %{students: students}}, socket}
+  end
+
+  def handle_in(
+        "load_class_students",
+        %{
+          "semester_id" => semester_id,
+          "class_id" => class_id,
+          "user_id" => user_id,
+          "institution_id" => institution_id
+        },
+        socket
+      ) do
+    students = Affairs.get_student_list(class_id, semester_id)
+
+    {:reply, {:ok, %{students: students}}, socket}
+  end
+
+  def handle_in(
+        "add_class_students",
+        %{
+          "student_id" => student_id,
+          "semester_id" => semester_id,
+          "class_id" => class_id,
+          "user_id" => user_id,
+          "institution_id" => institution_id
+        },
+        socket
+      ) do
+    class = Affairs.get_class!(class_id)
+    student = Affairs.get_student!(student_id)
+
+    case Affairs.create_student_class(%{
+           class_id: class_id,
+           institute_id: institution_id,
+           semester_id: semester_id,
+           sudent_id: student_id,
+           level_id: class.level_id
+         }) do
+      {:ok, sc} ->
+        students = Affairs.get_student_list(class_id, semester_id)
+
+        {:reply, {:ok, %{students: students}}, socket}
+
+      {:error, changeset} ->
+        Process.sleep(500)
+
+        ex_class =
+          Repo.get(
+            Class,
+            Repo.get_by(StudentClass, sudent_id: student_id, semester_id: semester_id).class_id
+          )
+
+        {:reply, {:error, %{name: student.name, class: class.name, ex_class: ex_class.name}},
+         socket}
+    end
+  end
+
   # Add authorization logic here as required.
   defp authorized?(_payload) do
     true

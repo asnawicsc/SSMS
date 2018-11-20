@@ -1,56 +1,33 @@
+<div class="content-heading">
+   <div>Users
+      <small><%= gettext("welcome")%>!</small>
+   </div>
+</div>
+
+<% group_user = @users |> Enum.group_by(fn x -> x.role end) %>
+<% groups = group_user |> Map.keys %>
+<div class="row">
+  <div class="col-lg-3">
+     <div class="card b">
+
+        <div class="list-group">
+
+           <a class="list-group-item list-group-item-action active show" href="#tabSetting5" data-toggle="tab">ALL</a>
+           <%= for group <- groups do %>
+           <a class="list-group-item list-group-item-action" href="#<%= group%>" data-toggle="tab"><%= group%></a>
+           <% end %>
+          
+        </div>
+     </div>
+  </div>
+  <div class="col-lg-9">
+     <div class="tab-content p-0 b0">
 
 
+        <div class="tab-pane active show" id="tabSetting5">
+           <div class="card b">
 
-
-
-          <div class="card">
-            <div class="card-header card-header-text card-header-warning">
-              <div class="card-text">
-                <h4 class="card-title">Users</h4>
-              </div>
-            
-     <span><%= link "New User", to: user_path(@conn, :register_new_user) %></span>
-     
-            </div>
-
-
-       <%= if   @conn.private.plug_session["user_id"] != nil do %>
-            
-        
-              <% user_id=@conn.private.plug_session["user_id"] %>
-
-              <%= if user_id != nil do %>
-
-                <% user=Repo.get_by(Settings.User, %{id: user_id }) %>
-
-                <%= if user.role == "Admin" do %>
-
-
-        <div class="card-body table-responsive">
-            <% group_user = @users |> Enum.group_by(fn x -> x.role end) %>
-             <% groups = group_user |> Map.keys %>
-
-              <div class="row">
-                <div class="col-md-2">
-                  <ul class="nav nav-pills nav-pills-rose flex-column" role="tablist">
-                    <li class="nav-item">
-                      <a class="nav-link active show" data-toggle="tab" href="#link4" role="tablist">
-                        ALL
-                      </a>
-                    </li>
-                   <%= for group <- groups do %>
-                    <li class="nav-item">
-                      <a class="nav-link" data-toggle="tab" href="#<%= group %>" role="tablist">
-                        <%= group%>
-                      </a>
-                    </li>
-                    <% end %>
-                  </ul>
-                </div>
-
-                <div class="col-md-10">
-                  <div class="tab-content">
-                    <div class="tab-pane active show" id="link4">
+              <div class="card-body">
                       <table class="table data">
                           <thead>
                               <tr>
@@ -79,9 +56,17 @@
                             <% end %>
                           </tbody>
                       </table>
-                    </div>
+              </div>
+           </div>
+        </div>
                   <%= for group <- groups do %>
-                      <div class="tab-pane" id="<%= group %>">
+
+        <div class="tab-pane" id="<%= group%>">
+         
+              <div class="card b">
+
+                 <div class="card-body">
+
                         <table class="table data">
                             <thead>
                                 <tr>
@@ -111,79 +96,15 @@
                               <% end %>
                             </tbody>
                         </table>
-                      </div>
-                  <% end %>
-                  </div>
-                </div>
+
+                 </div>
               </div>
-            </div>
-
-
-            <% end %>
-              <% end %>
-                <% end %>
-
-
-                       <%= if   @conn.private.plug_session["user_id"] != nil do %>
-            
-        
-              <% user_id=@conn.private.plug_session["user_id"] %>
-
-              <%= if user_id != nil do %>
-
-                <% user=Repo.get_by(Settings.User, %{id: user_id }) %>
-
-                <%= if user.role == "Support" do %>
-
-
-        <div class="card-body table-responsive">
-            <% group_user = @users |> Enum.group_by(fn x -> x.role end) %>
-
-              <div class="row">
-
-
-                <div class="col-md-12">
-                  <div class="tab-content">
-                    <div class="tab-pane active show" id="link4">
-                      <table class="table data">
-                          <thead>
-                              <tr >
-                                <th >Name</th>
-                                <th >Email</th>
-                                <th >Role</th>
-                                <th >Action</th>
-                              </tr>
-                          </thead>
-                          <tbody>
-                           <%= for user <- @users|>Enum.filter(fn x -> x.role == "Teacher" end) do %>
-                                <tr >
-                                  <td><%= user.name %></td>
-                                  <td><%= user.email %></td>
-                                  <td><%= user.role %></td>
-                                  <td >
-                                  <span><%= link "Show", to: user_path(@conn, :show, user), class: "btn btn-default btn-xs" %></span>
-                                 
-                                  <span><%= link "Edit", to: user_path(@conn, :edit, user), class: "btn btn-default btn-xs" %></span>
-                                  <span><%= link "Delete", to: user_path(@conn, :delete, user), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
-                                   <span><a href="/user_access_pass/<%= user.id %>" type="button" rel="tooltip" title="" class="btn btn-primary btn-link btn-sm" data-original-title="Edit user">
-                                      <i class="material-icons">User Access</i>
-                                    <div class="ripple-container"></div></a></span>
-                                </td>
-                                </tr>
-                            <% end %>
-                          </tbody>
-                      </table>
-                    </div>
-
-                  </div>
-                </div>
-              </div>
-            </div>
-
-
-            <% end %>
-              <% end %>
-                <% end %>
-
-    
+         
         </div>
+
+                  <% end %>
+
+     </div>
+  </div>
+</div>
+           <span><%= link "New User", to: user_path(@conn, :register_new_user) %></span>
