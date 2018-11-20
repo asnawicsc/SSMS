@@ -98,7 +98,8 @@ defmodule SchoolWeb.SubjectController do
             id: s.id,
             code: s.code,
             name: s.description,
-            description: s.description
+            description: s.description,
+            cdesc: s.cdesc
           }
         )
       )

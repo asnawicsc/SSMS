@@ -455,10 +455,10 @@ defmodule SchoolWeb.AttendanceController do
 
     teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email})
 
-    class =
-      if teacher != nil do
-        Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
-      end
+    # class =
+    # if teacher != nil do
+    #  Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
+    # end
 
     classes =
       if user.role == "Admin" or user.role == "Support" do
@@ -479,7 +479,8 @@ defmodule SchoolWeb.AttendanceController do
             c in School.Affairs.Class,
             left_join: l in School.Affairs.Level,
             on: c.level_id == l.id,
-            where: c.institution_id == ^School.Affairs.inst_id(conn) and c.id == ^class.id,
+            where:
+              c.institution_id == ^School.Affairs.inst_id(conn) and c.teacher_id == ^teacher.id,
             select: %{id: c.id, level: l.name, class: c.name},
             order_by: [c.name]
           )

@@ -260,7 +260,7 @@
                                     </a>
                                  </div>
                               </div>
-                              <a class="px-4" href="/student_listing_by_class">
+                              <a class="px-4" href="/student_lists/<%= @conn.private.plug_session["user_id"]%>">
                                  <em class="fa-5x fas fa-chalkboard-teacher text-danger"></em>
                               </a>
                               <p>
