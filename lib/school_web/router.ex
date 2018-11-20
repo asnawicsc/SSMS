@@ -262,6 +262,7 @@ defmodule SchoolWeb.Router do
     get("/show_student_info/:student_id", ClassController, :show_student_info)
 
     post("/create_student_co", CoCurriculumController, :create_student_co)
+    get("/co_curriculum/enroll_students", CoCurriculumController, :enroll_students)
     get("/co_mark", CoCurriculumController, :co_mark)
     post("/create_co_mark", CoCurriculumController, :create_co_mark)
     post("/edit_co_mark", CoCurriculumController, :edit_co_mark)
@@ -290,7 +291,6 @@ defmodule SchoolWeb.Router do
     resources("/student_cocurriculum", StudentCocurriculumController)
     get("/co_curriculum_setting", CoCurriculumController, :co_curriculum_setting)
 
-    post("/create_student_co", CoCurriculumController, :create_student_co)
     get("/co_mark", CoCurriculumController, :co_mark)
     post("/create_co_mark", CoCurriculumController, :create_co_mark)
     get("/student_listing_by_class", ClassController, :student_listing_by_class)

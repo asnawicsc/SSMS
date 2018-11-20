@@ -3309,6 +3309,10 @@ defmodule School.Affairs do
     Repo.all(CoCurriculum)
   end
 
+  def list_cocurriculum(inst_id) do
+    Repo.all(from(c in CoCurriculum, where: c.institution_id == ^inst_id))
+  end
+
   @doc """
   Gets a single co_curriculum.
 
@@ -3403,6 +3407,25 @@ defmodule School.Affairs do
   """
   def list_student_cocurriculum do
     Repo.all(StudentCocurriculum)
+  end
+
+  def list_student_cocurriculum(coco_id, semester_id) do
+    a =
+      Repo.all(
+        from(
+          sc in StudentCocurriculum,
+          left_join: s in Student,
+          on: s.id == sc.student_id,
+          where: sc.cocurriculum_id == ^coco_id and sc.semester_id == ^semester_id,
+          select: %{name: s.name, id: s.id}
+        )
+      )
+
+    if a == [] do
+      [%{name: "no students", id: 0}]
+    else
+      a
+    end
   end
 
   @doc """

@@ -2662,9 +2662,8 @@ defmodule SchoolWeb.UserChannel do
   end
 
   def handle_in("report_cocurriculum", payload, socket) do
-    csrf = payload["csrf"]
     cocurriculum = payload["cocurriculum"]
-    co_year = payload["co_year"]
+
     co_level = payload["co_level"]
     co_semester = payload["co_semester"]
 
@@ -2681,8 +2680,8 @@ defmodule SchoolWeb.UserChannel do
           left_join: c in School.Affairs.Class,
           on: j.class_id == c.id,
           where:
-            s.cocurriculum_id == ^cocurriculum and s.year == ^co_year and
-              s.semester_id == ^co_semester and s.standard_id == ^co_level,
+            s.cocurriculum_id == ^cocurriculum and s.semester_id == ^co_semester and
+              s.standard_id == ^co_level,
           select: %{
             id: p.id,
             student_id: s.student_id,
@@ -2699,19 +2698,15 @@ defmodule SchoolWeb.UserChannel do
         Phoenix.View.render_to_string(
           SchoolWeb.CoCurriculumView,
           "report_student_co.html",
-          csrf: csrf,
           students: students,
           cocurriculum: cocurriculum,
-          co_year: co_year,
-          co_level: co_level,
           co_semester: co_semester
         )
       else
         "No Data inside..Please choose other."
       end
 
-    broadcast(socket, "show_report_cocurriculum", %{html: html})
-    {:noreply, socket}
+    {:reply, {:ok, %{html: html}}, socket}
   end
 
   def handle_in("student_comment", payload, socket) do
@@ -3010,6 +3005,21 @@ defmodule SchoolWeb.UserChannel do
   end
 
   def handle_in(
+        "load_coco_students",
+        %{
+          "semester_id" => semester_id,
+          "coco_id" => coco_id,
+          "user_id" => user_id,
+          "institution_id" => institution_id
+        },
+        socket
+      ) do
+    students = Affairs.list_student_cocurriculum(coco_id, semester_id)
+
+    {:reply, {:ok, %{students: students}}, socket}
+  end
+
+  def handle_in(
         "add_class_students",
         %{
           "student_id" => student_id,
@@ -3045,6 +3055,49 @@ defmodule SchoolWeb.UserChannel do
           )
 
         {:reply, {:error, %{name: student.name, class: class.name, ex_class: ex_class.name}},
+         socket}
+    end
+  end
+
+  def handle_in(
+        "add_coco_students",
+        %{
+          "student_id" => student_id,
+          "semester_id" => semester_id,
+          "coco_id" => coco_id,
+          "user_id" => user_id,
+          "institution_id" => institution_id
+        },
+        socket
+      ) do
+    coco = Affairs.get_co_curriculum!(coco_id)
+    student = Affairs.get_student!(student_id)
+
+    case Affairs.create_student_cocurriculum(%{
+           cocurriculum_id: coco_id,
+           semester_id: semester_id,
+           student_id: student_id
+         }) do
+      {:ok, sc} ->
+        students = Affairs.list_student_cocurriculum(coco_id, semester_id)
+
+        {:reply, {:ok, %{students: students}}, socket}
+
+      {:error, changeset} ->
+        Process.sleep(500)
+
+        ex_coco =
+          Repo.get(
+            School.Affairs.CoCurriculum,
+            Repo.get_by(
+              School.Affairs.StudentCocurriculum,
+              student_id: student_id,
+              semester_id: semester_id
+            ).cocurriculum_id
+          )
+
+        {:reply,
+         {:error, %{name: student.name, coco: coco.description, ex_coco: ex_coco.description}},
          socket}
     end
   end

@@ -27,12 +27,12 @@
                         </thead>
                         <tbody>
                            <%= for co_curriculum <- @cocurriculum |> Enum.sort do %>
-                                 <% teacher = Repo.get_by(School.Affairs.Teacher, %{id: co_curriculum.teacher_id}) %>
+                              
                            <tr>
                             <td><%= co_curriculum.id %></td>
                               <td><%= co_curriculum.code %></td>
                                 <td><%= co_curriculum.description %></td>
-                                 <td><%= teacher.name %></td>
+                                 <td><%= co_curriculum.teacher_id %></td>
                               <td></td>
                            </tr>
                           <% end %>

@@ -24,18 +24,12 @@
                     <tr>
                        <td><%= co_curriculum.code %></td>
                       <td><%= co_curriculum.description %></td>
-                      <% if @cocurriculum != [] do %>
-                      <%  teacher = Repo.get_by(School.Affairs.Teacher, %{id: co_curriculum.teacher_id}) %>
-                      <td><%= teacher.name %></td>
-                    
-                     <% else %>
-
                       <td><%= co_curriculum.teacher_id %></td>
                         
-                     <% end %>
+                   
                       
      <td class="text-right">
- 
+        <span><%= link "Enroll Students", to: co_curriculum_path(@conn, :enroll_students, id: co_curriculum.id), class: "btn btn-default btn-xs" %></span>
         <span><%= link "Edit", to: co_curriculum_path(@conn, :edit, co_curriculum), class: "btn btn-default btn-xs" %></span>
         <span><%= link "Delete", to: co_curriculum_path(@conn, :delete, co_curriculum), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
       </td>

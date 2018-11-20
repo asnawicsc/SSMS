@@ -5,10 +5,15 @@ defmodule SchoolWeb.CoCurriculumController do
   alias School.Affairs.CoCurriculum
   require IEx
 
+  def enroll_students(conn, params) do
+    inst_id = Affairs.get_inst_id(conn)
+    cocos = Affairs.list_cocurriculum(Affairs.get_inst_id(conn))
+    semesters = Affairs.list_semesters(inst_id)
+    render(conn, "enroll_students.html", cocos: cocos, semesters: semesters)
+  end
+
   def index(conn, _params) do
-    cocurriculum =
-      Affairs.list_cocurriculum()
-      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+    cocurriculum = Affairs.list_cocurriculum(Affairs.get_inst_id(conn))
 
     render(conn, "index.html", cocurriculum: cocurriculum)
   end
@@ -111,7 +116,8 @@ defmodule SchoolWeb.CoCurriculumController do
       id =
         Repo.get_by(School.Affairs.StudentCocurriculum, %{
           cocurriculum_id: cocurriculum_id,
-          student_id: student_id
+          student_id: student_id,
+          semester_id: semester_id
         })
 
       params = %{
