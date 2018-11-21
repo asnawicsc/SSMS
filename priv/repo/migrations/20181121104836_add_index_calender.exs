@@ -5,7 +5,7 @@ defmodule School.Repo.Migrations.AddIndexCalender do
     create(
       unique_index(
         :period,
-        [:start_datetime, :end_datetime, :class_id, :subject_id],
+        [:start_datetime, :end_datetime],
         name: :index_all_s_c
       )
     )

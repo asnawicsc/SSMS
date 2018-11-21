@@ -37,6 +37,6 @@ defmodule School.Affairs.Period do
       :subject_id,
       :teacher_id
     ])
-    |> unique_constraint(:class_id, name: :index_all_s_c)
+    |> unique_constraint(:start_datetime, name: :index_all_s_c)
   end
 end
