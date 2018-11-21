@@ -6,24 +6,66 @@ defmodule SchoolWeb.GradeController do
   alias School.Affairs.Grade
 
   def index(conn, _params) do
-    grade = Affairs.list_grade()|>Enum.filter(fn x-> x.institution_id ==conn.private.plug_session["institution_id"] end)
+    grade =
+      Affairs.list_grade()
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
     render(conn, "index.html", grade: grade)
   end
 
   def default_grade(conn, params) do
-    # Repo.delete_all(Grade)
+    Repo.delete_all(Grade, institution_id: conn.private.plug_session["institution_id"])
 
-    # # Affairs.create_grade(%{name: "A", mix: 80, max: 100, gpa: 12.00, standard_id: 0})
-    # # Affairs.create_grade(%{name: "B", mix: 60, max: 79, gpa: 8.00, standard_id: 0})
-    # # Affairs.create_grade(%{name: "C", mix: 50, max: 59, gpa: 6.00, standard_id: 0})
-    # # Affairs.create_grade(%{name: "D", mix: 40, max: 49, gpa: 4.00, standard_id: 0})
-    # # Affairs.create_grade(%{name: "E", mix: 0, max: 39, gpa: 2.00, standard_id: 0})
+    Affairs.create_grade(%{
+      name: "A",
+      mix: 80,
+      max: 100,
+      gpa: 12.00,
+      standard_id: 0,
+      institution_id: conn.private.plug_session["institution_id"]
+    })
 
-    # grade = Affairs.list_grade()
+    Affairs.create_grade(%{
+      name: "B",
+      mix: 60,
+      max: 79,
+      gpa: 8.00,
+      standard_id: 0,
+      institution_id: conn.private.plug_session["institution_id"]
+    })
 
-    # conn
-    # |> put_flash(:info, "Grade updated successfully.")
-    # |> redirect(to: grade_path(conn, :index, grade))
+    Affairs.create_grade(%{
+      name: "C",
+      mix: 50,
+      max: 59,
+      gpa: 6.00,
+      standard_id: 0,
+      institution_id: conn.private.plug_session["institution_id"]
+    })
+
+    Affairs.create_grade(%{
+      name: "D",
+      mix: 40,
+      max: 49,
+      gpa: 4.00,
+      standard_id: 0,
+      institution_id: conn.private.plug_session["institution_id"]
+    })
+
+    Affairs.create_grade(%{
+      name: "E",
+      mix: 0,
+      max: 39,
+      gpa: 2.00,
+      standard_id: 0,
+      institution_id: conn.private.plug_session["institution_id"]
+    })
+
+    grade = Affairs.list_grade()
+
+    conn
+    |> put_flash(:info, "Grade updated successfully.")
+    |> redirect(to: grade_path(conn, :index, grade))
   end
 
   def new(conn, _params) do
@@ -32,7 +74,9 @@ defmodule SchoolWeb.GradeController do
   end
 
   def create(conn, %{"grade" => grade_params}) do
-        grade_params = Map.put(grade_params, "institution_id", conn.private.plug_session["institution_id"])
+    grade_params =
+      Map.put(grade_params, "institution_id", conn.private.plug_session["institution_id"])
+
     case Affairs.create_grade(grade_params) do
       {:ok, grade} ->
         conn

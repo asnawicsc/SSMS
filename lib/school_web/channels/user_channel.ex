@@ -768,14 +768,12 @@ defmodule SchoolWeb.UserChannel do
       Repo.all(
         from(
           s in School.Affairs.Grade,
-          where:
-            s.standard_id == ^payload["standard_level"] and s.institution_id == ^institution_id,
+          where: s.institution_id == ^institution_id,
           select: %{
             name: s.name,
             max: s.max,
             min: s.mix,
-            gpa: s.gpa,
-            standard_id: s.standard_id
+            gpa: s.gpa
           }
         )
       )
@@ -1794,7 +1792,7 @@ defmodule SchoolWeb.UserChannel do
             Repo.all(
               from(
                 g in School.Affairs.Grade,
-                where: g.institution_id == ^inst_id and g.standard_id == ^level_id
+                where: g.institution_id == ^inst_id
               )
             )
 
@@ -2094,7 +2092,7 @@ defmodule SchoolWeb.UserChannel do
             Repo.all(
               from(
                 g in School.Affairs.Grade,
-                where: g.institution_id == ^inst_id and g.standard_id == ^payload["standard_id"]
+                where: g.institution_id == ^inst_id
               )
             )
 
