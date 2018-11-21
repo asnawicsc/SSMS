@@ -24,6 +24,7 @@
                       </div>
                       <hr>
                   </div>
+                  <%= if @period.master_period_id == nil do %>
                  <div class="checkbox c-checkbox">
                     <label>
                        <input checked="" name="recurring_event" type="checkbox">
@@ -43,7 +44,7 @@
                         <input type="text" class="form-control date" name="until" value = "<%= my_time(@period.recurring_until) %>"/>
                       </div>
                  </div>
-
+<% end %>
                  <button class="btn btn-sm btn-secondary" type="submit">Submit</button>
               </form>
            </div>

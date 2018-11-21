@@ -62,8 +62,10 @@
 						$("div.fc-event[period_id='"+payload.period_id+"']").remove();
 					})
 					channel.on("show_failed_period", payload => {
-						swal("No event saved!", "Block doesnt exist!", "info");
-	      		$('#calendar').fullCalendar( 'removeEvents', [payload.event_id_str ] );
+						swal("No event saved!", payload.final_reason, "info");
+	      		// $('#calendar').fullCalendar( 'removeEvents', [payload.event_id_str ] );
+
+	      		  $('#calendar').fullCalendar( 'refetchEvents' )
 					})
 	
 
@@ -100,8 +102,8 @@
 			    eventSources: [{
 			      url: '/timetable/teacher/<%= @conn.private.plug_session["user_id"] %>',
 			      timezone: 'UTC',
-			      color: 'yellow',    // an option!
-			      textColor: 'black'  // an option!
+			      color: '#5d9cec',    // an option!
+			      textColor: 'white'  // an option!
 			    }],
 			    droppable: true, // this allows things to be dropped onto the calendar
 			    drop: function(date, jsEvent, ui, resourceId) {

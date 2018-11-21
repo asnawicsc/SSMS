@@ -3003,12 +3003,19 @@ defmodule SchoolWeb.UserChannel do
               })
 
             {:error, changeset} ->
+              errors = changeset.errors |> Keyword.keys()
+
+              {reason, message} = changeset.errors |> hd()
+              {proper_message, message_list} = message
+              final_reason = Atom.to_string(reason) <> " " <> proper_message
+
               broadcast(socket, "show_failed_period", %{
                 "period_id" => period_id,
                 "user_id" => user_id,
                 "start_date" => start_date,
                 "end_date" => end_date,
-                "event_id_str" => event_id_str
+                "event_id_str" => event_id_str,
+                "final_reason" => final_reason
               })
           end
         else
@@ -3017,7 +3024,8 @@ defmodule SchoolWeb.UserChannel do
             "user_id" => user_id,
             "start_date" => start_date,
             "end_date" => end_date,
-            "event_id_str" => event_id_str
+            "event_id_str" => event_id_str,
+            "final_reason" => "block doesnt exist!"
           })
         end
 

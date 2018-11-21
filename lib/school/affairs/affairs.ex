@@ -4085,7 +4085,8 @@ defmodule School.Affairs do
             end_datetime: p.end_datetime,
             teacher: t.name,
             google_event_id: p.google_event_id,
-            updated_at: p.updated_at
+            updated_at: p.updated_at,
+            color: s.color
           }
         )
       )
@@ -4097,7 +4098,8 @@ defmodule School.Affairs do
           description: x.teacher,
           period_id: x.period_id,
           google_event_id: x.google_event_id,
-          updated_at: x.updated_at
+          updated_at: x.updated_at,
+          color: x.color
         }
       end)
 

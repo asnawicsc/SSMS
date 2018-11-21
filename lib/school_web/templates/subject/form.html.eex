@@ -1,3 +1,7 @@
+     <!-- COLORPICKER-->
+   <link rel="stylesheet" href="/vendor/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.css">
+   <script src="/vendor/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js"></script>
+
 <%= form_for @changeset, @action, fn f -> %>
   <%= if @changeset.action do %>
     <div class="alert alert-danger">
@@ -28,8 +32,19 @@
     <%= number_input f, :sysdef, class: "form-control" %>
     <%= error_tag f, :sysdef %>
   </div>
+<p class="mt-3">Color</p>
+<div class="input-group demo-colorpicker colorpicker-element">
+ <%= text_input f, :color, class: "form-control" %>
 
+   <div class="input-group-append input-group-addon">
+      <div class="input-group-text"><i></i></div>
+   </div>
+</div>
+<br>
   <div class="form-group">
     <%= submit "Submit", class: "btn btn-primary" %>
   </div>
+
+
+
 <% end %>

@@ -54,17 +54,18 @@
     {
       url: '/timetable/teacher/<%= @conn.private.plug_session["user_id"] %>', // use the `url` property
  
-      color: 'yellow',    // an option!
-      textColor: 'black'  // an option!
+      color: '#5d9cec',    // an option!
+      textColor: 'white'  // an option!
     }
 
     // any other sources...
 
-  ],  eventClick: function(calEvent, jsEvent, view) {
+  ],   eventRender: function(event, element) {
+    element.css("background-color", event.color);
+    element.css("border-color", event.color);
+  },  eventClick: function(calEvent, jsEvent, view) {
 
-    alert('Event: ' + calEvent.title);
-    alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
-    alert('View: ' + view.name);
+
 
     // change the border color just for fun
     $(this).css('border-color', 'red');

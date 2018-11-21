@@ -192,16 +192,48 @@ defmodule SchoolWeb.PeriodController do
   end
 
   def update_period(conn, params) do
-    period_params = %{}
     period = Repo.get(Period, params["id"])
     start_datetime = stringdatetime(params["start_datetime"])
     end_datetime = stringdatetime(params["end_datetime"])
+    period_params = %{start_datetime: start_datetime, end_datetime: end_datetime}
 
     if period.master_period_id != nil do
       periods = all_child_periods(period.master_period_id, start_datetime)
 
+      days_diff = Timex.diff(start_datetime, period.start_datetime, :days)
+
       for new_period <- periods do
-        IEx.pry()
+        a = Time.new(start_datetime.hour, start_datetime.minute, 0) |> elem(1)
+
+        c = Time.new(end_datetime.hour, end_datetime.minute, 0) |> elem(1)
+
+        new_start_datetime =
+          NaiveDateTime.new(
+            Timex.shift(DateTime.to_date(new_period.start_datetime), days: days_diff),
+            a
+          )
+          |> elem(1)
+          |> DateTime.from_naive!("Etc/UTC")
+
+        new_end_datetime =
+          NaiveDateTime.new(
+            Timex.shift(DateTime.to_date(new_period.end_datetime), days: days_diff),
+            c
+          )
+          |> elem(1)
+          |> DateTime.from_naive!("Etc/UTC")
+
+        Affairs.update_period(new_period, %{
+          start_datetime: new_start_datetime,
+          end_datetime: new_end_datetime
+        })
+
+        School.Affairs.create_sync_list(%{period_id: new_period.id})
+      end
+    else
+      if params["recurring_event"] == "on" do
+        until_datetime = stringdatetime(params["until"])
+        create_recurring_event(period, params["recurring_frequency"], until_datetime)
       end
     end
 
@@ -210,11 +242,6 @@ defmodule SchoolWeb.PeriodController do
     # and then update all the child event, 
     # and then flag for update..
 
-    if params["recurring_event"] == "on" do
-      until_datetime = stringdatetime(params["until"])
-      create_recurring_event(period, params["recurring_frequency"], until_datetime)
-    end
-
     b = 0
 
     if b == 0 do
@@ -222,7 +249,9 @@ defmodule SchoolWeb.PeriodController do
         {:ok, period} ->
           conn
           |> put_flash(:info, "Period updated successfully.")
-          |> redirect(to: period_path(conn, :show, period))
+          |> redirect(
+            to: timetable_path(conn, :teacher_timetable_list, Settings.current_user(conn).id)
+          )
       end
     else
       conn
@@ -284,6 +313,8 @@ defmodule SchoolWeb.PeriodController do
       "monthly" ->
         true
     end
+
+    Affairs.update_period(period, %{master_period_id: period.id})
   end
 
   def stringdatetime(datetime) do

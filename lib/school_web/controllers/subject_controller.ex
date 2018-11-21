@@ -194,7 +194,7 @@ defmodule SchoolWeb.SubjectController do
   end
 
   def update(conn, %{"id" => id, "subject" => subject_params}) do
-    subject = Repo.get_by(Subject, code: id)
+    subject = Repo.get_by(Subject, id: id)
 
     case Affairs.update_subject(subject, subject_params) do
       {:ok, subject} ->
