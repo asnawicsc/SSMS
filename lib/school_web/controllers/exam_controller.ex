@@ -954,24 +954,13 @@ defmodule SchoolWeb.ExamController do
     # end
 
     class =
-      if user.role == "Admin" or user.role == "Support" do
-        Repo.all(
-          from(
-            s in School.Affairs.Class,
-            select: %{institution_id: s.institution_id, id: s.id, name: s.name}
-          )
+      Repo.all(
+        from(
+          s in School.Affairs.Class,
+          select: %{institution_id: s.institution_id, id: s.id, name: s.name}
         )
-        |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
-      else
-        Repo.all(
-          from(
-            s in School.Affairs.Class,
-            where: s.teacher_id == ^teacher.id,
-            select: %{institution_id: s.institution_id, id: s.id, name: s.name}
-          )
-        )
-        |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
-      end
+      )
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
 
     render(
       conn,
@@ -1492,8 +1481,10 @@ defmodule SchoolWeb.ExamController do
           Repo.all(
             from(
               em in School.Affairs.ExamMark,
+              left_join: f in School.Affairs.Exam,
+              on: em.exam_id == f.id,
               left_join: e in School.Affairs.ExamMaster,
-              on: em.exam_id == e.id,
+              on: f.exam_master_id == e.id,
               left_join: j in School.Affairs.Semester,
               on: e.semester_id == j.id,
               left_join: s in School.Affairs.Student,
@@ -1504,7 +1495,13 @@ defmodule SchoolWeb.ExamController do
               on: sc.class_id == c.id,
               left_join: sb in School.Affairs.Subject,
               on: em.subject_id == sb.id,
-              where: em.student_id == ^student.id and e.name == ^exam_name,
+              where:
+                em.student_id == ^student.id and e.name == ^exam_name and
+                  e.institution_id == ^conn.private.plug_session["institution_id"] and
+                  j.institution_id == ^conn.private.plug_session["institution_id"] and
+                  s.institution_id == ^conn.private.plug_session["institution_id"] and
+                  c.institution_id == ^conn.private.plug_session["institution_id"] and
+                  sb.institution_id == ^conn.private.plug_session["institution_id"],
               select: %{
                 student_name: s.name,
                 chinese_name: s.chinese_name,
@@ -1525,9 +1522,7 @@ defmodule SchoolWeb.ExamController do
               Repo.all(
                 from(
                   g in School.Affairs.Grade,
-                  where:
-                    g.institution_id == ^conn.private.plug_session["institution_id"] and
-                      g.standard_id == ^data.standard_id
+                  where: g.institution_id == ^conn.private.plug_session["institution_id"]
                 )
               )
 

@@ -772,14 +772,16 @@ defmodule SchoolWeb.PdfController do
       Repo.all(
         from(
           e in School.Affairs.ExamMark,
+          left_join: d in School.Affairs.Exam,
+          on: d.id == e.exam_id,
           left_join: k in School.Affairs.ExamMaster,
-          on: k.id == e.exam_id,
+          on: k.id == d.exam_master_id,
           left_join: s in School.Affairs.Student,
           on: s.id == e.student_id,
           left_join: p in School.Affairs.Subject,
           on: p.id == e.subject_id,
           where:
-            e.class_id == ^class_id and e.exam_id == ^exam_id and
+            e.class_id == ^class_id and k.id == ^exam_id and
               k.institution_id == ^conn.private.plug_session["institution_id"] and
               s.institution_id == ^conn.private.plug_session["institution_id"] and
               p.institution_id == ^conn.private.plug_session["institution_id"],
@@ -797,7 +799,7 @@ defmodule SchoolWeb.PdfController do
       )
 
     standard_id =
-      if exam_mark != [] do
+      if(exam_mark != []) do
         hd(exam_mark).standard_id
       end
 
@@ -873,9 +875,7 @@ defmodule SchoolWeb.PdfController do
             Repo.all(
               from(
                 g in School.Affairs.Grade,
-                where:
-                  g.institution_id == ^conn.private.plug_session["institution_id"] and
-                    g.standard_id == ^standard_id
+                where: g.institution_id == ^conn.private.plug_session["institution_id"]
               )
             )
 
@@ -1055,14 +1055,16 @@ defmodule SchoolWeb.PdfController do
       Repo.all(
         from(
           e in School.Affairs.ExamMark,
+          left_join: d in School.Affairs.Exam,
+          on: d.id == e.exam_id,
           left_join: k in School.Affairs.ExamMaster,
-          on: k.id == e.exam_id,
+          on: k.id == d.exam_master_id,
           left_join: s in School.Affairs.Student,
           on: s.id == e.student_id,
           left_join: p in School.Affairs.Subject,
           on: p.id == e.subject_id,
           where:
-            e.exam_id == ^exam_id.id and k.level_id == ^level_id and
+            d.exam_master_id == ^exam_id.id and k.level_id == ^level_id and
               k.institution_id == ^conn.private.plug_session["institution_id"] and
               s.institution_id == ^conn.private.plug_session["institution_id"] and
               p.institution_id == ^conn.private.plug_session["institution_id"],
@@ -1149,7 +1151,13 @@ defmodule SchoolWeb.PdfController do
         for data <- datas do
           student_mark = data.student_mark
 
-          grades = Repo.all(from(g in School.Affairs.Grade))
+          grades =
+            Repo.all(
+              from(
+                g in School.Affairs.Grade,
+                where: g.institution_id == ^conn.private.plug_session["institution_id"]
+              )
+            )
 
           for grade <- grades do
             if student_mark >= grade.mix and student_mark <= grade.max do
@@ -1346,9 +1354,9 @@ defmodule SchoolWeb.PdfController do
         delete_temporary: true
       )
 
-    # conn
-    # |> put_resp_header("Content-Type", "application/pdf")
-    # |> resp(200, pdf_binary)
+    conn
+    |> put_resp_header("Content-Type", "application/pdf")
+    |> resp(200, pdf_binary)
   end
 
   def student_class_listing(conn, params) do
@@ -1481,12 +1489,14 @@ defmodule SchoolWeb.PdfController do
           s in School.Affairs.ExamMark,
           left_join: p in School.Affairs.Subject,
           on: s.subject_id == p.id,
+          left_join: d in School.Affairs.Exam,
+          on: s.exam_id == d.id,
           left_join: t in School.Affairs.ExamMaster,
-          on: s.exam_id == t.id,
+          on: d.exam_master_id == t.id,
           left_join: r in School.Affairs.Class,
           on: r.id == s.class_id,
           where:
-            s.class_id == ^class_id and s.exam_id == ^exam.id and
+            s.class_id == ^class_id and d.exam_master_id == ^exam.id and
               p.institution_id == ^conn.private.plug_session["institution_id"] and
               t.institution_id == ^conn.private.plug_session["institution_id"] and
               r.institution_id == ^conn.private.plug_session["institution_id"],
@@ -1648,18 +1658,17 @@ defmodule SchoolWeb.PdfController do
           s in School.Affairs.ExamMark,
           left_join: p in School.Affairs.Subject,
           on: s.subject_id == p.id,
+          left_join: g in School.Affairs.Exam,
+          on: s.exam_id == g.id,
           left_join: t in School.Affairs.ExamMaster,
-          on: s.exam_id == t.id,
+          on: g.exam_master_id == t.id,
           left_join: r in School.Affairs.Class,
           on: r.id == s.class_id,
-          left_join: d in School.Affairs.Level,
-          on: r.level_id == d.id,
           where:
-            r.level_id == ^standard.id and s.exam_id == ^exam.id and
+            r.level_id == ^standard.id and g.exam_master_id == ^exam.id and
               p.institution_id == ^conn.private.plug_session["institution_id"] and
               t.institution_id == ^conn.private.plug_session["institution_id"] and
-              r.institution_id == ^conn.private.plug_session["institution_id"] and
-              d.institution_id == ^conn.private.plug_session["institution_id"],
+              r.institution_id == ^conn.private.plug_session["institution_id"],
           select: %{
             class_name: r.name,
             subject_code: p.code,

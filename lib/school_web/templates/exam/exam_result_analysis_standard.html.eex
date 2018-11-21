@@ -101,10 +101,10 @@
         function getval55(sel)
 {
     d=sel.value
-
+  var csrf= $("input[name='_csrf_token']").val() ;
  localStorage.setItem("exam_analysis_result_standard", d)
 
-       channel.push("exam_result_analysis_standard", {
+       channel.push("exam_result_analysis_standard", {csrf: csrf,
         standard_id: localStorage.getItem("exam_analysis_result_standard"),
         user_id: window.currentUser
     }).receive("ok", payload => {

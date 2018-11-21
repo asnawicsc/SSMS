@@ -1,6 +1,6 @@
 
 
-    <input type="hidden" name="_csrf_token" value="">
+    <input type="hidden" name="_csrf_token" value="<%= @csrf %>">
 
                   <label class="bmd-label-floating"><%= gettext "Exam Name" %></label>
                  <select class="custom-select -custom-select-sm" onchange="getval9(this)"  name="exam_result_analysis_id" required="" >
@@ -20,10 +20,10 @@
 {
     d=sel.value
 
-
+ var csrf= $("input[name='_csrf_token']").val() ;
 
         channel.push("exam_result_analysis_id", {
-    institution_id: window.currentInstitute , exam_id: d,class_id: localStorage.getItem("exam_result_analysis_id"),user_id: window.currentUser})
+    institution_id: window.currentInstitute , exam_id: d,class_id: localStorage.getItem("exam_result_analysis_id"),user_id: window.currentUser,csrf: csrf })
         .receive("ok", payload => {
             $("div#exam_record_analysis").html(payload.html);
         })
