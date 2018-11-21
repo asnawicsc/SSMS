@@ -1661,6 +1661,7 @@ defmodule SchoolWeb.UserChannel do
         SchoolWeb.ExamView,
         "exam_filter.html",
         exam: exam,
+        csrf: payload["csrf"],
         class_id: class_id
       )
 
@@ -1672,6 +1673,16 @@ defmodule SchoolWeb.UserChannel do
     exam_id = payload["exam_id"] |> String.to_integer()
     class = Repo.get_by(School.Affairs.Class, id: class_id)
     inst_id = payload["institution_id"] |> String.to_integer()
+
+    exam_master =
+      Repo.all(
+        from(s in School.Affairs.Exam,
+          left_join: g in School.Affairs.ExamMaster,
+          on: g.id == s.exam_master_id,
+          where: g.id == ^exam_id
+        )
+      )
+      |> hd()
 
     exam_mark =
       Repo.all(
@@ -1924,7 +1935,7 @@ defmodule SchoolWeb.UserChannel do
             mark1: mark1,
             total_student: total_student,
             class_id: payload["class_id"],
-            exam_id: payload["exam_id"],
+            exam_id: exam_master.exam_master_id,
             csrf: payload["csrf"]
           )
       else
@@ -2288,7 +2299,10 @@ defmodule SchoolWeb.UserChannel do
       |> Enum.uniq()
 
     html =
-      Phoenix.View.render_to_string(SchoolWeb.ExamView, "generate_mark_analyse.html", exam: exam)
+      Phoenix.View.render_to_string(SchoolWeb.ExamView, "generate_mark_analyse.html",
+        exam: exam,
+        csrf: payload["csrf"]
+      )
 
     {:reply, {:ok, %{html: html}}, socket}
   end
@@ -2340,7 +2354,13 @@ defmodule SchoolWeb.UserChannel do
         for data <- datas do
           student_mark = data.mark
 
-          grades = Repo.all(from(g in School.Affairs.Grade))
+          grades =
+            Repo.all(
+              from(
+                g in School.Affairs.Grade,
+                where: g.institution_id == ^payload["institution_id"]
+              )
+            )
 
           for grade <- grades do
             if student_mark >= grade.mix and student_mark <= grade.max do
@@ -2422,7 +2442,7 @@ defmodule SchoolWeb.UserChannel do
         exam: exam,
         class: class,
         class_id: class_id,
-        exam_id: exam_id,
+        exam_id: exam.id,
         csrf: payload["csrf"]
       )
 
@@ -2441,7 +2461,8 @@ defmodule SchoolWeb.UserChannel do
       Phoenix.View.render_to_string(
         SchoolWeb.ExamView,
         "exam_analysis_standard_filter.html",
-        exam: exam
+        exam: exam,
+        csrf: payload["csrf"]
       )
 
     {:reply, {:ok, %{html: html}}, socket}

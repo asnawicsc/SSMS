@@ -102,7 +102,9 @@
     function getval0(sel){
         d = sel.value
 
-        channel.push("exam_result_class", {class_id: d, user_id: window.currentUser,institution_id: window.currentInstitute})
+         var csrf= $("input[name='_csrf_token']").val() ;
+
+        channel.push("exam_result_class", {csrf: csrf,class_id: d, user_id: window.currentUser,institution_id: window.currentInstitute})
         .receive("ok", payload => {
              $("div#exam_filter").html(payload.html);
         })
