@@ -1,13 +1,30 @@
-<h2>Listing Grade </h2><p><a href="/default_grade">Used Default Grade</a></p>
 
-<table class="table">
+<div class="content-heading">
+   <div>Listing Grade
+      <small><%= gettext("welcome")%>!</small>
+   </div>
+
+</div>
+
+
+<div class="row">
+
+   
+
+        <div class="col-lg-12">
+
+            <div class="card">
+
+                <div class="card-body">
+                  <p><a href="/default_grade">Used Default Grade</a></p>
+<table class="table" id="datatable1">
   <thead>
     <tr>
       <th>Name</th>
       <th>Max</th>
       <th>Mix</th>
       <th>Gpa</th>
-      <th>Standerd</th>
+ 
 
       <th></th>
     </tr>
@@ -19,7 +36,7 @@
       <td><%= grade.max %></td>
       <td><%= grade.mix %></td>
       <td><%= grade.gpa %></td>
-        <td><%= grade.standard_id %></td>
+
       <td class="text-right">
         <span><%= link "Show", to: grade_path(@conn, :show, grade), class: "btn btn-default btn-xs" %></span>
         <span><%= link "Edit", to: grade_path(@conn, :edit, grade), class: "btn btn-default btn-xs" %></span>
@@ -29,5 +46,10 @@
 <% end %>
   </tbody>
 </table>
+
+</div>
+</div>
+</div>
+</div>
 
 <span><%= link "New Grade", to: grade_path(@conn, :new) %></span>
