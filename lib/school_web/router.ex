@@ -60,7 +60,7 @@ defmodule SchoolWeb.Router do
       :exam_result_analysis_class_standard
     )
 
-    post("/student_list_by_co", PdfController, :student_list_by_co)
+    get("/student_list_by_co", PdfController, :student_list_by_co)
 
     post("/height_weight_report_show", PdfController, :height_weight_report_show)
 
@@ -170,7 +170,7 @@ defmodule SchoolWeb.Router do
     resources("/time_period", TimePeriodController)
 
     get("/exam/marking/:id", ExamController, :marking)
-    get("/cocurriculum/marking/:id", CoCurriculumController, :marking)
+    get("/cocurriculum/marking/:id/:semester_id", CoCurriculumController, :marking)
     resources("/exam", ExamController)
     get("/exam", ExamController, :index)
     get("/generate_exam", ExamController, :generate_exam)

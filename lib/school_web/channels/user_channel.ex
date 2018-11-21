@@ -2667,31 +2667,65 @@ defmodule SchoolWeb.UserChannel do
     co_level = payload["co_level"]
     co_semester = payload["co_semester"]
 
-    students =
+    sem = Repo.get(Semester, co_semester)
+
+    students1 =
       Repo.all(
         from(
           s in School.Affairs.StudentCocurriculum,
           left_join: a in School.Affairs.Student,
           on: s.student_id == a.id,
-          left_join: j in School.Affairs.StudentClass,
-          on: s.student_id == j.sudent_id,
           left_join: p in School.Affairs.CoCurriculum,
           on: s.cocurriculum_id == p.id,
-          left_join: c in School.Affairs.Class,
-          on: j.class_id == c.id,
-          where:
-            s.cocurriculum_id == ^cocurriculum and s.semester_id == ^co_semester and
-              s.standard_id == ^co_level,
+          where: s.cocurriculum_id == ^cocurriculum and s.semester_id == ^co_semester,
           select: %{
             id: p.id,
             student_id: s.student_id,
             chinese_name: a.chinese_name,
             name: a.name,
-            class_name: c.name,
             mark: s.mark
           }
         )
       )
+
+    sc =
+      Repo.all(
+        from(
+          s in Student,
+          left_join: sc in StudentClass,
+          on: sc.sudent_id == s.id,
+          left_join: c in Class,
+          on: c.id == sc.class_id,
+          where: sc.institute_id == ^sem.institution_id and sc.semester_id == ^co_semester,
+          select: %{
+            student_id: s.id,
+            class: c.name,
+            level_id: sc.level_id
+          }
+        )
+      )
+
+    students =
+      for student <- students1 do
+        if Enum.any?(sc, fn x -> x.student_id == student.student_id end) do
+          b = sc |> Enum.filter(fn x -> x.student_id == student.student_id end) |> hd()
+
+          student = Map.put(student, :class_name, b.class)
+          student = Map.put(student, :level_id, b.level_id)
+          student
+        else
+          student = Map.put(student, :class_name, "no class assigned")
+          student = Map.put(student, :level_id, 0)
+          student
+        end
+      end
+
+    students =
+      if co_level != "Choose a level" do
+        students |> Enum.filter(fn x -> x.level_id == String.to_integer(co_level) end)
+      else
+        students
+      end
 
     html =
       if students != [] do
@@ -2700,7 +2734,8 @@ defmodule SchoolWeb.UserChannel do
           "report_student_co.html",
           students: students,
           cocurriculum: cocurriculum,
-          co_semester: co_semester
+          co_semester: co_semester,
+          co_level: co_level
         )
       else
         "No Data inside..Please choose other."

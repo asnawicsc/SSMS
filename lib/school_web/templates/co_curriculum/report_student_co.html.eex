@@ -9,7 +9,7 @@
 
   <body>
        <div align="right" ">
-    <form action="/pdf/student_list_by_co" method="POST">
+    <form action="/pdf/student_list_by_co" method="get">
           <input type="hidden" name="cocurriculum_id" value="<%= @cocurriculum %>">
     <input type="hidden" name="standard_id" value="<%= @co_level %>">
 

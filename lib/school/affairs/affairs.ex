@@ -906,6 +906,10 @@ defmodule School.Affairs do
     Repo.all(Parent)
   end
 
+  def list_parent(inst_id) do
+    Repo.all(from(p in Parent, where: p.institution_id == ^inst_id))
+  end
+
   @doc """
   Gets a single parent.
 

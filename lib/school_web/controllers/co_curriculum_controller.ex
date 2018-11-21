@@ -81,7 +81,8 @@ defmodule SchoolWeb.CoCurriculumController do
       id =
         Repo.get_by(School.Affairs.StudentCocurriculum, %{
           cocurriculum_id: cocurriculum_id,
-          student_id: student_id
+          student_id: student_id,
+          semester_id: semester_id
         })
 
       params = %{
@@ -141,6 +142,8 @@ defmodule SchoolWeb.CoCurriculumController do
     user = Repo.get_by(School.Settings.User, %{id: conn.private.plug_session["user_id"]})
     teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email})
 
+    semesters = Affairs.get_inst_id(conn) |> Affairs.list_semesters()
+
     cocurriculum =
       if user.role == "Admin" or user.role == "Support" do
         Affairs.list_cocurriculum()
@@ -155,41 +158,62 @@ defmodule SchoolWeb.CoCurriculumController do
       |> put_flash(:info, "You Are Not Assign to Any CoCurriculum Class")
       |> redirect(to: page_path(conn, :dashboard))
     else
-      render(conn, "co_mark.html", cocurriculum: cocurriculum)
+      render(conn, "co_mark.html", cocurriculum: cocurriculum, semesters: semesters)
     end
   end
 
   def marking(conn, params) do
     cocurriculum = params["id"]
-
+    sem = Repo.get(Semester, params["semester_id"])
     co = Repo.get_by(School.Affairs.CoCurriculum, %{id: cocurriculum})
+    inst_id = conn.private.plug_session["institution_id"]
 
     students =
       Repo.all(
         from(
-          s in School.Affairs.StudentCocurriculum,
-          left_join: a in School.Affairs.Student,
-          on: s.student_id == a.id,
-          left_join: j in School.Affairs.StudentClass,
-          on: s.student_id == j.sudent_id,
-          left_join: p in School.Affairs.CoCurriculum,
-          on: s.cocurriculum_id == p.id,
-          left_join: c in School.Affairs.Class,
-          on: j.class_id == c.id,
+          sc in School.Affairs.StudentCocurriculum,
+          left_join: s in School.Affairs.Student,
+          on: sc.student_id == s.id,
+          left_join: c in School.Affairs.CoCurriculum,
+          on: sc.cocurriculum_id == c.id,
           where:
-            s.cocurriculum_id == ^cocurriculum and
-              a.institution_id == ^conn.private.plug_session["institution_id"] and
-              c.institution_id == ^conn.private.plug_session["institution_id"] and
-              p.institution_id == ^conn.private.plug_session["institution_id"],
+            sc.cocurriculum_id == ^cocurriculum and s.institution_id == ^inst_id and
+              c.institution_id == ^inst_id and sc.semester_id == ^params["semester_id"],
           select: %{
-            id: p.id,
-            student_id: s.student_id,
-            name: a.name,
-            class_name: c.name,
-            mark: s.mark
+            student_id: sc.student_id,
+            mark: sc.mark,
+            sc_id: sc.id,
+            name: s.name
           }
         )
       )
+
+    sc =
+      Repo.all(
+        from(
+          s in Student,
+          left_join: sc in StudentClass,
+          on: sc.sudent_id == s.id,
+          left_join: c in Class,
+          on: c.id == sc.class_id,
+          where: sc.institute_id == ^inst_id and sc.semester_id == ^params["semester_id"],
+          select: %{
+            student_id: s.id,
+            class: c.name
+          }
+        )
+      )
+
+    students =
+      for student <- students do
+        if Enum.any?(sc, fn x -> x.student_id == student.student_id end) do
+          b = sc |> Enum.filter(fn x -> x.student_id == student.student_id end) |> hd()
+
+          Map.put(student, :class_name, b.class)
+        else
+          Map.put(student, :class_name, "no class assigned")
+        end
+      end
 
     condition = students |> Enum.map(fn x -> x.mark end) |> Enum.filter(fn x -> x != nil end)
 
@@ -198,14 +222,16 @@ defmodule SchoolWeb.CoCurriculumController do
         conn,
         "assign_mark.html",
         students: students,
-        co: co
+        co: co,
+        sem: sem
       )
     else
       render(
         conn,
         "edit_mark.html",
         students: students,
-        co: co
+        co: co,
+        sem: sem
       )
     end
   end

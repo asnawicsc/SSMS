@@ -209,7 +209,8 @@ defmodule SchoolWeb.ClassController do
 
     subject_class =
       Repo.all(
-        from(s in SubjectTeachClass,
+        from(
+          s in SubjectTeachClass,
           left_join: g in Subject,
           on: s.subject_id == g.id,
           where:
@@ -241,17 +242,29 @@ defmodule SchoolWeb.ClassController do
 
   def show_student_info(conn, params) do
     student = Repo.get(Student, params["student_id"])
-    mother = Repo.get_by(Parent, icno: student.micno)
-    father = Repo.get_by(Parent, icno: student.ficno)
-    guardian = Repo.get_by(Parent, icno: student.gicno)
+
+    mother =
+      if student.micno != nil do
+        Repo.get_by(Parent, icno: student.micno)
+      else
+      end
+
+    father =
+      if student.micno != nil do
+        Repo.get_by(Parent, icno: student.ficno)
+      else
+      end
+
+    guardian =
+      if student.micno != nil do
+        Repo.get_by(Parent, icno: student.gicno)
+      else
+      end
 
     render(
       conn,
       "show_student_info.html",
-      student: student,
-      mother: mother,
-      father: father,
-      guardian: guardian
+      student: student
     )
   end
 
