@@ -296,7 +296,7 @@ defmodule SchoolWeb.ExamController do
               select: %{
                 id: p.id,
                 c_id: s.id,
-                s_id: s.id,
+                s_id: g.id,
                 class: s.name,
                 exam: m.name,
                 subject: g.description
@@ -345,7 +345,7 @@ defmodule SchoolWeb.ExamController do
               select: %{
                 id: p.id,
                 c_id: s.id,
-                s_id: s.id,
+                s_id: g.id,
                 class: s.name,
                 exam: m.name,
                 subject: g.description
@@ -424,46 +424,18 @@ defmodule SchoolWeb.ExamController do
   end
 
   def marking(conn, params) do
-    IEx.pry()
+    subject_id = params["s_id"]
+    class_id = params["c_id"]
+    exam_id = params["id"]
 
-    a =
-      Repo.all(
-        from(
-          p in School.Affairs.SubjectTeachClass,
-          left_join: s in School.Affairs.Class,
-          on: s.id == p.class_id,
-          left_join: g in School.Affairs.Subject,
-          on: g.id == p.subject_id,
-          left_join: q in School.Affairs.Level,
-          on: q.id == p.standard_id,
-          left_join: e in School.Affairs.Exam,
-          on: e.subject_id == p.subject_id,
-          left_join: m in School.Affairs.ExamMaster,
-          on: m.id == e.exam_master_id,
-          where:
-            q.institution_id == ^conn.private.plug_session["institution_id"] and
-              s.institution_id == ^conn.private.plug_session["institution_id"] and
-              g.institution_id == ^conn.private.plug_session["institution_id"] and
-              m.institution_id == ^conn.private.plug_session["institution_id"] and
-              p.id == ^params["id"],
-          select: %{
-            class: s.id,
-            class_name: s.name,
-            exam_name: m.name,
-            exam: m.id,
-            subject_name: g.description,
-            subject: g.id
-          }
-        )
-      )
-      |> Enum.uniq()
-      |> hd()
+    exam = Repo.get_by(School.Affairs.Exam, %{id: exam_id, subject_id: subject_id})
 
     all =
       Repo.all(
         from(
           s in School.Affairs.ExamMark,
-          where: s.class_id == ^a.class and s.subject_id == ^a.subject and s.exam_id == ^a.exam,
+          where:
+            s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
           select: %{
             class_id: s.class_id,
             subject_id: s.subject_id,
@@ -475,14 +447,23 @@ defmodule SchoolWeb.ExamController do
       )
 
     if all == [] do
-      class = Affairs.get_class!(a.class)
-      subject = Affairs.get_subject!(a.subject)
+      class =
+        Repo.get_by(School.Affairs.Class, %{
+          id: class_id,
+          institution_id: conn.private.plug_session["institution_id"]
+        })
+
+      subject =
+        Repo.get_by(School.Affairs.Subject, %{
+          id: subject_id,
+          institution_id: conn.private.plug_session["institution_id"]
+        })
 
       verify =
         Repo.all(
           from(
             s in School.Affairs.Period,
-            where: s.class_id == ^a.class and s.subject_id == ^a.subject,
+            where: s.class_id == ^class.id and s.subject_id == ^subject.id,
             select: %{teacher_id: s.teacher_id}
           )
         )
@@ -493,7 +474,9 @@ defmodule SchoolWeb.ExamController do
             s in School.Affairs.StudentClass,
             left_join: p in Student,
             on: p.id == s.sudent_id,
-            where: s.class_id == ^a.class,
+            where:
+              s.class_id == ^class.id and
+                p.institution_id == ^conn.private.plug_session["institution_id"],
             select: %{id: p.id, student_name: p.name}
           )
         )
@@ -505,15 +488,22 @@ defmodule SchoolWeb.ExamController do
         student: student,
         class: class,
         subject: subject,
-        exam_id: a.exam
+        exam_id: exam_id
       )
     else
-      class_id = all |> Enum.map(fn x -> x.class_id end) |> Enum.uniq() |> hd
-      exam_id = all |> Enum.map(fn x -> x.exam_id end) |> Enum.uniq() |> hd
-      subject_id = all |> Enum.map(fn x -> x.subject_id end) |> Enum.uniq() |> hd
+      class =
+        Repo.get_by(School.Affairs.Class, %{
+          id: class_id,
+          institution_id: conn.private.plug_session["institution_id"]
+        })
 
-      class = Affairs.get_class!(class_id)
-      subject = Affairs.get_subject!(subject_id)
+      exam_id = params["id"]
+
+      subject =
+        Repo.get_by(School.Affairs.Subject, %{
+          id: subject_id,
+          institution_id: conn.private.plug_session["institution_id"]
+        })
 
       # all_student=Repo.all(from s in School.Affairs.StudentClass,   
       #   where: e.subject_id==^subject.id and s.class_id==^class.id and e.exam_id==^exam_id and e.student_id != s.sudent_id,
@@ -524,25 +514,27 @@ defmodule SchoolWeb.ExamController do
       t =
         Repo.all(
           from(
-            i in StudentClass,
-            left_join: s in Student,
-            on: s.id == i.sudent_id,
-            where: i.class_id == ^a.class,
-            select: %{name: s.name, student_id: s.id}
+            s in School.Affairs.StudentClass,
+            left_join: p in Student,
+            on: p.id == s.sudent_id,
+            where:
+              s.class_id == ^class.id and
+                p.institution_id == ^conn.private.plug_session["institution_id"],
+            select: %{id: p.id, student_name: p.name}
           )
         )
 
       fi =
         for item <- t do
-          a = Enum.filter(all, fn x -> x.student_id == item.student_id end)
+          a = Enum.filter(all, fn x -> x.student_id == item.id end)
 
           if a == [] do
             %{
               class_id: class_id,
               exam_id: exam_id,
-              student_id: item.student_id,
+              student_id: item.id,
               subject_id: subject_id,
-              student_name: item.name,
+              student_name: item.student_name,
               mark: 0
             }
           else
@@ -1018,9 +1010,15 @@ defmodule SchoolWeb.ExamController do
     subject_id = params["subject_id"]
     exam_id = params["exam_id"]
 
-    a =
-      Repo.get_by(School.Settings.ExamMaster, %{
+    exam =
+      Repo.get_by(School.Affairs.Exam, %{
         id: exam_id,
+        subject_id: subject_id
+      })
+
+    a =
+      Repo.get_by(School.Affairs.ExamMaster, %{
+        id: exam.exam_master_id,
         institution_id: conn.private.plug_session["user_id"]
       })
 
@@ -1052,9 +1050,15 @@ defmodule SchoolWeb.ExamController do
     subject_id = params["subject_id"]
     exam_id = params["exam_id"]
 
-    a =
-      Repo.get_by(School.Settings.ExamMaster, %{
+    exam =
+      Repo.get_by(School.Affairs.Exam, %{
         id: exam_id,
+        subject_id: subject_id
+      })
+
+    a =
+      Repo.get_by(School.Affairs.ExamMaster, %{
+        id: exam.exam_master_id,
         institution_id: conn.private.plug_session["user_id"]
       })
 
@@ -1283,8 +1287,10 @@ defmodule SchoolWeb.ExamController do
       Repo.all(
         from(
           em in School.Affairs.ExamMark,
+          left_join: z in School.Affairs.Exam,
+          on: em.exam_id == z.id,
           left_join: e in School.Affairs.ExamMaster,
-          on: em.exam_id == e.id,
+          on: z.exam_master_id == e.id,
           left_join: j in School.Affairs.Semester,
           on: e.semester_id == j.id,
           left_join: s in School.Affairs.Student,

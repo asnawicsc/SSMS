@@ -1,0 +1,205 @@
+<div class="content-heading">
+   <div>Enroll Students
+      <small><%= gettext("welcome")%>!</small>
+   </div>
+
+</div>
+
+<div class="row">
+               <div class="col-md-4">
+                  <!-- START card-->
+                  <div class="card card-default">
+                     <div class="card-header"></div>
+                     <div class="card-body">
+                     <form>
+
+                      <select id="semesters" class="custom-select custom-select-sm">
+                       <option selected="">Choose a semester</option>
+                       <%= for semester <- @semesters do %>
+                           <option value="<%= semester.id %>"><%= semester.start_date %> - <%= semester.end_date %></option>
+                           <% end %>
+                     </select>
+                       <select id="show_coco" class="custom-select custom-select-sm">
+                           <option selected="">Choose a coco</option>
+                           <%= for coco <- @cocos do %>
+                           <option value="<%= coco.id %>"><%= coco.description %></option>
+                           <% end %>
+                    
+                        </select>
+                     </form>
+                    <ol id="student_list">
+                      
+                    </ol>
+                     </div>
+                  </div>
+                  <!-- END card-->
+               </div>
+               <div class="col-md-7">
+                  <!-- START card-->
+                  <div class="card card-default">
+                
+                     <div class="card-body" id="">
+                     <form>
+                           <div class="form-group">
+                              <label>Query</label>
+                              <input class="form-control" id="qs" placeholder="Enter query" type="text">
+                           </div>
+                       
+ 
+                     </form>
+                     <div class="table-responsive">
+                       
+                        <table class="table" id="result">
+                          <thead>
+                            <tr>
+                              <th><%= gettext("Name") %></th>
+                              <th><%= gettext("Chinese Name") %></th>
+                              <th><%= gettext("IC") %></th>
+                              <th><%= gettext("Birth Cert") %></th>
+                              <th><%= gettext("Guardian IC") %></th>
+                              <th><%= gettext("Father IC") %></th>
+                              <th><%= gettext("Mother IC") %></th>
+                              <th><%= gettext("Phone") %></th>
+                              <th>  </th>
+                            </tr>
+                          </thead>
+                          <tbody></tbody>
+                        </table>
+                     </div>
+                     </div>
+                  </div>
+                  <!-- END card-->
+               </div>
+            </div>
+
+ <script type="text/javascript">
+   $(document).ready(function(){
+
+    $(document).on("click", ".add_to_coco", function(){
+
+      var student_id = $(this).attr("id")
+
+
+      var id = $("select#show_coco").val()
+      var semester_id = $("select#semesters").val()
+
+              swal({
+                title: "Are you sure?",
+                text: "You want to add this student?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#5d9cec",
+                confirmButtonText: "Yes, add it!",
+                cancelButtonText: "No, dont add it!",
+                closeOnConfirm: true,
+                closeOnCancel: false
+              }, function(isConfirm) {
+                if (isConfirm) {
+
+                 channel.push("add_coco_students", {student_id: student_id, semester_id: semester_id, coco_id: id, user_id: window.currentUser, institution_id: window.currentInstitute})
+
+                 .receive(
+                 "ok", payload => {
+                   var data = payload.students
+                   $("ol#student_list").html("")
+                   $(data).each(function(i, v){
+
+                    var li = '<li>'+v.name+'</li>'
+                    $("ol#student_list").append(li)
+                   })
+
+                 })
+
+                 .receive(
+                 "error", payload => {
+                    swal("Opps", payload.name + " was not added to " + payload.coco + "!" + "\nCurrently in : " + payload.ex_coco , "info");
+
+                 });
+       
+
+                } else {
+                  swal("Cancelled", "No student added!", "info");
+        
+                }
+              });
+
+
+
+ 
+    }) 
+
+
+    $("select#show_coco").change(function(){
+      var id = $("select#show_coco").val()
+      var semester_id = $("select#semesters").val()
+
+
+
+       channel.push("load_coco_students", {semester_id: semester_id, coco_id: id, user_id: window.currentUser, institution_id: window.currentInstitute}).receive(
+       "ok", payload => {
+         var data = payload.students
+         $("ol#student_list").html("")
+         $(data).each(function(i, v){
+
+          var li = '<li>'+v.name+'</li>'
+          $("ol#student_list").append(li)
+         })
+
+       })
+
+
+    })
+
+     document.getElementById("qs").onkeydown = function(e) {
+       e = e || window.event;
+
+       switch (e.keyCode || e.which) {
+         case 37:
+         case 36:
+         case 18:
+           if (e.altKey) {
+             return false;
+           }
+       }
+
+     };
+     document.getElementById("qs").onkeyup = function(e) {
+
+       var term = $("input#qs").val()
+       console.log(term)
+       channel.push("qs_term", {term: term, user_id: window.currentUser, institution_id: window.currentInstitute}).receive(
+       "ok", payload => {
+
+
+         var data = payload.students
+
+
+         $("table#result").DataTable({
+              destroy: true,
+             data: data,
+      
+         
+             columns: [
+                 {data: 'name'},
+                 {data: 'c_name'},
+                 {data: 'ic'},
+                 {data: 'b_cert'},
+                 {data: 'gicno'},
+                 {data: 'ficno'},
+                 {data: 'micno'},
+                 {data: 'phone'},
+                 {data: 'id',
+                    render: function(data, type, row, meta){
+                      var html = '<div class="btn btn-primary add_to_coco" id="'+data+'">Add</div>'   
+                    return html
+                  }
+                 }
+
+             ]
+         });
+
+       }
+      )
+     };
+   })
+ </script>

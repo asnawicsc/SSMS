@@ -38,9 +38,8 @@ defmodule SchoolWeb.ParentController do
   end
 
   def index(conn, _params) do
-    parent =
-      Affairs.list_parent()
-      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+    parent = Affairs.list_parent(conn.private.plug_session["institution_id"])
+    IEx.pry()
 
     semesters =
       Repo.all(from(s in Semester))

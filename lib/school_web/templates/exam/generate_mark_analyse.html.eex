@@ -4,6 +4,7 @@
 
                   <label class="bmd-label-floating"><%= gettext "Exam Name" %></label>
                  <select class="custom-select -custom-select-sm" onchange="getval9(this)"  name="exam_result_analysis_id" required="" >
+                  <option selected="selected">Choose a Exam</option>
                            <%= for a <- @exam|>Enum.uniq |> Enum.sort do %>
                                             <option value="<%= a.id %>" ><%= a.exam_name %>
                                             </option>
@@ -12,33 +13,24 @@
 
 
 <script type="text/javascript">
-   $('select[name="exam_result_analysis_id"]').val(localStorage.getItem("exam_result_analysis_id"));
-    function getval9(sel)
+
+
+
+              function getval9(sel)
 {
     d=sel.value
 
-localStorage.setItem("exam_result_analysis_id", d);
-
-   window.location.reload();
-
- 
-}
 
 
-
-  channel.push("exam_result_analysis_id", {class_id: localStorage.getItem("exam_result_analysis_class"),
-    user_id: window.currentUser,
-    exam_id: localStorage.getItem("exam_result_analysis_id"),
-     csrf: localStorage.getItem("exam_result_analysis_class_csrf")
-
-  })
+        channel.push("exam_result_analysis_id", {
+    institution_id: window.currentInstitute , exam_id: d,class_id: localStorage.getItem("exam_result_analysis_id"),user_id: window.currentUser})
+        .receive("ok", payload => {
+            $("div#exam_record_analysis").html(payload.html);
+        })
 
 
-          channel.on("show_exam_result_analysis_record", payload => {
+    }
 
-    $("div#exam_record_analysis").html(payload.html);
-
-  })
 
 
 </script>

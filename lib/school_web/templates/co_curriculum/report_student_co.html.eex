@@ -6,16 +6,16 @@
     <title>CoCurriculum Mark</title>
 
   </head>
- <% require IEx %>
+
   <body>
        <div align="right" ">
-    <form action="/pdf/student_list_by_co" method="POST">
+    <form action="/pdf/student_list_by_co" method="get">
           <input type="hidden" name="cocurriculum_id" value="<%= @cocurriculum %>">
     <input type="hidden" name="standard_id" value="<%= @co_level %>">
-     <input type="hidden" name="year" value="<%= @co_year %>">
+
       <input type="hidden" name="semester_id" value="<%= @co_semester %>">
 
-       <input type="hidden" name="_csrf_token" value="<%= @csrf %>">
+     
 <input align="left" class="btn btn-info btn-ml" type="submit" name="" value="Print!">
 </form>
 </div>

@@ -2,38 +2,48 @@
    <div>Co Curriculum List
       <small><%= gettext("welcome")%>!</small>
    </div>
-   <!-- START Language list-->
-   <div class="ml-auto">
 
-   </div>
-   <!-- END Language list-->
 </div>
  <div class="card">
    
                <div class="card-body">
-                  <div class="table-responsive bootgrid">
-                     <table class="table table-striped" id="bootgrid-command2">
+                  <div class="table-responsive ">
+                     <table class="table table-striped">
                         <thead>
                            <tr>
-                             <th data-visible="false" data-column-id="id" >ID</th>
-                              <th data-column-id="sender">Code</th>
-                              <th data-column-id="received" data-order="desc">Description</th>
-                              <th data-column-id="" data-order="desc">Teacher</th>
+                             <th >ID</th>
+                              <th >Code</th>
+                              <th >Description</th>
+                              <th >Teacher</th>
 
-                              <th data-column-id="commands" data-formatter="commands2" data-sortable="false">
-                                Action</div>
+                              <th >Action</div>
                               </th>
                            </tr>
                         </thead>
                         <tbody>
                            <%= for co_curriculum <- @cocurriculum |> Enum.sort do %>
-                                 <% teacher = Repo.get_by(School.Affairs.Teacher, %{id: co_curriculum.teacher_id}) %>
+                              
                            <tr>
                             <td><%= co_curriculum.id %></td>
                               <td><%= co_curriculum.code %></td>
                                 <td><%= co_curriculum.description %></td>
-                                 <td><%= teacher.name %></td>
-                              <td></td>
+                                 <td><%= co_curriculum.teacher_id %></td>
+                              <td>
+                                
+<div class="btn-group">
+                           <button class="btn btn-info" type="button">Marking</button>
+                           <button class="btn dropdown-toggle btn-info" type="button" data-toggle="dropdown">
+                              <span class="sr-only">info</span>
+                           </button>
+                           <div class="dropdown-menu" role="menu">
+                            <%= for semester <- @semesters do %>
+                              <a class="dropdown-item" href="/cocurriculum/marking/<%= co_curriculum.id %>/<%= semester.id%>"><%= semester.start_date%></a>
+                            <% end %>
+                
+                           </div>
+                        </div>
+
+                              </td>
                            </tr>
                           <% end %>
                       
@@ -49,32 +59,6 @@
   
 
 
-                var grid = $('#bootgrid-command2').bootgrid({
-            formatters: {
-                commands2: function(column, row) {
-                    return '<button type="button" class="btn btn-sm btn-info mr-2 command2-edit" data-row-id="' + row.id + '"><em class="fa fa-edit fa-fw"></em> Marking</button>';
-                }
-            },
-            templates: {
-                // templates for BS4
-                actionButton: '<button class="btn btn-secondary" type="button" title="{{ctx.text}}">{{ctx.content}}</button>',
-                actionDropDown: '<div class="{{css.dropDownMenu}}"><button class="btn btn-secondary dropdown-toggle dropdown-toggle-nocaret" type="button" data-toggle="dropdown"><span class="{{css.dropDownMenuText}}">{{ctx.content}}</span></button><ul class="{{css.dropDownMenuItems}}" role="menu"></ul></div>',
-                actionDropDownItem: '<li class="dropdown-item"><a href="" data-action="{{ctx.action}}" class="dropdown-link {{css.dropDownItemButton}}">{{ctx.text}}</a></li>',
-                actionDropDownCheckboxItem: '<li class="dropdown-item"><label class="dropdown-item p-0"><input name="{{ctx.name}}" type="checkbox" value="1" class="{{css.dropDownItemCheckbox}}" {{ctx.checked}} /> {{ctx.label}}</label></li>',
-                paginationItem: '<li class="page-item {{ctx.css}}"><a href="" data-page="{{ctx.page}}" class="page-link {{css.paginationButton}}">{{ctx.text}}</a></li>',
-            }
-        }).on('loaded.rs.jquery.bootgrid', function() {
-            /* Executes after data is loaded and rendered */
-            grid.find('.command2-edit').on('click', function() {
-
-
-              window.location.href = "/cocurriculum/marking/"+ $(this).data('row-id');
-
-                console.log('You pressed edit on row: ' + $(this).data('row-id'));
-            }).end().find('.command2-delete').on('click', function() {
-                console.log('You pressed delete on row: ' + $(this).data('row-id'));
-            });
-        });
 
 
 

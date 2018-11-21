@@ -82,7 +82,8 @@
     <script type="text/javascript">
 
     $(document).ready(function(){
-
+      var title = $.trim($("div.content-heading").children().html().split("<small>")[0])
+      $("title").html(title)
     <%= cond do %>
     <% get_flash(@conn, :info) != nil -> %>
         $.notify({message: '<%= get_flash(@conn, :info) %>'},{type: 'success'});

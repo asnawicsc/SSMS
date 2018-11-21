@@ -1800,37 +1800,69 @@ defmodule SchoolWeb.PdfController do
 
   def student_list_by_co(conn, params) do
     cocurriculum = params["cocurriculum_id"]
-    co_year = params["year"]
     co_level = params["standard_id"]
     co_semester = params["semester_id"]
+    sem = Repo.get(Semester, co_semester)
 
-    students =
+    students1 =
       Repo.all(
         from(
           s in School.Affairs.StudentCocurriculum,
           left_join: a in School.Affairs.Student,
           on: s.student_id == a.id,
-          left_join: j in School.Affairs.StudentClass,
-          on: s.student_id == j.sudent_id,
           left_join: p in School.Affairs.CoCurriculum,
           on: s.cocurriculum_id == p.id,
-          left_join: c in School.Affairs.Class,
-          on: j.class_id == c.id,
           where:
-            s.cocurriculum_id == ^cocurriculum and s.year == ^co_year and
-              s.semester_id == ^co_semester and s.standard_id == ^co_level and
-              a.institution_id == ^conn.private.plug_session["institution_id"] and
-              c.institution_id == ^conn.private.plug_session["institution_id"],
+            s.cocurriculum_id == ^cocurriculum and s.semester_id == ^co_semester and
+              a.institution_id == ^conn.private.plug_session["institution_id"],
           select: %{
             id: p.id,
             student_id: s.student_id,
             chinese_name: a.chinese_name,
             name: a.name,
-            class_name: c.name,
             mark: s.mark
           }
         )
       )
+
+    sc =
+      Repo.all(
+        from(
+          s in Student,
+          left_join: sc in StudentClass,
+          on: sc.sudent_id == s.id,
+          left_join: c in Class,
+          on: c.id == sc.class_id,
+          where: sc.institute_id == ^sem.institution_id and sc.semester_id == ^co_semester,
+          select: %{
+            student_id: s.id,
+            class: c.name,
+            level_id: sc.level_id
+          }
+        )
+      )
+
+    students =
+      for student <- students1 do
+        if Enum.any?(sc, fn x -> x.student_id == student.student_id end) do
+          b = sc |> Enum.filter(fn x -> x.student_id == student.student_id end) |> hd()
+
+          student = Map.put(student, :class_name, b.class)
+          student = Map.put(student, :level_id, b.level_id)
+          student
+        else
+          student = Map.put(student, :class_name, "no class assigned")
+          student = Map.put(student, :level_id, 0)
+          student
+        end
+      end
+
+    students =
+      if co_level != "Choose a level" do
+        students |> Enum.filter(fn x -> x.level_id == String.to_integer(co_level) end)
+      else
+        students
+      end
 
     html =
       Phoenix.View.render_to_string(

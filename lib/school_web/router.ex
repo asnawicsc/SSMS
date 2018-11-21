@@ -60,7 +60,7 @@ defmodule SchoolWeb.Router do
       :exam_result_analysis_class_standard
     )
 
-    post("/student_list_by_co", PdfController, :student_list_by_co)
+    get("/student_list_by_co", PdfController, :student_list_by_co)
 
     post("/height_weight_report_show", PdfController, :height_weight_report_show)
 
@@ -170,7 +170,8 @@ defmodule SchoolWeb.Router do
     resources("/time_period", TimePeriodController)
 
     get("/exam/marking/:id/:c_id/:s_id", ExamController, :marking)
-    get("/cocurriculum/marking/:id", CoCurriculumController, :marking)
+    get("/cocurriculum/marking/:id/:semester_id", CoCurriculumController, :marking)
+
     resources("/exam", ExamController)
     get("/exam", ExamController, :index)
     get("/generate_exam", ExamController, :generate_exam)
@@ -262,6 +263,7 @@ defmodule SchoolWeb.Router do
     get("/show_student_info/:student_id", ClassController, :show_student_info)
 
     post("/create_student_co", CoCurriculumController, :create_student_co)
+    get("/co_curriculum/enroll_students", CoCurriculumController, :enroll_students)
     get("/co_mark", CoCurriculumController, :co_mark)
     post("/create_co_mark", CoCurriculumController, :create_co_mark)
     post("/edit_co_mark", CoCurriculumController, :edit_co_mark)
@@ -290,7 +292,6 @@ defmodule SchoolWeb.Router do
     resources("/student_cocurriculum", StudentCocurriculumController)
     get("/co_curriculum_setting", CoCurriculumController, :co_curriculum_setting)
 
-    post("/create_student_co", CoCurriculumController, :create_student_co)
     get("/co_mark", CoCurriculumController, :co_mark)
     post("/create_co_mark", CoCurriculumController, :create_co_mark)
     get("/student_listing_by_class", ClassController, :student_listing_by_class)

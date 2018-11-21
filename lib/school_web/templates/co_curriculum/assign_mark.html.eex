@@ -1,9 +1,15 @@
+<div class="content-heading">
+   <div>Assign Marks
+      <small>for semester <%= @sem.start_date %> until <%= @sem.end_date %></small>
+   </div>
 
+</div>
 
 
 <form method="post" action="/create_co_mark" class="form-horizontal">
    <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
    <input type="hidden" name="cocurriculum_id" value="<%= @co.id %>">
+   <input type="hidden" name="semester_id" value="<%= @sem.id %>">
      <div class="row">
                <div class="col-12">
                   <!-- START card-->
