@@ -1,64 +1,65 @@
-<% require IEx %>
-   <%subjects = School.Repo.all(from l in School.Affairs.Subject, select: %{name: l.description,code: l.code}) %>
-   <%days = School.Repo.all(from l in School.Affairs.Day, select: %{name: l.name}) %>
-   <%class = School.Repo.all(from l in School.Affairs.Class, select: %{name: l.name}) %>
-   <%teachers = School.Repo.all(from l in School.Affairs.Teacher, select: %{name: l.name, code: l.code}) %>
-    <%period = School.Repo.all(from l in School.Affairs.Teacher, select: %{name: l.name, code: l.code}) %>
-<form method="post" action="/update_period/<%= @period.id %>" aria-label="item_form">
-    <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+<div class="content-heading">
+   <div>Edit Event
+      <small><%= gettext("welcome")%>!</small>
+   </div>
 
-  <div class="form-group">
-  <label>Day :</label>
-      <select class="select" name="period[day]">
+</div>
+    <div class="card mb-3 border-default" >
+         <div class="card-header text-white bg-primary">Update subject class block</div>
+         <div class="card-body">
+              <form  method="post" action="/update_period/<%= @period.id %>">
+                 <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+                 
+                 <div class="form-group">
+                  
+                  <label class="" style="font-size: 14px">Start Date and Time:</label>
 
-     
-                	<option value="<%= @period.day %>" selected="selected" ><%= @period.day %></option>                         
-          <%= for day <- days do %>
-                                                    
-                                                
-          <option value="<%= day.name %>" ><%= day.name %></option>
-                                                      
+                      <div class='input-group display'>
+                        <input type="text" class="form-control date" name="start_datetime" value = "<%= my_time( @period.start_datetime )%>"/>
+                      </div>
+                  <label class="" style="font-size: 14px">End Date and Time:</label>
+                  
+                      <div class='input-group display'>
+                        <input type="text" class="form-control date" name="end_datetime" value = "<%= my_time(@period.end_datetime) %>"/>
+                      </div>
+                      <hr>
+                  </div>
+                 <div class="checkbox c-checkbox">
+                    <label>
+                       <input checked="" name="recurring_event" type="checkbox">
+                       <span class="fa fa-check"></span>Recurring Event?</label>
+                 </div>
 
-          <%end %>
-                                        
-      </select>
-  </div>
+                 <select class="custom-select " name="recurring_frequency">
+                     <option selected="">Open this select menu</option>
+                     <option value="daily">Daily</option>
+                     <option value="weekly">Weekly</option>
+                     <option value="monthly">Monthly</option>
+                  </select>
 
-  <div class="form-group">
-  <label>Start Time :</label>
-     <input type="time" name="period[start_time]" value="<%= @start_time %>" required="required">
-  </div>
+                  <div class="form-group">
+                    <label>Until</label>
+                <div class='input-group display'>
+                        <input type="text" class="form-control date" name="until" value = "<%= my_time(@period.recurring_until) %>"/>
+                      </div>
+                 </div>
 
-   <div class="form-group">
-  <label>End Time :</label>
-     <input type="time" name="period[end_time]" value="<%= @end_time %>" required="required">
-  </div>
-
-
-
-  <div class="form-group">
-  <label>Subject :</label>
-      <select class="select" name="period[subject]">
-            	<option value="<%= @subject.code %>" selected="selected" ><%= @subject.description %></option>                               
-          <%= for subject <- subjects do %>
-                                                    
-             
-
-          <option value="<%= subject.code %>" ><%= subject.name %></option>
-                                                      
-
-          <%end %>
-                                        
-      </select>
-  </div>
+                 <button class="btn btn-sm btn-secondary" type="submit">Submit</button>
+              </form>
+           </div>
+ 
+      </div>
 
 
 
 
-  <div class="form-group">
-        <input class="btn btn-primary" name="" value="Submit" type="submit">
-  </div>
-</form>
 
 
-
+<script type="text/javascript">
+  $(document).ready(function() {
+      $('.display .date').datetimepicker({
+        format: 'Y-m-d H:i', step:  30
+      });
+  } );
+   
+</script>

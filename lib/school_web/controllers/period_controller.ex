@@ -157,6 +157,26 @@ defmodule SchoolWeb.PeriodController do
     )
   end
 
+  def edit_event(conn, %{"period_id" => id}) do
+    period = Affairs.get_period!(id)
+
+    subject = Repo.get_by(Subject, id: period.subject_id)
+    class = Repo.get_by(Class, id: period.class_id)
+    teacher = Repo.get_by(Teacher, id: period.teacher_id)
+
+    changeset = Affairs.change_period(period)
+
+    render(
+      conn,
+      "edit.html",
+      period: period,
+      changeset: changeset,
+      subject: subject,
+      class: class,
+      teacher: teacher
+    )
+  end
+
   def update(conn, %{"id" => id, "period" => period_params}) do
     period = Affairs.get_period!(id)
 
@@ -172,72 +192,25 @@ defmodule SchoolWeb.PeriodController do
   end
 
   def update_period(conn, params) do
-    id = params["id"]
-    class_name = params["period"]["class"]
-    day = params["period"]["day"]
-    end_time = params["period"]["end_time"] |> String.reverse()
-    start_time = params["period"]["start_time"] |> String.reverse()
-    subject = params["period"]["subject"]
-    teacher = params["period"]["teacher"]
+    IEx.pry()
+    period_params = %{}
+    period = Repo.get(Period, params["id"])
+    start_datetime = stringdatetime(params["start_datetime"])
+    end_datetime = stringdatetime(params["end_datetime"])
 
-    a = "00:"
-    new_end_time = (a <> end_time) |> String.reverse() |> Time.from_iso8601!()
-    new_start_time = (a <> start_time) |> String.reverse() |> Time.from_iso8601!()
+    # if this event has a master event,
+    # update the master, 
+    # and then update all the child event, 
+    # and then flag for update..
 
-    n_time = new_start_time.hour
-    n_sm = new_start_time.minute
-    e_time = new_end_time.hour
-    n_em = new_start_time.minute
+    if params["recurring_event"] == "on" do
+      until_datetime = stringdatetime(params["until"])
+      create_recurring_event(period, params["recurring_frequency"], until_datetime)
+    end
 
-    subject = Repo.get_by(Subject, code: subject)
-    class = Repo.get_by(Class, name: class_name)
-    teacher = Repo.get_by(Teacher, code: teacher)
-
-    period_params = %{
-      class_id: class.id,
-      day: day,
-      start_time: new_start_time,
-      end_time: new_end_time,
-      subject_id: subject.id,
-      teacher_id: teacher.id
-    }
-
-    period = Affairs.get_period!(id)
-
-    period_class =
-      Repo.all(from(p in Period, where: p.class_id == ^class.id and p.day == ^day))
-      |> Enum.reject(fn x -> x.id == period.id end)
-
-    all =
-      for item <- period_class do
-        e = item.end_time.hour
-        s = item.start_time.hour
-        em = item.end_time.minute
-        sm = item.start_time.minute
-
-        if e == 0 do
-          e = 12
-        end
-
-        if s == 0 do
-          s = 12
-        end
-
-        %{end_time: e, start_time: s, start_minute: sm, end_minute: em}
-      end
-
-    a =
-      all
-      |> Enum.filter(fn x ->
-        x.start_time >= n_time and x.start_time <= e_time and x.start_minute >= n_sm and
-          x.start_minute <= n_em
-      end)
-
-    b = a |> Enum.count()
+    b = 0
 
     if b == 0 do
-      changeset = Affairs.change_period(period)
-
       case Affairs.update_period(period, period_params) do
         {:ok, period} ->
           conn
@@ -249,6 +222,67 @@ defmodule SchoolWeb.PeriodController do
       |> put_flash(:info, "That slot already been taken,please refer to period table.")
       |> redirect(to: period_path(conn, :index))
     end
+  end
+
+  def create_recurring_event(period, frequency, until_datetime) do
+    # create the intervals(N), loop how many times, got how many weeks, determine N
+    # create new events with same details, just different start end time
+    rg = Date.range(DateTime.to_date(period.start_datetime), DateTime.to_date(until_datetime))
+    no_days = Enum.count(rg)
+
+    no_weeks = (no_days / 7) |> Float.floor() |> :erlang.trunc()
+
+    case frequency do
+      "daily" ->
+        no_times = 1..no_days
+
+        for new_date <- no_times do
+          Affairs.create_period(%{
+            class_id: period.class_id,
+            end_datetime: Timex.shift(period.end_datetime, days: new_date),
+            start_datetime: Timex.shift(period.start_datetime, days: new_date),
+            master_period_id: period.id,
+            subject_id: period.subject_id,
+            teacher_id: period.teacher_id,
+            timetable_id: period.timetable_id
+          })
+        end
+
+      "weekly" ->
+        # so i need to create 5 more events... 
+        no_times = 1..no_weeks
+        new_dates = Enum.map(no_times, fn x -> x * 7 end)
+
+        for new_date <- new_dates do
+          Affairs.create_period(%{
+            class_id: period.class_id,
+            end_datetime: Timex.shift(period.end_datetime, days: new_date),
+            start_datetime: Timex.shift(period.start_datetime, days: new_date),
+            master_period_id: period.id,
+            subject_id: period.subject_id,
+            teacher_id: period.teacher_id,
+            timetable_id: period.timetable_id
+          })
+        end
+
+      "monthly" ->
+        true
+    end
+  end
+
+  def stringdatetime(datetime) do
+    [sdate, stime] = datetime |> String.trim() |> String.split(" ")
+    [y, m, d] = sdate |> String.split("-") |> Enum.map(fn x -> String.to_integer(x) end)
+    sdate = Date.new(y, m, d) |> elem(1)
+
+    [h, m, s] =
+      stime |> String.split(":") |> List.insert_at(2, "00")
+      |> Enum.map(fn x -> String.to_integer(x) end)
+
+    stime = Time.new(h, m, s) |> elem(1)
+
+    NaiveDateTime.new(sdate, stime) |> elem(1) |> DateTime.from_naive!("Etc/UTC")
+    |> Timex.shift(hours: -8)
   end
 
   def delete(conn, %{"id" => id}) do

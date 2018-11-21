@@ -159,6 +159,7 @@ defmodule SchoolWeb.Router do
     get("/timetable/teacher/:user_id/sync_to_gcal", TimetableController, :sync_to_gcal)
     get("/timetable/teacher/:user_id", TimetableController, :teacher_timetable)
     get("/timetable/class/:class_id", TimetableController, :class_timetable)
+    get("/timetable/edit_event/:period_id", PeriodController, :edit_event)
     get("/generated_timetable/:id", TimetableController, :generated_timetable)
     resources("/period", PeriodController)
     get("/create_period/:subject_id/:class_id", PeriodController, :get_create_period)
