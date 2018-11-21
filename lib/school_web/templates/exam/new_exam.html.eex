@@ -26,10 +26,27 @@
                             <label>
                                 <%= gettext "Semester" %>
                             </label>
-                            <select class="custom-select custom-select" required="required" name="semester">
+                            <select class="custom-select custom-select" required="required"  name="semester">
+                                   <option selected="selected">Choose a semester</option>
                                 <%= for a <- @semester |> Enum.sort do %>
                                     <option value="<%= a.id %>">
                                         <%= a.start_date %> -        <%= a.end_date %>
+                                    </option>
+                                    <% end %>
+                            </select>
+                        </div>
+                    </div>
+
+                                        <div class="col-sm-2">
+                        <div class="form-group ">
+                            <label>
+                                <%= gettext "Standard" %>
+                            </label>
+                            <select class="custom-select custom-select" required="required" onchange="getvalsd(this);" name="level">
+                                 <option selected="selected">Choose a standard</option>
+                                <%= for a <- @ level |> Enum.sort do %>
+                                    <option value="<%= a.id %>">
+                                       <%= a.name %>
                                     </option>
                                     <% end %>
                             </select>
@@ -50,11 +67,11 @@
                             </div>
                             <div class="card-body">
                                 <ol class="s_unmark" id="s_unmark">
-                                    <%= for subject <- @subjects do %>
-                                        <li id="<%= subject.id %>">
-                                            <%= subject.name %>
+                                 
+                                        <li id="">
+                                           
                                         </li>
-                                        <% end %>
+                                        
                                 </ol>
                             </div>
                             <div class="card-footer">
@@ -94,6 +111,44 @@
 </form>
 
 <script type="text/javascript">
+
+
+
+
+    function getvalsd(sel){
+        d = sel.value
+
+        channel.push("sub_teach_class", {level_id: d, user_id: window.currentUser,institution_id: window.currentInstitute}) .receive("ok", payload => {
+
+
+
+             console.log(Object.values(payload.subject));
+
+            $("#s_unmark").html("")
+
+            var list = payload.subject
+            $(list).each(function(i, v){
+
+            var li = '<li id="'+v.subject_id+'">'+v.subject_name+'</li>'
+                    $("#s_unmark").append(li) 
+            })
+
+
+
+       
+      
+            
+        })
+
+       
+
+      
+
+    }
+
+
+
+
     $("ol#s_unmark").on("click", "li", function() {
 
         $("ol#s_mark").append(this)
@@ -136,4 +191,6 @@
         })
 
     })
+
+
 </script>

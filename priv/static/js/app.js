@@ -100,7 +100,7 @@
         var grid = $('#bootgrid-command').bootgrid({
             formatters: {
                 commands: function(column, row) {
-                    return '<button type="button" class="btn btn-sm btn-info mr-2 command-edit" data-row-id="' + row.id + '"><em class="fa fa-edit fa-fw"></em> Marking</button>';
+                    return '<button type="button" class="btn btn-sm btn-info mr-2 command-edit" data-row-id="' + row.id + "/" + row.c_id + "/" + row.s_id +'"><em class="fa fa-edit fa-fw"></em> Marking</button>';
                 }
             },
             templates: {
@@ -116,7 +116,7 @@
             grid.find('.command-edit').on('click', function() {
 
 
-              window.location.href = "/exam/marking/"+ $(this).data('row-id');
+              window.location.href = "/exam/marking/" + $(this).data('row-id') ;
 
                 console.log('You pressed edit on row: ' + $(this).data('row-id'));
             }).end().find('.command-delete').on('click', function() {
@@ -125,7 +125,7 @@
         });
 
 
-
+// +"/"+ $(this).data('row-c_id')+ "/" + $(this).data('row-s_id')
 
 }
 
