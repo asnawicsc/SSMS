@@ -169,7 +169,7 @@ defmodule SchoolWeb.Router do
     resources("/exam_master", ExamMasterController)
     resources("/time_period", TimePeriodController)
 
-    get("/exam/marking/:id", ExamController, :marking)
+    get("/exam/marking/:id/:c_id/:s_id", ExamController, :marking)
     get("/cocurriculum/marking/:id", CoCurriculumController, :marking)
     resources("/exam", ExamController)
     get("/exam", ExamController, :index)

@@ -1517,7 +1517,8 @@ defmodule SchoolWeb.UserChannel do
       Repo.all(
         from(
           s in School.Affairs.ExamMark,
-          where: s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
+          where:
+            s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
           select: %{
             class_id: s.class_id,
             subject_id: s.subject_id,
@@ -1623,6 +1624,26 @@ defmodule SchoolWeb.UserChannel do
     {:noreply, socket}
   end
 
+  def handle_in("sub_teach_class", payload, socket) do
+    standard_id = payload["level_id"]
+
+    subject =
+      Repo.all(
+        from(s in School.Affairs.SubjectTeachClass,
+          left_join: m in School.Affairs.Subject,
+          on: m.id == s.subject_id,
+          where: s.standard_id == ^standard_id and m.institution_id == ^payload["institution_id"],
+          select: %{
+            level_id: s.standard_id,
+            subject_id: s.subject_id,
+            subject_name: m.description
+          }
+        )
+      )
+
+    {:reply, {:ok, %{subject: subject}}, socket}
+  end
+
   def handle_in("exam_result_class", payload, socket) do
     class_id = payload["class_id"]
 
@@ -1658,26 +1679,11 @@ defmodule SchoolWeb.UserChannel do
       Repo.all(
         from(
           e in School.Affairs.ExamMark,
-          left_join: k in School.Affairs.ExamMaster,
-          on: k.id == e.exam_id,
-          left_join: s in School.Affairs.Student,
-          on: s.id == e.student_id,
-          left_join: p in School.Affairs.Subject,
-          on: p.id == e.subject_id,
-          where:
-            e.class_id == ^class_id and e.exam_id == ^exam_id and k.institution_id == ^inst_id,
-          select: %{
-            subject_code: p.code,
-            exam_name: k.name,
-            student_id: s.id,
-            student_name: s.name,
-            student_mark: e.mark,
-            chinese_name: s.chinese_name,
-            sex: s.sex,
-            level_id: k.level_id
-          }
+          where: e.class_id == ^class_id and e.exam_id == ^exam_id
         )
       )
+
+    IEx.pry()
 
     level_id = class.level_id
 

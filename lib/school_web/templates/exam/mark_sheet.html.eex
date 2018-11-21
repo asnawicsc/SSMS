@@ -13,10 +13,10 @@
 
                <div class="card-body">
                   <div class="table-responsive bootgrid">
-                     <table class="table table-striped" id="bootgrid-command">
+                     <table class="table table-striped" >
                         <thead>
                            <tr>
-                             <th  data-visible="false" data-column-id="id">ID</th>
+                      
                               <th data-column-id="sender">Class</th>
                               <th data-column-id="received" data-order="desc">Exam</th>
                               <th data-column-id="" data-order="desc">Subject</th>
@@ -28,7 +28,7 @@
                         <tbody>
                            <%= for as <- @a |> Enum.sort do %>
                            <tr>
-                            <td><%= as.id %></td>
+                            
                               <td><%= as.class %></td>
                               <td><%= as.exam %></td>
                               <td><%= as.subject %></td>
