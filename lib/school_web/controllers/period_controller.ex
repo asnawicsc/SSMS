@@ -192,14 +192,21 @@ defmodule SchoolWeb.PeriodController do
   end
 
   def update_period(conn, params) do
-    IEx.pry()
     period_params = %{}
     period = Repo.get(Period, params["id"])
     start_datetime = stringdatetime(params["start_datetime"])
     end_datetime = stringdatetime(params["end_datetime"])
 
+    if period.master_period_id != nil do
+      periods = all_child_periods(period.master_period_id, start_datetime)
+
+      for new_period <- periods do
+        IEx.pry()
+      end
+    end
+
     # if this event has a master event,
-    # update the master, 
+    # from the master event, update the child events after this current event's date, 
     # and then update all the child event, 
     # and then flag for update..
 
@@ -222,6 +229,15 @@ defmodule SchoolWeb.PeriodController do
       |> put_flash(:info, "That slot already been taken,please refer to period table.")
       |> redirect(to: period_path(conn, :index))
     end
+  end
+
+  def all_child_periods(master_period_id, start_datetime) do
+    Repo.all(
+      from(
+        p in Period,
+        where: p.master_period_id == ^master_period_id and p.start_datetime > ^start_datetime
+      )
+    )
   end
 
   def create_recurring_event(period, frequency, until_datetime) do

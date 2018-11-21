@@ -1517,8 +1517,7 @@ defmodule SchoolWeb.UserChannel do
       Repo.all(
         from(
           s in School.Affairs.ExamMark,
-          where:
-            s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
+          where: s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
           select: %{
             class_id: s.class_id,
             subject_id: s.subject_id,
@@ -1629,7 +1628,8 @@ defmodule SchoolWeb.UserChannel do
 
     subject =
       Repo.all(
-        from(s in School.Affairs.SubjectTeachClass,
+        from(
+          s in School.Affairs.SubjectTeachClass,
           left_join: m in School.Affairs.Subject,
           on: m.id == s.subject_id,
           where: s.standard_id == ^standard_id and m.institution_id == ^payload["institution_id"],
@@ -2503,7 +2503,8 @@ defmodule SchoolWeb.UserChannel do
 
           grades =
             Repo.all(
-              from(g in School.Affairs.Grade,
+              from(
+                g in School.Affairs.Grade,
                 where: g.institution_id == ^payload["institution_id"]
               )
             )
