@@ -63,7 +63,7 @@ defmodule SchoolWeb.InstitutionController do
     end
   end
 
-  def upload(param) when param != nil do
+  def upload(param) do
     {:ok, seconds} = Timex.format(Timex.now(), "%s", :strftime)
 
     path = File.cwd!() <> "/media"
@@ -104,10 +104,12 @@ defmodule SchoolWeb.InstitutionController do
   def update(conn, %{"id" => id, "institution" => institution_params}) do
     institution = Settings.get_institution!(id)
     image_params = institution_params["image1"]
-    result = upload(image_params)
 
-    institution_params = Map.put(institution_params, "logo_bin", result.bin)
-    institution_params = Map.put(institution_params, "logo_filename", result.filename)
+    if image_params != nil do
+      result = upload(image_params)
+      institution_params = Map.put(institution_params, "logo_bin", result.bin)
+      institution_params = Map.put(institution_params, "logo_filename", result.filename)
+    end
 
     case Settings.update_institution(institution, institution_params) do
       {:ok, institution} ->
