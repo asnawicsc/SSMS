@@ -107,7 +107,7 @@ defmodule SchoolWeb.SubjectTeachClassController do
       {:ok, subject_teach_class} ->
         conn
         |> put_flash(:info, "Subject teach class updated successfully.")
-        |> redirect(to: subject_teach_class_path(conn, :show, subject_teach_class))
+        |> redirect(to: subject_teach_class_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", subject_teach_class: subject_teach_class, changeset: changeset)

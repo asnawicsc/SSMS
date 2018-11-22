@@ -3314,7 +3314,15 @@ defmodule School.Affairs do
   end
 
   def list_cocurriculum(inst_id) do
-    Repo.all(from(c in CoCurriculum, where: c.institution_id == ^inst_id))
+    Repo.all(
+      from(
+        c in CoCurriculum,
+        left_join: t in Teacher,
+        on: t.id == c.teacher_id,
+        where: c.institution_id == ^inst_id,
+        select: %{id: c.id, code: c.code, description: c.description, teacher_id: t.name}
+      )
+    )
   end
 
   @doc """
