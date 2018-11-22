@@ -1515,7 +1515,8 @@ defmodule SchoolWeb.UserChannel do
       Repo.all(
         from(
           s in School.Affairs.ExamMark,
-          where: s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
+          where:
+            s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
           select: %{
             class_id: s.class_id,
             subject_id: s.subject_id,
@@ -1802,13 +1803,14 @@ defmodule SchoolWeb.UserChannel do
           grades =
             Repo.all(
               from(
-                g in School.Affairs.Grade,
-                where: g.institution_id == ^inst_id
+                g in School.Affairs.ExamGrade,
+                where:
+                  g.institution_id == ^inst_id and g.exam_master_id == ^exam_master.exam_master_id
               )
             )
 
           for grade <- grades do
-            if student_mark >= grade.mix and student_mark <= grade.max and student_mark != -1 do
+            if student_mark >= grade.min and student_mark <= grade.max and student_mark != -1 do
               %{
                 student_id: data.student_id,
                 student_name: data.student_name,
@@ -2102,13 +2104,13 @@ defmodule SchoolWeb.UserChannel do
           grades =
             Repo.all(
               from(
-                g in School.Affairs.Grade,
-                where: g.institution_id == ^inst_id
+                g in School.Affairs.ExamGrade,
+                where: g.institution_id == ^inst_id and g.exam_master_id == ^exam_master.id
               )
             )
 
           for grade <- grades do
-            if student_mark >= grade.mix and student_mark <= grade.max do
+            if student_mark >= grade.min and student_mark <= grade.max do
               %{
                 student_id: data.student_id,
                 student_name: data.student_name,
@@ -2357,13 +2359,14 @@ defmodule SchoolWeb.UserChannel do
           grades =
             Repo.all(
               from(
-                g in School.Affairs.Grade,
-                where: g.institution_id == ^payload["institution_id"]
+                g in School.Affairs.ExamGrade,
+                where:
+                  g.institution_id == ^payload["institution_id"] and g.exam_master_id == ^exam.id
               )
             )
 
           for grade <- grades do
-            if student_mark >= grade.mix and student_mark <= grade.max do
+            if student_mark >= grade.min and student_mark <= grade.max do
               %{
                 student_id: data.student_id,
                 grade: grade.name,
@@ -2523,13 +2526,14 @@ defmodule SchoolWeb.UserChannel do
           grades =
             Repo.all(
               from(
-                g in School.Affairs.Grade,
-                where: g.institution_id == ^payload["institution_id"]
+                g in School.Affairs.ExamGrade,
+                where:
+                  g.institution_id == ^payload["institution_id"] and g.exam_master_id == ^exam.id
               )
             )
 
           for grade <- grades do
-            if student_mark >= grade.mix and student_mark <= grade.max do
+            if student_mark >= grade.min and student_mark <= grade.max do
               %{
                 student_id: data.student_id,
                 grade: grade.name,

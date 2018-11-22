@@ -18,10 +18,10 @@
 {
     d=sel.value
 
-
+var csrf= $("input[name='_csrf_token']").val() ;
 
         channel.push("exam_standard_result", {
-    institution_id: window.currentInstitute , exam_standard_result_id: d,standard_id: localStorage.getItem("exam_result_standard"),user_id: window.currentUser,csrf: localStorage.getItem("exam_standard_csrf")})
+    institution_id: window.currentInstitute , exam_standard_result_id: d,standard_id: localStorage.getItem("exam_result_standard"),user_id: window.currentUser,csrf: csrf})
         .receive("ok", payload => {
             $("div#exam_record_standard").html(payload.html);
         })

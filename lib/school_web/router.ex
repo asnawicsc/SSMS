@@ -108,6 +108,30 @@ defmodule SchoolWeb.Router do
       :show_exam_period
     )
 
+    get(
+      "/show_exam_grade/:exam_name/semester/:semester_id",
+      ExamGradeController,
+      :show_exam_grade
+    )
+
+    get(
+      "/default_grade/:exam_master_id",
+      ExamGradeController,
+      :default_grade
+    )
+
+    get(
+      "/add_grade/:exam_master_id",
+      ExamGradeController,
+      :add_grade
+    )
+
+    post(
+      "/add_exam_grade",
+      ExamGradeController,
+      :add_exam_grade
+    )
+
     get("/submit_exam_period", ExamPeriodController, :submit_exam_period)
 
     resources("/parameters", ParameterController)
@@ -326,6 +350,8 @@ defmodule SchoolWeb.Router do
     get("/apply_color", PageController, :apply_color)
     get("/create_semesters", SemesterController, :create_semesters)
     post("/create_semesters_data", SemesterController, :create_semesters_data)
+    resources("/exam_grade", ExamGradeController)
+
     get("/*path", PageController, :no_page_found)
   end
 end

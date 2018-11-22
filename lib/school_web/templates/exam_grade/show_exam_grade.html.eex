@@ -1,0 +1,53 @@
+
+
+<div class="content-heading">
+    <div>Listing Exam grade (<%= @exam_master_id.name %>)
+    </div>
+</div>
+
+
+<div class="card">
+     <div class="card-header">
+     	<span><%= link "Used Default grade", to: exam_grade_path(@conn, :default_grade, @exam_master_id.id ) %></span>
+     </div>
+     <div class="card-body">
+
+<table class="table" id="datatable1">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Min</th>
+      <th>Max</th>
+      <th>Gpa</th>
+
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for exam_grade <- @exam_details do %>
+    <tr>
+      <td><%= exam_grade.name %></td>
+      <td><%= exam_grade.min %></td>
+      <td><%= exam_grade.max %></td>
+      <td><%= exam_grade.gpa %></td>
+
+
+      <td class="text-right">
+    
+        <span><%= link "Edit", to: exam_grade_path(@conn, :edit, exam_grade.id), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: exam_grade_path(@conn, :delete, exam_grade.id), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+</div>
+</div>
+<span><%= link "New Exam grade", to: exam_grade_path(@conn, :add_grade,@exam_master_id.id ) %></span>
+
+
+
+
+
