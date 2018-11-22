@@ -32,7 +32,7 @@
 
 
     <tr>
-      <td><%= subject_teach_class.standard_id %></td>
+      <td><%= Affairs.get_level!(subject_teach_class.standard_id ).name %></td>
       <td>
 
         <%= if subject != nil , do: subject.description , else: "Unknown Subject" %></td>

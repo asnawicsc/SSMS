@@ -210,21 +210,21 @@
                
             
   </div>
-  <div class="col-lg-7">
+  <div class="col-lg-8">
 
 
       <div class="row">
         <div class="col-lg-6">
           <div class="card card-default mb-3">
-             <div class="card-header d-flex align-items-center">
-            
-                  <em class="fa-2x mr-3 fas fa-pencil-alt"></em>
-                  <span style="font-weight: bolder;font-size: 17px;"><%= gettext("Class")%></span>
-               
-             </div>
+    
              <div class="card-body">
-                <h5 class="card-title"><%= gettext("Manage class")%></h5>
-                <p class="card-text"><%= gettext("Allow school executives to manage classes.")%></p>
+                <em class="fa-2x mr-2 mb-3 fas fa-pencil-alt"></em>
+                  <span style="font-weight: bolder;font-size: 17px;"><%= gettext("Class Management")%></span>
+                  <ol style="padding-left: 15px;">
+                    <li><p class="card-text"><%= gettext("Create class, requires a class teacher.")%></p></li>
+                    <li><p class="card-text"><%= gettext("Enroll students that is created in the school into class.")%></p></li>
+                    <li><p class="card-text"><%= gettext("Manage class to view class info such as time table. \nCan manage students according to class.")%></p></li>
+                  </ol>
                   <a href ="/classes/enroll_students"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Enroll Students</button></a>
                 <a  href="/create_class"]"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Class</button></a>
                 <div class="btn-group">
@@ -260,18 +260,19 @@
         </div>
          <div class="col-lg-6">
           <div class="card card-default mb-3">
-             <div class="card-header d-flex align-items-center">
-            
-                  <em class="fa-2x mr-3 fas fa-child"></em>
-                  <span style="font-weight: bolder;font-size: 17px;"><%= gettext("Student")%></span>
-               
-             </div>
+
         
              <% a = @conn %>
 
               <div class="card-body">
-                <h5 class="card-title"><%= gettext("Student")%></h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+
+                <em class="fa-2x mb-3 mr-2 fas fa-child"></em>
+                <span style="font-weight: bolder;font-size: 17px;"><%= gettext("Student Management")%></span>
+                
+                <ol style="padding-left: 15px;">
+                    <li><p class="card-text"><%= gettext("List of students that you can manage.")%></p></li>
+                     <li><p class="card-text"><%= gettext("Ad hoc create student.")%></p></li>
+                  </ol>
                 <a href="/student_lists/<%= a.private.plug_session["user_id"]%>"><button class="mb-1 btn-sm btn btn-outline-primary"  type="button">List</button></a>
                   <a href="/students/new"><button class="mb-1 btn-sm btn btn-outline-primary"  type="button">Create Student</button></a>
               </div>
@@ -282,36 +283,37 @@
       <div class="row">
         <div class="col-lg-6">
           <div class="card card-default mb-3">
-             <div class="card-header d-flex align-items-center">
-            
-                  <em class="fa-2x mr-3 fas fa-pencil-alt"></em>
-                  <span style="font-weight: bolder;font-size: 17px;">Exam</span>
-               
-             </div>
+
              <div class="card-body">
-                <h5 class="card-title">Card Default card title</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                  <em class="fa-2x mr-2 mb-3 fas fa-pencil-alt"></em>
+                  <span style="font-weight: bolder;font-size: 17px;"><%= gettext("Exam Management")%></span>                
+
+                  <ol style="padding-left: 15px;">
+                    <li><p class="card-text"><%= gettext("Create a master exam. It will contain the subjects as per semesters and standard.")%></p></li>
+                     <li><p class="card-text"><%= gettext("View exam master, to set the exam period and set exam grades.")%></p></li>
+                     <li><p class="card-text"><%= gettext("Mark an exam paper according to semesters.")%></p></li>
+                  </ol>
                 <a href="/new_exam"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create</button></a>
 
                 <a href="/exam"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Exam Period/Grade</button></a>
 
                  <a href ="/mark_sheet"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Mark</button></a>
-                <button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button>
+        
              </div>
           </div>
         </div>
 
         <div class="col-lg-6">
           <div class="card card-default mb-3">
-             <div class="card-header d-flex align-items-center">
-            
-                  <em class="fa-2x mr-3 fas fa-chess"></em>
-                  <span style="font-weight: bolder;font-size: 17px;">Cocurriculum</span>
-               
-             </div>
+
              <div class="card-body">
-                <h5 class="card-title">Card Default card title</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                  <em class="fa-2x mr-2 mb-3 fas fa-chess"></em>
+                  <span style="font-weight: bolder;font-size: 17px;"><%= gettext("Cocurriculum Management")%></span>
+                  <ol style="padding-left: 15px;">
+                    <li><p class="card-text"><%= gettext("List all cocurriculum and enroll students.")%></p></li>
+                      <li><p class="card-text"><%= gettext("Create new cocurriculum.")%></p></li>
+                        <li><p class="card-text"><%= gettext("Mark a cocurriculum.")%></p></li>
+                  </ol>
                 <a href ="/cocurriculum"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
                  <a href ="/cocurriculum/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Cocurriculum</button></a>
                  <a href ="/co_mark"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Marking</button></a>
@@ -324,15 +326,15 @@
       <div class="row">
         <div class="col-lg-6">
           <div class="card card-default mb-3">
-             <div class="card-header d-flex align-items-center">
-            
-                  <em class="fa-2x mr-3 fas fa-chalkboard-teacher"></em>
-                  <span style="font-weight: bolder;font-size: 17px;">Teacher</span>
-               
-             </div>
+
              <div class="card-body">
-                <h5 class="card-title">Card Default card title</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                  <em class="fa-2x mr-2 mb-3 fas fa-chalkboard-teacher"></em>
+                  <span style="font-weight: bolder;font-size: 17px;"><%= gettext("Teacher Management")%></span>
+          <ol style="padding-left: 15px;">
+                    <li><p class="card-text"><%= gettext("List all teachers and manage their info.")%></p></li>
+                     <li><p class="card-text"><%= gettext("Ad hoc create a teacher.")%></p></li>
+                     <li><p class="card-text"><%= gettext("Creates a teacher login.")%></p></li>
+                  </ol>
                 <a href ="/teacher"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
                 <a href ="/teacher/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Teacher</button></a>
                 <a href ="/login_teacher"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Teacher Login</button></a>
@@ -341,15 +343,14 @@
         </div>
         <div class="col-lg-6">
           <div class="card card-default mb-3">
-             <div class="card-header d-flex align-items-center">
-            
-                  <em class="fa-2x mr-3 fas fa-chalkboard-teacher"></em>
-                  <span style="font-weight: bolder;font-size: 17px;">Parent</span>
-               
-             </div>
+
              <div class="card-body">
-                <h5 class="card-title">Card Default card title</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                 <em class="fa-2x mr-2 mb-3 fas fa-chalkboard-teacher"></em>
+                  <span style="font-weight: bolder;font-size: 17px;"><%= gettext("Parent Management")%></span>
+                 <ol style="padding-left: 15px;">
+                    <li><p class="card-text"><%= gettext("View all student's parent information.")%></p></li>
+                    <li><p class="card-text"><%= gettext("Ad hoc create a parent.")%></p></li>
+                  </ol>
                 <a href ="/parent"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
                 <a href ="/parent/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Parent</button></a>
           
@@ -360,15 +361,15 @@
       <div class="row">
         <div class="col-lg-6">
         <div class="card card-default mb-3">
-           <div class="card-header d-flex align-items-center">
-          
-                <em class="fa-2x mr-3 fas fa-chalkboard-teacher"></em>
-                <span style="font-weight: bolder;font-size: 17px;">Subject</span>
-             
-           </div>
+
            <div class="card-body">
-              <h5 class="card-title">Card Default card title</h5>
-              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                 <em class="fa-2x mr-2 mb-3 fas fa-chalkboard-teacher"></em>
+                  <span style="font-weight: bolder;font-size: 17px;"><%= gettext("Subject Management")%></span>
+                 <ol style="padding-left: 15px;">
+                    <li><p class="card-text"><%= gettext("Ad hoc create a subject.")%></p></li>
+                    <li><p class="card-text"><%= gettext("Manage a subject and create a period from it.")%></p></li>
+                     <li><p class="card-text"><%= gettext("Assign a subject to a class and standard.")%></p></li>
+                  </ol>
                <a href ="/subject/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Subject</button></a>
                 <a href ="/subject_teach_class"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List Subject Period</button></a>
                <a href ="/subject_teach_class/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Subject Period</button></a>
@@ -377,15 +378,15 @@
       </div>
        <div class="col-lg-6">
         <div class="card card-default mb-3">
-           <div class="card-header d-flex align-items-center">
-          
-                <em class="fa-2x mr-3 fas fa-chalkboard-teacher"></em>
-                <span style="font-weight: bolder;font-size: 17px;">Standard</span>
-             
-           </div>
+
            <div class="card-body">
-              <h5 class="card-title">Card Default card title</h5>
-              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                 <em class="fa-2x mr-2 mb-3 fas fa-chalkboard-teacher"></em>
+                  <span style="font-weight: bolder;font-size: 17px;"><%= gettext("Standard Management")%></span>
+                 <ol style="padding-left: 15px;">
+                    <li><p class="card-text"><%= gettext("See all available standard.")%></p></li>
+                    <li><p class="card-text"><%= gettext("Ad hoc create a standard.")%></p></li>
+                   
+                  </ol>
               <a href ="/levels"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
                <a href ="/levels/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Standard</button></a>
         
@@ -396,15 +397,15 @@
     <div class="row">
         <div class="col-lg-6">
         <div class="card card-default mb-3">
-           <div class="card-header d-flex align-items-center">
-          
-                <em class="fa-2x mr-3 fas fa-chalkboard-teacher"></em>
-                <span style="font-weight: bolder;font-size: 17px;">Holiday</span>
-             
-           </div>
+         
            <div class="card-body">
-              <h5 class="card-title">Card Default card title</h5>
-              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                 <em class="fa-2x mr-2 mb-3 fas fa-chalkboard-teacher"></em>
+                  <span style="font-weight: bolder;font-size: 17px;"><%= gettext("Holiday Management")%></span>
+                 <ol style="padding-left: 15px;">
+                    <li><p class="card-text"><%= gettext("See all available Holiday.")%></p></li>
+                    <li><p class="card-text"><%= gettext("Ad hoc create a Holiday.")%></p></li>
+                   
+                  </ol>
               <a href ="/holiday"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
                <a href ="/holiday/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Holiday</button></a>
         
@@ -413,15 +414,15 @@
       </div>
         <div class="col-lg-6">
         <div class="card card-default mb-3">
-           <div class="card-header d-flex align-items-center">
-          
-                <em class="fa-2x mr-3 fas fa-chalkboard-teacher"></em>
-                <span style="font-weight: bolder;font-size: 17px;">Semesters</span>
-             
-           </div>
+           
            <div class="card-body">
-              <h5 class="card-title">Card Default card title</h5>
-              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                 <em class="fa-2x mr-2 mb-3 fas fa-chalkboard-teacher"></em>
+                  <span style="font-weight: bolder;font-size: 17px;"><%= gettext("Semester Management")%></span>
+                 <ol style="padding-left: 15px;">
+                    <li><p class="card-text"><%= gettext("See all available Semester.")%></p></li>
+                    <li><p class="card-text"><%= gettext("Ad hoc create a Semester.")%></p></li>
+                   
+                  </ol>
               <a href ="/semesters"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
               <a href ="/semesters/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Semester</button></a>
         
