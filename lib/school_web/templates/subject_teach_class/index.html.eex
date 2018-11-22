@@ -33,9 +33,11 @@
 
     <tr>
       <td><%= subject_teach_class.standard_id %></td>
-      <td><%= subject.description %></td>
+      <td>
 
-      <td><%= class.name %></td>
+        <%= if subject != nil , do: subject.description , else: "Unknown Subject" %></td>
+
+      <td><%= if class != nil , do: class.name , else: "Unknown Class" %></td>
        <td><%= period %></td>
 
       <td class="text-right">
