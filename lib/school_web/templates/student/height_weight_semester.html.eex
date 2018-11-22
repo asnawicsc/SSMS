@@ -1,0 +1,67 @@
+<div class="content-heading">
+    <div>Height & Weight
+    </div>
+</div>
+<div class="row">
+      <div class="col-lg-8" aria-label="student_table">
+        <div class="card card-default d-none d-lg-block">
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                  <th>Name</th>
+                  <th>Height (cm)</th>
+                  <th>Weight (Kg)</th>
+                  <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                <%= if @students == nil do %> 
+                <% else %>
+                <%= for student <- @students do %>
+                    <tr>
+                      <td class="text-left">
+                   
+                   
+                          <div><%= student.name %> <%= student.chinese_name %></div>
+
+
+   
+                    </td>
+                    <td class="text-left"> 
+                        <%= if student.height == nil do %>
+                          <div>Not set<div>
+                        <% else %>
+                          <div><%= student.height %></div>  
+                        <% end %>               
+                    </td>
+                    <td class="text-left">              
+                        <%= if student.weight == nil do %>
+                          <div>Not set<div>
+                        <% else %>
+                          <div><%= student.weight %></div>  
+                        <% end %>                   
+                    </td>
+                    <td>
+                      <a href="/edit_height_weight/<%= student.id %>/<%= @semester_id %>"><button class="btn btn-labeled btn-success btn-xs mb-2" type="button">
+                           <span class="btn-label"><i class="fa fa-wrench"></i></span>Edit</button></a>
+                    </td>
+                  </tr>
+                <% end %>
+                <% end %>
+
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+</div>
+
+<script type="text/javascript">
+  $(window).ready(function(){
+     $('.table').DataTable();
+  })
+</script>
