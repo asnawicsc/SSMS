@@ -139,25 +139,16 @@ defmodule SchoolWeb.TeacherController do
     user_id = conn.private.plug_session["user_id"]
     user = Repo.get(User, user_id)
 
-    if user.role == "Teacher" do
-      teacher = Repo.get_by(Teacher, email: user.email)
-      changeset = Affairs.change_teacher(teacher)
-      action = "/teacher/#{teacher.code}"
-      render(conn, "form.html", changeset: changeset, action: action)
-    end
-
-    if user.role == "Support" or user.role == "Admin" do
-      teacher =
-        Repo.all(
-          from(
-            t in Teacher,
-            where: t.institution_id == ^conn.private.plug_session["institution_id"]
-          )
+    teacher =
+      Repo.all(
+        from(
+          t in Teacher,
+          where: t.institution_id == ^conn.private.plug_session["institution_id"]
         )
-        |> Enum.with_index()
+      )
+      |> Enum.with_index()
 
-      render(conn, "teacher_listing.html", teacher: teacher)
-    end
+    render(conn, "teacher_listing.html", teacher: teacher)
   end
 
   def new(conn, _params) do
@@ -181,8 +172,13 @@ defmodule SchoolWeb.TeacherController do
   end
 
   def show(conn, %{"id" => id}) do
-    teacher = Affairs.get_teacher!(id)
-    render(conn, "show.html", teacher: teacher)
+    user_id = conn.private.plug_session["user_id"]
+    user = Repo.get(User, user_id)
+
+    teacher = Repo.get_by(Teacher, email: user.email)
+    changeset = Affairs.change_teacher(teacher)
+    teacher = Affairs.get_teacher!(teacher.id)
+    render(conn, "edit.html", teacher: teacher, changeset: changeset)
   end
 
   def edit(conn, %{"id" => id}) do

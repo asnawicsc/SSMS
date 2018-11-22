@@ -159,10 +159,9 @@
        <div class="card-body">
           <h5 class="card-title">Card Default card title</h5>
           <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          <a href="/new_exam"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create</button></a>
-          <a href="/exam"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Exam Period</button></a>
-          <button class="mb-1 btn-sm btn btn-outline-primary" type="button">Mark</button>
-          <button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button>
+
+          <a href="/mark_sheet"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Mark</button></a>
+    
        </div>
     </div>
     <div class="card card-default mb-3">
@@ -175,8 +174,8 @@
        <div class="card-body">
           <h5 class="card-title">Card Default card title</h5>
           <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          <button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button>
-          <button class="mb-1 btn-sm btn btn-outline-primary" type="button">Enroll</button>
+          <a href ="/co_mark"> <button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
+       
        </div>
     </div>
     <div class="card card-default mb-3">
@@ -189,8 +188,8 @@
        <div class="card-body">
           <h5 class="card-title">Card Default card title</h5>
           <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          <a href ="/teacher_listing"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Teacher Information</button></a>
-          <button class="mb-1 btn-sm btn btn-outline-primary" type="button">Enroll</button>
+          <a href ="/teacher/<%= a.private.plug_session["user_id"]%>"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Teacher Information</button></a>
+       
        </div>
     </div>
   </div>

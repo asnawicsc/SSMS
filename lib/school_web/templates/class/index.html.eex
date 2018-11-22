@@ -26,7 +26,7 @@
                     
       <td class="text-right">
        
-        <span><%= link (gettext "Sync Library Membership"), to: class_path(@conn, :sync_library_membership, class.id), class: "btn btn-default btn-xs" %></span>
+    <a class="mb-1 btn-sm btn btn-outline-primary" href="/class_setting/<%= class.id %>">Manage</a>
     
       
         
