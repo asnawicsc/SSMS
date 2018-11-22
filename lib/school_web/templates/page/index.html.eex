@@ -94,7 +94,7 @@
        <div class="card-body">
           <h5 class="card-title"><%= gettext("Manage class")%></h5>
           <p class="card-text"><%= gettext("Allow school executives to manage classes.")%></p>
-          <a  href="/create_class"]"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Class</button></a>
+       
           <div class="btn-group">
              <button class="mb-1 btn-sm btn btn-outline-primary" type="button">Manage</button>
              <button class="mb-1 btn-sm dropdown-toggle btn btn-outline-primary" type="button" data-toggle="dropdown" aria-expanded="false">

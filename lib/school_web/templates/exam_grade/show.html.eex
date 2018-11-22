@@ -1,0 +1,33 @@
+<h2>Show Exam grade</h2>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @exam_grade.name %>
+  </li>
+
+  <li>
+    <strong>Min:</strong>
+    <%= @exam_grade.min %>
+  </li>
+
+  <li>
+    <strong>Max:</strong>
+    <%= @exam_grade.max %>
+  </li>
+
+  <li>
+    <strong>Gpa:</strong>
+    <%= @exam_grade.gpa %>
+  </li>
+
+  <li>
+    <strong>Institution:</strong>
+    <%= @exam_grade.institution_id %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: exam_grade_path(@conn, :edit, @exam_grade) %></span>
+<span><%= link "Back", to: exam_grade_path(@conn, :index) %></span>

@@ -768,6 +768,12 @@ defmodule SchoolWeb.PdfController do
         institution_id: conn.private.plug_session["institution_id"]
       )
 
+    exam =
+      Repo.get_by(School.Affairs.ExamMaster, %{
+        id: exam_id,
+        institution_id: conn.private.plug_session["institution_id"]
+      })
+
     exam_mark =
       Repo.all(
         from(
@@ -874,13 +880,15 @@ defmodule SchoolWeb.PdfController do
           grades =
             Repo.all(
               from(
-                g in School.Affairs.Grade,
-                where: g.institution_id == ^conn.private.plug_session["institution_id"]
+                g in School.Affairs.ExamGrade,
+                where:
+                  g.institution_id == ^conn.private.plug_session["institution_id"] and
+                    g.exam_master_id == ^exam.id
               )
             )
 
           for grade <- grades do
-            if student_mark >= grade.mix and student_mark <= grade.max do
+            if student_mark >= grade.min and student_mark <= grade.max do
               %{
                 student_id: data.student_id,
                 student_name: data.student_name,
@@ -1154,13 +1162,15 @@ defmodule SchoolWeb.PdfController do
           grades =
             Repo.all(
               from(
-                g in School.Affairs.Grade,
-                where: g.institution_id == ^conn.private.plug_session["institution_id"]
+                g in School.Affairs.ExamGrade,
+                where:
+                  g.institution_id == ^conn.private.plug_session["institution_id"] and
+                    g.exam_master_id == ^exam_id.id
               )
             )
 
           for grade <- grades do
-            if student_mark >= grade.mix and student_mark <= grade.max do
+            if student_mark >= grade.min and student_mark <= grade.max do
               %{
                 student_id: data.student_id,
                 student_name: data.student_name,
@@ -1522,13 +1532,17 @@ defmodule SchoolWeb.PdfController do
           student_mark = data.mark
 
           grades =
-            Repo.all(from(g in School.Affairs.Grade))
-            |> Enum.filter(fn x ->
-              x.institution_id == conn.private.plug_session["institution_id"]
-            end)
+            Repo.all(
+              from(
+                g in School.Affairs.ExamGrade,
+                where:
+                  g.institution_id == ^conn.private.plug_session["institution_id"] and
+                    g.exam_master_id == ^exam.id
+              )
+            )
 
           for grade <- grades do
-            if student_mark >= grade.mix and student_mark <= grade.max do
+            if student_mark >= grade.min and student_mark <= grade.max do
               %{
                 student_id: data.student_id,
                 grade: grade.name,
@@ -1691,13 +1705,17 @@ defmodule SchoolWeb.PdfController do
           student_mark = data.mark
 
           grades =
-            Repo.all(from(g in School.Affairs.Grade))
-            |> Enum.filter(fn x ->
-              x.institution_id == conn.private.plug_session["institution_id"]
-            end)
+            Repo.all(
+              from(
+                g in School.Affairs.ExamGrade,
+                where:
+                  g.institution_id == ^conn.private.plug_session["institution_id"] and
+                    g.exam_master_id == ^exam.id
+              )
+            )
 
           for grade <- grades do
-            if student_mark >= grade.mix and student_mark <= grade.max do
+            if student_mark >= grade.min and student_mark <= grade.max do
               %{
                 student_id: data.student_id,
                 grade: grade.name,

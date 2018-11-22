@@ -1,0 +1,36 @@
+<h2>Listing Exam grade</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Min</th>
+      <th>Max</th>
+      <th>Gpa</th>
+      <th>Institution</th>
+       <th>Exam</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for exam_grade <- @exam_grade do %>
+    <tr>
+      <td><%= exam_grade.name %></td>
+      <td><%= exam_grade.min %></td>
+      <td><%= exam_grade.max %></td>
+      <td><%= exam_grade.gpa %></td>
+      <td><%= exam_grade.institution_id %></td>
+      <td><%= exam_grade.exam_master_id %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: exam_grade_path(@conn, :show, exam_grade), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: exam_grade_path(@conn, :edit, exam_grade), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: exam_grade_path(@conn, :delete, exam_grade), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Exam grade", to: exam_grade_path(@conn, :new) %></span>

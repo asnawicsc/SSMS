@@ -3448,4 +3448,72 @@ defmodule School.AffairsTest do
       assert %Ecto.Changeset{} = Affairs.change_sync_list(sync_list)
     end
   end
+
+  describe "exam_grade" do
+    alias School.Affairs.ExamGrade
+
+    @valid_attrs %{gpa: "120.5", institution_id: 42, max: 42, min: 42, name: "some name"}
+    @update_attrs %{gpa: "456.7", institution_id: 43, max: 43, min: 43, name: "some updated name"}
+    @invalid_attrs %{gpa: nil, institution_id: nil, max: nil, min: nil, name: nil}
+
+    def exam_grade_fixture(attrs \\ %{}) do
+      {:ok, exam_grade} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_exam_grade()
+
+      exam_grade
+    end
+
+    test "list_exam_grade/0 returns all exam_grade" do
+      exam_grade = exam_grade_fixture()
+      assert Affairs.list_exam_grade() == [exam_grade]
+    end
+
+    test "get_exam_grade!/1 returns the exam_grade with given id" do
+      exam_grade = exam_grade_fixture()
+      assert Affairs.get_exam_grade!(exam_grade.id) == exam_grade
+    end
+
+    test "create_exam_grade/1 with valid data creates a exam_grade" do
+      assert {:ok, %ExamGrade{} = exam_grade} = Affairs.create_exam_grade(@valid_attrs)
+      assert exam_grade.gpa == Decimal.new("120.5")
+      assert exam_grade.institution_id == 42
+      assert exam_grade.max == 42
+      assert exam_grade.min == 42
+      assert exam_grade.name == "some name"
+    end
+
+    test "create_exam_grade/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_exam_grade(@invalid_attrs)
+    end
+
+    test "update_exam_grade/2 with valid data updates the exam_grade" do
+      exam_grade = exam_grade_fixture()
+      assert {:ok, exam_grade} = Affairs.update_exam_grade(exam_grade, @update_attrs)
+      assert %ExamGrade{} = exam_grade
+      assert exam_grade.gpa == Decimal.new("456.7")
+      assert exam_grade.institution_id == 43
+      assert exam_grade.max == 43
+      assert exam_grade.min == 43
+      assert exam_grade.name == "some updated name"
+    end
+
+    test "update_exam_grade/2 with invalid data returns error changeset" do
+      exam_grade = exam_grade_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_exam_grade(exam_grade, @invalid_attrs)
+      assert exam_grade == Affairs.get_exam_grade!(exam_grade.id)
+    end
+
+    test "delete_exam_grade/1 deletes the exam_grade" do
+      exam_grade = exam_grade_fixture()
+      assert {:ok, %ExamGrade{}} = Affairs.delete_exam_grade(exam_grade)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_exam_grade!(exam_grade.id) end
+    end
+
+    test "change_exam_grade/1 returns a exam_grade changeset" do
+      exam_grade = exam_grade_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_exam_grade(exam_grade)
+    end
+  end
 end

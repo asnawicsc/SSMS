@@ -4342,4 +4342,100 @@ defmodule School.Affairs do
   def change_sync_list(%SyncList{} = sync_list) do
     SyncList.changeset(sync_list, %{})
   end
+
+  alias School.Affairs.ExamGrade
+
+  @doc """
+  Returns the list of exam_grade.
+
+  ## Examples
+
+      iex> list_exam_grade()
+      [%ExamGrade{}, ...]
+
+  """
+  def list_exam_grade do
+    Repo.all(ExamGrade)
+  end
+
+  @doc """
+  Gets a single exam_grade.
+
+  Raises `Ecto.NoResultsError` if the Exam grade does not exist.
+
+  ## Examples
+
+      iex> get_exam_grade!(123)
+      %ExamGrade{}
+
+      iex> get_exam_grade!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_exam_grade!(id), do: Repo.get!(ExamGrade, id)
+
+  @doc """
+  Creates a exam_grade.
+
+  ## Examples
+
+      iex> create_exam_grade(%{field: value})
+      {:ok, %ExamGrade{}}
+
+      iex> create_exam_grade(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_exam_grade(attrs \\ %{}) do
+    %ExamGrade{}
+    |> ExamGrade.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a exam_grade.
+
+  ## Examples
+
+      iex> update_exam_grade(exam_grade, %{field: new_value})
+      {:ok, %ExamGrade{}}
+
+      iex> update_exam_grade(exam_grade, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_exam_grade(%ExamGrade{} = exam_grade, attrs) do
+    exam_grade
+    |> ExamGrade.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a ExamGrade.
+
+  ## Examples
+
+      iex> delete_exam_grade(exam_grade)
+      {:ok, %ExamGrade{}}
+
+      iex> delete_exam_grade(exam_grade)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_exam_grade(%ExamGrade{} = exam_grade) do
+    Repo.delete(exam_grade)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking exam_grade changes.
+
+  ## Examples
+
+      iex> change_exam_grade(exam_grade)
+      %Ecto.Changeset{source: %ExamGrade{}}
+
+  """
+  def change_exam_grade(%ExamGrade{} = exam_grade) do
+    ExamGrade.changeset(exam_grade, %{})
+  end
 end

@@ -53,6 +53,7 @@
                         </div>
                     </div>
 
+    
    
 
                 </div>
@@ -102,12 +103,21 @@
                     </div>
                 </div>
 
-            </div>
+      
+
+
+            </div><center>   <input style="margin-bottom: 30px;" class="btn btn-primary" name="" value="Submit" type="submit"></center>
+                 
         </div>
+
+                
+
     </div>
+
+
   
 
-    <input class="btn btn-primary" name="" value="Submit" type="submit">
+
 </form>
 
 <script type="text/javascript">
@@ -191,6 +201,10 @@
         })
 
     })
+
+
+  
+
 
 
 </script>

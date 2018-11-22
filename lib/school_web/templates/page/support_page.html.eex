@@ -292,7 +292,9 @@
                 <h5 class="card-title">Card Default card title</h5>
                 <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                 <a href="/new_exam"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create</button></a>
-                <a href="/exam"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Exam Period</button></a>
+
+                <a href="/exam"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Exam Period/Grade</button></a>
+
                  <a href ="/mark_sheet"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Mark</button></a>
                 <button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button>
              </div>
@@ -427,26 +429,7 @@
         </div>
       </div>
     </div>
-        <div class="row">
-        <div class="col-lg-6">
-        <div class="card card-default mb-3">
-           <div class="card-header d-flex align-items-center">
-          
-                <em class="fa-2x mr-3 fas fa-chalkboard-teacher"></em>
-                <span style="font-weight: bolder;font-size: 17px;">Grade</span>
-             
-           </div>
-           <div class="card-body">
-              <h5 class="card-title">Card Default card title</h5>
-              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-              <a href ="/grade"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
-       
-        
-           </div>
-        </div>
-      </div>
    
-    </div>
 
   </div>
 </div>
