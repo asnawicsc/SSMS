@@ -464,7 +464,6 @@ defmodule SchoolWeb.StudentController do
     body = result |> Enum.map(fn x -> Map.values(x) end)
     new_io = List.insert_at(body, 0, header) |> CSV.encode() |> Enum.to_list() |> to_string
     {:ok, batch} = Settings.update_batch(batch, %{result: new_io})
-    IEx.pry()
 
     conn
     |> put_flash(:info, "Student created successfully.")
