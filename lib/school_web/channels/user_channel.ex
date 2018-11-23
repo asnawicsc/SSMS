@@ -104,6 +104,22 @@ defmodule SchoolWeb.UserChannel do
         )
       )
 
+    semester =
+      Repo.all(
+        from(
+          s in Semester,
+          where: s.institution_id == ^payload["institution_id"],
+          select: %{id: s.id, start_date: s.start_date, end_date: s.end_date}
+        )
+      )
+
+    new_semesters =
+      for each <- semester do
+        name = Enum.join([each.start_date, each.end_date], " - ")
+        each = Map.put(each, :name, name)
+        each
+      end
+
     broadcast(socket, "hw_show_classes", %{classes: class})
     {:noreply, socket}
   end
@@ -1677,7 +1693,8 @@ defmodule SchoolWeb.UserChannel do
 
     exam_master =
       Repo.all(
-        from(s in School.Affairs.Exam,
+        from(
+          s in School.Affairs.Exam,
           left_join: g in School.Affairs.ExamMaster,
           on: g.id == s.exam_master_id,
           where: g.id == ^exam_id
@@ -2301,7 +2318,9 @@ defmodule SchoolWeb.UserChannel do
       |> Enum.uniq()
 
     html =
-      Phoenix.View.render_to_string(SchoolWeb.ExamView, "generate_mark_analyse.html",
+      Phoenix.View.render_to_string(
+        SchoolWeb.ExamView,
+        "generate_mark_analyse.html",
         exam: exam,
         csrf: payload["csrf"]
       )

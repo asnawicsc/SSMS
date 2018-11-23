@@ -18,6 +18,231 @@ defmodule SchoolWeb.StudentController do
     render(conn, "index.html", students: students)
   end
 
+  def height_weight_semester(conn, params) do
+    user = Repo.get(User, conn.private.plug_session["user_id"])
+    semester = Repo.get(Semester, params["semester_id"])
+
+    if user.role == "Teacher" do
+      teacher = Repo.get_by(Teacher, email: user.email)
+
+      students =
+        Repo.all(
+          from(
+            s in Student,
+            left_join: sc in StudentClass,
+            on: sc.sudent_id == s.id,
+            left_join: c in Class,
+            on: c.id == sc.class_id,
+            left_join: t in Teacher,
+            on: t.id == c.teacher_id,
+            where: t.id == ^teacher.id and sc.semester_id == ^semester.id,
+            select: %{
+              name: s.name,
+              chinese_name: s.chinese_name,
+              height: s.height,
+              weight: s.weight,
+              id: s.id
+            }
+          )
+        )
+    else
+      students =
+        Repo.all(
+          from(
+            s in Student,
+            left_join: sc in StudentClass,
+            on: sc.sudent_id == s.id,
+            left_join: c in Class,
+            on: c.id == sc.class_id,
+            left_join: t in Teacher,
+            on: t.id == c.teacher_id,
+            where: sc.semester_id == ^semester.id,
+            select: %{
+              name: s.name,
+              chinese_name: s.chinese_name,
+              height: s.height,
+              weight: s.weight,
+              id: s.id
+            }
+          )
+        )
+    end
+
+    students =
+      for student <- students do
+        height =
+          if student.height != nil do
+            heights = String.split(student.height, ",")
+
+            height_list =
+              for height <- heights do
+                l_id = String.split(height, "-") |> List.to_tuple() |> elem(0)
+
+                if l_id == params["semester_id"] do
+                  height
+                end
+              end
+              |> Enum.reject(fn x -> x == nil end)
+
+            if height_list != [] do
+              hd(height_list) |> String.split("-") |> List.to_tuple() |> elem(1)
+            else
+              nil
+            end
+          else
+            nil
+          end
+
+        weight =
+          if student.weight != nil do
+            weights = String.split(student.weight, ",")
+
+            weight =
+              for weight <- weights do
+                l_id = String.split(weight, "-") |> List.to_tuple() |> elem(0)
+
+                if l_id == params["semester_id"] do
+                  weight
+                end
+              end
+              |> Enum.reject(fn x -> x == nil end)
+
+            if weight != [] do
+              hd(weight) |> String.split("-") |> List.to_tuple() |> elem(1)
+            else
+              nil
+            end
+          else
+            nil
+          end
+
+        student = Map.put(student, :height, height)
+        student = Map.put(student, :weight, weight)
+      end
+
+    render(conn, "height_weight_semester.html", students: students, semester_id: semester.id)
+  end
+
+  def edit_height_weight(conn, params) do
+    student = Repo.get(Student, params["student_id"])
+
+    height =
+      if student.height != nil do
+        heights = String.split(student.height, ",")
+
+        height_list =
+          for height <- heights do
+            l_id = String.split(height, "-") |> List.to_tuple() |> elem(0)
+
+            if l_id == params["semester_id"] do
+              height
+            end
+          end
+          |> Enum.reject(fn x -> x == nil end)
+
+        if height_list != [] do
+          hd(height_list) |> String.split("-") |> List.to_tuple() |> elem(1)
+        else
+          nil
+        end
+      else
+        nil
+      end
+
+    weight =
+      if student.weight != nil do
+        weights = String.split(student.weight, ",")
+
+        weight =
+          for weight <- weights do
+            l_id = String.split(weight, "-") |> List.to_tuple() |> elem(0)
+
+            if l_id == params["semester_id"] do
+              weight
+            end
+          end
+          |> Enum.reject(fn x -> x == nil end)
+
+        if weight != [] do
+          hd(weight) |> String.split("-") |> List.to_tuple() |> elem(1)
+        else
+          nil
+        end
+      else
+        nil
+      end
+
+    student = Map.put(student, :height, height)
+    student = Map.put(student, :weight, weight)
+
+    render(conn, "edit_height_weight.html", student: student, semester_id: params["semester_id"])
+  end
+
+  def submit_height_weight(conn, params) do
+    student = Repo.get(Student, params["student_id"])
+
+    height =
+      if student.height == nil do
+        height = Enum.join([params["semester_id"], params["height"]], "-")
+        # weight = Enum.join([payload["lvl_id"], map["weight"]], "-")
+      else
+        cur_height = Enum.join([params["semester_id"], params["height"]], "-")
+        ex_height = String.split(student.height, ",")
+
+        lists =
+          for ex <- ex_height do
+            l_id = String.split(ex, "-") |> List.to_tuple() |> elem(0)
+
+            if l_id != params["semester_id"] do
+              ex
+            end
+          end
+          |> Enum.reject(fn x -> x == nil end)
+
+        if lists != [] do
+          lists = Enum.join(lists, ",")
+          Enum.join([lists, cur_height], ",")
+        else
+          Enum.join([params["semester_id"], params["height"]], "-")
+        end
+      end
+
+    weight =
+      if student.weight == nil do
+        weight = Enum.join([params["semester_id"], params["weight"]], "-")
+      else
+        cur_weight = Enum.join([params["semester_id"], params["weight"]], "-")
+        ex_weight = String.split(student.weight, ",")
+
+        lists2 =
+          for ex <- ex_weight do
+            l_id = String.split(ex, "-") |> List.to_tuple() |> elem(0)
+
+            if l_id != params["semester_id"] do
+              ex
+            end
+          end
+          |> Enum.reject(fn x -> x == nil end)
+
+        if lists2 != [] do
+          lists2 = Enum.join(lists2, ",")
+          Enum.join([lists2, cur_weight], ",")
+        else
+          Enum.join([params["semester_id"], params["weight"]], "-")
+        end
+      end
+
+    Student.changeset(student, %{
+      height: height,
+      weight: weight
+    })
+    |> Repo.update()
+
+    conn
+    |> put_flash(:info, "Height and weight updated successfully.")
+    |> redirect(to: "/height_weight/#{params["semester_id"]}")
+  end
+
   def student_lists(conn, params) do
     user = Repo.get(User, params["user_id"])
 
@@ -117,11 +342,23 @@ defmodule SchoolWeb.StudentController do
         )
       )
 
-    levels =
-      Repo.all(Level)
-      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+    semester =
+      Repo.all(
+        from(
+          s in Semester,
+          where: s.institution_id == ^conn.private.plug_session["institution_id"],
+          select: %{id: s.id, start_date: s.start_date, end_date: s.end_date}
+        )
+      )
 
-    render(conn, "height_weight.html", students: students, levels: levels)
+    new_semesters =
+      for each <- semester do
+        name = Enum.join([each.start_date, each.end_date], " - ")
+        each = Map.put(each, :name, name)
+        each
+      end
+
+    render(conn, "height_weight.html", students: students, levels: new_semesters)
   end
 
   def height_weight_class(conn, params) do

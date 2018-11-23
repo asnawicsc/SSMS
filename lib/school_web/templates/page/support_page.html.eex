@@ -275,6 +275,33 @@
                   </ol>
                 <a href="/student_lists/<%= a.private.plug_session["user_id"]%>"><button class="mb-1 btn-sm btn btn-outline-primary"  type="button">List</button></a>
                   <a href="/students/new"><button class="mb-1 btn-sm btn btn-outline-primary"  type="button">Create Student</button></a>
+                  <div class="btn-group">
+                   <button class="mb-1 btn-sm btn btn-outline-primary" type="button">Height & Weight</button>
+                   <button class="mb-1 btn-sm dropdown-toggle btn btn-outline-primary" type="button" data-toggle="dropdown" aria-expanded="false">
+                      <span class="sr-only">info</span>
+                   </button>
+                   <% require IEx %>
+                   <% user = Repo.get(Settings.User,@conn.private.plug_session["user_id"]) %>
+
+                   <% if user.role == "Teacher" do 
+                       teacher = Repo.get_by(Affairs.Teacher,email: user.email) 
+                      all_semesters= Repo.all(from c in Affairs.Semester, where: c.institution_id == ^@conn.private.plug_session["institution_id"]) 
+                      all_semesters
+                    end %>
+
+
+                   <%  all_semesters =if user.role == "Admin" or user.role == "Support" do 
+                       all_semesters =Repo.all(from c in Affairs.Semester, where: c.institution_id == ^@conn.private.plug_session["institution_id"]) 
+                        all_semesters
+                   end %>
+
+
+                   <div class="dropdown-menu" role="menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(67px, 33px, 0px);">
+                    <%= for semester <- all_semesters do %>
+                      <a class="dropdown-item" href="/height_weight/<%= semester.id %>"><%= semester.start_date %> - <%= semester.end_date %></a>
+                    <% end %>
+                   </div>
+                </div>
               </div>
           </div>
         </div>

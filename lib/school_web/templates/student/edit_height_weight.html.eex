@@ -1,0 +1,32 @@
+<div class="content-heading">
+    <div>Height & Weight
+    </div>
+</div>
+<div class="row">
+      <div class="col-lg-4" aria-label="student_table">
+        <div class="card card-default d-none d-lg-block">
+          <div class="card-body">
+           <form action="/submit_height_weight">
+           	<input type="hidden" name="student_id" value ="<%= @student.id %>">
+           	<input type="hidden" name="semester_id" value ="<%= @semester_id %>">
+               <div class="form-group">
+                  <label>Height</label>
+                  <input class="form-control" value = "<%= @student.height %>" type="text" placeholder="Height" name = "height">
+               </div>
+               <div class="form-group">
+                  <label>Weight</label>
+                  <input class="form-control" value = "<%= @student.weight %>" type="text" placeholder="Weight" name ="weight">
+               </div>
+               
+               <button class="btn btn-sm btn-secondary" type="submit">Submit</button>
+            </form>
+          </div>
+        </div>
+      </div>
+</div>
+
+<script type="text/javascript">
+  $(window).ready(function(){
+     $('.table').DataTable();
+  })
+</script>
