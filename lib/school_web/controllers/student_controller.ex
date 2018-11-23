@@ -395,13 +395,13 @@ defmodule SchoolWeb.StudentController do
 
   def upload_students(conn, params) do
     bin = params["item"]["file"].path |> File.read() |> elem(1)
-
+    usr = Settings.current_user(conn)
+    {:ok, batch} = Settings.create_batch(%{upload_by: usr.id})
     data = bin |> String.split("\n") |> Enum.map(fn x -> String.split(x, ",") end)
     headers = hd(data) |> Enum.map(fn x -> String.trim(x, " ") end)
     contents = tl(data)
-    {:ok, batch} = Settings.create_batch()
 
-    student_params =
+    result =
       for content <- contents do
         h = headers |> Enum.map(fn x -> String.downcase(x) end)
 
@@ -441,41 +441,30 @@ defmodule SchoolWeb.StudentController do
         student_param =
           Map.put(student_param, "institution_id", conn.private.plug_session["institution_id"])
 
-        #   Map.put(student_param, "ic", Integer.to_string(student_param["ic_no"]))
-        #  student_param =if is_integer(student_param["postcode"]) do
-
-        #     Map.put(student_param, "postcode", Integer.to_string(student_param["postcode"]))
-        # end
-
-        #  student_param =if is_integer(student_param["student_no"]) do
-
-        #     Map.put(student_param, "student_no", Integer.to_string(student_param["student_no"]))
-        # end
-
-        #  student_param = if is_integer(student_param["ic_no"]) do
-        #  Map.put(student_param, "ic", Integer.to_string(student_param["ic_no"]))
-        # end
-
-        #  student_param =if is_integer(student_param["phone"]) do
-
-        #     Map.put(student_param, "phone", Integer.to_string(student_param["phone"]))
-        # end
-
-        #    student_param =if is_integer(student_param["state"]) do
-
-        #     Map.put(student_param, "state", Integer.to_string(student_param["state"]))
-        # end
-
         cg = Student.changeset(%Student{}, student_param)
 
         case Repo.insert(cg) do
           {:ok, student} ->
-            {:ok, student}
+            student_param
+            student_param = Map.put(student_param, "reason", "ok")
 
-          {:error, cg} ->
-            {:error, cg}
+          {:error, changeset} ->
+            errors = changeset.errors |> Keyword.keys()
+
+            {reason, message} = changeset.errors |> hd()
+            {proper_message, message_list} = message
+            final_reason = Atom.to_string(reason) <> " " <> proper_message
+            student_param = Map.put(student_param, "reason", final_reason)
+
+            student_param
         end
       end
+
+    header = result |> hd() |> Map.keys()
+    body = result |> Enum.map(fn x -> Map.values(x) end)
+    new_io = List.insert_at(body, 0, header) |> CSV.encode() |> Enum.to_list() |> to_string
+    {:ok, batch} = Settings.update_batch(batch, %{result: new_io})
+    IEx.pry()
 
     conn
     |> put_flash(:info, "Student created successfully.")

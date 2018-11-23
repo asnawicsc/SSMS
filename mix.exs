@@ -51,7 +51,8 @@ defmodule School.Mixfile do
       {:bcrypt_elixir, "~> 0.12"},
       {:httpoison, "~> 1.0"},
       {:barlix, "~> 0.1.0"},
-      {:pdf_generator, ">=0.3.5"}
+      {:pdf_generator, ">=0.3.5"},
+      {:csv, "~> 2.0.0"}
     ]
   end
 

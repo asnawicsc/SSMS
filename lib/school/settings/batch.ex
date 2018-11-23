@@ -2,10 +2,9 @@ defmodule School.Settings.Batch do
   use Ecto.Schema
   import Ecto.Changeset
 
-
   schema "batches" do
-    field :result, :binary
-    field :upload_by, :integer
+    field(:result, :binary)
+    field(:upload_by, :integer)
 
     timestamps()
   end
@@ -14,6 +13,6 @@ defmodule School.Settings.Batch do
   def changeset(batch, attrs) do
     batch
     |> cast(attrs, [:upload_by, :result])
-    |> validate_required([:upload_by, :result])
+    |> validate_required([:upload_by])
   end
 end

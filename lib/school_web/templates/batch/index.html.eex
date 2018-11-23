@@ -4,7 +4,7 @@
   <thead>
     <tr>
       <th>Upload by</th>
-      <th>Result</th>
+ 
 
       <th></th>
     </tr>
@@ -13,7 +13,7 @@
 <%= for batch <- @batches do %>
     <tr>
       <td><%= batch.upload_by %></td>
-      <td><%= batch.result %></td>
+ 
 
       <td class="text-right">
         <span><%= link "Show", to: batch_path(@conn, :show, batch), class: "btn btn-default btn-xs" %></span>
