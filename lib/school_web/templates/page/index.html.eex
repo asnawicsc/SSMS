@@ -165,6 +165,7 @@
     <div class="card card-default mb-3">
 
        <div class="card-body">
+
                   <em class="fa-2x mr-2 mb-3 fas fa-pencil-alt"></em>
                   <span style="font-weight: bolder;font-size: 17px;"><%= gettext("Exam Management")%></span>                
 
@@ -177,11 +178,13 @@
           <a href="/exam"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Exam Period</button></a>
           <button class="mb-1 btn-sm btn btn-outline-primary" type="button">Mark</button>
 
+
        </div>
     </div>
     <div class="card card-default mb-3">
 
        <div class="card-body">
+
                   <em class="fa-2x mr-2 mb-3 fas fa-chess"></em>
                   <span style="font-weight: bolder;font-size: 17px;"><%= gettext("Cocurriculum Management")%></span>
                   <ol style="padding-left: 15px;">
@@ -191,11 +194,13 @@
                   </ol>
           <button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button>
           <button class="mb-1 btn-sm btn btn-outline-primary" type="button">Enroll</button>
+
        </div>
     </div>
     <div class="card card-default mb-3">
 
        <div class="card-body">
+
                   <em class="fa-2x mr-2 mb-3 fas fa-chalkboard-teacher"></em>
                   <span style="font-weight: bolder;font-size: 17px;"><%= gettext("Teacher Management")%></span>
           <ol style="padding-left: 15px;">
@@ -204,6 +209,7 @@
                   </ol>
           <a href ="/teacher_listing"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Teacher Information</button></a>
     
+
        </div>
     </div>
   </div>
