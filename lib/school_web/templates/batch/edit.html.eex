@@ -1,0 +1,5 @@
+<h2>Edit Batch</h2>
+
+<%= render "form.html", Map.put(assigns, :action, batch_path(@conn, :update, @batch)) %>
+
+<span><%= link "Back", to: batch_path(@conn, :index) %></span>

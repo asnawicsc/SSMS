@@ -37,7 +37,7 @@
    
                     </td>
                     <td class="text-left">              
-                        <div><%= student.class %></div>                 
+                        <div><%=  %></div>                 
                     </td>
                   </tr>
                 <% end %>

@@ -1,0 +1,18 @@
+<h2>Show Batch</h2>
+
+<ul>
+
+  <li>
+    <strong>Upload by:</strong>
+    <%= @batch.upload_by %>
+  </li>
+
+  <li>
+    <strong>Result:</strong>
+    <%= @batch.result %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: batch_path(@conn, :edit, @batch) %></span>
+<span><%= link "Back", to: batch_path(@conn, :index) %></span>

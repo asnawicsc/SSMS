@@ -162,6 +162,7 @@ defmodule SchoolWeb.StudentController do
     data = bin |> String.split("\n") |> Enum.map(fn x -> String.split(x, ",") end)
     headers = hd(data) |> Enum.map(fn x -> String.trim(x, " ") end)
     contents = tl(data)
+    {:ok, batch} = Settings.create_batch()
 
     student_params =
       for content <- contents do

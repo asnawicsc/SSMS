@@ -708,4 +708,66 @@ defmodule School.SettingsTest do
       assert %Ecto.Changeset{} = Settings.change_role(role)
     end
   end
+
+  describe "batches" do
+    alias School.Settings.Batch
+
+    @valid_attrs %{result: "some result", upload_by: 42}
+    @update_attrs %{result: "some updated result", upload_by: 43}
+    @invalid_attrs %{result: nil, upload_by: nil}
+
+    def batch_fixture(attrs \\ %{}) do
+      {:ok, batch} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Settings.create_batch()
+
+      batch
+    end
+
+    test "list_batches/0 returns all batches" do
+      batch = batch_fixture()
+      assert Settings.list_batches() == [batch]
+    end
+
+    test "get_batch!/1 returns the batch with given id" do
+      batch = batch_fixture()
+      assert Settings.get_batch!(batch.id) == batch
+    end
+
+    test "create_batch/1 with valid data creates a batch" do
+      assert {:ok, %Batch{} = batch} = Settings.create_batch(@valid_attrs)
+      assert batch.result == "some result"
+      assert batch.upload_by == 42
+    end
+
+    test "create_batch/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Settings.create_batch(@invalid_attrs)
+    end
+
+    test "update_batch/2 with valid data updates the batch" do
+      batch = batch_fixture()
+      assert {:ok, batch} = Settings.update_batch(batch, @update_attrs)
+      assert %Batch{} = batch
+      assert batch.result == "some updated result"
+      assert batch.upload_by == 43
+    end
+
+    test "update_batch/2 with invalid data returns error changeset" do
+      batch = batch_fixture()
+      assert {:error, %Ecto.Changeset{}} = Settings.update_batch(batch, @invalid_attrs)
+      assert batch == Settings.get_batch!(batch.id)
+    end
+
+    test "delete_batch/1 deletes the batch" do
+      batch = batch_fixture()
+      assert {:ok, %Batch{}} = Settings.delete_batch(batch)
+      assert_raise Ecto.NoResultsError, fn -> Settings.get_batch!(batch.id) end
+    end
+
+    test "change_batch/1 returns a batch changeset" do
+      batch = batch_fixture()
+      assert %Ecto.Changeset{} = Settings.change_batch(batch)
+    end
+  end
 end
