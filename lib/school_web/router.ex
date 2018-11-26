@@ -149,7 +149,8 @@ defmodule SchoolWeb.Router do
     resources("/students", StudentController)
 
     get("/update_changes/:student_id", StudentController, :update_changes)
-    post("/upload_students", StudentController, :upload_students)
+    post("/upload_students", StudentController, :pre_upload_students)
+    post("/upload_students_final", StudentController, :upload_students)
     get("/height_weight", StudentController, :height_weight)
     get("/height_weight_class/:class_id", StudentController, :height_weight_class)
     get("/student_certificate", StudentController, :student_certificate)

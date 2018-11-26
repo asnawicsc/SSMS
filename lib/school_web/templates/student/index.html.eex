@@ -59,7 +59,7 @@
                   <div class="panel">
                     <div class="panel-heading">Bulk Upload Students</div>
                     <div class="panel-body">
-                      <%= form_for @conn, student_path(@conn, :upload_students), [as: :item, multipart: true], fn f -> %>
+                      <%= form_for @conn, student_path(@conn, :pre_upload_students), [as: :item, multipart: true], fn f -> %>
 
                           <%= label f, "", class: "control-label" %>
                           <%= file_input f, :file, accept: ".csv"%>
