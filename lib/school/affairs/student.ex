@@ -87,5 +87,6 @@ defmodule School.Affairs.Student do
       :height
     ])
     |> validate_required([:student_no])
+    |> unique_constraint(:b_cert)
   end
 end

@@ -393,12 +393,40 @@ defmodule SchoolWeb.StudentController do
     render(conn, "new.html", changeset: changeset)
   end
 
-  def upload_students(conn, params) do
+  def pre_upload_students(conn, params) do
     bin = params["item"]["file"].path |> File.read() |> elem(1)
     usr = Settings.current_user(conn)
-    {:ok, batch} = Settings.create_batch(%{upload_by: usr.id})
-    data = bin |> String.split("\n") |> Enum.map(fn x -> String.split(x, ",") end)
+    {:ok, batch} = Settings.create_batch(%{upload_by: usr.id, result: bin})
+
+    data =
+      if bin |> String.contains?("\t") do
+        bin |> String.split("\n") |> Enum.map(fn x -> String.split(x, "\t") end)
+      else
+        bin |> String.split("\n") |> Enum.map(fn x -> String.split(x, ",") end)
+      end
+
     headers = hd(data) |> Enum.map(fn x -> String.trim(x, " ") end)
+
+    render(conn, "adjust_header.html", headers: headers, batch_id: batch.id)
+  end
+
+  def upload_students(conn, params) do
+    batch = Settings.get_batch!(params["batch_id"])
+    bin = batch.result
+    usr = Settings.current_user(conn)
+    {:ok, batch} = Settings.update_batch(batch, %{upload_by: usr.id})
+
+    data =
+      if bin |> String.contains?("\t") do
+        bin |> String.split("\n") |> Enum.map(fn x -> String.split(x, "\t") end)
+      else
+        bin |> String.split("\n") |> Enum.map(fn x -> String.split(x, ",") end)
+      end
+
+    headers =
+      hd(data) |> Enum.map(fn x -> String.trim(x, " ") end)
+      |> Enum.map(fn x -> params["header"][x] end)
+
     contents = tl(data)
 
     result =
@@ -409,7 +437,17 @@ defmodule SchoolWeb.StudentController do
 
         c =
           for item <- content do
-            item = String.replace(item, "@@@", ",")
+            item =
+              case item do
+                "@@@" ->
+                  ","
+
+                "\\N" ->
+                  ""
+
+                _ ->
+                  item
+              end
 
             a =
               case item do
