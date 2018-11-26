@@ -1,0 +1,5 @@
+<h2>Edit Segak</h2>
+
+<%= render "form.html", Map.put(assigns, :action, segak_path(@conn, :update, @segak)) %>
+
+<span><%= link "Back", to: segak_path(@conn, :index) %></span>

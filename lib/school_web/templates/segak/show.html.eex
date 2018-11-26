@@ -1,0 +1,38 @@
+<h2>Show Segak</h2>
+
+<ul>
+
+  <li>
+    <strong>Student:</strong>
+    <%= @segak.student_id %>
+  </li>
+
+  <li>
+    <strong>Semester:</strong>
+    <%= @segak.semester_id %>
+  </li>
+
+  <li>
+    <strong>Standard:</strong>
+    <%= @segak.standard_id %>
+  </li>
+
+  <li>
+    <strong>Class:</strong>
+    <%= @segak.class_id %>
+  </li>
+
+  <li>
+    <strong>Mark:</strong>
+    <%= @segak.mark %>
+  </li>
+
+  <li>
+    <strong>Institution:</strong>
+    <%= @segak.institution_id %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: segak_path(@conn, :edit, @segak) %></span>
+<span><%= link "Back", to: segak_path(@conn, :index) %></span>

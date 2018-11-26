@@ -9,7 +9,10 @@ defmodule SchoolWeb.ClassController do
       Repo.all(from(s in Semester))
       |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
 
-    classes = Repo.all(from(c in Class, where: c.institution_id == ^User.institution_id(conn)))
+    classes =
+      Repo.all(
+        from(c in Class, where: c.institution_id == ^conn.private.plug_session["institution_id"])
+      )
 
     exams =
       Repo.all(

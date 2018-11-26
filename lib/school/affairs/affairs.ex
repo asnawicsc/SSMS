@@ -4446,4 +4446,100 @@ defmodule School.Affairs do
   def change_exam_grade(%ExamGrade{} = exam_grade) do
     ExamGrade.changeset(exam_grade, %{})
   end
+
+  alias School.Affairs.Segak
+
+  @doc """
+  Returns the list of segak.
+
+  ## Examples
+
+      iex> list_segak()
+      [%Segak{}, ...]
+
+  """
+  def list_segak do
+    Repo.all(Segak)
+  end
+
+  @doc """
+  Gets a single segak.
+
+  Raises `Ecto.NoResultsError` if the Segak does not exist.
+
+  ## Examples
+
+      iex> get_segak!(123)
+      %Segak{}
+
+      iex> get_segak!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_segak!(id), do: Repo.get!(Segak, id)
+
+  @doc """
+  Creates a segak.
+
+  ## Examples
+
+      iex> create_segak(%{field: value})
+      {:ok, %Segak{}}
+
+      iex> create_segak(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_segak(attrs \\ %{}) do
+    %Segak{}
+    |> Segak.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a segak.
+
+  ## Examples
+
+      iex> update_segak(segak, %{field: new_value})
+      {:ok, %Segak{}}
+
+      iex> update_segak(segak, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_segak(%Segak{} = segak, attrs) do
+    segak
+    |> Segak.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a Segak.
+
+  ## Examples
+
+      iex> delete_segak(segak)
+      {:ok, %Segak{}}
+
+      iex> delete_segak(segak)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_segak(%Segak{} = segak) do
+    Repo.delete(segak)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking segak changes.
+
+  ## Examples
+
+      iex> change_segak(segak)
+      %Ecto.Changeset{source: %Segak{}}
+
+  """
+  def change_segak(%Segak{} = segak) do
+    Segak.changeset(segak, %{})
+  end
 end

@@ -344,6 +344,7 @@
                 <a href ="/cocurriculum"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
                  <a href ="/cocurriculum/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Cocurriculum</button></a>
                  <a href ="/co_mark"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Marking</button></a>
+                  <a href ="/create_segak"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Segak</button></a>
                
              </div>
           </div>

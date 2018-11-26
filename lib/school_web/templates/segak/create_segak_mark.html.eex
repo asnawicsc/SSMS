@@ -1,0 +1,47 @@
+<div class="content-heading">
+    <div>Marking Segak
+        <small><%= gettext("welcome")%>!</small>
+    </div>
+    <!-- START Language list-->
+    <div class="ml-auto">
+
+    </div>
+    <!-- END Language list-->
+</div>
+
+     <div class="col-lg-9">
+
+            <div class="card">
+
+                <div class="card-body">
+                	<div class="table-responsive ">
+<table class="table" id="datatable1">
+	<thead>
+		<tr>
+			<td>ID</td>
+			<td>Class</td>
+			<td>Standard</td>
+			<td>Action</td>
+		</tr>
+	</thead>
+	<tbody>
+
+<%= for class <- @classes do %>
+
+
+
+		<tr>
+			<td><%= class.id %></td>
+			<td><%= class.name %></td>
+			<td><%= class.level_id %></td>
+			<td><%= link "Create a Mark", to: segak_path(@conn, :segak_mark, class.id), class: "btn btn-default btn-xs" %></td>
+	
+		</tr>
+<% end %>
+	</tbody>
+</table>
+</div>
+
+</div>
+</div>
+</div>

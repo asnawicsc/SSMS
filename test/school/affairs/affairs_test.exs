@@ -3516,4 +3516,74 @@ defmodule School.AffairsTest do
       assert %Ecto.Changeset{} = Affairs.change_exam_grade(exam_grade)
     end
   end
+
+  describe "segak" do
+    alias School.Affairs.Segak
+
+    @valid_attrs %{class_id: "some class_id", institution_id: "some institution_id", mark: "some mark", semester_id: "some semester_id", standard_id: "some standard_id", student_id: "some student_id"}
+    @update_attrs %{class_id: "some updated class_id", institution_id: "some updated institution_id", mark: "some updated mark", semester_id: "some updated semester_id", standard_id: "some updated standard_id", student_id: "some updated student_id"}
+    @invalid_attrs %{class_id: nil, institution_id: nil, mark: nil, semester_id: nil, standard_id: nil, student_id: nil}
+
+    def segak_fixture(attrs \\ %{}) do
+      {:ok, segak} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_segak()
+
+      segak
+    end
+
+    test "list_segak/0 returns all segak" do
+      segak = segak_fixture()
+      assert Affairs.list_segak() == [segak]
+    end
+
+    test "get_segak!/1 returns the segak with given id" do
+      segak = segak_fixture()
+      assert Affairs.get_segak!(segak.id) == segak
+    end
+
+    test "create_segak/1 with valid data creates a segak" do
+      assert {:ok, %Segak{} = segak} = Affairs.create_segak(@valid_attrs)
+      assert segak.class_id == "some class_id"
+      assert segak.institution_id == "some institution_id"
+      assert segak.mark == "some mark"
+      assert segak.semester_id == "some semester_id"
+      assert segak.standard_id == "some standard_id"
+      assert segak.student_id == "some student_id"
+    end
+
+    test "create_segak/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_segak(@invalid_attrs)
+    end
+
+    test "update_segak/2 with valid data updates the segak" do
+      segak = segak_fixture()
+      assert {:ok, segak} = Affairs.update_segak(segak, @update_attrs)
+      assert %Segak{} = segak
+      assert segak.class_id == "some updated class_id"
+      assert segak.institution_id == "some updated institution_id"
+      assert segak.mark == "some updated mark"
+      assert segak.semester_id == "some updated semester_id"
+      assert segak.standard_id == "some updated standard_id"
+      assert segak.student_id == "some updated student_id"
+    end
+
+    test "update_segak/2 with invalid data returns error changeset" do
+      segak = segak_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_segak(segak, @invalid_attrs)
+      assert segak == Affairs.get_segak!(segak.id)
+    end
+
+    test "delete_segak/1 deletes the segak" do
+      segak = segak_fixture()
+      assert {:ok, %Segak{}} = Affairs.delete_segak(segak)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_segak!(segak.id) end
+    end
+
+    test "change_segak/1 returns a segak changeset" do
+      segak = segak_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_segak(segak)
+    end
+  end
 end

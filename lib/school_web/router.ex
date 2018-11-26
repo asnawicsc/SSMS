@@ -361,6 +361,8 @@ defmodule SchoolWeb.Router do
     post("/create_semesters_data", SemesterController, :create_semesters_data)
     resources("/exam_grade", ExamGradeController)
     resources("/batches", BatchController)
+    resources("/segak", SegakController)
+    get("/create_segak", SegakController, :create_segak)
     get("/*path", PageController, :no_page_found)
   end
 end
