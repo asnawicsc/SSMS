@@ -7,6 +7,7 @@ defmodule School.Affairs.SubjectTeachClass do
     field(:standard_id, :integer)
     field(:subject_id, :integer)
     field(:teacher_id, :integer)
+    field(:institution_id, :integer)
 
     timestamps()
   end
@@ -14,7 +15,7 @@ defmodule School.Affairs.SubjectTeachClass do
   @doc false
   def changeset(subject_teach_class, attrs) do
     subject_teach_class
-    |> cast(attrs, [:standard_id, :subject_id, :class_id])
-    |> validate_required([:standard_id, :subject_id, :class_id])
+    |> cast(attrs, [:institution_id, :standard_id, :subject_id, :class_id])
+    |> validate_required([:institution_id, :standard_id, :subject_id, :class_id])
   end
 end

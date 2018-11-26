@@ -1,5 +1,11 @@
-<h2>Show Class</h2>
-
+<div class="content-heading">
+    <div>Show Class
+    </div>
+</div>
+<div class="row">
+      <div class="col-lg-8" aria-label="student_table">
+        <div class="card card-default d-none d-lg-block">
+          <div class="card-body">
 <ul>
 
   <li>
@@ -13,11 +19,17 @@
   </li>
 
     <li>
+       <%teacher=School.Repo.get_by(School.Affairs.Teacher,id:  @class.teacher_id)%>
     <strong>Teacher:</strong>
-    <%= @class.teacher_id %>
+    <%= teacher.name %>
   </li>
 
 </ul>
+
+
+</div>
+</div>
+</div>
 <span><%= link "Students", to: class_path(@conn, :students, @class) %></span>
 <span><%= link "Edit", to: class_path(@conn, :edit, @class) %></span>
 <span><%= link "Back", to: class_path(@conn, :index) %></span>

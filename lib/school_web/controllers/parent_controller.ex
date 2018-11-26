@@ -39,7 +39,6 @@ defmodule SchoolWeb.ParentController do
 
   def index(conn, _params) do
     parent = Affairs.list_parent(conn.private.plug_session["institution_id"])
-    IEx.pry()
 
     semesters =
       Repo.all(from(s in Semester))
@@ -94,7 +93,11 @@ defmodule SchoolWeb.ParentController do
   end
 
   def update(conn, %{"id" => id, "parent" => parent_params}) do
-    parent = Repo.get_by(Parent, icno: id)
+    parent =
+      Repo.get_by(Parent,
+        icno: parent_params["icno"],
+        institution_id: conn.private.plug_session["institution_id"]
+      )
 
     case Affairs.update_parent(parent, parent_params) do
       {:ok, parent} ->

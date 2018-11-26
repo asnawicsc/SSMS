@@ -5,7 +5,9 @@ defmodule SchoolWeb.SubjectTeachClassController do
   alias School.Affairs.SubjectTeachClass
 
   def index(conn, _params) do
-    subject_teach_class = Affairs.list_subject_teach_class()
+    subject_teach_class =
+      Affairs.list_subject_teach_class()
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
 
     render(conn, "index.html", subject_teach_class: subject_teach_class)
   end
@@ -34,7 +36,8 @@ defmodule SchoolWeb.SubjectTeachClassController do
         subject_id: subject_id,
         teacher_id: teacher_id,
         class_id: class_id,
-        standard_id: standard_id
+        standard_id: standard_id,
+        institution_id: conn.private.plug_session["institution_id"]
       }
 
       Affairs.create_subject_teach_class(subject_teach_class_params)
@@ -64,7 +67,8 @@ defmodule SchoolWeb.SubjectTeachClassController do
         subject_id: subject_id,
         teacher_id: teacher_id,
         class_id: class_id,
-        standard_id: standard_id
+        standard_id: standard_id,
+        institution_id: conn.private.plug_session["institution_id"]
       }
 
       subject_teach_class = Affairs.get_subject_teach_class!(id)
@@ -96,12 +100,20 @@ defmodule SchoolWeb.SubjectTeachClassController do
 
   def edit(conn, %{"id" => id}) do
     subject_teach_class = Affairs.get_subject_teach_class!(id)
+
     changeset = Affairs.change_subject_teach_class(subject_teach_class)
     render(conn, "edit.html", subject_teach_class: subject_teach_class, changeset: changeset)
   end
 
   def update(conn, %{"id" => id, "subject_teach_class" => subject_teach_class_params}) do
     subject_teach_class = Affairs.get_subject_teach_class!(id)
+
+    subject_teach_class_params =
+      Map.put(
+        subject_teach_class_params,
+        "institution_id",
+        conn.private.plug_session["institution_id"]
+      )
 
     case Affairs.update_subject_teach_class(subject_teach_class, subject_teach_class_params) do
       {:ok, subject_teach_class} ->

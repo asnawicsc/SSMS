@@ -22,51 +22,56 @@ defmodule SchoolWeb.StudentController do
     user = Repo.get(User, conn.private.plug_session["user_id"])
     semester = Repo.get(Semester, params["semester_id"])
 
-    if user.role == "Teacher" do
-      teacher = Repo.get_by(Teacher, email: user.email)
+    students =
+      if user.role == "Teacher" do
+        teacher = Repo.get_by(Teacher, email: user.email)
 
-      students =
-        Repo.all(
-          from(
-            s in Student,
-            left_join: sc in StudentClass,
-            on: sc.sudent_id == s.id,
-            left_join: c in Class,
-            on: c.id == sc.class_id,
-            left_join: t in Teacher,
-            on: t.id == c.teacher_id,
-            where: t.id == ^teacher.id and sc.semester_id == ^semester.id,
-            select: %{
-              name: s.name,
-              chinese_name: s.chinese_name,
-              height: s.height,
-              weight: s.weight,
-              id: s.id
-            }
+        students =
+          Repo.all(
+            from(
+              s in Student,
+              left_join: sc in StudentClass,
+              on: sc.sudent_id == s.id,
+              left_join: c in Class,
+              on: c.id == sc.class_id,
+              left_join: t in Teacher,
+              on: t.id == c.teacher_id,
+              where: t.id == ^teacher.id and sc.semester_id == ^semester.id,
+              select: %{
+                name: s.name,
+                chinese_name: s.chinese_name,
+                height: s.height,
+                weight: s.weight,
+                id: s.id
+              }
+            )
           )
-        )
-    else
-      students =
-        Repo.all(
-          from(
-            s in Student,
-            left_join: sc in StudentClass,
-            on: sc.sudent_id == s.id,
-            left_join: c in Class,
-            on: c.id == sc.class_id,
-            left_join: t in Teacher,
-            on: t.id == c.teacher_id,
-            where: sc.semester_id == ^semester.id,
-            select: %{
-              name: s.name,
-              chinese_name: s.chinese_name,
-              height: s.height,
-              weight: s.weight,
-              id: s.id
-            }
+
+        students
+      else
+        students =
+          Repo.all(
+            from(
+              s in Student,
+              left_join: sc in StudentClass,
+              on: sc.sudent_id == s.id,
+              left_join: c in Class,
+              on: c.id == sc.class_id,
+              left_join: t in Teacher,
+              on: t.id == c.teacher_id,
+              where: sc.semester_id == ^semester.id,
+              select: %{
+                name: s.name,
+                chinese_name: s.chinese_name,
+                height: s.height,
+                weight: s.weight,
+                id: s.id
+              }
+            )
           )
-        )
-    end
+
+        students
+      end
 
     students =
       for student <- students do
@@ -286,7 +291,8 @@ defmodule SchoolWeb.StudentController do
                       id: s.id,
                       name: s.name,
                       chinese_name: s.chinese_name,
-                      class: cl.name
+                      class: cl.name,
+                      b_cert: s.b_cert
                     }
                   )
                 )
@@ -313,7 +319,8 @@ defmodule SchoolWeb.StudentController do
                 id: s.id,
                 name: s.name,
                 chinese_name: s.chinese_name,
-                class: cl.name
+                class: cl.name,
+                b_cert: s.b_cert
               }
             )
           )

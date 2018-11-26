@@ -160,14 +160,26 @@ defmodule SchoolWeb.TeacherController do
     teacher_params =
       Map.put(teacher_params, "institution_id", conn.private.plug_session["institution_id"])
 
-    case Affairs.create_teacher(teacher_params) do
-      {:ok, teacher} ->
-        conn
-        |> put_flash(:info, "Teacher created successfully.")
-        |> redirect(to: teacher_path(conn, :index))
+    tc =
+      Repo.get_by(Teacher,
+        code: teacher_params["code"],
+        institution_id: conn.private.plug_session["institution_id"]
+      )
 
-      {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset)
+    if tc == nil do
+      case Affairs.create_teacher(teacher_params) do
+        {:ok, teacher} ->
+          conn
+          |> put_flash(:info, "Teacher created successfully.")
+          |> redirect(to: teacher_path(conn, :index))
+
+        {:error, %Ecto.Changeset{} = changeset} ->
+          render(conn, "new.html", changeset: changeset)
+      end
+    else
+      conn
+      |> put_flash(:info, "Code Already Exist.")
+      |> redirect(to: teacher_path(conn, :new))
     end
   end
 
