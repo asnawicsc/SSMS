@@ -128,83 +128,119 @@ defmodule SchoolWeb.ParentController do
     |> redirect(to: parent_path(conn, :index))
   end
 
-  def upload_parents(conn, params) do
+  def pre_upload_parents(conn, params) do
     bin = params["item"]["file"].path |> File.read() |> elem(1)
-    data = bin |> String.split("\n") |> Enum.map(fn x -> String.split(x, ",") end)
+    usr = Settings.current_user(conn)
+    {:ok, batch} = Settings.create_batch(%{upload_by: usr.id, result: bin})
+
+    data =
+      if bin |> String.contains?("\t") do
+        bin |> String.split("\n") |> Enum.map(fn x -> String.split(x, "\t") end)
+      else
+        bin |> String.split("\n") |> Enum.map(fn x -> String.split(x, ",") end)
+      end
+
     headers = hd(data) |> Enum.map(fn x -> String.trim(x, " ") end)
+
+    render(conn, "adjust_header.html", headers: headers, batch_id: batch.id)
+  end
+
+  def upload_parents(conn, params) do
+    batch = Settings.get_batch!(params["batch_id"])
+    bin = batch.result
+    usr = Settings.current_user(conn)
+    {:ok, batch} = Settings.update_batch(batch, %{upload_by: usr.id})
+
+    data =
+      if bin |> String.contains?("\t") do
+        bin |> String.split("\n") |> Enum.map(fn x -> String.split(x, "\t") end)
+      else
+        bin |> String.split("\n") |> Enum.map(fn x -> String.split(x, ",") end)
+      end
+
+    headers =
+      hd(data)
+      |> Enum.map(fn x -> String.trim(x, " ") end)
+      |> Enum.map(fn x -> params["header"][x] end)
+
     contents = tl(data)
 
-    parents_params =
+    result =
       for content <- contents do
         h = headers |> Enum.map(fn x -> String.downcase(x) end)
 
+        content = content |> Enum.map(fn x -> x end) |> Enum.filter(fn x -> x != "\"" end)
+
         c =
           for item <- content do
-            item = String.replace(item, "@@@", ",")
+            item =
+              case item do
+                "@@@" ->
+                  ","
 
-            case item do
-              {:ok, i} ->
-                i
+                "\\N" ->
+                  ""
 
-              _ ->
-                cond do
-                  item == " " ->
-                    "null"
+                _ ->
+                  item
+              end
 
-                  item == "" ->
-                    "null"
+            a =
+              case item do
+                {:ok, i} ->
+                  i
 
-                  item == "  " ->
-                    "null"
+                _ ->
+                  cond do
+                    item == " " ->
+                      "null"
 
-                  true ->
-                    item
+                    item == "  " ->
+                      "null"
 
-                    item
-                    |> String.split("\"")
-                    |> Enum.map(fn x -> String.replace(x, "\n", "") end)
-                    |> List.last()
-                end
-            end
+                    item == "   " ->
+                      "null"
+
+                    true ->
+                      item
+                      |> String.split("\"")
+                      |> Enum.map(fn x -> String.replace(x, "\n", "") end)
+                      |> List.last()
+                  end
+              end
           end
 
-        parents_params = Enum.zip(h, c) |> Enum.into(%{})
+        parent_params = Enum.zip(h, c) |> Enum.into(%{})
 
-        if is_integer(parents_params["tanggn"]) do
-          parents_params =
-            Map.put(parents_params, "tanggn", Integer.to_string(parents_params["tanggn"]))
-        end
+        parent_params =
+          Map.put(parent_params, "institution_id", conn.private.plug_session["institution_id"])
 
-        if is_integer(parents_params["income"]) do
-          parents_params =
-            Map.put(parents_params, "income", Integer.to_string(parents_params["income"]))
-        end
-
-        if is_integer(parents_params["state"]) do
-          parents_params =
-            Map.put(parents_params, "state", Integer.to_string(parents_params["state"]))
-        end
-
-        parents_params =
-          Map.put(
-            parents_params,
-            "institution_id",
-            Integer.to_string(conn.private.plug_session["institution_id"])
-          )
-
-        cg = Parent.changeset(%Parent{}, parents_params)
+        cg = Parent.changeset(%Parent{}, parent_params)
 
         case Repo.insert(cg) do
           {:ok, parent} ->
-            {:ok, parent}
+            parent_params
+            parent_params = Map.put(parent_params, "reason", "ok")
 
-          {:error, cg} ->
-            {:error, cg}
+          {:error, changeset} ->
+            errors = changeset.errors |> Keyword.keys()
+
+            {reason, message} = changeset.errors |> hd()
+            {proper_message, message_list} = message
+            final_reason = Atom.to_string(reason) <> " " <> proper_message
+            parent_params = Map.put(parent_params, "reason", final_reason)
+
+            parent_params
         end
       end
 
+    header = result |> hd() |> Map.keys()
+    body = result |> Enum.map(fn x -> Map.values(x) end)
+    new_io = List.insert_at(body, 0, header) |> CSV.encode() |> Enum.to_list() |> to_string
+    {:ok, batch} = Settings.update_batch(batch, %{result: new_io})
+
     conn
-    |> put_flash(:info, "Parents created successfully.")
+    |> put_flash(:info, "Parent created successfully.")
     |> redirect(to: parent_path(conn, :index))
   end
 end

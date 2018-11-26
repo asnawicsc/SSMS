@@ -238,50 +238,89 @@ defmodule SchoolWeb.TeacherController do
     |> redirect(to: teacher_path(conn, :teacher_setting))
   end
 
-  def upload_teachers(conn, params) do
+  def pre_upload_teachers(conn, params) do
     bin = params["item"]["file"].path |> File.read() |> elem(1)
-    data = bin |> String.split("\n") |> Enum.map(fn x -> String.split(x, ",") end)
+    usr = Settings.current_user(conn)
+    {:ok, batch} = Settings.create_batch(%{upload_by: usr.id, result: bin})
+
+    data =
+      if bin |> String.contains?("\t") do
+        bin |> String.split("\n") |> Enum.map(fn x -> String.split(x, "\t") end)
+      else
+        bin |> String.split("\n") |> Enum.map(fn x -> String.split(x, ",") end)
+      end
+
     headers = hd(data) |> Enum.map(fn x -> String.trim(x, " ") end)
+
+    render(conn, "adjust_header.html", headers: headers, batch_id: batch.id)
+  end
+
+  def upload_teachers(conn, params) do
+    batch = Settings.get_batch!(params["batch_id"])
+    bin = batch.result
+    usr = Settings.current_user(conn)
+    {:ok, batch} = Settings.update_batch(batch, %{upload_by: usr.id})
+
+    data =
+      if bin |> String.contains?("\t") do
+        bin |> String.split("\n") |> Enum.map(fn x -> String.split(x, "\t") end)
+      else
+        bin |> String.split("\n") |> Enum.map(fn x -> String.split(x, ",") end)
+      end
+
+    headers =
+      hd(data)
+      |> Enum.map(fn x -> String.trim(x, " ") end)
+      |> Enum.map(fn x -> params["header"][x] end)
+
     contents = tl(data)
 
-    teachers_params =
+    result =
       for content <- contents do
         h = headers |> Enum.map(fn x -> String.downcase(x) end)
 
+        content = content |> Enum.map(fn x -> x end) |> Enum.filter(fn x -> x != "\"" end)
+
         c =
           for item <- content do
-            item = String.replace(item, "@@@", ",")
+            item =
+              case item do
+                "@@@" ->
+                  ","
 
-            case item do
-              {:ok, i} ->
-                i
+                "\\N" ->
+                  ""
 
-              _ ->
-                cond do
-                  item == " " ->
-                    "null"
+                _ ->
+                  item
+              end
 
-                  item == "" ->
-                    "null"
+            a =
+              case item do
+                {:ok, i} ->
+                  i
 
-                  item == "  " ->
-                    "null"
+                _ ->
+                  cond do
+                    item == " " ->
+                      "null"
 
-                  true ->
-                    item
-                    |> String.split("\"")
-                    |> Enum.map(fn x -> String.replace(x, "\n", "") end)
-                    |> List.last()
-                end
-            end
+                    item == "  " ->
+                      "null"
+
+                    item == "   " ->
+                      "null"
+
+                    true ->
+                      item
+                      |> String.split("\"")
+                      |> Enum.map(fn x -> String.replace(x, "\n", "") end)
+                      |> List.last()
+                  end
+              end
           end
 
         teachers_params = Enum.zip(h, c) |> Enum.into(%{})
-
-        if is_integer(teachers_params["bcenrlno"]) do
-          teachers_params =
-            Map.put(teachers_params, "bcenrlno", Integer.to_string(teachers_params["bcenrlno"]))
-        end
 
         teachers_params =
           Map.put(teachers_params, "institution_id", conn.private.plug_session["institution_id"])
@@ -290,15 +329,28 @@ defmodule SchoolWeb.TeacherController do
 
         case Repo.insert(cg) do
           {:ok, teacher} ->
-            {:ok, teacher}
+            teachers_params
+            teachers_params = Map.put(teachers_params, "reason", "ok")
 
-          {:error, cg} ->
-            {:error, cg}
+          {:error, changeset} ->
+            errors = changeset.errors |> Keyword.keys()
+
+            {reason, message} = changeset.errors |> hd()
+            {proper_message, message_list} = message
+            final_reason = Atom.to_string(reason) <> " " <> proper_message
+            teachers_params = Map.put(teachers_params, "reason", final_reason)
+
+            teachers_params
         end
       end
 
+    header = result |> hd() |> Map.keys()
+    body = result |> Enum.map(fn x -> Map.values(x) end)
+    new_io = List.insert_at(body, 0, header) |> CSV.encode() |> Enum.to_list() |> to_string
+    {:ok, batch} = Settings.update_batch(batch, %{result: new_io})
+
     conn
     |> put_flash(:info, "Teachers created successfully.")
-    |> redirect(to: teacher_path(conn, :teacher_setting))
+    |> redirect(to: teacher_path(conn, :index))
   end
 end
