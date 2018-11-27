@@ -321,7 +321,13 @@ defmodule School.Affairs do
         left_join: l in Level,
         on: l.id == c.level_id,
         where: c.institution_id == ^institution_id,
-        select: %{id: c.id, name: c.name, remarks: c.remarks, level_id: l.name}
+        select: %{
+          id: c.id,
+          name: c.name,
+          remarks: c.remarks,
+          level_id: l.name,
+          teacher_id: c.teacher_id
+        }
       )
     )
   end
@@ -4541,5 +4547,101 @@ defmodule School.Affairs do
   """
   def change_segak(%Segak{} = segak) do
     Segak.changeset(segak, %{})
+  end
+
+  alias School.Affairs.ListRank
+
+  @doc """
+  Returns the list of list_rank.
+
+  ## Examples
+
+      iex> list_list_rank()
+      [%ListRank{}, ...]
+
+  """
+  def list_list_rank do
+    Repo.all(ListRank)
+  end
+
+  @doc """
+  Gets a single list_rank.
+
+  Raises `Ecto.NoResultsError` if the List rank does not exist.
+
+  ## Examples
+
+      iex> get_list_rank!(123)
+      %ListRank{}
+
+      iex> get_list_rank!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_list_rank!(id), do: Repo.get!(ListRank, id)
+
+  @doc """
+  Creates a list_rank.
+
+  ## Examples
+
+      iex> create_list_rank(%{field: value})
+      {:ok, %ListRank{}}
+
+      iex> create_list_rank(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_list_rank(attrs \\ %{}) do
+    %ListRank{}
+    |> ListRank.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a list_rank.
+
+  ## Examples
+
+      iex> update_list_rank(list_rank, %{field: new_value})
+      {:ok, %ListRank{}}
+
+      iex> update_list_rank(list_rank, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_list_rank(%ListRank{} = list_rank, attrs) do
+    list_rank
+    |> ListRank.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a ListRank.
+
+  ## Examples
+
+      iex> delete_list_rank(list_rank)
+      {:ok, %ListRank{}}
+
+      iex> delete_list_rank(list_rank)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_list_rank(%ListRank{} = list_rank) do
+    Repo.delete(list_rank)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking list_rank changes.
+
+  ## Examples
+
+      iex> change_list_rank(list_rank)
+      %Ecto.Changeset{source: %ListRank{}}
+
+  """
+  def change_list_rank(%ListRank{} = list_rank) do
+    ListRank.changeset(list_rank, %{})
   end
 end

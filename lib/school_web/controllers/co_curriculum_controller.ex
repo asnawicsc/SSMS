@@ -188,52 +188,199 @@ defmodule SchoolWeb.CoCurriculumController do
         )
       )
 
-    sc =
+    if students == [] do
+      conn
+      |> put_flash(:info, "Not Student in this CoCurriculum.")
+      |> redirect(to: co_curriculum_path(conn, :co_mark))
+    else
+      sc =
+        Repo.all(
+          from(
+            s in Student,
+            left_join: sc in StudentClass,
+            on: sc.sudent_id == s.id,
+            left_join: c in Class,
+            on: c.id == sc.class_id,
+            where: sc.institute_id == ^inst_id and sc.semester_id == ^params["semester_id"],
+            select: %{
+              student_id: s.id,
+              class: c.name
+            }
+          )
+        )
+
+      students =
+        for student <- students do
+          if Enum.any?(sc, fn x -> x.student_id == student.student_id end) do
+            b = sc |> Enum.filter(fn x -> x.student_id == student.student_id end) |> hd()
+
+            Map.put(student, :class_name, b.class)
+          else
+            Map.put(student, :class_name, "no class assigned")
+          end
+        end
+
+      condition = students |> Enum.map(fn x -> x.mark end) |> Enum.filter(fn x -> x != nil end)
+
+      if condition == [] do
+        render(
+          conn,
+          "assign_mark.html",
+          students: students,
+          co: co,
+          sem: sem
+        )
+      else
+        render(
+          conn,
+          "edit_mark.html",
+          students: students,
+          co: co,
+          sem: sem
+        )
+      end
+    end
+  end
+
+  def edit_co_rank(conn, params) do
+    cocurriculum = params["id"]
+    sem = Repo.get(Semester, params["semester_id"])
+    co = Repo.get_by(School.Affairs.CoCurriculum, %{id: cocurriculum})
+    inst_id = conn.private.plug_session["institution_id"]
+
+    students =
       Repo.all(
         from(
-          s in Student,
-          left_join: sc in StudentClass,
-          on: sc.sudent_id == s.id,
-          left_join: c in Class,
-          on: c.id == sc.class_id,
-          where: sc.institute_id == ^inst_id and sc.semester_id == ^params["semester_id"],
+          sc in School.Affairs.StudentCocurriculum,
+          left_join: s in School.Affairs.Student,
+          on: sc.student_id == s.id,
+          left_join: c in School.Affairs.CoCurriculum,
+          on: sc.cocurriculum_id == c.id,
+          where:
+            sc.cocurriculum_id == ^cocurriculum and s.institution_id == ^inst_id and
+              c.institution_id == ^inst_id and sc.semester_id == ^params["semester_id"],
           select: %{
-            student_id: s.id,
-            class: c.name
+            student_id: sc.student_id,
+            mark: sc.mark,
+            sc_id: sc.id,
+            name: s.name,
+            rank: sc.rank
           }
         )
       )
 
-    students =
-      for student <- students do
-        if Enum.any?(sc, fn x -> x.student_id == student.student_id end) do
-          b = sc |> Enum.filter(fn x -> x.student_id == student.student_id end) |> hd()
-
-          Map.put(student, :class_name, b.class)
-        else
-          Map.put(student, :class_name, "no class assigned")
-        end
-      end
-
-    condition = students |> Enum.map(fn x -> x.mark end) |> Enum.filter(fn x -> x != nil end)
-
-    if condition == [] do
-      render(
-        conn,
-        "assign_mark.html",
-        students: students,
-        co: co,
-        sem: sem
-      )
+    if students == [] do
+      conn
+      |> put_flash(:info, "Not Student in this CoCurriculum.")
+      |> redirect(to: co_curriculum_path(conn, :co_mark))
     else
-      render(
-        conn,
-        "edit_mark.html",
-        students: students,
-        co: co,
-        sem: sem
-      )
+      sc =
+        Repo.all(
+          from(
+            s in Student,
+            left_join: sc in StudentClass,
+            on: sc.sudent_id == s.id,
+            left_join: c in Class,
+            on: c.id == sc.class_id,
+            where: sc.institute_id == ^inst_id and sc.semester_id == ^params["semester_id"],
+            select: %{
+              student_id: s.id,
+              class: c.name
+            }
+          )
+        )
+
+      students =
+        for student <- students do
+          if Enum.any?(sc, fn x -> x.student_id == student.student_id end) do
+            b = sc |> Enum.filter(fn x -> x.student_id == student.student_id end) |> hd()
+
+            Map.put(student, :class_name, b.class)
+          else
+            Map.put(student, :class_name, "no class assigned")
+          end
+        end
+
+      condition = students |> Enum.map(fn x -> x.rank end) |> Enum.filter(fn x -> x != nil end)
+
+      list_rank =
+        Affairs.list_list_rank()
+        |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
+      if condition == [] do
+        render(
+          conn,
+          "assign_rank.html",
+          students: students,
+          co: co,
+          list_rank: list_rank,
+          sem: sem
+        )
+      else
+        render(
+          conn,
+          "edit_rank.html",
+          students: students,
+          list_rank: list_rank,
+          co: co,
+          sem: sem
+        )
+      end
     end
+  end
+
+  def create_rank_student_co(conn, params) do
+    ranks = params["rank"]
+
+    for rank <- ranks do
+      student_id = rank |> elem(0)
+      rank = rank |> elem(1)
+
+      semester_id = params["semester_id"]
+      cocurriculum_id = params["cocurriculum_id"]
+
+      id =
+        Repo.get_by(School.Affairs.StudentCocurriculum, %{
+          cocurriculum_id: cocurriculum_id,
+          student_id: student_id,
+          semester_id: semester_id
+        })
+
+      params = %{rank: rank}
+
+      Affairs.update_student_cocurriculum(id, params)
+    end
+
+    conn
+    |> put_flash(:info, "Rank updated successfully.")
+    |> redirect(to: co_curriculum_path(conn, :co_mark))
+  end
+
+  def edit_rank_student_co(conn, params) do
+    ranks = params["rank"]
+
+    for rank <- ranks do
+      student_id = rank |> elem(0)
+      rank = rank |> elem(1)
+
+      semester_id = params["semester_id"]
+      cocurriculum_id = params["cocurriculum_id"]
+
+      id =
+        Repo.get_by(School.Affairs.StudentCocurriculum, %{
+          cocurriculum_id: cocurriculum_id,
+          student_id: student_id,
+          semester_id: semester_id
+        })
+
+      params = %{rank: rank}
+
+      Affairs.update_student_cocurriculum(id, params)
+    end
+
+    conn
+    |> put_flash(:info, "Rank updated successfully.")
+    |> redirect(to: co_curriculum_path(conn, :co_mark))
   end
 
   def co_curriculum_setting(conn, _params) do

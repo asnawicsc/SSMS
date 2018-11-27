@@ -17,6 +17,48 @@ defmodule SchoolWeb.LevelController do
     render(conn, "new.html", changeset: changeset)
   end
 
+  def default_standard(conn, _params) do
+    Repo.delete_all(School.Affairs.Level,
+      institution_id: conn.private.plug_session["institution_id"]
+    )
+
+    Affairs.create_level(%{
+      name: "Standard 1",
+      institution_id: conn.private.plug_session["institution_id"]
+    })
+
+    Affairs.create_level(%{
+      name: "Standard 2",
+      institution_id: conn.private.plug_session["institution_id"]
+    })
+
+    Affairs.create_level(%{
+      name: "Standard 3",
+      institution_id: conn.private.plug_session["institution_id"]
+    })
+
+    Affairs.create_level(%{
+      name: "Standard 4",
+      institution_id: conn.private.plug_session["institution_id"]
+    })
+
+    Affairs.create_level(%{
+      name: "Standard 5",
+      institution_id: conn.private.plug_session["institution_id"]
+    })
+
+    Affairs.create_level(%{
+      name: "Standard 6",
+      institution_id: conn.private.plug_session["institution_id"]
+    })
+
+    levels = Affairs.list_levels()
+
+    conn
+    |> put_flash(:info, "Level updated successfully.")
+    |> redirect(to: level_path(conn, :index, levels))
+  end
+
   def create(conn, %{"level" => level_params}) do
     level_params =
       Map.put(level_params, "institution_id", conn.private.plug_session["institution_id"])

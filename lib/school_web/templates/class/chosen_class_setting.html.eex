@@ -58,7 +58,7 @@
                                     </div>
                                     <div class="form-group">
                                         Class Teacher:<br>
-                                        <input type="text" name="teacher_name" disabled="" value="<%= @teacher.name %>">
+                                        <input type="text" name="teacher_name" disabled="" value="<%= @teacher %>">
                                     </div>
                                  </form>
                               </div>

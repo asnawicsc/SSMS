@@ -1,0 +1,46 @@
+
+<form method="post" action="/edit_segak_mark" class="form-horizontal">
+   <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+   <input type="hidden" name="class_id" value="<%= @class_id %>">
+   <input type="hidden" name="semester_id" value="<%= @semester_id %>">
+    <input type="hidden" name="standard_id" value="<%= @standard_id %>">
+
+     <div class="row">
+               <div class="col-12">
+                  <!-- START card-->
+                  <div class="card card-default">
+                     <div class="card-header">Edit Segak Mark (<%=@class.name %>)</div>
+                     <div class="card-body">
+                        <!-- START table-responsive-->
+                        <div class="table-responsive">
+                             <table class="table table-striped table-bordered table-hover">
+                              <thead>
+                                 <tr>
+                                    <th style="background-color:#97DB9A;"><%= gettext "Student Name" %></th>
+                                    <th style="background-color:#97DB9A;"><%= gettext "Mark" %></th>
+                              
+                                 </tr>
+                              </thead>
+                              <tbody>
+                                <%= for item <- @segak do %>
+                                 <tr>
+                                    <td><%= item.name %></td>
+                                    <td><input type="number" min="0" max="20" name="mark[<%=item.id %>]" value="<%= item.mark %>"></td>
+                                
+                                 </tr>
+                                    <% end %>
+                              </tbody>
+                           </table>
+                        </div>
+                        <!-- END table-responsive-->
+                     </div>
+                        <center><input class="btn btn-primary" name="" value="Submit" type="submit" style="margin-bottom: 10px"></center> 
+
+                  </div>
+                  <!-- END card-->
+               </div>
+            
+            </div>
+
+
+</form>

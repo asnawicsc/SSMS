@@ -7,16 +7,17 @@
     </div>
 </div>
 <div class="row">
-      <div class="col-lg-8" >
+      <div class="col-lg-12" >
         <div class="card card-default d-none d-lg-block">
           <div class="card-body">
             <div class="table-responsive">
-              <table class="table">
+              <table class="table" id="datatable1">
                 <thead>
                   <tr>
                   <th>Code</th>
                   <th>Description</th>
                   <th>Teacher</th>
+                  <th></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -29,9 +30,13 @@
                    
                       
      <td class="text-right">
-        <span><%= link "Enroll Students", to: co_curriculum_path(@conn, :enroll_students, id: co_curriculum.id), class: "btn btn-default btn-xs" %></span>
-        <span><%= link "Edit", to: co_curriculum_path(@conn, :edit, co_curriculum.id), class: "btn btn-default btn-xs" %></span>
-        <span><%= link "Delete", to: co_curriculum_path(@conn, :delete, co_curriculum.id), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+
+            
+
+         <span><%= link "Enroll Students", to: co_curriculum_path(@conn, :enroll_students, id: co_curriculum.id), class: "mb-1 btn-sm btn btn-outline-primary" %></span>
+     
+        <span><%= link "Edit", to: co_curriculum_path(@conn, :edit, co_curriculum.id), class: "mb-1 btn-sm btn btn-outline-primary" %></span>
+        <span><%= link "Delete", to: co_curriculum_path(@conn, :delete, co_curriculum.id), method: :delete, data: [confirm: "Are you sure?"], class: "mb-1 btn-sm btn btn-outline-danger" %></span>
       </td>
                   </tr>
                 <% end %>

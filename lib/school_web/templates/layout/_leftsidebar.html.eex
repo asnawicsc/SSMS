@@ -200,6 +200,10 @@
                             <em class="icon-refresh"></em>
                               <span data-localize="sidebar.nav.extra.EXTRA"><%= gettext "Mark" %></span>
                            </a>
+                            <a href="/create_segak" title="School Setup" >
+                            <em class="icon-refresh"></em>
+                              <span data-localize="sidebar.nav.extra.EXTRA"><%= gettext "Segak" %></span>
+                           </a>
 
                            
                         </li>

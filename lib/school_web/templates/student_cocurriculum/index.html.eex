@@ -7,6 +7,7 @@
       <th>Cocurriculum</th>
       <th>Standard</th>
       <th>Grade</th>
+       <th>Rank</th>
       <th>Mark</th>
        <th>Year</th>
         <th>Semester</th>
@@ -21,6 +22,7 @@
       <td><%= student_cocurriculum.cocurriculum_id %></td>
       <td><%= student_cocurriculum.standard_id %></td>
       <td><%= student_cocurriculum.grade %></td>
+       <td><%= student_cocurriculum.rank %></td>
       <td><%= student_cocurriculum.mark %></td>
       <td><%= student_cocurriculum.year %></td>
       <td><%= student_cocurriculum.semester_id %></td>

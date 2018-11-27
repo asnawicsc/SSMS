@@ -9,7 +9,7 @@
     <!-- END Language list-->
 </div>
 
-     <div class="col-lg-9">
+     <div class="col-lg-12">
 
             <div class="card">
 
@@ -18,7 +18,7 @@
 <table class="table" id="datatable1">
 	<thead>
 		<tr>
-			<td>ID</td>
+		
 			<td>Class</td>
 			<td>Standard</td>
 			<td>Action</td>
@@ -31,10 +31,21 @@
 
 
 		<tr>
-			<td><%= class.id %></td>
+			
 			<td><%= class.name %></td>
 			<td><%= class.level_id %></td>
-			<td><%= link "Create a Mark", to: segak_path(@conn, :segak_mark, class.id), class: "btn btn-default btn-xs" %></td>
+			<td> <div class="btn-group">
+                           <button class="btn btn-info" type="button">Marking</button>
+                           <button class="btn dropdown-toggle btn-info" type="button" data-toggle="dropdown">
+                              <span class="sr-only">info</span>
+                           </button>
+                           <div class="dropdown-menu" role="menu">
+                            <%= for semester <- @semesters do %>
+                              <a class="dropdown-item" href="/segak/marking/<%= class.id %>/<%= semester.id%>"><%= semester.start_date%></a>
+                            <% end %>
+                
+                           </div>
+                        </div></td>
 	
 		</tr>
 <% end %>
