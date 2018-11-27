@@ -39,7 +39,6 @@ defmodule SchoolWeb.ParentController do
 
   def index(conn, _params) do
     parent = Affairs.list_parent(conn.private.plug_session["institution_id"])
-    IEx.pry()
 
     semesters =
       Repo.all(from(s in Semester))

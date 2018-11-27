@@ -27,7 +27,7 @@
                             <td><%= co_curriculum.id %></td>
                               <td><%= co_curriculum.code %></td>
                                 <td><%= co_curriculum.description %></td>
-                                 <td><%= co_curriculum.teacher_id %></td>
+                                 <td><%= co_curriculum.teacher_name %></td>
                               <td>
                                 
 <div class="btn-group">
