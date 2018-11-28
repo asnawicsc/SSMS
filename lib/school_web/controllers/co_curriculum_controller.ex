@@ -147,8 +147,40 @@ defmodule SchoolWeb.CoCurriculumController do
     cocurriculum =
       if user.role == "Admin" or user.role == "Support" do
         Affairs.list_cocurriculum()
+
+        Repo.all(
+          from(
+            c in CoCurriculum,
+            left_join: t in Teacher,
+            on: t.id == c.teacher_id,
+            where: c.institution_id == ^conn.private.plug_session["institution_id"],
+            select: %{
+              id: c.id,
+              code: c.code,
+              description: c.description,
+              institution_id: c.institution_id,
+              teacher_name: t.name,
+              teacher_id: c.teacher_id
+            }
+          )
+        )
       else
-        Affairs.list_cocurriculum()
+        Repo.all(
+          from(
+            c in CoCurriculum,
+            left_join: t in Teacher,
+            on: t.id == c.teacher_id,
+            where: c.institution_id == ^conn.private.plug_session["institution_id"],
+            select: %{
+              id: c.id,
+              code: c.code,
+              description: c.description,
+              institution_id: c.institution_id,
+              teacher_name: t.name,
+              teacher_id: c.teacher_id
+            }
+          )
+        )
         |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
         |> Enum.filter(fn x -> x.teacher_id == teacher.id end)
       end
@@ -217,7 +249,7 @@ defmodule SchoolWeb.CoCurriculumController do
 
     condition = students |> Enum.map(fn x -> x.mark end) |> Enum.filter(fn x -> x != nil end)
 
-    if condition == [] do
+    if condition == [] and students != [] do
       render(
         conn,
         "assign_mark.html",
@@ -225,7 +257,9 @@ defmodule SchoolWeb.CoCurriculumController do
         co: co,
         sem: sem
       )
-    else
+    end
+
+    if condition != [] do
       render(
         conn,
         "edit_mark.html",
@@ -233,6 +267,12 @@ defmodule SchoolWeb.CoCurriculumController do
         co: co,
         sem: sem
       )
+    end
+
+    if condition == [] and students == [] do
+      conn
+      |> put_flash(:info, "Please enroll students in this cocurriculum.")
+      |> redirect(to: co_curriculum_path(conn, :enroll_students))
     end
   end
 
