@@ -9,7 +9,7 @@
                <div class="col-md-4">
                   <!-- START card-->
                   <div class="card card-default">
-                     <div class="card-header"></div>
+                     <div class="card-header"><b>Step 1:</b><br>Please choose semester and class to enroll students.</div>
                      <div class="card-body">
                      <form>
 
@@ -34,14 +34,15 @@
                   </div>
                   <!-- END card-->
                </div>
-               <div class="col-md-7">
+               <div class="col-md-8">
                   <!-- START card-->
                   <div class="card card-default">
+                    <div class="card-header"><b>Step 2:</b><br>Search student and make enrollment.</div>
                 
                      <div class="card-body" id="">
                      <form>
                            <div class="form-group">
-                              <label>Query</label>
+                              <label>Student Information</label>
                               <input class="form-control" id="qs" placeholder="Enter query" type="text">
                            </div>
                        
@@ -56,9 +57,7 @@
                               <th><%= gettext("Chinese Name") %></th>
                               <th><%= gettext("IC") %></th>
                               <th><%= gettext("Birth Cert") %></th>
-                              <th><%= gettext("Guardian IC") %></th>
-                              <th><%= gettext("Father IC") %></th>
-                              <th><%= gettext("Mother IC") %></th>
+                              
                               <th><%= gettext("Phone") %></th>
                               <th>  </th>
                             </tr>
@@ -184,13 +183,11 @@
                  {data: 'c_name'},
                  {data: 'ic'},
                  {data: 'b_cert'},
-                 {data: 'gicno'},
-                 {data: 'ficno'},
-                 {data: 'micno'},
+                 
                  {data: 'phone'},
                  {data: 'id',
                     render: function(data, type, row, meta){
-                      var html = '<div class="btn btn-primary add_to_class" id="'+data+'">Add</div>'   
+                      var html = '<div class="btn btn-primary btn-sm add_to_class" id="'+data+'">Enroll</div>'   
                     return html
                   }
                  }

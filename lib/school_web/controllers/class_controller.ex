@@ -596,7 +596,7 @@ defmodule SchoolWeb.ClassController do
       {:ok, class} ->
         conn
         |> put_flash(:info, "Class created successfully.")
-        |> redirect(to: class_path(conn, :show, class))
+        |> redirect(to: class_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)

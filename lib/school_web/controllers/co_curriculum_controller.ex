@@ -494,7 +494,7 @@ defmodule SchoolWeb.CoCurriculumController do
       {:ok, co_curriculum} ->
         conn
         |> put_flash(:info, "Co curriculum created successfully.")
-        |> redirect(to: co_curriculum_path(conn, :co_curriculum_setting))
+        |> redirect(to: co_curriculum_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)

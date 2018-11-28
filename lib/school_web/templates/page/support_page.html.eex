@@ -237,20 +237,24 @@
 
                    <% if user.role == "Teacher" do 
                        teacher = Repo.get_by(Affairs.Teacher,email: user.email) 
-                      all_classes= Repo.all(from c in Affairs.Class, where: c.teacher_id == ^teacher.id) 
+                      all_classes= Repo.all(from c in Affairs.Class, where: c.teacher_id == ^teacher.id) |> Enum.group_by(fn x -> x.level_id end) 
                       all_classes
                     end %>
 
 
                    <%  all_classes =if user.role == "Admin" or user.role == "Support" do 
-                       all_classes =Repo.all(from c in Affairs.Class, where: c.institution_id == ^@conn.private.plug_session["institution_id"]) 
+                       all_classes =Repo.all(from c in Affairs.Class, where: c.institution_id == ^@conn.private.plug_session["institution_id"]) |> Enum.group_by(fn x -> x.level_id end)
                         all_classes
                    end %>
 
-
                    <div class="dropdown-menu" role="menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(67px, 33px, 0px);">
                     <%= for class <- all_classes do %>
-                      <a class="dropdown-item" href="/class_setting/<%= class.id %>"><%= class.name %></a>
+                    <% spec_classes = elem(class,1) |> Enum.sort_by(fn x -> x.name end) %>
+
+                      <%= for s_class <- spec_classes do %>
+                        <a class="dropdown-item" href="/class_setting/<%= s_class.id %>" style="justify-content: center"><%= s_class.name %></a>
+                      <% end %>
+                      <div class="dropdown-divider"></div>
                     <% end %>
                    </div>
                 </div>
