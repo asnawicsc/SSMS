@@ -16,7 +16,7 @@
                      <table class="table table-striped" id="bootgrid-command3">
                         <thead>
                            <tr>
-                             <th data-column-id="id">ID</th>
+                             <th data-column-id="id" data-visible="false">ID</th>
                               <th data-column-id="sender">Class</th>
                               <th data-column-id="" data-order="desc">Teacher</th>
 

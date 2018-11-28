@@ -1,11 +1,13 @@
+<p align="center"><%= @institution_name %><br/><script>document.write(new Date().getFullYear())</script>成绩表 </p>
 <head>
   <title a> Student Report Card </title>
-    
+  <h2 align="center"> Student Report Card (<%= @exam.name %>)</h2>
+
+  </div>
 </head>
-<p align="center"><%= @institution_name %><br/><script>document.write(new Date().getFullYear())</script>成绩表 </p>
 
 <body>
-  <table align="center" style="display: none">
+  <table align="center" ">
     <thead>
       <tr >
         <td colspan="4" align="left" >Name : <%= @student_name %></td>
@@ -85,131 +87,30 @@
         <td colspan="4" class="footer">Parent Signiture</td>
         <td colspan="3"></td>
       </tr>
-  </table>
-  <br>
+      <tr>
+        <td colspan="2" class="footer">Comment</td>
+        <td colspan="5">
+
+          <%= if @student_comment.comment1 != nil do
 
 
-  <table align="center">
-    <thead>
-      <tr >
-        <td colspan="6" align="left" style="border-right: 0; width: 40%;">学生姓名 : <%= @student_cname %><br/>Nama Murid : <%= @student_name %></td>
-      
-        <td colspan="2" align="left" style="border-left: 0;"> 班级<br/>Darjah : <%=@class_name %> </td>
+             student_comment =
+      Repo.get_by(School.Affairs.Comment,
+        id: @student_comment.comment1
+      ).c_malay
+          end %>,
+          <%= if @student_comment.comment2 != nil do
+              Repo.get_by(School.Affairs.Comment,
+        id: @student_comment.comment2
+      ).c_malay
+          end %>,
+          <%= if @student_comment.comment3 != nil do
+              Repo.get_by(School.Affairs.Comment,
+        id: @student_comment.comment3
+      ).c_malay
+          end %>
+        </td>
       </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td colspan="4" style="width: 30%; font-size: 25px">科目名称 Mata Pelajaran</td>
-        <td align="center">评审一<br/>PKBS1</td>
-        <td align="center">评审二<br/>PKBS2</td>
-        <td align="center">评审三<br/>PKBS3</td>
-        <td align="center">平均<br/>Purata</td>     
-      </tr>
-      <%= for item <- @all_data do %>
-      <tr>
-        <td colspan="2" style="border-right: 0;"><%= item.subject_cname %></td>
-        <td colspan="2"style="width: 40%; border-left: 0;"><%= item.subject_name %></td>
-        <td align="center" style="width: 13%;"><%= item.student_mark %> (<%= item.grade %>)</td>
-        <td align="center"></td>
-        <td align="center"></td>
-        <td align="center"></td>
-      
-      </tr>       
-       <% end %>
-       <tr>
-        <td colspan="4" style="width: 40%; padding: 13px"></td>
-        <td align="center"></td>
-        <td align="center"></td>
-        <td align="center"></td>
-        <td align="center"></td>     
-      </tr>
-      <tr>
-        <td colspan="4" style="width: 40%; padding: 13px"></td>
-        <td align="center"></td>
-        <td align="center"></td>
-        <td align="center"></td>
-        <td align="center"></td>     
-      </tr>
-      <tr>
-        <td colspan="2" style="border-right: 0;">操行</td>
-        <td colspan="2"style="width: 40%; border-left: 0;">Kelakuan</td>
-        <td align="center"></td>
-        <td align="center"></td>
-        <td align="center"></td> 
-        <td align="center"></td>     
-      </tr>
-      <tr>
-        <td colspan="2" style="border-right: 0;">出席日数</td>
-        <td colspan="2" style="width: 40%; border-left: 0;">Kedatangan</td>
-        <td align="center"></td>
-        <td align="center"></td>
-        <td align="center"></td>
-        <td align="center"></td>     
-      </tr>
-      <tr>
-        <td colspan="2" style="border-right: 0;">总分</td>
-        <td colspan="2" style="width: 40%; border-left: 0;">Jumlah Markah</td>
-        <td align="center"><%= @total_mark %></td>
-        <td align="center"></td>
-        <td align="center"></td>
-        <td align="center"></td>     
-      </tr>
-      <tr>
-        <td colspan="2" style="border-right: 0;">平均</td>
-        <td colspan="2" style="width: 40%; border-left: 0;">Purata</td>
-        <td align="center"><%= @total_average%></td>
-        <td align="center"></td>
-        <td align="center"></td>
-        <td align="center"></td>     
-      </tr>
-      <tr>
-        <td colspan="2" style="border-right: 0;">本班名次</td>
-        <td colspan="2" style="width: 40%; border-left: 0;">Kedudukan Dalam Kelas</td>
-        <td align="center"><%= @rank %>/<%= @total_student_in_class %></td>
-        <td align="center"></td>
-        <td align="center"></td>
-        <td align="center"></td>     
-      </tr>
-      <tr>
-        <td colspan="2" style="border-right: 0;">全级名次</td>
-        <td colspan="2" style="width: 40%; border-left: 0;">Kedudukan Dalam Darjah</td>
-        <%= if @standard_rank != nil do %>
-        <td align="center"><%= @standard_rank %>/<%= @total_student %></td>
-        <% else %>
-        <td align="center"></td>
-        <% end %>
-        <td align="center"></td>
-        <td align="center"></td>
-        <td align="center"></td>     
-      </tr>
-      <tr>
-        <td colspan="4" style="width: 40%;">校长签名<br/>T.tangan Guru Besar</td>
-        <td align="center"></td>
-        <td align="center"></td>
-        <td align="center"></td>
-        <td align="center"></td>     
-      </tr>
-      <tr>
-        <td colspan="4" style="width: 40%;">级任签名<br/>T.tangan Guru Darjah</td>
-        <td align="center"></td>
-        <td align="center"></td>
-        <td align="center"></td>
-        <td align="center"></td>     
-      </tr>
-      <tr>
-        <td colspan="4" style="width: 40%;">家长/监护人签名<br/>T.tangan Ibubapa/Penjaga</td>
-        <td align="center"></td>
-        <td align="center"></td>
-        <td align="center"></td>
-        <td align="center"></td>     
-      </tr>
-      <tr>
-        <td colspan="8" style="width: 40%; border-bottom: 0;">评语Komen:</td>   
-      </tr>
-      <tr>
-        <td colspan="8" style="border-top: 0;border-top: 0; padding: 30px"></td>   
-      </tr>
-    </tbody>
   </table>
 </body>
 
@@ -221,17 +122,22 @@
 
 td {
   border: 1px solid #726E6D;
-  padding: 1px;
-  
+  padding: 15px;
 }
 
 thead{
+  font-weight:bold;
   text-align:center;
-
+  background: #625D5D;
+  color:white;
 }
 
 table {
   border-collapse: collapse;
+    margin-left: 10px;
+   margin-right: 10px;
+   width: 1000px;
+   height: : auto;
 }
 
 .footer {
@@ -239,6 +145,8 @@ table {
   font-weight:bold;
 }
 
-
+tbody >tr:nth-child(odd) {
+  background: #D1D0CE;
+}
 
 </style>

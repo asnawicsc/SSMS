@@ -466,6 +466,7 @@
                    </div>
                 </div>
                 <a  href="/class_setting"]"><button class="mb-1 btn-sm btn btn-outline-primary" type="button" style="display: none;">Settings</button></a>
+                 <a href ="/list_class_comment"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Comments</button></a>
              </div>
           </div>
         </div>

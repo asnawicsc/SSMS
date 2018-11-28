@@ -239,7 +239,7 @@ defmodule SchoolWeb.Router do
 
     get("/print_students/:id", StudentController, :print_students)
 
-    get("/report_card/:exam_name/:id/:rank", ExamController, :report_card)
+    get("/report_card/:exam_name/:exam_id/:id/:rank", ExamController, :report_card)
     get("/all_report_card", ExamController, :all_report_card)
     post("/all_report_card", ExamController, :all_report_card)
     get("/show_guardian/", ParentController, :guardian_listing)
