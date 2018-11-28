@@ -152,10 +152,13 @@ defmodule SchoolWeb.Router do
     post("/upload_students", StudentController, :pre_upload_students)
     post("/upload_teachers", TeacherController, :pre_upload_teachers)
     post("/upload_parents", ParentController, :pre_upload_parents)
+    post("/upload_class", ClassController, :pre_upload_class)
 
     post("/upload_teachers_final", TeacherController, :upload_teachers)
     post("/upload_students_final", StudentController, :upload_students)
     post("/upload_parent_final", ParentController, :upload_parents)
+    post("/upload_class_final", ClassController, :upload_class)
+
     get("/height_weight", StudentController, :height_weight)
     get("/height_weight_class/:class_id", StudentController, :height_weight_class)
     get("/student_certificate", StudentController, :student_certificate)
@@ -363,6 +366,16 @@ defmodule SchoolWeb.Router do
     resources("/batches", BatchController)
     resources("/segak", SegakController)
     get("/create_segak", SegakController, :create_segak)
+    get("/segak/marking/:class_id/:semester_id", SegakController, :segak_mark)
+    post("/create_segak_mark", SegakController, :create_segak_mark)
+    post("/edit_segak_mark", SegakController, :edit_segak_mark)
+    get("/edit_co_rank/:id/:semester_id", CoCurriculumController, :edit_co_rank)
+    post("/create_rank_student_co", CoCurriculumController, :create_rank_student_co)
+    post("/edit_rank_student_co", CoCurriculumController, :edit_rank_student_co)
+    resources("/list_rank", ListRankController)
+    get("/default_rank", ListRankController, :default_rank)
+    post("/default_standard", LevelController, :default_standard)
+
     get("/*path", PageController, :no_page_found)
   end
 end

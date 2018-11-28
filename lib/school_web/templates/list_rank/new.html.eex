@@ -1,0 +1,5 @@
+<h2>New List rank</h2>
+
+<%= render "form.html", Map.put(assigns, :action, list_rank_path(@conn, :create)) %>
+
+<span><%= link "Back", to: list_rank_path(@conn, :index) %></span>

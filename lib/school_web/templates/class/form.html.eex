@@ -43,13 +43,13 @@
 
           <div class="form-group">
             <%= label f, :teacher_id, class: "control-label" %>
-            <%= select f, :teacher_id, teacher, class: "form-control" %>
+            <%= select f, :teacher_id,teacher, class: "form-control" %>
             <%= error_tag f, :teacher_id %>
           </div>
 
           <div class="form-group">
             <%= submit "Submit", class: "mb-1 btn btn-primary" %>
-            <a href="/dashboard" ]"=""><button class="mb-1 btn btn btn-outline-primary" type="button"><i class="fas fa-chevron-left"></i> Back</button></a>
+            <a href="/classes"]"=""><button class="mb-1 btn btn btn-outline-primary" type="button"><i class="fas fa-chevron-left"></i> Back</button></a>
           </div>
         <% end %>
       </div>

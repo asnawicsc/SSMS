@@ -16,6 +16,6 @@ defmodule School.Affairs.Class do
   def changeset(class, attrs) do
     class
     |> cast(attrs, [:teacher_id, :level_id, :institution_id, :name, :remarks])
-    |> validate_required([:name, :institution_id, :level_id])
+    |> validate_required([:name, :institution_id])
   end
 end

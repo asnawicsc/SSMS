@@ -1,4 +1,4 @@
-<% semester = School.Repo.all(from l in School.Affairs.Semester, select: {l.start_date, l.id}) %>
+<% semester = School.Repo.all(from l in School.Affairs.Semester,where: l.institution_id==^@conn.private.plug_session["institution_id"], select: {l.start_date, l.id}) %>
 <%= form_for @changeset, @action, fn f -> %>
   <%= if @changeset.action do %>
     <div class="alert alert-danger">

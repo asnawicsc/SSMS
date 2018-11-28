@@ -210,7 +210,16 @@ defmodule SchoolWeb.ClassController do
       )
       |> hd()
 
-    teacher = Repo.get(Teacher, class.teacher_id)
+    teacher =
+      if class.teacher_id == nil do
+        teacher = "No Teacher"
+        teacher
+      else
+        a = Repo.get(Teacher, class.teacher_id)
+        teacher = a.name
+
+        teacher
+      end
 
     students =
       Repo.all(
@@ -551,6 +560,7 @@ defmodule SchoolWeb.ClassController do
       |> redirect(to: institution_path(conn, :index))
     else
       classes = Affairs.list_classes(conn.private.plug_session["institution_id"])
+
       render(conn, "index.html", classes: classes)
     end
   end
@@ -628,5 +638,121 @@ defmodule SchoolWeb.ClassController do
     conn
     |> put_flash(:info, "Class deleted successfully.")
     |> redirect(to: class_path(conn, :index))
+  end
+
+  def pre_upload_class(conn, params) do
+    bin = params["item"]["file"].path |> File.read() |> elem(1)
+    usr = Settings.current_user(conn)
+    {:ok, batch} = Settings.create_batch(%{upload_by: usr.id, result: bin})
+
+    data =
+      if bin |> String.contains?("\t") do
+        bin |> String.split("\n") |> Enum.map(fn x -> String.split(x, "\t") end)
+      else
+        bin |> String.split("\n") |> Enum.map(fn x -> String.split(x, ",") end)
+      end
+
+    headers = hd(data) |> Enum.map(fn x -> String.trim(x, " ") end)
+
+    render(conn, "adjust_header.html", headers: headers, batch_id: batch.id)
+  end
+
+  def upload_class(conn, params) do
+    batch = Settings.get_batch!(params["batch_id"])
+    bin = batch.result
+    usr = Settings.current_user(conn)
+    {:ok, batch} = Settings.update_batch(batch, %{upload_by: usr.id})
+
+    data =
+      if bin |> String.contains?("\t") do
+        bin |> String.split("\n") |> Enum.map(fn x -> String.split(x, "\t") end)
+      else
+        bin |> String.split("\n") |> Enum.map(fn x -> String.split(x, ",") end)
+      end
+
+    headers =
+      hd(data)
+      |> Enum.map(fn x -> String.trim(x, " ") end)
+      |> Enum.map(fn x -> params["header"][x] end)
+
+    contents = tl(data)
+
+    result =
+      for content <- contents do
+        h = headers |> Enum.map(fn x -> String.downcase(x) end)
+
+        content = content |> Enum.map(fn x -> x end) |> Enum.filter(fn x -> x != "\"" end)
+
+        c =
+          for item <- content do
+            item =
+              case item do
+                "@@@" ->
+                  ","
+
+                "\\N" ->
+                  ""
+
+                _ ->
+                  item
+              end
+
+            a =
+              case item do
+                {:ok, i} ->
+                  i
+
+                _ ->
+                  cond do
+                    item == " " ->
+                      "null"
+
+                    item == "  " ->
+                      "null"
+
+                    item == "   " ->
+                      "null"
+
+                    true ->
+                      item
+                      |> String.split("\"")
+                      |> Enum.map(fn x -> String.replace(x, "\n", "") end)
+                      |> List.last()
+                  end
+              end
+          end
+
+        class_param = Enum.zip(h, c) |> Enum.into(%{})
+
+        class_param =
+          Map.put(class_param, "institution_id", conn.private.plug_session["institution_id"])
+
+        cg = Class.changeset(%Class{}, class_param)
+
+        case Repo.insert(cg) do
+          {:ok, class} ->
+            class_param
+            class_param = Map.put(class_param, "reason", "ok")
+
+          {:error, changeset} ->
+            errors = changeset.errors |> Keyword.keys()
+
+            {reason, message} = changeset.errors |> hd()
+            {proper_message, message_list} = message
+            final_reason = Atom.to_string(reason) <> " " <> proper_message
+            class_param = Map.put(class_param, "reason", final_reason)
+
+            class_param
+        end
+      end
+
+    header = result |> hd() |> Map.keys()
+    body = result |> Enum.map(fn x -> Map.values(x) end)
+    new_io = List.insert_at(body, 0, header) |> CSV.encode() |> Enum.to_list() |> to_string
+    {:ok, batch} = Settings.update_batch(batch, %{result: new_io})
+
+    conn
+    |> put_flash(:info, "Student created successfully.")
+    |> redirect(to: student_path(conn, :index))
   end
 end

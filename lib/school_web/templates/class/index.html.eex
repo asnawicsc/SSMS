@@ -13,20 +13,49 @@
                 <thead>
                   <tr>
                   <th><%= gettext "Name" %></th>
-                  <th><%= gettext "Remarks" %></th>
+
                   <th><%= gettext "Level" %></th>
+                  <th><%= gettext "Teacher" %></th>
                   </tr>
                 </thead>
                 <tbody>
                <%= for class <- @classes do %>
+
+               <% name= if class.teacher_id != nil do %>
+         <% teacher=School.Repo.get_by(School.Affairs.Teacher,id: class.teacher_id,institution_id: @conn.private.plug_session["institution_id"])%>
+
+                                  <%= name=if teacher != nil do
+                                    teacher.name
+                                  else
+                                    "Unknown Teacher"
+                                  end %>
+
+                            <%else %>
+                            <%= "No Teacher" %>
+                            <% end %>
+
+
+                              <% level_name= if class.level_id != nil do %>
+         <% level=School.Repo.get_by(School.Affairs.Level,name: class.level_id,institution_id: @conn.private.plug_session["institution_id"])%>
+
+                                  <%= level_name=if level != nil do
+                                    level.name
+                                  else
+                                    "Unknown Standard"
+                                  end %>
+
+                            <%else %>
+                            <%= "Unknown Standard" %>
+                            <% end %>
                     <tr>
                        <td><%= class.name %></td>
-                      <td><%= class.remarks %></td>
-                      <td><%= class.level_id %></td>
+    
+                      <td><%= level_name %></td>
+                      <td><%= name %></td>
                     
       <td class="text-right">
-       
-    <a class="mb-1 btn-sm btn btn-outline-primary" href="/class_setting/<%= class.id %>">Manage</a>
+        <a class="mb-1 btn-sm btn btn-outline-info" href="/classes/<%= class.id %>">Edit</a>
+    <a class="mb-1 btn-sm btn btn-outline-success" href="/class_setting/<%= class.id %>">Manage</a>
         <a class="mb-1 btn-sm btn btn-outline-primary" href="/classes/<%= class.id %>/sync_library_membership">Sync Library Membership</a>
       
         
@@ -44,5 +73,32 @@
           </div>
         </div>
       </div>
+                      <div class="col-lg-4" aria-label="p_upload">
+                  <div class="card card-default d-none d-lg-block">
+                    <div class="card-body">
+                     <p class="lead">Upload Classes. </p> 
+                        <div class="row" style="margin-top: 40px;">
+                        <div class="col-lg-12">
+                          <div class="panel">
+                            <div class="panel-heading">Bulk Upload Class</div>
+                            <div class="panel-body">
+                                <%= form_for @conn, class_path(@conn, :pre_upload_class), [as: :item, multipart: true], fn f -> %>
+
+                <%= file_input f, :file, accept: ".csv"%>
+                <%= error_tag f, :file %>
+
+             
+                <%= submit "Upload", class: "btn btn-primary" %>
+              
+            <% end %>
+
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
      
 </div>

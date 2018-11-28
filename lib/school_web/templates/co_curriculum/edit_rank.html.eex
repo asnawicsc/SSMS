@@ -1,0 +1,65 @@
+<div class="content-heading">
+   <div>Edit Ranks
+      <small>for semester <%= @sem.start_date %> until <%= @sem.end_date %></small>
+   </div>
+
+</div>
+
+<form method="post" action="/edit_rank_student_co" class="form-horizontal">
+   <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+   <input type="hidden" name="cocurriculum_id" value="<%= @co.id %>">
+ <input type="hidden" name="semester_id" value="<%= @sem.id %>">
+     <div class="row">
+               <div class="col-12">
+                  <!-- START card-->
+                  <div class="card card-default">
+                     <div class="card-header">Rank for <%= @co.description %> </div>
+                     <div class="card-body">
+                        <!-- START table-responsive-->
+                        <div class="table-responsive">
+                             <table class="table table-striped table-bordered table-hover">
+                              <thead>
+                                 <tr>
+                                    <th style="background-color:#97DB9A;"><%= gettext "Student Name" %></th>
+                                      <th style="background-color:#97DB9A;"><%= gettext "Class" %></th>
+                                    <th style="background-color:#97DB9A;"><%= gettext "Rank" %></th>
+                              
+                                 </tr>
+                              </thead>
+                              <tbody>
+                                <%= for item <- @students do %>
+                                 <tr>
+                                    <td><%= item.name %></td>
+                                    <td><%= item.class_name %></td>
+                                          <td>
+                                       <select class="custom-select custom-select-sm" name="rank[<%=item.student_id %>]" value="">
+                                        <%= if  item.rank == nil do  %>
+                                           <option selected="">Open this select menu</option>
+                                         <% else %>
+                                              <option value="<%= item.rank %>"><%= item.rank %></option>
+                                       <% end %>
+                                
+                                 <%= for item <- @list_rank do %>
+                               <option value="<%= item.name %>"><%= item.name %></option>
+                                 <% end %>
+                               
+                              </select>
+                           </td>
+                                
+                                 </tr>
+                                    <% end %>
+                              </tbody>
+                           </table>
+                        </div>
+                        <!-- END table-responsive-->
+                     </div>
+                        <center><input class="btn btn-primary" name="" value="Submit" type="submit" style="margin-bottom: 10px"></center> 
+
+                  </div>
+                  <!-- END card-->
+               </div>
+            
+            </div>
+
+
+</form>

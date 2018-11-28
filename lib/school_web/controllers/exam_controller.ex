@@ -304,6 +304,8 @@ defmodule SchoolWeb.ExamController do
             )
           )
 
+        IEx.pry()
+
         {class, a}
       else
         teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email})
@@ -688,12 +690,17 @@ defmodule SchoolWeb.ExamController do
     #    Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
     #  end
 
+    level =
+      Repo.all(from(l in School.Affairs.Level))
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
     class = Affairs.list_classes(Affairs.get_inst_id(conn))
 
     render(
       conn,
       "exam_result_class.html",
-      class: class
+      class: class,
+      level: level
     )
   end
 

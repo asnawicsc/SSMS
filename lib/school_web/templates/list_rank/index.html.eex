@@ -1,0 +1,45 @@
+<div class="content-heading">
+   <div>Listing List rank
+      <small><%= gettext("welcome")%>!</small>
+   </div>
+</div>
+
+<div class="card">
+   
+               <div class="card-body">
+
+                  <div class="table-responsive ">
+
+                    <%= link "Default Rank", to: list_rank_path(@conn, :default_rank) %>
+
+                     <table class="table table-striped" id="datatable1">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Mark</th>
+
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for list_rank <- @list_rank do %>
+    <tr>
+      <td><%= list_rank.name %></td>
+      <td><%= list_rank.mark %></td>
+    
+      <td class="text-right">
+        <span><%= link "Show", to: list_rank_path(@conn, :show, list_rank), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: list_rank_path(@conn, :edit, list_rank), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: list_rank_path(@conn, :delete, list_rank), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+</div>
+</div>
+</div>
+
+<span><%= link "New List rank", to: list_rank_path(@conn, :new) %></span>

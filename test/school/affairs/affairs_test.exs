@@ -3586,4 +3586,68 @@ defmodule School.AffairsTest do
       assert %Ecto.Changeset{} = Affairs.change_segak(segak)
     end
   end
+
+  describe "list_rank" do
+    alias School.Affairs.ListRank
+
+    @valid_attrs %{integer: "some integer", mark: "some mark", name: "some name"}
+    @update_attrs %{integer: "some updated integer", mark: "some updated mark", name: "some updated name"}
+    @invalid_attrs %{integer: nil, mark: nil, name: nil}
+
+    def list_rank_fixture(attrs \\ %{}) do
+      {:ok, list_rank} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_list_rank()
+
+      list_rank
+    end
+
+    test "list_list_rank/0 returns all list_rank" do
+      list_rank = list_rank_fixture()
+      assert Affairs.list_list_rank() == [list_rank]
+    end
+
+    test "get_list_rank!/1 returns the list_rank with given id" do
+      list_rank = list_rank_fixture()
+      assert Affairs.get_list_rank!(list_rank.id) == list_rank
+    end
+
+    test "create_list_rank/1 with valid data creates a list_rank" do
+      assert {:ok, %ListRank{} = list_rank} = Affairs.create_list_rank(@valid_attrs)
+      assert list_rank.integer == "some integer"
+      assert list_rank.mark == "some mark"
+      assert list_rank.name == "some name"
+    end
+
+    test "create_list_rank/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_list_rank(@invalid_attrs)
+    end
+
+    test "update_list_rank/2 with valid data updates the list_rank" do
+      list_rank = list_rank_fixture()
+      assert {:ok, list_rank} = Affairs.update_list_rank(list_rank, @update_attrs)
+      assert %ListRank{} = list_rank
+      assert list_rank.integer == "some updated integer"
+      assert list_rank.mark == "some updated mark"
+      assert list_rank.name == "some updated name"
+    end
+
+    test "update_list_rank/2 with invalid data returns error changeset" do
+      list_rank = list_rank_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_list_rank(list_rank, @invalid_attrs)
+      assert list_rank == Affairs.get_list_rank!(list_rank.id)
+    end
+
+    test "delete_list_rank/1 deletes the list_rank" do
+      list_rank = list_rank_fixture()
+      assert {:ok, %ListRank{}} = Affairs.delete_list_rank(list_rank)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_list_rank!(list_rank.id) end
+    end
+
+    test "change_list_rank/1 returns a list_rank changeset" do
+      list_rank = list_rank_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_list_rank(list_rank)
+    end
+  end
 end

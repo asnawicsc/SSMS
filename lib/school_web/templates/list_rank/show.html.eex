@@ -1,0 +1,20 @@
+<h2>Show List rank</h2>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @list_rank.name %>
+  </li>
+
+  <li>
+    <strong>Mark:</strong>
+    <%= @list_rank.mark %>
+  </li>
+
+
+
+</ul>
+
+<span><%= link "Edit", to: list_rank_path(@conn, :edit, @list_rank) %></span>
+<span><%= link "Back", to: list_rank_path(@conn, :index) %></span>
