@@ -304,8 +304,6 @@ defmodule SchoolWeb.ExamController do
             )
           )
 
-        IEx.pry()
-
         {class, a}
       else
         teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email})

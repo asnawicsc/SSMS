@@ -22,8 +22,9 @@
                         <li class="nav-item" role="presentation">
                            <a class="nav-link active bb0" href="#home" aria-controls="home" role="tab" data-toggle="tab">
                               <em class="far fa-clock fa-fw"></em>Basic Tasks Card</a>
+                                 <a class="nav-link active" style="color: red"  >*Please complete all basic task first*</a>
                         </li>
-                   
+                      
                      </ul>
                      <!-- Tab panes-->
 
@@ -55,18 +56,19 @@
                                    <span class="badge badge-success float-right" id="a1" value="10" >Done</span>
                                      <em class="fa-fw fas fa-calendar-alt mr-2"></em>Create Semester</a>
                                <% end %>
+
+                                          <%= if level == [] do  %>
+                                  <a class="list-group-item" href="/levels/new">
+                                   <span class="badge badge-danger float-right" id="a5">Not Set</span>
+                                     <em class="fa-fw fas fa-th mr-2"></em>Create Standard</a>
+                               <% else %>
+                                <a class="list-group-item" href="#">
+                                   <span class="badge badge-success float-right" id="a5">Done</span>
+                                    <em class="fa-fw fas fa-th mr-2"></em>Create Standard</a>
+                               <% end %>
                                 
                                
-                            
-                                 <%= if students == [] do  %>
-                                   <a class="list-group-item" href="/students/new">
-                              <span class="badge badge-danger float-right" id="a2">Not Set</span>
-                                   <em class="fa-fw fa fa-address-card mr-2"></em>Create Student</a>
-                               <% else %>
-                                 <a class="list-group-item" href="#">
-                                    <span class="badge badge-success float-right" id="a2">Done</span>
-                                     <em class="fa-fw fa fa-address-card mr-2"></em>Create Student</a>
-                               <% end %>
+ 
                                
                                 
                              
@@ -91,18 +93,32 @@
                                    <span class="badge badge-success float-right" id="a4">Done</span>
                                    <em class="fa-fw fas fa-user-friends mr-2"></em>Create Parent</a>
                                <% end %>
+
+                                                   <%= if subject == [] do  %>
+                                    <a class="list-group-item" href="/subject/new">
+                                 <span class="badge badge-danger float-right" id="a7">Not Set</span>
+                                 <em class="fa-fw fa fa-book mr-2"></em>Create Subject</a>
+                               <% else %>
+                               <a class="list-group-item" href="#">
+                                   <span class="badge badge-success float-right" id="a7">Done</span>
+                                   <em class="fa-fw fa fa-book mr-2"></em>Create Subject</a>
+                               <% end %>
+                                
+
+
+                                 <%= if students == [] do  %>
+                                   <a class="list-group-item" href="/students/new">
+                              <span class="badge badge-danger float-right" id="a2">Not Set</span>
+                                   <em class="fa-fw fa fa-address-card mr-2"></em>Create Student</a>
+                               <% else %>
+                                 <a class="list-group-item" href="#">
+                                    <span class="badge badge-success float-right" id="a2">Done</span>
+                                     <em class="fa-fw fa fa-address-card mr-2"></em>Create Student</a>
+                               <% end %>
                                 
                                  
                              
-                                 <%= if level == [] do  %>
-                                  <a class="list-group-item" href="/levels/new">
-                                   <span class="badge badge-danger float-right" id="a5">Not Set</span>
-                                     <em class="fa-fw fas fa-th mr-2"></em>Create Standard</a>
-                               <% else %>
-                                <a class="list-group-item" href="#">
-                                   <span class="badge badge-success float-right" id="a5">Done</span>
-                                    <em class="fa-fw fas fa-th mr-2"></em>Create Standard</a>
-                               <% end %>
+                      
                                 
                                 
                           
@@ -118,16 +134,7 @@
                                 
                                 
                               
-                                    <%= if subject == [] do  %>
-                                    <a class="list-group-item" href="/subject/new">
-                                 <span class="badge badge-danger float-right" id="a7">Not Set</span>
-                                 <em class="fa-fw fa fa-book mr-2"></em>Create Subject</a>
-                               <% else %>
-                               <a class="list-group-item" href="#">
-                                   <span class="badge badge-success float-right" id="a7">Done</span>
-                                   <em class="fa-fw fa fa-book mr-2"></em>Create Subject</a>
-                               <% end %>
-                                
+                
                                
                                  
                               
@@ -214,51 +221,100 @@
 
 
       <div class="row">
+
+                <div class="col-lg-6">
+        <div class="card card-default mb-3">
+           
+           <div class="card-body">
+                 <em class="fa-2x mr-2 mb-3 fas fa-chalkboard-teacher"></em>
+                  <span style="font-weight: bolder;font-size: 17px;"><%= gettext("Semester Management")%></span>
+                 <ol style="padding-left: 15px;">
+                    <li><p class="card-text"><%= gettext("See all available Semester.")%></p></li>
+                    <li><p class="card-text"><%= gettext("Ad hoc create a Semester.")%></p></li>
+                   
+                  </ol>
+              <a href ="/semesters"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
+              <a href ="/semesters/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Semester</button></a>
+        
+           </div>
+        </div>
+      </div>
+            <div class="col-lg-6">
+        <div class="card card-default mb-3">
+
+           <div class="card-body">
+                 <em class="fa-2x mr-2 mb-3 fas fa-chalkboard-teacher"></em>
+                  <span style="font-weight: bolder;font-size: 17px;"><%= gettext("Standard Management")%></span>
+                 <ol style="padding-left: 15px;">
+                    <li><p class="card-text"><%= gettext("See all available standard.")%></p></li>
+                    <li><p class="card-text"><%= gettext("Ad hoc create a standard.")%></p></li>
+                   
+                  </ol>
+              <a href ="/levels"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
+               <a href ="/levels/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Standard</button></a>
+        
+           </div>
+        </div>
+      </div>
+       
+      </div>
+            <div class="row">
         <div class="col-lg-6">
           <div class="card card-default mb-3">
-    
+
              <div class="card-body">
-                <em class="fa-2x mr-2 mb-3 fas fa-pencil-alt"></em>
-                  <span style="font-weight: bolder;font-size: 17px;"><%= gettext("Class Management")%></span>
-                  <ol style="padding-left: 15px;">
-                    <li><p class="card-text"><%= gettext("Create class, requires a class teacher.")%></p></li>
-                    <li><p class="card-text"><%= gettext("Enroll students that is created in the school into class.")%></p></li>
-                    <li><p class="card-text"><%= gettext("Manage class to view class info such as time table. \nCan manage students according to class.")%></p></li>
+                  <em class="fa-2x mr-2 mb-3 fas fa-chalkboard-teacher"></em>
+                  <span style="font-weight: bolder;font-size: 17px;"><%= gettext("Teacher Management")%></span>
+          <ol style="padding-left: 15px;">
+                    <li><p class="card-text"><%= gettext("List all teachers and manage their info.")%></p></li>
+                     <li><p class="card-text"><%= gettext("Ad hoc create a teacher.")%></p></li>
+                     <li><p class="card-text"><%= gettext("Creates a teacher login.")%></p></li>
                   </ol>
-                  <a href ="/classes/enroll_students"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Enroll Students</button></a>
-                <a  href="/create_class"]"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Class</button></a>
-                <div class="btn-group">
-                   <button class="mb-1 btn-sm btn btn-outline-primary" type="button">Manage</button>
-                   <button class="mb-1 btn-sm dropdown-toggle btn btn-outline-primary" type="button" data-toggle="dropdown" aria-expanded="false">
-                      <span class="sr-only">info</span>
-                   </button>
-                   <% require IEx %>
-                   <% user = Repo.get(Settings.User,@conn.private.plug_session["user_id"]) %>
-
-                   <% if user.role == "Teacher" do 
-                       teacher = Repo.get_by(Affairs.Teacher,email: user.email) 
-                      all_classes= Repo.all(from c in Affairs.Class, where: c.teacher_id == ^teacher.id) 
-                      all_classes
-                    end %>
-
-
-                   <%  all_classes =if user.role == "Admin" or user.role == "Support" do 
-                       all_classes =Repo.all(from c in Affairs.Class, where: c.institution_id == ^@conn.private.plug_session["institution_id"]) 
-                        all_classes
-                   end %>
-
-
-                   <div class="dropdown-menu" role="menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(67px, 33px, 0px);">
-                    <%= for class <- all_classes do %>
-                      <a class="dropdown-item" href="/class_setting/<%= class.id %>"><%= class.name %></a>
-                    <% end %>
-                   </div>
-                </div>
-                <a  href="/class_setting"]"><button class="mb-1 btn-sm btn btn-outline-primary" type="button" style="display: none;">Settings</button></a>
+                <a href ="/teacher"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
+                <a href ="/teacher/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Teacher</button></a>
+                <a href ="/login_teacher"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Teacher Login</button></a>
              </div>
           </div>
         </div>
-         <div class="col-lg-6">
+        <div class="col-lg-6">
+          <div class="card card-default mb-3">
+
+             <div class="card-body">
+                 <em class="fa-2x mr-2 mb-3 fas fa-chalkboard-teacher"></em>
+                  <span style="font-weight: bolder;font-size: 17px;"><%= gettext("Parent Management")%></span>
+                 <ol style="padding-left: 15px;">
+                    <li><p class="card-text"><%= gettext("View all student's parent information.")%></p></li>
+                    <li><p class="card-text"><%= gettext("Ad hoc create a parent.")%></p></li>
+                  </ol>
+                <a href ="/parent"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
+                <a href ="/parent/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Parent</button></a>
+          
+             </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="row">
+        <div class="col-lg-6">
+        <div class="card card-default mb-3">
+
+           <div class="card-body">
+                 <em class="fa-2x mr-2 mb-3 fas fa-chalkboard-teacher"></em>
+                  <span style="font-weight: bolder;font-size: 17px;"><%= gettext("Subject Management")%></span>
+                 <ol style="padding-left: 15px;">
+                    <li><p class="card-text"><%= gettext("Ad hoc create a subject.")%></p></li>
+                    <li><p class="card-text"><%= gettext("Manage a subject and create a period from it.")%></p></li>
+                     <li><p class="card-text"><%= gettext("Assign a subject to a class and standard.")%></p></li>
+                  </ol>
+               <a href ="/subject/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Subject</button></a>
+                <a href ="/subject_teach_class"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List Subject Period</button></a>
+               <a href ="/subject_teach_class/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Subject Period</button></a>
+           </div>
+        </div>
+      </div>
+  <div class="col-lg-6">
           <div class="card card-default mb-3">
 
         
@@ -305,9 +361,9 @@
               </div>
           </div>
         </div>
-      </div>
+    </div>
 
-      <div class="row">
+          <div class="row">
         <div class="col-lg-6">
           <div class="card card-default mb-3">
 
@@ -351,77 +407,6 @@
         </div>
       </div>
 
-      <div class="row">
-        <div class="col-lg-6">
-          <div class="card card-default mb-3">
-
-             <div class="card-body">
-                  <em class="fa-2x mr-2 mb-3 fas fa-chalkboard-teacher"></em>
-                  <span style="font-weight: bolder;font-size: 17px;"><%= gettext("Teacher Management")%></span>
-          <ol style="padding-left: 15px;">
-                    <li><p class="card-text"><%= gettext("List all teachers and manage their info.")%></p></li>
-                     <li><p class="card-text"><%= gettext("Ad hoc create a teacher.")%></p></li>
-                     <li><p class="card-text"><%= gettext("Creates a teacher login.")%></p></li>
-                  </ol>
-                <a href ="/teacher"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
-                <a href ="/teacher/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Teacher</button></a>
-                <a href ="/login_teacher"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Teacher Login</button></a>
-             </div>
-          </div>
-        </div>
-        <div class="col-lg-6">
-          <div class="card card-default mb-3">
-
-             <div class="card-body">
-                 <em class="fa-2x mr-2 mb-3 fas fa-chalkboard-teacher"></em>
-                  <span style="font-weight: bolder;font-size: 17px;"><%= gettext("Parent Management")%></span>
-                 <ol style="padding-left: 15px;">
-                    <li><p class="card-text"><%= gettext("View all student's parent information.")%></p></li>
-                    <li><p class="card-text"><%= gettext("Ad hoc create a parent.")%></p></li>
-                  </ol>
-                <a href ="/parent"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
-                <a href ="/parent/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Parent</button></a>
-          
-             </div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-lg-6">
-        <div class="card card-default mb-3">
-
-           <div class="card-body">
-                 <em class="fa-2x mr-2 mb-3 fas fa-chalkboard-teacher"></em>
-                  <span style="font-weight: bolder;font-size: 17px;"><%= gettext("Subject Management")%></span>
-                 <ol style="padding-left: 15px;">
-                    <li><p class="card-text"><%= gettext("Ad hoc create a subject.")%></p></li>
-                    <li><p class="card-text"><%= gettext("Manage a subject and create a period from it.")%></p></li>
-                     <li><p class="card-text"><%= gettext("Assign a subject to a class and standard.")%></p></li>
-                  </ol>
-               <a href ="/subject/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Subject</button></a>
-                <a href ="/subject_teach_class"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List Subject Period</button></a>
-               <a href ="/subject_teach_class/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Subject Period</button></a>
-           </div>
-        </div>
-      </div>
-       <div class="col-lg-6">
-        <div class="card card-default mb-3">
-
-           <div class="card-body">
-                 <em class="fa-2x mr-2 mb-3 fas fa-chalkboard-teacher"></em>
-                  <span style="font-weight: bolder;font-size: 17px;"><%= gettext("Standard Management")%></span>
-                 <ol style="padding-left: 15px;">
-                    <li><p class="card-text"><%= gettext("See all available standard.")%></p></li>
-                    <li><p class="card-text"><%= gettext("Ad hoc create a standard.")%></p></li>
-                   
-                  </ol>
-              <a href ="/levels"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
-               <a href ="/levels/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Standard</button></a>
-        
-           </div>
-        </div>
-      </div>
-    </div>
     <div class="row">
         <div class="col-lg-6">
         <div class="card card-default mb-3">
@@ -441,22 +426,49 @@
         </div>
       </div>
         <div class="col-lg-6">
-        <div class="card card-default mb-3">
-           
-           <div class="card-body">
-                 <em class="fa-2x mr-2 mb-3 fas fa-chalkboard-teacher"></em>
-                  <span style="font-weight: bolder;font-size: 17px;"><%= gettext("Semester Management")%></span>
-                 <ol style="padding-left: 15px;">
-                    <li><p class="card-text"><%= gettext("See all available Semester.")%></p></li>
-                    <li><p class="card-text"><%= gettext("Ad hoc create a Semester.")%></p></li>
-                   
+          <div class="card card-default mb-3">
+    
+             <div class="card-body">
+                <em class="fa-2x mr-2 mb-3 fas fa-pencil-alt"></em>
+                  <span style="font-weight: bolder;font-size: 17px;"><%= gettext("Class Management")%></span>
+                  <ol style="padding-left: 15px;">
+                    <li><p class="card-text"><%= gettext("Create class, requires a class teacher.")%></p></li>
+                    <li><p class="card-text"><%= gettext("Enroll students that is created in the school into class.")%></p></li>
+                    <li><p class="card-text"><%= gettext("Manage class to view class info such as time table. \nCan manage students according to class.")%></p></li>
                   </ol>
-              <a href ="/semesters"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
-              <a href ="/semesters/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Semester</button></a>
-        
-           </div>
+                  <a href ="/classes/enroll_students"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Enroll Students</button></a>
+                <a  href="/create_class"]"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Class</button></a>
+                <div class="btn-group">
+                   <button class="mb-1 btn-sm btn btn-outline-primary" type="button">Manage</button>
+                   <button class="mb-1 btn-sm dropdown-toggle btn btn-outline-primary" type="button" data-toggle="dropdown" aria-expanded="false">
+                      <span class="sr-only">info</span>
+                   </button>
+                   <% require IEx %>
+                   <% user = Repo.get(Settings.User,@conn.private.plug_session["user_id"]) %>
+
+                   <% if user.role == "Teacher" do 
+                       teacher = Repo.get_by(Affairs.Teacher,email: user.email) 
+                      all_classes= Repo.all(from c in Affairs.Class, where: c.teacher_id == ^teacher.id) 
+                      all_classes
+                    end %>
+
+
+                   <%  all_classes =if user.role == "Admin" or user.role == "Support" do 
+                       all_classes =Repo.all(from c in Affairs.Class, where: c.institution_id == ^@conn.private.plug_session["institution_id"]) 
+                        all_classes
+                   end %>
+
+
+                   <div class="dropdown-menu" role="menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(67px, 33px, 0px);">
+                    <%= for class <- all_classes do %>
+                      <a class="dropdown-item" href="/class_setting/<%= class.id %>"><%= class.name %></a>
+                    <% end %>
+                   </div>
+                </div>
+                <a  href="/class_setting"]"><button class="mb-1 btn-sm btn btn-outline-primary" type="button" style="display: none;">Settings</button></a>
+             </div>
+          </div>
         </div>
-      </div>
     </div>
    
 

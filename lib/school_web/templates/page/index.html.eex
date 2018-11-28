@@ -170,14 +170,11 @@
                   <span style="font-weight: bolder;font-size: 17px;"><%= gettext("Exam Management")%></span>                
 
                   <ol style="padding-left: 15px;">
-                    <li><p class="card-text"><%= gettext("Create a master exam. It will contain the subjects as per semesters and standard.")%></p></li>
-                     <li><p class="card-text"><%= gettext("View exam master, to set the exam period and set exam grades.")%></p></li>
+       
                      <li><p class="card-text"><%= gettext("Mark an exam paper according to semesters.")%></p></li>
                   </ol>
-          <a href="/new_exam"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create</button></a>
-          <a href="/exam"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Exam Period</button></a>
-          <button class="mb-1 btn-sm btn btn-outline-primary" type="button">Mark</button>
-
+          <a href="/mark_sheet"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Mark</button></a>
+         
 
        </div>
     </div>
@@ -188,12 +185,11 @@
                   <em class="fa-2x mr-2 mb-3 fas fa-chess"></em>
                   <span style="font-weight: bolder;font-size: 17px;"><%= gettext("Cocurriculum Management")%></span>
                   <ol style="padding-left: 15px;">
-                    <li><p class="card-text"><%= gettext("List all cocurriculum and enroll students.")%></p></li>
-                      <li><p class="card-text"><%= gettext("Create new cocurriculum.")%></p></li>
+            
                         <li><p class="card-text"><%= gettext("Mark a cocurriculum.")%></p></li>
                   </ol>
-          <button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button>
-          <button class="mb-1 btn-sm btn btn-outline-primary" type="button">Enroll</button>
+       
+           <a href="/co_mark"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Mark</button></a>
 
        </div>
     </div>
@@ -207,7 +203,10 @@
                     <li><p class="card-text"><%= gettext("See your own teacher info.")%></p></li>
 
                   </ol>
-          <a href ="/teacher_listing"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Teacher Information</button></a>
+
+                    <% user = Repo.get(Settings.User,a.private.plug_session["user_id"])
+                      teacher = Repo.get_by(Affairs.Teacher,email: user.email)  %>
+          <a href ="/teacher/<%= teacher.id %>"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Teacher Information</button></a>
     
 
        </div>

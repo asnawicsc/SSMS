@@ -18,11 +18,21 @@
 <% data = elem(page, 0) %>
 
 <div  style="page-break-before: always;">
-	<h2><%= @school.name %></h2>
+	<center><b>SENARAI IBU BAPA</b></center><br>
+	<center><b><%= @school.name %></b></center>
 	<div><%= SchoolWeb.LayoutView.my_time(DateTime.utc_now) %></div><div>page: <%= elem(page, 1) + 1 %> of <%= Enum.count(pages) %></div>
-	<h5><u><b>Parent Listing</b></u></h5>
-
+	
+	<br>
 	<table class="table table-striped" >
+		<thead>
+			<tr align="left">
+				<th>Class/IC</th>
+				<th>Student No</th>
+				<th>Name</th>
+				<th>Other Name</th>
+				<th>Sex</th>
+			</tr>
+		</thead>
 	<% parents = data |> Enum.group_by(fn x -> x.icno end) |> Map.keys |> Enum.sort %>
 		
 		<%= for parent <- parents do %>

@@ -28,9 +28,10 @@
 
 <% period = Repo.all(from s in School.Affairs.Period,where: s.subject_id ==^subject_teach_class.subject_id and s.class_id==^subject_teach_class.class_id)|>Enum.count %>
 
+<% standard = School.Repo.get_by(School.Affairs.Level,institution_id: @conn.private.plug_session["institution_id"],id: subject_teach_class.standard_id) %>
 
     <tr>
-      <td><%= Affairs.get_level!(class.level_id ).name %></td>
+      <td>  <%= if standard != nil , do: standard.name , else: "Unknown Standard" %></td>
       <td>
 
         <%= if subject != nil , do: subject.description , else: "Unknown Subject" %></td>

@@ -632,7 +632,8 @@ defmodule SchoolWeb.PdfController do
             c.institution_id == ^conn.private.plug_session["institution_id"] and
               l.institution_id == ^conn.private.plug_session["institution_id"] and
               t.institution_id == ^conn.private.plug_session["institution_id"] and
-              j.institution_id == ^conn.private.plug_session["institution_id"],
+              j.institution_id == ^conn.private.plug_session["institution_id"] and
+              s.institution_id == ^conn.private.plug_session["institution_id"],
           select: %{
             class: c.name,
             standard: l.name,
@@ -1399,11 +1400,22 @@ defmodule SchoolWeb.PdfController do
       )
       |> Enum.with_index()
 
+    institution =
+      Repo.get_by(School.Settings.Institution, id: conn.private.plug_session["institution_id"])
+
+    class =
+      Repo.get_by(School.Affairs.Class, %{
+        id: class_id,
+        institution_id: conn.private.plug_session["institution_id"]
+      })
+
     html =
       Phoenix.View.render_to_string(
         SchoolWeb.PdfView,
         "student_class_listing.html",
-        all: all
+        all: all,
+        class: class,
+        institution: institution
       )
 
     pdf_params = %{"html" => html}
