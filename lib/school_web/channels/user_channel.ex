@@ -1531,7 +1531,8 @@ defmodule SchoolWeb.UserChannel do
       Repo.all(
         from(
           s in School.Affairs.ExamMark,
-          where: s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
+          where:
+            s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
           select: %{
             class_id: s.class_id,
             subject_id: s.subject_id,
@@ -1654,6 +1655,7 @@ defmodule SchoolWeb.UserChannel do
           }
         )
       )
+      |> Enum.uniq()
 
     {:reply, {:ok, %{subject: subject}}, socket}
   end

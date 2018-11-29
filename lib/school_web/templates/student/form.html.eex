@@ -1,6 +1,6 @@
 
 <% require IEx %>
-<%  institutes = Repo.all(from i in School.Settings.Institution,where: i.institution_id ==^@conn.private.plug_session["institution_id"], select: {i.name, i.id})%>
+<%  institutes = Repo.all(from i in School.Settings.Institution,where: i.id ==^@conn.private.plug_session["institution_id"], select: {i.name, i.id})%>
 
 <% parameters = Repo.get_by(School.Settings.Parameter, institution_id: @conn.private.plug_session["institution_id"])
   %>
