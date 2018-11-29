@@ -35,7 +35,7 @@
 
                                 <%= if item.coment1 !=nil  do %>
 
-                                <%  comment=Affairs.get_comment!(item.coment1) %>
+                                <%  comment= Repo.get_by(School.Affairs.Comment, id: item.coment1, institution_id: @conn.private.plug_session["institution_id"]) %>
                            
                                <option value="<%= item.coment1 %>">(<%= comment.code %>) <%= comment.c_malay %></option>
                                <% else %>
@@ -50,7 +50,8 @@
 
                                 <%= if item.coment2 !=nil  do %>
 
-                                <%  comment=Affairs.get_comment!(item.coment2) %>
+
+                                <%  comment= Repo.get_by(School.Affairs.Comment, id: item.coment2, institution_id: @conn.private.plug_session["institution_id"]) %>
                            
                                <option value="<%= item.coment2 %>">(<%= comment.code %>) <%= comment.c_malay %></option>
                                <% else %>
@@ -66,7 +67,7 @@
 
                                 <%= if item.coment3 !=nil  do %>
 
-                                <%  comment=Affairs.get_comment!(item.coment3) %>
+                                   <%  comment= Repo.get_by(School.Affairs.Comment, id: item.coment3, institution_id: @conn.private.plug_session["institution_id"]) %>
                            
                                <option value="<%= item.coment3 %>">(<%= comment.code %>) <%= comment.c_malay %></option>
                                <% else %>

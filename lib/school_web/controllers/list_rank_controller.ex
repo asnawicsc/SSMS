@@ -13,8 +13,10 @@ defmodule SchoolWeb.ListRankController do
   end
 
   def default_rank(conn, _params) do
-    Repo.delete_all(School.Affairs.ListRank,
-      institution_id: conn.private.plug_session["institution_id"]
+    Repo.delete_all(
+      from(s in School.Affairs.ListRank,
+        where: s.institution_id == ^conn.private.plug_session["institution_id"]
+      )
     )
 
     Affairs.create_list_rank(%{
