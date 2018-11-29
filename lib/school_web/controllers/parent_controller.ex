@@ -57,6 +57,9 @@ defmodule SchoolWeb.ParentController do
   end
 
   def create(conn, %{"parent" => parent_params}) do
+    parent_params =
+      Map.put(parent_params, "institution_id", conn.private.plug_session["institution_id"])
+
     case Affairs.create_parent(parent_params) do
       {:ok, parent} ->
         conn

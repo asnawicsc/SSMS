@@ -116,6 +116,7 @@ defmodule SchoolWeb.ExamController do
   end
 
   def mark_analyse(conn, params) do
+    IEx.pry()
     class_id = params["class_id"]
     exam_name = params["exam_name"]
 
@@ -168,6 +169,15 @@ defmodule SchoolWeb.ExamController do
                 where: g.institution_id == ^conn.private.plug_session["institution_id"]
               )
             )
+
+          # grades =
+          #   Repo.all(
+          #     from(g in School.Affairs.ExamGrade,
+          #       where:
+          #         g.institution_id == ^conn.private.plug_session["institution_id"] and
+          #           g.exam_master_id == ^exam.id
+          #     )
+          #   )
 
           for grade <- grades do
             if student_mark >= grade.mix and student_mark <= grade.max do
@@ -230,6 +240,8 @@ defmodule SchoolWeb.ExamController do
     lulus = group_subject |> Enum.map(fn x -> x.lulus end) |> Enum.sum()
     tak_lulus = group_subject |> Enum.map(fn x -> x.tak_lulus end) |> Enum.sum()
     total = group_subject |> Enum.map(fn x -> x.total_student end) |> Enum.sum()
+
+    IEx.pry()
 
     render(
       conn,
@@ -1524,6 +1536,11 @@ defmodule SchoolWeb.ExamController do
             institution_id: conn.private.plug_session["institution_id"]
           })
 
+        student_comment =
+          Repo.get_by(School.Affairs.StudentComment,
+            student_id: student.id
+          )
+
         all =
           Repo.all(
             from(
@@ -1627,6 +1644,7 @@ defmodule SchoolWeb.ExamController do
           student_name: student_name,
           student_cname: student_cname,
           class_name: class_name,
+          student_comment: student_comment,
           institution_name: institution.name,
           rank: rank,
           total_student: total_student,

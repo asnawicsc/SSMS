@@ -97,7 +97,26 @@
       </tr>
       <tr >
         <td colspan="2" class="footer">Comment</td>
-        <td colspan="5"></td>
+        <td colspan="5">
+               <%= if student.student_comment.comment1 != nil do
+
+
+             student_comment =
+      Repo.get_by(School.Affairs.Comment,
+        id: student.student_comment.comment1
+      ).c_malay
+          end %>,
+          <%= if student.student_comment.comment2 != nil do
+              Repo.get_by(School.Affairs.Comment,
+        id: student.student_comment.comment2
+      ).c_malay
+          end %>,
+          <%= if student.student_comment.comment3 != nil do
+              Repo.get_by(School.Affairs.Comment,
+        id: student.student_comment.comment3
+      ).c_malay
+          end %>
+        </td>
       </tr>
     </tfoot>
   </table>

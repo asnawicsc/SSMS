@@ -11,7 +11,11 @@ defmodule SchoolWeb.StudentCommentController do
   end
 
   def student_comments(conn, _params) do
-    classes = Repo.all(from(c in Class, where: c.institution_id == ^User.institution_id(conn)))
+    classes =
+      Repo.all(
+        from(c in Class, where: c.institution_id == ^conn.private.plug_session["institution_id"])
+      )
+
     render(conn, "comments.html", classes: classes)
   end
 
@@ -150,11 +154,19 @@ defmodule SchoolWeb.StudentCommentController do
         )
       )
 
-    render(conn, "student_comments.html", class: class, comment: comment, students: students)
+    if students != [] do
+      render(conn, "student_comments.html", class: class, comment: comment, students: students)
+    else
+      conn
+      |> put_flash(:info, "No Student In this Class Please Enroll Student first")
+      |> redirect(to: student_comment_path(conn, :list_class_comment))
+    end
   end
 
   def mark_comment(conn, params) do
-    comment = Affairs.list_comment()
+    comment =
+      Affairs.list_comment()
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
 
     user = Repo.get_by(School.Settings.User, %{id: conn.private.plug_session["user_id"]})
 
@@ -203,7 +215,10 @@ defmodule SchoolWeb.StudentCommentController do
   end
 
   def list_class_comment(conn, params) do
-    class = Repo.all(from(c in Class, where: c.institution_id == ^User.institution_id(conn)))
+    class =
+      Repo.all(
+        from(c in Class, where: c.institution_id == ^conn.private.plug_session["institution_id"])
+      )
 
     render(conn, "list_class_comment.html", class: class)
   end

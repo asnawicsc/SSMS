@@ -431,7 +431,8 @@ defmodule SchoolWeb.StudentController do
       end
 
     headers =
-      hd(data) |> Enum.map(fn x -> String.trim(x, " ") end)
+      hd(data)
+      |> Enum.map(fn x -> String.trim(x, " ") end)
       |> Enum.map(fn x -> params["header"][x] end)
 
     contents = tl(data)
@@ -516,6 +517,9 @@ defmodule SchoolWeb.StudentController do
   end
 
   def create(conn, %{"student" => student_params}) do
+    student_params =
+      Map.put(student_params, "institution_id", conn.private.plug_session["institution_id"])
+
     case Affairs.create_student(student_params) do
       {:ok, student} ->
         conn
