@@ -76,6 +76,10 @@ defmodule SchoolWeb.ParentController do
     render(conn, "show.html", parent: parent)
   end
 
+  def login(conn, params) do
+    render(conn, "login.html", [])
+  end
+
   def show_guardian(conn, %{"id" => id}) do
     guardian = Repo.get_by(Parent, icno: id)
 
@@ -97,7 +101,8 @@ defmodule SchoolWeb.ParentController do
 
   def update(conn, %{"id" => id, "parent" => parent_params}) do
     parent =
-      Repo.get_by(Parent,
+      Repo.get_by(
+        Parent,
         icno: parent_params["icno"],
         institution_id: conn.private.plug_session["institution_id"]
       )

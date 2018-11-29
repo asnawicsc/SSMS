@@ -24,6 +24,9 @@ defmodule SchoolWeb.Router do
     # Use the default browser stack
     pipe_through([:browser, :splash_layout])
     get("/", PageController, :index_splash)
+    get("/validate_code", ApiController, :code)
+    get("/fb_login", ApiController, :fb_login)
+    get("/parent_login", ParentController, :login)
     get("/contacts_us", PageController, :contacts_us)
     get("/redirect_from_li6", PageController, :redirect_from_li6)
   end
