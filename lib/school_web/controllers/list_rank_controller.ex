@@ -15,7 +15,7 @@ defmodule SchoolWeb.ListRankController do
   def default_rank(conn, _params) do
     Repo.delete_all(
       from(s in School.Affairs.ListRank,
-        where: s.institution_id == conn.private.plug_session["institution_id"]
+        where: s.institution_id == ^conn.private.plug_session["institution_id"]
       )
     )
 
