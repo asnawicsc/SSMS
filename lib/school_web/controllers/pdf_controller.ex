@@ -806,7 +806,7 @@ defmodule SchoolWeb.PdfController do
       )
 
     standard_id =
-      if(exam_mark != []) do
+      if exam_mark != [] do
         hd(exam_mark).standard_id
       end
 
@@ -1451,7 +1451,9 @@ defmodule SchoolWeb.PdfController do
 
     institution = Repo.get_by(School.Settings.Institution, id: inst_id)
 
-    teacher = Affairs.list_teacher()|>Enum.filter(fn x -> x.institution_id==^inst_id) |> Enum.with_index()
+    teacher =
+      Affairs.list_teacher() |> Enum.filter(fn x -> x.institution_id == ^inst_id end)
+      |> Enum.with_index()
 
     html =
       Phoenix.View.render_to_string(
