@@ -116,7 +116,6 @@ defmodule SchoolWeb.ExamController do
   end
 
   def mark_analyse(conn, params) do
-    IEx.pry()
     class_id = params["class_id"]
     exam_name = params["exam_name"]
 
@@ -1025,7 +1024,7 @@ defmodule SchoolWeb.ExamController do
     a =
       Repo.get_by(School.Affairs.ExamMaster, %{
         id: exam.exam_master_id,
-        institution_id: conn.private.plug_session["user_id"]
+        institution_id: conn.private.plug_session["institution_id"]
       })
 
     exam_name = a.name
@@ -1065,7 +1064,7 @@ defmodule SchoolWeb.ExamController do
     a =
       Repo.get_by(School.Affairs.ExamMaster, %{
         id: exam.exam_master_id,
-        institution_id: conn.private.plug_session["user_id"]
+        institution_id: conn.private.plug_session["institution_id"]
       })
 
     exam_name = a.name
