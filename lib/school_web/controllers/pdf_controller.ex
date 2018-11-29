@@ -1452,7 +1452,8 @@ defmodule SchoolWeb.PdfController do
     institution = Repo.get_by(School.Settings.Institution, id: inst_id)
 
     teacher =
-      Affairs.list_teacher() |> Enum.filter(fn x -> x.institution_id == inst_id end)
+      Affairs.list_teacher()
+      |> Enum.filter(fn x -> x.institution_id == inst_id end)
       |> Enum.with_index()
 
     html =
