@@ -26,6 +26,7 @@
                            <tr>
                             <td><%= co_curriculum.id %></td>
                               <td><%= co_curriculum.code %></td>
+
                                 <td ><%= co_curriculum.description %></td>
                                   <% teacher=School.Repo.get_by(School.Affairs.Teacher,id: co_curriculum.teacher_id,institution_id: @conn.private.plug_session["institution_id"])%>
 
@@ -36,6 +37,7 @@
                                   end %>
                                  <td><%= name %></td>
                               <td align="right">
+
                                 
 <div class="btn-group">
                            <button class="btn btn-info" type="button">Marking</button>

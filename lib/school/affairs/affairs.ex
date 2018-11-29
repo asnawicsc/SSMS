@@ -720,6 +720,10 @@ defmodule School.Affairs do
     Repo.all(Teacher)
   end
 
+  def list_teacher(inst_id) do
+    Repo.all(from(t in Teacher, where: t.institution_id == ^inst_id))
+  end
+
   @doc """
   Gets a single teacher.
 
@@ -814,6 +818,10 @@ defmodule School.Affairs do
   """
   def list_subject do
     Repo.all(Subject)
+  end
+
+  def list_subject(inst_id) do
+    Repo.all(from(s in Subject, where: s.institution_id == ^inst_id))
   end
 
   @doc """
@@ -4104,6 +4112,7 @@ defmodule School.Affairs do
           }
         )
       )
+      |> Enum.reject(fn x -> x.class == nil end)
       |> Enum.map(fn x ->
         %{
           start: my_time(x.start_datetime),
@@ -4142,7 +4151,8 @@ defmodule School.Affairs do
             end_datetime: p.end_datetime,
             teacher: t.name,
             google_event_id: p.google_event_id,
-            updated_at: p.updated_at
+            updated_at: p.updated_at,
+            color: s.color
           }
         )
       )
@@ -4150,11 +4160,12 @@ defmodule School.Affairs do
         %{
           start: my_time(x.start_datetime),
           end: my_time(x.end_datetime),
-          title: x.subject <> " - " <> x.class,
+          title: x.subject <> " - " <> x.teacher,
           description: x.teacher,
           period_id: x.period_id,
           google_event_id: x.google_event_id,
-          updated_at: x.updated_at
+          updated_at: x.updated_at,
+          color: x.color
         }
       end)
 
@@ -4223,7 +4234,8 @@ defmodule School.Affairs do
           class: c.name,
           start_datetime: p.start_datetime,
           end_datetime: p.end_datetime,
-          teacher: t.name
+          teacher: t.name,
+          timetable_id: p.timetable_id
         }
       )
     )
@@ -4236,7 +4248,8 @@ defmodule School.Affairs do
         title: x.subject <> " - " <> x.class,
         class: x.class,
         subject: x.subject,
-        teacher: x.teacher
+        teacher: x.teacher,
+        timetable_id: x.timetable_id
       }
     end)
   end

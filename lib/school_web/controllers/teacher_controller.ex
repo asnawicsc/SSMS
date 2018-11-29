@@ -161,7 +161,8 @@ defmodule SchoolWeb.TeacherController do
       Map.put(teacher_params, "institution_id", conn.private.plug_session["institution_id"])
 
     tc =
-      Repo.get_by(Teacher,
+      Repo.get_by(
+        Teacher,
         code: teacher_params["code"],
         institution_id: conn.private.plug_session["institution_id"]
       )

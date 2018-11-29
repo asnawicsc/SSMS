@@ -76,7 +76,8 @@ defmodule SchoolWeb.ClassController do
             id: t.id,
             ic: t.ic,
             student_no: t.student_no,
-            phone: t.phone
+            phone: t.phone,
+            b_cert: t.b_cert
           }
         )
       )
@@ -99,10 +100,24 @@ defmodule SchoolWeb.ClassController do
   def reg_lib_student(student, lib_id, uri) do
     name = String.replace(student.name, " ", "+")
 
-    path =
-      "?scope=get_user_register_response&lib_id=#{lib_id}&name=#{name}&ic=#{student.ic}&phone=#{
+    ic =
+      if student.ic == nil do
+        student.b_cert
+      else
+        student.ic
+      end
+
+    phone =
+      if student.phone == nil do
+        "no_phone"
+      else
         student.phone
-      }&code=#{student.student_no}"
+      end
+
+    path =
+      "?scope=get_user_register_response&lib_id=#{lib_id}&name=#{name}&ic=#{ic}&phone=#{phone}&code=#{
+        student.student_no
+      }"
 
     IO.inspect(uri <> path)
     response = HTTPoison.get!(uri <> path, [{"Content-Type", "application/json"}]).body
@@ -243,6 +258,14 @@ defmodule SchoolWeb.ClassController do
       students: students,
       subject_class: subject_class
     )
+  end
+
+  def modify_timetable(conn, params) do
+    inst_id = Affairs.get_inst_id(conn)
+    teachers = Affairs.list_teacher(inst_id)
+    subjects = Affairs.list_subject(inst_id)
+    class = Repo.get(Class, params["class_id"])
+    render(conn, "modify_timetable.html", class: class, teachers: teachers, subjects: subjects)
   end
 
   def enroll_students(conn, params) do
