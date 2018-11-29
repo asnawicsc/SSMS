@@ -210,7 +210,45 @@
                   <!-- END loader widget-->
                </div>
            
-               <!-- END dashboard sidebar-->
+               <div class="col-xl-12">
+                  <div class="card card-transparent" ">
+                     <!-- Nav tabs-->
+                     <ul class="nav nav-tabs nav-fill" role="tablist">
+                        <li class="nav-item" role="presentation">
+                           <a class="nav-link active bb0" href="#home" aria-controls="home" role="tab" data-toggle="tab">
+                              <em class="far fa-clock fa-fw"></em>Frequently Asked Questions</a>
+                               
+                        </li>
+                      
+                     </ul>
+                     <!-- Tab panes-->
+
+
+                     <div class="tab-content p-0 bg-white">
+                        <div class="tab-pane active" id="home" role="tabpanel">
+                           <!-- START list group-->
+                           <div class="list-group mb-0">
+
+                      
+                                  <div class="list-group-item bt0" >
+                                  
+                                     <em class="fa-fw fas fa-question mr-2"></em>How to create Timetable for a class?
+
+                                      <a class="btn btn-xs btn-success" href="javascript:void(0);" onclick="intro_start()">Show me how</a>
+                                   </div>
+                       
+               
+                                
+                             
+                           </div>
+                           <!-- END list group-->
+                      
+                        </div>
+                     
+                     </div>
+                  </div>
+                  <!-- END card tab-->
+               </div><!-- END dashboard sidebar-->
             </div>
                
                 
@@ -438,12 +476,12 @@
                   </ol>
                   <a href ="/classes/enroll_students"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Enroll Students</button></a>
                 <a  href="/create_class"]"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Class</button></a>
-                <div class="btn-group">
+                <div class="btn-group" data-step="1" data-intro="Choose one of the class to add a timetable period.">
                    <button class="mb-1 btn-sm btn btn-outline-primary" type="button">Manage</button>
                    <button class="mb-1 btn-sm dropdown-toggle btn btn-outline-primary" type="button" data-toggle="dropdown" aria-expanded="false">
                       <span class="sr-only">info</span>
                    </button>
-                   <% require IEx %>
+         
                    <% user = Repo.get(Settings.User,@conn.private.plug_session["user_id"]) %>
 
                    <% if user.role == "Teacher" do 
@@ -461,7 +499,7 @@
 
                    <div class="dropdown-menu" role="menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(67px, 33px, 0px);">
                     <%= for class <- all_classes do %>
-                      <a class="dropdown-item" href="/class_setting/<%= class.id %>"><%= class.name %></a>
+                      <a class="dropdown-item student_class" href="/class_setting/<%= class.id %>"><%= class.name %></a>
                     <% end %>
                    </div>
                 </div>
@@ -506,4 +544,12 @@ for (i = 0; i < arrayList; i++) {
 $('#percent1').attr("data-percent",total);
 
 $("#percent").html(total+"%");
+
+function intro_start(){
+  introJs().start();
+  $("a.student_class").each(function(i, v){
+    var _href = $(v).attr("href"); 
+   $(v).attr("href", _href + '?how_to=true')
+  })
+}
 </script>

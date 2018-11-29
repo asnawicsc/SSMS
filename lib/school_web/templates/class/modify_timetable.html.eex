@@ -9,6 +9,11 @@
    <div><%= @class.name %>'s Timetable
       <small><%= gettext("welcome")%>!</small>
    </div>
+   <div class="ml-auto">
+                  <div class="btn-group">
+                      <a class="btn btn-xs btn-success" href="javascript:void(0);" onclick="javascript:introJs().start();">Show me how</a>
+                  </div>
+               </div>
 
 </div>
 <div class="row">
@@ -27,7 +32,7 @@
       </div>
 
 
-       	<div class="card mb-3 border-default">
+       	<div class="card mb-3 border-default"  data-step="3" data-intro="Once selected, the form below will populate the date time for you, the rest is to enter the teacher and subject.">
          <div class="card-header text-white bg-primary">Add new subject class block</div>
          <div class="card-body">
               <form >
@@ -69,7 +74,7 @@
   </div>
   <div class="col-lg-9">
   
-      <div class="card mb-3 border-default">
+      <div class="card mb-3 border-default"  data-step="2" data-intro="Click on the date or time block on the calendar.">
          <div class="card-header text-white bg-primary">Timetable</div>
          <div class="card-body">
 			<div id='calendar'></div>
@@ -90,7 +95,11 @@
 
 <script type="text/javascript">
 			  $(document).ready(function(){
-
+  if (RegExp('how_to', 'gi').test(window.location.search)) {
+    
+    
+        introJs().start();
+      }
 
 			  
 				jQuery('.datetimepicker').datetimepicker();

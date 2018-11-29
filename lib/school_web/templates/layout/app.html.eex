@@ -118,6 +118,8 @@
  <script src="/vendor/easy-pie-chart/dist/jquery.easypiechart.js"></script>
 <link rel="stylesheet" type="text/css" href="/vendor/jquery_datetimepicker/jquery.datetimepicker.min.css"/ >
 <script src="/vendor/jquery_datetimepicker/jquery.datetimepicker.full.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/vendor/introjs.css"/ >
+<script src="/vendor/intro.js"></script>
       <%= if @conn.private.plug_session["style"] == nil do %>
         <link id="autoloaded-stylesheet" rel="stylesheet" href="/css/theme-a.css">
       <% else %>

@@ -25,7 +25,7 @@
                   <div class="col-lg-3">
                      <div class="card b">
                         <div class="card-header bg-gray-lighter text-bold"><%= @class.name %> Class Settings</div>
-                        <div class="list-group">
+                        <div class="list-group" data-step="2" data-intro="Click on the class period.">
                            <a class="list-group-item list-group-item-action active" href="#tabSetting1" id="class_info" data-toggle="tab">Class Info</a>
                            <a class="list-group-item list-group-item-action" href="#tabSetting2" id="class_subject" data-toggle="tab">Class Subject</a>
                            <a class="list-group-item list-group-item-action" href="#tabSetting3" id="class_period" data-toggle="tab">Class Period</a>
@@ -99,7 +99,10 @@
                               <div class="card-header bg-gray-lighter text-bold">Timetable</div>
                               <div class="card-body">
                                  <div id='calendar'></div>
-                                 <a href="/class_setting/<%= @conn.params["class_id"]%>/modify_timetable" ><button class="mb-1 btn btn-outline-info" type="button">Modify Timetable</button></a>
+                                 <div data-step="3" data-intro="Click here to add the period.">
+                                   
+                                 <a href="/class_setting/<%= @conn.params["class_id"]%>/modify_timetable" id="how_to" ><button class="mb-1 btn btn-outline-info" type="button">Modify Timetable</button></a>
+                                 </div>
                               </div>
                              
                            </div>
@@ -143,7 +146,12 @@
 <script type="text/javascript">
            $(document).ready(function(){
 
-
+  if (RegExp('how_to', 'gi').test(window.location.search)) {
+      $("a#class_period").click();
+      var _href = $("a#how_to").attr("href")
+      $("a#how_to").attr("href", _href + "?how_to=true")
+        introJs().start();
+      }
            
             jQuery('#datetimepicker').datetimepicker();
 
