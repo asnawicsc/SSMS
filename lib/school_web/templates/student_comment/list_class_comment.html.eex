@@ -1,5 +1,5 @@
 <div class="content-heading">
-   <div>Class List
+   <div>Create Comment by Class
       <small><%= gettext("welcome")%>!</small>
    </div>
    <!-- START Language list-->

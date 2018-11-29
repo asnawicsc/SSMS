@@ -90,6 +90,9 @@
       <tr>
         <td colspan="2" class="footer">Comment</td>
         <td colspan="5">
+          <%=  if @student_comment != nil  do %>
+            
+     
 
           <%= if @student_comment.comment1 != nil do
 
@@ -109,6 +112,8 @@
         id: @student_comment.comment3
       ).c_malay
           end %>
+
+           <% end %>
         </td>
       </tr>
   </table>
