@@ -1531,8 +1531,7 @@ defmodule SchoolWeb.UserChannel do
       Repo.all(
         from(
           s in School.Affairs.ExamMark,
-          where:
-            s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
+          where: s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
           select: %{
             class_id: s.class_id,
             subject_id: s.subject_id,
@@ -3016,65 +3015,163 @@ defmodule SchoolWeb.UserChannel do
     {:ok, s_date, 0} = DateTime.from_iso8601(start_date)
     {:ok, e_date, 0} = DateTime.from_iso8601(end_date)
 
-    case School.Affairs.get_teacher(user_id) do
-      {:ok, teacher} ->
-        {:ok, timetable} = School.Affairs.initialize_calendar(teacher.id)
+    if period_id == 0 do
+      # create a new period 
+      teacher = Affairs.get_teacher!(user_id)
 
-        # need to find that period and update it
-        period = Repo.get(School.Affairs.Period, period_id)
+      {:ok, timetable} = School.Affairs.initialize_calendar(teacher.id)
+      subject_id = event_id_str |> String.split("_") |> List.first()
+      class_id = event_id_str |> String.split("_") |> List.last()
 
-        if period != nil do
-          a =
-            School.Affairs.update_period(period, %{
-              start_datetime: s_date,
-              end_datetime: e_date,
-              timetable_id: timetable.id,
-              teacher_id: teacher.id
-            })
+      a =
+        Affairs.create_period(%{
+          start_datetime: s_date,
+          end_datetime: e_date,
+          timetable_id: timetable.id,
+          teacher_id: teacher.id,
+          subject_id: subject_id,
+          class_id: class_id
+        })
 
-          case a do
-            {:ok, period} ->
-              if period.google_event_id != nil do
-                flag_pending_sync(period.id)
-              end
-
-              broadcast(socket, "show_period", %{
-                "period_id" => period_id,
-                "user_id" => user_id,
-                "start_date" => start_date,
-                "end_date" => end_date,
-                "event_id_str" => event_id_str
-              })
-
-            {:error, changeset} ->
-              errors = changeset.errors |> Keyword.keys()
-
-              {reason, message} = changeset.errors |> hd()
-              {proper_message, message_list} = message
-              final_reason = Atom.to_string(reason) <> " " <> proper_message
-
-              broadcast(socket, "show_failed_period", %{
-                "period_id" => period_id,
-                "user_id" => user_id,
-                "start_date" => start_date,
-                "end_date" => end_date,
-                "event_id_str" => event_id_str,
-                "final_reason" => final_reason
-              })
+      case a do
+        {:ok, period} ->
+          if period.google_event_id != nil do
+            flag_pending_sync(period.id)
           end
-        else
-          broadcast(socket, "show_failed_period", %{
-            "period_id" => period_id,
-            "user_id" => user_id,
-            "start_date" => start_date,
-            "end_date" => end_date,
-            "event_id_str" => event_id_str,
-            "final_reason" => "block doesnt exist!"
-          })
-        end
 
-      {:error, "no teacher assigned"} ->
-        true
+          broadcast(socket, "show_period_new", %{
+            "start_date" => start_date,
+            "end_date" => end_date
+          })
+
+        {:error, changeset} ->
+          errors = changeset.errors |> Keyword.keys()
+
+          {reason, message} = changeset.errors |> hd()
+          {proper_message, message_list} = message
+          final_reason = Atom.to_string(reason) <> " " <> proper_message
+
+          broadcast(socket, "show_failed_period", %{
+            "final_reason" => final_reason
+          })
+      end
+
+      # user id is the teacher id
+      # event_id is the subject_id 
+    else
+      case School.Affairs.get_teacher(user_id) do
+        {:ok, teacher} ->
+          {:ok, timetable} = School.Affairs.initialize_calendar(teacher.id)
+
+          # need to find that period and update it
+          period = Repo.get(School.Affairs.Period, period_id)
+
+          period_params = %{
+            start_datetime: s_date,
+            end_datetime: e_date
+          }
+
+          if period.teacher_id == nil do
+            period_params = Map.put(period_params, :teacher_id, teacher.id)
+            period_params = Map.put(period_params, :timetable_id, timetable.id)
+          end
+
+          if period != nil do
+            a = School.Affairs.update_period(period, period_params)
+
+            case a do
+              {:ok, period} ->
+                if period.google_event_id != nil do
+                  flag_pending_sync(period.id)
+                end
+
+                broadcast(socket, "show_period", %{
+                  "period_id" => period_id,
+                  "user_id" => user_id,
+                  "start_date" => start_date,
+                  "end_date" => end_date,
+                  "event_id_str" => event_id_str
+                })
+
+              {:error, changeset} ->
+                errors = changeset.errors |> Keyword.keys()
+
+                {reason, message} = changeset.errors |> hd()
+                {proper_message, message_list} = message
+                final_reason = Atom.to_string(reason) <> " " <> proper_message
+
+                broadcast(socket, "show_failed_period", %{
+                  "period_id" => period_id,
+                  "user_id" => user_id,
+                  "start_date" => start_date,
+                  "end_date" => end_date,
+                  "event_id_str" => event_id_str,
+                  "final_reason" => final_reason
+                })
+            end
+          else
+            broadcast(socket, "show_failed_period", %{
+              "period_id" => period_id,
+              "user_id" => user_id,
+              "start_date" => start_date,
+              "end_date" => end_date,
+              "event_id_str" => event_id_str,
+              "final_reason" => "block doesnt exist!"
+            })
+          end
+
+        {:error, "no teacher assigned"} ->
+          period = Repo.get(School.Affairs.Period, period_id)
+
+          period_params = %{
+            start_datetime: s_date,
+            end_datetime: e_date
+          }
+
+          if period != nil do
+            a = School.Affairs.update_period(period, period_params)
+
+            case a do
+              {:ok, period} ->
+                if period.google_event_id != nil do
+                  flag_pending_sync(period.id)
+                end
+
+                broadcast(socket, "show_period", %{
+                  "period_id" => period_id,
+                  "user_id" => user_id,
+                  "start_date" => start_date,
+                  "end_date" => end_date,
+                  "event_id_str" => event_id_str
+                })
+
+              {:error, changeset} ->
+                errors = changeset.errors |> Keyword.keys()
+
+                {reason, message} = changeset.errors |> hd()
+                {proper_message, message_list} = message
+                final_reason = Atom.to_string(reason) <> " " <> proper_message
+
+                broadcast(socket, "show_failed_period", %{
+                  "period_id" => period_id,
+                  "user_id" => user_id,
+                  "start_date" => start_date,
+                  "end_date" => end_date,
+                  "event_id_str" => event_id_str,
+                  "final_reason" => final_reason
+                })
+            end
+          else
+            broadcast(socket, "show_failed_period", %{
+              "period_id" => period_id,
+              "user_id" => user_id,
+              "start_date" => start_date,
+              "end_date" => end_date,
+              "event_id_str" => event_id_str,
+              "final_reason" => "block doesnt exist!"
+            })
+          end
+      end
     end
 
     {:noreply, socket}

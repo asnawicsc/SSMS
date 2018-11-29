@@ -23,6 +23,7 @@
   <thead>
 
     <tr>
+       <th id="">Timetable ID</th>
       <th id="">Class</th>
       <th>Subject </th>
       <th>Teacher</th>
@@ -44,6 +45,7 @@
 
 
     <tr>
+       <td><%= period.timetable_id %></td>
        <td><%= period.class %></td>
         <td><%= period.subject  %></td>
          <td><%= period.teacher  %></td>

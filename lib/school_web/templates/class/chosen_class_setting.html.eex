@@ -96,9 +96,10 @@
                         </div>
                         <div class="tab-pane" id="tabSetting3">
                            <div class="card b">
-                              <div class="card-header bg-gray-lighter text-bold">Emails</div>
+                              <div class="card-header bg-gray-lighter text-bold">Timetable</div>
                               <div class="card-body">
                                  <div id='calendar'></div>
+                                 <a href="/class_setting/<%= @conn.params["class_id"]%>/modify_timetable" ><button class="mb-1 btn btn-outline-info" type="button">Modify Timetable</button></a>
                               </div>
                              
                            </div>
@@ -119,56 +120,7 @@
                                  </div>
                               </div>
                         </div>
-                        <div class="tab-pane" id="tabSetting5">
-                           <div class="card b">
-                              <div class="card-header bg-gray-lighter text-bold">Applications</div>
-                              <div class="card-body">
-                                 <p>
-                                    <span>You have granted access for</span>
-                                    <strong>3 applications</strong>
-                                    <span>to your account.</span>
-                                 </p>
-                                 <div class="list-group">
-                                    <div class="list-group-item d-flex align-items-center">
-                                       <img class="mr-2 img-fluid thumb48" src="img/dummy.png" alt="App">
-                                       <div>
-                                          <p class="text-bold mb-0">Application #1</p>
-                                          <small>Ut turpis urna, tristique sed adipiscing nec, luctus quis leo.</small>
-                                       </div>
-                                       <div class="ml-auto">
-                                          <button class="btn btn-secondary" type="button">
-                                             <strong>Revoke</strong>
-                                          </button>
-                                       </div>
-                                    </div>
-                                    <div class="list-group-item d-flex align-items-center">
-                                       <img class="mr-2 img-fluid thumb48" src="img/dummy.png" alt="App">
-                                       <div>
-                                          <p class="text-bold mb-0">Application #2</p>
-                                          <small>Ut turpis urna, tristique sed adipiscing nec, luctus quis leo.</small>
-                                       </div>
-                                       <div class="ml-auto">
-                                          <button class="btn btn-secondary" type="button">
-                                             <strong>Revoke</strong>
-                                          </button>
-                                       </div>
-                                    </div>
-                                    <div class="list-group-item d-flex align-items-center">
-                                       <img class="mr-2 img-fluid thumb48" src="img/dummy.png" alt="App">
-                                       <div>
-                                          <p class="text-bold mb-0">Application #3</p>
-                                          <small>Ut turpis urna, tristique sed adipiscing nec, luctus quis leo.</small>
-                                       </div>
-                                       <div class="ml-auto">
-                                          <button class="btn btn-secondary" type="button">
-                                             <strong>Revoke</strong>
-                                          </button>
-                                       </div>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
+              
                      </div>
                 
                </div>
@@ -194,6 +146,7 @@
 
            
             jQuery('#datetimepicker').datetimepicker();
+
 
                channel.on("show_period", payload => {
                   swal("Saved!", "Your event has been saved!", "success");
@@ -233,20 +186,25 @@
              // put your options and callbacks here
              header: { center: 'month,agendaWeek' }, 
 
-             editable: true,
+      
             eventLimit: true, // when too many events in a day, show the popover
              eventSources: [{
                url: '/timetable/class/<%= @class_id %>',
                timezone: 'UTC',
-               color: 'yellow',    // an option!
-               textColor: 'black'  // an option!
+               color: '#5d9cec',    // an option!
+               textColor: 'white'  // an option!
              }],
-             droppable: true, // this allows things to be dropped onto the calendar
-             drop: function(date, jsEvent, ui, resourceId) {
-                  var target_date = date._d;
-                     var dayWrapper = moment(target_date);
-                     dayWrapper.subtract(8, 'hours');
-             }
+          eventClick: function(calEvent, jsEvent, view) {
+
+      
+              swal({
+                title: calEvent.title,
+                text: calEvent.description,
+                type: "info"
+               
+              })
+          }
+
 
            });
 

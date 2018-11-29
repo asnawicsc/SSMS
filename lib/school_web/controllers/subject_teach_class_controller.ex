@@ -82,6 +82,9 @@ defmodule SchoolWeb.SubjectTeachClassController do
   end
 
   def create(conn, %{"subject_teach_class" => subject_teach_class_params}) do
+    subject_teach_class_params =
+      Map.put(subject_teach_class_params, "institution_id", Affairs.get_inst_id(conn))
+
     case Affairs.create_subject_teach_class(subject_teach_class_params) do
       {:ok, subject_teach_class} ->
         conn

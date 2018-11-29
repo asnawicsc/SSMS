@@ -298,6 +298,7 @@ defmodule SchoolWeb.Router do
 
     get("/class_setting", ClassController, :class_setting)
     get("/class_setting/:class_id", ClassController, :chosen_class_setting)
+    get("/class_setting/:class_id/modify_timetable", ClassController, :modify_timetable)
     get("/show_student_info/:student_id", ClassController, :show_student_info)
 
     post("/create_student_co", CoCurriculumController, :create_student_co)

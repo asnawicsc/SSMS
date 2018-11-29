@@ -260,6 +260,14 @@ defmodule SchoolWeb.ClassController do
     )
   end
 
+  def modify_timetable(conn, params) do
+    inst_id = Affairs.get_inst_id(conn)
+    teachers = Affairs.list_teacher(inst_id)
+    subjects = Affairs.list_subject(inst_id)
+    class = Repo.get(Class, params["class_id"])
+    render(conn, "modify_timetable.html", class: class, teachers: teachers, subjects: subjects)
+  end
+
   def enroll_students(conn, params) do
     inst_id = Affairs.get_inst_id(conn)
     classes = Affairs.list_classes(inst_id)
