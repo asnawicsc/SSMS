@@ -16,7 +16,7 @@
                      <table class="table table-striped" id="bootgrid-command3">
                         <thead>
                            <tr>
-                             <th data-column-id="id">ID</th>
+                             <th data-column-id="id" data-visible="false">ID</th>
                               <th data-column-id="sender">Class</th>
                               <th data-column-id="" data-order="desc">Teacher</th>
 
@@ -27,11 +27,21 @@
                         </thead>
                         <tbody>
                            <%= for a <- @class |> Enum.sort do %>
-                                 <% teacher = Repo.get_by(School.Affairs.Teacher, %{id: a.teacher_id}) %>
+
+                           <% teacher=if a.teacher_id == nil do
+
+                             "Unknown Teacher"
+
+                           else
+
+                           Repo.get_by(School.Affairs.Teacher, %{id: a.teacher_id,institution_id: @conn.private.plug_session["institution_id"]}).name
+                             
+                           end %>
+                                 
                            <tr>
                             <td><%= a.id %></td>
                               <td><%= a.name %></td>
-                                 <td><%= teacher.name %></td>
+                                 <td><%= teacher %></td>
                               <td></td>
                            </tr>
                           <% end %>

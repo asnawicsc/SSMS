@@ -116,6 +116,7 @@ defmodule SchoolWeb.ExamController do
   end
 
   def mark_analyse(conn, params) do
+    IEx.pry()
     class_id = params["class_id"]
     exam_name = params["exam_name"]
 
@@ -168,6 +169,15 @@ defmodule SchoolWeb.ExamController do
                 where: g.institution_id == ^conn.private.plug_session["institution_id"]
               )
             )
+
+          # grades =
+          #   Repo.all(
+          #     from(g in School.Affairs.ExamGrade,
+          #       where:
+          #         g.institution_id == ^conn.private.plug_session["institution_id"] and
+          #           g.exam_master_id == ^exam.id
+          #     )
+          #   )
 
           for grade <- grades do
             if student_mark >= grade.mix and student_mark <= grade.max do
@@ -230,6 +240,8 @@ defmodule SchoolWeb.ExamController do
     lulus = group_subject |> Enum.map(fn x -> x.lulus end) |> Enum.sum()
     tak_lulus = group_subject |> Enum.map(fn x -> x.tak_lulus end) |> Enum.sum()
     total = group_subject |> Enum.map(fn x -> x.total_student end) |> Enum.sum()
+
+    IEx.pry()
 
     render(
       conn,
@@ -303,8 +315,6 @@ defmodule SchoolWeb.ExamController do
               }
             )
           )
-
-        IEx.pry()
 
         {class, a}
       else
@@ -1259,7 +1269,12 @@ defmodule SchoolWeb.ExamController do
     end
   end
 
-  def report_card(conn, %{"id" => id, "exam_name" => exam_name, "rank" => rank}) do
+  def report_card(conn, %{
+        "id" => id,
+        "exam_name" => exam_name,
+        "exam_id" => exam_id,
+        "rank" => rank
+      }) do
     student_rank = rank |> String.split("-") |> List.to_tuple() |> elem(0)
     total_student_in_class = rank |> String.split("-") |> List.to_tuple() |> elem(1)
 
@@ -1276,7 +1291,17 @@ defmodule SchoolWeb.ExamController do
         {standard_rank, total_student}
       end
 
-    student = Affairs.get_student!(id)
+    student =
+      Repo.get_by(School.Affairs.Student,
+        id: id,
+        institution_id: conn.private.plug_session["institution_id"]
+      )
+
+    student_comment =
+      Repo.get_by(School.Affairs.StudentComment,
+        student_id: student.id
+      )
+
     institution = Repo.get(Institution, conn.private.plug_session["institution_id"])
 
     all =
@@ -1312,20 +1337,26 @@ defmodule SchoolWeb.ExamController do
         )
       )
 
+    exam =
+      Repo.get_by(School.Affairs.ExamMaster, %{
+        id: exam_id,
+        institution_id: conn.private.plug_session["institution_id"]
+      })
+
     all_data =
       for data <- all do
         grades =
           Repo.all(
             from(
-              g in School.Affairs.Grade,
+              g in School.Affairs.ExamGrade,
               where:
                 g.institution_id == ^conn.private.plug_session["institution_id"] and
-                  g.standard_id == ^data.standard_id
+                  g.exam_master_id == ^exam.id
             )
           )
 
         for grade <- grades do
-          if data.mark >= grade.mix and data.mark <= grade.max do
+          if data.mark >= grade.min and data.mark <= grade.max do
             %{
               class_name: data.class_name,
               semester: data.semester,
@@ -1373,6 +1404,7 @@ defmodule SchoolWeb.ExamController do
         total_gpa: total_gpa,
         total_mark: total_mark,
         total_average: total_average,
+        exam: exam,
         a: a,
         b: b,
         c: c,
@@ -1380,6 +1412,7 @@ defmodule SchoolWeb.ExamController do
         e: e,
         f: f,
         g: g,
+        student_comment: student_comment,
         cgpa: cgpa,
         all_data: all_data,
         student_name: student_name,
@@ -1425,16 +1458,24 @@ defmodule SchoolWeb.ExamController do
     # the format of standard array is "exam_name/stu_id/class_rank - total_student - standard_rank - total_student_standard"
     student_data_lists = params["array"] |> String.split(",")
 
+    exam_id =
+      params["array"]
+      |> String.split(",")
+      |> hd
+      |> String.split("/")
+      |> List.to_tuple()
+      |> elem(1)
+
     students =
       for list <- student_data_lists do
         exam_name = list |> String.split("/") |> List.to_tuple() |> elem(0)
-        student_id = list |> String.split("/") |> List.to_tuple() |> elem(1)
+        student_id = list |> String.split("/") |> List.to_tuple() |> elem(2)
 
         rank =
           list
           |> String.split("/")
           |> List.to_tuple()
-          |> elem(2)
+          |> elem(3)
           |> String.split("-")
           |> List.to_tuple()
           |> elem(0)
@@ -1443,7 +1484,7 @@ defmodule SchoolWeb.ExamController do
           list
           |> String.split("/")
           |> List.to_tuple()
-          |> elem(2)
+          |> elem(3)
           |> String.split("-")
           |> List.to_tuple()
           |> elem(1)
@@ -1452,14 +1493,14 @@ defmodule SchoolWeb.ExamController do
           if list
              |> String.split("/")
              |> List.to_tuple()
-             |> elem(2)
+             |> elem(3)
              |> String.split("-")
              |> Enum.count() == 4 do
             standard_rank =
               list
               |> String.split("/")
               |> List.to_tuple()
-              |> elem(2)
+              |> elem(3)
               |> String.split("-")
               |> List.to_tuple()
               |> elem(2)
@@ -1468,7 +1509,7 @@ defmodule SchoolWeb.ExamController do
               list
               |> String.split("/")
               |> List.to_tuple()
-              |> elem(2)
+              |> elem(3)
               |> String.split("-")
               |> List.to_tuple()
               |> elem(3)
@@ -1481,17 +1522,33 @@ defmodule SchoolWeb.ExamController do
             {standard_rank, total_student_standard}
           end
 
-        student = Affairs.get_student!(student_id)
+        student =
+          Repo.get_by(School.Affairs.Student,
+            id: student_id,
+            institution_id: conn.private.plug_session["institution_id"]
+          )
+
         institution = Repo.get(Institution, conn.private.plug_session["institution_id"])
+
+        exam =
+          Repo.get_by(School.Affairs.ExamMaster, %{
+            id: exam_id,
+            institution_id: conn.private.plug_session["institution_id"]
+          })
+
+        student_comment =
+          Repo.get_by(School.Affairs.StudentComment,
+            student_id: student.id
+          )
 
         all =
           Repo.all(
             from(
               em in School.Affairs.ExamMark,
-              left_join: f in School.Affairs.Exam,
-              on: em.exam_id == f.id,
+              left_join: z in School.Affairs.Exam,
+              on: em.exam_id == z.id,
               left_join: e in School.Affairs.ExamMaster,
-              on: f.exam_master_id == e.id,
+              on: z.exam_master_id == e.id,
               left_join: j in School.Affairs.Semester,
               on: e.semester_id == j.id,
               left_join: s in School.Affairs.Student,
@@ -1502,13 +1559,7 @@ defmodule SchoolWeb.ExamController do
               on: sc.class_id == c.id,
               left_join: sb in School.Affairs.Subject,
               on: em.subject_id == sb.id,
-              where:
-                em.student_id == ^student.id and e.name == ^exam_name and
-                  e.institution_id == ^conn.private.plug_session["institution_id"] and
-                  j.institution_id == ^conn.private.plug_session["institution_id"] and
-                  s.institution_id == ^conn.private.plug_session["institution_id"] and
-                  c.institution_id == ^conn.private.plug_session["institution_id"] and
-                  sb.institution_id == ^conn.private.plug_session["institution_id"],
+              where: em.student_id == ^student.id and e.name == ^exam_name,
               select: %{
                 student_name: s.name,
                 chinese_name: s.chinese_name,
@@ -1527,14 +1578,15 @@ defmodule SchoolWeb.ExamController do
           for data <- all do
             grades =
               Repo.all(
-                from(
-                  g in School.Affairs.Grade,
-                  where: g.institution_id == ^conn.private.plug_session["institution_id"]
+                from(g in School.Affairs.ExamGrade,
+                  where:
+                    g.institution_id == ^conn.private.plug_session["institution_id"] and
+                      g.exam_master_id == ^exam.id
                 )
               )
 
             for grade <- grades do
-              if data.mark >= grade.mix and data.mark <= grade.max do
+              if data.mark >= grade.min and data.mark <= grade.max do
                 %{
                   class_name: data.class_name,
                   semester: data.semester,
@@ -1587,10 +1639,12 @@ defmodule SchoolWeb.ExamController do
           f: f,
           g: g,
           cgpa: cgpa,
+          exam: exam,
           all_data: all_data,
           student_name: student_name,
           student_cname: student_cname,
           class_name: class_name,
+          student_comment: student_comment,
           institution_name: institution.name,
           rank: rank,
           total_student: total_student,

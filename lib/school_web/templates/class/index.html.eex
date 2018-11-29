@@ -54,8 +54,8 @@
                       <td><%= name %></td>
                     
       <td class="text-right">
-        <a class="mb-1 btn-sm btn btn-outline-info" href="/classes/<%= class.id %>">Edit</a>
-    <a class="mb-1 btn-sm btn btn-outline-success" href="/class_setting/<%= class.id %>">Manage</a>
+        <a class="mb-1 btn-sm btn btn-outline-warning" href="/classes/<%= class.id %>">Edit</a>
+    <a class="mb-1 btn-sm btn btn-outline-success" href="/class_setting/<%= class.id %>">View</a>
         <a class="mb-1 btn-sm btn btn-outline-primary" href="/classes/<%= class.id %>/sync_library_membership">Sync Library Membership</a>
       
         

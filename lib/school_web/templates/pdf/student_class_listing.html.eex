@@ -1,3 +1,9 @@
+<center><b>SENARAI MURID MENGIKUT KELAS</b></center><br>
+<center><b><%= @institution.name %></b></br></center>
+<p  style="margin-right: 10px; margin-left: 10px;">Kelas: <b><%= @class.name %></b></p>
+
+
+
 <table class="table" border="1" style="border-collapse: collapse; margin-right: 10px; margin-left: 10px;"  >
   <thead>
     <tr align="center">
