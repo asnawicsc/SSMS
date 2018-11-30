@@ -17,13 +17,33 @@
             <option value="<%= semester.id %>"><%= semester.start_date %> - <%= semester.end_date %>
             </option><% end %>
           </select>
+           <br>
                     <select id="show_class" class="custom-select custom-select-sm">
             <option selected="">Choose a class</option><%= for class <- @classes do %>
             <option value="<%= class.id %>"><%= class.name %>
             </option><% end %>
           </select>
                 </form>
-                <ol id="student_list"></ol>
+                <br>
+                 <br>
+                       <div class="table-responsive">
+                    <table class="table" id="remove_from_class">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <%= gettext("Name") %>
+                                </th>
+                                <th>
+                                    <%= gettext("Action") %>
+                                </th>
+                              
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+       
             </div>
         </div>
         <!-- END card-->
@@ -106,13 +126,24 @@
                      .receive(
                      "ok", payload => {
                        var data = payload.students
-                       $("ol#student_list").html("")
-                       $(data).each(function(i, v){
-    
-                        var li = '<li aria-label="'+v.id +'">'+v.name+'&nbsp &nbsp &nbsp &nbsp &nbsp <div class="btn btn-primary btn-xs btn-outline remove_from_class" aria-label="'+v.id+'">Remove</div>' +'</li>'
-                        $("ol#student_list").append(li)
-                       })
-    
+                       $("table#remove_from_class").html("")
+                    
+                         $("table#remove_from_class").DataTable({
+                              destroy: true,
+                             data: data,
+                      
+                         
+                             columns: [
+                                 {data: 'name'},
+                                 {data: 'id',
+                                    render: function(data, type, row, meta){
+                                      var html = '<div class="btn btn-primary remove_from_class" aria-label="'+data+'">Remove</div>'   
+                                    return html
+                                  }
+                                 }
+                
+                             ]
+                         });
                      })
     
                      .receive(
@@ -143,14 +174,39 @@
            channel.push("load_class_students", {semester_id: semester_id, class_id: id, user_id: window.currentUser, institution_id: window.currentInstitute}).receive(
            "ok", payload => {
              var data = payload.students
-             $("ol#student_list").html("")
-             $(data).each(function(i, v){
+
+
+
+
+             $("table#remove_from_class").DataTable({
+                  destroy: true,
+                 data: data,
+          
+             
+                 columns: [
+                     {data: 'name'},
+                     {data: 'id',
+                        render: function(data, type, row, meta){
+                          var html = '<div class="btn btn-primary remove_from_class" aria-label="'+data+'">Remove</div>'   
+                        return html
+                      }
+                     }
+    
+                 ]
+             });
+
+
+
+
+
+             // $("ol#student_list").html("")
+             // $(data).each(function(i, v){
     
     
     
-              var li = '<li aria-label="'+v.id +'">'+v.name+'&nbsp &nbsp &nbsp &nbsp &nbsp <div class="btn btn-primary btn-xs btn-outline remove_from_class" aria-label="'+v.id+'">Remove</div>' +'</li>'
-              $("ol#student_list").append(li)
-             })
+             //  var li = '<li aria-label="'+v.id +'">'+v.name+'&nbsp &nbsp &nbsp &nbsp &nbsp <div class="btn btn-primary btn-xs btn-outline remove_from_class" aria-label="'+v.id+'">Remove</div>' +'</li>'
+             //  $("ol#student_list").append(li)
+             // })
     
            })
     
@@ -243,13 +299,24 @@
                             var data = payload.students
 
 
-                     $("ol#student_list").html("")
-                     $(data).each(function(i, v){
-
+                     $("table#remove_from_class").html("")
+                    
+             $("table#remove_from_class").DataTable({
+                  destroy: true,
+                 data: data,
+          
+             
+                 columns: [
+                     {data: 'name'},
+                     {data: 'id',
+                        render: function(data, type, row, meta){
+                          var html = '<div class="btn btn-primary remove_from_class" aria-label="'+data+'">Remove</div>'   
+                        return html
+                      }
+                     }
     
-                      var li ='<li aria-label="'+v.id +'">'+v.name+'&nbsp &nbsp &nbsp &nbsp &nbsp <div class="btn btn-primary btn-xs btn-outline remove_from_class" aria-label="'+v.id+'">Remove</div>' +'</li>'
-                      $("ol#student_list").append(li)
-                     })
+                 ]
+             });
                       })
     
                    } else {
