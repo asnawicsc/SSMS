@@ -1,10 +1,10 @@
+<% require IEx %>
 
-
-<% levels = School.Repo.all(from l in School.Affairs.Level,where: l.institution_id ==^@conn.private.plug_session["institution_id"], select: {l.name, l.id}) %>
+<% levels = School.Repo.all(from l in School.Affairs.Level,where: l.institution_id ==^@conn.private.plug_session["institution_id"], select: {l.name, l.id}) |> List.insert_at(0, {"Left empty to choose single class.", 0}) %>
 
 <% subject = School.Repo.all(from l in School.Affairs.Subject,where: l.institution_id ==^@conn.private.plug_session["institution_id"], select: {l.description, l.id}) %>
 
-<% class = School.Repo.all(from l in School.Affairs.Class,where: l.institution_id ==^@conn.private.plug_session["institution_id"], select: {l.name, l.id}) %>
+<% class = School.Repo.all(from l in School.Affairs.Class,where: l.institution_id ==^@conn.private.plug_session["institution_id"], select: {l.name, l.id}) |> List.insert_at(0, {"Left empty to apply all class in the chosen standard.", 0}) %>
 
 <%= form_for @changeset, @action, fn f -> %>
   <%= if @changeset.action do %>

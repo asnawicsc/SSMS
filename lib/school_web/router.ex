@@ -27,6 +27,7 @@ defmodule SchoolWeb.Router do
     get("/validate_code", ApiController, :code)
     get("/fb_login", ApiController, :fb_login)
     get("/parent_login", ParentController, :login)
+    get("/parents_corner", ParentController, :parents_corner)
     get("/contacts_us", PageController, :contacts_us)
     get("/redirect_from_li6", PageController, :redirect_from_li6)
   end

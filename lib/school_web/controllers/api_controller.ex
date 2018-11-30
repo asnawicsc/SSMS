@@ -111,8 +111,8 @@ defmodule SchoolWeb.ApiController do
 
     response = HTTPoison.get!(uri2)
     body = response.body
-    IO.puts(body)
     {:ok, map_first} = Poison.decode(body)
+    IO.inspect(map_first)
     access_token = map_first["access_token"]
 
     uri4 =
@@ -122,8 +122,8 @@ defmodule SchoolWeb.ApiController do
 
     response = HTTPoison.get!(uri4)
     body = response.body
-    IO.puts(body)
     {:ok, map} = Poison.decode(body)
+    IO.inspect(map)
 
     page_access_token = map["access_token"]
 
@@ -134,8 +134,8 @@ defmodule SchoolWeb.ApiController do
 
     response = HTTPoison.get!(uri3)
     body = response.body
-    IO.puts(body)
     {:ok, map_last} = Poison.decode(body)
+    IO.inspect(map_last)
     user_id = map_last["data"]["user_id"]
 
     if user_id == nil do
@@ -152,16 +152,22 @@ defmodule SchoolWeb.ApiController do
 
       response = HTTPoison.get!(uri5)
       body = response.body
-      IO.puts(body)
       {:ok, map_user} = Poison.decode(body)
+      IO.inspect(map_user)
 
       # here is where we start gathering data for the ids for apps, there is also a possibility where the user dont have data for the current fb app...
       # there is no psid, maybe didnt include the business manager for the page.
       # very likely there is a name in map_user 
       # just create this as a normal str8 user 
-      IO.puts("checking for params state\n")
+      IO.inspect("checking for params state\n")
 
       IO.inspect(conn.params["state"])
+
+      parent = Repo.get_by(School.Affairs.Parent, fb_user_id: user_id)
+
+      if parent == nil do
+        School.Affairs.create_parent(%{fb_user_id: user_id})
+      end
 
       conn
       |> put_session(:user_id, user_id)

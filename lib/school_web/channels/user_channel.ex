@@ -3284,9 +3284,32 @@ defmodule SchoolWeb.UserChannel do
             Repo.get_by(StudentClass, sudent_id: student_id, semester_id: semester_id).class_id
           )
 
-        {:reply, {:error, %{name: student.name, class: class.name, ex_class: ex_class.name}},
-         socket}
+        {:reply,
+         {:error,
+          %{
+            name: student.name,
+            student_id: student.id,
+            class: class.name,
+            ex_class: ex_class.name
+          }}, socket}
     end
+  end
+
+  def handle_in("remove_from_class", payload, socket) do
+    ex_class =
+      Repo.get_by(School.Affairs.StudentClass,
+        sudent_id: payload["student_id"],
+        semester_id: payload["semester_id"],
+        class_id: payload["class_id"]
+      )
+
+    student = Affairs.get_student!(payload["student_id"])
+
+    Affairs.delete_student_class(ex_class)
+
+    students = Affairs.get_student_list(payload["class_id"], payload["semester_id"])
+
+    {:reply, {:error, %{students: students, name: student.name, student_id: student.id}}, socket}
   end
 
   def handle_in(

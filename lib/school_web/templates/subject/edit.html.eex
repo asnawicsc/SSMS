@@ -16,4 +16,4 @@
 </div>
 
 
-<span><%= link "Back", to: subject_path(@conn, :index) %></span>
+<span><%= link "Back", to: subject_teach_class_path(@conn, :index), class: "btn btn-outline-primary" %></span>

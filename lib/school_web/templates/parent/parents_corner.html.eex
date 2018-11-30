@@ -1,0 +1,42 @@
+
+<header class="header header-inverse" style="background-color: #9ac29d">
+      <div class="container text-center">
+
+        <div class="row">
+          <div class="col-12 col-lg-8 offset-lg-2">
+
+            <h1>Parents Corner</h1>
+            <p class="fs-20 opacity-70">Read and get updated on how your child progress.</p>
+
+          </div>
+        </div>
+
+      </div>
+    </header>
+    <section class="section section-inverse pb-0 overflow-hidden" style="background-color: #50748e">
+        <div class="container">
+          <div class="row align-items-center">
+            
+            <div class="col-12 col-md-8 pb-70">
+              <h2>Just to double confirm</h2>
+              <p class="lead">You will see this until we linked your Facebook ID with your profile registered at school.</p>
+              <br>
+              <form class="form-inline form-glass" action="" method="post" target="_blank">
+                <div class="input-group">
+                  <input name="ic_no" class="form-control" placeholder="Enter IC Number" type="text">
+                  <span class="input-group-btn">
+                    <button class="btn btn-outline btn-white" type="button">Link <i class="ti-arrow-right fs-9 ml-8"></i></button>
+                  </span>
+                </div>
+              </form>
+            </div>
+
+
+            <div class="col-12 col-md-4">
+              <img src="/assets/img/phone-2.png" alt="..." data-aos="slide-up" class="aos-init aos-animate">
+            </div>
+
+          </div>
+
+        </div>
+      </section>
