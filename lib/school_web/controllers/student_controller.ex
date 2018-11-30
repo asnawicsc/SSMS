@@ -18,6 +18,56 @@ defmodule SchoolWeb.StudentController do
     render(conn, "index.html", students: students)
   end
 
+  def students_transfer(conn, params) do
+    curr_semester = Repo.get(Semester, conn.private.plug_session["semester_id"])
+    all_semesters = Repo.all(from(s in Semester, where: s.start_date > ^curr_semester.end_date))
+
+    render(
+      conn,
+      "student_transfer.html",
+      curr_semester: curr_semester,
+      all_semesters: all_semesters
+    )
+  end
+
+  def submit_student_transfer(conn, params) do
+    students =
+      Repo.all(
+        from(
+          s in Student,
+          left_join: sc in StudentClass,
+          on: sc.sudent_id == s.id,
+          where:
+            sc.institute_id == ^conn.private.plug_session["institution_id"] and
+              sc.semester_id == ^conn.private.plug_session["semester_id"],
+          select: %{
+            student_id: s.id,
+            semester_id: sc.semester_id,
+            class_id: sc.class_id
+          }
+        )
+      )
+
+    for student <- students do
+      cur_class = Repo.get(Class, student.class_id)
+      next_class = Repo.get(Class, cur_class.next_class)
+
+      student_param = %{
+        class_id: next_class.id,
+        institute_id: conn.private.plug_session["institution_id"],
+        level_id: next_class.level_id,
+        semester_id: String.to_integer(params["next_semester_id"]),
+        sudent_id: student.student_id
+      }
+
+      Affairs.create_student_class(student_param)
+    end
+
+    conn
+    |> put_flash(:info, "All students transferred to next semester successfully !")
+    |> redirect(to: student_path(conn, :students_transfer))
+  end
+
   def height_weight_semester(conn, params) do
     user = Repo.get(User, conn.private.plug_session["user_id"])
     semester = Repo.get(Semester, params["semester_id"])
