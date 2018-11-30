@@ -48,7 +48,7 @@
 
                            
                                  <%= if semesters == [] do  %>
-                                    <a class="list-group-item bt0" href="/semesters/new">
+                                    <a class="list-group-item bt0" href="/create_semesters">
                                   <span class="badge badge-danger float-right" id="a1" as="0" >Not Set</span>
                                      <em class="fa-fw fas fa-calendar-alt mr-2"></em>Create Semester</a>
                                <% else %>
@@ -477,7 +477,7 @@
                   <a href ="/classes/enroll_students"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Enroll Students</button></a>
                 <a  href="/create_class"]"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Class</button></a>
                 <div class="btn-group" data-step="1" data-intro="Choose one of the class to add a timetable period.">
-                   <button class="mb-1 btn-sm btn btn-outline-primary" type="button">Manage</button>
+                   <a href="/classes"><button class="mb-1 btn-sm btn btn-outline-primary" type="button" >Manage</button></a>
                    <button class="mb-1 btn-sm dropdown-toggle btn btn-outline-primary" type="button" data-toggle="dropdown" aria-expanded="false">
                       <span class="sr-only">info</span>
                    </button>

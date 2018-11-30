@@ -492,15 +492,21 @@ defmodule SchoolWeb.ExamController do
           )
         )
 
-      render(
-        conn,
-        "mark.html",
-        all: all,
-        student: student,
-        class: class,
-        subject: subject,
-        exam_id: exam_id
-      )
+      if student == [] do
+        conn
+        |> put_flash(:info, "No Student in the Class,Please Enroll Student to Class first.")
+        |> redirect(to: exam_path(conn, :mark_sheet))
+      else
+        render(
+          conn,
+          "mark.html",
+          all: all,
+          student: student,
+          class: class,
+          subject: subject,
+          exam_id: exam_id
+        )
+      end
     else
       class =
         Repo.get_by(School.Affairs.Class, %{
