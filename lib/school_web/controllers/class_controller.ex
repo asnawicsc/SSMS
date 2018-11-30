@@ -4,6 +4,51 @@ defmodule SchoolWeb.ClassController do
 
   require IEx
 
+  def class_transfer(conn, params) do
+    all_classes =
+      Repo.all(
+        from(
+          c in Class,
+          left_join: l in Level,
+          on: l.id == c.level_id,
+          where: c.institution_id == ^conn.private.plug_session["institution_id"],
+          select: %{
+            id: c.id,
+            class_name: c.name,
+            next_class: c.next_class,
+            level_name: l.name,
+            level_id: l.id
+          }
+        )
+      )
+      |> Enum.group_by(fn x -> x.level_name end)
+
+    render(conn, "class_transfer.html", classes: all_classes)
+  end
+
+  def submit_class_transfer(conn, params) do
+    for each <- params do
+      if elem(each, 1) != "Graduate" do
+        cur_class = elem(each, 1) |> String.split("->") |> List.to_tuple() |> elem(0)
+        next_class = elem(each, 1) |> String.split("->") |> List.to_tuple() |> elem(1)
+        cur_class = Repo.get(Class, cur_class)
+        class_params = %{next_class: next_class}
+
+        Affairs.update_class(cur_class, class_params)
+      else
+        cur_class = elem(each, 1) |> String.split("->") |> List.to_tuple() |> elem(0)
+        cur_class = Repo.get(Class, cur_class)
+        class_params = %{next_class: "Graduate"}
+
+        Affairs.update_class(cur_class, class_params)
+      end
+    end
+
+    conn
+    |> put_flash(:info, "Class transfer settings updated.")
+    |> redirect(to: class_path(conn, :class_transfer))
+  end
+
   def mark_sheet_listing(conn, params) do
     semesters =
       Repo.all(from(s in Semester))
@@ -229,7 +274,8 @@ defmodule SchoolWeb.ClassController do
           on: s.id == st.sudent_id,
           left_join: c in Class,
           on: c.id == st.class_id,
-          where: c.id == ^class_id,
+          where:
+            c.id == ^class_id and st.semester_id == ^conn.private.plug_session["semester_id"],
           order_by: [asc: s.name]
         )
       )

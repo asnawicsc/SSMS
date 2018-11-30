@@ -26,7 +26,9 @@
                    
                      </ul>
                      <!-- Tab panes-->
-
+                     <% require IEx %>
+                     <% a = @conn %>
+                                    
                         <% subject = School.Repo.all(from l in School.Affairs.Subject,where: l.institution_id ==^@conn.private.plug_session["institution_id"], select: {l.id}) %>
                         <% semesters = School.Repo.all(from l in School.Affairs.Semester,where: l.institution_id ==^@conn.private.plug_session["institution_id"], select: {l.id}) %>
                          <% students = School.Repo.all(from l in School.Affairs.Student,where: l.institution_id ==^@conn.private.plug_session["institution_id"], select: {l.id}) %>
@@ -202,6 +204,36 @@
                    
                   <!-- END loader widget-->
                </div>
+
+               <div class="col-xl-12">
+
+                    <div class="card card-transparent">
+                      <ul class="nav nav-tabs nav-fill" role="tablist">
+                        <li class="nav-item" role="presentation">
+                           <a class="nav-link active bb0" href="#home" aria-controls="home" role="tab" data-toggle="tab">
+                              <em class="fas fa-calendar-check"></em> <b>Year End Processing</b></a>
+                        </li>
+                   
+                     </ul>
+
+                     <div class="tab-content p-0 bg-white">
+                        <div class="tab-pane active" id="home" role="tabpanel">
+                           <!-- START list group-->
+                           <div class="list-group mb-0">
+                            <a class="list-group-item bt0" href="/class_transfer">
+                             <button class="btn btn-labeled btn-info btn-xs mb-2 float-right" type="button">
+                           <span class="btn-label"><i class="fa fa-cog"></i></span>Settings</button>
+                               <em class="fa-fw fas fa-calendar-alt mr-2"></em>Class Transfer Settings</a>
+
+                               <a class="list-group-item bt0" href="/students_transfer">
+                             <button class="btn btn-labeled btn-info btn-xs mb-2 float-right" type="button">
+                           <span class="btn-label"><i class="fa fa-cog"></i></span>Go Transfer</button>
+                               <em class="fa-fw fas fa-exchange-alt mr-2"></em>Transfer All Students</a>
+                           </div>
+                        </div>
+                      </div>
+                    </div>
+                 </div>
            
                <!-- END dashboard sidebar-->
             </div>
@@ -258,6 +290,7 @@
                     <% end %>
                    </div>
                 </div>
+
                 <a  href="/class_setting"]"><button class="mb-1 btn-sm btn btn-outline-primary" type="button" style="display: none;">Settings</button></a>
              </div>
           </div>

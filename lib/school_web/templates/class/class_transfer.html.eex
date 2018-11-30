@@ -1,0 +1,59 @@
+<div class="content-heading">
+   <div>Class Transfer Settings
+      <small><%= gettext("Set which classes to be transfer!")%></small>
+   </div>
+
+</div>
+
+<div class="row">
+	<%= for class <- @classes do %>
+	<div class="col-md-5">
+	  <!-- START card-->
+	  <div class="card mb-3 border-success">
+	    <div class="card-header text-white bg-success"><%= elem(class,0)%></div>
+	    <div class="card-body">
+	    <form action="/submit_class_transfer" >
+		<%= for each <- elem(class,1) do %>
+			
+				<div class="form-group">
+                   <label class="col-md-5 col-form-label">Class: <b><%= each.class_name%></b></label>
+                   <div class="col-md-8">
+                      <div class="input-group mb-2">
+                         <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">Transfer to</span>
+                         </div>
+                         <% require IEx %>
+                         <% a = @conn %>
+
+                         <% choices = Repo.all(from c in Affairs.Class, where: c.institution_id == ^a.private.plug_session["institution_id"]) %>
+                         
+                         <select class="custom-select custom-select" name="transfer_from_<%= each.class_name %>" aria-describedby="basic-addon1">
+                         	<%= for choice <- choices do %>
+                         		<%= if each.next_class != nil do %>
+	                         		<%= if Integer.to_string(choice.id) != each.next_class do %>
+	                         			<option value="<%= each.id %>-><%= choice.id %>"><%= choice.name %></option>
+	                         		<% else %>
+	                         			<% cur_class = Repo.get(Affairs.Class, each.next_class) %>
+                                		<option value="<%= each.id %>-><%= cur_class.id %>" selected=""><%= cur_class.name %></option>
+	                         		<% end %>
+	                         	<% else %>
+	                         		<option value="<%= each.id %>-><%= choice.id %>"><%= choice.name %></option>
+	                         	<% end %>
+                         		
+                         	<% end %>
+                         		<%= if each.next_class != "Graduate" do %>
+                                	<option value="<%= each.id %>->Graduate">Graduate</option>
+                                <% else %>
+                                	<option value="<%= each.id %>->Graduate" selected="">Graduate</option>
+                                <% end %>
+                         </select>
+                      </div>    
+                   </div>
+                </div>
+		<% end %>
+		<button class="mb-1 btn btn-info float-right" type="submit">Submit</button>
+        </form>
+		    	</div>
+		 	</div>
+		</div>
+	<% end %>
