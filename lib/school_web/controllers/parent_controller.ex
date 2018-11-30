@@ -93,7 +93,9 @@ defmodule SchoolWeb.ParentController do
     if parent != nil do
       Affairs.update_parent(parent, %{fb_user_id: user.fb_user_id})
 
-      Repo.delete(user)
+      if user != parent do
+        Repo.delete(user)
+      end
     end
 
     conn
