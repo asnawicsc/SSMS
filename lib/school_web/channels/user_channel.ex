@@ -3192,7 +3192,7 @@ defmodule SchoolWeb.UserChannel do
     user = Repo.get(User, user_id)
     term = "%#{term}%"
 
-    students =
+    all_student =
       Repo.all(
         from(
           s in Student,
@@ -3215,6 +3215,30 @@ defmodule SchoolWeb.UserChannel do
           limit: 100
         )
       )
+
+    student =
+      Repo.all(
+        from(
+          s in StudentClass,
+          left_join: g in Student,
+          on: s.sudent_id == g.id,
+          where: g.institution_id == ^institution_id,
+          select: %{
+            name: g.name,
+            c_name: g.chinese_name,
+            ic: g.ic,
+            b_cert: g.b_cert,
+            gicno: g.gicno,
+            ficno: g.ficno,
+            micno: g.micno,
+            phone: g.phone,
+            id: g.id
+          },
+          limit: 100
+        )
+      )
+
+    students = all_student -- student
 
     {:reply, {:ok, %{students: students}}, socket}
   end
