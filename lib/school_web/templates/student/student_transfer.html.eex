@@ -1,6 +1,6 @@
 <div class="content-heading">
    <div>Transfer All Students
-      <small><%= gettext("Transfer all student to next semester at once!")%></small>
+      <small><%= gettext("Transfer all student to next year at once!")%></small>
    </div>
 
 </div>
