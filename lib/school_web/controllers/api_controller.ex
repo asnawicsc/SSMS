@@ -6,6 +6,47 @@ defmodule SchoolWeb.ApiController do
   alias School.Settings.{Institution, User, Parameter}
   require IEx
 
+  def personal_broadcast(chatfuel_block_name, user_attribute_list_map) do
+    bot_id = "5bd1836d0ecd9f0159d5f60a"
+    psid = "2320864854622545"
+    ct = "mELtlMAHYqR0BvgEiMq8zVek3uYUK3OJMbtyrdNPTrQB9ndV0fM7lWTFZbM4MZvD"
+    chatfuel_message_tag = "COMMUNITY_ALERT"
+
+    uri =
+      "https://api.chatfuel.com/bots/#{bot_id}/users/#{psid}/send?chatfuel_token=#{ct}&chatfuel_message_tag=#{
+        chatfuel_message_tag
+      }&chatfuel_block_name=#{chatfuel_block_name}"
+
+    user_attributes =
+      for map <- user_attribute_list_map do
+        key = Map.keys(map) |> hd() |> Atom.to_string() |> URI.encode()
+        value = Map.values(map) |> hd() |> URI.encode()
+
+        "&#{key}=#{value}"
+      end
+      |> Enum.join()
+
+    uri = uri <> user_attributes
+
+    IO.inspect(uri)
+
+    case HTTPoison.request(:post, uri, "", [{"Content-Type", "application/json"}], []) do
+      {:ok, %HTTPoison.Response{body: body}} ->
+        IO.inspect(Poison.decode(body))
+        IO.puts("message sent!")
+
+      {:error, %HTTPoison.Error{reason: reason}} ->
+        IO.inspect(Poison.decode(reason))
+
+      {:ok, %HTTPoison.Response{status_code: 400, body: body}} ->
+        IO.inspect(Poison.decode(body))
+        IO.puts("message sent!")
+
+      _ ->
+        IO.puts("dont know how to catch this")
+    end
+  end
+
   def webhook_get(conn, params) do
     cond do
       params["fields"] == nil ->

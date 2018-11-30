@@ -84,16 +84,18 @@ defmodule SchoolWeb.ParentController do
     render(conn, "login.html", [])
   end
 
-  def show_guardian(conn, %{"id" => id}) do
-    guardian = Repo.get_by(Parent, icno: id)
+  def show_guardian(conn, params) do
+    guardian = Repo.get_by(Parent, icno: params["id"])
 
-    if guardian != [] do
+    if guardian != nil do
       changeset = Affairs.change_parent(guardian)
       render(conn, "edit.html", parent: guardian, changeset: changeset)
     else
+      student = Repo.get_by(Student, student_no: params["student_no"])
+
       conn
-      |> put_flash(:info, "This parent information is not exist")
-      |> redirect(to: student_path(conn, :index))
+      |> put_flash(:info, "This parent information does not exist")
+      |> redirect(to: class_path(conn, :show_student_info, student.id))
     end
   end
 

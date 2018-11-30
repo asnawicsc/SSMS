@@ -278,22 +278,25 @@ defmodule SchoolWeb.ClassController do
   def show_student_info(conn, params) do
     student = Repo.get(Student, params["student_id"])
 
+    guardian =
+      if student.gicno != nil do
+        Repo.get_by(Parent, icno: student.gicno)
+      else
+        nil
+      end
+
+    father =
+      if student.ficno != nil do
+        Repo.get_by(Parent, icno: student.ficno)
+      else
+        nil
+      end
+
     mother =
       if student.micno != nil do
         Repo.get_by(Parent, icno: student.micno)
       else
-      end
-
-    father =
-      if student.micno != nil do
-        Repo.get_by(Parent, icno: student.ficno)
-      else
-      end
-
-    guardian =
-      if student.micno != nil do
-        Repo.get_by(Parent, icno: student.gicno)
-      else
+        nil
       end
 
     render(

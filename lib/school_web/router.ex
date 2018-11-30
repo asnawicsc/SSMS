@@ -29,6 +29,7 @@ defmodule SchoolWeb.Router do
     get("/parent_login", ParentController, :login)
     get("/parents_corner", ParentController, :parents_corner)
     get("/contacts_us", PageController, :contacts_us)
+    post("/match_parents_ic", ParentController, :match_parents_ic)
     get("/redirect_from_li6", PageController, :redirect_from_li6)
   end
 

@@ -220,6 +220,7 @@ defmodule SchoolWeb.AttendanceController do
       |> Enum.filter(fn x -> x != nil end)
 
     attended_std = student_ids |> String.split(",")
+
     abs_ids = abs_ids -- attended_std
 
     for each <- abs_ids do
@@ -243,6 +244,58 @@ defmodule SchoolWeb.AttendanceController do
     conn
     |> put_flash(:info, "Attendance recorded successfully.")
     |> redirect(to: attendance_path(conn, :index))
+  end
+
+  def inform_parents_student_attendance(attended_std) do
+    for id <- attended_std do
+      student = Affairs.get_student!(id)
+
+      guardian =
+        if student.gicno != nil do
+          Repo.get_by(Parent, icno: student.gicno)
+        else
+          nil
+        end
+
+      father =
+        if student.ficno != nil do
+          Repo.get_by(Parent, icno: student.ficno)
+        else
+          nil
+        end
+
+      mother =
+        if student.micno != nil do
+          Repo.get_by(Parent, icno: student.micno)
+        else
+          nil
+        end
+
+      cond do
+        guardian != nil ->
+          fb_send_attedance_report(guardian, student)
+
+        father != nil ->
+          fb_send_attedance_report(father, student)
+
+        mother != nil ->
+          fb_send_attedance_report(mother, student)
+      end
+    end
+  end
+
+  def fb_send_attedance_report(parent, student) do
+    date =
+      DateTime.utc_now() |> Timex.shift(hours: 8) |> Timex.format("%Y-%m-%d %H:%M ", :strftime)
+      |> elem(1)
+
+    if parent.fb_user_id != nil do
+      SchoolWeb.ApiController.personal_broadcast("attendance_announcement", %{
+        name: student.name,
+        date: date,
+        message: "is present during teacher taking attendance."
+      })
+    end
   end
 
   def attendance_report(conn, params) do
