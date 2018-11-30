@@ -80,6 +80,20 @@ defmodule SchoolWeb.ParentController do
     render(conn, "show.html", parent: parent)
   end
 
+  def match_parents_ic(conn, params) do
+    icno = params["ic_no"] |> String.replace("-", "")
+
+    parent = Repo.get_by(Parent, icno: icno)
+
+    user = Settings.current_user(conn)
+
+    IO.inspect(parent)
+    IO.inspect(user)
+
+    conn
+    |> redirect(to: parent_path(conn, :parents_corner))
+  end
+
   def login(conn, params) do
     render(conn, "login.html", [])
   end

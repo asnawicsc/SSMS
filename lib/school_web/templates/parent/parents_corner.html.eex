@@ -21,7 +21,8 @@
               <h2>Just to double confirm</h2>
               <p class="lead">You will see this until we linked your Facebook ID with your profile registered at school.</p>
               <br>
-              <form class="form-inline form-glass" action="/match_parents_ic" method="post" target="_blank">
+              <form class="form-inline form-glass" action="/match_parents_ic" method="post" >
+                     <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
                 <div class="input-group">
                   <input name="ic_no" class="form-control" placeholder="Enter IC Number" type="text">
                   <span class="input-group-btn">
