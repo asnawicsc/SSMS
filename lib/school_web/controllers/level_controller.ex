@@ -18,9 +18,12 @@ defmodule SchoolWeb.LevelController do
   end
 
   def default_standard(conn, _params) do
+    inst_id = Affairs.get_inst_id(conn)
+
     Repo.delete_all(
-      from(s in School.Affairs.Level,
-        where: s.institution_id == ^@conn.private.plug_session["institution_id"]
+      from(
+        s in School.Affairs.Level,
+        where: s.institution_id == ^inst_id
       )
     )
 

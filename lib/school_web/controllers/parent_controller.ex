@@ -56,6 +56,10 @@ defmodule SchoolWeb.ParentController do
     render(conn, "new.html", changeset: changeset)
   end
 
+  def parents_corner(conn, params) do
+    render(conn, "parents_corner.html", [])
+  end
+
   def create(conn, %{"parent" => parent_params}) do
     parent_params =
       Map.put(parent_params, "institution_id", conn.private.plug_session["institution_id"])

@@ -1,0 +1,7 @@
+
+<div class="content-heading">
+   <div>Parent's Corner
+      <small><%= gettext("welcome")%>!</small>
+   </div>
+
+</div>
