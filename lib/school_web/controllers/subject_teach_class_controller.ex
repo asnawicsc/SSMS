@@ -82,17 +82,88 @@ defmodule SchoolWeb.SubjectTeachClassController do
   end
 
   def create(conn, %{"subject_teach_class" => subject_teach_class_params}) do
-    subject_teach_class_params =
-      Map.put(subject_teach_class_params, "institution_id", Affairs.get_inst_id(conn))
+    inst_id = Affairs.get_inst_id(conn)
+    subject_teach_class_params = Map.put(subject_teach_class_params, "institution_id", inst_id)
 
-    case Affairs.create_subject_teach_class(subject_teach_class_params) do
-      {:ok, subject_teach_class} ->
+    standard_id = subject_teach_class_params["standard_id"]
+    class_id = subject_teach_class_params["class_id"]
+
+    all_class = Affairs.list_classes(inst_id)
+
+    cond do
+      standard_id == "0" and class_id == "0" ->
+        for class <- all_class do
+          subject_teach_class_params = Map.put(subject_teach_class_params, "class_id", class.id)
+
+          subject_teach_class_params =
+            Map.put(subject_teach_class_params, "standard_id", class.standard_id)
+
+          case Affairs.create_subject_teach_class(subject_teach_class_params) do
+            {:ok, subject_teach_class} ->
+              true
+
+            {:error, %Ecto.Changeset{} = changeset} ->
+              true
+          end
+        end
+
         conn
         |> put_flash(:info, "Subject teach class created successfully.")
         |> redirect(to: subject_teach_class_path(conn, :index))
 
-      {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset)
+      standard_id != "0" and class_id == "0" ->
+        for class <-
+              all_class
+              |> Enum.filter(fn x -> x.standard_id == String.to_integer(standard_id) end) do
+          subject_teach_class_params = Map.put(subject_teach_class_params, "class_id", class.id)
+
+          subject_teach_class_params =
+            Map.put(subject_teach_class_params, "standard_id", class.standard_id)
+
+          case Affairs.create_subject_teach_class(subject_teach_class_params) do
+            {:ok, subject_teach_class} ->
+              true
+
+            {:error, %Ecto.Changeset{} = changeset} ->
+              IEx.pry()
+              true
+          end
+        end
+
+        conn
+        |> put_flash(:info, "Subject teach class created successfully.")
+        |> redirect(to: subject_teach_class_path(conn, :index))
+
+      standard_id == "0" and class_id != "0" ->
+        for class <- all_class |> Enum.filter(fn x -> x.id == String.to_integer(class_id) end) do
+          subject_teach_class_params = Map.put(subject_teach_class_params, "class_id", class.id)
+
+          subject_teach_class_params =
+            Map.put(subject_teach_class_params, "standard_id", class.standard_id)
+
+          case Affairs.create_subject_teach_class(subject_teach_class_params) do
+            {:ok, subject_teach_class} ->
+              true
+
+            {:error, %Ecto.Changeset{} = changeset} ->
+              true
+          end
+        end
+
+        conn
+        |> put_flash(:info, "Subject teach class created successfully.")
+        |> redirect(to: subject_teach_class_path(conn, :index))
+
+      true ->
+        case Affairs.create_subject_teach_class(subject_teach_class_params) do
+          {:ok, subject_teach_class} ->
+            conn
+            |> put_flash(:info, "Subject teach class created successfully.")
+            |> redirect(to: subject_teach_class_path(conn, :index))
+
+          {:error, %Ecto.Changeset{} = changeset} ->
+            render(conn, "new.html", changeset: changeset)
+        end
     end
   end
 

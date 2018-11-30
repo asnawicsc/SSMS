@@ -25,4 +25,4 @@
 </ul>
 
 <span><%= link "Edit", to: subject_path(@conn, :edit, @subject) %></span>
-<span><%= link "Back", to: subject_path(@conn, :support_dashboard) %></span>
+<span><%= link "Back", to: page_path(@conn, :dashboard) %></span>

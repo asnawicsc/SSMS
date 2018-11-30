@@ -9,6 +9,7 @@ defmodule School.Affairs.Subject do
     field(:sysdef, :integer)
     field(:institution_id, :integer)
     field(:color, :string)
+    has_many(:period, School.Affairs.Period)
     timestamps()
   end
 
