@@ -90,6 +90,12 @@ defmodule SchoolWeb.ParentController do
     IO.inspect(parent)
     IO.inspect(user)
 
+    if parent != nil do
+      Affairs.update_parent(parent, %{fb_user_id: user.fb_user_id})
+
+      Repo.delete(user)
+    end
+
     conn
     |> redirect(to: parent_path(conn, :parents_corner))
   end
