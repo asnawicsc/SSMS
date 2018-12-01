@@ -1,17 +1,43 @@
 
-<h1>Holiday Listing</h1>
 
 
-<form action="/pdf/holiday_listing" method="POST">
-	<input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+<div class="content-heading">
+    <div>Holiday Listing
+        <small><%= gettext("welcome")%>!</small>
+    </div>
+    <!-- START Language list-->
+    <div class="ml-auto">
 
-<select name="semester" required="required">
-	<%= for sem <- @semesters do %>
+    </div>
+    <!-- END Language list-->
+</div>
 
-	<option value="<%=sem.id %>" value=><%= sem.start_date %> - <%= sem.end_date %></option>
-	<% end %>
-</select>
-<input type="submit" name="" value="Generate!">
-</form>
+<div class="row">
 
+    <%= render( SchoolWeb.ExamView ,"report_nav.html",conn: @conn) %>
 
+        <div class="col-lg-9">
+
+            <div class="card">
+                    <div class="card-header">Holiday Listing Report</div>
+                <div class="card-body">
+                    <form action="/pdf/holiday_listing" method="POST">
+                        <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+                        <div class="form-row">
+                          <div class="form-group col-md-3">
+                         <select class="custom-select -custom-select-sm" name="semester" required="required">
+                           
+                          <%= for sem <- @semesters do %>
+                               <option value="<%=sem.id %>" value=><%= sem.start_date %> - <%= sem.end_date %></option>
+                                <% end %>
+                        </select>
+                      </div>
+          
+                       <div class="form-group col-md-2">
+                        <button class="mb-1 btn btn-primary" type="submit" name="" value="Generate">Generate</button>
+                      </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+</div>

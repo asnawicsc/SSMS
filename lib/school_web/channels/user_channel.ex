@@ -3297,7 +3297,53 @@ defmodule SchoolWeb.UserChannel do
       {:ok, sc} ->
         students = Affairs.get_student_list(class_id, semester_id)
 
-        {:reply, {:ok, %{students: students}}, socket}
+        all_student =
+          Repo.all(
+            from(
+              s in Student,
+              where: s.institution_id == ^institution_id,
+              select: %{
+                name: s.name,
+                c_name: s.chinese_name,
+                ic: s.ic,
+                b_cert: s.b_cert,
+                gicno: s.gicno,
+                ficno: s.ficno,
+                micno: s.micno,
+                phone: s.phone,
+                id: s.id
+              },
+              limit: 100
+            )
+          )
+
+        student =
+          Repo.all(
+            from(
+              s in StudentClass,
+              left_join: g in Student,
+              on: s.sudent_id == g.id,
+              where:
+                g.institution_id == ^institution_id and s.class_id == ^class_id and
+                  s.semester_id == ^semester_id,
+              select: %{
+                name: g.name,
+                c_name: g.chinese_name,
+                ic: g.ic,
+                b_cert: g.b_cert,
+                gicno: g.gicno,
+                ficno: g.ficno,
+                micno: g.micno,
+                phone: g.phone,
+                id: g.id
+              },
+              limit: 100
+            )
+          )
+
+        all_student = all_student -- student
+
+        {:reply, {:ok, %{students: students, all_student: all_student}}, socket}
 
       {:error, changeset} ->
         Process.sleep(500)

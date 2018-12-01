@@ -144,11 +144,45 @@
                 
                              ]
                          });
+
+                         var data2 = payload.all_student
+
+                          $("table#result").html("")
+    
+             $("table#result").DataTable({
+                  destroy: true,
+                 data: data2,
+          
+             
+                 columns: [
+                     {data: 'name'},
+                     {data: 'c_name'},
+                     {data: 'ic'},
+                     {data: 'b_cert'},
+                     {data: 'gicno'},
+                     {data: 'ficno'},
+                     {data: 'micno'},
+                     {data: 'phone'},
+                     {data: 'id',
+                        render: function(data, type, row, meta){
+                          var html = '<div class="btn btn-primary add_to_class" id="'+data+'">Add</div>'   
+                        return html
+                      }
+                     }
+    
+                 ]
+             });
+
+
+
                      })
     
                      .receive(
                      "error", payload => {
                         swal("Opps", payload.name + " was not added to " + payload.class + "!" + "\nCurrently in : " + payload.ex_class , "info");
+
+                      
+
     
                      });
            
@@ -238,7 +272,7 @@
     
     
              var data = payload.students
-    
+
     
              $("table#result").DataTable({
                   destroy: true,
@@ -267,6 +301,8 @@
            }
           )
          };
+
+
     
       $(document).on("click", ".remove_from_class", function(){
     

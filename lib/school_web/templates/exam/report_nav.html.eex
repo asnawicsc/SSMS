@@ -77,6 +77,11 @@
                            <span>Mark Analysis Grade</span>
                            <span class="ml-auto badge"><em class="fa-2x fas fa-file-medical-alt text-purple"></em></span>
                         </a>
+                         <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" href="/holiday_report">
+                           <span class="circle bg-warning mr-2"></span>
+                           <span>Holiday Listing</span>
+                           <span class="ml-auto badge"><em class="fa-2x fa fa-compass text-purple"></em></span>
+                        </a>
               
                      </div>
             

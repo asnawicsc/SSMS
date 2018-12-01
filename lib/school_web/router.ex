@@ -385,6 +385,7 @@ defmodule SchoolWeb.Router do
     resources("/list_rank", ListRankController)
     get("/default_rank", ListRankController, :default_rank)
     post("/default_standard", LevelController, :default_standard)
+    get("/assign_lib_access", UserController, :assign_lib_access)
 
     get("/*path", PageController, :no_page_found)
   end
