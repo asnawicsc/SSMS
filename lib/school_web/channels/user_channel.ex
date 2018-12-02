@@ -982,6 +982,7 @@ defmodule SchoolWeb.UserChannel do
 
   def handle_in("student_class_listing", payload, socket) do
     class_id = payload["class_id"]
+    semester_id = payload["semester_id"]
 
     all =
       Repo.all(
@@ -991,7 +992,7 @@ defmodule SchoolWeb.UserChannel do
           on: s.class_id == g.id,
           left_join: r in School.Affairs.Student,
           on: r.id == s.sudent_id,
-          where: s.class_id == ^class_id,
+          where: s.class_id == ^class_id and s.semester_id == ^semester_id,
           select: %{
             id: s.sudent_id,
             chinese_name: r.chinese_name,
@@ -1008,13 +1009,17 @@ defmodule SchoolWeb.UserChannel do
       |> Enum.with_index()
 
     html =
-      Phoenix.View.render_to_string(
-        SchoolWeb.ClassView,
-        "student_list.html",
-        all: all,
-        csrf: payload["csrf"],
-        class_id: class_id
-      )
+      if all != [] do
+        Phoenix.View.render_to_string(
+          SchoolWeb.ClassView,
+          "student_list.html",
+          all: all,
+          csrf: payload["csrf"],
+          class_id: class_id
+        )
+      else
+        "No Student In This Class"
+      end
 
     broadcast(socket, "show_student_class_listing", %{
       html: html
