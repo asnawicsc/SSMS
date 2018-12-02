@@ -22,6 +22,12 @@ defmodule SchoolWeb.UserController do
     end
   end
 
+  def assign_lib_access(conn, params) do
+    users = Settings.list_users()
+
+    render(conn, "library_assign.html", users: users)
+  end
+
   def authenticate(conn, %{"email" => email, "password" => password}) do
     user = Repo.get_by(User, email: email)
 

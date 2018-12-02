@@ -5,4 +5,4 @@
 </div>
 <%= render "form2.html", Map.put(assigns, :action, teacher_path(@conn, :create)) %>
 
-<span><%= link "Back", to: teacher_path(@conn, :index) %></span>
+

@@ -36,10 +36,12 @@
                         <select class="custom-select -custom-select-sm" name="exam" required="required">
 
                             <%= for exam <- @exams do %>
+
+                            <% standard=Repo.get_by(School.Affairs.Level, id: exam.level_id) %>
                                 <option value="<%= exam.id %>">
                                     <%= exam.name %>(
-                                        <%= exam.year %>)(Standard :
-                                            <%= exam.level_id %>)</option>
+                                        <%= exam.year %>)(
+                                            <%= standard.name %>)</option>
                                 <% end %>
                         </select>
                     </div>
