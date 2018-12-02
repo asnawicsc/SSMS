@@ -125,7 +125,6 @@ defmodule SchoolWeb.SubjectTeachClassController do
               true
 
             {:error, %Ecto.Changeset{} = changeset} ->
-              IEx.pry()
               true
           end
         end

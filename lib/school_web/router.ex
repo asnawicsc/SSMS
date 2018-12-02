@@ -29,6 +29,7 @@ defmodule SchoolWeb.Router do
     get("/parent_login", ParentController, :login)
     get("/parents_corner", ParentController, :parents_corner)
     get("/contacts_us", PageController, :contacts_us)
+    post("/match_parents_ic", ParentController, :match_parents_ic)
     get("/redirect_from_li6", PageController, :redirect_from_li6)
   end
 
@@ -79,6 +80,8 @@ defmodule SchoolWeb.Router do
     # Use the default browser stack
     pipe_through(:browser)
 
+    get("/class_transfer", ClassController, :class_transfer)
+    get("/submit_class_transfer", ClassController, :submit_class_transfer)
     get("/mark_sheet_listing", ClassController, :mark_sheet_listing)
     get("/mark_analyse_by_grade", ClassController, :mark_analyse_by_grade)
     get("/class_analysis", ClassController, :class_analysis)
@@ -163,6 +166,8 @@ defmodule SchoolWeb.Router do
     post("/upload_parent_final", ParentController, :upload_parents)
     post("/upload_class_final", ClassController, :upload_class)
 
+    get("/submit_student_transfer", StudentController, :submit_student_transfer)
+    get("/students_transfer", StudentController, :students_transfer)
     get("/height_weight", StudentController, :height_weight)
     get("/height_weight_class/:class_id", StudentController, :height_weight_class)
     get("/student_certificate", StudentController, :student_certificate)

@@ -216,7 +216,10 @@ defmodule SchoolWeb.UserController do
 
   def update(conn, %{"id" => id, "user" => user_params, "is_librarian" => is_librarian}) do
     user = Settings.get_user!(id)
+    crypted_password = Comeonin.Bcrypt.hashpwsalt(user.password)
+
     user_params = Map.put(user_params, "is_librarian", is_librarian)
+    user_params = Map.put(user_params, "crypted_password", crypted_password)
 
     case Settings.update_user(user, user_params) do
       {:ok, user} ->
