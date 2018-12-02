@@ -413,6 +413,10 @@ defmodule SchoolWeb.ClassController do
         Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
       end
 
+    semesters =
+      Repo.all(from(s in Semester))
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
     class =
       if user.role == "Admin" or user.role == "Support" do
         Repo.all(
@@ -436,7 +440,8 @@ defmodule SchoolWeb.ClassController do
     render(
       conn,
       "student_listing_by_class.html",
-      class: class
+      class: class,
+      semesters: semesters
     )
   end
 
