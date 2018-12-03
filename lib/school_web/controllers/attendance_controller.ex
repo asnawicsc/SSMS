@@ -281,6 +281,9 @@ defmodule SchoolWeb.AttendanceController do
 
         mother != nil ->
           fb_send_attedance_report(mother, student)
+
+        true ->
+          nil
       end
     end
   end
@@ -289,7 +292,9 @@ defmodule SchoolWeb.AttendanceController do
     IO.inspect(parent)
 
     date =
-      DateTime.utc_now() |> Timex.shift(hours: 8) |> Timex.format("%Y-%m-%d %H:%M ", :strftime)
+      DateTime.utc_now()
+      |> Timex.shift(hours: 8)
+      |> Timex.format("%Y-%m-%d %H:%M ", :strftime)
       |> elem(1)
 
     if parent.fb_user_id != nil do

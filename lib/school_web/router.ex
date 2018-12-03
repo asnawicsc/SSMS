@@ -193,6 +193,9 @@ defmodule SchoolWeb.Router do
     get("/record_attendance", AttendanceController, :record_attendance)
 
     resources("/teacher", TeacherController)
+    get("/teacher_attendance", TeacherController, :teacher_attendance)
+    get("/mark_teacher_attendance", TeacherController, :mark_teacher_attendance)
+    get("/submit_teacher_attendance", TeacherController, :submit_teacher_attendance)
     post("/upload_teachers", TeacherController, :upload_teachers)
     get("/teacher_listing", TeacherController, :teacher_listing)
     resources("/subject", SubjectController)
