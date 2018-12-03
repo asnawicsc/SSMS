@@ -527,7 +527,6 @@ defmodule SchoolWeb.CoCurriculumController do
   end
 
   def delete(conn, %{"id" => id}) do
-    IEx.pry()
     co_curriculum = Affairs.get_co_curriculum!(id)
     {:ok, _co_curriculum} = Affairs.delete_co_curriculum(co_curriculum)
 

@@ -23,7 +23,9 @@ defmodule SchoolWeb.UserController do
   end
 
   def assign_lib_access(conn, params) do
-    users = Settings.list_users()
+    users =
+      Settings.list_users()
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
 
     render(conn, "library_assign.html", users: users)
   end
