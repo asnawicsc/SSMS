@@ -6,7 +6,7 @@ defmodule School.Affairs.Period do
     field(:day, :string)
     field(:end_time, :time)
     field(:start_time, :time)
-    field(:subject_id, :integer)
+    # field(:subject_id, :integer)
     field(:teacher_id, :integer)
     field(:class_id, :integer)
     field(:recurring_frequency, :string)
@@ -16,6 +16,7 @@ defmodule School.Affairs.Period do
     field(:end_datetime, :utc_datetime)
     field(:google_event_id, :binary)
     field(:master_period_id, :integer)
+    belongs_to(:subject, School.Affairs.Subject)
     timestamps()
   end
 

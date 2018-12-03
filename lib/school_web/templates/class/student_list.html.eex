@@ -7,31 +7,30 @@
 
 </form>
 </div>
-<Br>
+
 
  <div class="table-responsive ">
   <table class="table" id="datatable1">
-  <thead>
-    <tr>
-      <th><%= gettext "Bil." %></th>
-      <th><%= gettext "Bil Dlm Sekolah" %></th>
-      <th><%= gettext "B. Cina" %></th>
-      <th><%= gettext "Bahasa Malaysia" %></th>
-      <th><%= gettext "Jantina" %></th>
-      <th><%= gettext "Tarikh Lahir" %></th>
-      <th><%= gettext "Tempat Lahir" %></th>
-      <th><%= gettext "Umur Pada 1hb Jan" %></th>
-      <th><%= gettext "No Sijil Beranak" %></th>
-      <th><%= gettext "Tarikh Masuk" %></th>
-      <th><%= gettext "Bangsa" %></th>
+    <thead>
+      <tr>
+        <th><%= gettext "Bil." %></th>
+        <th><%= gettext "Bil Dlm Sekolah" %></th>
+        <th><%= gettext "B. Cina" %></th>
+        <th><%= gettext "Bahasa Malaysia" %></th>
+        <th><%= gettext "Jantina" %></th>
+        <th><%= gettext "Tarikh Lahir" %></th>
+        <th><%= gettext "Tempat Lahir" %></th>
+        <th><%= gettext "Umur Pada 1hb Jan" %></th>
+        <th><%= gettext "No Sijil Beranak" %></th>
+        <th><%= gettext "Tarikh Masuk" %></th>
+        <th><%= gettext "Bangsa" %></th>
 
-    </tr>
-  </thead>
+      </tr>
+    </thead>
   <tbody>
 <%= for item <- @all do %>
-<% no=item|>elem(1) %>
-<% item=item|>elem(0) %>
-
+        <% no=item|>elem(1) %>
+        <% item=item|>elem(0) %>
     <tr>
       <td><%= no+1 %></td>
        <td><%= item.id %></td>
@@ -40,21 +39,21 @@
        <td><%= item.sex %></td>
        <td><%= item.dob %></td>
        <td><%= item.pob %></td>
-       <td></td>
+       <td>&nbsp;</td>
        <td><%= item.b_cert %></td>
-       <td></td>
+       <td>&nbsp;</td>
        <td>
        	<%= if item.race == "C" do "CINA" end %>
        	<%= if item.race == "M" do "MELAYU" end %>
        	<%= if item.race == "I" do "INDIA" end %>
        	<%= if item.race == "I" do "LAIN-LAIN" end %>
-
        	</td>
-
     </tr>
 <% end %>
   </tbody>
 </table>
+
+</div>
 </div>
 
 

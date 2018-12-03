@@ -323,12 +323,19 @@
                         </li>
 
                         <li class=" ">
+
                            <a href="#library_access" title="School Setup" data-toggle="collapse">
                             <em class="fas fa-book"></em>
                               <span data-localize="sidebar.nav.extra.EXTRA"><%= gettext "Access Library" %></span>
                            </a>
 
                            <ul class="sidebar-nav sidebar-subnav collapse" id="library_access">
+                             <li class=" ">
+                                 <a href="/assign_lib_access" title="Book Lists">
+
+                                    <span><%= gettext "Assign Access" %></span>
+                                 </a>
+                              </li>
                               <li class=" ">
                                  <a href="/library/lib_access" title="Book Lists">
 

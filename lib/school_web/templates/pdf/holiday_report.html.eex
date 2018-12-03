@@ -15,7 +15,7 @@ table tr td{
 <h5 style="text-decoration: underline;">Holiday Listing</h5>
 
 
-<table class="table">
+<table class="table" id="datatable1">
 
 
 	<tr style="font-weight: bolder;">

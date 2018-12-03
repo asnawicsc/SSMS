@@ -567,6 +567,9 @@ defmodule SchoolWeb.StudentController do
   end
 
   def create(conn, %{"student" => student_params}) do
+    student_params =
+      Map.put(student_params, "institution_id", conn.private.plug_session["institution_id"])
+
     case Affairs.create_student(student_params) do
       {:ok, student} ->
         conn

@@ -982,6 +982,7 @@ defmodule SchoolWeb.UserChannel do
 
   def handle_in("student_class_listing", payload, socket) do
     class_id = payload["class_id"]
+    semester_id = payload["semester_id"]
 
     all =
       Repo.all(
@@ -991,7 +992,7 @@ defmodule SchoolWeb.UserChannel do
           on: s.class_id == g.id,
           left_join: r in School.Affairs.Student,
           on: r.id == s.sudent_id,
-          where: s.class_id == ^class_id,
+          where: s.class_id == ^class_id and s.semester_id == ^semester_id,
           select: %{
             id: s.sudent_id,
             chinese_name: r.chinese_name,
@@ -1008,13 +1009,17 @@ defmodule SchoolWeb.UserChannel do
       |> Enum.with_index()
 
     html =
-      Phoenix.View.render_to_string(
-        SchoolWeb.ClassView,
-        "student_list.html",
-        all: all,
-        csrf: payload["csrf"],
-        class_id: class_id
-      )
+      if all != [] do
+        Phoenix.View.render_to_string(
+          SchoolWeb.ClassView,
+          "student_list.html",
+          all: all,
+          csrf: payload["csrf"],
+          class_id: class_id
+        )
+      else
+        "No Student In This Class"
+      end
 
     broadcast(socket, "show_student_class_listing", %{
       html: html
@@ -1655,6 +1660,7 @@ defmodule SchoolWeb.UserChannel do
           }
         )
       )
+      |> Enum.uniq()
 
     {:reply, {:ok, %{subject: subject}}, socket}
   end
@@ -3016,65 +3022,163 @@ defmodule SchoolWeb.UserChannel do
     {:ok, s_date, 0} = DateTime.from_iso8601(start_date)
     {:ok, e_date, 0} = DateTime.from_iso8601(end_date)
 
-    case School.Affairs.get_teacher(user_id) do
-      {:ok, teacher} ->
-        {:ok, timetable} = School.Affairs.initialize_calendar(teacher.id)
+    if period_id == 0 do
+      # create a new period 
+      teacher = Affairs.get_teacher!(user_id)
 
-        # need to find that period and update it
-        period = Repo.get(School.Affairs.Period, period_id)
+      {:ok, timetable} = School.Affairs.initialize_calendar(teacher.id)
+      subject_id = event_id_str |> String.split("_") |> List.first()
+      class_id = event_id_str |> String.split("_") |> List.last()
 
-        if period != nil do
-          a =
-            School.Affairs.update_period(period, %{
-              start_datetime: s_date,
-              end_datetime: e_date,
-              timetable_id: timetable.id,
-              teacher_id: teacher.id
-            })
+      a =
+        Affairs.create_period(%{
+          start_datetime: s_date,
+          end_datetime: e_date,
+          timetable_id: timetable.id,
+          teacher_id: teacher.id,
+          subject_id: subject_id,
+          class_id: class_id
+        })
 
-          case a do
-            {:ok, period} ->
-              if period.google_event_id != nil do
-                flag_pending_sync(period.id)
-              end
-
-              broadcast(socket, "show_period", %{
-                "period_id" => period_id,
-                "user_id" => user_id,
-                "start_date" => start_date,
-                "end_date" => end_date,
-                "event_id_str" => event_id_str
-              })
-
-            {:error, changeset} ->
-              errors = changeset.errors |> Keyword.keys()
-
-              {reason, message} = changeset.errors |> hd()
-              {proper_message, message_list} = message
-              final_reason = Atom.to_string(reason) <> " " <> proper_message
-
-              broadcast(socket, "show_failed_period", %{
-                "period_id" => period_id,
-                "user_id" => user_id,
-                "start_date" => start_date,
-                "end_date" => end_date,
-                "event_id_str" => event_id_str,
-                "final_reason" => final_reason
-              })
+      case a do
+        {:ok, period} ->
+          if period.google_event_id != nil do
+            flag_pending_sync(period.id)
           end
-        else
-          broadcast(socket, "show_failed_period", %{
-            "period_id" => period_id,
-            "user_id" => user_id,
-            "start_date" => start_date,
-            "end_date" => end_date,
-            "event_id_str" => event_id_str,
-            "final_reason" => "block doesnt exist!"
-          })
-        end
 
-      {:error, "no teacher assigned"} ->
-        true
+          broadcast(socket, "show_period_new", %{
+            "start_date" => start_date,
+            "end_date" => end_date
+          })
+
+        {:error, changeset} ->
+          errors = changeset.errors |> Keyword.keys()
+
+          {reason, message} = changeset.errors |> hd()
+          {proper_message, message_list} = message
+          final_reason = Atom.to_string(reason) <> " " <> proper_message
+
+          broadcast(socket, "show_failed_period", %{
+            "final_reason" => final_reason
+          })
+      end
+
+      # user id is the teacher id
+      # event_id is the subject_id 
+    else
+      case School.Affairs.get_teacher(user_id) do
+        {:ok, teacher} ->
+          {:ok, timetable} = School.Affairs.initialize_calendar(teacher.id)
+
+          # need to find that period and update it
+          period = Repo.get(School.Affairs.Period, period_id)
+
+          period_params = %{
+            start_datetime: s_date,
+            end_datetime: e_date
+          }
+
+          if period.teacher_id == nil do
+            period_params = Map.put(period_params, :teacher_id, teacher.id)
+            period_params = Map.put(period_params, :timetable_id, timetable.id)
+          end
+
+          if period != nil do
+            a = School.Affairs.update_period(period, period_params)
+
+            case a do
+              {:ok, period} ->
+                if period.google_event_id != nil do
+                  flag_pending_sync(period.id)
+                end
+
+                broadcast(socket, "show_period", %{
+                  "period_id" => period_id,
+                  "user_id" => user_id,
+                  "start_date" => start_date,
+                  "end_date" => end_date,
+                  "event_id_str" => event_id_str
+                })
+
+              {:error, changeset} ->
+                errors = changeset.errors |> Keyword.keys()
+
+                {reason, message} = changeset.errors |> hd()
+                {proper_message, message_list} = message
+                final_reason = Atom.to_string(reason) <> " " <> proper_message
+
+                broadcast(socket, "show_failed_period", %{
+                  "period_id" => period_id,
+                  "user_id" => user_id,
+                  "start_date" => start_date,
+                  "end_date" => end_date,
+                  "event_id_str" => event_id_str,
+                  "final_reason" => final_reason
+                })
+            end
+          else
+            broadcast(socket, "show_failed_period", %{
+              "period_id" => period_id,
+              "user_id" => user_id,
+              "start_date" => start_date,
+              "end_date" => end_date,
+              "event_id_str" => event_id_str,
+              "final_reason" => "block doesnt exist!"
+            })
+          end
+
+        {:error, "no teacher assigned"} ->
+          period = Repo.get(School.Affairs.Period, period_id)
+
+          period_params = %{
+            start_datetime: s_date,
+            end_datetime: e_date
+          }
+
+          if period != nil do
+            a = School.Affairs.update_period(period, period_params)
+
+            case a do
+              {:ok, period} ->
+                if period.google_event_id != nil do
+                  flag_pending_sync(period.id)
+                end
+
+                broadcast(socket, "show_period", %{
+                  "period_id" => period_id,
+                  "user_id" => user_id,
+                  "start_date" => start_date,
+                  "end_date" => end_date,
+                  "event_id_str" => event_id_str
+                })
+
+              {:error, changeset} ->
+                errors = changeset.errors |> Keyword.keys()
+
+                {reason, message} = changeset.errors |> hd()
+                {proper_message, message_list} = message
+                final_reason = Atom.to_string(reason) <> " " <> proper_message
+
+                broadcast(socket, "show_failed_period", %{
+                  "period_id" => period_id,
+                  "user_id" => user_id,
+                  "start_date" => start_date,
+                  "end_date" => end_date,
+                  "event_id_str" => event_id_str,
+                  "final_reason" => final_reason
+                })
+            end
+          else
+            broadcast(socket, "show_failed_period", %{
+              "period_id" => period_id,
+              "user_id" => user_id,
+              "start_date" => start_date,
+              "end_date" => end_date,
+              "event_id_str" => event_id_str,
+              "final_reason" => "block doesnt exist!"
+            })
+          end
+      end
     end
 
     {:noreply, socket}
@@ -3093,7 +3197,7 @@ defmodule SchoolWeb.UserChannel do
     user = Repo.get(User, user_id)
     term = "%#{term}%"
 
-    students =
+    all_student =
       Repo.all(
         from(
           s in Student,
@@ -3116,6 +3220,30 @@ defmodule SchoolWeb.UserChannel do
           limit: 100
         )
       )
+
+    student =
+      Repo.all(
+        from(
+          s in StudentClass,
+          left_join: g in Student,
+          on: s.sudent_id == g.id,
+          where: g.institution_id == ^institution_id,
+          select: %{
+            name: g.name,
+            c_name: g.chinese_name,
+            ic: g.ic,
+            b_cert: g.b_cert,
+            gicno: g.gicno,
+            ficno: g.ficno,
+            micno: g.micno,
+            phone: g.phone,
+            id: g.id
+          },
+          limit: 100
+        )
+      )
+
+    students = all_student -- student
 
     {:reply, {:ok, %{students: students}}, socket}
   end
@@ -3174,7 +3302,53 @@ defmodule SchoolWeb.UserChannel do
       {:ok, sc} ->
         students = Affairs.get_student_list(class_id, semester_id)
 
-        {:reply, {:ok, %{students: students}}, socket}
+        all_student =
+          Repo.all(
+            from(
+              s in Student,
+              where: s.institution_id == ^institution_id,
+              select: %{
+                name: s.name,
+                c_name: s.chinese_name,
+                ic: s.ic,
+                b_cert: s.b_cert,
+                gicno: s.gicno,
+                ficno: s.ficno,
+                micno: s.micno,
+                phone: s.phone,
+                id: s.id
+              },
+              limit: 100
+            )
+          )
+
+        student =
+          Repo.all(
+            from(
+              s in StudentClass,
+              left_join: g in Student,
+              on: s.sudent_id == g.id,
+              where:
+                g.institution_id == ^institution_id and s.class_id == ^class_id and
+                  s.semester_id == ^semester_id,
+              select: %{
+                name: g.name,
+                c_name: g.chinese_name,
+                ic: g.ic,
+                b_cert: g.b_cert,
+                gicno: g.gicno,
+                ficno: g.ficno,
+                micno: g.micno,
+                phone: g.phone,
+                id: g.id
+              },
+              limit: 100
+            )
+          )
+
+        all_student = all_student -- student
+
+        {:reply, {:ok, %{students: students, all_student: all_student}}, socket}
 
       {:error, changeset} ->
         Process.sleep(500)
@@ -3185,9 +3359,32 @@ defmodule SchoolWeb.UserChannel do
             Repo.get_by(StudentClass, sudent_id: student_id, semester_id: semester_id).class_id
           )
 
-        {:reply, {:error, %{name: student.name, class: class.name, ex_class: ex_class.name}},
-         socket}
+        {:reply,
+         {:error,
+          %{
+            name: student.name,
+            student_id: student.id,
+            class: class.name,
+            ex_class: ex_class.name
+          }}, socket}
     end
+  end
+
+  def handle_in("remove_from_class", payload, socket) do
+    ex_class =
+      Repo.get_by(School.Affairs.StudentClass,
+        sudent_id: payload["student_id"],
+        semester_id: payload["semester_id"],
+        class_id: payload["class_id"]
+      )
+
+    student = Affairs.get_student!(payload["student_id"])
+
+    Affairs.delete_student_class(ex_class)
+
+    students = Affairs.get_student_list(payload["class_id"], payload["semester_id"])
+
+    {:reply, {:error, %{students: students, name: student.name, student_id: student.id}}, socket}
   end
 
   def handle_in(

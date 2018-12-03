@@ -53,6 +53,12 @@ defmodule SchoolWeb.SegakController do
         )
       )
 
+    if students == [] do
+      conn
+      |> put_flash(:info, "No Student in the Class,Please Enroll Student to Class first.")
+      |> redirect(to: segak_path(conn, :create_segak))
+    end
+
     segak =
       Repo.all(
         from(s in School.Affairs.Segak,

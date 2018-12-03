@@ -17,5 +17,6 @@ defmodule School.Affairs.SubjectTeachClass do
     subject_teach_class
     |> cast(attrs, [:institution_id, :standard_id, :subject_id, :class_id])
     |> validate_required([:institution_id, :standard_id, :subject_id, :class_id])
+    |> unique_constraint(:subject_id, name: :index_all_stc)
   end
 end

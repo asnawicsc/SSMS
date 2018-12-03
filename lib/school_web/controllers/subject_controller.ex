@@ -168,8 +168,8 @@ defmodule SchoolWeb.SubjectController do
   end
 
   def create(conn, %{"subject" => subject_params}) do
-    subject_params =
-      Map.put(subject_params, "institution_id", conn.private.plug_session["institution_id"])
+    inst_id = Affairs.get_inst_id(conn)
+    subject_params = Map.put(subject_params, "institution_id", inst_id)
 
     case Affairs.create_subject(subject_params) do
       {:ok, subject} ->

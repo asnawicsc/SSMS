@@ -1,7 +1,8 @@
 
 
 <div class="content-heading">
-    <div>Listing Subject teach class
+    <div>Listing Class Subject 
+      <small>Different class have different subject period. Define them so that each class can have different period.</small>
     </div>
 </div>
 
@@ -28,9 +29,10 @@
 
 <% period = Repo.all(from s in School.Affairs.Period,where: s.subject_id ==^subject_teach_class.subject_id and s.class_id==^subject_teach_class.class_id)|>Enum.count %>
 
+<% standard = School.Repo.get_by(School.Affairs.Level,institution_id: @conn.private.plug_session["institution_id"],id: subject_teach_class.standard_id) %>
 
     <tr>
-      <td><%= Affairs.get_level!(class.level_id ).name %></td>
+      <td>  <%= if standard != nil , do: standard.name , else: "Unknown Standard" %></td>
       <td>
 
         <%= if subject != nil , do: subject.description , else: "Unknown Subject" %></td>
@@ -39,7 +41,7 @@
        <td><%= period %></td>
 
       <td class="text-right">
-         <%= link "Create a period", to: period_path(@conn, :get_create_period, subject_teach_class.subject_id, subject_teach_class.class_id), class: "btn btn-default btn-xs" %>
+         <% link "Create a period", to: period_path(@conn, :get_create_period, subject_teach_class.subject_id, subject_teach_class.class_id), class: "btn btn-default btn-xs" %>
          <span><%= link "Edit Subject", to: subject_path(@conn, :edit, subject_teach_class.subject_id), class: "btn btn-default btn-xs" %></span>
 
         <span><%= link "Edit", to: subject_teach_class_path(@conn, :edit, subject_teach_class), class: "btn btn-default btn-xs" %></span>
@@ -55,4 +57,5 @@
 </div>
 </div>
 
-<span><%= link "New Subject teach class", to: subject_teach_class_path(@conn, :new) %></span>
+<span><%= link "New Class Subject", to: subject_teach_class_path(@conn, :new), class: "btn btn-outline-primary" %></span>
+<span><%= link "New Subject", to: subject_path(@conn, :new), class: "btn btn-outline-warning" %></span>

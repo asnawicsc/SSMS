@@ -36,7 +36,8 @@ defmodule School.Affairs.Parent do
     field(:state, :string)
     field(:tanggn, :string)
     field(:institution_id, :integer)
-
+    field(:fb_user_id, :string)
+    field(:role, :string, default: "Parent")
     timestamps()
   end
 
@@ -44,6 +45,8 @@ defmodule School.Affairs.Parent do
   def changeset(parent, attrs) do
     parent
     |> cast(attrs, [
+      :role,
+      :fb_user_id,
       :institution_id,
       :icno,
       :name,
@@ -78,5 +81,27 @@ defmodule School.Affairs.Parent do
       :epstate,
       :inctaxno
     ])
+  end
+
+  def delete_duplicate_icno() do
+    import Ecto.Query
+
+    s_no =
+      School.Repo.all(
+        from(
+          s in School.Affairs.Parent,
+          group_by: [s.icno],
+          select: %{ct: count(s.icno), no: s.icno}
+        )
+      )
+      |> Enum.filter(fn x -> x.ct > 1 end)
+      |> Enum.map(fn x -> x.no end)
+
+    for s_n <- s_no do
+      students = School.Repo.all(from(s in School.Affairs.Parent, where: s.icno == ^s_n))
+
+      {student, dup_students} = List.pop_at(students, 0)
+      Enum.map(dup_students, fn x -> School.Repo.delete(x) end)
+    end
   end
 end

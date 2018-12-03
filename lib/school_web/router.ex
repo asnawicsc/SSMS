@@ -24,7 +24,12 @@ defmodule SchoolWeb.Router do
     # Use the default browser stack
     pipe_through([:browser, :splash_layout])
     get("/", PageController, :index_splash)
+    get("/validate_code", ApiController, :code)
+    get("/fb_login", ApiController, :fb_login)
+    get("/parent_login", ParentController, :login)
+    get("/parents_corner", ParentController, :parents_corner)
     get("/contacts_us", PageController, :contacts_us)
+    post("/match_parents_ic", ParentController, :match_parents_ic)
     get("/redirect_from_li6", PageController, :redirect_from_li6)
   end
 
@@ -243,7 +248,7 @@ defmodule SchoolWeb.Router do
 
     get("/print_students/:id", StudentController, :print_students)
 
-    get("/report_card/:exam_name/:id/:rank", ExamController, :report_card)
+    get("/report_card/:exam_name/:exam_id/:id/:rank", ExamController, :report_card)
     get("/all_report_card", ExamController, :all_report_card)
     post("/all_report_card", ExamController, :all_report_card)
     get("/show_guardian/", ParentController, :guardian_listing)
@@ -302,6 +307,7 @@ defmodule SchoolWeb.Router do
 
     get("/class_setting", ClassController, :class_setting)
     get("/class_setting/:class_id", ClassController, :chosen_class_setting)
+    get("/class_setting/:class_id/modify_timetable", ClassController, :modify_timetable)
     get("/show_student_info/:student_id", ClassController, :show_student_info)
 
     post("/create_student_co", CoCurriculumController, :create_student_co)
@@ -379,6 +385,7 @@ defmodule SchoolWeb.Router do
     resources("/list_rank", ListRankController)
     get("/default_rank", ListRankController, :default_rank)
     post("/default_standard", LevelController, :default_standard)
+    get("/assign_lib_access", UserController, :assign_lib_access)
 
     get("/*path", PageController, :no_page_found)
   end

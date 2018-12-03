@@ -118,6 +118,8 @@
  <script src="/vendor/easy-pie-chart/dist/jquery.easypiechart.js"></script>
 <link rel="stylesheet" type="text/css" href="/vendor/jquery_datetimepicker/jquery.datetimepicker.min.css"/ >
 <script src="/vendor/jquery_datetimepicker/jquery.datetimepicker.full.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/vendor/introjs.css"/ >
+<script src="/vendor/intro.js"></script>
       <%= if @conn.private.plug_session["style"] == nil do %>
         <link id="autoloaded-stylesheet" rel="stylesheet" href="/css/theme-a.css">
       <% else %>
@@ -127,6 +129,38 @@
 </head>
 
 <body>
+<script>
+  window.fbMessengerPlugins = window.fbMessengerPlugins || {
+    init: function () {
+      FB.init({
+        appId            : '1678638095724206',
+        autoLogAppEvents : true,
+        xfbml            : true,
+        version          : 'v3.0'
+      });
+    }, callable: []
+  };
+  window.fbAsyncInit = window.fbAsyncInit || function () {
+    window.fbMessengerPlugins.callable.forEach(function (item) { item(); });
+    window.fbMessengerPlugins.init();
+  };
+  setTimeout(function () {
+    (function (d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) { return; }
+      js = d.createElement(s);
+      js.id = id;
+      js.src = "//connect.facebook.net/en_US/sdk/xfbml.customerchat.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+  }, 0);
+</script>
+
+<div
+  class="fb-customerchat"
+  page_id="340744706488937"
+  ref="">
+</div>
    <div class="wrapper">
     <%= render("_nav.html", conn: @conn)%>
     <%= render("_leftsidebar.html", conn: @conn) %>

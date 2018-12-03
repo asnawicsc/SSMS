@@ -63,7 +63,7 @@ defmodule SchoolWeb.CoCurriculumController do
 
     conn
     |> put_flash(:info, "Student cocurriculum created successfully.")
-    |> redirect(to: co_curriculum_path(conn, :co_curriculum_setting))
+    |> redirect(to: co_curriculum_path(conn, :cocurriculum))
   end
 
   def create_co_mark(conn, params) do
@@ -527,6 +527,7 @@ defmodule SchoolWeb.CoCurriculumController do
   end
 
   def delete(conn, %{"id" => id}) do
+    IEx.pry()
     co_curriculum = Affairs.get_co_curriculum!(id)
     {:ok, _co_curriculum} = Affairs.delete_co_curriculum(co_curriculum)
 

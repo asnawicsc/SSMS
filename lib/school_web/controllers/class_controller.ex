@@ -306,6 +306,14 @@ defmodule SchoolWeb.ClassController do
     )
   end
 
+  def modify_timetable(conn, params) do
+    inst_id = Affairs.get_inst_id(conn)
+    teachers = Affairs.list_teacher(inst_id)
+    subjects = Affairs.list_subject(inst_id)
+    class = Repo.get(Class, params["class_id"])
+    render(conn, "modify_timetable.html", class: class, teachers: teachers, subjects: subjects)
+  end
+
   def enroll_students(conn, params) do
     inst_id = Affairs.get_inst_id(conn)
     classes = Affairs.list_classes(inst_id)
@@ -316,22 +324,25 @@ defmodule SchoolWeb.ClassController do
   def show_student_info(conn, params) do
     student = Repo.get(Student, params["student_id"])
 
+    guardian =
+      if student.gicno != nil do
+        Repo.get_by(Parent, icno: student.gicno)
+      else
+        nil
+      end
+
+    father =
+      if student.ficno != nil do
+        Repo.get_by(Parent, icno: student.ficno)
+      else
+        nil
+      end
+
     mother =
       if student.micno != nil do
         Repo.get_by(Parent, icno: student.micno)
       else
-      end
-
-    father =
-      if student.micno != nil do
-        Repo.get_by(Parent, icno: student.ficno)
-      else
-      end
-
-    guardian =
-      if student.micno != nil do
-        Repo.get_by(Parent, icno: student.gicno)
-      else
+        nil
       end
 
     render(
@@ -402,6 +413,10 @@ defmodule SchoolWeb.ClassController do
         Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
       end
 
+    semesters =
+      Repo.all(from(s in Semester))
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
     class =
       if user.role == "Admin" or user.role == "Support" do
         Repo.all(
@@ -425,7 +440,8 @@ defmodule SchoolWeb.ClassController do
     render(
       conn,
       "student_listing_by_class.html",
-      class: class
+      class: class,
+      semesters: semesters
     )
   end
 

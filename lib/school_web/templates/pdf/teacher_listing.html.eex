@@ -1,5 +1,5 @@
-
-<h4><%= @institution.name %></h4>
+<center><b>SENARAI GURU</b></center><br>
+<center><b><%= @institution.name %></b></center>
 <Br>
 <table class="table" border="1" style="border-collapse: collapse;" width="100%" >
   <thead>

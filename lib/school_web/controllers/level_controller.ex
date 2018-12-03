@@ -18,9 +18,15 @@ defmodule SchoolWeb.LevelController do
   end
 
   def default_standard(conn, _params) do
-    Repo.delete_all(School.Affairs.Level,
-      institution_id: conn.private.plug_session["institution_id"]
-    )
+    all = Repo.all(School.Affairs.Level)
+
+    if all != [] do
+      Repo.delete_all(
+        from(s in School.Affairs.Level,
+          where: s.institution_id == ^@conn.private.plug_session["institution_id"]
+        )
+      )
+    end
 
     Affairs.create_level(%{
       name: "Standard 1",
