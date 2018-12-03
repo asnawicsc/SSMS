@@ -20,7 +20,16 @@ defmodule SchoolWeb.StudentController do
 
   def students_transfer(conn, params) do
     curr_semester = Repo.get(Semester, conn.private.plug_session["semester_id"])
-    all_semesters = Repo.all(from(s in Semester, where: s.start_date > ^curr_semester.end_date))
+
+    all_semesters =
+      Repo.all(
+        from(
+          s in Semester,
+          where:
+            s.start_date > ^curr_semester.end_date and
+              s.institution_id == ^conn.private.plug_session["institution_id"]
+        )
+      )
 
     render(
       conn,
