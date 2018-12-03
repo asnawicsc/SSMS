@@ -83,6 +83,7 @@
   <% end %>
 		</div>
   </div>
+  
 
   <script type="text/javascript">
     $("a#tab_panel").click(function(){

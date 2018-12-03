@@ -48,6 +48,7 @@ defmodule SchoolWeb.Router do
     pipe_through([:browser])
     post("/class_analysis", PdfController, :class_analysis)
     post("/class_listing_teacher", PdfController, :class_listing_teacher)
+    get("/student_transfer_pdf/:semester_id", PdfController, :student_transfer_pdf)
 
     post("/standard_listing", PdfController, :standard_listing)
     post("/exam_result_standard", PdfController, :exam_result_standard)
