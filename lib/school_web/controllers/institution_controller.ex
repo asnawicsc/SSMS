@@ -18,6 +18,14 @@ defmodule SchoolWeb.InstitutionController do
     |> redirect(to: institution_path(conn, :index))
   end
 
+  def pre_upload(conn, params) do
+    render(conn, "upload.html", [])
+  end
+
+  def upload(conn, params) do
+    render(conn, "upload.html", [])
+  end
+
   def list_institutions(conn, _params) do
     institution = Settings.list_institutions()
 

@@ -146,6 +146,8 @@ defmodule SchoolWeb.Router do
     get("/system_config/:institution_id", ParameterController, :system_config)
     resources("/institutions", InstitutionController)
     get("/institutions/:id/select", InstitutionController, :select)
+    get("/institutions/:id/upload", InstitutionController, :upload)
+    post("/institutions/:id/pre_upload", InstitutionController, :pre_upload)
     resources("/users", UserController)
     get("/login", UserController, :login)
     get("/user_info/:id", UserController, :user_info)
