@@ -23,7 +23,14 @@ defmodule SchoolWeb.UserController do
   end
 
   def assign_lib_access(conn, params) do
-    users = Settings.list_users()
+    users =
+      Repo.all(
+        from(s in User,
+          left_join: g in Settings.UserAccess,
+          on: s.id == g.user_id,
+          where: g.institution_id == ^conn.private.plug_session["institution_id"]
+        )
+      )
 
     render(conn, "library_assign.html", users: users)
   end

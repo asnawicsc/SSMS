@@ -39,7 +39,7 @@
                                
                                  
                                   <span><%= link "Edit", to: user_path(@conn, :edit, user), class: "btn btn-primary " %></span>
-                                 
+                                
                                
                                 </td>
                                 </tr>

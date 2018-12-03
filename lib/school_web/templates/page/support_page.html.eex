@@ -532,7 +532,7 @@
 
 
                    <div class="dropdown-menu" role="menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(67px, 33px, 0px);">
-                    <%= for class <- all_classes do %>
+                    <%= for class <- all_classes|>Enum.sort_by(fn x -> x.name end) do %>
                       <a class="dropdown-item student_class" href="/class_setting/<%= class.id %>"><%= class.name %></a>
                     <% end %>
                    </div>

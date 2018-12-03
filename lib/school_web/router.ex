@@ -164,10 +164,14 @@ defmodule SchoolWeb.Router do
     post("/upload_parents", ParentController, :pre_upload_parents)
     post("/upload_class", ClassController, :pre_upload_class)
 
+    post("/pre_generate_student_class", StudentController, :pre_generate_student_class)
+
     post("/upload_teachers_final", TeacherController, :upload_teachers)
     post("/upload_students_final", StudentController, :upload_students)
     post("/upload_parent_final", ParentController, :upload_parents)
     post("/upload_class_final", ClassController, :upload_class)
+
+    post("/upload_generate_student_class", StudentController, :upload_generate_student_class)
 
     get("/submit_student_transfer", StudentController, :submit_student_transfer)
     get("/students_transfer", StudentController, :students_transfer)
