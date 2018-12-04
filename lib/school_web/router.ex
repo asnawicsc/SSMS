@@ -362,6 +362,7 @@ defmodule SchoolWeb.Router do
     get("/exam_report/:class_id/:exam_id", ExamController, :exam_report)
 
     get("/list_report", ExamController, :list_report)
+    get("/list_report_history", ExamController, :list_report_history)
     get("/list_institutions", InstitutionController, :list_institutions)
 
     get("/report_nav", ExamController, :report_nav)

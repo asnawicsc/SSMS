@@ -289,7 +289,9 @@ defmodule SchoolWeb.AttendanceController do
     IO.inspect(parent)
 
     date =
-      DateTime.utc_now() |> Timex.shift(hours: 8) |> Timex.format("%Y-%m-%d %H:%M ", :strftime)
+      DateTime.utc_now()
+      |> Timex.shift(hours: 8)
+      |> Timex.format("%Y-%m-%d %H:%M ", :strftime)
       |> elem(1)
 
     if parent.fb_user_id != nil do
@@ -321,7 +323,7 @@ defmodule SchoolWeb.AttendanceController do
       end
 
     st = all |> Enum.filter(fn x -> x <= 16 end)
-    nd = all |> Enum.filter(fn x -> x >= 16 and x <= 31 end)
+    nd = all |> Enum.filter(fn x -> x > 16 and x <= 31 end)
 
     start_month = st |> List.first()
     half_month = st |> List.last()
@@ -379,6 +381,9 @@ defmodule SchoolWeb.AttendanceController do
     #   estimate_total: estimate_total
     # )
 
+    institution =
+      Repo.get_by(School.Settings.Institution, id: conn.private.plug_session["institution_id"])
+
     html =
       Phoenix.View.render_to_string(
         SchoolWeb.AttendanceView,
@@ -388,6 +393,7 @@ defmodule SchoolWeb.AttendanceController do
         attendance: attendance,
         start_date: start_date,
         end_date: end_date,
+        institution: institution,
         start_month:
           Date.new(
             String.to_integer(params["year"]),

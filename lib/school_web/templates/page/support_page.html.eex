@@ -5,11 +5,15 @@
 <script src="/vendor/fullcalendar/dist/fullcalendar.js"></script>
 <script src="/vendor/fullcalendar/dist/gcal.js"></script>
 <div class="content-heading">
+
    <div>Dashboard
       <small><%= gettext("welcome")%>!</small>
    </div>
 
+
+
 </div>
+
 
 <div class="row">
   <div class="col-lg-4">

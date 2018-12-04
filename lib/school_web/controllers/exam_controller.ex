@@ -40,6 +40,10 @@ defmodule SchoolWeb.ExamController do
     render(conn, "list_report.html")
   end
 
+  def list_report_history(conn, params) do
+    render(conn, "list_report_history.html")
+  end
+
   def new(conn, _params) do
     changeset = Affairs.change_exam(%Exam{})
     render(conn, "new.html", changeset: changeset)
