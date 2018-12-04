@@ -15,6 +15,135 @@ defmodule SchoolWeb.TeacherController do
     render(conn, "index.html", teacher: teacher)
   end
 
+  def teacher_attendance(conn, params) do
+    render(conn, "teacher_attendance.html")
+  end
+
+  def mark_teacher_attendance(conn, params) do
+    date = params["date"]
+
+    teachers =
+      Repo.all(
+        from(
+          t in Teacher,
+          where: t.institution_id == ^conn.private.plug_session["institution_id"]
+        )
+      )
+
+    attendance =
+      Repo.get_by(
+        Attendance,
+        attendance_date: params["date"],
+        class_id: 0,
+        semester_id: conn.private.plug_session["semester_id"],
+        institution_id: conn.private.plug_session["institution_id"]
+      )
+
+    {attendance} =
+      if attendance == nil do
+        cg =
+          Attendance.changeset(%Attendance{}, %{
+            institution_id: Affairs.inst_id(conn),
+            attendance_date: params["date"],
+            class_id: 0,
+            semester_id: conn.private.plug_session["semester_id"]
+          })
+
+        {:ok, attendance} = Repo.insert(cg)
+        {attendance}
+      else
+        {Repo.get_by(
+           Attendance,
+           attendance_date: params["date"],
+           class_id: 0,
+           semester_id: conn.private.plug_session["semester_id"]
+         )}
+      end
+
+    attended_teacher_ids =
+      attendance.teacher_id |> String.split(",") |> Enum.reject(fn x -> x == "" end)
+
+    attended_teachers =
+      if attended_teacher_ids != [] do
+        Repo.all(from(s in Teacher, where: s.id in ^attended_teacher_ids, order_by: [s.name]))
+      else
+        []
+      end
+
+    remaining = teachers -- attended_teachers
+
+    remaining =
+      for each <- remaining do
+        Map.put(each, :attend, false)
+      end
+
+    if attended_teachers != [] do
+      attended_teachers =
+        for each <- attended_teachers do
+          Map.put(each, :attend, true)
+        end
+    end
+
+    teachers = List.flatten(remaining, attended_teachers)
+
+    render(
+      conn,
+      "mark_teacher_attendance.html",
+      date: date,
+      teachers: teachers,
+      attendance: attendance
+    )
+  end
+
+  def submit_teacher_attendance(conn, params) do
+    attendance = Repo.get(Attendance, params["attendance_id"])
+    lists = Map.to_list(params)
+
+    teacher_ids =
+      for list <- lists do
+        if String.contains?(elem(list, 0), "-attend") do
+          params[elem(list, 0)]
+        end
+      end
+      |> Enum.filter(fn x -> x != nil end)
+      |> Enum.join(",")
+
+    Attendance.changeset(attendance, %{teacher_id: teacher_ids}) |> Repo.update!()
+
+    abs_ids =
+      for list <- lists do
+        if String.contains?(elem(list, 0), "-abs_reason") do
+          String.trim(elem(list, 0), "-abs_reason")
+        end
+      end
+      |> Enum.filter(fn x -> x != nil end)
+
+    attended_teacher = teacher_ids |> String.split(",")
+    abs_ids = abs_ids -- attended_teacher
+
+    for each <- abs_ids do
+      abs = Repo.get_by(Absent, absent_date: attendance.attendance_date, teacher_id: each)
+
+      if abs != nil do
+        Absent.changeset(abs, %{reason: params[each <> "-abs_reason"]}) |> Repo.update!()
+      else
+        Absent.changeset(%Absent{}, %{
+          institution_id: attendance.institution_id,
+          class_id: 0,
+          teacher_id: each,
+          semester_id: attendance.semester_id,
+          reason: params[each <> "-abs_reason"],
+          absent_date: attendance.attendance_date
+        })
+        |> Repo.insert()
+      end
+    end
+
+    conn
+    |> put_flash(:info, "Attendance recorded successfully.")
+    |> redirect(to: teacher_path(conn, :teacher_attendance))
+  end
+
   def teacher_setting(conn, _params) do
     teacher_school_job =
       Affairs.list_teacher_school_job()

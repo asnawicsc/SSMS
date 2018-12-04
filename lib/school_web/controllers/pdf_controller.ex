@@ -4,6 +4,74 @@ defmodule SchoolWeb.PdfController do
 
   require IEx
 
+  def student_transfer_pdf(conn, params) do
+    semesters =
+      Repo.all(
+        from(
+          s in Semester,
+          where: s.institution_id == ^conn.private.plug_session["institution_id"]
+        )
+      )
+
+    semesters = [%{id: conn.private.plug_session["semester_id"]}, %{id: params["semester_id"]}]
+
+    students =
+      for semester <- semesters do
+        Repo.all(
+          from(
+            s in Student,
+            left_join: sc in StudentClass,
+            on: sc.sudent_id == s.id,
+            left_join: c in Class,
+            on: c.id == sc.class_id,
+            left_join: sm in Semester,
+            on: sm.id == sc.semester_id,
+            where: sm.id == ^semester.id,
+            select: %{
+              student_id: s.id,
+              name: s.name
+            }
+          )
+        )
+      end
+      |> List.flatten()
+      |> Enum.sort()
+      |> Enum.dedup()
+
+    html =
+      Phoenix.View.render_to_string(
+        SchoolWeb.PdfView,
+        "student_transfer_listing.html",
+        semesters: semesters,
+        students: students
+      )
+
+    pdf_params = %{"html" => html}
+
+    pdf_binary =
+      PdfGenerator.generate_binary!(
+        pdf_params["html"],
+        size: "A4",
+        shell_params: [
+          "--margin-left",
+          "5",
+          "--margin-right",
+          "5",
+          "--margin-top",
+          "5",
+          "--margin-bottom",
+          "5",
+          "--encoding",
+          "utf-8"
+        ],
+        delete_temporary: true
+      )
+
+    conn
+    |> put_resp_header("Content-Type", "application/pdf")
+    |> resp(200, pdf_binary)
+  end
+
   def parent_listing(conn, params) do
     school = Repo.get(Institution, conn.private.plug_session["institution_id"])
 
