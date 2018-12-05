@@ -354,6 +354,13 @@
                            </a>
 
                         </li>
+                         <li class=" ">
+                           <a href="/list_report_history" title="School Setup" >
+                            <em class="fas fa-file"></em>
+                              <span data-localize="sidebar.nav.extra.EXTRA"><%= gettext "History Record" %></span>
+                           </a>
+
+                        </li>
                      </ul>
                      <!-- END sidebar nav-->
                   </nav>

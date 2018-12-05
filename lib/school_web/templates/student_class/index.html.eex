@@ -14,13 +14,24 @@
   </thead>
   <tbody>
 <%= for student_class <- @student_classes do %>
+<% level_name= if student_class.level_id != nil do %>
+         <% level=School.Repo.get_by(School.Affairs.Level,name: student_class.level_id,institution_id: @conn.private.plug_session["institution_id"])%>
 
-<% levels = School.Repo.get_by(School.Affairs.Level, id: student_class.level_id) %>
+                                  <%= level_name=if level != nil do
+                                    level.name
+                                  else
+                                    "Unknown Standard"
+                                  end %>
+
+                            <%else %>
+                            <%= "Unknown Standard" %>
+                            <% end %>
+
 <% teacher = School.Repo.all(from l in School.Affairs.Teacher,where: l.institution_id ==^@conn.private.plug_session["institution_id"], select: {l.name, l.id}) %>
 
     <tr>
       <td><%= student_class.institute_id %></td>
-      <td><%= student_class.level_id %> <%= levels.name %></td>
+      <td> <%= level_name %></td>
       <td><%= student_class.semester_id %></td>
       <td><%= student_class.class_id %></td>
       <td><%= student_class.sudent_id %></td>

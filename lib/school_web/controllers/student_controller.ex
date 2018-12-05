@@ -459,6 +459,175 @@ defmodule SchoolWeb.StudentController do
     render(conn, "new.html", changeset: changeset)
   end
 
+  def pre_generate_student_class(conn, params) do
+    bin = params["item"]["file"].path |> File.read() |> elem(1)
+    usr = Settings.current_user(conn)
+    {:ok, batch} = Settings.create_batch(%{upload_by: usr.id, result: bin})
+
+    data =
+      if bin |> String.contains?("\t") do
+        bin |> String.split("\n") |> Enum.map(fn x -> String.split(x, "\t") end)
+      else
+        bin |> String.split("\n") |> Enum.map(fn x -> String.split(x, ",") end)
+      end
+
+    headers = hd(data) |> Enum.map(fn x -> String.trim(x, " ") end)
+
+    render(conn, "adjust_header_generate.html", headers: headers, batch_id: batch.id)
+  end
+
+  def upload_generate_student_class(conn, params) do
+    batch = Settings.get_batch!(params["batch_id"])
+    bin = batch.result
+    usr = Settings.current_user(conn)
+    {:ok, batch} = Settings.update_batch(batch, %{upload_by: usr.id})
+
+    data =
+      if bin |> String.contains?("\t") do
+        bin |> String.split("\n") |> Enum.map(fn x -> String.split(x, "\t") end)
+      else
+        bin |> String.split("\n") |> Enum.map(fn x -> String.split(x, ",") end)
+      end
+
+    headers =
+      hd(data)
+      |> Enum.map(fn x -> String.trim(x, " ") end)
+      |> Enum.map(fn x -> params["header"][x] end)
+
+    contents = tl(data)
+
+    result =
+      for content <- contents do
+        h = headers |> Enum.map(fn x -> String.downcase(x) end)
+
+        content = content |> Enum.map(fn x -> x end) |> Enum.filter(fn x -> x != "\"" end)
+
+        c =
+          for item <- content do
+            item =
+              case item do
+                "@@@" ->
+                  ","
+
+                "\\N" ->
+                  ""
+
+                _ ->
+                  item
+              end
+
+            a =
+              case item do
+                {:ok, i} ->
+                  i
+
+                _ ->
+                  cond do
+                    item == " " ->
+                      "null"
+
+                    item == "  " ->
+                      "null"
+
+                    item == "   " ->
+                      "null"
+
+                    true ->
+                      item
+                      |> String.split("\"")
+                      |> Enum.map(fn x -> String.replace(x, "\n", "") end)
+                      |> List.last()
+                  end
+              end
+          end
+
+        student_param = Enum.zip(h, c) |> Enum.into(%{})
+
+        if student_param["quit date"] == "" do
+          student =
+            Repo.get_by(School.Affairs.Student,
+              student_no: student_param["student no"],
+              institution_id: conn.private.plug_session["institution_id"]
+            )
+
+          if student != nil do
+            institution_id = conn.private.plug_session["institution_id"]
+            semester_id = conn.private.plug_session["semester_id"]
+
+            semester =
+              Repo.get_by(School.Affairs.Semester,
+                id: semester_id,
+                institution_id: conn.private.plug_session["institution_id"]
+              )
+
+            all =
+              student_param["registration date"]
+              |> String.split_at(10)
+              |> elem(0)
+              |> String.replace(".", "-")
+              |> String.split_at(2)
+
+            day = all |> elem(0)
+
+            month = all |> elem(1) |> String.split_at(4) |> elem(0)
+
+            year = all |> elem(1) |> String.split_at(4) |> elem(1)
+
+            registration_date = (year <> month <> day) |> Date.from_iso8601!()
+
+            year_diffrent = semester.end_date.year - registration_date.year + 1
+
+            class_year =
+              student_param["class"]
+              |> String.split("")
+              |> Enum.filter(fn x -> x != "" end)
+              |> hd
+              |> String.to_integer()
+
+            class =
+              Repo.get_by(School.Affairs.Class,
+                name: student_param["class"],
+                institution_id: conn.private.plug_session["institution_id"]
+              )
+
+            if class == nil do
+              class_param = %{
+                name: student_param["class"],
+                institution_id: conn.private.plug_session["institution_id"]
+              }
+
+              cls = Class.changeset(%Class{}, class_param)
+
+              Repo.insert(cls)
+            end
+
+            latest_class =
+              Repo.get_by(School.Affairs.Class,
+                name: student_param["class"],
+                institution_id: conn.private.plug_session["institution_id"]
+              )
+
+            if class_year == year_diffrent do
+              param = %{
+                class_id: latest_class.id,
+                institute_id: conn.private.plug_session["institution_id"],
+                semester_id: semester_id,
+                sudent_id: student.id
+              }
+
+              cg = StudentClass.changeset(%StudentClass{}, param)
+
+              Repo.insert(cg)
+            end
+          end
+        end
+      end
+
+    conn
+    |> put_flash(:info, "Student Class created successfully.")
+    |> redirect(to: student_path(conn, :index))
+  end
+
   def pre_upload_students(conn, params) do
     bin = params["item"]["file"].path |> File.read() |> elem(1)
     usr = Settings.current_user(conn)

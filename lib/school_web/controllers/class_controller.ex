@@ -269,13 +269,16 @@ defmodule SchoolWeb.ClassController do
     students =
       Repo.all(
         from(
-          s in Student,
-          left_join: st in StudentClass,
+          st in StudentClass,
+          left_join: s in Student,
           on: s.id == st.sudent_id,
-          left_join: c in Class,
-          on: c.id == st.class_id,
           where:
-            c.id == ^class_id and st.semester_id == ^conn.private.plug_session["semester_id"],
+            st.class_id == ^class_id and
+              st.semester_id == ^conn.private.plug_session["semester_id"],
+          select: %{
+            id: st.sudent_id,
+            name: s.name
+          },
           order_by: [asc: s.name]
         )
       )
@@ -737,7 +740,7 @@ defmodule SchoolWeb.ClassController do
       |> Enum.map(fn x -> String.trim(x, " ") end)
       |> Enum.map(fn x -> params["header"][x] end)
 
-    contents = tl(data)
+    contents = tl(data) |> Enum.uniq() |> Enum.sort()
 
     result =
       for content <- contents do

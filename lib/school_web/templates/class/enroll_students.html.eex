@@ -19,7 +19,7 @@
           </select>
            <br>
                     <select id="show_class" class="custom-select custom-select-sm">
-            <option selected="">Choose a class</option><%= for class <- @classes do %>
+            <option selected="">Choose a class</option><%= for class <- @classes|>Enum.sort_by(fn x -> x.name end) do %>
             <option value="<%= class.id %>"><%= class.name %>
             </option><% end %>
           </select>

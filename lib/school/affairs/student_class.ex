@@ -16,7 +16,7 @@ defmodule School.Affairs.StudentClass do
   def changeset(student_class, attrs) do
     student_class
     |> cast(attrs, [:institute_id, :level_id, :semester_id, :class_id, :sudent_id])
-    |> validate_required([:institute_id, :level_id, :semester_id, :class_id, :sudent_id])
+    |> validate_required([:institute_id, :semester_id, :class_id, :sudent_id])
     |> unique_constraint(:sudent_id, name: :index_all)
   end
 end
