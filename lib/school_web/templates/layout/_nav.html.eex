@@ -91,7 +91,9 @@
                   
                      <% semester=Repo.get_by(School.Affairs.Semester, %{id: @conn.private.plug_session["semester_id"] }) %>
                       <a class="nav-link" href="#" >
+                        <%= if semester != nil do %>
                   Current Semester: <%= semester.start_date %> - <%= semester.end_date %>
+                  <% end %>
                       </a>
                
                </li>

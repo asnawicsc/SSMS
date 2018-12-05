@@ -740,7 +740,7 @@ defmodule SchoolWeb.ClassController do
       |> Enum.map(fn x -> String.trim(x, " ") end)
       |> Enum.map(fn x -> params["header"][x] end)
 
-    contents = tl(data)
+    contents = tl(data) |> Enum.uniq() |> Enum.sort()
 
     result =
       for content <- contents do
