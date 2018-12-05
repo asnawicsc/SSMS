@@ -281,6 +281,9 @@ defmodule SchoolWeb.AttendanceController do
 
         mother != nil ->
           fb_send_attedance_report(mother, student)
+
+        true ->
+          nil
       end
     end
   end

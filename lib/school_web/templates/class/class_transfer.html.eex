@@ -6,15 +6,38 @@
 </div>
 
 <div class="row">
-	<%= for class <- @classes do %>
-	<div class="col-md-5">
+  <div class="col-lg-3">
+     <div class="card b">
+        <div class="card-header bg-gray-lighter text-bold">Standards Tab Panel</div>
+        <div class="list-group">
+          <%= for class <- @classes do %>
+
+              <a class="list-group-item list-group-item-action" href="#<%= elem(class,0) |> String.replace(" ","_") %>" data-toggle="tab" id="tab_panel"><%= elem(class,0) %> </a>
+          <% end %>
+        </div>
+     </div>
+  </div>
+
+  <div class="tab-pane active show" id="notify">
+     <div class="card b">
+        <div class="card-header bg-gray-lighter text-bold"></div>
+        <div class="card-body">
+           <h2>Click on the tab panel to show information.</h2>
+        </div>
+     </div>
+  </div>
+
+
+	<div class="col-lg-7">
+    <div class="tab-content p-0 b0">
+  <%= for class <- @classes do %>
 	  <!-- START card-->
-	  <div class="card mb-3 border-success">
-	    <div class="card-header text-white bg-success"><%= elem(class,0)%></div>
+    <div class="tab-pane" id="<%= elem(class,0) |> String.replace(" ","_") %>">
+	  <div class="card mb-3 border-info">
+	    <div class="card-header text-white bg-info"><%= elem(class,0)%></div>
 	    <div class="card-body">
 	    <form action="/submit_class_transfer" >
-		<%= for each <- elem(class,1) do %>
-			
+		<%= for each <- elem(class,1) do %>		
 				<div class="form-group">
                    <label class="col-md-5 col-form-label">Class: <b><%= each.class_name%></b></label>
                    <div class="col-md-8">
@@ -50,10 +73,20 @@
                       </div>    
                    </div>
                 </div>
+                
 		<% end %>
 		<button class="mb-1 btn btn-info float-right" type="submit">Submit</button>
         </form>
 		    	</div>
 		 	</div>
+      </div>
+  <% end %>
 		</div>
-	<% end %>
+  </div>
+  
+
+  <script type="text/javascript">
+    $("a#tab_panel").click(function(){
+      $("div#notify").hide()
+    })
+  </script>

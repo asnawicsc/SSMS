@@ -1,0 +1,32 @@
+<link rel="stylesheet" href="<%= Application.app_dir(:school, "priv/static") %>/css/bootstrap.min.css">
+
+<div>
+	<center><b>Students Transfer Lists</b></center><br>
+	<table class="table">
+		<thead>
+			<tr align="">
+				<th>Name</th>
+				<%= for semester <- @semesters do %>
+					<% semester = Repo.get(Affairs.Semester, semester.id)%>
+					<th><%= semester.start_date%> - <%= semester.end_date %></th>
+				<% end %>
+			</tr>
+		</thead>
+		<tbody>
+			<%= for student <- @students do %>
+			<tr align="center">
+				<td><%= student.name %></td>
+				<%= for semester <- @semesters do %>
+					<% class = Repo.all(from sc in Affairs.StudentClass,left_join: c in Class,on: c.id == sc.class_id, where: sc.semester_id == ^semester.id and sc.sudent_id == ^student.student_id, select: %{name: c.name})%>
+					
+					<%= if class != [] do %>
+						<td><%= hd(class).name %></td>
+					<% else %>
+						<td></td>
+					<% end %>
+				<% end %>
+			</tr>
+			<% end %>
+		</tbody>
+	</table>
+</div>

@@ -347,6 +347,7 @@
                 <a href ="/teacher"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
                 <a href ="/teacher/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Teacher</button></a>
                 <a href ="/login_teacher"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Teacher Login</button></a>
+                <a href ="/teacher_attendance"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Mark Teacher Attendance</button></a>
              </div>
           </div>
         </div>
