@@ -3,6 +3,7 @@ defmodule SchoolWeb.LevelController do
 
   alias School.Affairs
   alias School.Affairs.Level
+  require IEx
 
   def index(conn, _params) do
     levels =
@@ -18,12 +19,17 @@ defmodule SchoolWeb.LevelController do
   end
 
   def default_standard(conn, _params) do
-    all = Repo.all(School.Affairs.Level)
+    all =
+      Repo.all(
+        from(s in School.Affairs.Level,
+          where: s.institution_id == ^conn.private.plug_session["institution_id"]
+        )
+      )
 
     if all != [] do
       Repo.delete_all(
         from(s in School.Affairs.Level,
-          where: s.institution_id == ^@conn.private.plug_session["institution_id"]
+          where: s.institution_id == ^conn.private.plug_session["institution_id"]
         )
       )
     end

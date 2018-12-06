@@ -10,6 +10,9 @@ defmodule School.Affairs.Semester do
     field(:start_date, :date)
     field(:institution_id, :integer)
     field(:next_semester_id, :integer)
+    field(:sem, :integer)
+    field(:year, :integer)
+
     timestamps()
   end
 
@@ -23,8 +26,10 @@ defmodule School.Affairs.Semester do
       :holiday_end,
       :school_days,
       :institution_id,
-      :next_semester_id
+      :next_semester_id,
+      :year,
+      :sem
     ])
-    |> validate_required([:start_date, :end_date, :holiday_start, :holiday_end, :institution_id])
+    |> validate_required([:start_date, :end_date, :year, :sem, :institution_id])
   end
 end
