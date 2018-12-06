@@ -308,7 +308,7 @@
                    
                   </ol>
               <a href ="/semesters"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
-              <a href ="/semesters/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Semester</button></a>
+              <a href ="/create_semesters"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Semester</button></a>
         
            </div>
         </div>
@@ -383,6 +383,7 @@
                     <li><p class="card-text"><%= gettext("Manage a subject and create a period from it.")%></p></li>
                      <li><p class="card-text"><%= gettext("Assign a subject to a class and standard.")%></p></li>
                   </ol>
+                    <a href ="/subject"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
                <a href ="/subject/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Subject</button></a>
                 <a href ="/subject_teach_class"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List Subject Period</button></a>
                <a href ="/subject_teach_class/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Subject Period</button></a>

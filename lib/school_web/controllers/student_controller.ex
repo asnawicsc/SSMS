@@ -494,7 +494,7 @@ defmodule SchoolWeb.StudentController do
       |> Enum.map(fn x -> String.trim(x, " ") end)
       |> Enum.map(fn x -> params["header"][x] end)
 
-    contents = tl(data)
+    contents = tl(data) |> Enum.reject(fn x -> x == [""] end) |> Enum.uniq() |> Enum.sort()
 
     result =
       for content <- contents do
@@ -543,76 +543,34 @@ defmodule SchoolWeb.StudentController do
 
         student_param = Enum.zip(h, c) |> Enum.into(%{})
 
-        if student_param["quit date"] == "" do
-          student =
-            Repo.get_by(School.Affairs.Student,
-              student_no: student_param["student no"],
+        institution_id = conn.private.plug_session["institution_id"]
+
+        student_id =
+          Repo.get_by(Affairs.Student,
+            student_no: student_param["student_id"],
+            institution_id: conn.private.plug_session["institution_id"]
+          )
+
+        if student_id != nil do
+          class_id =
+            Repo.get_by(Affairs.Class,
+              name: student_param["class_name"],
               institution_id: conn.private.plug_session["institution_id"]
             )
 
-          if student != nil do
-            institution_id = conn.private.plug_session["institution_id"]
-            semester_id = conn.private.plug_session["semester_id"]
-
-            semester =
-              Repo.get_by(School.Affairs.Semester,
-                id: semester_id,
-                institution_id: conn.private.plug_session["institution_id"]
+          if class_id != nil do
+            semester_id =
+              Repo.get_by(Affairs.Semester,
+                year: student_param["year"],
+                sem: student_param["sem"]
               )
 
-            all =
-              student_param["registration date"]
-              |> String.split_at(10)
-              |> elem(0)
-              |> String.replace(".", "-")
-              |> String.split_at(2)
-
-            day = all |> elem(0)
-
-            month = all |> elem(1) |> String.split_at(4) |> elem(0)
-
-            year = all |> elem(1) |> String.split_at(4) |> elem(1)
-
-            registration_date = (year <> month <> day) |> Date.from_iso8601!()
-
-            year_diffrent = semester.end_date.year - registration_date.year + 1
-
-            class_year =
-              student_param["class"]
-              |> String.split("")
-              |> Enum.filter(fn x -> x != "" end)
-              |> hd
-              |> String.to_integer()
-
-            class =
-              Repo.get_by(School.Affairs.Class,
-                name: student_param["class"],
-                institution_id: conn.private.plug_session["institution_id"]
-              )
-
-            if class == nil do
-              class_param = %{
-                name: student_param["class"],
-                institution_id: conn.private.plug_session["institution_id"]
-              }
-
-              cls = Class.changeset(%Class{}, class_param)
-
-              Repo.insert(cls)
-            end
-
-            latest_class =
-              Repo.get_by(School.Affairs.Class,
-                name: student_param["class"],
-                institution_id: conn.private.plug_session["institution_id"]
-              )
-
-            if class_year == year_diffrent do
+            if semester_id != nil do
               param = %{
-                class_id: latest_class.id,
-                institute_id: conn.private.plug_session["institution_id"],
-                semester_id: semester_id,
-                sudent_id: student.id
+                class_id: class_id.id,
+                institute_id: institution_id,
+                semester_id: semester_id.od,
+                sudent_id: student_id.id
               }
 
               cg = StudentClass.changeset(%StudentClass{}, param)
@@ -662,6 +620,7 @@ defmodule SchoolWeb.StudentController do
       hd(data)
       |> Enum.map(fn x -> String.trim(x, " ") end)
       |> Enum.map(fn x -> params["header"][x] end)
+      |> Enum.reject(fn x -> x == nil end)
 
     contents = tl(data)
 
