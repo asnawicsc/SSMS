@@ -489,6 +489,12 @@ defmodule SchoolWeb.AttendanceController do
         # class = Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
         class = Repo.all(from(c in Class, where: c.teacher_id == ^teacher.id))
 
+        if class == [] do
+          conn
+          |> put_flash(:info, "You are not assign to any class")
+          |> redirect(to: page_path(conn, :index))
+        end
+
         attendance =
           for each_class <- class do
             Affairs.list_attendance() |> Enum.filter(fn x -> x.class_id == each_class.id end)
