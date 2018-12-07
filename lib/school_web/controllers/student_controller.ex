@@ -569,7 +569,7 @@ defmodule SchoolWeb.StudentController do
               param = %{
                 class_id: class_id.id,
                 institute_id: institution_id,
-                semester_id: semester_id.od,
+                semester_id: semester_id.id,
                 sudent_id: student_id.id
               }
 
