@@ -6,11 +6,52 @@ defmodule SchoolWeb.ApiController do
   alias School.Settings.{Institution, User, Parameter}
   require IEx
 
-  def personal_broadcast(chatfuel_block_name, user_attribute_list_map) do
+  def personal_broadcast(chatfuel_block_name, user_attribute_list_map, psid) do
     bot_id = "5bd1836d0ecd9f0159d5f60a"
-    psid = "2320864854622545"
+
     ct = "mELtlMAHYqR0BvgEiMq8zVek3uYUK3OJMbtyrdNPTrQB9ndV0fM7lWTFZbM4MZvD"
     chatfuel_message_tag = "COMMUNITY_ALERT"
+
+    uri =
+      "https://api.chatfuel.com/bots/#{bot_id}/users/#{psid}/send?chatfuel_token=#{ct}&chatfuel_message_tag=#{
+        chatfuel_message_tag
+      }&chatfuel_block_name=#{chatfuel_block_name}"
+
+    user_attributes =
+      for map <- user_attribute_list_map do
+        key = Map.keys(map) |> hd() |> Atom.to_string() |> URI.encode()
+        value = Map.values(map) |> hd() |> URI.encode()
+
+        "&#{key}=#{value}"
+      end
+      |> Enum.join()
+
+    uri = uri <> user_attributes
+
+    IO.inspect(uri)
+
+    case HTTPoison.request(:post, uri, "", [{"Content-Type", "application/json"}], []) do
+      {:ok, %HTTPoison.Response{body: body}} ->
+        IO.inspect(Poison.decode(body))
+        IO.puts("message sent!")
+
+      {:error, %HTTPoison.Error{reason: reason}} ->
+        IO.inspect(Poison.decode(reason))
+
+      {:ok, %HTTPoison.Response{status_code: 400, body: body}} ->
+        IO.inspect(Poison.decode(body))
+        IO.puts("message sent!")
+
+      _ ->
+        IO.puts("dont know how to catch this")
+    end
+  end
+
+  def school_broadcast(chatfuel_block_name, user_attribute_list_map, psid) do
+    bot_id = "5bd1836d0ecd9f0159d5f60a"
+
+    ct = "mELtlMAHYqR0BvgEiMq8zVek3uYUK3OJMbtyrdNPTrQB9ndV0fM7lWTFZbM4MZvD"
+    chatfuel_message_tag = "CONFIRMED_EVENT_REMINDER"
 
     uri =
       "https://api.chatfuel.com/bots/#{bot_id}/users/#{psid}/send?chatfuel_token=#{ct}&chatfuel_message_tag=#{
@@ -124,7 +165,7 @@ defmodule SchoolWeb.ApiController do
     state_params = "sb=#{true}"
 
     url =
-      "https://www.facebook.com/v3.0/dialog/oauth?client_id=#{app_id}&redirect_uri=#{redir_url}&state=#{
+      "https://www.facebook.com/v3.2/dialog/oauth?client_id=#{app_id}&redirect_uri=#{redir_url}&state=#{
         state_params
       }&scope=email,public_profile"
 
@@ -146,7 +187,7 @@ defmodule SchoolWeb.ApiController do
     code = conn.params["code"]
 
     uri2 =
-      "https://graph.facebook.com/v3.0/oauth/access_token?client_id=#{app_id}&redirect_uri=#{
+      "https://graph.facebook.com/v3.2/oauth/access_token?client_id=#{app_id}&redirect_uri=#{
         redir_url
       }&client_secret=#{app_secret}&code=#{code}"
 
@@ -154,10 +195,11 @@ defmodule SchoolWeb.ApiController do
     body = response.body
     {:ok, map_first} = Poison.decode(body)
     IO.inspect(map_first)
+    uat = map_first["access_token"]
     access_token = map_first["access_token"]
 
     uri4 =
-      "https://graph.facebook.com/v3.0/oauth/access_token?client_id=#{app_id}&client_secret=#{
+      "https://graph.facebook.com/v3.2/oauth/access_token?client_id=#{app_id}&client_secret=#{
         app_secret
       }&grant_type=client_credentials"
 
@@ -196,6 +238,28 @@ defmodule SchoolWeb.ApiController do
       {:ok, map_user} = Poison.decode(body)
       IO.inspect(map_user)
 
+      page_list_map =
+        map_user["ids_for_pages"]["data"]
+        |> Enum.filter(fn x -> x["page"]["name"] == "5chool.net" end)
+
+      psid =
+        if page_list_map != [] do
+          data_map = page_list_map |> hd()
+          data_map["id"]
+        else
+          nil
+        end
+
+      fbuid = user_id
+
+      uri6 = "https://graph.facebook.com/v3.1/#{fbuid}?fields=email&access_token=#{uat}"
+
+      response = HTTPoison.get!(uri6)
+      body = response.body
+      {:ok, map_user2} = Poison.decode(body)
+      IO.inspect(map_user2)
+      user_email = map_user2["email"]
+
       # here is where we start gathering data for the ids for apps, there is also a possibility where the user dont have data for the current fb app...
       # there is no psid, maybe didnt include the business manager for the page.
       # very likely there is a name in map_user 
@@ -204,10 +268,14 @@ defmodule SchoolWeb.ApiController do
 
       IO.inspect(conn.params["state"])
 
+      IO.inspect(psid)
+
       parent = Repo.get_by(School.Affairs.Parent, fb_user_id: user_id)
 
       if parent == nil do
-        School.Affairs.create_parent(%{fb_user_id: user_id})
+        School.Affairs.create_parent(%{fb_user_id: user_id, email: user_email, psid: psid})
+      else
+        School.Affairs.update_parent(parent, %{fb_user_id: user_id, email: user_email, psid: psid})
       end
 
       conn

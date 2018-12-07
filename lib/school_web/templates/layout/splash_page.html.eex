@@ -18,6 +18,12 @@
     <!-- Favicons -->
     <link rel="apple-touch-icon" href="/img/outside2.png">
     <link rel="icon" href="/img/outside2.png">
+        <!-- Scripts -->
+    <script src="assets/js/core.min.js"></script>
+    <script src="assets/js/thesaas.min.js"></script>
+    <script src="assets/js/script.js"></script>
+    <link rel="stylesheet" href="/vendor/sweetalert/dist/sweetalert.css">
+    <script src="/vendor/sweetalert/dist/sweetalert.min.js"></script>
   </head>
 
   <body>
@@ -59,10 +65,25 @@
 
 
 
-    <!-- Scripts -->
-    <script src="assets/js/core.min.js"></script>
-    <script src="assets/js/thesaas.min.js"></script>
-    <script src="assets/js/script.js"></script>
 
+    <script type="text/javascript">
+
+    $(document).ready(function(){
+
+    <%= cond do %>
+    <% get_flash(@conn, :info) != nil -> %>
+        
+
+        swal("Awesome!", "<%= get_flash(@conn, :info) %>", "success");
+
+    <% get_flash(@conn, :error) != nil -> %>
+
+        swal("Ops!", "<%= get_flash(@conn, :error) %>", "error");
+    <% true -> %>
+
+    <% end %>
+      
+    })
+    </script>
   </body>
 </html>

@@ -38,6 +38,8 @@ defmodule School.Affairs.Parent do
     field(:institution_id, :integer)
     field(:fb_user_id, :string)
     field(:role, :string, default: "Parent")
+    field(:email, :string)
+    field(:psid, :string)
     timestamps()
   end
 
@@ -45,6 +47,8 @@ defmodule School.Affairs.Parent do
   def changeset(parent, attrs) do
     parent
     |> cast(attrs, [
+      :psid,
+      :email,
       :role,
       :fb_user_id,
       :institution_id,

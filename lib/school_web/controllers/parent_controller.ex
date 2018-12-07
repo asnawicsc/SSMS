@@ -83,23 +83,37 @@ defmodule SchoolWeb.ParentController do
   def match_parents_ic(conn, params) do
     icno = params["ic_no"] |> String.replace("-", "")
 
-    parent = Repo.get_by(Parent, icno: icno)
-
     user = Settings.current_user(conn)
+    parent = Repo.get_by(Parent, icno: icno, email: user.email)
 
     IO.inspect(parent)
     IO.inspect(user)
 
     if parent != nil do
-      Affairs.update_parent(parent, %{fb_user_id: user.fb_user_id})
+      Affairs.update_parent(parent, %{
+        fb_user_id: user.fb_user_id,
+        email: user.email,
+        psid: user.psid
+      })
 
       if user != parent do
         Repo.delete(user)
       end
-    end
 
-    conn
-    |> redirect(to: parent_path(conn, :parents_corner))
+      conn
+      |> put_flash(
+        :info,
+        "Linking process done."
+      )
+      |> redirect(to: parent_path(conn, :parents_corner))
+    else
+      conn
+      |> put_flash(
+        :info,
+        "We couldnt find the matching IC, kindly contact the school administrator."
+      )
+      |> redirect(to: parent_path(conn, :parents_corner))
+    end
   end
 
   def login(conn, params) do
