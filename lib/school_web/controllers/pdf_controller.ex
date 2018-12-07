@@ -1193,7 +1193,12 @@ defmodule SchoolWeb.PdfController do
                 institution_id: conn.private.plug_session["institution_id"]
               })
 
-            student_class = Repo.get_by(School.Affairs.StudentClass, %{sudent_id: student.id})
+            student_class =
+              Repo.get_by(School.Affairs.StudentClass, %{
+                sudent_id: student.id,
+                semester_id: exam_id.semester_id
+              })
+
             s_mark = all_mark |> Enum.filter(fn x -> x.student_name == item end)
 
             a =

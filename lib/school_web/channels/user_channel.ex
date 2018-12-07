@@ -1536,8 +1536,7 @@ defmodule SchoolWeb.UserChannel do
       Repo.all(
         from(
           s in School.Affairs.ExamMark,
-          where:
-            s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
+          where: s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
           select: %{
             class_id: s.class_id,
             subject_id: s.subject_id,
@@ -2087,7 +2086,12 @@ defmodule SchoolWeb.UserChannel do
               )
               |> hd()
 
-            student_class = Repo.get_by(School.Affairs.StudentClass, %{sudent_id: student.id})
+            student_class =
+              Repo.get_by(School.Affairs.StudentClass, %{
+                sudent_id: student.id,
+                semester_id: exam_master.semester_id
+              })
+
             s_mark = all_mark |> Enum.filter(fn x -> x.student_name == item end)
 
             a =
@@ -2122,7 +2126,11 @@ defmodule SchoolWeb.UserChannel do
         for data <- datas do
           student_mark = data.student_mark
 
-          student_class = Repo.get_by(School.Affairs.StudentClass, %{sudent_id: data.student_id})
+          student_class =
+            Repo.get_by(School.Affairs.StudentClass, %{
+              sudent_id: data.student_id,
+              semester_id: exam_master.semester_id
+            })
 
           grades =
             Repo.all(
@@ -3372,7 +3380,8 @@ defmodule SchoolWeb.UserChannel do
 
   def handle_in("remove_from_class", payload, socket) do
     ex_class =
-      Repo.get_by(School.Affairs.StudentClass,
+      Repo.get_by(
+        School.Affairs.StudentClass,
         sudent_id: payload["student_id"],
         semester_id: payload["semester_id"],
         class_id: payload["class_id"]

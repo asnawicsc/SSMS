@@ -113,4 +113,58 @@ defmodule School.Affairs.Student do
       Enum.map(dup_students, fn x -> School.Repo.delete(x) end)
     end
   end
+
+  def delete_duplicate_student_name() do
+    import Ecto.Query
+
+    s_no =
+      School.Repo.all(
+        from(
+          s in School.Affairs.Student,
+          group_by: [s.name],
+          select: %{ct: count(s.name), no: s.name}
+        )
+      )
+      |> Enum.filter(fn x -> x.ct > 1 end)
+      |> Enum.map(fn x -> x.no end)
+
+    for s_n <- s_no do
+      students = School.Repo.all(from(s in School.Affairs.Student, where: s.name == ^s_n))
+
+      {student, dup_students} = List.pop_at(students, 0)
+
+      Enum.map(dup_students, fn x ->
+        School.Affairs.update_student(x, %{
+          name: x.name <> "- duplicate - " <> Integer.to_string(x.id)
+        })
+      end)
+    end
+  end
+
+  def delete_duplicate_student_id() do
+    import Ecto.Query
+
+    s_no =
+      School.Repo.all(
+        from(
+          s in School.Affairs.Student,
+          group_by: [s.name],
+          select: %{ct: count(s.name), no: s.name}
+        )
+      )
+      |> Enum.filter(fn x -> x.ct > 1 end)
+      |> Enum.map(fn x -> x.no end)
+
+    for s_n <- s_no do
+      students = School.Repo.all(from(s in School.Affairs.Student, where: s.name == ^s_n))
+
+      {student, dup_students} = List.pop_at(students, 0)
+
+      Enum.map(dup_students, fn x ->
+        School.Affairs.update_student(x, %{
+          name: x.name <> "- duplicate - " <> Integer.to_string(x.id)
+        })
+      end)
+    end
+  end
 end

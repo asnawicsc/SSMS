@@ -270,12 +270,22 @@ defmodule SchoolWeb.ApiController do
 
       IO.inspect(psid)
 
-      parent = Repo.get_by(School.Affairs.Parent, fb_user_id: user_id)
+      check_parents = Repo.all(from(p in Parent, where: p.email == ^user_email))
 
-      if parent == nil do
-        School.Affairs.create_parent(%{fb_user_id: user_id, email: user_email, psid: psid})
+      if Enum.count(check_parents) == 1 do
+        parent = Repo.get_by(School.Affairs.Parent, email: user_email)
+
+        # if parent == nil do
+        #   School.Affairs.create_parent(%{fb_user_id: user_id, email: user_email, psid: psid})
+        # else
+        School.Affairs.update_parent(parent, %{
+          fb_user_id: user_id,
+          email: user_email,
+          psid: psid
+        })
+
+        # end
       else
-        School.Affairs.update_parent(parent, %{fb_user_id: user_id, email: user_email, psid: psid})
       end
 
       conn
