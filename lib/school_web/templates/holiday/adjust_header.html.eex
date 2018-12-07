@@ -4,14 +4,12 @@
 </div>
 
 		
-<form class="form-horizontal" method="POST" action="/upload_generate_student_class">
+<form class="form-horizontal" method="POST" action="/upload_holiday_final">
 	  <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
 	    <input type="hidden" name="batch_id" value="<%= @batch_id%>">
-	<% attrs = [      "year",
-      "sem",
-      "class_name",
-      "student_id"
-    ]%>
+	<% attrs = [ :date,
+      :description
+    ] |> Enum.map(fn x -> Atom.to_string(x) end) %>
 
 <%= for header <- @headers do %>
 

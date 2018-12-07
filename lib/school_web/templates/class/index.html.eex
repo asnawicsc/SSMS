@@ -9,13 +9,15 @@
         <div class="card card-default d-none d-lg-block">
           <div class="card-body">
             <div class="table-responsive">
-              <table class="table">
+              <table class="table" id="datatable1">
                 <thead>
                   <tr>
                   <th><%= gettext "Name" %></th>
 
                   <th><%= gettext "Level" %></th>
                   <th><%= gettext "Teacher" %></th>
+                  <th><%= gettext "Total Student" %></th>
+                  <th></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -47,14 +49,35 @@
                             <%else %>
                             <%= "Unknown Standard" %>
                             <% end %>
+
+
+                                     <% students= if class.id != nil do  
+                                             students =
+                                          Repo.all(
+                                            from st in StudentClass,
+                                              left_join: s in Student,
+                                              on: s.id == st.sudent_id,
+                                              where:
+                                                st.class_id == ^class.id and
+                                                  st.semester_id == ^@conn.private.plug_session["semester_id"]
+                                              )|>Enum.count
+
+
+                                        else
+
+                                          students=0
+
+                                          end  %>
+                              
                     <tr>
                        <td><%= class.name %></td>
     
                       <td><%= level_name %></td>
                       <td><%= name %></td>
+                      <td><%= students %></td>
                     
       <td class="text-right">
-        <a class="mb-1 btn-sm btn btn-outline-warning" href="/classes/<%= class.id %>">Edit</a>
+        <a class="mb-1 btn-sm btn btn-outline-warning" href="/classes/<%= class.id %>/edit">Edit</a>
     <a class="mb-1 btn-sm btn btn-outline-success" href="/class_setting/<%= class.id %>">View</a>
         <a class="mb-1 btn-sm btn btn-outline-primary" href="/classes/<%= class.id %>/sync_library_membership">Sync Library Membership</a>
       

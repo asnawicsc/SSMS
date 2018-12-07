@@ -85,6 +85,20 @@
             <ul class="navbar-nav flex-row">
                <!-- Search icon-->
 
+ 
+    
+                              <li class="nav-item d-none d-md-block">
+                     <%= if @conn.private.plug_session["semester_id"] != nil do %>
+                     <% semester=Repo.get_by(School.Affairs.Semester, %{id: @conn.private.plug_session["semester_id"] }) %>
+                      <a class="nav-link" href="#" >
+                        <%= if semester != nil do %>
+                  Current Semester: <%= semester.start_date %> - <%= semester.end_date %>
+                  <% end %>
+                    <% end %>
+                      </a>
+               
+               </li>
+
                <!-- Fullscreen (only desktops)-->
                <li class="nav-item d-none d-md-block">
                   <a class="nav-link" href="#" data-toggle-fullscreen="">
