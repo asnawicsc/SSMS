@@ -137,13 +137,14 @@
                         student_ids = Enum.filter(@attendance, fn x -> x.attendance_date == NaiveDateTime.to_date(date) end)
                          student_ids = if student_ids != [] do
                           
-                       hd(student_ids).student_id |> String.split(",")
+                       hd(student_ids).student_id |> String.split(",") |> Enum.reject(fn x -> x == "" end)
                         else
                         []
                         end
 
-                        %>
 
+
+                        %>
                           <%= if Enum.any?(student_ids, fn x -> x == Integer.to_string(student.sudent_id) end) do  %>
                             <%= "1" %>
                               <% else %>

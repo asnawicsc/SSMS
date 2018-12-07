@@ -356,6 +356,9 @@ defmodule SchoolWeb.AttendanceController do
           order_by: [t.name]
         )
       )
+      |> Enum.reject(fn x -> x.sudent_id == "" end)
+
+    IO.inspect(students)
 
     attendance =
       Repo.all(
