@@ -4,7 +4,7 @@
   <head>
     <title a> Student Report Card </title>
     </head>
-  <p align="center"><%= student.institution_name %><br/><script>document.write(new Date().getFullYear())</script>成绩表 </p>
+  <p align="center"><%= student.institution_name %><br/> <%= student.semester.start_date.year %>成绩表 </p>
 </div>
 
 

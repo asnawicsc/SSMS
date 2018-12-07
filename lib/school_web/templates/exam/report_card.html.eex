@@ -1,4 +1,4 @@
-<p align="center"><%= @institution_name %><br/><script>document.write(new Date().getFullYear())</script>成绩表 </p>
+<p align="center"><%= @institution_name %><br/><%= @semester.start_date.year%> 成绩表 </p>
 <head>
   <title a> Student Report Card </title>
   <h2 align="center"> Student Report Card (<%= @exam.name %>)</h2>

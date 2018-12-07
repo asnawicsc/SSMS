@@ -1404,11 +1404,14 @@ defmodule SchoolWeb.ExamController do
     total_per = per * 100
 
     total_average = (total_mark / total_per * 100) |> Float.round(2)
+    semester = Repo.get(Semester, exam.semester_id)
+    IO.inspect(semester)
 
     html =
       Phoenix.View.render_to_string(
         SchoolWeb.ExamView,
         "report_card.html",
+        semester: semester,
         total_gpa: total_gpa,
         total_mark: total_mark,
         total_average: total_average,
@@ -1565,7 +1568,9 @@ defmodule SchoolWeb.ExamController do
               on: sc.class_id == c.id,
               left_join: sb in School.Affairs.Subject,
               on: em.subject_id == sb.id,
-              where: em.student_id == ^student.id and e.name == ^exam_name,
+              where:
+                em.student_id == ^student.id and e.name == ^exam_name and
+                  sc.semester_id == ^exam.semester_id,
               select: %{
                 student_name: s.name,
                 chinese_name: s.chinese_name,
@@ -1633,8 +1638,10 @@ defmodule SchoolWeb.ExamController do
         total_per = per * 100
 
         total_average = (total_mark / total_per * 100) |> Float.round(2)
+        semester = Repo.get(Semester, exam.semester_id)
 
         %{
+          semester: semester,
           total_gpa: total_gpa,
           total_mark: total_mark,
           total_average: total_average,
