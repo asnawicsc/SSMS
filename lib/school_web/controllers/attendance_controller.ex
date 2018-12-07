@@ -177,12 +177,15 @@ defmodule SchoolWeb.AttendanceController do
         Map.put(each, :attend, false)
       end
 
-    if attended_students != [] do
-      attended_students =
-        for each <- attended_students do
-          Map.put(each, :attend, true)
-        end
-    end
+    attended_students =
+      if attended_students != [] do
+        attended_students =
+          for each <- attended_students do
+            Map.put(each, :attend, true)
+          end
+      else
+        []
+      end
 
     students = List.flatten(rem, attended_students)
 

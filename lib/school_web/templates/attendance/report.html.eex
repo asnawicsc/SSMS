@@ -128,10 +128,15 @@
                 </tr>
                 <%= for student <- students do %>
 
+               
                   <tr>
+                  
+                      
+                  
                     <%= for date <- dates do %>
+                   
                       <td style="width: 200px; text-align: center;">
-
+                           <%= if student.sudent_id != "" do %>
                         <%
 
                         student_ids = Enum.filter(@attendance, fn x -> x.attendance_date == NaiveDateTime.to_date(date) end)
@@ -144,28 +149,46 @@
 
 
 
+
+
                         %>
-                          <%= if Enum.any?(student_ids, fn x -> x == Integer.to_string(student.sudent_id) end) do  %>
-                            <%= "1" %>
-                              <% else %>
-                                <%= if student.sudent_id != "" do %>
+                        <%= if student_ids != [] do %>
+                      
+                         
+
+                                <%= if Enum.any?(student_ids, fn x -> x == Integer.to_string(student.sudent_id) end) do  %>
+                                     
                                   
+                                  <%= "1" %>
+                                    <% else %>
+
+
+                                     
+                                                  
+                                               
+                                                     <% a = Repo.get_by(Absent, absent_date: NaiveDateTime.to_date(date), student_id: Integer.to_string(student.sudent_id))   %>
+
+                                                      <%= if a != nil do %>
+
+                                                        <%= a.reason |> String.split() |> hd() |> String.split("") |> Enum.reject(fn x -> x == ""end) |> hd()  %>
+
+                                                    <% else %>
+                                                    <%=  "0" %>
+                                                    <% end %>
+
+                                           
+
+                                <% end %>
+
+                           <% else %>
+                              <%=  "0" %>
+                            <% end %>
+
+                            <% else %>
+
+                                &nbsp;
                                
-                                <% a = Repo.get_by(Absent, absent_date: NaiveDateTime.to_date(date), student_id: Integer.to_string(student.sudent_id))   %>
-
-                                  <%= if a != nil do %>
-
-                                    <%= a.reason |> String.split() |> hd() |> String.split("") |> Enum.reject(fn x -> x == ""end) |> hd()  %>
-
-                                      <% else %>
-                                        <%=  0 %>
-                                        <% end %>
-
-                                            <% else %>
-                                            &nbsp;
-                                        <% end %>
-                                          <% end %>
-
+                                 <% end %>
                       </td>
                       <% end %>
 
@@ -330,36 +353,37 @@
                       <tr>
                         <%= for date <- dates do %>
                           <td style="width: 200px; text-align: center;">
+                       <%= if student.sudent_id != "" do %>
+                                            <%
 
-                            <%
+                                        student_ids = Enum.filter(@attendance, fn x -> x.attendance_date == NaiveDateTime.to_date(date) end)
+                                         student_ids = if student_ids != [] do
+                                          
+                                       hd(student_ids).student_id |> String.split(",")
+                                        else
+                                       []
+                                        end
 
-                        student_ids = Enum.filter(@attendance, fn x -> x.attendance_date == NaiveDateTime.to_date(date) end)
-                         student_ids = if student_ids != [] do
-                          
-                       hd(student_ids).student_id |> String.split(",")
-                        else
-                       []
-                        end
-
-                        %>
+                                        %>
 
                               <%= if Enum.any?(student_ids, fn x -> x == Integer.to_string(student.sudent_id) end) do  %>
                                 1
                                 <% else %>
-                                   <%= if student.sudent_id != "" do %>
+                                 
                                   <% a = Repo.get_by(Absent, absent_date: NaiveDateTime.to_date(date), student_id: Integer.to_string(student.sudent_id))   %>
 
-                                    <%= if a != nil do %>
+                                              <%= if a != nil do %>
 
-                                      <%= a.reason |> String.split() |> hd() |> String.split("") |> Enum.reject(fn x -> x == ""end) |> hd()  %>
+                                                <%= a.reason |> String.split() |> hd() |> String.split("") |> Enum.reject(fn x -> x == ""end) |> hd()  %>
 
-                                        <% else %>
-                                          <%= 0 %>
-                                          <% end %>
+                                                  <% else %>
+                                                    <%= 0 %>
+                                                    <% end %>
 
-                                          <% else %>
-                                            &nbsp;
+                                         
                                         <% end %>
+                                         <% else %>
+                                            &nbsp;
                                           <% end %>
 
                           </td>
