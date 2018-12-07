@@ -1,0 +1,13 @@
+<h2>Show Announcement</h2>
+<% require IEx %>
+<div>
+	<% m = @announcement.message %>
+
+    <strong>Message:</strong>
+    <%= text_to_html(m) %>
+</div>
+
+
+<span><%= link "Edit", to: announcement_path(@conn, :edit, @announcement) %></span>
+<span><%= link "Back", to: announcement_path(@conn, :index) %></span>
+<span><%= link "Broadcast", to: announcement_path(@conn, :broadcast, @announcement) %></span>

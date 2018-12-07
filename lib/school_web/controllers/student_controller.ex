@@ -546,21 +546,24 @@ defmodule SchoolWeb.StudentController do
         institution_id = conn.private.plug_session["institution_id"]
 
         student_id =
-          Repo.get_by(Affairs.Student,
+          Repo.get_by(
+            Affairs.Student,
             student_no: student_param["student_id"],
             institution_id: conn.private.plug_session["institution_id"]
           )
 
         if student_id != nil do
           class_id =
-            Repo.get_by(Affairs.Class,
+            Repo.get_by(
+              Affairs.Class,
               name: student_param["class_name"],
               institution_id: conn.private.plug_session["institution_id"]
             )
 
           if class_id != nil do
             semester_id =
-              Repo.get_by(Affairs.Semester,
+              Repo.get_by(
+                Affairs.Semester,
                 year: student_param["year"],
                 sem: student_param["sem"]
               )

@@ -408,7 +408,8 @@ defmodule SchoolWeb.Router do
     get("/default_rank", ListRankController, :default_rank)
     post("/default_standard", LevelController, :default_standard)
     get("/assign_lib_access", UserController, :assign_lib_access)
-
+    resources("/announcements", AnnouncementController)
+    get("/announcements/:id/broadcast", AnnouncementController, :broadcast)
     get("/*path", PageController, :no_page_found)
   end
 end

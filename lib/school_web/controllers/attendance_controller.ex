@@ -298,11 +298,15 @@ defmodule SchoolWeb.AttendanceController do
       |> elem(1)
 
     if parent.fb_user_id != nil do
-      SchoolWeb.ApiController.personal_broadcast("attendance_announcement", [
-        %{name: student.name},
-        %{date: date},
-        %{message: "is present during teacher taking attendance."}
-      ])
+      SchoolWeb.ApiController.personal_broadcast(
+        "attendance_announcement",
+        [
+          %{name: student.name},
+          %{date: date},
+          %{message: "is present during teacher taking attendance."}
+        ],
+        parent.psid
+      )
     end
   end
 
