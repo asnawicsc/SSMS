@@ -58,8 +58,17 @@ defmodule SchoolWeb.StudentController do
       )
 
     for student <- students do
-      cur_class = Repo.get(Class, student.class_id)
-      next_class = Repo.get(Class, cur_class.next_class)
+      cur_class =
+        Repo.get_by(Class,
+          id: student.class_id,
+          institution_id: conn.private.plug_session["institution_id"]
+        )
+
+      next_class =
+        Repo.get_by(Class,
+          id: cur_class.next_class,
+          institution_id: conn.private.plug_session["institution_id"]
+        )
 
       student_param = %{
         class_id: next_class.id,
