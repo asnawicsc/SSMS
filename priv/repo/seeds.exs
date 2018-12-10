@@ -17,6 +17,7 @@ alias School.Settings.User
 alias School.Repo
 import Ecto.Query
 
-user = Settings.get_user!(1)
-Settings.update_user(user, role: "Admin")
+# user = Settings.get_user!(1)
+
+# Settings.update_user(user, role: "Admin")
 Settings.create_user_access(%{user_id: 1, institution_id: 1})
