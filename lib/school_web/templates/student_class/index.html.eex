@@ -15,7 +15,7 @@
   <tbody>
 <%= for student_class <- @student_classes do %>
 <% level_name= if student_class.level_id != nil do %>
-         <% level=School.Repo.get_by(School.Affairs.Level,name: student_class.level_id,institution_id: @conn.private.plug_session["institution_id"])%>
+         <% level=School.Repo.get_by(School.Affairs.Level,id: student_class.level_id,institution_id: @conn.private.plug_session["institution_id"])%>
 
                                   <%= level_name=if level != nil do
                                     level.name

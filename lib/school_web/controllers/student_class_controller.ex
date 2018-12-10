@@ -8,8 +8,6 @@ defmodule SchoolWeb.StudentClassController do
   def index(conn, _params) do
     student_classes = Affairs.list_student_classes()
     render(conn, "index.html", student_classes: student_classes)
-
-    IEx.pry()
   end
 
   def new(conn, _params) do

@@ -24,7 +24,7 @@
                         <div class=row>
                               <div id="gne" class="form-group col-md-3">
                        <select class="custom-select -custom-select-sm" onchange="getval43(this);" required="required" name="semester_id">
-                                        <%= for a <- @semesters |> Enum.sort do %>
+                                        <%= for a <- @semesters |> Enum.sort_by(fn x -> x.year end) do %>
                                         <option value="<%= a.id %>">
                                             <%= a.start_date  %> - <%= a.end_date  %>
                                         </option>
@@ -34,7 +34,7 @@
                                   <div id="gne" class="form-group col-md-3">
 
                                        <select class="custom-select -custom-select-sm" onchange="getval(this);" required="required" name="class_id">
-                                        <%= for a <- @class |> Enum.sort do %>
+                                        <%= for a <- @class |> Enum.sort_by(fn x -> x.name end) do %>
                                         <option value="<%= a.id %>">
                                             <%= a.name %>
                                         </option>

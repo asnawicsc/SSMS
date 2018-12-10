@@ -21,7 +21,7 @@
                      </select>
                        <select id="show_coco" class="custom-select custom-select-sm">
                            <option selected="">Choose a coco</option>
-                           <%= for coco <- @cocos do %>
+                           <%= for coco <- @cocos|>Enum.sort_by(fn x -> x.description end) do %>
                            <option value="<%= coco.id %>"><%= coco.description %></option>
                            <% end %>
                     
