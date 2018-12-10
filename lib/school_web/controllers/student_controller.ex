@@ -43,12 +43,12 @@ defmodule SchoolWeb.StudentController do
     students =
       Repo.all(
         from(
-          s in Student,
-          left_join: sc in StudentClass,
+          sc in StudentClass,
+          left_join: s in Student,
           on: sc.sudent_id == s.id,
           where:
             sc.institute_id == ^conn.private.plug_session["institution_id"] and
-              s.institute_id == ^conn.private.plug_session["institution_id"] and
+              s.institution_id == ^conn.private.plug_session["institution_id"] and
               sc.semester_id == ^conn.private.plug_session["semester_id"],
           select: %{
             student_id: s.id,
