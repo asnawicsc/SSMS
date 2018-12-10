@@ -33,7 +33,7 @@ environment :dev do
 end
 
 environment :prod do
-  set(include_erts: false)
+  set(include_erts: true)
   set(include_src: false)
   set(cookie: :";g)@g,Cf`^iD6u,cq:5m$<.1nz)TzfbqHm~LSVIo{e>FZNt3P9eK)VHup)KF[Ab>")
 end
