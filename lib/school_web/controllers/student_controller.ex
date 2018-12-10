@@ -18,6 +18,74 @@ defmodule SchoolWeb.StudentController do
     render(conn, "index.html", students: students)
   end
 
+  def students_transfer(conn, params) do
+    curr_semester = Repo.get(Semester, conn.private.plug_session["semester_id"])
+
+    all_semesters =
+      Repo.all(
+        from(
+          s in Semester,
+          where:
+            s.start_date > ^curr_semester.end_date and
+              s.institution_id == ^conn.private.plug_session["institution_id"]
+        )
+      )
+
+    render(
+      conn,
+      "student_transfer.html",
+      curr_semester: curr_semester,
+      all_semesters: all_semesters
+    )
+  end
+
+  def submit_student_transfer(conn, params) do
+    students =
+      Repo.all(
+        from(
+          s in Student,
+          left_join: sc in StudentClass,
+          on: sc.sudent_id == s.id,
+          where:
+            sc.institute_id == ^conn.private.plug_session["institution_id"] and
+              sc.semester_id == ^conn.private.plug_session["semester_id"],
+          select: %{
+            student_id: s.id,
+            semester_id: sc.semester_id,
+            class_id: sc.class_id
+          }
+        )
+      )
+
+    for student <- students do
+      cur_class =
+        Repo.get_by(Class,
+          id: student.class_id,
+          institution_id: conn.private.plug_session["institution_id"]
+        )
+
+      next_class =
+        Repo.get_by(Class,
+          id: cur_class.next_class,
+          institution_id: conn.private.plug_session["institution_id"]
+        )
+
+      student_param = %{
+        class_id: next_class.id,
+        institute_id: conn.private.plug_session["institution_id"],
+        level_id: next_class.level_id,
+        semester_id: String.to_integer(params["next_semester_id"]),
+        sudent_id: student.student_id
+      }
+
+      Affairs.create_student_class(student_param)
+    end
+
+    conn
+    |> put_flash(:info, "All students transferred to next semester successfully !")
+    |> redirect(to: student_path(conn, :students_transfer))
+  end
+
   def height_weight_semester(conn, params) do
     user = Repo.get(User, conn.private.plug_session["user_id"])
     semester = Repo.get(Semester, params["semester_id"])
@@ -285,7 +353,10 @@ defmodule SchoolWeb.StudentController do
                     on: c.sudent_id == s.id,
                     left_join: cl in Class,
                     on: cl.id == c.class_id,
-                    where: s.id == ^student.student_id,
+                    where:
+                      s.id == ^student.student_id and
+                        s.institution_id == ^conn.private.plug_session["institution_id"] and
+                        c.institution_id == ^conn.private.plug_session["institution_id"],
                     order_by: [asc: s.name],
                     select: %{
                       id: s.id,
@@ -313,7 +384,9 @@ defmodule SchoolWeb.StudentController do
               on: c.sudent_id == s.id,
               left_join: cl in Class,
               on: cl.id == c.class_id,
-              where: s.institution_id == ^conn.private.plug_session["institution_id"],
+              where:
+                s.institution_id == ^conn.private.plug_session["institution_id"] and
+                  cl.institution_id == ^conn.private.plug_session["institution_id"],
               order_by: [asc: s.name],
               select: %{
                 id: s.id,
@@ -400,6 +473,136 @@ defmodule SchoolWeb.StudentController do
     render(conn, "new.html", changeset: changeset)
   end
 
+  def pre_generate_student_class(conn, params) do
+    bin = params["item"]["file"].path |> File.read() |> elem(1)
+    usr = Settings.current_user(conn)
+    {:ok, batch} = Settings.create_batch(%{upload_by: usr.id, result: bin})
+
+    data =
+      if bin |> String.contains?("\t") do
+        bin |> String.split("\n") |> Enum.map(fn x -> String.split(x, "\t") end)
+      else
+        bin |> String.split("\n") |> Enum.map(fn x -> String.split(x, ",") end)
+      end
+
+    headers = hd(data) |> Enum.map(fn x -> String.trim(x, " ") end)
+
+    render(conn, "adjust_header_generate.html", headers: headers, batch_id: batch.id)
+  end
+
+  def upload_generate_student_class(conn, params) do
+    batch = Settings.get_batch!(params["batch_id"])
+    bin = batch.result
+    usr = Settings.current_user(conn)
+    {:ok, batch} = Settings.update_batch(batch, %{upload_by: usr.id})
+
+    data =
+      if bin |> String.contains?("\t") do
+        bin |> String.split("\n") |> Enum.map(fn x -> String.split(x, "\t") end)
+      else
+        bin |> String.split("\n") |> Enum.map(fn x -> String.split(x, ",") end)
+      end
+
+    headers =
+      hd(data)
+      |> Enum.map(fn x -> String.trim(x, " ") end)
+      |> Enum.map(fn x -> params["header"][x] end)
+
+    contents = tl(data) |> Enum.reject(fn x -> x == [""] end) |> Enum.uniq() |> Enum.sort()
+
+    result =
+      for content <- contents do
+        h = headers |> Enum.map(fn x -> String.downcase(x) end)
+
+        content = content |> Enum.map(fn x -> x end) |> Enum.filter(fn x -> x != "\"" end)
+
+        c =
+          for item <- content do
+            item =
+              case item do
+                "@@@" ->
+                  ","
+
+                "\\N" ->
+                  ""
+
+                _ ->
+                  item
+              end
+
+            a =
+              case item do
+                {:ok, i} ->
+                  i
+
+                _ ->
+                  cond do
+                    item == " " ->
+                      "null"
+
+                    item == "  " ->
+                      "null"
+
+                    item == "   " ->
+                      "null"
+
+                    true ->
+                      item
+                      |> String.split("\"")
+                      |> Enum.map(fn x -> String.replace(x, "\n", "") end)
+                      |> List.last()
+                  end
+              end
+          end
+
+        student_param = Enum.zip(h, c) |> Enum.into(%{})
+
+        institution_id = conn.private.plug_session["institution_id"]
+
+        student_id =
+          Repo.get_by(
+            Affairs.Student,
+            student_no: student_param["student_id"],
+            institution_id: conn.private.plug_session["institution_id"]
+          )
+
+        if student_id != nil do
+          class_id =
+            Repo.get_by(
+              Affairs.Class,
+              name: student_param["class_name"],
+              institution_id: conn.private.plug_session["institution_id"]
+            )
+
+          if class_id != nil do
+            semester_id =
+              Repo.get_by(
+                Affairs.Semester,
+                year: student_param["year"],
+                sem: student_param["sem"]
+              )
+
+            if semester_id != nil do
+              param = %{
+                class_id: class_id.id,
+                institute_id: institution_id,
+                semester_id: semester_id.id,
+                sudent_id: student_id.id
+              }
+
+              cg = StudentClass.changeset(%StudentClass{}, param)
+
+              Repo.insert(cg)
+            end
+          end
+        end
+      end
+
+    conn
+    |> put_flash(:info, "Student Class created successfully.")
+    |> redirect(to: student_path(conn, :index))
+  end
+
   def pre_upload_students(conn, params) do
     bin = params["item"]["file"].path |> File.read() |> elem(1)
     usr = Settings.current_user(conn)
@@ -434,6 +637,7 @@ defmodule SchoolWeb.StudentController do
       hd(data)
       |> Enum.map(fn x -> String.trim(x, " ") end)
       |> Enum.map(fn x -> params["header"][x] end)
+      |> Enum.reject(fn x -> x == nil end)
 
     contents = tl(data)
 
