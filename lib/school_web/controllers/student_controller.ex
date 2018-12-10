@@ -48,6 +48,7 @@ defmodule SchoolWeb.StudentController do
           on: sc.sudent_id == s.id,
           where:
             sc.institute_id == ^conn.private.plug_session["institution_id"] and
+              s.institute_id == ^conn.private.plug_session["institution_id"] and
               sc.semester_id == ^conn.private.plug_session["semester_id"],
           select: %{
             student_id: s.id,
