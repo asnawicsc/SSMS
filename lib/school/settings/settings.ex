@@ -8,8 +8,6 @@ defmodule School.Settings do
 
   alias School.Settings.Parameter
 
-
-
   @doc """
   Returns the list of parameters.
 
@@ -103,8 +101,6 @@ defmodule School.Settings do
   def change_parameter(%Parameter{} = parameter) do
     Parameter.changeset(parameter, %{})
   end
-
- 
 
   alias School.Settings.Institution
 
@@ -298,10 +294,22 @@ defmodule School.Settings do
     User.changeset(user, %{})
   end
 
-
   def current_user(conn) do
     id = Plug.Conn.get_session(conn, :user_id)
-    if id, do: School.Repo.get(User, id)
+
+    user = School.Repo.get(User, id)
+
+    if user == nil do
+      parent = School.Repo.get_by(School.Affairs.Parent, fb_user_id: id)
+
+      if parent == nil do
+        nil
+      else
+        parent
+      end
+    else
+      user
+    end
   end
 
   alias School.Settings.Label
@@ -399,8 +407,6 @@ defmodule School.Settings do
   def change_label(%Label{} = label) do
     Label.changeset(label, %{})
   end
-
-
 
   alias School.Settings.UserAccess
 

@@ -1,7 +1,8 @@
 
 
 <div class="content-heading">
-    <div>Listing Subject teach class
+    <div>Listing Class Subject 
+      <small>Different class have different subject period. Define them so that each class can have different period.</small>
     </div>
 </div>
 
@@ -40,7 +41,7 @@
        <td><%= period %></td>
 
       <td class="text-right">
-         <%= link "Create a period", to: period_path(@conn, :get_create_period, subject_teach_class.subject_id, subject_teach_class.class_id), class: "btn btn-default btn-xs" %>
+         <% link "Create a period", to: period_path(@conn, :get_create_period, subject_teach_class.subject_id, subject_teach_class.class_id), class: "btn btn-default btn-xs" %>
          <span><%= link "Edit Subject", to: subject_path(@conn, :edit, subject_teach_class.subject_id), class: "btn btn-default btn-xs" %></span>
 
         <span><%= link "Edit", to: subject_teach_class_path(@conn, :edit, subject_teach_class), class: "btn btn-default btn-xs" %></span>
@@ -56,4 +57,5 @@
 </div>
 </div>
 
-<span><%= link "New Subject teach class", to: subject_teach_class_path(@conn, :new) %></span>
+<span><%= link "New Class Subject", to: subject_teach_class_path(@conn, :new), class: "btn btn-outline-primary" %></span>
+<span><%= link "New Subject", to: subject_path(@conn, :new), class: "btn btn-outline-warning" %></span>

@@ -1,6 +1,7 @@
 defmodule School.Affairs.Student do
   use Ecto.Schema
   import Ecto.Changeset
+  require IEx
 
   schema "students" do
     field(:blood_type, :string)
@@ -87,6 +88,83 @@ defmodule School.Affairs.Student do
       :height
     ])
     |> validate_required([:student_no])
+    |> unique_constraint(:student_no)
     |> unique_constraint(:b_cert)
+  end
+
+  def delete_duplicate_student_no() do
+    import Ecto.Query
+
+    s_no =
+      School.Repo.all(
+        from(
+          s in School.Affairs.Student,
+          group_by: [s.student_no],
+          select: %{ct: count(s.student_no), no: s.student_no}
+        )
+      )
+      |> Enum.filter(fn x -> x.ct > 1 end)
+      |> Enum.map(fn x -> x.no end)
+
+    for s_n <- s_no do
+      students = School.Repo.all(from(s in School.Affairs.Student, where: s.student_no == ^s_n))
+
+      {student, dup_students} = List.pop_at(students, 0)
+      Enum.map(dup_students, fn x -> School.Repo.delete(x) end)
+    end
+  end
+
+  def delete_duplicate_student_name() do
+    import Ecto.Query
+
+    s_no =
+      School.Repo.all(
+        from(
+          s in School.Affairs.Student,
+          group_by: [s.name],
+          select: %{ct: count(s.name), no: s.name}
+        )
+      )
+      |> Enum.filter(fn x -> x.ct > 1 end)
+      |> Enum.map(fn x -> x.no end)
+
+    for s_n <- s_no do
+      students = School.Repo.all(from(s in School.Affairs.Student, where: s.name == ^s_n))
+
+      {student, dup_students} = List.pop_at(students, 0)
+
+      Enum.map(dup_students, fn x ->
+        School.Affairs.update_student(x, %{
+          name: x.name <> "- duplicate - " <> Integer.to_string(x.id)
+        })
+      end)
+    end
+  end
+
+  def delete_duplicate_student_id() do
+    import Ecto.Query
+
+    s_no =
+      School.Repo.all(
+        from(
+          s in School.Affairs.Student,
+          group_by: [s.name],
+          select: %{ct: count(s.name), no: s.name}
+        )
+      )
+      |> Enum.filter(fn x -> x.ct > 1 end)
+      |> Enum.map(fn x -> x.no end)
+
+    for s_n <- s_no do
+      students = School.Repo.all(from(s in School.Affairs.Student, where: s.name == ^s_n))
+
+      {student, dup_students} = List.pop_at(students, 0)
+
+      Enum.map(dup_students, fn x ->
+        School.Affairs.update_student(x, %{
+          name: x.name <> "- duplicate - " <> Integer.to_string(x.id)
+        })
+      end)
+    end
   end
 end

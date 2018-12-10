@@ -18,6 +18,24 @@ defmodule SchoolWeb.InstitutionController do
     |> redirect(to: institution_path(conn, :index))
   end
 
+  def pre_upload(conn, params) do
+    # IEx.pry()
+
+    # write the upload to a directory
+
+    # execute the porcelain commands
+
+    # get the output and process it...
+
+    conn
+    |> put_flash(:info, "Processing!")
+    |> redirect(to: institution_path(conn, :index))
+  end
+
+  def upload(conn, params) do
+    render(conn, "upload.html", [])
+  end
+
   def list_institutions(conn, _params) do
     institution = Settings.list_institutions()
 
@@ -47,7 +65,7 @@ defmodule SchoolWeb.InstitutionController do
 
   def create(conn, %{"institution" => institution_params}) do
     image_params = institution_params["image1"]
-    result = upload(image_params)
+    result = upload_image(image_params)
 
     institution_params = Map.put(institution_params, "logo_bin", result.bin)
     institution_params = Map.put(institution_params, "logo_filename", result.filename)
@@ -63,7 +81,7 @@ defmodule SchoolWeb.InstitutionController do
     end
   end
 
-  def upload(param) do
+  def upload_image(param) do
     {:ok, seconds} = Timex.format(Timex.now(), "%s", :strftime)
 
     path = File.cwd!() <> "/media"
@@ -106,7 +124,7 @@ defmodule SchoolWeb.InstitutionController do
     image_params = institution_params["image1"]
 
     if image_params != nil do
-      result = upload(image_params)
+      result = upload_image(image_params)
       institution_params = Map.put(institution_params, "logo_bin", result.bin)
       institution_params = Map.put(institution_params, "logo_filename", result.filename)
     end

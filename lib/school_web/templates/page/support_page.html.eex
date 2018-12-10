@@ -5,11 +5,15 @@
 <script src="/vendor/fullcalendar/dist/fullcalendar.js"></script>
 <script src="/vendor/fullcalendar/dist/gcal.js"></script>
 <div class="content-heading">
+
    <div>Dashboard
       <small><%= gettext("welcome")%>!</small>
    </div>
 
+
+
 </div>
+
 
 <div class="row">
   <div class="col-lg-4">
@@ -27,7 +31,9 @@
                       
                      </ul>
                      <!-- Tab panes-->
-
+                     <% require IEx %>
+                     <% a = @conn %>
+                                    
                         <% subject = School.Repo.all(from l in School.Affairs.Subject,where: l.institution_id ==^@conn.private.plug_session["institution_id"], select: {l.id}) %>
                         <% semesters = School.Repo.all(from l in School.Affairs.Semester,where: l.institution_id ==^@conn.private.plug_session["institution_id"], select: {l.id}) %>
                          <% students = School.Repo.all(from l in School.Affairs.Student,where: l.institution_id ==^@conn.private.plug_session["institution_id"], select: {l.id}) %>
@@ -209,6 +215,36 @@
                    
                   <!-- END loader widget-->
                </div>
+
+               <div class="col-xl-12">
+
+                    <div class="card card-transparent">
+                      <ul class="nav nav-tabs nav-fill" role="tablist">
+                        <li class="nav-item" role="presentation">
+                           <a class="nav-link active bb0" href="#home" aria-controls="home" role="tab" data-toggle="tab">
+                              <em class="fas fa-calendar-check"></em> <b>Year End Processing</b></a>
+                        </li>
+                   
+                     </ul>
+
+                     <div class="tab-content p-0 bg-white">
+                        <div class="tab-pane active" id="home" role="tabpanel">
+                           <!-- START list group-->
+                           <div class="list-group mb-0">
+                            <a class="list-group-item bt0" href="/class_transfer">
+                             <button class="btn btn-labeled btn-info btn-xs mb-2 float-right" type="button">
+                           <span class="btn-label"><i class="fa fa-cog"></i></span>Settings</button>
+                               <em class="fa-fw fas fa-calendar-alt mr-2"></em>Class Transfer Settings</a>
+
+                               <a class="list-group-item bt0" href="/students_transfer">
+                             <button class="btn btn-labeled btn-info btn-xs mb-2 float-right" type="button">
+                           <span class="btn-label"><i class="fa fa-cog"></i></span>Go Transfer</button>
+                               <em class="fa-fw fas fa-exchange-alt mr-2"></em>Transfer All Students</a>
+                           </div>
+                        </div>
+                      </div>
+                    </div>
+                 </div>
            
                <div class="col-xl-12">
                   <div class="card card-transparent" ">
@@ -272,7 +308,7 @@
                    
                   </ol>
               <a href ="/semesters"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
-              <a href ="/semesters/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Semester</button></a>
+              <a href ="/create_semesters"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Semester</button></a>
         
            </div>
         </div>
@@ -311,6 +347,7 @@
                 <a href ="/teacher"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
                 <a href ="/teacher/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Teacher</button></a>
                 <a href ="/login_teacher"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Teacher Login</button></a>
+                <a href ="/teacher_attendance"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Mark Teacher Attendance</button></a>
              </div>
           </div>
         </div>
@@ -346,10 +383,12 @@
                     <li><p class="card-text"><%= gettext("Manage a subject and create a period from it.")%></p></li>
                      <li><p class="card-text"><%= gettext("Assign a subject to a class and standard.")%></p></li>
                   </ol>
+                    <a href ="/subject"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
                <a href ="/subject/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Subject</button></a>
                 <a href ="/subject_teach_class"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List Subject Period</button></a>
                <a href ="/subject_teach_class/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Subject Period</button></a>
            </div>
+
         </div>
       </div>
   <div class="col-lg-6">
@@ -498,7 +537,7 @@
 
 
                    <div class="dropdown-menu" role="menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(67px, 33px, 0px);">
-                    <%= for class <- all_classes do %>
+                    <%= for class <- all_classes|>Enum.sort_by(fn x -> x.name end) do %>
                       <a class="dropdown-item student_class" href="/class_setting/<%= class.id %>"><%= class.name %></a>
                     <% end %>
                    </div>

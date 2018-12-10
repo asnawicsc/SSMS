@@ -25,12 +25,14 @@
                           <thead>
                             <tr>
                                 <th>Name</th>
+                                <th>IC</th>
                             </tr>
                             </thead>
                             <tbody>
-                             <%= for parent <- @parent do %>
+                             <%= for parent <- @parent|>Enum.filter(fn x -> x.name != nil end) do %>
                               <tr>
-                                 <td>   <div id="<%= parent.icno %>" class="btn btn-link parent"><%= parent.name %></div></td>
+                                 <td>   <div id="<%= parent.icno %>" class="btn btn-link parent"><%= parent.name %></div> </td>
+                                  <td>   <div id="<%= parent.icno %>" class="btn btn-link parent"><%= parent.icno %></div> </td>
                               </tr>
                             <% end %>
                           </tbody>

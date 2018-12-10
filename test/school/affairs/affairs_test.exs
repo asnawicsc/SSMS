@@ -3650,4 +3650,64 @@ defmodule School.AffairsTest do
       assert %Ecto.Changeset{} = Affairs.change_list_rank(list_rank)
     end
   end
+
+  describe "announcements" do
+    alias School.Affairs.Announcement
+
+    @valid_attrs %{message: "some message"}
+    @update_attrs %{message: "some updated message"}
+    @invalid_attrs %{message: nil}
+
+    def announcement_fixture(attrs \\ %{}) do
+      {:ok, announcement} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_announcement()
+
+      announcement
+    end
+
+    test "list_announcements/0 returns all announcements" do
+      announcement = announcement_fixture()
+      assert Affairs.list_announcements() == [announcement]
+    end
+
+    test "get_announcement!/1 returns the announcement with given id" do
+      announcement = announcement_fixture()
+      assert Affairs.get_announcement!(announcement.id) == announcement
+    end
+
+    test "create_announcement/1 with valid data creates a announcement" do
+      assert {:ok, %Announcement{} = announcement} = Affairs.create_announcement(@valid_attrs)
+      assert announcement.message == "some message"
+    end
+
+    test "create_announcement/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_announcement(@invalid_attrs)
+    end
+
+    test "update_announcement/2 with valid data updates the announcement" do
+      announcement = announcement_fixture()
+      assert {:ok, announcement} = Affairs.update_announcement(announcement, @update_attrs)
+      assert %Announcement{} = announcement
+      assert announcement.message == "some updated message"
+    end
+
+    test "update_announcement/2 with invalid data returns error changeset" do
+      announcement = announcement_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_announcement(announcement, @invalid_attrs)
+      assert announcement == Affairs.get_announcement!(announcement.id)
+    end
+
+    test "delete_announcement/1 deletes the announcement" do
+      announcement = announcement_fixture()
+      assert {:ok, %Announcement{}} = Affairs.delete_announcement(announcement)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_announcement!(announcement.id) end
+    end
+
+    test "change_announcement/1 returns a announcement changeset" do
+      announcement = announcement_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_announcement(announcement)
+    end
+  end
 end

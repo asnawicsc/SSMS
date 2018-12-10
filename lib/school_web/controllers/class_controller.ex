@@ -4,6 +4,51 @@ defmodule SchoolWeb.ClassController do
 
   require IEx
 
+  def class_transfer(conn, params) do
+    all_classes =
+      Repo.all(
+        from(
+          c in Class,
+          left_join: l in Level,
+          on: l.id == c.level_id,
+          where: c.institution_id == ^conn.private.plug_session["institution_id"],
+          select: %{
+            id: c.id,
+            class_name: c.name,
+            next_class: c.next_class,
+            level_name: l.name,
+            level_id: l.id
+          }
+        )
+      )
+      |> Enum.group_by(fn x -> x.level_name end)
+
+    render(conn, "class_transfer.html", classes: all_classes)
+  end
+
+  def submit_class_transfer(conn, params) do
+    for each <- params do
+      if elem(each, 1) != "Graduate" do
+        cur_class = elem(each, 1) |> String.split("->") |> List.to_tuple() |> elem(0)
+        next_class = elem(each, 1) |> String.split("->") |> List.to_tuple() |> elem(1)
+        cur_class = Repo.get(Class, cur_class)
+        class_params = %{next_class: next_class}
+
+        Affairs.update_class(cur_class, class_params)
+      else
+        cur_class = elem(each, 1) |> String.split("->") |> List.to_tuple() |> elem(0)
+        cur_class = Repo.get(Class, cur_class)
+        class_params = %{next_class: "Graduate"}
+
+        Affairs.update_class(cur_class, class_params)
+      end
+    end
+
+    conn
+    |> put_flash(:info, "Class transfer settings updated.")
+    |> redirect(to: class_path(conn, :class_transfer))
+  end
+
   def mark_sheet_listing(conn, params) do
     semesters =
       Repo.all(from(s in Semester))
@@ -224,12 +269,16 @@ defmodule SchoolWeb.ClassController do
     students =
       Repo.all(
         from(
-          s in Student,
-          left_join: st in StudentClass,
+          st in StudentClass,
+          left_join: s in Student,
           on: s.id == st.sudent_id,
-          left_join: c in Class,
-          on: c.id == st.class_id,
-          where: c.id == ^class_id,
+          where:
+            st.class_id == ^class_id and
+              st.semester_id == ^conn.private.plug_session["semester_id"],
+          select: %{
+            id: st.sudent_id,
+            name: s.name
+          },
           order_by: [asc: s.name]
         )
       )
@@ -278,22 +327,25 @@ defmodule SchoolWeb.ClassController do
   def show_student_info(conn, params) do
     student = Repo.get(Student, params["student_id"])
 
+    guardian =
+      if student.gicno != nil do
+        Repo.get_by(Parent, icno: student.gicno)
+      else
+        nil
+      end
+
+    father =
+      if student.ficno != nil do
+        Repo.get_by(Parent, icno: student.ficno)
+      else
+        nil
+      end
+
     mother =
       if student.micno != nil do
         Repo.get_by(Parent, icno: student.micno)
       else
-      end
-
-    father =
-      if student.micno != nil do
-        Repo.get_by(Parent, icno: student.ficno)
-      else
-      end
-
-    guardian =
-      if student.micno != nil do
-        Repo.get_by(Parent, icno: student.gicno)
-      else
+        nil
       end
 
     render(
@@ -364,6 +416,10 @@ defmodule SchoolWeb.ClassController do
         Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
       end
 
+    semesters =
+      Repo.all(from(s in Semester))
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
     class =
       if user.role == "Admin" or user.role == "Support" do
         Repo.all(
@@ -387,7 +443,8 @@ defmodule SchoolWeb.ClassController do
     render(
       conn,
       "student_listing_by_class.html",
-      class: class
+      class: class,
+      semesters: semesters
     )
   end
 
@@ -604,7 +661,7 @@ defmodule SchoolWeb.ClassController do
       {:ok, class} ->
         conn
         |> put_flash(:info, "Class created successfully.")
-        |> redirect(to: class_path(conn, :show, class))
+        |> redirect(to: class_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
@@ -683,7 +740,7 @@ defmodule SchoolWeb.ClassController do
       |> Enum.map(fn x -> String.trim(x, " ") end)
       |> Enum.map(fn x -> params["header"][x] end)
 
-    contents = tl(data)
+    contents = tl(data) |> Enum.uniq() |> Enum.sort()
 
     result =
       for content <- contents do
@@ -760,7 +817,7 @@ defmodule SchoolWeb.ClassController do
     {:ok, batch} = Settings.update_batch(batch, %{result: new_io})
 
     conn
-    |> put_flash(:info, "Student created successfully.")
-    |> redirect(to: student_path(conn, :index))
+    |> put_flash(:info, "Class created successfully.")
+    |> redirect(to: class_path(conn, :index))
   end
 end

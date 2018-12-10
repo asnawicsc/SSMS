@@ -3,6 +3,7 @@ defmodule SchoolWeb.StudentClassController do
 
   alias School.Affairs
   alias School.Affairs.StudentClass
+  require IEx
 
   def index(conn, _params) do
     student_classes = Affairs.list_student_classes()
@@ -20,6 +21,7 @@ defmodule SchoolWeb.StudentClassController do
         conn
         |> put_flash(:info, "Student class created successfully.")
         |> redirect(to: student_class_path(conn, :show, student_class))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
@@ -44,6 +46,7 @@ defmodule SchoolWeb.StudentClassController do
         conn
         |> put_flash(:info, "Student class updated successfully.")
         |> redirect(to: student_class_path(conn, :show, student_class))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", student_class: student_class, changeset: changeset)
     end

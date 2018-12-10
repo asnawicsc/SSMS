@@ -22,6 +22,19 @@ defmodule SchoolWeb.UserController do
     end
   end
 
+  def assign_lib_access(conn, params) do
+    users =
+      Repo.all(
+        from(s in User,
+          left_join: g in Settings.UserAccess,
+          on: s.id == g.user_id,
+          where: g.institution_id == ^conn.private.plug_session["institution_id"]
+        )
+      )
+
+    render(conn, "library_assign.html", users: users)
+  end
+
   def authenticate(conn, %{"email" => email, "password" => password}) do
     user = Repo.get_by(User, email: email)
 
@@ -216,7 +229,10 @@ defmodule SchoolWeb.UserController do
 
   def update(conn, %{"id" => id, "user" => user_params, "is_librarian" => is_librarian}) do
     user = Settings.get_user!(id)
+    crypted_password = Comeonin.Bcrypt.hashpwsalt(user.password)
+
     user_params = Map.put(user_params, "is_librarian", is_librarian)
+    user_params = Map.put(user_params, "crypted_password", crypted_password)
 
     case Settings.update_user(user, user_params) do
       {:ok, user} ->

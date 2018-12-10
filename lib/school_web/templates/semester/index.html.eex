@@ -7,14 +7,15 @@
 </div>
       <div class="row">
           
-                <div class="col-lg-12" >
+                <div class="col-lg-8" >
                   <div class="card card-default d-none d-lg-block">
                     <div class="card-body">
                       <div class="table-responsive">
                         <table class="table" id="datatable1">
                           <thead>
                             <tr>
-                            
+                                <th>Year</th>
+                                <th>Sem</th>
                                 <th>Start date</th>
                                 <th>End date</th>
                                 <th>Holiday start</th>
@@ -27,6 +28,8 @@
                             <tbody>
                          <%= for semester <- @semesters do %>
     <tr>
+            <td><%= semester.year %></td>
+      <td><%= semester.sem %></td>
       <td><%= semester.start_date %></td>
       <td><%= semester.end_date %></td>
       <td><%= semester.holiday_start %></td>
@@ -46,6 +49,35 @@
                     </div>
                   </div>
                 </div>
+                  <div class="col-lg-4" >
+                           <div class="card card-default d-none d-lg-block">
+            <div class="card-body">
+          <p class="lead">Upload History Semester</p> 
+            <div class="row" style="margin-top: 10px;">
+                <div class="col-lg-12">
+                  <div class="panel">
+                    <div class="panel-heading">Bulk Upload Semester</div>
+                    <div class="panel-body">
+                      <%= form_for @conn, semester_path(@conn, :pre_generate_semester), [as: :item, multipart: true], fn f -> %>
+
+                          <%= label f, "", class: "control-label" %>
+                          <%= file_input f, :file, accept: ".csv"%>
+                          <%= error_tag f, :file %>
+
+                        <div class="form-group">
+                          <br>
+                          <%= submit "Submit", class: "btn btn-primary" %>
+                        </div>
+                      <% end %>
+
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 </div>
 
 

@@ -1,0 +1,42 @@
+<div class="content-heading">
+    <div>Adjust Header
+    </div>
+</div>
+
+		
+<form class="form-horizontal" method="POST" action="/upload_semester_final">
+	  <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+	    <input type="hidden" name="batch_id" value="<%= @batch_id%>">
+	<% attrs = [ :start_date,
+      :end_date,
+      :year,
+      :sem
+    ] |> Enum.map(fn x -> Atom.to_string(x) end) %>
+
+<%= for header <- @headers do %>
+
+	<div class="form-group row">
+	   <label class="col-md-2 col-form-label"><%= header%> </label>
+	   <div class="col-md-10">
+
+	      <select name="header[<%= header%>]" class="custom-select custom-select-sm">
+	         <option>Open this select menu</option>
+						<%= for attr <- attrs do	%>
+			
+				
+						
+							   <option  
+
+<%= if String.jaro_distance(header, attr) > 0.9, do: "selected=''" %>
+
+							      value="<%= attr%>"><%= attr%></option>
+					
+						<% end %>
+	      </select>
+
+	   </div>
+	</div>
+
+	<% end %>
+	<button type="submit">Submit</button>
+</form>

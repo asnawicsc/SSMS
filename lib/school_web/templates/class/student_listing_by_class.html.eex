@@ -21,15 +21,28 @@
                         <form>
                             <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
                         </form>
+                        <div class=row>
+                              <div id="gne" class="form-group col-md-3">
+                       <select class="custom-select -custom-select-sm" onchange="getval43(this);" required="required" name="semester_id">
+                                        <%= for a <- @semesters |> Enum.sort_by(fn x -> x.year end) do %>
+                                        <option value="<%= a.id %>">
+                                            <%= a.start_date  %> - <%= a.end_date  %>
+                                        </option>
+                                        <% end %>
+                                    </select>
+                                </div>
+                                  <div id="gne" class="form-group col-md-3">
 
-                      <select class="custom-select -custom-select-sm" onchange="getval(this);" required="required" name="class_id">
-                                        <%= for a <- @class |> Enum.sort do %>
+                                       <select class="custom-select -custom-select-sm" onchange="getval(this);" required="required" name="class_id">
+                                        <%= for a <- @class |> Enum.sort_by(fn x -> x.name end) do %>
                                         <option value="<%= a.id %>">
                                             <%= a.name %>
                                         </option>
                                         <% end %>
                                     </select>
+                                </div>
 
+                                </div>
                     </div>
 
                 </div>
@@ -62,13 +75,26 @@
         window.location.reload();
 
     }
+
+       $('select[name="semester_id"]').val(localStorage.getItem("semester_id"));
+
+       function getval43(sel) {
+        s = sel.value
+        var semester_id = localStorage.setItem("semester_id", s);
+
+        window.location.reload();
+
+    }
     $("input[name='edit_class']").val(localStorage.getItem("class_id"))
 
     var class_id = localStorage.getItem("class_id")
 
+     var semester_id = localStorage.getItem("semester_id")
+
     channel.push("student_class_listing", {
         user_id: window.currentUser,
         class_id: class_id,
+        semester_id: semester_id,
         csrf: localStorage.getItem("student_class_listing_csrf")
     })
 

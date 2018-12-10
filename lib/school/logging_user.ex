@@ -10,10 +10,11 @@ defmodule School.LoggingUser do
   def call(conn, opts) do
     cond do
       conn.private.plug_session["user_id"] == nil ->
-        if conn.request_path == "/" or conn.request_path == "/contacts_us" or
-             conn.request_path == "/authenticate" or conn.request_path == "/redirect_from_li6" or
-             conn.request_path == "/parent_login" or conn.request_path == "/fb_login" or
-             conn.request_path == "/validate_code" do
+        if conn.request_path == "/" or conn.request_path == "/match_parents_ic" or
+             conn.request_path == "/contacts_us" or conn.request_path == "/authenticate" or
+             conn.request_path == "/redirect_from_li6" or conn.request_path == "/parent_login" or
+             conn.request_path == "/fb_login" or conn.request_path == "/validate_code" or
+             conn.request_path == "/parents_corner" do
           conn
         else
           conn

@@ -5,6 +5,45 @@
 
 <form action="/create_semesters_data" method="post"> 
     <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+
+<div class="row">
+  <div class="col-4">
+    <div class="card">
+      <div class="card-body">
+        <h4>Semester</h4>
+        <div class="input-group date" >
+            <select class="custom-select -custom-select-sm" name="sem" required="required">
+                                   
+                                        <option value="1">
+                                           1
+                                        </option>
+                                         <option value="2">
+                                            2
+                                        </option>
+                                      
+                                </select>
+           
+         </div>
+     </div>
+   </div>
+ </div>
+
+   <div class="col-4">
+    <div class="card">
+      <div class="card-body">
+        <h4>Year:</h4>
+        <div class="input-group " >
+            <input class="form-control" type="text" name="year" >
+            <span class="input-group-append input-group-addon">
+             
+            </span>
+         </div>
+     </div>
+   </div>
+ </div>
+
+</div>
+
 <div class="row">
   <div class="col-4">
     <div class="card">
@@ -93,4 +132,5 @@
 
 <script type="text/javascript">
   $("input.date").datetimepicker({timepicker:false,format:'Y-m-d'})
+
 </script>

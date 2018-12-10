@@ -982,6 +982,7 @@ defmodule SchoolWeb.UserChannel do
 
   def handle_in("student_class_listing", payload, socket) do
     class_id = payload["class_id"]
+    semester_id = payload["semester_id"]
 
     all =
       Repo.all(
@@ -991,7 +992,7 @@ defmodule SchoolWeb.UserChannel do
           on: s.class_id == g.id,
           left_join: r in School.Affairs.Student,
           on: r.id == s.sudent_id,
-          where: s.class_id == ^class_id,
+          where: s.class_id == ^class_id and s.semester_id == ^semester_id,
           select: %{
             id: s.sudent_id,
             chinese_name: r.chinese_name,
@@ -1008,13 +1009,17 @@ defmodule SchoolWeb.UserChannel do
       |> Enum.with_index()
 
     html =
-      Phoenix.View.render_to_string(
-        SchoolWeb.ClassView,
-        "student_list.html",
-        all: all,
-        csrf: payload["csrf"],
-        class_id: class_id
-      )
+      if all != [] do
+        Phoenix.View.render_to_string(
+          SchoolWeb.ClassView,
+          "student_list.html",
+          all: all,
+          csrf: payload["csrf"],
+          class_id: class_id
+        )
+      else
+        "No Student In This Class"
+      end
 
     broadcast(socket, "show_student_class_listing", %{
       html: html
@@ -1531,8 +1536,7 @@ defmodule SchoolWeb.UserChannel do
       Repo.all(
         from(
           s in School.Affairs.ExamMark,
-          where:
-            s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
+          where: s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
           select: %{
             class_id: s.class_id,
             subject_id: s.subject_id,
@@ -2082,7 +2086,12 @@ defmodule SchoolWeb.UserChannel do
               )
               |> hd()
 
-            student_class = Repo.get_by(School.Affairs.StudentClass, %{sudent_id: student.id})
+            student_class =
+              Repo.get_by(School.Affairs.StudentClass, %{
+                sudent_id: student.id,
+                semester_id: exam_master.semester_id
+              })
+
             s_mark = all_mark |> Enum.filter(fn x -> x.student_name == item end)
 
             a =
@@ -2117,7 +2126,11 @@ defmodule SchoolWeb.UserChannel do
         for data <- datas do
           student_mark = data.student_mark
 
-          student_class = Repo.get_by(School.Affairs.StudentClass, %{sudent_id: data.student_id})
+          student_class =
+            Repo.get_by(School.Affairs.StudentClass, %{
+              sudent_id: data.student_id,
+              semester_id: exam_master.semester_id
+            })
 
           grades =
             Repo.all(
@@ -3192,7 +3205,7 @@ defmodule SchoolWeb.UserChannel do
     user = Repo.get(User, user_id)
     term = "%#{term}%"
 
-    students =
+    all_student =
       Repo.all(
         from(
           s in Student,
@@ -3215,6 +3228,30 @@ defmodule SchoolWeb.UserChannel do
           limit: 100
         )
       )
+
+    student =
+      Repo.all(
+        from(
+          s in StudentClass,
+          left_join: g in Student,
+          on: s.sudent_id == g.id,
+          where: g.institution_id == ^institution_id,
+          select: %{
+            name: g.name,
+            c_name: g.chinese_name,
+            ic: g.ic,
+            b_cert: g.b_cert,
+            gicno: g.gicno,
+            ficno: g.ficno,
+            micno: g.micno,
+            phone: g.phone,
+            id: g.id
+          },
+          limit: 100
+        )
+      )
+
+    students = all_student -- student
 
     {:reply, {:ok, %{students: students}}, socket}
   end
@@ -3273,7 +3310,53 @@ defmodule SchoolWeb.UserChannel do
       {:ok, sc} ->
         students = Affairs.get_student_list(class_id, semester_id)
 
-        {:reply, {:ok, %{students: students}}, socket}
+        all_student =
+          Repo.all(
+            from(
+              s in Student,
+              where: s.institution_id == ^institution_id,
+              select: %{
+                name: s.name,
+                c_name: s.chinese_name,
+                ic: s.ic,
+                b_cert: s.b_cert,
+                gicno: s.gicno,
+                ficno: s.ficno,
+                micno: s.micno,
+                phone: s.phone,
+                id: s.id
+              },
+              limit: 100
+            )
+          )
+
+        student =
+          Repo.all(
+            from(
+              s in StudentClass,
+              left_join: g in Student,
+              on: s.sudent_id == g.id,
+              where:
+                g.institution_id == ^institution_id and s.class_id == ^class_id and
+                  s.semester_id == ^semester_id,
+              select: %{
+                name: g.name,
+                c_name: g.chinese_name,
+                ic: g.ic,
+                b_cert: g.b_cert,
+                gicno: g.gicno,
+                ficno: g.ficno,
+                micno: g.micno,
+                phone: g.phone,
+                id: g.id
+              },
+              limit: 100
+            )
+          )
+
+        all_student = all_student -- student
+
+        {:reply, {:ok, %{students: students, all_student: all_student}}, socket}
 
       {:error, changeset} ->
         Process.sleep(500)
@@ -3284,9 +3367,33 @@ defmodule SchoolWeb.UserChannel do
             Repo.get_by(StudentClass, sudent_id: student_id, semester_id: semester_id).class_id
           )
 
-        {:reply, {:error, %{name: student.name, class: class.name, ex_class: ex_class.name}},
-         socket}
+        {:reply,
+         {:error,
+          %{
+            name: student.name,
+            student_id: student.id,
+            class: class.name,
+            ex_class: ex_class.name
+          }}, socket}
     end
+  end
+
+  def handle_in("remove_from_class", payload, socket) do
+    ex_class =
+      Repo.get_by(
+        School.Affairs.StudentClass,
+        sudent_id: payload["student_id"],
+        semester_id: payload["semester_id"],
+        class_id: payload["class_id"]
+      )
+
+    student = Affairs.get_student!(payload["student_id"])
+
+    Affairs.delete_student_class(ex_class)
+
+    students = Affairs.get_student_list(payload["class_id"], payload["semester_id"])
+
+    {:reply, {:error, %{students: students, name: student.name, student_id: student.id}}, socket}
   end
 
   def handle_in(

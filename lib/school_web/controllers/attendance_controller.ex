@@ -177,12 +177,15 @@ defmodule SchoolWeb.AttendanceController do
         Map.put(each, :attend, false)
       end
 
-    if attended_students != [] do
-      attended_students =
-        for each <- attended_students do
-          Map.put(each, :attend, true)
-        end
-    end
+    attended_students =
+      if attended_students != [] do
+        attended_students =
+          for each <- attended_students do
+            Map.put(each, :attend, true)
+          end
+      else
+        []
+      end
 
     students = List.flatten(rem, attended_students)
 
@@ -220,6 +223,7 @@ defmodule SchoolWeb.AttendanceController do
       |> Enum.filter(fn x -> x != nil end)
 
     attended_std = student_ids |> String.split(",")
+    inform_parents_student_attendance(attended_std)
     abs_ids = abs_ids -- attended_std
 
     for each <- abs_ids do
@@ -245,6 +249,70 @@ defmodule SchoolWeb.AttendanceController do
     |> redirect(to: attendance_path(conn, :index))
   end
 
+  def inform_parents_student_attendance(attended_std) do
+    for id <- attended_std do
+      student = Affairs.get_student!(id)
+      IO.inspect(student)
+
+      guardian =
+        if student.gicno != nil do
+          Repo.get_by(Parent, icno: student.gicno)
+        else
+          nil
+        end
+
+      father =
+        if student.ficno != nil do
+          Repo.get_by(Parent, icno: student.ficno)
+        else
+          nil
+        end
+
+      mother =
+        if student.micno != nil do
+          Repo.get_by(Parent, icno: student.micno)
+        else
+          nil
+        end
+
+      cond do
+        guardian != nil ->
+          fb_send_attedance_report(guardian, student)
+
+        father != nil ->
+          fb_send_attedance_report(father, student)
+
+        mother != nil ->
+          fb_send_attedance_report(mother, student)
+
+        true ->
+          nil
+      end
+    end
+  end
+
+  def fb_send_attedance_report(parent, student) do
+    IO.inspect(parent)
+
+    date =
+      DateTime.utc_now()
+      |> Timex.shift(hours: 8)
+      |> Timex.format("%Y-%m-%d %H:%M ", :strftime)
+      |> elem(1)
+
+    if parent.fb_user_id != nil do
+      SchoolWeb.ApiController.personal_broadcast(
+        "attendance_announcement",
+        [
+          %{name: student.name},
+          %{date: date},
+          %{message: "is present during teacher taking attendance."}
+        ],
+        parent.psid
+      )
+    end
+  end
+
   def attendance_report(conn, params) do
     class_id = params["class"]
     semester_id = params["semester"]
@@ -265,7 +333,7 @@ defmodule SchoolWeb.AttendanceController do
       end
 
     st = all |> Enum.filter(fn x -> x <= 16 end)
-    nd = all |> Enum.filter(fn x -> x >= 16 and x <= 31 end)
+    nd = all |> Enum.filter(fn x -> x > 16 and x <= 31 end)
 
     start_month = st |> List.first()
     half_month = st |> List.last()
@@ -291,6 +359,9 @@ defmodule SchoolWeb.AttendanceController do
           order_by: [t.name]
         )
       )
+      |> Enum.reject(fn x -> x.sudent_id == "" end)
+
+    IO.inspect(students)
 
     attendance =
       Repo.all(
@@ -323,6 +394,9 @@ defmodule SchoolWeb.AttendanceController do
     #   estimate_total: estimate_total
     # )
 
+    institution =
+      Repo.get_by(School.Settings.Institution, id: conn.private.plug_session["institution_id"])
+
     html =
       Phoenix.View.render_to_string(
         SchoolWeb.AttendanceView,
@@ -332,6 +406,7 @@ defmodule SchoolWeb.AttendanceController do
         attendance: attendance,
         start_date: start_date,
         end_date: end_date,
+        institution: institution,
         start_month:
           Date.new(
             String.to_integer(params["year"]),
@@ -419,6 +494,12 @@ defmodule SchoolWeb.AttendanceController do
 
         # class = Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
         class = Repo.all(from(c in Class, where: c.teacher_id == ^teacher.id))
+
+        if class == [] do
+          conn
+          |> put_flash(:info, "You are not assign to any class")
+          |> redirect(to: page_path(conn, :index))
+        end
 
         attendance =
           for each_class <- class do

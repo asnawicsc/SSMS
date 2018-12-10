@@ -1,0 +1,58 @@
+<div class="content-heading">
+
+   <div>Users
+      <small><%= gettext("welcome")%>!</small>
+   </div>
+</div>
+
+<% group_user = @users |> Enum.group_by(fn x -> x.role end) %>
+<% groups = group_user |> Map.keys %>
+<div class="row">
+
+  <div class="col-lg-12">
+     <div class="tab-content p-0 b0">
+
+
+
+        <div class="tab-pane active show" id="tabSetting5">
+           <div class="card b">
+
+
+              <div class="card-body">
+
+                      <table class="table data">
+                          <thead>
+                              <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Action</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                           <%= for user <- @users|>Enum.filter(fn x -> x.role == "Teacher" end) do %>
+                                <tr>
+                                  <td><%= user.name %></td>
+                                  <td><%= user.email %></td>
+                                  <td><%= user.role %></td>
+                                  <td >
+                               
+                                 
+                                  <span><%= link "Edit", to: user_path(@conn, :edit, user), class: "btn btn-primary " %></span>
+                                
+                               
+                                </td>
+                                </tr>
+                            <% end %>
+                          </tbody>
+                      </table>
+
+              </div>
+           </div>
+        </div>
+
+     </div>
+  </div>
+</div>
+
+

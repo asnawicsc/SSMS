@@ -27,7 +27,9 @@ defmodule SchoolWeb.Router do
     get("/validate_code", ApiController, :code)
     get("/fb_login", ApiController, :fb_login)
     get("/parent_login", ParentController, :login)
+    get("/parents_corner", ParentController, :parents_corner)
     get("/contacts_us", PageController, :contacts_us)
+    post("/match_parents_ic", ParentController, :match_parents_ic)
     get("/redirect_from_li6", PageController, :redirect_from_li6)
   end
 
@@ -46,6 +48,7 @@ defmodule SchoolWeb.Router do
     pipe_through([:browser])
     post("/class_analysis", PdfController, :class_analysis)
     post("/class_listing_teacher", PdfController, :class_listing_teacher)
+    get("/student_transfer_pdf/:semester_id", PdfController, :student_transfer_pdf)
 
     post("/standard_listing", PdfController, :standard_listing)
     post("/exam_result_standard", PdfController, :exam_result_standard)
@@ -78,6 +81,8 @@ defmodule SchoolWeb.Router do
     # Use the default browser stack
     pipe_through(:browser)
 
+    get("/class_transfer", ClassController, :class_transfer)
+    get("/submit_class_transfer", ClassController, :submit_class_transfer)
     get("/mark_sheet_listing", ClassController, :mark_sheet_listing)
     get("/mark_analyse_by_grade", ClassController, :mark_analyse_by_grade)
     get("/class_analysis", ClassController, :class_analysis)
@@ -142,6 +147,8 @@ defmodule SchoolWeb.Router do
     get("/system_config/:institution_id", ParameterController, :system_config)
     resources("/institutions", InstitutionController)
     get("/institutions/:id/select", InstitutionController, :select)
+    get("/institutions/:id/upload", InstitutionController, :upload)
+    post("/institutions/:id/pre_upload", InstitutionController, :pre_upload)
     resources("/users", UserController)
     get("/login", UserController, :login)
     get("/user_info/:id", UserController, :user_info)
@@ -156,12 +163,29 @@ defmodule SchoolWeb.Router do
     post("/upload_teachers", TeacherController, :pre_upload_teachers)
     post("/upload_parents", ParentController, :pre_upload_parents)
     post("/upload_class", ClassController, :pre_upload_class)
+    post("/generate_semester", SemesterController, :pre_generate_semester)
+
+    post("/generate_absent", AbsentController, :pre_generate_absent)
+
+    post("/generate_holiday", HolidayController, :pre_generate_holiday)
+
+    post("/pre_generate_student_class", StudentController, :pre_generate_student_class)
 
     post("/upload_teachers_final", TeacherController, :upload_teachers)
     post("/upload_students_final", StudentController, :upload_students)
     post("/upload_parent_final", ParentController, :upload_parents)
     post("/upload_class_final", ClassController, :upload_class)
 
+    post("/upload_holiday_final", HolidayController, :upload_holiday)
+
+    post("/upload_generate_student_class", StudentController, :upload_generate_student_class)
+
+    post("/upload_semester_final", SemesterController, :upload_semester)
+
+    post("/upload_absent_final", AbsentController, :upload_absent)
+
+    get("/submit_student_transfer", StudentController, :submit_student_transfer)
+    get("/students_transfer", StudentController, :students_transfer)
     get("/height_weight", StudentController, :height_weight)
     get("/height_weight_class/:class_id", StudentController, :height_weight_class)
     get("/student_certificate", StudentController, :student_certificate)
@@ -186,6 +210,9 @@ defmodule SchoolWeb.Router do
     get("/record_attendance", AttendanceController, :record_attendance)
 
     resources("/teacher", TeacherController)
+    get("/teacher_attendance", TeacherController, :teacher_attendance)
+    get("/mark_teacher_attendance", TeacherController, :mark_teacher_attendance)
+    get("/submit_teacher_attendance", TeacherController, :submit_teacher_attendance)
     post("/upload_teachers", TeacherController, :upload_teachers)
     get("/teacher_listing", TeacherController, :teacher_listing)
     resources("/subject", SubjectController)
@@ -352,6 +379,7 @@ defmodule SchoolWeb.Router do
     get("/exam_report/:class_id/:exam_id", ExamController, :exam_report)
 
     get("/list_report", ExamController, :list_report)
+    get("/list_report_history", ExamController, :list_report_history)
     get("/list_institutions", InstitutionController, :list_institutions)
 
     get("/report_nav", ExamController, :report_nav)
@@ -379,7 +407,9 @@ defmodule SchoolWeb.Router do
     resources("/list_rank", ListRankController)
     get("/default_rank", ListRankController, :default_rank)
     post("/default_standard", LevelController, :default_standard)
-
+    get("/assign_lib_access", UserController, :assign_lib_access)
+    resources("/announcements", AnnouncementController)
+    get("/announcements/:id/broadcast", AnnouncementController, :broadcast)
     get("/*path", PageController, :no_page_found)
   end
 end

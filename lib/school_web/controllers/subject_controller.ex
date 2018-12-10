@@ -168,8 +168,8 @@ defmodule SchoolWeb.SubjectController do
   end
 
   def create(conn, %{"subject" => subject_params}) do
-    subject_params =
-      Map.put(subject_params, "institution_id", conn.private.plug_session["institution_id"])
+    inst_id = Affairs.get_inst_id(conn)
+    subject_params = Map.put(subject_params, "institution_id", inst_id)
 
     case Affairs.create_subject(subject_params) do
       {:ok, subject} ->
@@ -266,10 +266,8 @@ defmodule SchoolWeb.SubjectController do
 
         subject_params = Enum.zip(h, c) |> Enum.into(%{})
 
-        if is_integer(subject_params["sysdef"]) do
-          subject_params =
-            Map.put(subject_params, "sysdef", Integer.to_string(subject_params["sysdef"]))
-        end
+        subject_params =
+          Map.put(subject_params, "institution_id", conn.private.plug_session["institution_id"])
 
         cg = Subject.changeset(%Subject{}, subject_params)
 

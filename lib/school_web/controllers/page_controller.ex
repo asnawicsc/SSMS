@@ -355,19 +355,24 @@ defmodule SchoolWeb.PageController do
     user = Settings.current_user(conn)
     role = user.role
 
-    location =
-      case role do
-        "Support" ->
-          "support_page.html"
+    if role == "Parent" do
+      conn
+      |> redirect(to: parent_path(conn, :parents_corner))
+    else
+      location =
+        case role do
+          "Support" ->
+            "support_page.html"
 
-        "Admin" ->
-          "admin_page.html"
+          "Admin" ->
+            "admin_page.html"
 
-        _ ->
-          "index.html"
-      end
+          _ ->
+            "index.html"
+        end
 
-    render(conn, location, current_sem: current_sem)
+      render(conn, location, current_sem: current_sem)
+    end
   end
 
   def admin_dashboard(conn, _params) do

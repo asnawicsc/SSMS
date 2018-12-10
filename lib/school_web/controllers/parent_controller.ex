@@ -56,6 +56,10 @@ defmodule SchoolWeb.ParentController do
     render(conn, "new.html", changeset: changeset)
   end
 
+  def parents_corner(conn, params) do
+    render(conn, "parents_corner.html", [])
+  end
+
   def create(conn, %{"parent" => parent_params}) do
     parent_params =
       Map.put(parent_params, "institution_id", conn.private.plug_session["institution_id"])
@@ -76,20 +80,58 @@ defmodule SchoolWeb.ParentController do
     render(conn, "show.html", parent: parent)
   end
 
+  def match_parents_ic(conn, params) do
+    icno = params["ic_no"] |> String.replace("-", "")
+
+    user = Settings.current_user(conn)
+    parent = Repo.get_by(Parent, icno: icno, email: user.email)
+
+    IO.inspect(parent)
+    IO.inspect(user)
+
+    if parent != nil do
+      Affairs.update_parent(parent, %{
+        fb_user_id: user.fb_user_id,
+        email: user.email,
+        psid: user.psid
+      })
+
+      if user != parent do
+        Repo.delete(user)
+      end
+
+      conn
+      |> put_flash(
+        :info,
+        "Linking process done."
+      )
+      |> redirect(to: parent_path(conn, :parents_corner))
+    else
+      conn
+      |> put_flash(
+        :info,
+        "We couldnt find the matching IC, kindly contact the school administrator."
+      )
+      |> redirect(to: parent_path(conn, :parents_corner))
+    end
+  end
+
   def login(conn, params) do
     render(conn, "login.html", [])
   end
 
-  def show_guardian(conn, %{"id" => id}) do
-    guardian = Repo.get_by(Parent, icno: id)
+  def show_guardian(conn, params) do
+    guardian = Repo.get_by(Parent, icno: params["id"])
 
-    if guardian != [] do
+    if guardian != nil do
       changeset = Affairs.change_parent(guardian)
       render(conn, "edit.html", parent: guardian, changeset: changeset)
     else
+      student = Repo.get_by(Student, student_no: params["student_no"])
+
       conn
-      |> put_flash(:info, "This parent information is not exist")
-      |> redirect(to: student_path(conn, :index))
+      |> put_flash(:info, "This parent information does not exist")
+      |> redirect(to: class_path(conn, :show_student_info, student.id))
     end
   end
 

@@ -40,6 +40,10 @@ defmodule SchoolWeb.ExamController do
     render(conn, "list_report.html")
   end
 
+  def list_report_history(conn, params) do
+    render(conn, "list_report_history.html")
+  end
+
   def new(conn, _params) do
     changeset = Affairs.change_exam(%Exam{})
     render(conn, "new.html", changeset: changeset)
@@ -440,13 +444,13 @@ defmodule SchoolWeb.ExamController do
     exam_id = params["id"]
 
     exam = Repo.get_by(School.Affairs.Exam, %{id: exam_id, subject_id: subject_id})
+    exam_master = Repo.get_by(School.Affairs.ExamMaster, id: exam.exam_master_id)
 
     all =
       Repo.all(
         from(
           s in School.Affairs.ExamMark,
-          where:
-            s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
+          where: s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
           select: %{
             class_id: s.class_id,
             subject_id: s.subject_id,
@@ -487,7 +491,8 @@ defmodule SchoolWeb.ExamController do
             on: p.id == s.sudent_id,
             where:
               s.class_id == ^class.id and
-                p.institution_id == ^conn.private.plug_session["institution_id"],
+                p.institution_id == ^conn.private.plug_session["institution_id"] and
+                s.semester_id == ^exam_master.semester_id,
             select: %{id: p.id, student_name: p.name}
           )
         )
@@ -536,7 +541,8 @@ defmodule SchoolWeb.ExamController do
             on: p.id == s.sudent_id,
             where:
               s.class_id == ^class.id and
-                p.institution_id == ^conn.private.plug_session["institution_id"],
+                p.institution_id == ^conn.private.plug_session["institution_id"] and
+                s.semester_id == ^exam_master.semester_id,
             select: %{id: p.id, student_name: p.name}
           )
         )
@@ -593,8 +599,7 @@ defmodule SchoolWeb.ExamController do
       Repo.all(
         from(
           s in School.Affairs.ExamMark,
-          where:
-            s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
+          where: s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
           select: %{
             class_id: s.class_id,
             subject_id: s.subject_id,
@@ -1297,15 +1302,13 @@ defmodule SchoolWeb.ExamController do
       end
 
     student =
-      Repo.get_by(School.Affairs.Student,
+      Repo.get_by(
+        School.Affairs.Student,
         id: id,
         institution_id: conn.private.plug_session["institution_id"]
       )
 
-    student_comment =
-      Repo.get_by(School.Affairs.StudentComment,
-        student_id: student.id
-      )
+    student_comment = Repo.get_by(School.Affairs.StudentComment, student_id: student.id)
 
     institution = Repo.get(Institution, conn.private.plug_session["institution_id"])
 
@@ -1401,11 +1404,14 @@ defmodule SchoolWeb.ExamController do
     total_per = per * 100
 
     total_average = (total_mark / total_per * 100) |> Float.round(2)
+    semester = Repo.get(Semester, exam.semester_id)
+    IO.inspect(semester)
 
     html =
       Phoenix.View.render_to_string(
         SchoolWeb.ExamView,
         "report_card.html",
+        semester: semester,
         total_gpa: total_gpa,
         total_mark: total_mark,
         total_average: total_average,
@@ -1528,7 +1534,8 @@ defmodule SchoolWeb.ExamController do
           end
 
         student =
-          Repo.get_by(School.Affairs.Student,
+          Repo.get_by(
+            School.Affairs.Student,
             id: student_id,
             institution_id: conn.private.plug_session["institution_id"]
           )
@@ -1541,10 +1548,7 @@ defmodule SchoolWeb.ExamController do
             institution_id: conn.private.plug_session["institution_id"]
           })
 
-        student_comment =
-          Repo.get_by(School.Affairs.StudentComment,
-            student_id: student.id
-          )
+        student_comment = Repo.get_by(School.Affairs.StudentComment, student_id: student.id)
 
         all =
           Repo.all(
@@ -1564,7 +1568,9 @@ defmodule SchoolWeb.ExamController do
               on: sc.class_id == c.id,
               left_join: sb in School.Affairs.Subject,
               on: em.subject_id == sb.id,
-              where: em.student_id == ^student.id and e.name == ^exam_name,
+              where:
+                em.student_id == ^student.id and e.name == ^exam_name and
+                  sc.semester_id == ^exam.semester_id,
               select: %{
                 student_name: s.name,
                 chinese_name: s.chinese_name,
@@ -1583,7 +1589,8 @@ defmodule SchoolWeb.ExamController do
           for data <- all do
             grades =
               Repo.all(
-                from(g in School.Affairs.ExamGrade,
+                from(
+                  g in School.Affairs.ExamGrade,
                   where:
                     g.institution_id == ^conn.private.plug_session["institution_id"] and
                       g.exam_master_id == ^exam.id
@@ -1631,8 +1638,10 @@ defmodule SchoolWeb.ExamController do
         total_per = per * 100
 
         total_average = (total_mark / total_per * 100) |> Float.round(2)
+        semester = Repo.get(Semester, exam.semester_id)
 
         %{
+          semester: semester,
           total_gpa: total_gpa,
           total_mark: total_mark,
           total_average: total_average,

@@ -10,7 +10,8 @@
       border-collapse: collapse;
       border: 2px solid rgb(200, 200, 200);
       letter-spacing: 1px;
-      font-size: 0.8rem;
+      font-size: 0.4rem;
+        font-weight: bold;
     }
 
     td,
@@ -20,7 +21,7 @@
     }
 
     td {
-      text-align: center;
+    
     }
 
     caption {
@@ -30,11 +31,15 @@
 </head>
 <% require IEx %>
 
+
+
   <body>
 
     <div style="page-break-before: always;">
-
-      <table style="float: left;">
+<h5 align="center"><%= @institution.name %></h5>
+<h5 align="center">Jadual Kedatangan Murid Bagi Kelas <%= @class.name %>, Pada Bulan <%=@start_date.month|> Timex.month_name()
+ %>,Tahun <%=@start_date.year %> </h5>
+      <table style="float: left; border-right:0px solid;"  >
         <tr align="center">
           <th style="height: 100px;">Bil</th>
           <th>Kod Murid</th>
@@ -43,11 +48,34 @@
           <th>Jantina (M/F)</th>
         </tr>
 
-        <%= for student <- @students|>Enum.with_index do %>
+       <% all= @students|>Enum.count %>
+
+          <% total= 55 - all %>
+
+          <% range = 1 .. total %>
+
+          <% r=for item <- range do 
+
+           %{
+    chinese_name: "",
+    id: "",
+    name: "",
+    sex: "",
+    sudent_id: ""
+  } 
+           end %>
+
+            <% students = @students ++ r %>
+
+
+
+
+        <%= for student <- students|>Enum.with_index do %>
 
           <% no =student|>elem(1) %>
             <% student =student|>elem(0) %>
-              <tr align="center">
+
+              <tr align="center" >
 
                 <td>
                   <%= no+1%>
@@ -67,18 +95,18 @@
               </tr>
               <% end %>
                 <tr>
-                  <td colspan="5">Jumlah yang tidak hadir</td>
+                  <td colspan="5" align="center">Jumlah yang tidak hadir</td>
                 </tr>
                 <tr>
-                  <td colspan="5">Jumlah Kedatangan</td>
+                  <td colspan="5" align="center">Jumlah Kedatangan</td>
                 </tr>
                 <tr>
-                  <td colspan="5">Jumlah kedatangan yang sepatutya</td>
+                  <td colspan="5" align="center">Jumlah kedatangan yang sepatutya</td>
                 </tr>
 
       </table>
 
-      <table border="1">
+      <table border="1" style="border-left:0px solid;">
 
         <% dates = Timex.Interval.new(from: @start_month, until: @half_month, left_open: false, right_open: false) %>
           <% all = dates|>Enum.count %>
@@ -98,38 +126,69 @@
                     <% end %>
 
                 </tr>
-                <%= for student <- @students do %>
+                <%= for student <- students do %>
 
+               
                   <tr>
+                  
+                      
+                  
                     <%= for date <- dates do %>
+                   
                       <td style="width: 200px; text-align: center;">
-
+                           <%= if student.sudent_id != "" do %>
                         <%
 
                         student_ids = Enum.filter(@attendance, fn x -> x.attendance_date == NaiveDateTime.to_date(date) end)
                          student_ids = if student_ids != [] do
                           
-                       hd(student_ids).student_id |> String.split(",")
+                       hd(student_ids).student_id |> String.split(",") |> Enum.reject(fn x -> x == "" end)
                         else
                         []
                         end
 
+
+
+
+
                         %>
+                        <%= if student_ids != [] do %>
+                      
+                         
 
-                          <%= if Enum.any?(student_ids, fn x -> x == Integer.to_string(student.sudent_id) end) do  %>
-                            <%= "1" %>
-                              <% else %>
-                                <% a = Repo.get_by(Absent, absent_date: NaiveDateTime.to_date(date), student_id: Integer.to_string(student.sudent_id))   %>
+                                <%= if Enum.any?(student_ids, fn x -> x == Integer.to_string(student.sudent_id) end) do  %>
+                                     
+                                  
+                                  <%= "1" %>
+                                    <% else %>
 
-                                  <%= if a != nil do %>
 
-                                    <%= a.reason |> String.split() |> hd() |> String.split("") |> Enum.reject(fn x -> x == ""end) |> hd()  %>
+                                     
+                                                  
+                                               
+                                                     <% a = Repo.get_by(Absent, absent_date: NaiveDateTime.to_date(date), student_id: Integer.to_string(student.sudent_id))   %>
 
-                                      <% else %>
-                                        0
-                                        <% end %>
-                                          <% end %>
+                                                      <%= if a != nil do %>
 
+                                                        <%= a.reason |> String.split() |> hd() |> String.split("") |> Enum.reject(fn x -> x == ""end) |> hd()  %>
+
+                                                    <% else %>
+                                                    <%=  "0" %>
+                                                    <% end %>
+
+                                           
+
+                                <% end %>
+
+                           <% else %>
+                              <%=  "0" %>
+                            <% end %>
+
+                            <% else %>
+
+                                &nbsp;
+                               
+                                 <% end %>
                       </td>
                       <% end %>
 
@@ -201,12 +260,12 @@
 
     <div style="page-break-before: always;">
 
-      <table style="float: left;">
+      <table style="float: left;" style="border-right:0px solid;">
         <tr align="center">
           <th style="height: 100px;">Bil</th>
         </tr>
 
-        <%= for student <- @students|>Enum.with_index do %>
+        <%= for student <- students|>Enum.with_index do %>
 
           <% no =student|>elem(1) %>
 
@@ -218,18 +277,18 @@
             </tr>
             <% end %>
               <tr>
-                <td style="height: 20px;"></td>
+                <td style="height: 13px;"></td>
               </tr>
               <tr>
-                <td style="height: 20px;"></td>
+                <td style="height: 13px"></td>
               </tr>
               <tr>
-                <td style="height: 20px;"></td>
+                <td style="height: 13px"></td>
               </tr>
 
       </table>
 
-      <table border="1">
+      <table border="1" style="border-left:0px solid;">
 
         <% dates = Timex.Interval.new(from: @start_2half, until: @end_month, left_open: false, right_open: false) %>
 
@@ -258,7 +317,7 @@
                           <td style="width: 400px; text-align: center;">Bulan lepas</td>
                           <td style="width: 400px; text-align: center; height: auto;">Jumlah</td>
                           <% c= dates2|>Enum.count  %>
-                            <% c= c+4  %>
+                            <% c= c+31 %>
 
                               <td style="width: 800px; text-align: center;" rowspan="<%= c  %>">
                                 <p>Purata kedatangan</p>
@@ -283,46 +342,57 @@
                                 <p>:</p>
                                 <p>Disemak oleh GB/PK</p>
                                 <p>:</p>
+                               
+
                               </td>
 
                     </tr>
 
-                    <%= for student <- @students do %>
+                    <%= for student <- students do %>
 
                       <tr>
                         <%= for date <- dates do %>
                           <td style="width: 200px; text-align: center;">
+                       <%= if student.sudent_id != "" do %>
+                                            <%
 
-                            <%
+                                        student_ids = Enum.filter(@attendance, fn x -> x.attendance_date == NaiveDateTime.to_date(date) end)
+                                         student_ids = if student_ids != [] do
+                                          
+                                       hd(student_ids).student_id |> String.split(",")
+                                        else
+                                       []
+                                        end
 
-                        student_ids = Enum.filter(@attendance, fn x -> x.attendance_date == NaiveDateTime.to_date(date) end)
-                         student_ids = if student_ids != [] do
-                          
-                       hd(student_ids).student_id |> String.split(",")
-                        else
-                       []
-                        end
-
-                        %>
+                                        %>
 
                               <%= if Enum.any?(student_ids, fn x -> x == Integer.to_string(student.sudent_id) end) do  %>
                                 1
                                 <% else %>
+                                 
                                   <% a = Repo.get_by(Absent, absent_date: NaiveDateTime.to_date(date), student_id: Integer.to_string(student.sudent_id))   %>
 
-                                    <%= if a != nil do %>
+                                              <%= if a != nil do %>
 
-                                      <%= a.reason |> String.split() |> hd() |> String.split("") |> Enum.reject(fn x -> x == ""end) |> hd()  %>
+                                                <%= a.reason |> String.split() |> hd() |> String.split("") |> Enum.reject(fn x -> x == ""end) |> hd()  %>
 
-                                        <% else %>
-                                          0
+                                                  <% else %>
+                                                    <%= 0 %>
+                                                    <% end %>
+
+                                         
+                                        <% end %>
+                                         <% else %>
+                                            &nbsp;
                                           <% end %>
-                                            <% end %>
 
                           </td>
                           <% end %>
                             <td style="width: 400px; text-align: center;">
+                                 <%= if student.sudent_id != "" do %>
                               <%= Repo.all(from a in Absent, where: a.absent_date in ^all_dates2 and a.student_id == ^Integer.to_string(student.sudent_id)) |> Enum.count()  %>
+
+                              <%end %>
 
                             </td>
                             <td style="width: 400px; text-align: center;">
