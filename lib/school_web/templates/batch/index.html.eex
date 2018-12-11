@@ -1,6 +1,6 @@
 <h2>Listing Batches</h2>
 
-<table class="table">
+<table class="table" id="datatable1">
   <thead>
     <tr>
       <th>Upload by</th>
