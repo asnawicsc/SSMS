@@ -13,27 +13,40 @@
     </div>
   <% end %>
 
-  <div class="form-group">
+  
+  <div class="form-group" data-step="1" data-intro="You can choose a standard or left empty to choose single class.">
     <%= label f, :standard_id, class: "control-label" %>
     <%= select f, :standard_id,levels, class: "form-control" %>
     <%= error_tag f, :standard_id %>
   </div>
 
-  <div class="form-group">
+
+  
+  <div class="form-group" data-step="2" data-intro="Choose a subject to be created for Subject Period.">
     <%= label f, :subject_id, class: "control-label" %>
     <%= select f, :subject_id,subject, class: "form-control" %>
     <%= error_tag f, :subject_id %>
   </div>
 
 
-
-  <div class="form-group">
+  
+  <div class="form-group" data-step="3" data-intro="Choose a class for the subject to be assigned.">
     <%= label f, :class_id, class: "control-label" %>
     <%= select f, :class_id,class, class: "form-control" %>
     <%= error_tag f, :class_id %>
   </div>
+ 
 
   <div class="form-group">
     <%= submit "Submit", class: "btn btn-primary" %>
   </div>
 <% end %>
+
+<script type="text/javascript">
+  if (RegExp('how_to', 'gi').test(window.location.search)) {
+      // $("a#class_period").click();
+      // var _href = $("a#how_to").attr("href")
+      // $("a#how_to").attr("href", _href + "?how_to=true")
+        introJs().start();
+      }
+</script>
