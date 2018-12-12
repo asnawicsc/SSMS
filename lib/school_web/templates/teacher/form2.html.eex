@@ -222,7 +222,7 @@
           <div class="form-group">
             <%= submit "Submit", class: "mb-1 btn btn-sm btn-primary" %>
             <%= if user.role == "Support" or user.role == "Admin" do %>
-        <a href="/teacher"><button class="mb-1 btn-sm btn btn-outline-primary teacher_back" type="button"><i class="fas fa-chevron-left"></i> Back</button></a>
+        <a href="/teacher"><button class="mb-1 btn-sm btn btn-outline-primary" type="button"><i class="fas fa-chevron-left"></i> Back</button></a>
             <% end %>
             <%= if user.role == "Teacher" do %>
             <a href="/dashboard"><button class="mb-1 btn-sm btn btn-outline-primary" type="button"><i class="fas fa-chevron-left"></i> Back</button></a>
