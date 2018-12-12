@@ -61,7 +61,7 @@ defmodule SchoolWeb.StudentController do
         )
       )
 
-    IO.inspect(students)
+
 
     for student <- students do
       if student.class_id != nil do
@@ -71,7 +71,7 @@ defmodule SchoolWeb.StudentController do
             institution_id: conn.private.plug_session["institution_id"]
           )
 
-        if cur_class.next_class != nil do
+        if cur_class.next_class != nil and !="Graduate" do
           next_class =
             Repo.get_by(Class,
               id: cur_class.next_class,
