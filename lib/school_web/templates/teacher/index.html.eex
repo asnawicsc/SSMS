@@ -18,7 +18,7 @@
 
       <div class="row">
             <%= if user.role == "Admin" or user.role == "Support" do %>
-                <div class="col-lg-7" aria-label="student_table">
+                <div class="col-lg-7" aria-label="teacher_table">
                   <div class="card card-default d-none d-lg-block">
                     <div class="card-body">
                       <div class="table-responsive">
@@ -33,7 +33,8 @@
                             <tbody>
                             <%= for teacher <- @teacher do %>
                               <tr>
-                                <td>   <div id="<%= teacher.code %> " class="btn btn-link teacher"><%= teacher.name %></div></td>
+                                <td>   
+                                  <div id="<%= teacher.code %> " class="btn btn-link teacher"><%= teacher.name %></div></td>
                                 <td>
                                   <%= if teacher.email != nil do %>
                                     <%= if Repo.get_by(User, email: teacher.email) != nil  do  %>
@@ -110,7 +111,7 @@
      $('.table').DataTable();
 
 
-     
+
        $("div.teacher").click(function(){
     var code = $(this).attr("id")
     channel.push("inquire_teacher_details", {user_id: window.currentUser,institution_id: window.currentInstitute, code: code})
@@ -119,14 +120,14 @@
 
          channel.on("show_teacher_details", payload => {
     $("div[aria-label='student_upload']").hide()
-    $("div[aria-label='student_table']").hide()
+    $("div[aria-label='teacher_table']").hide()
     $("div[aria-label='teacher_details']").html(payload.html)
     $("div[aria-label='teacher_details']").show()
     var csrf = window.csrf
     $("input[name='_csrf_token']").val(csrf)
     $("button.teacher_back").click(function(){
       $("div[aria-label='student_upload']").show()
-      $("div[aria-label='student_table']").show()
+      $("div[aria-label='teacher_table']").show()
       $("div[aria-label='teacher_details']").hide()
 
     })
