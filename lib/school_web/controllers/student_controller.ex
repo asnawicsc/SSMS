@@ -61,6 +61,8 @@ defmodule SchoolWeb.StudentController do
         )
       )
 
+    IO.inspect(students)
+
     for student <- students do
       if student.class_id != nil do
         cur_class =
