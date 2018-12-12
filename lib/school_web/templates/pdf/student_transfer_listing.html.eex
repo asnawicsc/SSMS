@@ -22,7 +22,7 @@
 					<%= if class != [] do %>
 						<td><%= hd(class).name %></td>
 					<% else %>
-						<td></td>
+						<td><%= "Graduate" %></td>
 					<% end %>
 				<% end %>
 			</tr>
