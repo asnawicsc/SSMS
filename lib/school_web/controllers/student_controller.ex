@@ -43,13 +43,16 @@ defmodule SchoolWeb.StudentController do
     students =
       Repo.all(
         from(
-          s in Student,
-          left_join: sc in StudentClass,
+          sc in StudentClass,
+          left_join: s in Student,
           on: sc.sudent_id == s.id,
+          left_join: c in Class,
+          on: sc.class_id == c.id,
           where:
             sc.institute_id == ^conn.private.plug_session["institution_id"] and
               s.institution_id == ^conn.private.plug_session["institution_id"] and
               sc.semester_id == ^conn.private.plug_session["semester_id"],
+               c.institution_id == ^conn.private.plug_session["institution_id"],
           select: %{
             student_id: s.id,
             semester_id: sc.semester_id,
@@ -59,27 +62,31 @@ defmodule SchoolWeb.StudentController do
       )
 
     for student <- students do
-      cur_class =
-        Repo.get_by(Class,
-          id: student.class_id,
-          institution_id: conn.private.plug_session["institution_id"]
-        )
+      if student.class_id != nil do
+        cur_class =
+          Repo.get_by(Class,
+            id: student.class_id,
+            institution_id: conn.private.plug_session["institution_id"]
+          )
 
-      next_class =
-        Repo.get_by(Class,
-          id: cur_class.next_class,
-          institution_id: conn.private.plug_session["institution_id"]
-        )
+        if cur_class.next_class != nil do
+          next_class =
+            Repo.get_by(Class,
+              id: cur_class.next_class,
+              institution_id: conn.private.plug_session["institution_id"]
+            )
 
-      student_param = %{
-        class_id: next_class.id,
-        institute_id: conn.private.plug_session["institution_id"],
-        level_id: next_class.level_id,
-        semester_id: String.to_integer(params["next_semester_id"]),
-        sudent_id: student.student_id
-      }
+          student_param = %{
+            class_id: next_class.id,
+            institute_id: conn.private.plug_session["institution_id"],
+            level_id: next_class.level_id,
+            semester_id: String.to_integer(params["next_semester_id"]),
+            sudent_id: student.student_id
+          }
 
-      Affairs.create_student_class(student_param)
+          Affairs.create_student_class(student_param)
+        end
+      end
     end
 
     conn
@@ -580,7 +587,8 @@ defmodule SchoolWeb.StudentController do
               Repo.get_by(
                 Affairs.Semester,
                 year: student_param["year"],
-                sem: student_param["sem"]
+                sem: student_param["sem"],
+                institution_id: conn.private.plug_session["institution_id"]
               )
 
             if semester_id != nil do

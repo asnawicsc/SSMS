@@ -110,16 +110,32 @@
                         <div class="tab-pane" id="tabSetting4">
                               <div class="card b">
                                  <div class="card-header bg-gray-lighter text-bold">Class Student Info</div>
-                                 <div class="card-body">
-                                    <ol>
-                                    <%= for student <- @students do %>
-                                      <li><b><%= student.name %></b>
-                                        <a href="/show_student_info/<%= student.id %>">
+                                 <div class="card-body" >
+                                
+                                   <table class="table" style="width:100%" id="datatable1">
+                          <thead>
+                              <tr>
+                                <th>Name</th>
+                                 <th>Action</th>
+                          
+                              </tr>
+                          </thead>
+                          <tbody>
+                          <%= for student <- @students do %>
+
+                          
+                                <tr>
+                                  <td><b><%= student.name %></b></td>
+                                  <td> <a href="/show_student_info/<%= student.id %>">
                                         <button class="btn btn-labeled btn-info btn-xs mb-2" type="button">
-                                        <span class="btn-label"><i class="fa fa-search"></i></span>Info</button></a>
-                                    </li>
-                                    <% end %>
-                                    </ol> 
+                                        <span class="btn-label"><i class="fa fa-search"></i></span>Info</button></a></td>                         
+                                </tr>
+                            <% end %>
+                          </tbody>
+                      </table>
+                                
+
+                                   
                                  </div>
                               </div>
                         </div>

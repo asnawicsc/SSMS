@@ -142,6 +142,38 @@ defmodule SchoolWeb.ClassController do
     |> redirect(to: class_path(conn, :index))
   end
 
+  def sync_library_membership_all(conn, params) do
+    students_in =
+      Repo.all(
+        from(t in School.Affairs.Student,
+          where: t.institution_id == ^School.Affairs.inst_id(conn),
+          select: %{
+            chinese_name: t.chinese_name,
+            name: t.name,
+            id: t.id,
+            ic: t.ic,
+            student_no: t.student_no,
+            phone: t.phone,
+            b_cert: t.b_cert
+          }
+        )
+      )
+
+    inst = Repo.get(Institution, School.Affairs.inst_id(conn))
+
+    uri = Application.get_env(:school, :api)[:url]
+    lib_id = inst.library_organization_id
+
+    a =
+      for student <- students_in do
+        Task.start_link(__MODULE__, :reg_lib_student, [student, lib_id, uri])
+      end
+
+    conn
+    |> put_flash(:info, "Library membership synced!")
+    |> redirect(to: page_path(conn, :support_dashboard))
+  end
+
   def reg_lib_student(student, lib_id, uri) do
     name = String.replace(student.name, " ", "+")
 

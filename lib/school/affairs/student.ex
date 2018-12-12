@@ -42,6 +42,7 @@ defmodule School.Affairs.Student do
     field(:micno, :string)
     field(:height, :string)
     field(:weight, :string)
+
     timestamps()
   end
 
