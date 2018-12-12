@@ -40,8 +40,6 @@ defmodule SchoolWeb.StudentController do
   end
 
   def submit_student_transfer(conn, params) do
-  
-
     students =
       Repo.all(
         from(
