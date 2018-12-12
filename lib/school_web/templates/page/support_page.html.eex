@@ -272,6 +272,13 @@
 
                                       <a class="btn btn-xs btn-success" href="javascript:void(0);" onclick="intro_start()">Show me how</a>
                                    </div>
+
+                                   <div class="list-group-item bt0" >
+                                  
+                                     <em class="fa-fw fas fa-question mr-2"></em>How to create Subject and Subject Period?
+
+                                      <a class="btn btn-xs btn-success" href="javascript:void(0);" onclick="create_sub()">Show me how</a>
+                                   </div>
                        
                
                                 
@@ -384,9 +391,15 @@
                      <li><p class="card-text"><%= gettext("Assign a subject to a class and standard.")%></p></li>
                   </ol>
                     <a href ="/subject"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List</button></a>
+              <div id="createSubject" class="btn-group" data-step="" data-intro="First you need to create subjects before creating subject period.">
                <a href ="/subject/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Subject</button></a>
+             </div>
+             
                 <a href ="/subject_teach_class"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List Subject Period</button></a>
-               <a href ="/subject_teach_class/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Subject Period</button></a>
+              
+              <div id="createSubjectPeriod" class="btn-group" data-step="" data-intro="After created subject, you can now create Subject Period.">
+               <a id="subjectPeriod" href ="/subject_teach_class/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Subject Period</button></a>
+               </div>
            </div>
 
         </div>
@@ -518,7 +531,7 @@
                   </ol>
                   <a href ="/classes/enroll_students"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Enroll Students</button></a>
                 <a  href="/create_class"]"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Class</button></a>
-                <div class="btn-group" data-step="1" data-intro="Choose one of the class to add a timetable period.">
+                <div id="createTimetable_1" class="btn-group" data-step="" data-intro="Choose one of the class to add a timetable period.">
                    <a href="/classes"><button class="mb-1 btn-sm btn btn-outline-primary" type="button" >Manage</button></a>
                    <button class="mb-1 btn-sm dropdown-toggle btn btn-outline-primary" type="button" data-toggle="dropdown" aria-expanded="false">
                       <span class="sr-only">info</span>
@@ -588,10 +601,22 @@ $('#percent1').attr("data-percent",total);
 $("#percent").html(total+"%");
 
 function intro_start(){
+  $("div#createTimetable_1").attr("data-step",1)
+  $("div#createSubject").attr("data-step","")
+  $("div#createSubjectPeriod").attr("data-step","")
   introJs().start();
   $("a.student_class").each(function(i, v){
     var _href = $(v).attr("href"); 
    $(v).attr("href", _href + '?how_to=true')
   })
+}
+
+function create_sub(){
+  $("div#createSubject").attr("data-step",1)
+  $("div#createTimetable_1").attr("data-step","")
+  $("div#createSubjectPeriod").attr("data-step",2)
+  introJs().start();
+  var href = $("a#subjectPeriod").attr("href");
+  $("a#subjectPeriod").attr("href", href+"?how_to=true")
 }
 </script>
