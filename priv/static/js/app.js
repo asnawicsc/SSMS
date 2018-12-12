@@ -362,21 +362,6 @@ channel.on("show_student_details", payload => {
 
 
 
-  channel.on("show_teacher_details", payload => {
-    $("div[aria-label='student_upload']").hide()
-    $("div[aria-label='student_table']").hide()
-    $("div[aria-label='teacher_details']").html(payload.html)
-    $("div[aria-label='teacher_details']").show()
-    var csrf = window.csrf
-    $("input[name='_csrf_token']").val(csrf)
-    $("button.teacher_back").click(function(){
-      $("div[aria-label='student_upload']").show()
-      $("div[aria-label='student_table']").show()
-      $("div[aria-label='teacher_details']").hide()
-
-    })
-  })
-
        $("div.parent").click(function(){
     var icno = $(this).attr("id")
     channel.push("inquire_parent_details", {user_id: window.currentUser, institution_id: window.currentInstitute, icno: icno})
