@@ -200,6 +200,7 @@ defmodule SchoolWeb.Router do
     resources("/classes", ClassController)
     get("/classes/:id/students", ClassController, :students)
     get("/classes/:id/sync_library_membership", ClassController, :sync_library_membership)
+    get("/sync_library_membership_all", ClassController, :sync_library_membership_all)
     get("/add_to_class_semester", ClassController, :add_to_class_semester)
     resources("/student_classes", StudentClassController)
     get("/attendance/report", AttendanceController, :attendance_report)
