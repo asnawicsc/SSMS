@@ -360,10 +360,7 @@ channel.on("show_student_details", payload => {
   })
 
 
-  $("div.teacher").on("click", document, function(){
-    var code = $(this).attr("id")
-    channel.push("inquire_teacher_details", {user_id: window.currentUser,institution_id: window.currentInstitute, code: code})
-  })
+
 
   channel.on("show_teacher_details", payload => {
     $("div[aria-label='student_upload']").hide()
