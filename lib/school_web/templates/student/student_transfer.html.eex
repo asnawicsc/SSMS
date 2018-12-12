@@ -17,7 +17,7 @@
 	    			 <label class="col-md-12 col-form-label">Please select which semester to be transferred to: </label>
 	    			<form action ="/submit_student_transfer">
 	    				<div class="col-md-8">
-		    			 <select class="custom-select custom-select" id="select" name="next_semester_id">
+		    			 <select class="custom-select custom-select" id="select" name="next_semester_id" required="required">
 	                         <option selected="">Select a Semester</option>
 	                         <%= for semester <- @all_semesters do %>
 	                         	<option value="<%= semester.id %>">[<%= semester.start_date %>] - [<%= semester.end_date %>]</option>

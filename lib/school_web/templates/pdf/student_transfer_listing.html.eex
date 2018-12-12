@@ -13,7 +13,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<%= for student <- @students do %>
+			<%= for student <- @students|>Enum.sort_by(fn x -> x.class_id end) do %>
 			<tr align="center">
 				<td><%= student.name %></td>
 				<%= for semester <- @semesters do %>
