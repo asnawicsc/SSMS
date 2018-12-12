@@ -57,7 +57,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-lg-4" aria-label="student_upload">
+                <div class="col-lg-4" aria-label="teacher_upload">
                   <div class="card card-default d-none d-lg-block">
                     <div class="card-body">
                      <p class="lead">Click on a teacher name in the left panel. </p> 
@@ -119,14 +119,14 @@
 
 
          channel.on("show_teacher_details", payload => {
-    $("div[aria-label='student_upload']").hide()
+    $("div[aria-label='teacher_upload']").hide()
     $("div[aria-label='teacher_table']").hide()
     $("div[aria-label='teacher_details']").html(payload.html)
     $("div[aria-label='teacher_details']").show()
     var csrf = window.csrf
     $("input[name='_csrf_token']").val(csrf)
     $("button.teacher_back").click(function(){
-      $("div[aria-label='student_upload']").show()
+      $("div[aria-label='teacher_upload']").show()
       $("div[aria-label='teacher_table']").show()
       $("div[aria-label='teacher_details']").hide()
 
