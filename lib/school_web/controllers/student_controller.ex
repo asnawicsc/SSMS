@@ -80,7 +80,7 @@ defmodule SchoolWeb.StudentController do
             class_id: next_class.id,
             institute_id: conn.private.plug_session["institution_id"],
             level_id: next_class.level_id,
-            semester_id: String.to_integer(params["next_semester_id"]),
+            semester_id: params["next_semester_id"],
             sudent_id: student.student_id
           }
 
