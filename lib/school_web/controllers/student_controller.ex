@@ -40,16 +40,21 @@ defmodule SchoolWeb.StudentController do
   end
 
   def submit_student_transfer(conn, params) do
+  
+
     students =
       Repo.all(
         from(
           sc in StudentClass,
           left_join: s in Student,
           on: sc.sudent_id == s.id,
+          left_join: c in Class,
+          on: sc.class_id == c.id,
           where:
             sc.institute_id == ^conn.private.plug_session["institution_id"] and
               s.institution_id == ^conn.private.plug_session["institution_id"] and
               sc.semester_id == ^conn.private.plug_session["semester_id"],
+               c.institution_id == ^conn.private.plug_session["institution_id"],
           select: %{
             student_id: s.id,
             semester_id: sc.semester_id,
