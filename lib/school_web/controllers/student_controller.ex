@@ -580,7 +580,8 @@ defmodule SchoolWeb.StudentController do
               Repo.get_by(
                 Affairs.Semester,
                 year: student_param["year"],
-                sem: student_param["sem"]
+                sem: student_param["sem"],
+                institution_id: conn.private.plug_session["institution_id"]
               )
 
             if semester_id != nil do

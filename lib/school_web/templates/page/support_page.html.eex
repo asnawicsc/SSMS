@@ -406,7 +406,7 @@
                     <li><p class="card-text"><%= gettext("List of students that you can manage.")%></p></li>
                      <li><p class="card-text"><%= gettext("Ad hoc create student.")%></p></li>
                   </ol>
-                <a href="/student_lists/<%= a.private.plug_session["user_id"]%>"><button class="mb-1 btn-sm btn btn-outline-primary"  type="button">List</button></a>
+                <a href="/students><button class="mb-1 btn-sm btn btn-outline-primary"  type="button">List</button></a>
                   <a href="/students/new"><button class="mb-1 btn-sm btn btn-outline-primary"  type="button">Create Student</button></a>
                   <div class="btn-group">
                    <button class="mb-1 btn-sm btn btn-outline-primary" type="button">Height & Weight</button>
