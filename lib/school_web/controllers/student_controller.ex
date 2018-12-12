@@ -59,27 +59,31 @@ defmodule SchoolWeb.StudentController do
       )
 
     for student <- students do
-      cur_class =
-        Repo.get_by(Class,
-          id: student.class_id,
-          institution_id: conn.private.plug_session["institution_id"]
-        )
+      if student.class_id != nil do
+        cur_class =
+          Repo.get_by(Class,
+            id: student.class_id,
+            institution_id: conn.private.plug_session["institution_id"]
+          )
 
-      next_class =
-        Repo.get_by(Class,
-          id: cur_class.next_class,
-          institution_id: conn.private.plug_session["institution_id"]
-        )
+        if cur_class.next_class != nil do
+          next_class =
+            Repo.get_by(Class,
+              id: cur_class.next_class,
+              institution_id: conn.private.plug_session["institution_id"]
+            )
 
-      student_param = %{
-        class_id: next_class.id,
-        institute_id: conn.private.plug_session["institution_id"],
-        level_id: next_class.level_id,
-        semester_id: String.to_integer(params["next_semester_id"]),
-        sudent_id: student.student_id
-      }
+          student_param = %{
+            class_id: next_class.id,
+            institute_id: conn.private.plug_session["institution_id"],
+            level_id: next_class.level_id,
+            semester_id: String.to_integer(params["next_semester_id"]),
+            sudent_id: student.student_id
+          }
 
-      Affairs.create_student_class(student_param)
+          Affairs.create_student_class(student_param)
+        end
+      end
     end
 
     conn
