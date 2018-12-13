@@ -450,7 +450,8 @@ defmodule SchoolWeb.ExamController do
       Repo.all(
         from(
           s in School.Affairs.ExamMark,
-          where: s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
+          where:
+            s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
           select: %{
             class_id: s.class_id,
             subject_id: s.subject_id,
@@ -599,7 +600,8 @@ defmodule SchoolWeb.ExamController do
       Repo.all(
         from(
           s in School.Affairs.ExamMark,
-          where: s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
+          where:
+            s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
           select: %{
             class_id: s.class_id,
             subject_id: s.subject_id,
@@ -1327,10 +1329,14 @@ defmodule SchoolWeb.ExamController do
           left_join: sc in School.Affairs.StudentClass,
           on: sc.sudent_id == s.id,
           left_join: c in School.Affairs.Class,
-          on: sc.class_id == c.id,
+          on: em.class_id == c.id,
           left_join: sb in School.Affairs.Subject,
           on: em.subject_id == sb.id,
-          where: em.student_id == ^student.id and e.name == ^exam_name,
+          where:
+            em.student_id == ^student.id and e.name == ^exam_name and
+              c.institution_id == ^institution.id and e.institution_id == ^institution.id and
+              j.institution_id == ^institution.id and s.institution_id == ^institution.id and
+              sb.institution_id == ^institution.id and sc.institute_id == ^institution.id,
           select: %{
             student_name: s.name,
             chinese_name: s.chinese_name,
@@ -1340,10 +1346,11 @@ defmodule SchoolWeb.ExamController do
             subject_name: sb.description,
             subject_cname: sb.cdesc,
             mark: em.mark,
-            standard_id: sc.level_id
+            standard_id: e.level_id
           }
         )
       )
+      |> Enum.uniq()
 
     exam =
       Repo.get_by(School.Affairs.ExamMaster, %{

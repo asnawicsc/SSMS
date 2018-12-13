@@ -1,0 +1,115 @@
+
+<div class="content-heading">
+    <div>Exam History Checklist 
+    </div>
+
+</div>
+<div class="row">
+<div class="col-7">
+<div class="card">
+     <div class="card-header">
+ <b style="color: red">* Noted: Generate Exam History only can be done at the end of Semester * </b>
+     </div>
+     <div class="card-body">
+      <table id="datatable1" class="table table-striped table-bordered" style="width:100%">
+              <thead>
+                  <tr>
+                      <th>Exam Name</th>
+                      <th>Semester</th>
+                      <th >Action</th>
+                    
+                  </tr>
+              </thead>
+              <tbody>
+                  <%= for e <- @exam_semester |> Enum.sort do %>
+                 <tr>
+                    <td><%= e.exam_name %></td>
+                    <td><%= e.semester %>- <%= e.semester_end %></td>
+                    <td align="right">
+
+
+                    	<%= if @history_exam != []  do %>
+
+                    	<%= if @history_exam.exam_name != e.exam_name  do %>
+                    	
+                      <a href="/generate_history_exam/<%= e.exam_master_id %>/semester/<%= e.semester_id %>"><button class="btn btn-labeled btn-s btn-info mb-2" type="button" >
+                        <span class="btn-label"><i class="fa fa-arrow"></i></span>
+                        Tranfer
+                      </button></a>
+
+                      <% else %>
+                      <span>
+<b style="color: green">
+                      <%= "Tranfered"  %>
+</b>
+&nbsp;&nbsp;
+<a href="#"><button class="btn btn-labeled btn-s btn-success mb-2" type="button" >
+                        <span class="btn-label"><i class="fa fa-arrow"></i></span>
+                        Download
+                      </button></a></span>
+                      	<% end %>
+
+                      	<% else %>
+
+                      	  <a href="/generate_history_exam/<%= e.exam_master_id %>/semester/<%= e.semester_id %>"><button class="btn btn-labeled btn-s btn-info mb-2" type="button" >
+                        <span class="btn-label"><i class="fa fa-arrow"></i></span>
+                        Tranfer
+                      </button></a>
+
+                      	<% end %>
+
+                     
+                    </td>
+                   
+             	 </td>
+                 </tr>
+                <% end %>
+              </tbody>
+      </table>
+    </div>
+</div> 
+</div>
+                  <div class="col-lg-4" >
+                           <div class="card card-default d-none d-lg-block">
+
+            <div class="card-body">
+                 <div class="text-right text-muted">
+                      <%#     Sample Csv Upload 
+                         <em class="fa fa-upload fa-2x" onclick="window.open('priv/static/img/semester_upload_format.csv')"></em> %>
+                        </div>
+
+                        
+          <p class="lead">Upload History Exam Record</p> 
+
+            <div class="row" style="margin-top: 10px;">
+                <div class="col-lg-12">
+                  <div class="panel">
+                    <div class="panel-heading">Bulk Upload Semester</div>
+                    <div class="panel-body">
+
+                      <%= form_for @conn, history_exam_path(@conn, :pre_generate_exam_record), [as: :item, multipart: true], fn f -> %>
+
+                          <%= label f, "", class: "control-label" %>
+                          <%= file_input f, :file, accept: ".csv"%>
+                          <%= error_tag f, :file %>
+
+                        <div class="form-group">
+                          <br>
+                          <%= submit "Submit", class: "btn btn-primary" %>
+                        </div>
+                      <% end %>
+
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('#period_table').DataTable();
+} );
+</script>

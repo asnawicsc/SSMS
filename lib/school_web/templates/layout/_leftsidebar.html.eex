@@ -353,7 +353,7 @@
                               <span data-localize="sidebar.nav.extra.EXTRA"><%= gettext "Report" %></span>
                            </a>
 
-                        </li>
+                    
                
                      </ul>
                      <!-- END sidebar nav-->
