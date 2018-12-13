@@ -474,7 +474,7 @@
                 <a href="/exam"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Exam Period/Grade</button></a>
 
                  <a href ="/mark_sheet"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Mark</button></a>
-         <%#  <a href ="/exam_history_checklist"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Exam History</button></a> %>
+          <a href ="/exam_history_checklist"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Exam History</button></a>
              </div>
           </div>
         </div>

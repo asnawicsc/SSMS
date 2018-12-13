@@ -286,14 +286,15 @@ defmodule SchoolWeb.HistoryExamController do
         end
         |> List.flatten()
 
-      a = all_stud |> Enum.group_by(fn x -> x.subject_code end)
+      a = all_stud |> Enum.group_by(fn x -> x.student_no end)
 
-      render(conn, "result_history_exam_class.html", a: a)
+      render(conn, "result_history_exam_class.html",
+        a: a,
+        class_name: params["class_name"],
+        year: params["year"],
+        exam_name: params["exam_name"]
+      )
     end
-
-    # history_data =
-    #   Affairs.list_history_exam()
-    #   |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
   end
 
   def new(conn, _params) do
