@@ -11,6 +11,7 @@ defmodule SchoolWeb.HistoryExamController do
   alias School.Affairs.Subject
   alias School.Affairs.Student
   require IEx
+  require Task
 
   def index(conn, _params) do
     history_exam = Affairs.list_history_exam()
@@ -146,6 +147,40 @@ defmodule SchoolWeb.HistoryExamController do
 
     contents = tl(data)
 
+    Task.start_link(__MODULE__, :loop, [conn, contents, headers, batch])
+
+    conn
+    |> put_flash(:info, "History Record successfully added.")
+    |> redirect(to: exam_path(conn, :list_report_history))
+  end
+
+  def history_exam_result_class(conn, params) do
+    year =
+      Affairs.list_history_exam()
+      |> Enum.map(fn x -> x.year end)
+      |> Enum.uniq()
+      |> Enum.filter(fn x -> x != nil end)
+
+    exam_name =
+      Affairs.list_history_exam()
+      |> Enum.map(fn x -> x.exam_name end)
+      |> Enum.uniq()
+      |> Enum.filter(fn x -> x != nil end)
+
+    class_name =
+      Affairs.list_history_exam()
+      |> Enum.map(fn x -> x.class_name end)
+      |> Enum.uniq()
+      |> Enum.filter(fn x -> x != nil end)
+
+    render(conn, "history_exam_result_class.html",
+      year: year,
+      exam_name: exam_name,
+      class_name: class_name
+    )
+  end
+
+  def loop(conn, contents, headers, batch) do
     result =
       for content <- contents do
         h = headers |> Enum.map(fn x -> String.downcase(x) end)
@@ -219,36 +254,6 @@ defmodule SchoolWeb.HistoryExamController do
     body = result |> Enum.map(fn x -> Map.values(x) end)
     new_io = List.insert_at(body, 0, header) |> CSV.encode() |> Enum.to_list() |> to_string
     {:ok, batch} = Settings.update_batch(batch, %{result: new_io})
-
-    conn
-    |> put_flash(:info, "History Record successfully added.")
-    |> redirect(to: exam_path(conn, :list_report_history))
-  end
-
-  def history_exam_result_class(conn, params) do
-    year =
-      Affairs.list_history_exam()
-      |> Enum.map(fn x -> x.year end)
-      |> Enum.uniq()
-      |> Enum.filter(fn x -> x != nil end)
-
-    exam_name =
-      Affairs.list_history_exam()
-      |> Enum.map(fn x -> x.exam_name end)
-      |> Enum.uniq()
-      |> Enum.filter(fn x -> x != nil end)
-
-    class_name =
-      Affairs.list_history_exam()
-      |> Enum.map(fn x -> x.class_name end)
-      |> Enum.uniq()
-      |> Enum.filter(fn x -> x != nil end)
-
-    render(conn, "history_exam_result_class.html",
-      year: year,
-      exam_name: exam_name,
-      class_name: class_name
-    )
   end
 
   def history_exam_report_class(conn, params) do
