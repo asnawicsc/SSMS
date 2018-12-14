@@ -1,5 +1,5 @@
 <div class="content-heading">
-    <div>List Exam Class
+    <div>List Absent Class
         <small><%= gettext("welcome")%>!</small>
     </div>
     <!-- START Language list-->
