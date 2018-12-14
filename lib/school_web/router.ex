@@ -417,12 +417,19 @@ defmodule SchoolWeb.Router do
     get("/exam_history_checklist", HistoryExamController, :exam_history_checklist)
     get("/history_exam_result_class", HistoryExamController, :history_exam_result_class)
     post("/history_exam_report_class", HistoryExamController, :history_exam_report_class)
+    resources("/absent_history", AbsentHistoryController)
+    get("/history_absent", AbsentHistoryController, :history_absent)
 
     get(
       "/generate_history_exam/:exam_id/semester/:semester_id",
       HistoryExamController,
       :generate_history_exam
     )
+
+    post("/pre_upload_absent_history", AbsentHistoryController, :pre_upload_absent_history)
+
+    post("/upload_history_absent", AbsentHistoryController, :upload_history_absent)
+    post("/history_absent_class", AbsentHistoryController, :history_absent_class)
 
     resources("/announcements", AnnouncementController)
     get("/announcements/:id/broadcast", AnnouncementController, :broadcast)

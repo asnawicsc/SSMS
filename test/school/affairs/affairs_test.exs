@@ -3792,4 +3792,76 @@ defmodule School.AffairsTest do
       assert %Ecto.Changeset{} = Affairs.change_history_exam(history_exam)
     end
   end
+
+  describe "absent_history" do
+    alias School.Affairs.AbsentHistory
+
+    @valid_attrs %{absent_date: "some absent_date", absent_type: "some absent_type", chinese_name: "some chinese_name", student_class: "some student_class", student_name: "some student_name", student_no: 42, year: 42}
+    @update_attrs %{absent_date: "some updated absent_date", absent_type: "some updated absent_type", chinese_name: "some updated chinese_name", student_class: "some updated student_class", student_name: "some updated student_name", student_no: 43, year: 43}
+    @invalid_attrs %{absent_date: nil, absent_type: nil, chinese_name: nil, student_class: nil, student_name: nil, student_no: nil, year: nil}
+
+    def absent_history_fixture(attrs \\ %{}) do
+      {:ok, absent_history} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_absent_history()
+
+      absent_history
+    end
+
+    test "list_absent_history/0 returns all absent_history" do
+      absent_history = absent_history_fixture()
+      assert Affairs.list_absent_history() == [absent_history]
+    end
+
+    test "get_absent_history!/1 returns the absent_history with given id" do
+      absent_history = absent_history_fixture()
+      assert Affairs.get_absent_history!(absent_history.id) == absent_history
+    end
+
+    test "create_absent_history/1 with valid data creates a absent_history" do
+      assert {:ok, %AbsentHistory{} = absent_history} = Affairs.create_absent_history(@valid_attrs)
+      assert absent_history.absent_date == "some absent_date"
+      assert absent_history.absent_type == "some absent_type"
+      assert absent_history.chinese_name == "some chinese_name"
+      assert absent_history.student_class == "some student_class"
+      assert absent_history.student_name == "some student_name"
+      assert absent_history.student_no == 42
+      assert absent_history.year == 42
+    end
+
+    test "create_absent_history/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_absent_history(@invalid_attrs)
+    end
+
+    test "update_absent_history/2 with valid data updates the absent_history" do
+      absent_history = absent_history_fixture()
+      assert {:ok, absent_history} = Affairs.update_absent_history(absent_history, @update_attrs)
+      assert %AbsentHistory{} = absent_history
+      assert absent_history.absent_date == "some updated absent_date"
+      assert absent_history.absent_type == "some updated absent_type"
+      assert absent_history.chinese_name == "some updated chinese_name"
+      assert absent_history.student_class == "some updated student_class"
+      assert absent_history.student_name == "some updated student_name"
+      assert absent_history.student_no == 43
+      assert absent_history.year == 43
+    end
+
+    test "update_absent_history/2 with invalid data returns error changeset" do
+      absent_history = absent_history_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_absent_history(absent_history, @invalid_attrs)
+      assert absent_history == Affairs.get_absent_history!(absent_history.id)
+    end
+
+    test "delete_absent_history/1 deletes the absent_history" do
+      absent_history = absent_history_fixture()
+      assert {:ok, %AbsentHistory{}} = Affairs.delete_absent_history(absent_history)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_absent_history!(absent_history.id) end
+    end
+
+    test "change_absent_history/1 returns a absent_history changeset" do
+      absent_history = absent_history_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_absent_history(absent_history)
+    end
+  end
 end

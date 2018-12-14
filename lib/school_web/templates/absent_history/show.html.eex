@@ -1,0 +1,43 @@
+<h2>Show Absent history</h2>
+
+<ul>
+
+  <li>
+    <strong>Student no:</strong>
+    <%= @absent_history.student_no %>
+  </li>
+
+  <li>
+    <strong>Student name:</strong>
+    <%= @absent_history.student_name %>
+  </li>
+
+  <li>
+    <strong>Chinese name:</strong>
+    <%= @absent_history.chinese_name %>
+  </li>
+
+  <li>
+    <strong>Student class:</strong>
+    <%= @absent_history.student_class %>
+  </li>
+
+  <li>
+    <strong>Absent date:</strong>
+    <%= @absent_history.absent_date %>
+  </li>
+
+  <li>
+    <strong>Absent type:</strong>
+    <%= @absent_history.absent_type %>
+  </li>
+
+  <li>
+    <strong>Year:</strong>
+    <%= @absent_history.year %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: absent_history_path(@conn, :edit, @absent_history) %></span>
+<span><%= link "Back", to: absent_history_path(@conn, :index) %></span>

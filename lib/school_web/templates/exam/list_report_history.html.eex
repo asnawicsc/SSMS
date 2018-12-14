@@ -32,7 +32,26 @@
                </div>
                <div class="col-lg-9">
                   <div class="row">
-
+                     <div class="col-lg-3 col-md-5">
+                        <div class="card" data-filter-group="audio">
+                           <div class="card-body text-center">
+                              <div class="d-flex">
+                                 <div class="ml-auto">
+                                    <a class="text-muted mr-1" href="/history_absent" title="Download">
+                                       <em class="fa fa-download fa-fw"></em>
+                                    </a>
+                                 </div>
+                              </div>
+                              <a class="px-4" href="/history_absent">
+                                 <em class="fa-5x fas fa-book-open"></em>
+                              </a>
+                              <p>
+                                 <small class="text-dark">History Attendance</small>
+                              </p>
+                          
+                           </div>
+                        </div>
+                     </div>
                       <div class="col-lg-3 col-md-5">
                         <div class="card" data-filter-group="movie">
                            <div class="card-body text-center">
@@ -53,7 +72,6 @@
                            </div>
                         </div>
                      </div>
-      
                      
 
                </div>

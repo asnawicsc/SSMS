@@ -4854,4 +4854,100 @@ defmodule School.Affairs do
   def change_history_exam(%HistoryExam{} = history_exam) do
     HistoryExam.changeset(history_exam, %{})
   end
+
+  alias School.Affairs.AbsentHistory
+
+  @doc """
+  Returns the list of absent_history.
+
+  ## Examples
+
+      iex> list_absent_history()
+      [%AbsentHistory{}, ...]
+
+  """
+  def list_absent_history do
+    Repo.all(AbsentHistory)
+  end
+
+  @doc """
+  Gets a single absent_history.
+
+  Raises `Ecto.NoResultsError` if the Absent history does not exist.
+
+  ## Examples
+
+      iex> get_absent_history!(123)
+      %AbsentHistory{}
+
+      iex> get_absent_history!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_absent_history!(id), do: Repo.get!(AbsentHistory, id)
+
+  @doc """
+  Creates a absent_history.
+
+  ## Examples
+
+      iex> create_absent_history(%{field: value})
+      {:ok, %AbsentHistory{}}
+
+      iex> create_absent_history(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_absent_history(attrs \\ %{}) do
+    %AbsentHistory{}
+    |> AbsentHistory.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a absent_history.
+
+  ## Examples
+
+      iex> update_absent_history(absent_history, %{field: new_value})
+      {:ok, %AbsentHistory{}}
+
+      iex> update_absent_history(absent_history, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_absent_history(%AbsentHistory{} = absent_history, attrs) do
+    absent_history
+    |> AbsentHistory.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a AbsentHistory.
+
+  ## Examples
+
+      iex> delete_absent_history(absent_history)
+      {:ok, %AbsentHistory{}}
+
+      iex> delete_absent_history(absent_history)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_absent_history(%AbsentHistory{} = absent_history) do
+    Repo.delete(absent_history)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking absent_history changes.
+
+  ## Examples
+
+      iex> change_absent_history(absent_history)
+      %Ecto.Changeset{source: %AbsentHistory{}}
+
+  """
+  def change_absent_history(%AbsentHistory{} = absent_history) do
+    AbsentHistory.changeset(absent_history, %{})
+  end
 end

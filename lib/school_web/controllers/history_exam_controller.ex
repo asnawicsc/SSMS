@@ -262,7 +262,8 @@ defmodule SchoolWeb.HistoryExamController do
         from(s in HistoryExam,
           where:
             s.class_name == ^params["class_name"] and s.year == ^params["year"] and
-              s.exam_name == ^params["exam_name"]
+              s.exam_name == ^params["exam_name"] and
+              s.institution_id == ^conn.private.plug_session["institution_id"]
         )
       )
 
