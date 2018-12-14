@@ -132,7 +132,7 @@ defmodule SchoolWeb.HistoryExamController do
     {:ok, batch} = Settings.update_batch(batch, %{upload_by: usr.id})
 
     data =
-      if bin |> String.contains?("\t") do
+      if bin |> String.contains?("\r") do
         bin |> String.split("\n") |> Enum.map(fn x -> String.split(x, "\t") end)
       else
         bin |> String.split("\n") |> Enum.map(fn x -> String.split(x, ",") end)
@@ -222,7 +222,7 @@ defmodule SchoolWeb.HistoryExamController do
 
     conn
     |> put_flash(:info, "History Record successfully added.")
-    |> redirect(to: history_exam_path(conn, :index))
+    |> redirect(to: exam_path(conn, :list_report_history))
   end
 
   def history_exam_result_class(conn, params) do
