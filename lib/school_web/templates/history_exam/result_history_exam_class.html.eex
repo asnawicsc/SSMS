@@ -1,0 +1,35 @@
+<h2>Listing History exam</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Student no</th>
+      <th>Student name</th>
+      <th>Other name</th>
+      <th>Subject code</th>
+      <th>Subject name</th>
+      <th>Subject mark</th>
+
+    </tr>
+  </thead>
+  <tbody>
+<%= for history_exam <- @a do %>
+<% require IEx %>
+<%  historys=history_exam|>elem(1) %>
+
+
+    <%= for history <- historys do %>
+    <tr>
+      <td><%= history.student_no %></td>
+     <td><%= history.student_name %></td>
+     <td><%= history.chinese_name %></td>
+     <td><%= history.subject_code %></td>
+     <td><%= history.subject_name %></td>
+     <td><%= history.subject_mark %></td>
+    </tr>
+    <% end %>
+<% end %>
+  </tbody>
+</table>
+
+

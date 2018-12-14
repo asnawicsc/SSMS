@@ -75,12 +75,12 @@
                            <div class="card-body text-center">
                               <div class="d-flex">
                                  <div class="ml-auto">
-                                    <a class="text-muted mr-1" href="/exam_result_class" title="Download">
+                                    <a class="text-muted mr-1" href="/history_exam_result_class" title="Download">
                                        <em class="fa fa-download fa-fw"></em>
                                     </a>
                                  </div>
                               </div>
-                              <a class="px-4" href="/exam_result_class">
+                              <a class="px-4" href="/history_exam_result_class">
                                  <em class="fa-5x fas fa-pen-square text-success"></em>
                               </a>
                               <p>

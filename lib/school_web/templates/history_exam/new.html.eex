@@ -1,0 +1,5 @@
+<h2>New History exam</h2>
+
+<%= render "form.html", Map.put(assigns, :action, history_exam_path(@conn, :create)) %>
+
+<span><%= link "Back", to: history_exam_path(@conn, :index) %></span>

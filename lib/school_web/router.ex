@@ -169,6 +169,8 @@ defmodule SchoolWeb.Router do
 
     post("/generate_holiday", HolidayController, :pre_generate_holiday)
 
+    post("/generate_exam_record", HistoryExamController, :pre_generate_exam_record)
+
     post("/pre_generate_student_class", StudentController, :pre_generate_student_class)
 
     post("/upload_teachers_final", TeacherController, :upload_teachers)
@@ -181,6 +183,8 @@ defmodule SchoolWeb.Router do
     post("/upload_generate_student_class", StudentController, :upload_generate_student_class)
 
     post("/upload_semester_final", SemesterController, :upload_semester)
+
+    post("/upload_history_exam_record", HistoryExamController, :upload_exam_record)
 
     post("/upload_absent_final", AbsentController, :upload_absent)
 
@@ -409,6 +413,17 @@ defmodule SchoolWeb.Router do
     get("/default_rank", ListRankController, :default_rank)
     post("/default_standard", LevelController, :default_standard)
     get("/assign_lib_access", UserController, :assign_lib_access)
+    resources("/history_exam", HistoryExamController)
+    get("/exam_history_checklist", HistoryExamController, :exam_history_checklist)
+    get("/history_exam_result_class", HistoryExamController, :history_exam_result_class)
+    post("/history_exam_report_class", HistoryExamController, :history_exam_report_class)
+
+    get(
+      "/generate_history_exam/:exam_id/semester/:semester_id",
+      HistoryExamController,
+      :generate_history_exam
+    )
+
     resources("/announcements", AnnouncementController)
     get("/announcements/:id/broadcast", AnnouncementController, :broadcast)
     get("/*path", PageController, :no_page_found)

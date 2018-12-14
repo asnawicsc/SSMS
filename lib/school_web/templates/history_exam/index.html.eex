@@ -1,0 +1,52 @@
+<h2>Listing History exam</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Student no</th>
+      <th>Student name</th>
+      <th>Other name</th>
+      <th>Subject name</th>
+      <th>Subject code</th>
+      <th>Subject mark</th>
+      <th>Exam class rank</th>
+      <th>Exam standard rank</th>
+      <th>Exam name</th>
+      <th>Class name</th>
+      <th>Semester</th>
+      <th>Year</th>
+      <th>Institution</th>
+      <th>Exam grade</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for history_exam <- @history_exam do %>
+    <tr>
+      <td><%= history_exam.student_no %></td>
+      <td><%= history_exam.student_name %></td>
+      <td><%= history_exam.chinese_name %></td>
+      <td><%= history_exam.subject_name %></td>
+      <td><%= history_exam.subject_code %></td>
+      <td><%= history_exam.subject_mark %></td>
+      <td><%= history_exam.exam_class_rank %></td>
+      <td><%= history_exam.exam_standard_rank %></td>
+      <td><%= history_exam.exam_name %></td>
+      <td><%= history_exam.class_name %></td>
+      <td><%= history_exam.semester_id %></td>
+       <td><%= history_exam.year %></td>
+      <td><%= history_exam.institution_id %></td>
+      <td><%= history_exam.exam_grade %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: history_exam_path(@conn, :show, history_exam), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: history_exam_path(@conn, :edit, history_exam), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: history_exam_path(@conn, :delete, history_exam), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New History exam", to: history_exam_path(@conn, :new) %></span>

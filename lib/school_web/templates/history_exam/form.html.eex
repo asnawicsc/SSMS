@@ -1,0 +1,95 @@
+<%= form_for @changeset, @action, fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= label f, :student_no, class: "control-label" %>
+    <%= number_input f, :student_no, class: "form-control" %>
+    <%= error_tag f, :student_no %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :student_name, class: "control-label" %>
+    <%= text_input f, :student_name, class: "form-control" %>
+    <%= error_tag f, :student_name %>
+  </div>
+
+    <div class="form-group">
+    <%= label f, :chinese_name, class: "control-label" %>
+    <%= text_input f, :chinese_name, class: "form-control" %>
+    <%= error_tag f, :chinese_name %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :subject_name, class: "control-label" %>
+    <%= text_input f, :subject_name, class: "form-control" %>
+    <%= error_tag f, :subject_name %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :subject_code, class: "control-label" %>
+    <%= text_input f, :subject_code, class: "form-control" %>
+    <%= error_tag f, :subject_code %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :subject_mark, class: "control-label" %>
+    <%= number_input f, :subject_mark, step: "any", class: "form-control" %>
+    <%= error_tag f, :subject_mark %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :exam_class_rank, class: "control-label" %>
+    <%= number_input f, :exam_class_rank, class: "form-control" %>
+    <%= error_tag f, :exam_class_rank %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :exam_standard_rank, class: "control-label" %>
+    <%= number_input f, :exam_standard_rank, class: "form-control" %>
+    <%= error_tag f, :exam_standard_rank %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :exam_name, class: "control-label" %>
+    <%= text_input f, :exam_name, class: "form-control" %>
+    <%= error_tag f, :exam_name %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :class_name, class: "control-label" %>
+    <%= text_input f, :class_name, class: "form-control" %>
+    <%= error_tag f, :class_name %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :semester_id, class: "control-label" %>
+    <%= number_input f, :semester_id, class: "form-control" %>
+    <%= error_tag f, :semester_id %>
+  </div>
+
+   <div class="form-group">
+    <%= label f, :year, class: "control-label" %>
+    <%= number_input f, :year, class: "form-control" %>
+    <%= error_tag f, :year %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :institution_id, class: "control-label" %>
+    <%= number_input f, :institution_id, class: "form-control" %>
+    <%= error_tag f, :institution_id %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :exam_grade, class: "control-label" %>
+    <%= text_input f, :exam_grade, class: "form-control" %>
+    <%= error_tag f, :exam_grade %>
+  </div>
+
+  <div class="form-group">
+    <%= submit "Submit", class: "btn btn-primary" %>
+  </div>
+<% end %>
