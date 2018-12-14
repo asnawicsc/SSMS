@@ -352,6 +352,14 @@
                             <em class="fas fa-file"></em>
                               <span data-localize="sidebar.nav.extra.EXTRA"><%= gettext "Report" %></span>
                            </a>
+                         </li>
+
+                           <li class=" ">
+                           <a href="/list_report_history" title="School Setup" >
+                            <em class="fas fa-file"></em>
+                              <span data-localize="sidebar.nav.extra.EXTRA"><%= gettext "History Report" %></span>
+                           </a>
+                         </li>
 
                     
                

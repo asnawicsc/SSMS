@@ -17,18 +17,20 @@
 <table class="table table-striped table-bordered table-hover">
         <thead>
 </thead>
-  <tbody>
+
 <%= for history_exam <- @a do %>
 <% require IEx %>
 <%  historys=history_exam|>elem(1) %>
+  <tbody>
 <tr>
       <td>
+            <% about= historys|>hd() %>
+     <table width="1742px;"><td rowspan="" ="7" class="card-header text-white bg-info">Name: <%= about.student_name %>&nbsp;&nbsp; &nbsp;  Student No: <%= about.student_no %>&nbsp;&nbsp; &nbsp;  Other Name: <%= about.chinese_name %> </td></table>
   <table class="table table-striped table-bordered table-hover">
+
             <thead>
     <tr>
-      <th>Student no</th>
-      <th>Student name</th>
-      <th>Other name</th>
+
       <th>Subject code</th>
       <th>Subject name</th>
       <th>Subject mark</th>
@@ -39,10 +41,7 @@
     <%= for history <- historys|>Enum.sort_by(fn x -> x.subject_code end) do %>
  <tbody>
     <tr>
-     
-      <td><%= history.student_no %></td>
-     <td><%= history.student_name %></td>
-     <td><%= history.chinese_name %></td>
+
      <td><%= history.subject_code %></td>
      <td><%= history.subject_name %></td>
      <td><%= history.subject_mark %></td>
