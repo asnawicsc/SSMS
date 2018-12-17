@@ -16,7 +16,7 @@
         <div class="card card-default d-none d-lg-block">
           <div class="card-body">
             <div class="table-responsive">
-              <table class="table">
+              <table class="table" class="datatable1">
                 <thead>
                   <tr>
                   <th>Name</th>

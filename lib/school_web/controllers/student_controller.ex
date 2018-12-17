@@ -7,8 +7,13 @@ defmodule SchoolWeb.StudentController do
 
   def index(conn, _params) do
     students =
-      Affairs.list_students()
-      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+      Repo.all(
+        from(
+          s in Student,
+          where: s.institution_id == ^conn.private.plug_session["institution_id"],
+          order_by: [asc: s.name]
+        )
+      )
 
     render(conn, "index.html", students: students)
   end
@@ -359,7 +364,9 @@ defmodule SchoolWeb.StudentController do
                     where:
                       s.id == ^student.student_id and
                         s.institution_id == ^conn.private.plug_session["institution_id"] and
-                        c.institution_id == ^conn.private.plug_session["institution_id"],
+                        c.institution_id == ^conn.private.plug_session["institution_id"] and
+                        cl.institute_id == ^conn.private.plug_session["institution_id"] and
+                        c.semester_id == ^conn.private.plug_session["semester_id"],
                     order_by: [asc: s.name],
                     select: %{
                       id: s.id,
@@ -389,7 +396,9 @@ defmodule SchoolWeb.StudentController do
               on: cl.id == c.class_id,
               where:
                 s.institution_id == ^conn.private.plug_session["institution_id"] and
-                  cl.institution_id == ^conn.private.plug_session["institution_id"],
+                  c.institute_id == ^conn.private.plug_session["institution_id"] and
+                  cl.institution_id == ^conn.private.plug_session["institution_id"] and
+                  c.semester_id == ^conn.private.plug_session["semester_id"],
               order_by: [asc: s.name],
               select: %{
                 id: s.id,
