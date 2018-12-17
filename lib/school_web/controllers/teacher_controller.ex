@@ -11,6 +11,7 @@ defmodule SchoolWeb.TeacherController do
     teacher =
       Affairs.list_teacher()
       |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+      |> Enum.filter(fn x -> x.is_delete != true end)
 
     render(conn, "index.html", teacher: teacher)
   end
@@ -338,6 +339,13 @@ defmodule SchoolWeb.TeacherController do
         code: code,
         institution_id: conn.private.plug_session["institution_id"]
       )
+
+    teacher_params =
+      if teacher_params["is_delete"] == "true" do
+        Map.put(teacher_params, "is_delete", true)
+      else
+        Map.put(teacher_params, "is_delete", false)
+      end
 
     case Affairs.update_teacher(teacher, teacher_params) do
       {:ok, teacher} ->

@@ -415,6 +415,14 @@ defmodule SchoolWeb.UserChannel do
     user = Repo.get(School.Settings.User, payload["user_id"])
 
     teacher = Repo.get_by(Teacher, code: code, institution_id: payload["institution_id"])
+
+    teacher =
+      if teacher.is_delete == nil do
+        teacher = Map.put(teacher, :is_delete, false)
+      else
+        teacher
+      end
+
     changeset = Affairs.change_teacher(teacher)
 
     conn = %{
@@ -428,6 +436,7 @@ defmodule SchoolWeb.UserChannel do
         code: code,
         changeset: changeset,
         conn: conn,
+        teacher: teacher,
         action: "/teacher/#{teacher.code}"
       )
 
@@ -1536,7 +1545,8 @@ defmodule SchoolWeb.UserChannel do
       Repo.all(
         from(
           s in School.Affairs.ExamMark,
-          where: s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
+          where:
+            s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
           select: %{
             class_id: s.class_id,
             subject_id: s.subject_id,

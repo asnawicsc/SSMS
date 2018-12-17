@@ -7,13 +7,8 @@ defmodule SchoolWeb.StudentController do
 
   def index(conn, _params) do
     students =
-      Repo.all(
-        from(
-          s in Student,
-          where: s.institution_id == ^conn.private.plug_session["institution_id"],
-          order_by: [asc: s.name]
-        )
-      )
+      Affairs.list_students()
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
 
     render(conn, "index.html", students: students)
   end
