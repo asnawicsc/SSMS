@@ -9,6 +9,7 @@
          <div class="card-body">
               <form  method="post" action="/update_period/<%= @period.id %>">
                  <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+                  <input type="hidden" name="class_id" value="<%= @class.id %>">
                  
                  <div class="form-group">
                   

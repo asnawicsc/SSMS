@@ -263,20 +263,21 @@
 			  	},
 			  	eventClick: function(calEvent, jsEvent, view) {
 
-			
+			var class_id = "<%= @conn.params["class_id"]%>"
 				    	swal({
 						    title: calEvent.title,
 						  	text: calEvent.description,
-						    type: "warning",
+						    type: "success",
 					showCancelButton: true, confirmButtonText: "Edit",
-						    cancelButtonText: "Dismiss",
+					 cancelButtonColor: "#ffffffff1",
+						    cancelButtonText: "Delete",
 						    closeOnConfirm: true,
 						    closeOnCancel: true
 						  }, function(isConfirm) {
 						    if (isConfirm) {
 						    window.location.href = "/timetable/edit_event/" + calEvent.period_id;
 						    } else {
-
+						    window.location.href = "/timetable/delete_event/" + calEvent.period_id + "/"+class_id;
 						    }})
 				  }
 			  });

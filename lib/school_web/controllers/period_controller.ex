@@ -243,20 +243,24 @@ defmodule SchoolWeb.PeriodController do
     # and then flag for update..
 
     b = 0
+    url = class_path(conn, :class_setting)
+
+    link = url <> "/#{params["class_id"]}/modify_timetable"
+
+    conn
+    |> put_flash(:info, "Period deleted successfully.")
 
     if b == 0 do
       case Affairs.update_period(period, period_params) do
         {:ok, period} ->
           conn
           |> put_flash(:info, "Period updated successfully.")
-          |> redirect(
-            to: timetable_path(conn, :teacher_timetable_list, Settings.current_user(conn).id)
-          )
+          |> redirect(external: link)
       end
     else
       conn
       |> put_flash(:info, "That slot already been taken,please refer to period table.")
-      |> redirect(to: period_path(conn, :index))
+      |> redirect(external: link)
     end
   end
 
@@ -323,21 +327,30 @@ defmodule SchoolWeb.PeriodController do
     sdate = Date.new(y, m, d) |> elem(1)
 
     [h, m, s] =
-      stime |> String.split(":") |> List.insert_at(2, "00")
+      stime
+      |> String.split(":")
+      |> List.insert_at(2, "00")
       |> Enum.map(fn x -> String.to_integer(x) end)
 
     stime = Time.new(h, m, s) |> elem(1)
 
-    NaiveDateTime.new(sdate, stime) |> elem(1) |> DateTime.from_naive!("Etc/UTC")
+    NaiveDateTime.new(sdate, stime)
+    |> elem(1)
+    |> DateTime.from_naive!("Etc/UTC")
     |> Timex.shift(hours: -8)
   end
 
-  def delete(conn, %{"id" => id}) do
+  def delete(conn, %{"id" => id, "class_id" => class_id}) do
     period = Affairs.get_period!(id)
+
     {:ok, _period} = Affairs.delete_period(period)
+
+    url = class_path(conn, :class_setting)
+
+    link = url <> "/#{class_id}/modify_timetable"
 
     conn
     |> put_flash(:info, "Period deleted successfully.")
-    |> redirect(to: period_path(conn, :index))
+    |> redirect(external: link)
   end
 end
