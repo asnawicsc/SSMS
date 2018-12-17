@@ -432,6 +432,12 @@ defmodule SchoolWeb.Router do
     post("/upload_history_absent", AbsentHistoryController, :upload_history_absent)
     post("/history_absent_class", AbsentHistoryController, :history_absent_class)
 
+    get(
+      "/generate_head_count_mark/subject_id/:subject_id/class_id/:class_id",
+      HeadCountController,
+      :generate_head_count_mark
+    )
+
     resources("/announcements", AnnouncementController)
     get("/announcements/:id/broadcast", AnnouncementController, :broadcast)
     get("/*path", PageController, :no_page_found)
