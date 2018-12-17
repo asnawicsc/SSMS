@@ -75,7 +75,17 @@
   <div class="col-lg-9">
   
       <div class="card mb-3 border-default"  data-step="2" data-intro="Click on the date or time block on the calendar.">
-         <div class="card-header text-white bg-primary">Timetable</div>
+         <div class="card-header text-white bg-primary">Timetable    </div>
+          <div class="ml-auto" style="margin-top: 10px; margin-right: 10px;" >  <label class="switch switch-sm">
+                                Delete Mode: &nbsp; <input type="checkbox" id="check_mode" name="check_mode" checked="true">
+
+
+                                 <span></span>
+                              </label>
+                          </div>
+
+                        
+                         
          <div class="card-body">
 			<div id='calendar'></div>
 
@@ -264,21 +274,85 @@
 			  	eventClick: function(calEvent, jsEvent, view) {
 
 			var class_id = "<%= @conn.params["class_id"]%>"
+
+			 var mode = $("input[name='check_mode']").val();
+
+			 $('#check_mode').click(function() {
+    $("#txtAge").toggle(this.checked);
+});
+
+	
+   
+if(document.getElementById('check_mode').checked) {
+
+	
+
+				    					    	swal({
+						    title: calEvent.title,
+						  	text: calEvent.description,
+						    type: "success",
+					showCancelButton: true, confirmButtonText: "Delete",
+					
+						    cancelButtonText: "Dismiss",
+						    closeOnConfirm: true,
+						    closeOnCancel: true
+
+						  }, function(isConfirm) {
+						    if (isConfirm) {
+						    	window.location.href = "/timetable/delete_event/" + calEvent.period_id+"/"+class_id;
+						    } 
+						    else
+						    {
+			
+						    }
+						 
+
+
+						  })
+
+
+
+
+} else {
+
+
+
+
+
+
+
+
+
+
+
 				    	swal({
 						    title: calEvent.title,
 						  	text: calEvent.description,
 						    type: "success",
 					showCancelButton: true, confirmButtonText: "Edit",
-					 cancelButtonColor: "#ffffffff1",
-						    cancelButtonText: "Delete",
+					
+						    cancelButtonText: "Dismiss",
 						    closeOnConfirm: true,
 						    closeOnCancel: true
+
 						  }, function(isConfirm) {
 						    if (isConfirm) {
 						    window.location.href = "/timetable/edit_event/" + calEvent.period_id;
-						    } else {
-						    window.location.href = "/timetable/delete_event/" + calEvent.period_id + "/"+class_id;
-						    }})
+						    } 
+						    else
+						    {
+			
+						    }
+						 
+
+
+						  })
+
+				    }
+					    	
+
+
+
 				  }
 			  });
 

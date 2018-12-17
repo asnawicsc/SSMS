@@ -1079,6 +1079,7 @@ $.extend( $.validator, {
 				return !!$( param, element.form ).length;
 			},
 			"function": function( param, element ) {
+				
 				return param( element );
 			}
 		},
