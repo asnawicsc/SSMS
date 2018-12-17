@@ -8,7 +8,7 @@
                <div class="col-12">
                   <!-- START card-->
                   <div class="card card-default">
-                     <div class="card-header">Exam Mark for <%= @subject.description %> (<%=@class.name %>)</div>
+                     <div class="card-header">Target Exam Mark for <%= @subject.description %> (<%=@class.name %>)</div>
                      <div class="card-body">
                         <!-- START table-responsive-->
                         <div class="table-responsive">
