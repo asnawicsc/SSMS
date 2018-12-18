@@ -454,59 +454,6 @@ defmodule SchoolWeb.UserChannel do
 
     changeset = Affairs.change_parent(parent)
 
-    student1 =
-      Repo.all(
-        from(
-          g in School.Affairs.Student,
-          left_join: s in School.Affairs.StudentClass,
-          on: g.id == s.sudent_id,
-          left_join: f in School.Affairs.Class,
-          on: f.id == s.class_id,
-          where:
-            g.ficno == ^icno and g.institution_id == ^payload["institution_id"] and
-              s.institute_id == ^payload["institution_id"] and
-              f.institution_id == ^payload["institution_id"] and
-              s.semester_id == ^payload["semester_id"],
-          select: %{id: g.id, name: g.name, chinese_name: g.chinese_name, class_name: f.name}
-        )
-      )
-
-    student2 =
-      Repo.all(
-        from(
-          g in School.Affairs.Student,
-          left_join: s in School.Affairs.StudentClass,
-          on: g.id == s.sudent_id,
-          left_join: f in School.Affairs.Class,
-          on: f.id == s.class_id,
-          where:
-            g.micno == ^icno and g.institution_id == ^payload["institution_id"] and
-              s.institute_id == ^payload["institution_id"] and
-              f.institution_id == ^payload["institution_id"] and
-              s.semester_id == ^payload["semester_id"],
-          select: %{id: g.id, name: g.name, chinese_name: g.chinese_name, class_name: f.name}
-        )
-      )
-
-    student3 =
-      Repo.all(
-        from(
-          g in School.Affairs.Student,
-          left_join: s in School.Affairs.StudentClass,
-          on: g.id == s.sudent_id,
-          left_join: f in School.Affairs.Class,
-          on: f.id == s.class_id,
-          where:
-            g.gicno == ^icno and g.institution_id == ^payload["institution_id"] and
-              s.institute_id == ^payload["institution_id"] and
-              f.institution_id == ^payload["institution_id"] and
-              s.semester_id == ^payload["semester_id"],
-          select: %{id: g.id, name: g.name, chinese_name: g.chinese_name, class_name: f.name}
-        )
-      )
-
-    student = student1 ++ student2 ++ student3
-
     conn = %{private: %{plug_session: %{"institution_id" => payload["institution_id"]}}}
 
     html =
@@ -516,7 +463,6 @@ defmodule SchoolWeb.UserChannel do
         icno: icno,
         changeset: changeset,
         conn: conn,
-        student: student,
         action: "/parent/#{parent.icno}"
       )
 
