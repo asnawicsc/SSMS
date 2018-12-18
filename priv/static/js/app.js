@@ -384,11 +384,7 @@ channel.on("show_student_details", payload => {
     $("input[name='_csrf_token']").val(csrf)
   }) 
 
-         $("div.parent_child").click(function(){
-    var icno = $(this).attr("id")
-    channel.push("inquire_parent_child_details", {user_id: window.currentUser, institution_id: window.currentInstitute,semester_id: window.currentSemester, icno: icno})
-  }) 
- 
+
 
      $("div.teacher_timetable").click(function(){
     var code = $(this).attr("id")
