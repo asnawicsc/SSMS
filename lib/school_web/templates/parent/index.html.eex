@@ -83,7 +83,8 @@
 <script type="text/javascript">
   $(window).ready(function(){
     var target = window.location.search.substring(1).split("=")[1]
-    $("div#"+target+".teacher").click()
+    $("div#"+target+".parent").click()
+     $("div#"+target+".parent_child").click()
 
      $('.table').DataTable();
   })
