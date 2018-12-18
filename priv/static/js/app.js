@@ -364,8 +364,17 @@ channel.on("show_student_details", payload => {
 
        $("div.parent").click(function(){
     var icno = $(this).attr("id")
-    channel.push("inquire_parent_details", {user_id: window.currentUser, institution_id: window.currentInstitute, icno: icno})
-  }) 
+    channel.push("inquire_parent_details", {user_id: window.currentUser, institution_id: window.currentInstitute,semester_id: window.currentSemester, icno: icno})
+  })
+
+
+     channel.on("show_parent_child_details", payload => {
+    $("div[aria-label='p_upload']").hide()
+    $("div[aria-label='p_table']").hide()
+    $("div[aria-label='parent_child_details']").html(payload.html)
+    var csrf = window.csrf
+    $("input[name='_csrf_token']").val(csrf)
+  })  
 
    channel.on("show_parent_details", payload => {
     $("div[aria-label='p_upload']").hide()
@@ -373,7 +382,13 @@ channel.on("show_student_details", payload => {
     $("div[aria-label='parent_details']").html(payload.html)
     var csrf = window.csrf
     $("input[name='_csrf_token']").val(csrf)
-  })  
+  }) 
+
+         $("div.parent_child").click(function(){
+    var icno = $(this).attr("id")
+    channel.push("inquire_parent_child_details", {user_id: window.currentUser, institution_id: window.currentInstitute,semester_id: window.currentSemester, icno: icno})
+  }) 
+ 
 
      $("div.teacher_timetable").click(function(){
     var code = $(this).attr("id")

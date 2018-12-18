@@ -123,8 +123,6 @@
     <%= error_tag f, :hphone %>
   </div>
 
-
-
 </div>
 
   <div class="form-group">
@@ -139,3 +137,5 @@
     </div>
   </div>
 </div>
+
+
