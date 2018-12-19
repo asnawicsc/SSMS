@@ -125,6 +125,8 @@ defmodule SchoolWeb.ParentController do
       Affairs.list_parent()
       |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
 
+    student = Repo.get_by(Student, student_no: params["student_no"])
+
     if parent == [] do
       conn
       |> put_flash(:info, "Please Insert Parent Information")
