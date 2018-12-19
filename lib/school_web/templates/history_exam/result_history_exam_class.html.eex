@@ -14,9 +14,7 @@
                       <div class="table-responsive">
 
 
-<table class="table">
-        <thead>
-</thead>
+<table class="table table-hover">
 
 <%= for history_exam <- @a do %>
 <% require IEx %>
@@ -25,8 +23,12 @@
 <tr>
       <td>
             <% about= historys|>hd() %>
-     <table width="1742px;"><td rowspan="" ="7" class="card-header text-white bg-info">Name: <%= about.student_name %>&nbsp;&nbsp; &nbsp;  Student No: <%= about.student_no %>&nbsp;&nbsp; &nbsp;  Other Name: <%= about.chinese_name %> </td></table>
-  <table class="table">
+
+           <div class="card-header text-white bg-info">Name: <%= about.student_name %>&nbsp;&nbsp; &nbsp;  Student No: <%= about.student_no %>&nbsp;&nbsp; &nbsp;  Other Name: <%= about.chinese_name %></div>
+                    <div class="card-body">
+                      <div class="table-responsive">       
+    
+  <table class="table table-hover">
 
             <thead>
     <tr>
@@ -49,6 +51,9 @@
   </tbody>
     <% end %>
     </table>
+  </div>
+</div>
+</td>
   </td>
 </tr>
 
