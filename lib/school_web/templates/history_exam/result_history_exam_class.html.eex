@@ -14,7 +14,7 @@
                       <div class="table-responsive">
 
 
-<table class="table table-striped table-bordered table-hover">
+<table class="table">
         <thead>
 </thead>
 
@@ -26,7 +26,7 @@
       <td>
             <% about= historys|>hd() %>
      <table width="1742px;"><td rowspan="" ="7" class="card-header text-white bg-info">Name: <%= about.student_name %>&nbsp;&nbsp; &nbsp;  Student No: <%= about.student_no %>&nbsp;&nbsp; &nbsp;  Other Name: <%= about.chinese_name %> </td></table>
-  <table class="table table-striped table-bordered table-hover">
+  <table class="table">
 
             <thead>
     <tr>
