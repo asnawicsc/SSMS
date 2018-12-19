@@ -12,12 +12,14 @@ defmodule SchoolWeb.AbsentHistoryController do
   def history_absent(conn, params) do
     year =
       Affairs.list_absent_history()
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
       |> Enum.map(fn x -> x.year end)
       |> Enum.uniq()
       |> Enum.filter(fn x -> x != nil end)
 
     class_name =
       Affairs.list_absent_history()
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
       |> Enum.map(fn x -> x.student_class end)
       |> Enum.uniq()
       |> Enum.filter(fn x -> x != nil end)

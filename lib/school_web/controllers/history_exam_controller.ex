@@ -157,18 +157,21 @@ defmodule SchoolWeb.HistoryExamController do
   def history_exam_result_class(conn, params) do
     year =
       Affairs.list_history_exam()
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
       |> Enum.map(fn x -> x.year end)
       |> Enum.uniq()
       |> Enum.filter(fn x -> x != nil end)
 
     exam_name =
       Affairs.list_history_exam()
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
       |> Enum.map(fn x -> x.exam_name end)
       |> Enum.uniq()
       |> Enum.filter(fn x -> x != nil end)
 
     class_name =
       Affairs.list_history_exam()
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
       |> Enum.map(fn x -> x.class_name end)
       |> Enum.uniq()
       |> Enum.filter(fn x -> x != nil end)
