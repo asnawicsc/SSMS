@@ -321,10 +321,7 @@ $(document).ready(function(){
      
   })
 
-   $("div.parentchild").click(function(){
-    var icno = $(this).attr("id")
-    channel.push("inquire_parent_child_details", {user_id: window.currentUser, institution_id: window.currentInstitute,semester_id: window.currentSemester, icno: icno})
-  }) 
+
   
 
 channel.on("show_student_details", payload => {
@@ -374,13 +371,7 @@ channel.on("show_student_details", payload => {
   })
 
 
-     channel.on("show_parent_child_details", payload => {
-    $("div[aria-label='p_upload']").hide()
-    $("div[aria-label='p_table']").hide()
-    $("div[aria-label='parent_child_details']").html(payload.html)
-    var csrf = window.csrf
-    $("input[name='_csrf_token']").val(csrf)
-  })  
+
 
    channel.on("show_parent_details", payload => {
     $("div[aria-label='p_upload']").hide()
