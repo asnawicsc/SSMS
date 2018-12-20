@@ -26,7 +26,7 @@
                             <tr>
                                 <th>Name</th>
                                 <th>IC</th>
-                                <th>Total Child</th>
+                      
                                 <th></th>
                             </tr>
                             </thead>
@@ -34,69 +34,11 @@
                              <%= for parent <- @parent|>Enum.filter(fn x -> x.name != nil end) do %>
 
 
-        <% {total}= if parent.icno != nil do
-          
-       student1 =
-      Repo.all(
-        from(
-          g in School.Affairs.Student,
-          left_join: s in School.Affairs.StudentClass,
-          on: g.id == s.sudent_id,
-          left_join: f in School.Affairs.Class,
-          on: f.id == s.class_id,
-          where:
-            g.ficno == ^parent.icno and g.institution_id == ^@conn.private.plug_session["institution_id"] and
-              s.institute_id == ^@conn.private.plug_session["institution_id"] and
-              f.institution_id == ^@conn.private.plug_session["institution_id"] and
-              s.semester_id == ^@conn.private.plug_session["semester_id"],
-          select: %{id: g.id, name: g.name, chinese_name: g.chinese_name, class_name: f.name}
-        )
-      )|>Enum.count()
-
-
-       student2 =
-      Repo.all(
-        from(
-          g in School.Affairs.Student,
-          left_join: s in School.Affairs.StudentClass,
-          on: g.id == s.sudent_id,
-          left_join: f in School.Affairs.Class,
-          on: f.id == s.class_id,
-          where:
-            g.micno == ^parent.icno and g.institution_id == ^@conn.private.plug_session["institution_id"] and
-              s.institute_id == ^@conn.private.plug_session["institution_id"] and
-              f.institution_id == ^@conn.private.plug_session["institution_id"] and
-              s.semester_id == ^@conn.private.plug_session["semester_id"],
-          select: %{id: g.id, name: g.name, chinese_name: g.chinese_name, class_name: f.name}
-        )
-      )|>Enum.count()
-
-       student3 =
-      Repo.all(
-        from(
-          g in School.Affairs.Student,
-          left_join: s in School.Affairs.StudentClass,
-          on: g.id == s.sudent_id,
-          left_join: f in School.Affairs.Class,
-          on: f.id == s.class_id,
-          where:
-            g.gicno == ^parent.icno and g.institution_id == ^@conn.private.plug_session["institution_id"] and
-              s.institute_id == ^@conn.private.plug_session["institution_id"] and
-              f.institution_id == ^@conn.private.plug_session["institution_id"] and
-              s.semester_id == ^@conn.private.plug_session["semester_id"],
-          select: %{id: g.id, name: g.name, chinese_name: g.chinese_name, class_name: f.name}
-        )
-      )|>Enum.count()
-
-      {student1+ student2+ student3}
-
-    else
-      {0}
-      end %>
+        
                               <tr>
                                  <td>   <div id="<%= parent.icno %>" class="btn btn-link parent"><%= parent.name %></div> </td>
                                   <td>   <div id="<%= parent.icno %>" class="btn btn-link parent"><%= parent.icno %></div> </td>
-                                   <td>  <%= total %> </td>
+                                   
                                    <td>   <div id="<%= parent.icno %>" class="btn btn-success parentchild">Child Info</div> </td>
                               </tr>
                             <% end %>
