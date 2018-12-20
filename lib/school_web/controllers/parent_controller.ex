@@ -121,8 +121,6 @@ defmodule SchoolWeb.ParentController do
   end
 
   def show_guardian(conn, params) do
-    IEx.pry()
-
     parent =
       Affairs.list_parent()
       |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
