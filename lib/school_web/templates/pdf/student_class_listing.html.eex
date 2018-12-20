@@ -4,7 +4,7 @@
 
 
 
-<table class="table" border="1" style="border-collapse: collapse; margin-right: 10px; margin-left: 10px;"  align="center" >
+<table class="table" border="1" style="border-collapse: collapse; margin-right: 10px; margin-left: 10px;"  align="center"  width="100%" >
   <thead>
     <tr align="center">
       <th><%= gettext "Bil." %></th>
