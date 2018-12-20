@@ -522,6 +522,14 @@ defmodule SchoolWeb.StudentController do
 
     contents = tl(data) |> Enum.reject(fn x -> x == [""] end) |> Enum.uniq() |> Enum.sort()
 
+    Task.start_link(__MODULE__, :loop, [conn, contents, headers, batch])
+
+    conn
+    |> put_flash(:info, "Student Class created successfully.")
+    |> redirect(to: student_path(conn, :index))
+  end
+
+  def loop(conn, contents, headers, batch) do
     result =
       for content <- contents do
         h = headers |> Enum.map(fn x -> String.downcase(x) end)
@@ -610,10 +618,6 @@ defmodule SchoolWeb.StudentController do
           end
         end
       end
-
-    conn
-    |> put_flash(:info, "Student Class created successfully.")
-    |> redirect(to: student_path(conn, :index))
   end
 
   def pre_upload_students(conn, params) do

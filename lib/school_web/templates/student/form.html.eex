@@ -12,7 +12,7 @@
 <% transport = parameters.transport |> String.split(",") %>
 <% user = Repo.get(School.Settings.User,@conn.private.plug_session["user_id"]) %>
 <% Gettext.put_locale(SchoolWeb.Gettext, user.default_lang) %>
-<a href="/student_lists/<%= @conn.private.plug_session["user_id"] %>" ]"=""><button class="mb-1 btn-sm btn btn-outline-primary" type="button"><i class="fas fa-chevron-left"></i> Back</button></a>
+<a href="/students""=""><button class="mb-1 btn-sm btn btn-outline-primary" type="button"><i class="fas fa-chevron-left"></i> Back</button></a>
 <div class="row">
                <div class="col-lg-4">
                   <div class="card card-default d-none d-lg-block">
