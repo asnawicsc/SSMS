@@ -1478,6 +1478,12 @@ defmodule SchoolWeb.PdfController do
     institution =
       Repo.get_by(School.Settings.Institution, id: conn.private.plug_session["institution_id"])
 
+    semester =
+      Repo.get_by(School.Affairs.Semester,
+        id: semester_id,
+        institution_id: conn.private.plug_session["institution_id"]
+      )
+
     class =
       Repo.get_by(School.Affairs.Class, %{
         id: class_id,
@@ -1490,6 +1496,7 @@ defmodule SchoolWeb.PdfController do
         "student_class_listing.html",
         all: all,
         class: class,
+        semester: semester,
         institution: institution
       )
 
