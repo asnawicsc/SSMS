@@ -321,6 +321,12 @@ $(document).ready(function(){
      
   })
 
+   $("div.parentchild").click(function(){
+    var icno = $(this).attr("id")
+    channel.push("inquire_parent_child_details", {user_id: window.currentUser, institution_id: window.currentInstitute,semester_id: window.currentSemester, icno: icno})
+  }) 
+  
+
 channel.on("show_student_details", payload => {
     $("div[aria-label='student_upload']").hide()
     $("div[aria-label='student_table']").hide()

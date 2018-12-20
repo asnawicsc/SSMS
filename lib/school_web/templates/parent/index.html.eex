@@ -84,6 +84,7 @@
   $(window).ready(function(){
     var target = window.location.search.substring(1).split("=")[1]
     $("div#"+target+".parent").click()
+      $("div#"+target+".parentchild").click()
   
 
      $('.table').DataTable();
@@ -91,10 +92,6 @@
 
 
   })
- $("div.parentchild").click(function(){
-    var icno = $(this).attr("id")
-    channel.push("inquire_parent_child_details", {user_id: window.currentUser, institution_id: window.currentInstitute,semester_id: window.currentSemester, icno: icno})
-  }) 
-  
+
  
 </script>
