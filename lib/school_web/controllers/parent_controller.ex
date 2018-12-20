@@ -121,13 +121,15 @@ defmodule SchoolWeb.ParentController do
   end
 
   def show_guardian(conn, params) do
+    IEx.pry()
+
     parent =
       Affairs.list_parent()
       |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
 
-    student = Repo.get_by(Student, student_no: params["student_no"])
-
     if parent == [] do
+      student = Repo.get_by(Student, student_no: params["student_no"])
+
       conn
       |> put_flash(:info, "Please Insert Parent Information")
       |> redirect(to: class_path(conn, :show_student_info, student.id))

@@ -279,7 +279,7 @@ defmodule SchoolWeb.Router do
     get("/all_report_card", ExamController, :all_report_card)
     post("/all_report_card", ExamController, :all_report_card)
     get("/show_guardian/", ParentController, :guardian_listing)
-    get("/show_guardian/:id", ParentController, :show_guardian)
+    get("/show_guardian/:id/:student_no", ParentController, :show_guardian)
     resources("/exam_mark", ExamMarkController)
     get("/generate_mark_analyse/:id", ExamController, :generate_mark_analyse)
     post("/mark_analyse", ExamController, :mark_analyse)
