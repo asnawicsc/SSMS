@@ -95,6 +95,11 @@
 
      $('.table').DataTable();
 
+
+  
+
+  })
+
  $("div.parentchild").click(function(){
     var icno = $(this).attr("id")
     channel.push("inquire_parent_child_details", {user_id: window.currentUser, institution_id: window.currentInstitute,semester_id: window.currentSemester, icno: icno})
@@ -108,11 +113,6 @@
     var csrf = window.csrf
     $("input[name='_csrf_token']").val(csrf)
   })  
-  
-
-  })
-
-
 
  
 </script>
