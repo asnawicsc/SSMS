@@ -1445,6 +1445,7 @@ defmodule SchoolWeb.PdfController do
 
   def student_class_listing(conn, params) do
     class_id = params["class_id"]
+    semester_id = params["semester_id"]
 
     all =
       Repo.all(
@@ -1457,7 +1458,8 @@ defmodule SchoolWeb.PdfController do
           where:
             s.class_id == ^class_id and
               g.institution_id == ^conn.private.plug_session["institution_id"] and
-              r.institution_id == ^conn.private.plug_session["institution_id"],
+              r.institution_id == ^conn.private.plug_session["institution_id"] and
+              s.semester_id == ^semester_id,
           select: %{
             id: s.sudent_id,
             chinese_name: r.chinese_name,

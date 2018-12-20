@@ -1105,7 +1105,8 @@ defmodule SchoolWeb.UserChannel do
           "student_list.html",
           all: all,
           csrf: payload["csrf"],
-          class_id: class_id
+          class_id: class_id,
+          semester_id: semester_id
         )
       else
         "No Student In This Class"
