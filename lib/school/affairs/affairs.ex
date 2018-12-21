@@ -4759,7 +4759,6 @@ defmodule School.Affairs do
     Announcement.changeset(announcement, %{})
   end
 
-
   alias School.Affairs.Ediscipline
 
   @doc """
@@ -4809,7 +4808,6 @@ defmodule School.Affairs do
     |> Repo.insert()
   end
 
-
   @doc """
 
   Updates a ediscipline.
@@ -4857,7 +4855,6 @@ defmodule School.Affairs do
   def change_ediscipline(%Ediscipline{} = ediscipline) do
     Ediscipline.changeset(ediscipline, %{})
   end
-
 
   alias School.Affairs.HistoryExam
 
@@ -4908,10 +4905,8 @@ defmodule School.Affairs do
     |> Repo.insert()
   end
 
-
-  
-@doc """
-Updates a history_exam.
+  @doc """
+  Updates a history_exam.
   ## Examples
 
       iex> update_history_exam(history_exam, %{field: new_value})
@@ -4927,7 +4922,7 @@ Updates a history_exam.
     |> Repo.update()
   end
 
-@doc """
+  @doc """
   Deletes a HistoryExam.
 
   ## Examples
@@ -5050,6 +5045,5 @@ Updates a history_exam.
   """
   def change_absent_history(%AbsentHistory{} = absent_history) do
     AbsentHistory.changeset(absent_history, %{})
->>>>>>> b616d603e695fff107fa1ba6977603dfa7737736
   end
 end
