@@ -21,7 +21,7 @@ defmodule SchoolWeb.ApiController do
     #  }&chatfuel_block_name=#{chatfuel_block_name}&title=#{title}&message=#{message}"
 
     uri =
-      "https://api.chatfuel.com/bots/#{bot_id}/users/2254055204618063/send?chatfuel_token=#{ct}&chatfuel_message_tag=#{
+      "https://api.chatfuel.com/bots/#{bot_id}/users/#{ed_details.psid}/send?chatfuel_token=#{ct}&chatfuel_message_tag=#{
         chatfuel_message_tag
       }&chatfuel_block_name=#{chatfuel_block_name}&title=#{title}&message=#{message}"
 
