@@ -169,6 +169,8 @@ defmodule SchoolWeb.Router do
 
     post("/generate_holiday", HolidayController, :pre_generate_holiday)
 
+    post("/generate_exam_record", HistoryExamController, :pre_generate_exam_record)
+
     post("/pre_generate_student_class", StudentController, :pre_generate_student_class)
 
     post("/upload_teachers_final", TeacherController, :upload_teachers)
@@ -181,6 +183,8 @@ defmodule SchoolWeb.Router do
     post("/upload_generate_student_class", StudentController, :upload_generate_student_class)
 
     post("/upload_semester_final", SemesterController, :upload_semester)
+
+    post("/upload_history_exam_record", HistoryExamController, :upload_exam_record)
 
     post("/upload_absent_final", AbsentController, :upload_absent)
 
@@ -229,6 +233,7 @@ defmodule SchoolWeb.Router do
     get("/timetable/teacher/:user_id", TimetableController, :teacher_timetable)
     get("/timetable/class/:class_id", TimetableController, :class_timetable)
     get("/timetable/edit_event/:period_id", PeriodController, :edit_event)
+    get("/timetable/delete_event/:id/:class_id", PeriodController, :delete)
     get("/generated_timetable/:id", TimetableController, :generated_timetable)
     resources("/period", PeriodController)
     get("/create_period/:subject_id/:class_id", PeriodController, :get_create_period)
@@ -275,7 +280,7 @@ defmodule SchoolWeb.Router do
     get("/all_report_card", ExamController, :all_report_card)
     post("/all_report_card", ExamController, :all_report_card)
     get("/show_guardian/", ParentController, :guardian_listing)
-    get("/show_guardian/:id", ParentController, :show_guardian)
+    get("/show_guardian/:id/:student_no", ParentController, :show_guardian)
     resources("/exam_mark", ExamMarkController)
     get("/generate_mark_analyse/:id", ExamController, :generate_mark_analyse)
     post("/mark_analyse", ExamController, :mark_analyse)
@@ -410,6 +415,30 @@ defmodule SchoolWeb.Router do
     get("/default_rank", ListRankController, :default_rank)
     post("/default_standard", LevelController, :default_standard)
     get("/assign_lib_access", UserController, :assign_lib_access)
+    resources("/history_exam", HistoryExamController)
+    get("/exam_history_checklist", HistoryExamController, :exam_history_checklist)
+    get("/history_exam_result_class", HistoryExamController, :history_exam_result_class)
+    post("/history_exam_report_class", HistoryExamController, :history_exam_report_class)
+    resources("/absent_history", AbsentHistoryController)
+    get("/history_absent", AbsentHistoryController, :history_absent)
+
+    get(
+      "/generate_history_exam/:exam_id/semester/:semester_id",
+      HistoryExamController,
+      :generate_history_exam
+    )
+
+    post("/pre_upload_absent_history", AbsentHistoryController, :pre_upload_absent_history)
+
+    post("/upload_history_absent", AbsentHistoryController, :upload_history_absent)
+    post("/history_absent_class", AbsentHistoryController, :history_absent_class)
+
+    get(
+      "/generate_head_count_mark/subject_id/:subject_id/class_id/:class_id",
+      HeadCountController,
+      :generate_head_count_mark
+    )
+
     resources("/announcements", AnnouncementController)
     get("/announcements/:id/broadcast", AnnouncementController, :broadcast)
     resources("/edisciplines", EdisciplineController)

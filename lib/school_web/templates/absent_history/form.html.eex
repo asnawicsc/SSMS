@@ -1,0 +1,53 @@
+<%= form_for @changeset, @action, fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= label f, :student_no, class: "control-label" %>
+    <%= number_input f, :student_no, class: "form-control" %>
+    <%= error_tag f, :student_no %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :student_name, class: "control-label" %>
+    <%= text_input f, :student_name, class: "form-control" %>
+    <%= error_tag f, :student_name %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :chinese_name, class: "control-label" %>
+    <%= text_input f, :chinese_name, class: "form-control" %>
+    <%= error_tag f, :chinese_name %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :student_class, class: "control-label" %>
+    <%= text_input f, :student_class, class: "form-control" %>
+    <%= error_tag f, :student_class %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :absent_date, class: "control-label" %>
+    <%= text_input f, :absent_date, class: "form-control" %>
+    <%= error_tag f, :absent_date %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :absent_type, class: "control-label" %>
+    <%= text_input f, :absent_type, class: "form-control" %>
+    <%= error_tag f, :absent_type %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :year, class: "control-label" %>
+    <%= number_input f, :year, class: "form-control" %>
+    <%= error_tag f, :year %>
+  </div>
+
+  <div class="form-group">
+    <%= submit "Submit", class: "btn btn-primary" %>
+  </div>
+<% end %>

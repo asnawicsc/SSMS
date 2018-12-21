@@ -26,13 +26,20 @@
                             <tr>
                                 <th>Name</th>
                                 <th>IC</th>
+                      
+                                <th></th>
                             </tr>
                             </thead>
                             <tbody>
                              <%= for parent <- @parent|>Enum.filter(fn x -> x.name != nil end) do %>
+
+
+        
                               <tr>
                                  <td>   <div id="<%= parent.icno %>" class="btn btn-link parent"><%= parent.name %></div> </td>
                                   <td>   <div id="<%= parent.icno %>" class="btn btn-link parent"><%= parent.icno %></div> </td>
+                                   
+                                   <td>   <div id="<%= parent.icno %>" class="btn btn-success parentchild">Child Info</div> </td>
                               </tr>
                             <% end %>
                           </tbody>
@@ -70,6 +77,8 @@
                 </div>
                 <div class="col-lg-12" aria-label="parent_details">
                 </div>
+                 <div class="col-lg-12" aria-label="parent_child_details">
+                </div>
 
   
       </div>
@@ -79,8 +88,31 @@
 <script type="text/javascript">
   $(window).ready(function(){
     var target = window.location.search.substring(1).split("=")[1]
-    $("div#"+target+".teacher").click()
+   
+    $("div#"+target+".parent").click()
+   
+  
 
      $('.table').DataTable();
+
+
+  
+
   })
+
+ $("div.parentchild").click(function(){
+    var icno = $(this).attr("id")
+    channel.push("inquire_parent_child_details", {user_id: window.currentUser, institution_id: window.currentInstitute,semester_id: window.currentSemester, icno: icno})
+  }) 
+
+
+       channel.on("show_parent_child_details", payload => {
+    $("div[aria-label='p_upload']").hide()
+    $("div[aria-label='p_table']").hide()
+    $("div[aria-label='parent_child_details']").html(payload.html)
+    var csrf = window.csrf
+    $("input[name='_csrf_token']").val(csrf)
+  })  
+
+ 
 </script>

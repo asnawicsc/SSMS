@@ -1,0 +1,5 @@
+<h2>Edit Absent history</h2>
+
+<%= render "form.html", Map.put(assigns, :action, absent_history_path(@conn, :update, @absent_history)) %>
+
+<span><%= link "Back", to: absent_history_path(@conn, :index) %></span>

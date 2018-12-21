@@ -12,7 +12,7 @@
 <% transport = parameters.transport |> String.split(",") %>
 <% user = Repo.get(School.Settings.User,@conn.private.plug_session["user_id"]) %>
 <% Gettext.put_locale(SchoolWeb.Gettext, user.default_lang) %>
-<a href="/student_lists/<%= @conn.private.plug_session["user_id"] %>" ]"=""><button class="mb-1 btn-sm btn btn-outline-primary" type="button"><i class="fas fa-chevron-left"></i> Back</button></a>
+<a href="/students""=""><button class="mb-1 btn-sm btn btn-outline-primary" type="button"><i class="fas fa-chevron-left"></i> Back</button></a>
 <div class="row">
                <div class="col-lg-4">
                   <div class="card card-default d-none d-lg-block">
@@ -23,14 +23,14 @@
                         <div class="media">
                            <div class="media-body py-2">
                               <div class="text-bold">Father
-                                <div class="text-sm text-muted"><a target="_blank" href="/show_guardian/<%= @student.ficno %>">Click here to show father's information</a></div>
+                                <div class="text-sm text-muted"><a target="_blank" href="/show_guardian/<%= @student.ficno %>/<%= @student.student_no %>">Click here to show father's information</a></div>
                               </div>
                            </div>
                         </div>
                         <div class="media">
                            <div class="media-body py-2">
                               <div class="text-bold">Mother
-                                <div class="text-sm text-muted"><a target="_blank" href="/show_guardian/<%= @student.micno %>">Click here to show mother's information</a></div>
+                                <div class="text-sm text-muted"><a target="_blank" href="/show_guardian/<%= @student.micno %>/<%= @student.student_no %>">Click here to show mother's information</a></div>
                                  
                               </div>
                            </div>
@@ -38,7 +38,7 @@
                         <div class="media">
                            <div class="media-body py-2">
                               <div class="text-bold">Guardian
-                                 <div class="text-sm text-muted"><a target="_blank" href="/show_guardian/<%= @student.gicno %>">Click here to show guardian's information</a></div>
+                                 <div class="text-sm text-muted"><a target="_blank" href="/show_guardian/<%= @student.gicno %>/<%= @student.student_no %>">Click here to show guardian's information</a></div>
                               </div>
                            </div>
                         </div>
@@ -186,6 +186,24 @@
                                     <label class="text-bold col-xl-2 col-md-3 col-4 col-form-label text-right" for="inputContact8">Position in House</label>
                                     <div class="col-xl-10 col-md-9 col-8">
                                        <input class="form-control" id="inputContact8" name="position_in_house" type="text" value="<%= @student.position_in_house %>">
+                                    </div>
+                                 </div>
+                                   <div class="form-group row">
+                                    <label class="text-bold col-xl-2 col-md-3 col-4 col-form-label text-right" for="inputContact8">Father IC:</label>
+                                    <div class="col-xl-10 col-md-9 col-8">
+                                       <input class="form-control" id="inputContact8" name="ficno" type="text" value="<%= @student.ficno %>">
+                                    </div>
+                                 </div>
+                                   <div class="form-group row">
+                                    <label class="text-bold col-xl-2 col-md-3 col-4 col-form-label text-right" for="inputContact8">Mother IC:</label>
+                                    <div class="col-xl-10 col-md-9 col-8">
+                                       <input class="form-control" id="inputContact8" name="micno" type="text" value="<%= @student.micno %>">
+                                    </div>
+                                 </div>
+                                   <div class="form-group row">
+                                    <label class="text-bold col-xl-2 col-md-3 col-4 col-form-label text-right" for="inputContact8">Guardian IC:</label>
+                                    <div class="col-xl-10 col-md-9 col-8">
+                                       <input class="form-control" id="inputContact8" name="gicno" type="text" value="<%= @student.gicno %>">
                                     </div>
                                  </div>
                                  

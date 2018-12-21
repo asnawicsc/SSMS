@@ -1,0 +1,137 @@
+  <a href="/parent"><button class="mb-1 btn-sm btn btn-outline-primary" type="button"><i class="fas fa-chevron-left"></i> Back</button></a>
+<div class="row">
+  <div class="col-lg-12" aria-label="p_table">
+    <div class="card card-default d-none d-lg-block">      
+       <div class="card-header text-white bg-primary">Parent Info</div>
+      <div class="card-body">
+
+                <div class="card-body ">
+  
+                  <div class="row">
+                    <div class="form-group col-md-2"">
+                              <label>IC NO/Passport</label>
+                              <input class="form-control" type="text_input" disabled="disabled" value="<%= @parent.icno %>" placeholder="IC No">
+                           </div> 
+
+                             <div class="form-group col-md-2"">
+                              <label>Name</label>
+                              <input class="form-control" type="text_input" disabled="disabled" value="<%= @parent.name %>" placeholder="Name">
+                           </div> 
+                             <div class="form-group col-md-2"">
+                              <label>Other Name</label>
+                              <input class="form-control" type="text_input" disabled="disabled" value="<%= @parent.cname %>" placeholder="Other Name">
+                           </div> 
+                             <div class="form-group col-md-2"">
+                              <label>Email address</label>
+                              <input class="form-control" type="text_input" disabled="disabled" value="<%= @parent.email %>" placeholder="Enter email">
+                           </div> 
+                            <div class="form-group col-md-2"">
+                              <label>Race</label>
+                              <input class="form-control" type="text_input" disabled="disabled" value="<%= @parent.race %>" placeholder="Race">
+                           </div> 
+                            <div class="form-group col-md-2"">
+                              <label>Religion</label>
+                              <input class="form-control" type="text_input" disabled="disabled" value="<%= @parent.religion %>" placeholder="Religion">
+                           </div> 
+                    </div>
+
+                                 <div class="row">
+                   <div class="form-group col-md-2"">
+                              <label>Nationality</label>
+                              <input class="form-control" type="text_input" disabled="disabled" value="<%= @parent.nation %>" placeholder="Nationality">
+                           </div> 
+
+                             <div class="form-group col-md-2"">
+                              <label>County</label>
+                              <input class="form-control" type="text_input" disabled="disabled" value="<%= @parent.country %>" placeholder="Country">
+                           </div> 
+                             <div class="form-group col-md-2"">
+                              <label>Occupation</label>
+                              <input class="form-control" type="text_input" disabled="disabled" value="<%= @parent.occup %>" placeholder="Occupation">
+                           </div> 
+                             <div class="form-group col-md-2"">
+                              <label>Address 1</label>
+                              <input class="form-control" type="text_input" disabled="disabled" value="<%= @parent.addr1 %>" placeholder="Address">
+                           </div> 
+                            <div class="form-group col-md-2"">
+                              <label>Address 2</label>
+                              <input class="form-control" type="text_input" disabled="disabled" value="<%= @parent.addr2 %>" placeholder="Address">
+                           </div> 
+                            <div class="form-group col-md-2"">
+                              <label>Address 3</label>
+                              <input class="form-control" type="text_input" disabled="disabled" value="<%= @parent.addr3 %>" placeholder="Address">
+                           </div> 
+                    </div>
+
+
+             <div class="row">
+                   <div class="form-group col-md-2"">
+                              <label>Poscode</label>
+                              <input class="form-control" type="text_input" disabled="disabled" value="<%= @parent.poscod %>" placeholder="Poscode">
+                           </div> 
+
+                             <div class="form-group col-md-2"">
+                              <label>District</label>
+                              <input class="form-control" type="text_input" disabled="disabled" value="<%= @parent.district %>" placeholder="District">
+                           </div> 
+                             <div class="form-group col-md-2"">
+                              <label>State</label>
+                              <input class="form-control" type="text_input" disabled="disabled" value="<%= @parent.state %>" placeholder="State">
+                           </div> 
+                             <div class="form-group col-md-2"">
+                              <label>Home Phone No</label>
+                              <input class="form-control" type="text_input" disabled="disabled" value="<%= @parent.htel %>" placeholder="Home Phone No">
+                           </div> 
+                            <div class="form-group col-md-2"">
+                              <label>Office No</label>
+                              <input class="form-control" type="text_input" disabled="disabled" value="<%= @parent.otel %>" placeholder="Office No">
+                           </div> 
+                            <div class="form-group col-md-2"">
+                              <label>H/P No</label>
+                              <input class="form-control" type="text_input" disabled="disabled" value="<%= @parent.hphone %>" placeholder="H/P No">
+                           </div> 
+                    </div>
+
+
+
+
+                  
+                </div>
+          </div>
+              </div>
+            </div>
+        
+</div>
+
+
+
+ <div class="row">
+          
+                <div class="col-lg-12" >
+                  <div class="card card-default d-none d-lg-block">
+                       <div class="card-header text-white bg-success">Child Info</div>
+                    <div class="card-body">
+<table class="table" id="datatable1">
+  <thead>
+    <tr>
+       <th>Name</th>
+      <th>Current Class</th>
+    </tr>
+  </thead>
+  <tbody>
+ <%= for stu <- @student do %>
+
+    <tr>
+      <td><%= stu.name %> <%= stu.chinese_name %></td>
+      <td> <%= stu.class_name %></td>
+
+      
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+</div>
+</div>
+</div>
+</div>

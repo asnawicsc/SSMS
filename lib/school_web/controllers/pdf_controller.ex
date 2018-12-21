@@ -1445,6 +1445,7 @@ defmodule SchoolWeb.PdfController do
 
   def student_class_listing(conn, params) do
     class_id = params["class_id"]
+    semester_id = params["semester_id"]
 
     all =
       Repo.all(
@@ -1457,7 +1458,8 @@ defmodule SchoolWeb.PdfController do
           where:
             s.class_id == ^class_id and
               g.institution_id == ^conn.private.plug_session["institution_id"] and
-              r.institution_id == ^conn.private.plug_session["institution_id"],
+              r.institution_id == ^conn.private.plug_session["institution_id"] and
+              s.semester_id == ^semester_id,
           select: %{
             id: s.sudent_id,
             chinese_name: r.chinese_name,
@@ -1471,10 +1473,18 @@ defmodule SchoolWeb.PdfController do
           }
         )
       )
+      |> Enum.sort_by(fn x -> x.sex end)
+      |> Enum.reverse()
       |> Enum.with_index()
 
     institution =
       Repo.get_by(School.Settings.Institution, id: conn.private.plug_session["institution_id"])
+
+    semester =
+      Repo.get_by(School.Affairs.Semester,
+        id: semester_id,
+        institution_id: conn.private.plug_session["institution_id"]
+      )
 
     class =
       Repo.get_by(School.Affairs.Class, %{
@@ -1488,6 +1498,7 @@ defmodule SchoolWeb.PdfController do
         "student_class_listing.html",
         all: all,
         class: class,
+        semester: semester,
         institution: institution
       )
 

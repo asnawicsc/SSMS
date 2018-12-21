@@ -215,6 +215,41 @@
             <%= error_tag f, :email %>
           </div>
           
+       
+
+          <div  class="form-group col-md-2" style="margin-top: 30px;">
+            <%= label f, (gettext "is_delete?") %>
+
+
+
+              <%=  checkbox f, :is_delete, checked: @teacher.is_delete %>
+
+           <%= error_tag f, :is_delete %>
+          </div>
+
+
+          <div class="form-group col-md-2">
+            <%= label f, (gettext "Tranfer In Date"),  class: "control-label" %>
+            <%= text_input f, :tranfer_in, class: "form-control" %>
+            <%= error_tag f, :tranfer_in %>
+          </div>
+          
+       
+
+          <div class="form-group col-md-2">
+            <%= label f, (gettext "Tranfer Out Date"),  class: "control-label" %>
+            <%= text_input f, :tranfer_out, class: "form-control" %>
+            <%= error_tag f, :tranfer_out %>
+          </div>
+          
+       
+
+          <div class="form-group col-md-2">
+            <%= label f, (gettext "Tranfer Reason"),  class: "control-label" %>
+            <%= text_input f, :reason, class: "form-control" %>
+            <%= error_tag f, :reason %>
+          </div>
+          
         </div>
 
 
@@ -223,7 +258,7 @@
             <%= submit "Submit", class: "mb-1 btn btn-sm btn-primary" %>
             <%= if user.role == "Support" or user.role == "Admin" do %>
 
-        <button class="mb-1 btn-sm btn btn-outline-primary teacher_back" type="button"><i class="fas fa-chevron-left"></i> Back</button>
+           <a href="/teacher"><button class="mb-1 btn-sm btn btn-outline-primary" type="button"><i class="fas fa-chevron-left"></i> Back</button></a>
 
             <% end %>
             <%= if user.role == "Teacher" do %>

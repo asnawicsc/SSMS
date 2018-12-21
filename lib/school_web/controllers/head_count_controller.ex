@@ -6,11 +6,15 @@ defmodule SchoolWeb.HeadCountController do
   alias School.Affairs.HeadCount
 
   def index(conn, _params) do
+    subject_teach_class =
+      Affairs.list_subject_teach_class()
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
     head_counts = Affairs.list_head_counts()
-    render(conn, "index.html", head_counts: head_counts)
+    render(conn, "index.html", subject_teach_class: subject_teach_class)
   end
 
-   def generate_head_count(conn, %{"id" => id}) do
+  def generate_head_count(conn, %{"id" => id}) do
     all =
       Repo.all(
         from(
@@ -28,21 +32,91 @@ defmodule SchoolWeb.HeadCountController do
       |> Enum.uniq()
       |> Enum.filter(fn x -> x.t_name != "Rest" end)
 
-
-
     render(conn, "generate_head_count.html", all: all, id: id)
+  end
+
+  def generate_head_count_mark(conn, params) do
+    head_count_mark =
+      Repo.all(
+        from(
+          e in School.Affairs.HeadCount,
+          where: e.class_id == ^params["class_id"] and e.subject_id == ^params["subject_id"],
+          select: %{
+            class_id: e.class_id,
+            subject_id: e.subject_id,
+            student_id: e.student_id,
+            mark: e.targer_mark
+          }
+        )
+      )
+
+    students =
+      Repo.all(
+        from(
+          sc in StudentClass,
+          left_join: s in Student,
+          on: sc.sudent_id == s.id,
+          left_join: c in Class,
+          on: sc.class_id == c.id,
+          where:
+            sc.institute_id == ^conn.private.plug_session["institution_id"] and
+              s.institution_id == ^conn.private.plug_session["institution_id"] and
+              sc.semester_id == ^conn.private.plug_session["semester_id"] and
+              c.institution_id == ^conn.private.plug_session["institution_id"] and
+              sc.class_id == ^params["class_id"],
+          select: %{id: s.id, student_name: s.name}
+        )
+      )
+
+    if students != [] do
+      class =
+        Repo.get_by(
+          Class,
+          id: params["class_id"],
+          institution_id: conn.private.plug_session["institution_id"]
+        )
+
+      subject =
+        Repo.get_by(
+          Subject,
+          id: params["subject_id"],
+          institution_id: conn.private.plug_session["institution_id"]
+        )
+
+      if head_count_mark == [] do
+        render(
+          conn,
+          "head_count_create.html",
+          student: students,
+          class: class,
+          subject: subject
+        )
+      else
+        render(
+          conn
+          |> put_flash(:info, "Exam  target mark already filled, please edit existing mark."),
+          "edit_head_count.html",
+          all: head_count_mark,
+          class: class,
+          subject: subject
+        )
+      end
+    else
+      conn
+      |> put_flash(:info, "No Student In The class Please Enroll Student")
+      |> redirect(to: head_count_path(conn, :index))
+    end
   end
 
   def head_count_create(conn, params) do
     class_id = params["class_id"]
     subject_id = params["subject"]
-  
 
     all =
       Repo.all(
         from(
           s in School.Affairs.HeadCount,
-          where: s.class_id == ^class_id and s.subject_id == ^subject_id ,
+          where: s.class_id == ^class_id and s.subject_id == ^subject_id,
           select: %{
             class_id: s.class_id,
             subject_id: s.subject_id,
@@ -56,7 +130,6 @@ defmodule SchoolWeb.HeadCountController do
       class = Affairs.get_class!(class_id)
       subject = Affairs.get_subject!(subject_id)
 
-     
       student =
         Repo.all(
           from(
@@ -74,7 +147,6 @@ defmodule SchoolWeb.HeadCountController do
         student: student,
         class: class,
         subject: subject
-      
       )
     else
       class_id = all |> Enum.map(fn x -> x.class_id end) |> Enum.uniq() |> hd
@@ -93,11 +165,10 @@ defmodule SchoolWeb.HeadCountController do
     end
   end
 
-   def create_head_count(conn, params) do
+  def create_head_count(conn, params) do
     class_id = params["class_id"]
     mark = params["mark"]
     subject_id = params["subject_id"]
-
 
     for item <- mark do
       student_id = item |> elem(0)
@@ -110,20 +181,24 @@ defmodule SchoolWeb.HeadCountController do
         student_id: student_id
       }
 
+      head_count_params =
+        Map.put(head_count_params, :institution_id, conn.private.plug_session["institution_id"])
+
+      head_count_params =
+        Map.put(head_count_params, :semester_id, conn.private.plug_session["semester_id"])
 
       Affairs.create_head_count(head_count_params)
     end
 
     conn
     |> put_flash(:info, "Exam target mark created successfully.")
-    |> redirect(to: class_path(conn, :index))
+    |> redirect(to: head_count_path(conn, :index))
   end
 
-   def update_head_count_mark(conn, params) do
+  def update_head_count_mark(conn, params) do
     class_id = params["class_id"]
     mark = params["mark"]
     subject_id = params["subject_id"]
-  
 
     for item <- mark do
       student_id = item |> elem(0)
@@ -147,11 +222,11 @@ defmodule SchoolWeb.HeadCountController do
 
     conn
     |> put_flash(:info, "Exam target mark updated successfully.")
-    |> redirect(to: class_path(conn, :index))
+    |> redirect(to: head_count_path(conn, :index))
   end
 
   def head_count_subject(conn, %{"id" => id}) do
-      all =
+    all =
       Repo.all(
         from(
           p in School.Affairs.Period,
@@ -168,19 +243,24 @@ defmodule SchoolWeb.HeadCountController do
       |> Enum.uniq()
       |> Enum.filter(fn x -> x.t_name != "Rest" end)
 
-
-        render(conn, "head_count_subject.html", all: all, id: id)
+    render(conn, "head_count_subject.html", all: all, id: id)
   end
 
   def head_count_subject_create(conn, params) do
-        class = Affairs.get_class!(params["class_id"])
-         subject = Affairs.get_subject!(params["subject"])
+    class = Affairs.get_class!(params["class_id"])
+    subject = Affairs.get_subject!(params["subject"])
 
-         period=Repo.all(from p in School.Affairs.Period, where: p.class_id==^class.id and p.subject_id==^subject.id)|>hd
-         teacher_id=period.teacher_id
+    period =
+      Repo.all(
+        from(p in School.Affairs.Period,
+          where: p.class_id == ^class.id and p.subject_id == ^subject.id
+        )
+      )
+      |> hd
 
-         teacher_name=Affairs.get_teacher!(teacher_id)
+    teacher_id = period.teacher_id
 
+    teacher_name = Affairs.get_teacher!(teacher_id)
 
     head_count_mark =
       Repo.all(
@@ -190,7 +270,7 @@ defmodule SchoolWeb.HeadCountController do
           on: s.id == e.student_id,
           left_join: p in School.Affairs.Subject,
           on: p.id == e.subject_id,
-          where: e.class_id == ^class.id and e.subject_id==^subject.id,
+          where: e.class_id == ^class.id and e.subject_id == ^subject.id,
           select: %{
             subject_code: p.code,
             student_id: s.id,
@@ -200,89 +280,74 @@ defmodule SchoolWeb.HeadCountController do
         )
       )
 
-      if head_count_mark ==[]  do
-          conn
-        |> put_flash(:info, "Head count for this subject is not created yet!.")
-        |> redirect(to: class_path(conn, :index))
-
-      else
-
-   
-
-        exam_mark =
-      Repo.all(
-        from(
-          e in School.Affairs.ExamMark,
-          left_join: k in School.Affairs.ExamMaster,
-          on: k.id == e.exam_id,
-          left_join: s in School.Affairs.Student,
-          on: s.id == e.student_id,
-          left_join: p in School.Affairs.Subject,
-          on: p.id == e.subject_id,
-          where: e.class_id == ^class.id and e.subject_id==^subject.id,
-          select: %{
-            subject_code: p.code,
-            exam_name: k.name,
-            student_id: s.id,
-            student_name: s.name,
-            student_mark: e.mark,
-            sex: s.sex
-          }
+    if head_count_mark == [] do
+      conn
+      |> put_flash(:info, "Head count for this subject is not created yet!.")
+      |> redirect(to: class_path(conn, :index))
+    else
+      exam_mark =
+        Repo.all(
+          from(
+            e in School.Affairs.ExamMark,
+            left_join: k in School.Affairs.ExamMaster,
+            on: k.id == e.exam_id,
+            left_join: s in School.Affairs.Student,
+            on: s.id == e.student_id,
+            left_join: p in School.Affairs.Subject,
+            on: p.id == e.subject_id,
+            where: e.class_id == ^class.id and e.subject_id == ^subject.id,
+            select: %{
+              subject_code: p.code,
+              exam_name: k.name,
+              student_id: s.id,
+              student_name: s.name,
+              student_mark: e.mark,
+              sex: s.sex
+            }
+          )
         )
-      )
-
-
 
       if exam_mark != [] do
-      exam_name = exam_mark |>Enum.group_by(fn x -> x.exam_name end)
+        exam_name = exam_mark |> Enum.group_by(fn x -> x.exam_name end)
 
+        mark1 =
+          for item <- exam_name do
+            exam_name = item |> elem(0)
 
+            datas = item |> elem(1)
 
-              mark1 =
-        for item <- exam_name do
-          exam_name = item |> elem(0)
+            for data <- datas do
+              student_mark = data.student_mark
 
-          datas = item |> elem(1)
+              grades = Repo.all(from(g in School.Affairs.Grade))
 
-          for data <- datas do
-            student_mark = data.student_mark
-
-       
-
-            grades = Repo.all(from(g in School.Affairs.Grade))
-
-            for grade <- grades do
-              if student_mark >= grade.mix and student_mark <= grade.max do
-                %{
-                  exam: exam_name,
-                  student_id: data.student_id,
-                  student_name: data.student_name,
-                  grade: grade.name,
-                  gpa: grade.gpa,
-                  subject_code: data.subject_code,
-                  student_mark: data.student_mark,
-                  sex: data.sex
-                }
+              for grade <- grades do
+                if student_mark >= grade.mix and student_mark <= grade.max do
+                  %{
+                    exam: exam_name,
+                    student_id: data.student_id,
+                    student_name: data.student_name,
+                    grade: grade.name,
+                    gpa: grade.gpa,
+                    subject_code: data.subject_code,
+                    student_mark: data.student_mark,
+                    sex: data.sex
+                  }
+                end
               end
             end
           end
-        end
-        |> List.flatten()
-        |> Enum.filter(fn x -> x != nil end)
+          |> List.flatten()
+          |> Enum.filter(fn x -> x != nil end)
 
+        news = mark1 |> Enum.group_by(fn x -> x.student_name end)
 
-          news = mark1 |> Enum.group_by(fn x -> x.student_name end)
+        detail =
+          for new <- news do
+            student_id = new |> elem(1) |> Enum.map(fn x -> x.student_id end) |> Enum.uniq() |> hd
+            sex = new |> elem(1) |> Enum.map(fn x -> x.sex end) |> Enum.uniq() |> hd
 
-
-
-
-          detail=for new <- news do
-
-             student_id = new |> elem(1) |> Enum.map(fn x -> x.student_id end) |> Enum.uniq() |> hd
-              sex = new |> elem(1) |> Enum.map(fn x -> x.sex end) |> Enum.uniq() |> hd
-
-
-                             head_count_mark =
+            head_count_mark =
               Repo.all(
                 from(
                   e in School.Affairs.HeadCount,
@@ -290,7 +355,9 @@ defmodule SchoolWeb.HeadCountController do
                   on: s.id == e.student_id,
                   left_join: p in School.Affairs.Subject,
                   on: p.id == e.subject_id,
-                  where: e.class_id == ^class.id and e.subject_id==^subject.id and e.student_id==^student_id,
+                  where:
+                    e.class_id == ^class.id and e.subject_id == ^subject.id and
+                      e.student_id == ^student_id,
                   select: %{
                     subject_code: p.code,
                     student_id: s.id,
@@ -299,57 +366,49 @@ defmodule SchoolWeb.HeadCountController do
                     sex: s.sex
                   }
                 )
-              )|>hd
+              )
+              |> hd
 
-        
+            student_mark = head_count_mark.student_mark
 
-             student_mark = head_count_mark.student_mark
+            grades = Repo.all(from(g in School.Affairs.Grade))
 
-              grades = Repo.all(from(g in School.Affairs.Grade))
-
-            grade=for grade <- grades do
-              if student_mark >= grade.mix and student_mark <= grade.max do
-                %{
-                
-                  grade: grade.name,       
-                  target_mark: student_mark
-                }
-              else
-
+            grade =
+              for grade <- grades do
+                if student_mark >= grade.mix and student_mark <= grade.max do
+                  %{
+                    grade: grade.name,
+                    target_mark: student_mark
+                  }
+                else
+                end
               end
-            end|> List.flatten()
-                |> Enum.filter(fn x -> x != nil end)|>hd
-     
-       
+              |> List.flatten()
+              |> Enum.filter(fn x -> x != nil end)
+              |> hd
 
-         
-        %{
-            subject: new |> elem(1) |> Enum.sort_by(fn x -> x.exam end),
-            name: new |> elem(0),
-            student_id: student_id,
-            target_grade: grade.grade,
-            target_mark: grade.target_mark,
-            sex: sex
-            
-          }
-        end|>Enum.with_index
-   
+            %{
+              subject: new |> elem(1) |> Enum.sort_by(fn x -> x.exam end),
+              name: new |> elem(0),
+              student_id: student_id,
+              target_grade: grade.grade,
+              target_mark: grade.target_mark,
+              sex: sex
+            }
+          end
+          |> Enum.with_index()
 
-        mark=exam_mark|>Enum.group_by(fn x -> x.exam_name end)
+        mark = exam_mark |> Enum.group_by(fn x -> x.exam_name end)
 
-
-
-          render(conn, "head_counts.html",mark: mark, detail: detail, subject_name: subject.description, class_name: class.name,teacher_name: teacher_name)
-
-
-   
+        render(conn, "head_counts.html",
+          mark: mark,
+          detail: detail,
+          subject_name: subject.description,
+          class_name: class.name,
+          teacher_name: teacher_name
+        )
+      end
     end
-
-
-    end
-    
-
-
   end
 
   def new(conn, _params) do
@@ -363,6 +422,7 @@ defmodule SchoolWeb.HeadCountController do
         conn
         |> put_flash(:info, "Head count created successfully.")
         |> redirect(to: head_count_path(conn, :show, head_count))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
@@ -387,6 +447,7 @@ defmodule SchoolWeb.HeadCountController do
         conn
         |> put_flash(:info, "Head count updated successfully.")
         |> redirect(to: head_count_path(conn, :show, head_count))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", head_count: head_count, changeset: changeset)
     end

@@ -364,7 +364,9 @@ defmodule SchoolWeb.StudentController do
                     where:
                       s.id == ^student.student_id and
                         s.institution_id == ^conn.private.plug_session["institution_id"] and
-                        c.institution_id == ^conn.private.plug_session["institution_id"],
+                        c.institution_id == ^conn.private.plug_session["institution_id"] and
+                        cl.institute_id == ^conn.private.plug_session["institution_id"] and
+                        c.semester_id == ^conn.private.plug_session["semester_id"],
                     order_by: [asc: s.name],
                     select: %{
                       id: s.id,
@@ -394,7 +396,9 @@ defmodule SchoolWeb.StudentController do
               on: cl.id == c.class_id,
               where:
                 s.institution_id == ^conn.private.plug_session["institution_id"] and
-                  cl.institution_id == ^conn.private.plug_session["institution_id"],
+                  c.institute_id == ^conn.private.plug_session["institution_id"] and
+                  cl.institution_id == ^conn.private.plug_session["institution_id"] and
+                  c.semester_id == ^conn.private.plug_session["semester_id"],
               order_by: [asc: s.name],
               select: %{
                 id: s.id,
@@ -518,6 +522,14 @@ defmodule SchoolWeb.StudentController do
 
     contents = tl(data) |> Enum.reject(fn x -> x == [""] end) |> Enum.uniq() |> Enum.sort()
 
+    Task.start_link(__MODULE__, :loop, [conn, contents, headers, batch])
+
+    conn
+    |> put_flash(:info, "Student Class created successfully.")
+    |> redirect(to: student_path(conn, :index))
+  end
+
+  def loop(conn, contents, headers, batch) do
     result =
       for content <- contents do
         h = headers |> Enum.map(fn x -> String.downcase(x) end)
@@ -606,10 +618,6 @@ defmodule SchoolWeb.StudentController do
           end
         end
       end
-
-    conn
-    |> put_flash(:info, "Student Class created successfully.")
-    |> redirect(to: student_path(conn, :index))
   end
 
   def pre_upload_students(conn, params) do

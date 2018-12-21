@@ -1,10 +1,10 @@
 <center><b>SENARAI MURID MENGIKUT KELAS</b></center><br>
 <center><b><%= @institution.name %></b></br></center>
-<p  style="margin-right: 10px; margin-left: 10px;">Kelas: <b><%= @class.name %></b></p>
+<p  style="margin-right: 10px; margin-left: 10px;">Kelas: <b><%= @class.name %></b> &nbsp;&nbsp; Year: <b><%= @semester.year %></b> &nbsp;&nbsp; Semester: <b><%= @semester.sem %></b></p>
 
 
 
-<table class="table" border="1" style="border-collapse: collapse; margin-right: 10px; margin-left: 10px;"  >
+<table class="table" border="1" style="border-collapse: collapse;   align="center"  width="100%" >
   <thead>
     <tr align="center">
       <th><%= gettext "Bil." %></th>

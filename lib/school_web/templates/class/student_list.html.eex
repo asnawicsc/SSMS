@@ -2,6 +2,7 @@
         <div align="right" >
     <form action="/pdf/student_class_listing" method="POST">
  <input type="hidden" name="class_id" value="<%= @class_id %>">
+  <input type="hidden" name="semester_id" value="<%= @semester_id %>">
   <input type="hidden" name="_csrf_token" value="<%= @csrf %>">
   <button class="mb-1 btn btn-primary" type="submit" name="" value="Generate">Print!</button>
 

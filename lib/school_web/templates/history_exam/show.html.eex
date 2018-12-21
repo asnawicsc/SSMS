@@ -1,0 +1,68 @@
+<h2>Show History exam</h2>
+
+<ul>
+
+  <li>
+    <strong>Student no:</strong>
+    <%= @history_exam.student_no %>
+  </li>
+
+  <li>
+    <strong>Student name:</strong>
+    <%= @history_exam.student_name %>
+  </li>
+
+  <li>
+    <strong>Subject name:</strong>
+    <%= @history_exam.subject_name %>
+  </li>
+
+  <li>
+    <strong>Subject code:</strong>
+    <%= @history_exam.subject_code %>
+  </li>
+
+  <li>
+    <strong>Subject mark:</strong>
+    <%= @history_exam.subject_mark %>
+  </li>
+
+  <li>
+    <strong>Exam class rank:</strong>
+    <%= @history_exam.exam_class_rank %>
+  </li>
+
+  <li>
+    <strong>Exam standard rank:</strong>
+    <%= @history_exam.exam_standard_rank %>
+  </li>
+
+  <li>
+    <strong>Exam name:</strong>
+    <%= @history_exam.exam_name %>
+  </li>
+
+  <li>
+    <strong>Class name:</strong>
+    <%= @history_exam.class_name %>
+  </li>
+
+  <li>
+    <strong>Semester:</strong>
+    <%= @history_exam.semester_id %>
+  </li>
+
+  <li>
+    <strong>Institution:</strong>
+    <%= @history_exam.institution_id %>
+  </li>
+
+  <li>
+    <strong>Exam grade:</strong>
+    <%= @history_exam.exam_grade %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: history_exam_path(@conn, :edit, @history_exam) %></span>
+<span><%= link "Back", to: history_exam_path(@conn, :index) %></span>

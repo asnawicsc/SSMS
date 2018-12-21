@@ -121,17 +121,29 @@ defmodule SchoolWeb.ParentController do
   end
 
   def show_guardian(conn, params) do
-    guardian = Repo.get_by(Parent, icno: params["id"])
+    parent =
+      Affairs.list_parent()
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
 
-    if guardian != nil do
-      changeset = Affairs.change_parent(guardian)
-      render(conn, "edit.html", parent: guardian, changeset: changeset)
-    else
+    if parent == [] do
       student = Repo.get_by(Student, student_no: params["student_no"])
 
       conn
-      |> put_flash(:info, "This parent information does not exist")
+      |> put_flash(:info, "Please Insert Parent Information")
       |> redirect(to: class_path(conn, :show_student_info, student.id))
+    else
+      guardian = Repo.get_by(Parent, icno: params["id"])
+
+      if guardian != nil do
+        changeset = Affairs.change_parent(guardian)
+        render(conn, "edit.html", parent: guardian, changeset: changeset)
+      else
+        student = Repo.get_by(Student, student_no: params["student_no"])
+
+        conn
+        |> put_flash(:info, "This parent information does not exist")
+        |> redirect(to: class_path(conn, :show_student_info, student.id))
+      end
     end
   end
 

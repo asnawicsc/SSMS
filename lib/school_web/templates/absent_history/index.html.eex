@@ -1,0 +1,38 @@
+<h2>Listing Absent history</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Student no</th>
+      <th>Student name</th>
+      <th>Chinese name</th>
+      <th>Student class</th>
+      <th>Absent date</th>
+      <th>Absent type</th>
+      <th>Year</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for absent_history <- @absent_history do %>
+    <tr>
+      <td><%= absent_history.student_no %></td>
+      <td><%= absent_history.student_name %></td>
+      <td><%= absent_history.chinese_name %></td>
+      <td><%= absent_history.student_class %></td>
+      <td><%= absent_history.absent_date %></td>
+      <td><%= absent_history.absent_type %></td>
+      <td><%= absent_history.year %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: absent_history_path(@conn, :show, absent_history), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: absent_history_path(@conn, :edit, absent_history), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: absent_history_path(@conn, :delete, absent_history), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Absent history", to: absent_history_path(@conn, :new) %></span>

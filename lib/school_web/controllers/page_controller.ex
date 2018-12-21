@@ -26,7 +26,7 @@ defmodule SchoolWeb.PageController do
   end
 
   def redirect_from_li6(conn, params) do
-    user = Repo.get_by(User, name: params["name"], email: params["email"])
+    user = Repo.get_by(User, email: params["email"])
     role = user.role
 
     location =

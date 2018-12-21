@@ -336,6 +336,9 @@ $(document).ready(function(){
      
   })
 
+
+  
+
 channel.on("show_student_details", payload => {
     $("div[aria-label='student_upload']").hide()
     $("div[aria-label='student_table']").hide()
@@ -379,8 +382,11 @@ channel.on("show_student_details", payload => {
 
        $("div.parent").click(function(){
     var icno = $(this).attr("id")
-    channel.push("inquire_parent_details", {user_id: window.currentUser, institution_id: window.currentInstitute, icno: icno})
-  }) 
+    channel.push("inquire_parent_details", {user_id: window.currentUser, institution_id: window.currentInstitute,semester_id: window.currentSemester, icno: icno})
+  })
+
+
+
 
    channel.on("show_parent_details", payload => {
     $("div[aria-label='p_upload']").hide()
@@ -388,7 +394,9 @@ channel.on("show_student_details", payload => {
     $("div[aria-label='parent_details']").html(payload.html)
     var csrf = window.csrf
     $("input[name='_csrf_token']").val(csrf)
-  })  
+  }) 
+
+
 
      $("div.teacher_timetable").click(function(){
     var code = $(this).attr("id")

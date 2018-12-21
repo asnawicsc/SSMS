@@ -4759,6 +4759,7 @@ defmodule School.Affairs do
     Announcement.changeset(announcement, %{})
   end
 
+
   alias School.Affairs.Ediscipline
 
   @doc """
@@ -4808,7 +4809,9 @@ defmodule School.Affairs do
     |> Repo.insert()
   end
 
+
   @doc """
+
   Updates a ediscipline.
 
   ## Examples
@@ -4853,5 +4856,200 @@ defmodule School.Affairs do
   """
   def change_ediscipline(%Ediscipline{} = ediscipline) do
     Ediscipline.changeset(ediscipline, %{})
+  end
+
+
+  alias School.Affairs.HistoryExam
+
+  @doc """
+  Returns the list of history_exam.
+
+  ## Examples
+
+      iex> list_history_exam()
+      [%HistoryExam{}, ...]
+
+  """
+  def list_history_exam do
+    Repo.all(HistoryExam)
+  end
+
+  @doc """
+  Gets a single history_exam.
+
+  Raises `Ecto.NoResultsError` if the History exam does not exist.
+
+  ## Examples
+
+      iex> get_history_exam!(123)
+      %HistoryExam{}
+
+      iex> get_history_exam!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_history_exam!(id), do: Repo.get!(HistoryExam, id)
+
+  @doc """
+  Creates a history_exam.
+
+  ## Examples
+
+      iex> create_history_exam(%{field: value})
+      {:ok, %HistoryExam{}}
+
+      iex> create_history_exam(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_history_exam(attrs \\ %{}) do
+    %HistoryExam{}
+    |> HistoryExam.changeset(attrs)
+    |> Repo.insert()
+  end
+
+
+  
+@doc """
+Updates a history_exam.
+  ## Examples
+
+      iex> update_history_exam(history_exam, %{field: new_value})
+      {:ok, %HistoryExam{}}
+
+      iex> update_history_exam(history_exam, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_history_exam(%HistoryExam{} = history_exam, attrs) do
+    history_exam
+    |> HistoryExam.changeset(attrs)
+    |> Repo.update()
+  end
+
+@doc """
+  Deletes a HistoryExam.
+
+  ## Examples
+
+      iex> delete_history_exam(history_exam)
+      {:ok, %HistoryExam{}}
+
+      iex> delete_history_exam(history_exam)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_history_exam(%HistoryExam{} = history_exam) do
+    Repo.delete(history_exam)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking history_exam changes.
+
+  ## Examples
+
+      iex> change_history_exam(history_exam)
+      %Ecto.Changeset{source: %HistoryExam{}}
+
+  """
+  def change_history_exam(%HistoryExam{} = history_exam) do
+    HistoryExam.changeset(history_exam, %{})
+  end
+
+  alias School.Affairs.AbsentHistory
+
+  @doc """
+  Returns the list of absent_history.
+
+  ## Examples
+
+      iex> list_absent_history()
+      [%AbsentHistory{}, ...]
+
+  """
+  def list_absent_history do
+    Repo.all(AbsentHistory)
+  end
+
+  @doc """
+  Gets a single absent_history.
+
+  Raises `Ecto.NoResultsError` if the Absent history does not exist.
+
+  ## Examples
+
+      iex> get_absent_history!(123)
+      %AbsentHistory{}
+
+      iex> get_absent_history!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_absent_history!(id), do: Repo.get!(AbsentHistory, id)
+
+  @doc """
+  Creates a absent_history.
+
+  ## Examples
+
+      iex> create_absent_history(%{field: value})
+      {:ok, %AbsentHistory{}}
+
+      iex> create_absent_history(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_absent_history(attrs \\ %{}) do
+    %AbsentHistory{}
+    |> AbsentHistory.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a absent_history.
+
+  ## Examples
+
+      iex> update_absent_history(absent_history, %{field: new_value})
+      {:ok, %AbsentHistory{}}
+
+      iex> update_absent_history(absent_history, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_absent_history(%AbsentHistory{} = absent_history, attrs) do
+    absent_history
+    |> AbsentHistory.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a AbsentHistory.
+
+  ## Examples
+
+      iex> delete_absent_history(absent_history)
+      {:ok, %AbsentHistory{}}
+
+      iex> delete_absent_history(absent_history)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_absent_history(%AbsentHistory{} = absent_history) do
+    Repo.delete(absent_history)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking absent_history changes.
+
+  ## Examples
+
+      iex> change_absent_history(absent_history)
+      %Ecto.Changeset{source: %AbsentHistory{}}
+
+  """
+  def change_absent_history(%AbsentHistory{} = absent_history) do
+    AbsentHistory.changeset(absent_history, %{})
+>>>>>>> b616d603e695fff107fa1ba6977603dfa7737736
   end
 end
