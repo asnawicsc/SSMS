@@ -1,0 +1,52 @@
+<div class="content-heading">
+    <div>Message Details
+    </div>
+</div>
+
+<div class="row">         
+	<div class="col-lg-10" aria-label="">
+		<div class="card card-default d-none d-lg-block">
+	    	<div class="card-body">
+	    		<form action="/update_summary">
+	    		<input type="hidden" name="edsp_id" value="<%= @edsp.id %>">
+	    		<div class="form-group row">
+                   <label class="col-md-2 col-form-label" for="input-id-1">Related Student</label>
+                   <div class="col-md-7">
+                      <input class="form-control" id="input-id-1" type="text" disabled="" value="<%= @student.name %>">
+                   </div>
+                </div>
+	    		<div class="form-group row">
+                   <label class="col-md-2 col-form-label" for="input-id-1">Sent To Parent/Guardian</label>
+                   <div class="col-md-7">
+                      <input class="form-control" id="input-id-1" type="text" disabled="" value="<%= @parent.name %>">
+                   </div>
+                </div>
+
+	    		<div class="form-group row">
+                   <label class="col-md-2 col-form-label" for="input-id-1">Title</label>
+                   <div class="col-md-7">
+                      <input class="form-control" name="title" id="input-id-1" type="text" disabled="" value="<%= @edsp.title %>">
+                   </div>
+                </div>
+
+                <div class="form-group row">
+                   <label class="col-md-2 col-form-label" for="input-id-1">Message</label>
+                   <div class="col-md-7">
+                      <textarea class="form-control" name="message" aria-label="With textarea" style="height: 100px" disabled="" ><%= @edsp.message %></textarea>
+                   </div>
+                </div>
+
+                <div class="form-group row">
+                   <label class="col-md-2 col-form-label" for="input-id-1">Follow Up Summary</label>
+                   <div class="col-md-7">
+                      <textarea class="form-control" name="summary" aria-label="With textarea" style="height: 100px" value"><%= @edsp.summary %></textarea>
+                   </div>
+                </div>
+
+                <button class="btn btn-labeled btn-success mb-2" type="submit">
+                           <span class="btn-label"><i class="fa fa-check"></i></span>Update Summary</button>
+            	</form>
+	    	</div>
+	    </div>
+	</div>
+</div>

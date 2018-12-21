@@ -17,6 +17,43 @@ defmodule SchoolWeb.UserChannel do
     end
   end
 
+  def handle_in("ed_show_parents", payload, socket) do
+    student = Repo.get(Student, payload["std_id"])
+
+    if student.ficno != nil do
+      father = Repo.get_by(Parent, icno: student.ficno)
+    else
+      father = nil
+    end
+
+    if student.micno != nil do
+      mother = Repo.get_by(Parent, icno: student.micno)
+    else
+      mother = nil
+    end
+
+    if student.gicno != nil do
+      guardian = Repo.get_by(Parent, icno: student.gicno)
+    else
+      guardian = nil
+    end
+
+    html =
+      Phoenix.View.render_to_string(
+        SchoolWeb.EdisciplineView,
+        "parents_list.html",
+        father: father,
+        mother: mother,
+        guardian: guardian
+      )
+
+    broadcast(socket, "parents_details", %{
+      html: html
+    })
+
+    {:noreply, socket}
+  end
+
   def handle_in("add_to_class_attendance", payload, socket) do
     class = Repo.get(Class, payload["class_id"])
     student = Repo.get(School.Affairs.Student, payload["student_id"])
@@ -1536,7 +1573,8 @@ defmodule SchoolWeb.UserChannel do
       Repo.all(
         from(
           s in School.Affairs.ExamMark,
-          where: s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
+          where:
+            s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
           select: %{
             class_id: s.class_id,
             subject_id: s.subject_id,

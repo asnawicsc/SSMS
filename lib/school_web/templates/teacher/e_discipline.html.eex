@@ -1,0 +1,43 @@
+<div class="content-heading">
+    <div>E-Discipline
+    </div>
+</div>
+
+<div class="row">         
+	<div class="col-lg-10" aria-label="">
+		<div class="card card-default d-none d-lg-block">
+	    	<div class="card-body">
+	    		<table class="table">
+	    			<thead>
+	                	<tr>
+	                		<th>Issues</th>
+	                		<th>Date</th>
+	                		<th>Action</th>
+	                	</tr>
+	                </thead>
+                	<tbody>
+                    	<tr>
+                    		<%= for message <- @messages do %>
+	                    	<td class="text-left">
+								<%= message.title %>
+	                    	</td>
+                    		<td class="text-left">              
+                 				<%= message.inserted_at |> Timex.to_datetime() |> to_string() %>
+                    		</td>
+                    		<td>
+                    			<a href="/show_message_details/<%= message.id %>"><button class="btn btn-labeled btn-xs btn-purple" type="button">
+                           			<span class="btn-label"><i class="fa fa-search"></i></span>Details</button></a>
+                    		</td>
+                    		<% end %>
+                  		</tr>
+                	</tbody>
+	    		</table>
+	    	</div>
+		</div>
+	</div>
+
+</div>
+
+<script type="text/javascript">
+	$('.table').DataTable();
+</script>

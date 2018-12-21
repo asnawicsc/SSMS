@@ -211,5 +211,25 @@
 
        </div>
     </div>
+    <div class="card card-default mb-3">
+
+       <div class="card-body">
+
+                  <em class="fa-2x mr-2 mb-3 fas fa-chalkboard-teacher"></em>
+                  <span style="font-weight: bolder;font-size: 17px;">E-Discipline</span>
+          <ol style="padding-left: 15px;">
+                    <li><p class="card-text"><%= gettext("Send students' discipline information to parents.")%></p></li>
+
+                  </ol>
+
+                    <% user = Repo.get(Settings.User,a.private.plug_session["user_id"])
+                      teacher = Repo.get_by(Affairs.Teacher,email: user.email)  %>
+                      <a href ="/ediscipline_form"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">E-Discipline Message</button></a>
+          <a href ="/e_discipline"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List Message History</button></a>
+          
+    
+
+       </div>
+    </div>
   </div>
 </div>

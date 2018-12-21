@@ -211,6 +211,7 @@ defmodule SchoolWeb.Router do
     get("/record_attendance", AttendanceController, :record_attendance)
 
     resources("/teacher", TeacherController)
+    get("/e_discipline", TeacherController, :e_discipline)
     get("/teacher_attendance", TeacherController, :teacher_attendance)
     get("/mark_teacher_attendance", TeacherController, :mark_teacher_attendance)
     get("/submit_teacher_attendance", TeacherController, :submit_teacher_attendance)
@@ -411,6 +412,11 @@ defmodule SchoolWeb.Router do
     get("/assign_lib_access", UserController, :assign_lib_access)
     resources("/announcements", AnnouncementController)
     get("/announcements/:id/broadcast", AnnouncementController, :broadcast)
+    resources("/edisciplines", EdisciplineController)
+    get("/ediscipline_form", EdisciplineController, :ediscipline_form)
+    get("/msg_details", EdisciplineController, :msg_details)
+    get("/show_message_details/:msg_id", EdisciplineController, :show_message_details)
+    get("/update_summary", EdisciplineController, :update_summary)
     get("/*path", PageController, :no_page_found)
   end
 end

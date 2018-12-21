@@ -153,6 +153,21 @@ channel
 
 $(document).ready(function(){
 
+  $('#selection').change(function(){ 
+        var std_id = $(this).val();
+        channel.push("ed_show_parents",{std_id: std_id})
+        
+    })
+  channel.on("parents_details",payload =>{
+          $("#message").show()
+          $("div#parents_list").html(payload.html)
+          $('#parents').change(function(){ 
+            var parent_id = $(this).val();
+            console.log(parent_id)
+            $("input#parent_id").val(parent_id)
+          })
+  })
+
   $("div.setting-color label").click(function(){
     var color = $(this).attr("data-load-css")
     console.log(color);

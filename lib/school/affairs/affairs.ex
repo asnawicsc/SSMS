@@ -4758,4 +4758,100 @@ defmodule School.Affairs do
   def change_announcement(%Announcement{} = announcement) do
     Announcement.changeset(announcement, %{})
   end
+
+  alias School.Affairs.Ediscipline
+
+  @doc """
+  Returns the list of edisciplines.
+
+  ## Examples
+
+      iex> list_edisciplines()
+      [%Ediscipline{}, ...]
+
+  """
+  def list_edisciplines do
+    Repo.all(Ediscipline)
+  end
+
+  @doc """
+  Gets a single ediscipline.
+
+  Raises `Ecto.NoResultsError` if the Ediscipline does not exist.
+
+  ## Examples
+
+      iex> get_ediscipline!(123)
+      %Ediscipline{}
+
+      iex> get_ediscipline!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_ediscipline!(id), do: Repo.get!(Ediscipline, id)
+
+  @doc """
+  Creates a ediscipline.
+
+  ## Examples
+
+      iex> create_ediscipline(%{field: value})
+      {:ok, %Ediscipline{}}
+
+      iex> create_ediscipline(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_ediscipline(attrs \\ %{}) do
+    %Ediscipline{}
+    |> Ediscipline.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a ediscipline.
+
+  ## Examples
+
+      iex> update_ediscipline(ediscipline, %{field: new_value})
+      {:ok, %Ediscipline{}}
+
+      iex> update_ediscipline(ediscipline, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_ediscipline(%Ediscipline{} = ediscipline, attrs) do
+    ediscipline
+    |> Ediscipline.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a Ediscipline.
+
+  ## Examples
+
+      iex> delete_ediscipline(ediscipline)
+      {:ok, %Ediscipline{}}
+
+      iex> delete_ediscipline(ediscipline)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_ediscipline(%Ediscipline{} = ediscipline) do
+    Repo.delete(ediscipline)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking ediscipline changes.
+
+  ## Examples
+
+      iex> change_ediscipline(ediscipline)
+      %Ecto.Changeset{source: %Ediscipline{}}
+
+  """
+  def change_ediscipline(%Ediscipline{} = ediscipline) do
+    Ediscipline.changeset(ediscipline, %{})
+  end
 end

@@ -3710,4 +3710,70 @@ defmodule School.AffairsTest do
       assert %Ecto.Changeset{} = Affairs.change_announcement(announcement)
     end
   end
+
+  describe "edisciplines" do
+    alias School.Affairs.Ediscipline
+
+    @valid_attrs %{message: "some message", psid: "some psid", teacher_id: 42, title: "some title"}
+    @update_attrs %{message: "some updated message", psid: "some updated psid", teacher_id: 43, title: "some updated title"}
+    @invalid_attrs %{message: nil, psid: nil, teacher_id: nil, title: nil}
+
+    def ediscipline_fixture(attrs \\ %{}) do
+      {:ok, ediscipline} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_ediscipline()
+
+      ediscipline
+    end
+
+    test "list_edisciplines/0 returns all edisciplines" do
+      ediscipline = ediscipline_fixture()
+      assert Affairs.list_edisciplines() == [ediscipline]
+    end
+
+    test "get_ediscipline!/1 returns the ediscipline with given id" do
+      ediscipline = ediscipline_fixture()
+      assert Affairs.get_ediscipline!(ediscipline.id) == ediscipline
+    end
+
+    test "create_ediscipline/1 with valid data creates a ediscipline" do
+      assert {:ok, %Ediscipline{} = ediscipline} = Affairs.create_ediscipline(@valid_attrs)
+      assert ediscipline.message == "some message"
+      assert ediscipline.psid == "some psid"
+      assert ediscipline.teacher_id == 42
+      assert ediscipline.title == "some title"
+    end
+
+    test "create_ediscipline/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_ediscipline(@invalid_attrs)
+    end
+
+    test "update_ediscipline/2 with valid data updates the ediscipline" do
+      ediscipline = ediscipline_fixture()
+      assert {:ok, ediscipline} = Affairs.update_ediscipline(ediscipline, @update_attrs)
+      assert %Ediscipline{} = ediscipline
+      assert ediscipline.message == "some updated message"
+      assert ediscipline.psid == "some updated psid"
+      assert ediscipline.teacher_id == 43
+      assert ediscipline.title == "some updated title"
+    end
+
+    test "update_ediscipline/2 with invalid data returns error changeset" do
+      ediscipline = ediscipline_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_ediscipline(ediscipline, @invalid_attrs)
+      assert ediscipline == Affairs.get_ediscipline!(ediscipline.id)
+    end
+
+    test "delete_ediscipline/1 deletes the ediscipline" do
+      ediscipline = ediscipline_fixture()
+      assert {:ok, %Ediscipline{}} = Affairs.delete_ediscipline(ediscipline)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_ediscipline!(ediscipline.id) end
+    end
+
+    test "change_ediscipline/1 returns a ediscipline changeset" do
+      ediscipline = ediscipline_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_ediscipline(ediscipline)
+    end
+  end
 end
