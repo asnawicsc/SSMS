@@ -1096,6 +1096,8 @@ defmodule SchoolWeb.UserChannel do
           }
         )
       )
+      |> Enum.sort_by(fn x -> x.sex end)
+      |> Enum.reverse()
       |> Enum.with_index()
 
     html =
