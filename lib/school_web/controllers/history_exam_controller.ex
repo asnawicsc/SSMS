@@ -156,8 +156,12 @@ defmodule SchoolWeb.HistoryExamController do
 
   def history_exam_result_class(conn, params) do
     all =
-      Affairs.list_history_exam()
-      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+      Repo.all(
+        from(s in HistoryExam,
+          where: s.institution_id == ^conn.private.plug_session["institution_id"],
+          select: %{year: s.year, exam_name: s.exam_name, class_name: s.class_name}
+        )
+      )
 
     year =
       all
