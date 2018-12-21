@@ -542,7 +542,7 @@ defmodule SchoolWeb.UserChannel do
         icno: icno,
         changeset: changeset,
         conn: conn,
-        student: student,
+        student: student |> Enum.uniq(),
         parent: parent,
         action: "/parent/#{parent.icno}"
       )
