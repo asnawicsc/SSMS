@@ -5046,4 +5046,100 @@ defmodule School.Affairs do
   def change_absent_history(%AbsentHistory{} = absent_history) do
     AbsentHistory.changeset(absent_history, %{})
   end
+
+  alias School.Affairs.Ehomework
+
+  @doc """
+  Returns the list of ehehomeworks.
+
+  ## Examples
+
+      iex> list_ehehomeworks()
+      [%Ehomework{}, ...]
+
+  """
+  def list_ehehomeworks do
+    Repo.all(Ehomework)
+  end
+
+  @doc """
+  Gets a single ehomework.
+
+  Raises `Ecto.NoResultsError` if the Ehomework does not exist.
+
+  ## Examples
+
+      iex> get_ehomework!(123)
+      %Ehomework{}
+
+      iex> get_ehomework!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_ehomework!(id), do: Repo.get!(Ehomework, id)
+
+  @doc """
+  Creates a ehomework.
+
+  ## Examples
+
+      iex> create_ehomework(%{field: value})
+      {:ok, %Ehomework{}}
+
+      iex> create_ehomework(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_ehomework(attrs \\ %{}) do
+    %Ehomework{}
+    |> Ehomework.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a ehomework.
+
+  ## Examples
+
+      iex> update_ehomework(ehomework, %{field: new_value})
+      {:ok, %Ehomework{}}
+
+      iex> update_ehomework(ehomework, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_ehomework(%Ehomework{} = ehomework, attrs) do
+    ehomework
+    |> Ehomework.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a Ehomework.
+
+  ## Examples
+
+      iex> delete_ehomework(ehomework)
+      {:ok, %Ehomework{}}
+
+      iex> delete_ehomework(ehomework)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_ehomework(%Ehomework{} = ehomework) do
+    Repo.delete(ehomework)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking ehomework changes.
+
+  ## Examples
+
+      iex> change_ehomework(ehomework)
+      %Ecto.Changeset{source: %Ehomework{}}
+
+  """
+  def change_ehomework(%Ehomework{} = ehomework) do
+    Ehomework.changeset(ehomework, %{})
+  end
 end

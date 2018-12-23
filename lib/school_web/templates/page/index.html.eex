@@ -244,7 +244,40 @@
 
                       <% user = Repo.get(Settings.User,a.private.plug_session["user_id"])
                         teacher = Repo.get_by(Affairs.Teacher,email: user.email)  %>
-                        <a href ="/ediscipline_form"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">E-Homework</button></a>
+                        <div class="btn-group">
+             <button class="mb-1 btn-sm btn btn-outline-primary" type="button">Choose a class</button>
+             <button class="mb-1 btn-sm dropdown-toggle btn btn-outline-primary" type="button" data-toggle="dropdown" aria-expanded="false">
+                <span class="sr-only">info</span>
+             </button>
+             <% require IEx %>
+             <% user = Repo.get(Settings.User,@conn.private.plug_session["user_id"]) %>
+
+       
+
+
+             <%  all_classes = 
+
+             case user.role do 
+              "Admin" ->
+                Repo.all(from c in Affairs.Class, where: c.institution_id == ^@conn.private.plug_session["institution_id"]) 
+
+              "Support" ->
+                Repo.all(from c in Affairs.Class, where: c.institution_id == ^@conn.private.plug_session["institution_id"]) 
+
+              "Teacher" -> 
+                teacher = Repo.get_by(Affairs.Teacher,email: user.email) 
+                Repo.all(from c in Affairs.Class, where: c.teacher_id == ^teacher.id) 
+             end 
+
+             %>
+
+
+             <div class="dropdown-menu" role="menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(67px, 33px, 0px);">
+              <%= for class <- all_classes do %>
+                <a class="dropdown-item" href="/ehomework/<%= class.id %>"><%= class.name %></a>
+              <% end %>
+             </div>
+          </div>
             
       
 

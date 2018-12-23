@@ -3147,6 +3147,34 @@ defmodule SchoolWeb.UserChannel do
     {:noreply, socket}
   end
 
+  def handle_in("save_homework_details", params, socket) do
+    {:ok, s_datetime, 0} = DateTime.from_iso8601(params["start_date"])
+    {:ok, e_datetime, 0} = DateTime.from_iso8601(params["end_date"])
+
+    s_date = s_datetime |> DateTime.to_date()
+    e_date = e_datetime |> DateTime.to_date()
+
+    ehomework_params = %{
+      class_id: Integer.parse(params["class_id"]) |> elem(0),
+      end_date: e_date,
+      semester_id: Integer.parse(params["semester_id"]) |> elem(0),
+      start_date: s_date,
+      subject_id: Integer.parse(params["subject_id"]) |> elem(0),
+      desc: params["description"]
+    }
+
+    case Affairs.create_ehomework(ehomework_params) do
+      {:ok, ehomework} ->
+        broadcast(socket, "show_calendar", %{
+          "start_date" => s_datetime,
+          "end_date" => e_datetime
+        })
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        nil
+    end
+  end
+
   def handle_in(
         "save_period",
         %{

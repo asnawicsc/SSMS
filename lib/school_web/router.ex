@@ -446,6 +446,12 @@ defmodule SchoolWeb.Router do
     get("/msg_details", EdisciplineController, :msg_details)
     get("/show_message_details/:msg_id", EdisciplineController, :show_message_details)
     get("/update_summary", EdisciplineController, :update_summary)
+
+    resources("/ehehomeworks", EhomeworkController)
+    get("/ehomework/:class_id", EhomeworkController, :ehomework)
+    get("/show_ehomework_calendar/class/:class_id", EhomeworkController, :show_ehomework_calendar)
+    get("/view_homework/class/:class_id/end_date/:end_date", EhomeworkController, :view_homework)
+    get("/update_ehomework/:ehomework_id", EhomeworkController, :update_ehomework)
     get("/*path", PageController, :no_page_found)
   end
 end

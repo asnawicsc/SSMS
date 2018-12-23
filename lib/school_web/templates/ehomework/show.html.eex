@@ -1,0 +1,33 @@
+<h2>Show Ehomework</h2>
+
+<ul>
+
+  <li>
+    <strong>Subject:</strong>
+    <%= @ehomework.subject_id %>
+  </li>
+
+  <li>
+    <strong>Start date:</strong>
+    <%= @ehomework.start_date %>
+  </li>
+
+  <li>
+    <strong>End date:</strong>
+    <%= @ehomework.end_date %>
+  </li>
+
+  <li>
+    <strong>Semester:</strong>
+    <%= @ehomework.semester_id %>
+  </li>
+
+  <li>
+    <strong>Class:</strong>
+    <%= @ehomework.class_id %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: ehomework_path(@conn, :edit, @ehomework) %></span>
+<span><%= link "Back", to: ehomework_path(@conn, :index) %></span>

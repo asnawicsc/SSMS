@@ -3930,4 +3930,72 @@ defmodule School.AffairsTest do
 >>>>>>> b616d603e695fff107fa1ba6977603dfa7737736
     end
   end
+
+  describe "ehehomeworks" do
+    alias School.Affairs.Ehomework
+
+    @valid_attrs %{class_id: 42, end_date: ~D[2010-04-17], semester_id: 42, start_date: ~D[2010-04-17], subject_id: 42}
+    @update_attrs %{class_id: 43, end_date: ~D[2011-05-18], semester_id: 43, start_date: ~D[2011-05-18], subject_id: 43}
+    @invalid_attrs %{class_id: nil, end_date: nil, semester_id: nil, start_date: nil, subject_id: nil}
+
+    def ehomework_fixture(attrs \\ %{}) do
+      {:ok, ehomework} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_ehomework()
+
+      ehomework
+    end
+
+    test "list_ehehomeworks/0 returns all ehehomeworks" do
+      ehomework = ehomework_fixture()
+      assert Affairs.list_ehehomeworks() == [ehomework]
+    end
+
+    test "get_ehomework!/1 returns the ehomework with given id" do
+      ehomework = ehomework_fixture()
+      assert Affairs.get_ehomework!(ehomework.id) == ehomework
+    end
+
+    test "create_ehomework/1 with valid data creates a ehomework" do
+      assert {:ok, %Ehomework{} = ehomework} = Affairs.create_ehomework(@valid_attrs)
+      assert ehomework.class_id == 42
+      assert ehomework.end_date == ~D[2010-04-17]
+      assert ehomework.semester_id == 42
+      assert ehomework.start_date == ~D[2010-04-17]
+      assert ehomework.subject_id == 42
+    end
+
+    test "create_ehomework/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_ehomework(@invalid_attrs)
+    end
+
+    test "update_ehomework/2 with valid data updates the ehomework" do
+      ehomework = ehomework_fixture()
+      assert {:ok, ehomework} = Affairs.update_ehomework(ehomework, @update_attrs)
+      assert %Ehomework{} = ehomework
+      assert ehomework.class_id == 43
+      assert ehomework.end_date == ~D[2011-05-18]
+      assert ehomework.semester_id == 43
+      assert ehomework.start_date == ~D[2011-05-18]
+      assert ehomework.subject_id == 43
+    end
+
+    test "update_ehomework/2 with invalid data returns error changeset" do
+      ehomework = ehomework_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_ehomework(ehomework, @invalid_attrs)
+      assert ehomework == Affairs.get_ehomework!(ehomework.id)
+    end
+
+    test "delete_ehomework/1 deletes the ehomework" do
+      ehomework = ehomework_fixture()
+      assert {:ok, %Ehomework{}} = Affairs.delete_ehomework(ehomework)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_ehomework!(ehomework.id) end
+    end
+
+    test "change_ehomework/1 returns a ehomework changeset" do
+      ehomework = ehomework_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_ehomework(ehomework)
+    end
+  end
 end
