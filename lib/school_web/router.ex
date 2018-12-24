@@ -158,7 +158,7 @@ defmodule SchoolWeb.Router do
     get("/logout", UserController, :logout)
     resources("/students", StudentController)
 
-    get("/update_changes/:student_id", StudentController, :update_changes)
+    post("/update_changes/:student_id", StudentController, :update_changes)
     post("/upload_students", StudentController, :pre_upload_students)
     post("/upload_teachers", TeacherController, :pre_upload_teachers)
     post("/upload_parents", ParentController, :pre_upload_parents)

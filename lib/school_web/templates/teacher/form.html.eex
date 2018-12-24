@@ -10,7 +10,7 @@
   <div class="col-lg-12" aria-label="student_table">
     <div class="card card-default d-none d-lg-block">
       <div class="card-body">
-        <%= form_for @changeset, @action, fn f -> %>
+<%= form_for @changeset, @action,[ multipart: true], fn f -> %>
           <%= if @changeset.action do %>
             <div class="alert alert-danger">
               <p>Oops, something went wrong! Please check the errors below.</p>
@@ -252,6 +252,17 @@
           
         </div>
 
+                <div class="form-group">
+    <center>
+      <label>Teacher Picture</label><br>
+
+
+      <img id="preview6" alt="Click here to select teacher picture" style='width:auto; height: 200px;' src='data:image/png;base64, <%= @bin%>'>
+       <%= file_input f, :image1, accept: ".png, .jpg, .jpeg"  ,id: "imgInp6", style: "display: none;"%>
+    </center>
+  </div>
+
+
 
 
           <div class="form-group">
@@ -270,3 +281,23 @@
     </div>
   </div>
 </div>
+   <script type="text/javascript">
+      $(window).ready(function(){
+        $("#imgInp6").change(function(){
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#preview6').attr('src', e.target.result);
+                 
+                }
+                reader.readAsDataURL($("#imgInp6")[0].files[0]);
+        });
+
+
+        $("img#preview6").click(function(){
+          $("input#imgInp6").click()
+        })
+    
+
+      });
+   </script>
+

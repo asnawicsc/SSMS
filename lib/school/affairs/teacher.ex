@@ -49,6 +49,8 @@ defmodule School.Affairs.Teacher do
     field(:tranfer_in, :string)
     field(:tranfer_out, :string)
     field(:reason, :string)
+    field(:image_bin, :binary)
+    field(:image_filename, :string)
 
     timestamps()
   end
@@ -89,7 +91,9 @@ defmodule School.Affairs.Teacher do
       :email,
       :tranfer_in,
       :tranfer_out,
-      :reason
+      :reason,
+      :image_bin,
+      :image_filename
     ])
     |> validate_required([:icno, :email, :name, :code])
   end

@@ -6,6 +6,7 @@ defmodule SchoolWeb.TeacherController do
   alias School.Settings.User
   alias School.Settings.UserAccess
   require IEx
+  import Mogrify
 
   def index(conn, _params) do
     teacher =
@@ -78,12 +79,15 @@ defmodule SchoolWeb.TeacherController do
         Map.put(each, :attend, false)
       end
 
-    if attended_teachers != [] do
-      attended_teachers =
-        for each <- attended_teachers do
-          Map.put(each, :attend, true)
-        end
-    end
+    attended_teachers =
+      if attended_teachers != [] do
+        attended_teachers =
+          for each <- attended_teachers do
+            Map.put(each, :attend, true)
+          end
+      else
+        attended_teachers = []
+      end
 
     teachers = List.flatten(remaining, attended_teachers)
 
@@ -108,6 +112,12 @@ defmodule SchoolWeb.TeacherController do
       end
       |> Enum.filter(fn x -> x != nil end)
       |> Enum.join(",")
+
+    if teacher_ids == "" do
+      conn
+      |> put_flash(:info, "Attendance inserted fail, please mark all teacher.")
+      |> redirect(to: teacher_path(conn, :teacher_attendance))
+    end
 
     Attendance.changeset(attendance, %{teacher_id: teacher_ids}) |> Repo.update!()
 
@@ -287,6 +297,12 @@ defmodule SchoolWeb.TeacherController do
   end
 
   def create(conn, %{"teacher" => teacher_params}) do
+    image_params = teacher_params["image1"]
+    result = upload_image(image_params)
+
+    teacher_params = Map.put(teacher_params, "image_bin", result.bin)
+    teacher_params = Map.put(teacher_params, "image_filename", result.filename)
+
     teacher_params =
       Map.put(teacher_params, "institution_id", conn.private.plug_session["institution_id"])
 
@@ -312,6 +328,31 @@ defmodule SchoolWeb.TeacherController do
       |> put_flash(:info, "Code Already Exist.")
       |> redirect(to: teacher_path(conn, :new))
     end
+  end
+
+  def upload_image(param) do
+    {:ok, seconds} = Timex.format(Timex.now(), "%s", :strftime)
+
+    path = File.cwd!() <> "/media"
+    image_path = Application.app_dir(:school, "priv/static/images")
+
+    if File.exists?(path) == false do
+      File.mkdir(File.cwd!() <> "/media")
+    end
+
+    fl = param.filename |> String.replace(" ", "_")
+    absolute_path = path <> "/#{seconds <> fl}"
+    absolute_path_bin = path <> "/bin_" <> "#{seconds <> fl}"
+    File.cp(param.path, absolute_path)
+    File.rm(image_path <> "/uploads")
+    File.ln_s(path, image_path <> "/uploads")
+
+    resized = Mogrify.open(absolute_path) |> resize("200x200") |> save(path: absolute_path_bin)
+    {:ok, bin} = File.read(resized.path)
+
+    # File.rm(resized.path)
+
+    %{filename: seconds <> fl, bin: Base.encode64(bin)}
   end
 
   def show(conn, %{"id" => id}) do
@@ -342,12 +383,30 @@ defmodule SchoolWeb.TeacherController do
 
     teacher_params =
       if teacher_params["is_delete"] == "true" do
-        Map.put(teacher_params, "is_delete", true)
+        teacher_params = Map.put(teacher_params, "is_delete", true)
       else
-        Map.put(teacher_params, "is_delete", false)
+        teacher_params = Map.put(teacher_params, "is_delete", false)
       end
 
-    case Affairs.update_teacher(teacher, teacher_params) do
+    image_params = teacher_params["image1"]
+
+    teacher_params =
+      if image_params != nil do
+        result = upload_image(image_params)
+
+        Map.put(teacher_params, "image_bin", result.bin)
+      end
+
+    teacher_params =
+      if image_params != nil do
+        result = upload_image(image_params)
+
+        Map.put(teacher_params, "image_filename", result.filename)
+      end
+
+    teacherss = Teacher.changeset(teacher, teacher_params)
+
+    case Repo.update(teacherss) do
       {:ok, teacher} ->
         url = teacher_path(conn, :index, focus: teacher.code)
         referer = conn.req_headers |> Enum.filter(fn x -> elem(x, 0) == "referer" end)

@@ -437,6 +437,7 @@ defmodule SchoolWeb.UserChannel do
         changeset: changeset,
         conn: conn,
         teacher: teacher,
+        bin: teacher.image_bin,
         action: "/teacher/#{teacher.code}"
       )
 
