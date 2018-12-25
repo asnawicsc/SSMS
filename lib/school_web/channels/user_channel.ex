@@ -17,6 +17,43 @@ defmodule SchoolWeb.UserChannel do
     end
   end
 
+  def handle_in("ed_show_parents", payload, socket) do
+    student = Repo.get(Student, payload["std_id"])
+
+    if student.ficno != nil do
+      father = Repo.get_by(Parent, icno: student.ficno)
+    else
+      father = nil
+    end
+
+    if student.micno != nil do
+      mother = Repo.get_by(Parent, icno: student.micno)
+    else
+      mother = nil
+    end
+
+    if student.gicno != nil do
+      guardian = Repo.get_by(Parent, icno: student.gicno)
+    else
+      guardian = nil
+    end
+
+    html =
+      Phoenix.View.render_to_string(
+        SchoolWeb.EdisciplineView,
+        "parents_list.html",
+        father: father,
+        mother: mother,
+        guardian: guardian
+      )
+
+    broadcast(socket, "parents_details", %{
+      html: html
+    })
+
+    {:noreply, socket}
+  end
+
   def handle_in("add_to_class_attendance", payload, socket) do
     class = Repo.get(Class, payload["class_id"])
     student = Repo.get(School.Affairs.Student, payload["student_id"])
@@ -3108,6 +3145,34 @@ defmodule SchoolWeb.UserChannel do
 
     broadcast(socket, "load_ui_color", %{color: color})
     {:noreply, socket}
+  end
+
+  def handle_in("save_homework_details", params, socket) do
+    {:ok, s_datetime, 0} = DateTime.from_iso8601(params["start_date"])
+    {:ok, e_datetime, 0} = DateTime.from_iso8601(params["end_date"])
+
+    s_date = s_datetime |> DateTime.to_date()
+    e_date = e_datetime |> DateTime.to_date()
+
+    ehomework_params = %{
+      class_id: Integer.parse(params["class_id"]) |> elem(0),
+      end_date: e_date,
+      semester_id: Integer.parse(params["semester_id"]) |> elem(0),
+      start_date: s_date,
+      subject_id: Integer.parse(params["subject_id"]) |> elem(0),
+      desc: params["description"]
+    }
+
+    case Affairs.create_ehomework(ehomework_params) do
+      {:ok, ehomework} ->
+        broadcast(socket, "show_calendar", %{
+          "start_date" => s_datetime,
+          "end_date" => e_datetime
+        })
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        nil
+    end
   end
 
   def handle_in(

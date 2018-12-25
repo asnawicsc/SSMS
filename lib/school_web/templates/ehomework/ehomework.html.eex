@@ -1,0 +1,296 @@
+<link rel="stylesheet" href="/vendor/fullcalendar/dist/fullcalendar.css">
+<!-- MOMENT JS-->
+<script src="/vendor/moment/min/moment-with-locales.js"></script>
+<!-- FULLCALENDAR-->
+<script src="/vendor/fullcalendar/dist/fullcalendar.js"></script>
+<script src="/vendor/fullcalendar/dist/gcal.js"></script>
+
+<div class="content-heading">
+   <div>E-Homework
+      <small><%= gettext("welcome")%>!</small>
+   </div>
+
+</div>
+
+<div class="row">
+   <div class="col-lg-3">
+
+       	<div class="card mb-3 border-default"  data-step="3" data-intro="Once selected, the form below will populate the date time for you, the rest is to enter the teacher and subject.">
+         <div class="card-header text-white bg-primary">Add new homework</div>
+         <div class="card-body">
+              <form >
+              	<input type="hidden" id="class_id" name="class_id" value="<%= @class.id%>">
+              	<input type="hidden" id="semester_id" name="semester_id" value="<%= @conn.private.plug_session["semester_id"] %>">
+              	<div class="form-group">
+                    <label>Start</label>
+                    <input class="form-control datetimepicker" name="start" placeholder="Start" type="text">
+ 				</div>
+ 				<div class="form-group">
+                    <label>End</label>
+                    <input class="form-control datetimepicker"  name="end" placeholder="End" type="text">
+ 				</div>
+              	<div class="form-group">
+              		
+        		<label >Subject</label>
+                 <select class="custom-select " name="subject_id">
+	                   <option selected="">Open this select menu</option>
+	                 <%= for subject <- @subjects do %>
+	                   <option value="<%= subject.subject_id %>"><%= subject.description %></option>
+	 					<% end %>
+	             </select>
+              	</div>
+              	<div class="form-group">
+              		
+        		<label>Description</label>
+                 <textarea class="form-control" id="description" name="description"></textarea>
+              	</div>
+                
+
+                 <div class="btn btn-sm btn-secondary" id="submit_event">Submit</div>
+              </form>
+           </div>
+ 
+      </div>
+  </div>
+  <div class="col-lg-9">
+  
+      <div class="card mb-3 border-default"  data-step="2" data-intro="Click on the date or time block on the calendar.">
+         <div class="card-header text-white bg-primary">Timetable    </div>
+          <div class="ml-auto" style="margin-top: 10px; margin-right: 10px; display: none;" >  <label class="switch switch-sm">
+                                Delete Mode: &nbsp; <input type="checkbox" id="check_mode" name="check_mode" checked="true">
+
+
+                                 <span></span>
+                              </label>
+                          </div>
+
+                        
+                         
+         <div class="card-body">
+			<div id='calendar'></div>
+
+         </div>
+      </div>
+              
+  </div>
+
+
+
+  </div>
+
+  <script type="text/javascript">
+  	$(document).ready(function(){
+  		jQuery('.datetimepicker').datetimepicker();
+
+  		$(document).change(function(){
+        var b = $("input[name='start']").val()
+        var a = $("input[name='end']").val()
+        var start = moment(b, "YYYY/MM/DD HH:mm");
+        var end = moment(a, "YYYY/MM/DD HH:mm");
+
+				$('#calendar').fullCalendar( 'select', start,  end  )
+
+        });
+
+        $("div#submit_event").click(function(){
+        	var semester_id = $("input#semester_id").val();
+        	var subject_id = $("select[name='subject_id']").val();
+        	var class_id = $("input#class_id").val();
+			        var b = $("input[name='start']").val()
+			        var a = $("input[name='end']").val()
+			        var start = moment(b, "YYYY/MM/DD HH:mm");
+			        var end = moment(a, "YYYY/MM/DD HH:mm");
+        			var title = "rando"
+        			var description = $("textarea#description").val();
+						  swal({
+						    title: "Are you sure?",
+						    text: "You want to save " + title + " on " + b,
+						    type: "warning",
+						    showCancelButton: true,
+						    confirmButtonColor: "#5d9cec",
+						    confirmButtonText: "Yes, save it!",
+						    cancelButtonText: "No, dont save it!",
+						    closeOnConfirm: false,
+						    closeOnCancel: false
+						  }, function(isConfirm) {
+						    if (isConfirm) {
+	
+					
+						   		channel.push("save_homework_details", {
+						   			semester_id: semester_id,
+						   			subject_id: subject_id,
+						   			class_id: class_id,
+						   			start_date: start.toISOString(), 
+						   			end_date: end.toISOString(),
+						   			description: description})
+
+						    } else {
+						      swal("Cancelled", "No event saved!", "info");
+						 
+
+						     		      revertFunc();
+						    }
+						  });
+        });
+
+        channel.on("show_calendar", payload => {
+			swal("Saved!", "Your event has been saved!", "success");
+			 $('#calendar').fullCalendar( 'refetchEvents' )
+		})
+
+
+
+        $('#calendar').fullCalendar({
+			    // put your options and callbacks here
+			    header: { center: 'month,agendaWeek' }, 
+			    selectable: true,
+			     unselectAuto: false,
+			    editable: true,
+    			eventLimit: true, // when too many events in a day, show the popover
+			    eventSources: [{
+			      url: '/show_ehomework_calendar/class/<%= @conn.params["class_id"] %>',
+			      timezone: 'UTC',
+			      color: '#5d9cec',    // an option!
+			      textColor: 'white'  // an option!
+			    }],
+			    droppable: true, // this allows things to be dropped onto the calendar
+			    select: function(start, end, jsEvent, view, resource_list) {
+						var start_date = start._d ;
+						var end_date = end._d ;
+						var dayWrapper = moment(start_date);
+						var e_dayWrapper = moment(end_date);
+						dayWrapper.subtract(8, 'hours');
+						e_dayWrapper.subtract(8, 'hours'); 
+						$("input[name='start']").val(dayWrapper.format("YYYY/MM/DD HH:mm"))
+						$("input[name='end']").val(e_dayWrapper.format("YYYY/MM/DD HH:mm"))
+				
+			    },
+
+			  	eventDrop: function(event, delta, revertFunc) {
+						var title = event.title;
+						var start_date = event.start._d ;
+						var end_date = event.end._d ;
+						var dayWrapper = moment(start_date);
+						var e_dayWrapper = moment(end_date);
+							dayWrapper.subtract(8, 'hours');
+						  swal({
+						    title: "Are you sure?",
+						    text: "You want to save " + title + " on " + dayWrapper.format("dddd, MMMM Do YYYY, h:mm:ss a"),
+						    type: "warning",
+						    showCancelButton: true,
+						    confirmButtonColor: "#5d9cec",
+						    confirmButtonText: "Yes, save it!",
+						    cancelButtonText: "No, dont save it!",
+						    closeOnConfirm: false,
+						    closeOnCancel: false
+						  }, function(isConfirm) {
+						    if (isConfirm) {
+						var dayWrapper2 = moment(start_date);
+						var e_dayWrapper2 = moment(end_date);
+						dayWrapper2.subtract(8, 'hours');
+						e_dayWrapper2.subtract(8, 'hours');
+						   		channel.push("save_period", {
+						   			period_id: event.period_id, 
+						   			event_id_str: event._id,
+						   			user_id: window.currentUser, 
+						   			start_date: dayWrapper2.toISOString(), 
+						   			end_date: e_dayWrapper2.toISOString()})
+
+						    } else {
+						      swal("Cancelled", "No event saved!", "info");
+						 
+
+						     		      revertFunc();
+						    }
+						  });
+		
+
+			  	},
+			  	eventClick: function(calEvent, jsEvent, view) {
+
+			var class_id = "<%= @conn.params["class_id"]%>"
+
+			 var mode = $("input[name='check_mode']").val();
+
+			 $('#check_mode').click(function() {
+    $("#txtAge").toggle(this.checked);
+});
+
+	
+   
+if(document.getElementById('check_mode').checked) {
+
+	
+
+				    					    	swal({
+						    title: calEvent.title,
+						  	text: calEvent.description,
+						    type: "success",
+					showCancelButton: true, confirmButtonText: "Yes",
+					
+						    cancelButtonText: "No",
+						    closeOnConfirm: true,
+						    closeOnCancel: true
+
+						  }, function(isConfirm) {
+						    if (isConfirm) {
+						    	window.location.href = "/view_homework/class/" + calEvent.class_id+"/end_date/"+calEvent.end_date;
+						    } 
+						    else
+						    {
+			
+						    }
+						 
+
+
+						  })
+
+
+
+
+} else {
+
+
+
+
+
+
+
+
+
+
+
+				    	swal({
+						    title: calEvent.title,
+						  	text: calEvent.description,
+						    type: "success",
+					showCancelButton: true, confirmButtonText: "Edit",
+					
+						    cancelButtonText: "Dismiss",
+						    closeOnConfirm: true,
+						    closeOnCancel: true
+
+						  }, function(isConfirm) {
+						    if (isConfirm) {
+						    window.location.href = "/timetable/edit_event/" + calEvent.period_id;
+						    } 
+						    else
+						    {
+			
+						    }
+						 
+
+
+						  })
+
+				    }
+					    	
+
+
+
+				  }
+			  });
+
+
+  	})
+  </script>
