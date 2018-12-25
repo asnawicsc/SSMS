@@ -226,6 +226,8 @@ defmodule SchoolWeb.Router do
     resources("/parent", ParentController)
     post("/upload_parents", ParentController, :upload_parents)
 
+    get("/create_clerk", UserController, :create_clerk)
+
     resources("/timetable", TimetableController)
     get("/timetable/teacher/:user_id/list", TimetableController, :teacher_timetable_list)
     get("/timetable/teacher/:user_id/sync_to_gcal", TimetableController, :sync_to_gcal)

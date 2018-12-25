@@ -127,6 +127,16 @@
                            </a>
 
                         </li>
+
+                            <li class="nav-heading ">
+                           <span data-localize="sidebar.heading.HEADER">School Clerk</span>
+                        </li>
+                        <li class=" ">
+                           <a href="/create_clerk" title="Extras" >
+                             <em class="fas fa-user"></em>
+                              <span data-localize="sidebar.nav.extra.EXTRA"><%= gettext "Create Clerk" %></span>
+                           </a>
+                        </li>
                          <li class="nav-heading ">
                            <span data-localize="sidebar.heading.HEADER">Class Management</span>
                         </li>
