@@ -1094,11 +1094,10 @@ defmodule SchoolWeb.UserChannel do
             b_cert: r.b_cert,
             religion: r.religion,
             race: r.race
-          }
+          },
+          order_by: [desc: r.sex, asc: r.name]
         )
       )
-      |> Enum.sort_by(fn x -> x.sex end)
-      |> Enum.reverse()
       |> Enum.with_index()
 
     html =

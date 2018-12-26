@@ -116,6 +116,10 @@
               "Teacher" -> 
                 teacher = Repo.get_by(Affairs.Teacher,email: user.email) 
                 Repo.all(from c in Affairs.Class, where: c.teacher_id == ^teacher.id) 
+
+                 "Clerk" ->
+                Repo.all(from c in Affairs.Class, where: c.institution_id == ^@conn.private.plug_session["institution_id"]) 
+
              end 
 
              %>

@@ -102,12 +102,21 @@ defmodule SchoolWeb.UserController do
             |> put_session(:style, user.styles)
             |> redirect(to: page_path(conn, :support_dashboard))
           else
-            conn
-            |> put_session(:user_id, user.id)
-            |> put_session(:semester_id, current_sem.id)
-            |> put_session(:institution_id, access.institution_id)
-            |> put_session(:style, user.styles)
-            |> redirect(to: page_path(conn, :dashboard))
+            if user.role == "Clerk" do
+              conn
+              |> put_session(:user_id, user.id)
+              |> put_session(:semester_id, current_sem.id)
+              |> put_session(:institution_id, access.institution_id)
+              |> put_session(:style, user.styles)
+              |> redirect(to: page_path(conn, :clerk_dashboard))
+            else
+              conn
+              |> put_session(:user_id, user.id)
+              |> put_session(:semester_id, current_sem.id)
+              |> put_session(:institution_id, access.institution_id)
+              |> put_session(:style, user.styles)
+              |> redirect(to: page_path(conn, :dashboard))
+            end
           end
         end
       else
@@ -189,7 +198,17 @@ defmodule SchoolWeb.UserController do
   end
 
   def create_clerk(conn, _params) do
-    render(conn, "create_clerk.html")
+    users =
+      Repo.all(
+        from(s in User,
+          left_join: g in Settings.UserAccess,
+          on: s.id == g.user_id,
+          where:
+            g.institution_id == ^conn.private.plug_session["institution_id"] and s.role == "Clerk"
+        )
+      )
+
+    render(conn, "create_clerk.html", users: users)
   end
 
   def index(conn, _params) do

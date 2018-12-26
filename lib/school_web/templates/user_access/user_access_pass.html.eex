@@ -14,7 +14,7 @@
                  
                       <ol class="not_selected">
              
-                      <%= for institution <- @not_selected|> Enum.filter(fn x -> x.id ==@conn.private.plug_session["institution_id"] end) |> Enum.sort_by(fn x -> x.name end) do %>
+                      <%= for institution <- @not_selected |> Enum.sort_by(fn x -> x.name end) do %>
                   
                   <li aria-label="<%= institution.id %>" style="cursor: pointer;"><%= institution.name %></li>
                   <%end%>

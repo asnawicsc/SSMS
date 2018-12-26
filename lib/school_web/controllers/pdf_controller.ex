@@ -1470,11 +1470,10 @@ defmodule SchoolWeb.PdfController do
             b_cert: r.b_cert,
             religion: r.religion,
             race: r.race
-          }
+          },
+          order_by: [desc: r.sex, asc: r.name]
         )
       )
-      |> Enum.sort_by(fn x -> x.sex end)
-      |> Enum.reverse()
       |> Enum.with_index()
 
     institution =
@@ -1536,8 +1535,12 @@ defmodule SchoolWeb.PdfController do
     institution = Repo.get_by(School.Settings.Institution, id: inst_id)
 
     teacher =
-      Affairs.list_teacher()
-      |> Enum.filter(fn x -> x.institution_id == inst_id end)
+      Repo.all(
+        from(s in School.Affairs.Teacher,
+          where: s.institution_id == ^inst_id,
+          order_by: [asc: s.name]
+        )
+      )
       |> Enum.with_index()
 
     html =

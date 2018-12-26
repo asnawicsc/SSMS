@@ -1,9 +1,52 @@
 
+<div class="row">
 
+
+
+      <div class="col-lg-8" >
+        <div class="card card-default d-none d-lg-block">
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table" id="datatable1">
+                <thead>
+                  <tr>
+                  <th><%= gettext "Name" %></th>
+
+                  <th><%= gettext "Email" %></th>
+  
+                  <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                 <%= for user <- @users do %>
+
+              
+
+                               
+                              
+                    <tr>
+                       <td><%= user.name %></td>
     
+                      <td><%= user.email %></td>
+          
+    
+                  </tr>
+                <% end %>
+
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+          <div class="col-lg-4" >
             <!-- START card-->
             <div class="card card-default">
-               <div class="card-header"> Create User</div>
+               <div class="card-header"> Create Clerk</div>
                <div class="card-body">
               <% role = School.Repo.all(from l in School.Settings.Role, select: %{name: l.name, id: l.id}) %>
 
@@ -64,7 +107,7 @@
 
                         <div class="form-group">
                                     <span>Role : <select class="select" required="required" name="role">
-                                          <%= for a <- role|>Enum.filter(fn x -> x.name !="Admin" and x.name !="Support" and x.name !="Teacher" and x.name !="Class Monitor" end) |> Enum.sort do %>
+                                          <%= for a <- role|>Enum.filter(fn x -> x.name !="Admin" and x.name !="Support" and x.name !="Teacher" and x.name !="Monitor" end) |> Enum.sort do %>
                                           <option value="<%= a.name %>">
                                           <%= a.name %>
                                           </option>
@@ -97,4 +140,5 @@
                </div>
             </div>
             <!-- END card-->
-       
+       </div>
+       </div>

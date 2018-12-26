@@ -51,6 +51,19 @@
             </div>
           <% end %>
 
+           <%= if user.role == "Clerk" do %>
+           <div class="navbar-header">
+               <a class="navbar-brand" href="/clerk_dashboard">
+                  <div class="brand-logo">
+                     <img class="img-fluid" src="/img/tail.png" width="80px" height="70px" alt="App Logo">
+                  </div>
+                  <div class="brand-logo-collapsed">
+                     <img class="img-fluid" src="/img/head.png" alt="App Logo">
+                  </div>
+               </a>
+            </div>
+          <% end %>
+
    <% end %>
 <% end %>
            
