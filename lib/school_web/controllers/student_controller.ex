@@ -855,6 +855,8 @@ defmodule SchoolWeb.StudentController do
         result = upload_image(image_params)
 
         Map.put(params, "image_bin", result.bin)
+      else
+        params
       end
 
     params =
@@ -862,6 +864,8 @@ defmodule SchoolWeb.StudentController do
         result = upload_image(image_params)
 
         Map.put(params, "image_filename", result.filename)
+      else
+        params
       end
 
     studentss = Student.changeset(student, params)

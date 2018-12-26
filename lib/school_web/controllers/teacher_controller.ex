@@ -407,6 +407,8 @@ defmodule SchoolWeb.TeacherController do
         result = upload_image(image_params)
 
         Map.put(teacher_params, "image_bin", result.bin)
+      else
+        teacher_params
       end
 
     teacher_params =
@@ -414,6 +416,8 @@ defmodule SchoolWeb.TeacherController do
         result = upload_image(image_params)
 
         Map.put(teacher_params, "image_filename", result.filename)
+      else
+        teacher_params
       end
 
     teacherss = Teacher.changeset(teacher, teacher_params)
