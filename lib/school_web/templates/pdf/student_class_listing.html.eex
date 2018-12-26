@@ -1,17 +1,25 @@
-<center><b>SENARAI MURID MENGIKUT KELAS</b></center><br>
-<center><b><%= @institution.name %></b></br></center>
-<p  style="margin-right: 10px; margin-left: 10px;">Kelas: <b><%= @class.name %></b> &nbsp;&nbsp; Year: <b><%= @semester.year %></b> &nbsp;&nbsp; Semester: <b><%= @semester.sem %></b></p>
 
+<table class="table" border="1" style="border-collapse: collapse;""    width="100%">
+  <tbody>
+<td >
+<b><%= @institution.name %></b></br>
+<b>Kelas: <%= @class.name %></b> <br>
+<b>Nama GURU : ________________________________________________________________ </b><br>
+<b>PERKARA : _________________________________________________________________</b> <b style="margin-left: 450px;px;">Tarikh:<%= SchoolWeb.LayoutView.my_time(DateTime.utc_now) %></b> <br> 
 
+</td>
+    </tbody>
+</table>
 
 <table class="table" border="1" style="border-collapse: collapse;""    width="100%" >
   <thead>
     <tr align="center">
       <th><%= gettext "Bil." %></th>
-      <th><%= gettext "Student No" %></th>
+      <th><%= gettext "学生没有" %></th>
         <th><%= gettext "Name" %></th>
-      <th><%= gettext "Chinese Name" %></th>
+      <th><%= gettext "中文名" %></th>
       <th><%= gettext "J" %></th>
+      <th></th>
       <th></th>
       <th></th>
       <th></th>
@@ -40,7 +48,7 @@
        <td width="40px"></td>
        <td width="40px"></td>
        <td width="40px"></td>
-
+       <td width="40px"></td>
     </tr>
 <% end %>
   </tbody>
