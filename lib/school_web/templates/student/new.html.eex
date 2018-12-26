@@ -232,8 +232,8 @@
 
                 <div class="form-group">
     <center>
-      <label>Teacher Picture</label><br>
-      <img id="preview5" alt="Click here to select teacher picture" style='width:auto; height: 200px;' src='data:image/png;base64, ""'>
+      <label>Student Picture</label><br>
+      <img id="preview5" alt="Click here to select teacher student" style='width:auto; height: 200px;' src='data:image/png;base64, ""'>
        <%= file_input f, :image1, accept: ".png, .jpg, .jpeg"  ,id: "imgInp5", style: "display: none;"%>
     </center>
   </div>

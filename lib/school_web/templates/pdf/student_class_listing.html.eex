@@ -4,20 +4,21 @@
 
 
 
-<table class="table" border="1" style="border-collapse: collapse;   align="center"  width="100%" >
+<table class="table" border="1" style="border-collapse: collapse;""    width="100%" >
   <thead>
     <tr align="center">
       <th><%= gettext "Bil." %></th>
-      <th><%= gettext "Bil Dlm Sekolah" %></th>
-      <th><%= gettext "B. Cina" %></th>
-      <th><%= gettext "Bahasa Malaysia" %></th>
-      <th><%= gettext "Jantina" %></th>
-      <th><%= gettext "Tarikh Lahir" %></th>
-      <th><%= gettext "Tempat Lahir" %></th>
-      <th><%= gettext "Umur Pada 1hb Jan" %></th>
-      <th><%= gettext "No Sijil Beranak" %></th>
-      <th><%= gettext "Tarikh Masuk" %></th>
-      <th><%= gettext "Bangsa" %></th>
+      <th><%= gettext "Student No" %></th>
+        <th><%= gettext "Name" %></th>
+      <th><%= gettext "Chinese Name" %></th>
+      <th><%= gettext "J" %></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
 
     </tr>
   </thead>
@@ -26,24 +27,19 @@
 <% no=item|>elem(1) %>
 <% item=item|>elem(0) %>
 
-    <tr align="center">
+    <tr align="center" style="margin-left: 20px;">
       <td><%= no+1 %></td>
        <td><%= item.id %></td>
+       <td align="left" ><%= item.name %></td>
        <td><%= item.chinese_name %></td>
-       <td><%= item.name %></td>
        <td><%= item.sex %></td>
-       <td><%= item.dob %></td>
-       <td><%= item.pob %></td>
-       <td></td>
-       <td><%= item.b_cert %></td>
-       <td></td>
-       <td>
-       	<%= if item.race == "C" do "CINA" end %>
-       	<%= if item.race == "M" do "MELAYU" end %>
-       	<%= if item.race == "I" do "INDIA" end %>
-       	<%= if item.race == "O" do "LAIN-LAIN" end %>
-
-       	</td>
+       <td width="40px"></td>
+       <td width="40px"></td>
+       <td width="40px"></td>
+       <td width="40px"></td>
+       <td width="40px"></td>
+       <td width="40px"></td>
+       <td width="40px"></td>
 
     </tr>
 <% end %>
