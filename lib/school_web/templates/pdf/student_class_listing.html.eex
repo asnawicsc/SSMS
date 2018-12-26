@@ -11,7 +11,7 @@
     </tbody>
 </table>
 
-<table class="table" border="1" style="border-collapse: collapse;""    width="100%" >
+<table class="table" border="1" style="border-collapse: collapse; border-spacing: 0;"    width="100%" >
   <thead>
     <tr align="center">
       <th><%= gettext "Bil." %></th>
@@ -59,4 +59,16 @@
   </tbody>
 </table>
 
-
+<style type="text/css">
+  
+  table { 
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+td {
+    padding:0px;
+}
+td img {
+    display:block;
+}
+</style>
