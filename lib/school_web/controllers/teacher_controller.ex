@@ -20,9 +20,10 @@ defmodule SchoolWeb.TeacherController do
   def e_discipline(conn, params) do
     user = Repo.get(User, conn.private.plug_session["user_id"])
 
-    if user.role == "Teacher" do
-      teacher = Repo.get_by(Teacher, email: user.email)
-    end
+    teacher =
+      if user.role == "Teacher" do
+        teacher = Repo.get_by(Teacher, email: user.email)
+      end
 
     messages = Repo.all(from(e in School.Affairs.Ediscipline, where: e.teacher_id == ^teacher.id))
     render(conn, "e_discipline.html", messages: messages)
