@@ -3,9 +3,9 @@
   <tbody>
 <td >
 <b><%= @institution.name %></b></br>
-<b>Kelas: <%= @class.name %></b> <br>
-<b>Nama GURU : ________________________________________________________________ </b><br>
-<b>PERKARA : _________________________________________________________________</b> <b style="margin-left: 450px;px;">Tarikh:<%= SchoolWeb.LayoutView.my_time(DateTime.utc_now) %></b> <br> 
+班级<b> Kelas: <%= @class.name %></b> <br>
+老师<b> Nama GURU : ________________________________________________________________ </b><br>
+事项<b> PERKARA &nbsp;&nbsp;&nbsp;: ________________________________________________________________</b>  <b style="margin-left: 350px;px;"></b>日期<b>Tarikh:<%= SchoolWeb.LayoutView.my_time(DateTime.utc_now) %></b> <br> 
 
 </td>
     </tbody>
@@ -15,9 +15,9 @@
   <thead>
     <tr align="center">
       <th><%= gettext "Bil." %></th>
-      <th><%= gettext "学生卡" %></th>
+      <th><%= gettext "学号" %></th>
         <th><%= gettext "Name" %></th>
-      <th><%= gettext "中文名" %></th>
+      <th><%= gettext "姓名" %></th>
       <th><%= gettext "Jan" %></th>
       <th></th>
       <th></th>
@@ -64,6 +64,7 @@
   table { 
     border-spacing: 0;
     border-collapse: collapse;
+    font-size: 12px;
 }
 td {
     padding:0px;

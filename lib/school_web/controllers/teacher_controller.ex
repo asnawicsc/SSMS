@@ -395,16 +395,16 @@ defmodule SchoolWeb.TeacherController do
 
     teacher_params =
       if teacher_params["is_delete"] == "true" do
-        Map.put(teacher_params, "is_delete", 1)
+        Map.put(teacher_params, "is_delete", "1")
       else
-        Map.put(teacher_params, "is_delete", 0)
+        Map.put(teacher_params, "is_delete", "0")
       end
 
     teacher_params =
       if teacher_params["is_delete"] == "false" do
-        Map.put(teacher_params, "is_delete", 0)
+        Map.put(teacher_params, "is_delete", "0")
       else
-        Map.put(teacher_params, "is_delete", 1)
+        Map.put(teacher_params, "is_delete", "1")
       end
 
     image_params = teacher_params["image1"]
@@ -428,6 +428,7 @@ defmodule SchoolWeb.TeacherController do
       end
 
     teacherss = Teacher.changeset(teacher, teacher_params)
+    IEx.pry()
 
     case Repo.update(teacherss) do
       {:ok, teacher} ->
