@@ -5,7 +5,7 @@
 <b><%= @institution.name %></b></br>
 班级<b> Kelas: <%= @class.name %></b> <br>
 老师<b> Nama GURU : ________________________________________________________________ </b><br>
-事项<b> PERKARA &nbsp;&nbsp;&nbsp;: ________________________________________________________________</b>  <b style="margin-left: 350px;px;"></b>日期<b>Tarikh:<%= SchoolWeb.LayoutView.my_time(DateTime.utc_now) %></b> <br> 
+事项<b> PERKARA &nbsp;&nbsp;&nbsp;: ________________________________________________________________</b>  <b style="margin-left: 600px;px;"></b>日期<b>Tarikh:<%= SchoolWeb.LayoutView.my_time(DateTime.utc_now) %></b> <br> 
 
 </td>
     </tbody>
@@ -29,6 +29,7 @@
       <th></th>
       <th></th>
       <th></th>
+      <th>Repo.all(from s in Student Affairs.ManageStu</th>
 
     </tr>
   </thead>
@@ -52,8 +53,9 @@
        <td width="80px"></td>
        <td width="80px"></td>
        <td width="80px"></td>
-              <td width="80px"></td>
        <td width="80px"></td>
+       <td width="80px"></td>
+
     </tr>
 <% end %>
   </tbody>

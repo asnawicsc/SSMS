@@ -5,9 +5,21 @@
   <thead>
     <tr align="center">
       <th><%= gettext "Bil." %></th>
-      <th><%= gettext "Kod" %></th>
-      <th><%= gettext "Nama (B.Mal)" %></th>
-      <th><%= gettext "Nama (Chinese)" %></th>
+     
+      <th><%= gettext "Name" %></th>
+      <th><%= gettext "姓名" %></th>
+      <th><%= gettext "Position" %></th>
+       <th><%= gettext "Position" %></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+       
 
 
     </tr>
@@ -19,9 +31,20 @@
 
     <tr align="center">
       <td><%= no+1 %></td>
-       <td><%= item.code %></td>
-       <td><%= item.name %></td>
+
+       <td align="left"><%= item.name %></td>
        <td><%= item.cname %></td>
+       <td><%= item.postitle %></td>
+        <th width="80"></th>
+        <th width="80"></th>
+        <th width="80"></th>
+        <th width="80"></th>
+        <th width="80"></th>
+        <th width="80"></th>
+        <th width="80"></th>
+        <th width="80"></th>
+        <th width="80"></th>
+        <th width="80"></th>
  
 
     </tr>
