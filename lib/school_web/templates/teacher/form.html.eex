@@ -218,11 +218,15 @@
        
 
           <div  class="form-group col-md-2" style="margin-top: 30px;">
-            <%= label f, (gettext "is_delete?") %>
+            <%= label f, (gettext "is_delete?"),  class: "control-label"%>
 
 
-
-              <%=  checkbox f, :is_delete, checked: @teacher.is_delete %>
+              <%= if  @teacher.is_delete == 1  do
+                    checkbox f, :is_delete, checked: 'checked' 
+                else
+                    checkbox f, :is_delete
+              end %>
+           
 
            <%= error_tag f, :is_delete %>
           </div>

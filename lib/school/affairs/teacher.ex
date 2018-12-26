@@ -45,7 +45,7 @@ defmodule School.Affairs.Teacher do
     field(:tccjob6, :string)
     field(:institution_id, :integer)
     field(:email, :string)
-    field(:is_delete, :boolean, default: false)
+    field(:is_delete, :integer, default: 0)
     field(:tranfer_in, :string)
     field(:tranfer_out, :string)
     field(:reason, :string)

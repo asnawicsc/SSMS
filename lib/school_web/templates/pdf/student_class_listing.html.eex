@@ -1,5 +1,5 @@
 
-<table class="table" border="1" style="border-collapse: collapse;""    width="100%">
+<table class="table" border="1" style="border-collapse: collapse; "     width="100%">
   <tbody>
 <td >
 <b><%= @institution.name %></b></br>
@@ -37,7 +37,7 @@
 <% no=item|>elem(1) %>
 <% item=item|>elem(0) %>
 
-    <tr align="center" style="margin-left: 20px;">
+    <tr align="center">
       <td><%= no+1 %></td>
        <td><%= item.id_no %></td>
        <td align="left" ><%= item.name %></td>
