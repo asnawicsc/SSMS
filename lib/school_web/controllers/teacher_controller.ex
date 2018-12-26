@@ -428,7 +428,6 @@ defmodule SchoolWeb.TeacherController do
       end
 
     teacherss = Teacher.changeset(teacher, teacher_params)
-    IEx.pry()
 
     case Repo.update(teacherss) do
       {:ok, teacher} ->

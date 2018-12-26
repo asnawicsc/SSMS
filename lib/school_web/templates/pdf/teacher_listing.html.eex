@@ -9,7 +9,7 @@
       <th><%= gettext "Name" %></th>
       <th><%= gettext "姓名" %></th>
       <th><%= gettext "Position" %></th>
-       <th><%= gettext "Position" %></th>
+       <th></th>
         <th></th>
         <th></th>
         <th></th>
