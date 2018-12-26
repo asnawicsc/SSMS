@@ -20,23 +20,26 @@ defmodule SchoolWeb.UserChannel do
   def handle_in("ed_show_parents", payload, socket) do
     student = Repo.get(Student, payload["std_id"])
 
-    if student.ficno != nil do
-      father = Repo.get_by(Parent, icno: student.ficno)
-    else
-      father = nil
-    end
+    father =
+      if student.ficno != nil do
+        father = Repo.get_by(Parent, icno: student.ficno)
+      else
+        father = nil
+      end
 
-    if student.micno != nil do
-      mother = Repo.get_by(Parent, icno: student.micno)
-    else
-      mother = nil
-    end
+    mother =
+      if student.micno != nil do
+        mother = Repo.get_by(Parent, icno: student.micno)
+      else
+        mother = nil
+      end
 
-    if student.gicno != nil do
-      guardian = Repo.get_by(Parent, icno: student.gicno)
-    else
-      guardian = nil
-    end
+    guardian =
+      if student.gicno != nil do
+        guardian = Repo.get_by(Parent, icno: student.gicno)
+      else
+        guardian = nil
+      end
 
     html =
       Phoenix.View.render_to_string(
