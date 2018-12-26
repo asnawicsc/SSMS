@@ -15,10 +15,12 @@
   <thead>
     <tr align="center">
       <th><%= gettext "Bil." %></th>
-      <th><%= gettext "学生没有" %></th>
+      <th><%= gettext "学生卡" %></th>
         <th><%= gettext "Name" %></th>
       <th><%= gettext "中文名" %></th>
-      <th><%= gettext "J" %></th>
+      <th><%= gettext "Jan" %></th>
+      <th></th>
+      <th></th>
       <th></th>
       <th></th>
       <th></th>
@@ -37,18 +39,21 @@
 
     <tr align="center" style="margin-left: 20px;">
       <td><%= no+1 %></td>
-       <td><%= item.id %></td>
+       <td><%= item.id_no %></td>
        <td align="left" ><%= item.name %></td>
        <td><%= item.chinese_name %></td>
-       <td><%= item.sex %></td>
-       <td width="40px"></td>
-       <td width="40px"></td>
-       <td width="40px"></td>
-       <td width="40px"></td>
-       <td width="40px"></td>
-       <td width="40px"></td>
-       <td width="40px"></td>
-       <td width="40px"></td>
+       <td><%= if item.sex == "M" do "L" end %>
+        <%= if item.sex == "F" do "P" end %></td>
+       <td width="80px"></td>
+       <td width="80px"></td>
+       <td width="80px"></td>
+       <td width="80px"></td>
+       <td width="80px"></td>
+       <td width="80px"></td>
+       <td width="80px"></td>
+       <td width="80px"></td>
+              <td width="80px"></td>
+       <td width="80px"></td>
     </tr>
 <% end %>
   </tbody>
