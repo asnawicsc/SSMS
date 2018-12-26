@@ -4759,6 +4759,103 @@ defmodule School.Affairs do
     Announcement.changeset(announcement, %{})
   end
 
+  alias School.Affairs.Ediscipline
+
+  @doc """
+  Returns the list of edisciplines.
+
+  ## Examples
+
+      iex> list_edisciplines()
+      [%Ediscipline{}, ...]
+
+  """
+  def list_edisciplines do
+    Repo.all(Ediscipline)
+  end
+
+  @doc """
+  Gets a single ediscipline.
+
+  Raises `Ecto.NoResultsError` if the Ediscipline does not exist.
+
+  ## Examples
+
+      iex> get_ediscipline!(123)
+      %Ediscipline{}
+
+      iex> get_ediscipline!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_ediscipline!(id), do: Repo.get!(Ediscipline, id)
+
+  @doc """
+  Creates a ediscipline.
+
+  ## Examples
+
+      iex> create_ediscipline(%{field: value})
+      {:ok, %Ediscipline{}}
+
+      iex> create_ediscipline(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_ediscipline(attrs \\ %{}) do
+    %Ediscipline{}
+    |> Ediscipline.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+
+  Updates a ediscipline.
+
+  ## Examples
+
+      iex> update_ediscipline(ediscipline, %{field: new_value})
+      {:ok, %Ediscipline{}}
+
+      iex> update_ediscipline(ediscipline, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_ediscipline(%Ediscipline{} = ediscipline, attrs) do
+    ediscipline
+    |> Ediscipline.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a Ediscipline.
+
+  ## Examples
+
+      iex> delete_ediscipline(ediscipline)
+      {:ok, %Ediscipline{}}
+
+      iex> delete_ediscipline(ediscipline)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_ediscipline(%Ediscipline{} = ediscipline) do
+    Repo.delete(ediscipline)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking ediscipline changes.
+
+  ## Examples
+
+      iex> change_ediscipline(ediscipline)
+      %Ecto.Changeset{source: %Ediscipline{}}
+
+  """
+  def change_ediscipline(%Ediscipline{} = ediscipline) do
+    Ediscipline.changeset(ediscipline, %{})
+  end
+
   alias School.Affairs.HistoryExam
 
   @doc """
@@ -4810,7 +4907,6 @@ defmodule School.Affairs do
 
   @doc """
   Updates a history_exam.
-
   ## Examples
 
       iex> update_history_exam(history_exam, %{field: new_value})
@@ -4949,5 +5045,101 @@ defmodule School.Affairs do
   """
   def change_absent_history(%AbsentHistory{} = absent_history) do
     AbsentHistory.changeset(absent_history, %{})
+  end
+
+  alias School.Affairs.Ehomework
+
+  @doc """
+  Returns the list of ehehomeworks.
+
+  ## Examples
+
+      iex> list_ehehomeworks()
+      [%Ehomework{}, ...]
+
+  """
+  def list_ehehomeworks do
+    Repo.all(Ehomework)
+  end
+
+  @doc """
+  Gets a single ehomework.
+
+  Raises `Ecto.NoResultsError` if the Ehomework does not exist.
+
+  ## Examples
+
+      iex> get_ehomework!(123)
+      %Ehomework{}
+
+      iex> get_ehomework!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_ehomework!(id), do: Repo.get!(Ehomework, id)
+
+  @doc """
+  Creates a ehomework.
+
+  ## Examples
+
+      iex> create_ehomework(%{field: value})
+      {:ok, %Ehomework{}}
+
+      iex> create_ehomework(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_ehomework(attrs \\ %{}) do
+    %Ehomework{}
+    |> Ehomework.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a ehomework.
+
+  ## Examples
+
+      iex> update_ehomework(ehomework, %{field: new_value})
+      {:ok, %Ehomework{}}
+
+      iex> update_ehomework(ehomework, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_ehomework(%Ehomework{} = ehomework, attrs) do
+    ehomework
+    |> Ehomework.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a Ehomework.
+
+  ## Examples
+
+      iex> delete_ehomework(ehomework)
+      {:ok, %Ehomework{}}
+
+      iex> delete_ehomework(ehomework)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_ehomework(%Ehomework{} = ehomework) do
+    Repo.delete(ehomework)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking ehomework changes.
+
+  ## Examples
+
+      iex> change_ehomework(ehomework)
+      %Ecto.Changeset{source: %Ehomework{}}
+
+  """
+  def change_ehomework(%Ehomework{} = ehomework) do
+    Ehomework.changeset(ehomework, %{})
   end
 end

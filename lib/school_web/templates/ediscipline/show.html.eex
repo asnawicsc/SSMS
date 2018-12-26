@@ -1,0 +1,28 @@
+<h2>Show Ediscipline</h2>
+
+<ul>
+
+  <li>
+    <strong>Title:</strong>
+    <%= @ediscipline.title %>
+  </li>
+
+  <li>
+    <strong>Message:</strong>
+    <%= @ediscipline.message %>
+  </li>
+
+  <li>
+    <strong>Psid:</strong>
+    <%= @ediscipline.psid %>
+  </li>
+
+  <li>
+    <strong>Teacher:</strong>
+    <%= @ediscipline.teacher_id %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: ediscipline_path(@conn, :edit, @ediscipline) %></span>
+<span><%= link "Back", to: ediscipline_path(@conn, :index) %></span>

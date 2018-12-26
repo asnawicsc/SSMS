@@ -1,0 +1,26 @@
+<select class="custom-select custom-select mb-3" id="parents">
+	<%= if @father == nil and @mother == nil and @guardian == nil do %>
+		<option selected>
+			No parents
+		</option>
+	<% else %>
+		<option selected>
+			Please select a person to send.
+		</option>
+	<% end %>
+	<%= if @father != nil do %>
+		<option value="<%= @father.id %>">
+			<%= @father.name %> (Father)
+		</option>
+	<% end %>
+	<%= if @mother != nil do %>
+		<option value="<%= @mother.id %>">
+			<%= @mother.name %> (Mother)
+		</option>
+	<% end %>
+	<%= if @guardian != nil do %>
+		<option value="<%= @guardian.id %>">
+			<%= @guardian.name %> (Guardian)
+		</option>
+	<% end %>	
+</select>

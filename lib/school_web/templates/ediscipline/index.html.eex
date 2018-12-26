@@ -1,0 +1,32 @@
+<h2>Listing Edisciplines</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Message</th>
+      <th>Psid</th>
+      <th>Teacher</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for ediscipline <- @edisciplines do %>
+    <tr>
+      <td><%= ediscipline.title %></td>
+      <td><%= ediscipline.message %></td>
+      <td><%= ediscipline.psid %></td>
+      <td><%= ediscipline.teacher_id %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: ediscipline_path(@conn, :show, ediscipline), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: ediscipline_path(@conn, :edit, ediscipline), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: ediscipline_path(@conn, :delete, ediscipline), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Ediscipline", to: ediscipline_path(@conn, :new) %></span>
