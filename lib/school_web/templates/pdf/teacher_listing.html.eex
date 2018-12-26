@@ -35,16 +35,16 @@
        <td align="left"><%= item.name %></td>
        <td><%= item.cname %></td>
        <td><%= item.postitle %></td>
-        <th width="80"></th>
-        <th width="80"></th>
-        <th width="80"></th>
-        <th width="80"></th>
-        <th width="80"></th>
-        <th width="80"></th>
-        <th width="80"></th>
-        <th width="80"></th>
-        <th width="80"></th>
-        <th width="80"></th>
+        <th width="50"></th>
+        <th width="50"></th>
+        <th width="50"></th>
+        <th width="50"></th>
+        <th width="50"></th>
+        <th width="50"></th>
+        <th width="50"></th>
+        <th width="50"></th>
+        <th width="50"></th>
+        <th width="50"></th>
  
 
     </tr>

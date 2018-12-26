@@ -295,7 +295,7 @@ defmodule SchoolWeb.TeacherController do
       Repo.all(
         from(s in School.Affairs.Teacher,
           where: s.institution_id == ^conn.private.plug_session["institution_id"],
-          order_by: [asc: s.job, asc: s.name]
+          order_by: [asc: s.tscjob1, asc: s.name]
         )
       )
       |> Enum.with_index()
