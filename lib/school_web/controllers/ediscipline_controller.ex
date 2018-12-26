@@ -22,17 +22,21 @@ defmodule SchoolWeb.EdisciplineController do
     edsp = Repo.get(Ediscipline, params["msg_id"])
     parent = Repo.get_by(Parent, psid: edsp.psid)
 
-    if Repo.get_by(Student, micno: parent.icno) == nil do
-      if Repo.get_by(Student, ficno: parent.icno) == nil do
-        if Repo.get_by(Student, gicno: parent.icno) != nil do
-          student = Repo.get_by(Student, gicno: parent.icno)
-        end
+    student =
+      if Repo.get_by(Student, micno: parent.icno) == nil do
+        student =
+          if Repo.get_by(Student, ficno: parent.icno) == nil do
+            if Repo.get_by(Student, gicno: parent.icno) != nil do
+              student = Repo.get_by(Student, gicno: parent.icno)
+            end
+          else
+            student = Repo.get_by(Student, ficno: parent.icno)
+          end
+
+        student
       else
-        student = Repo.get_by(Student, ficno: parent.icno)
+        student = Repo.get_by(Student, micno: parent.icno)
       end
-    else
-      student = Repo.get_by(Student, micno: parent.icno)
-    end
 
     render(conn, "message_details.html", student: student, parent: parent, edsp: edsp)
   end
@@ -40,9 +44,10 @@ defmodule SchoolWeb.EdisciplineController do
   def ediscipline_form(conn, params) do
     user = Repo.get(User, conn.private.plug_session["user_id"])
 
-    if user.role == "Teacher" do
-      teacher = Repo.get_by(Teacher, email: user.email)
-    end
+    teacher =
+      if user.role == "Teacher" do
+        teacher = Repo.get_by(Teacher, email: user.email)
+      end
 
     all_students =
       Repo.all(
