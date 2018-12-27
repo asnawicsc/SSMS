@@ -42,7 +42,7 @@
       <td><%= no+1 %></td>
        <td><%= item.id_no %></td>
         <%= if String.length(item.name) > 40 do %>
-       <td align="left" style="font-size: 8px; w" ><%=  item.name %></td>
+       <td align="left" style="font-size: 8px; width: auto; height: auto;" ><%=  item.name %></td>
         <% else %>
         <td align="left" ><%=  item.name %></td>
        <% end  %>
@@ -74,6 +74,7 @@
     border-spacing: 0;
     border-collapse: collapse;
     font-size: 12px;
+    white-space: nowrap;
 }
 td {
     padding:6px;
