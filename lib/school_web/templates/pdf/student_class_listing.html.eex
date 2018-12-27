@@ -41,7 +41,14 @@
     <tr align="center">
       <td><%= no+1 %></td>
        <td><%= item.id_no %></td>
-       <td align="left" ><%= item.name %></td>
+       <td align="left" >
+        <%= if String.length(item.name) > 40 do %>
+
+         <p style="font-size: 8px">   <%=  item.name %> </p>
+          <% else %>
+          <%=  item.name %>
+       <% end  %>
+      </td>
        <td width="80px"><%= item.chinese_name %></td>
        <td><%= if item.sex == "M" do "L" end %>
         <%= if item.sex == "F" do "P" end %></td>
