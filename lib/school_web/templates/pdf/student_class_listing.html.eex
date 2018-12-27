@@ -1,11 +1,12 @@
 
-<table class="table" border="1" style="border-collapse: collapse; "     width="100%">
+<table class="table" border="1"  width="100%">
+    <thead align="center"></thead>
   <tbody>
 <td >
 <b><%= @institution.name %></b></br>
 班级<b> Kelas: <%= @class.name %></b> <br>
 老师<b> Nama GURU : ________________________________________________________________ </b><br>
-事项<b> PERKARA &nbsp;&nbsp;&nbsp;: ________________________________________________________________</b>  <b style="margin-left: 200px;px;"></b>日期<b>Tarikh:<%= SchoolWeb.LayoutView.my_time(DateTime.utc_now) %></b> <br> 
+事项<b> PERKARA &nbsp;&nbsp;&nbsp;: ________________________________________________________________</b>  <b style="margin-left: 190px;px;"></b>日期<b>Tarikh:<%= SchoolWeb.LayoutView.my_time(DateTime.utc_now) %></b> <br> 
 
 </td>
     </tbody>
