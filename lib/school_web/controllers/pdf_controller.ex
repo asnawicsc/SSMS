@@ -1549,7 +1549,7 @@ defmodule SchoolWeb.PdfController do
     teacher =
       Repo.all(
         from(s in School.Affairs.Teacher,
-          where: s.institution_id == ^inst_id,
+          where: s.institution_id == ^inst_id and s.is_delete != 1,
           select: %{name: s.name, cname: s.cname},
           order_by: [asc: s.rank, asc: s.name]
         )
