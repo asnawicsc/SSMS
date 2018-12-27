@@ -144,6 +144,7 @@ defmodule SchoolWeb.UserChannel do
           order_by: [asc: c.name]
         )
       )
+      |> Enum.uniq()
 
     semester =
       Repo.all(
