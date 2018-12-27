@@ -397,14 +397,14 @@ defmodule SchoolWeb.TeacherController do
       if teacher_params["is_delete"] == "true" do
         Map.put(teacher_params, "is_delete", "1")
       else
-        Map.put(teacher_params, "is_delete", "0")
+        teacher_params
       end
 
     teacher_params =
       if teacher_params["is_delete"] == "false" do
         Map.put(teacher_params, "is_delete", "0")
       else
-        Map.put(teacher_params, "is_delete", "1")
+        teacher_params
       end
 
     image_params = teacher_params["image1"]

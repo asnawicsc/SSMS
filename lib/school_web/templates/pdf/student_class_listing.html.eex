@@ -44,7 +44,7 @@
        <td align="left" >
         <%= if String.length(item.name) > 40 do %>
 
-         <p style="font-size: 8px">   <%=  item.name %> </p>
+         <p style="font-size: 9px">   <%=  item.name %> </p>
           <% else %>
           <%=  item.name %>
        <% end  %>
@@ -73,6 +73,7 @@
 <style type="text/css">
   
   table { 
+ 
     border-spacing: 0;
     border-collapse: collapse;
     font-size: 12px;
