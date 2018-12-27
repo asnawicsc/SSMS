@@ -5,7 +5,7 @@
 <b><%= @institution.name %></b></br>
 班级<b> Kelas: <%= @class.name %></b> <br>
 老师<b> Nama GURU : ________________________________________________________________ </b><br>
-事项<b> PERKARA &nbsp;&nbsp;&nbsp;: ________________________________________________________________</b>  <b style="margin-left: 600px;px;"></b>日期<b>Tarikh:<%= SchoolWeb.LayoutView.my_time(DateTime.utc_now) %></b> <br> 
+事项<b> PERKARA &nbsp;&nbsp;&nbsp;: ________________________________________________________________</b>  <b style="margin-left: 200px;px;"></b>日期<b>Tarikh:<%= SchoolWeb.LayoutView.my_time(DateTime.utc_now) %></b> <br> 
 
 </td>
     </tbody>
@@ -45,19 +45,21 @@
        <td><%= item.chinese_name %></td>
        <td><%= if item.sex == "M" do "L" end %>
         <%= if item.sex == "F" do "P" end %></td>
-       <td width="80px"></td>
-       <td width="80px"></td>
-       <td width="80px"></td>
-       <td width="80px"></td>
-       <td width="80px"></td>
-       <td width="80px"></td>
-       <td width="80px"></td>
-       <td width="80px"></td>
-       <td width="80px"></td>
-       <td width="80px"></td>
+       <td width="40px"></td>
+       <td width="40px"></td>
+       <td width="40px"></td>
+       <td width="40px"></td>
+       <td width="40px"></td>
+       <td width="40px"></td>
+       <td width="40px"></td>
+       <td width="40px"></td>
+       <td width="40px"></td>
+       <td width="40px"></td>
 
     </tr>
 <% end %>
+
+
   </tbody>
 </table>
 
