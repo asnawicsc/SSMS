@@ -140,7 +140,8 @@ defmodule SchoolWeb.UserChannel do
           where:
             s.semester_id == ^map["semester_id"] and s.institute_id == ^payload["institution_id"] and
               c.institution_id == ^payload["institution_id"],
-          select: %{id: c.id, name: c.name}
+          select: %{id: c.id, name: c.name},
+          order_by: [asc: c.name]
         )
       )
 
