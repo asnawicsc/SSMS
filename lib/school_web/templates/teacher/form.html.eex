@@ -222,12 +222,7 @@
             <%= label f, (gettext "is_delete?"),  class: "control-label"%>
 
 
-              <%= if  @teacher.is_delete == 1  do
-                    checkbox f, :is_delete, checked: 'checked' 
-                else
-                    checkbox f, :is_delete
-              end %>
-           
+               <%= checkbox f, :is_delete %>
 
            <%= error_tag f, :is_delete %>
           </div>

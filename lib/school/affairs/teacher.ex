@@ -95,7 +95,8 @@ defmodule School.Affairs.Teacher do
       :reason,
       :image_bin,
       :image_filename,
-      :rank
+      :rank,
+      :is_delete
     ])
     |> validate_required([:icno, :email, :name, :code])
   end
