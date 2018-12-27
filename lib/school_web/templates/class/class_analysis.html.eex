@@ -23,7 +23,7 @@
                                 <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
 
                                 <select class="custom-select -custom-select-sm" name="class" required="required">
-                                    <%= for class <- @classes do %>
+                                    <%= for class <- @classes|>Enum.sort_by(fn x -> x.name end) do %>
                                         <option>
                                             <%= class.name %>
                                         </option>
@@ -62,7 +62,7 @@
                                 <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
 
                                 <select class="custom-select -custom-select-sm" name="class" required="required">
-                                    <%= for class <- @classes do %>
+                                    <%= for class <- @classes|>Enum.sort_by(fn x -> x.name end) do %>
                                         <option>
                                             <%= class.name %>
                                         </option>

@@ -25,7 +25,7 @@
                             <div class="form-row">
                         <div class="form-group col-md-2">
                             <select class="custom-select -custom-select-sm" name="class" required="required">
-                                <%= for class <- @classes do %>
+                                <%= for class <- @classes|>Enum.sort_by(fn x -> x.name end) do %>
                                     <option value="<%= class.id %>">
                                         <%= class.name %>
                                     </option>
