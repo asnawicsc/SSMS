@@ -1,12 +1,12 @@
 
 <table class="table" border="1"  width="100%">
-    <thead align="center"></thead>
+  
   <tbody>
 <td >
 <b><%= @institution.name %></b></br>
 班级<b> Kelas: <%= @class.name %></b> <br>
 老师<b> Nama GURU : ________________________________________________________________ </b><br>
-事项<b> PERKARA &nbsp;&nbsp;&nbsp;: ________________________________________________________________</b>  <b style="margin-left: 190px;px;"></b>日期<b>Tarikh:<%= SchoolWeb.LayoutView.my_time(DateTime.utc_now) %></b> <br> 
+事项<b> PERKARA &nbsp;&nbsp;&nbsp;: ________________________________________________________________</b><b style="margin-left: 10px;"> 日期 Tarikh:<%= SchoolWeb.LayoutView.my_time(DateTime.utc_now) %></b> 
 
 </td>
     </tbody>
@@ -50,16 +50,16 @@
        <td width="80px"><%= item.chinese_name %></td>
        <td><%= if item.sex == "M" do "L" end %>
         <%= if item.sex == "F" do "P" end %></td>
-       <td width="40px"></td>
-       <td width="40px"></td>
-       <td width="40px"></td>
-       <td width="40px"></td>
-       <td width="40px"></td>
-       <td width="40px"></td>
-       <td width="40px"></td>
-       <td width="40px"></td>
-       <td width="40px"></td>
-       <td width="40px"></td>
+       <td width="42px"></td>
+       <td width="42px"></td>
+       <td width="42px"></td>
+       <td width="42px"></td>
+       <td width="42px"></td>
+       <td width="42px"></td>
+       <td width="42px"></td>
+       <td width="42px"></td>
+       <td width="42px"></td>
+       <td width="42px"></td>
 
     </tr>
 <% end %>
@@ -74,11 +74,11 @@
 
     border-spacing: 0;
     border-collapse: collapse;
-    font-size: 20px;
+    font-size: 15px;
     white-space: nowrap;
 }
 td {
-    padding:6px;
+    padding:4px;
 }
 td img {
     display:block;
