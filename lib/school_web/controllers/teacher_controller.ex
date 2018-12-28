@@ -33,6 +33,38 @@ defmodule SchoolWeb.TeacherController do
     render(conn, "teacher_attendance.html")
   end
 
+  def edit_teacher_access(conn, params) do
+    user = Repo.get_by(User, id: params["user_id"])
+
+    crypted_password = Comeonin.Bcrypt.hashpwsalt(params["password"])
+
+    params = Map.put(params, "password", params["password"])
+    params = Map.put(params, "crypted_password", crypted_password)
+    params = Map.put(params, "name", params["name"])
+
+    case Settings.update_user(user, params) do
+      {:ok, user} ->
+        conn
+        |> put_flash(:info, "User updated successfully.")
+        |> redirect(to: teacher_path(conn, :index))
+
+      {:error} ->
+        render(conn, "edit_teacher_login.html", user: user)
+    end
+  end
+
+  def delete_teacher_login(conn, params) do
+    user = Settings.get_user!(params["id"])
+
+    user_access = Repo.get_by(School.Settings.UserAccess, user_id: user.id)
+    Settings.delete_user_access(user_access)
+    Settings.delete_user(user)
+
+    conn
+    |> put_flash(:info, "Teacher Login successfully deleted.")
+    |> redirect(to: teacher_path(conn, :index))
+  end
+
   def mark_teacher_attendance(conn, params) do
     date = params["date"]
 
@@ -265,6 +297,12 @@ defmodule SchoolWeb.TeacherController do
         end
       end
     end
+  end
+
+  def edit_teacher_login(conn, params) do
+    user = Repo.get_by(User, id: params["id"])
+
+    render(conn, "edit_teacher_login.html", user: user)
   end
 
   def teacher_timetable(conn, _params) do

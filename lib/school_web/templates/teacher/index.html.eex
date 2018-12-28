@@ -38,7 +38,15 @@
                                 <td>
                                   <%= if teacher.email != nil do %>
                                     <%= if Repo.get_by(User, email: teacher.email) != nil  do  %>
-                                        <p style="color: green">Created</p>
+                                        <% user=Repo.get_by(User, email: teacher.email) %>
+                                          <a href="/edit_teacher_login/<%= user.id %>"><button class="btn btn-labeled btn-xs btn-success mb-2" type="button" >
+                                        <span class="btn-label"><i class="fa fa-arrow-right"></i></span>
+                                       Edit
+                                      </button></a>   <a href=""><button class="btn btn-labeled btn-xs btn-danger mb-2" ids="<%= user.id %>" id="delete_teacher_login_accress" type="button" >
+                                        <span class="btn-label"><i class="fa fa-arrow-right"></i></span>
+                                       Delete
+                                      </button></a>
+                                     
                                     <% else %>
                                       <a href="/create_teacher_login/<%= teacher.id %>"><button class="btn btn-labeled btn-xs btn-info mb-2" type="button" >
                                         <span class="btn-label"><i class="fa fa-arrow-right"></i></span>
@@ -138,6 +146,34 @@
 
     })
   })
+
+
+           $('#delete_teacher_login_accress').on('click', function(e) {
+
+              var teacher_id = $(this).attr("ids")
+
+            e.preventDefault();
+            swal({
+                title: "Are you sure?",
+                text: "You will not be able to recover this imaginary file!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, cancel plx!",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            }, function(isConfirm) {
+                if (isConfirm) {
+
+                    window.location.href ="/delete_teacher_login/"+ teacher_id;
+                  
+                } else {
+                    swal("Cancelled", "Your login is safe :)", "error");
+                }
+            });
+
+        });
 
 
 

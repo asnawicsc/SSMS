@@ -399,6 +399,12 @@ defmodule SchoolWeb.Router do
     get("/support_dashboard", PageController, :support_dashboard)
     get("/login_teacher", TeacherController, :login_teacher)
     get("/create_teacher_login/:id", TeacherController, :create_teacher_login)
+
+    get("/edit_teacher_login/:id", TeacherController, :edit_teacher_login)
+
+    post("/edit_teacher_access", TeacherController, :edit_teacher_access)
+    get("/delete_teacher_login/:id", TeacherController, :delete_teacher_login)
+
     resources("/sync_list", SyncListController)
     get("/apply_color", PageController, :apply_color)
     get("/create_semesters", SemesterController, :create_semesters)
