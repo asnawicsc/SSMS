@@ -448,6 +448,8 @@ defmodule SchoolWeb.Router do
     get("/msg_details", EdisciplineController, :msg_details)
     get("/show_message_details/:msg_id", EdisciplineController, :show_message_details)
     get("/update_summary", EdisciplineController, :update_summary)
+    get("/change_semester", UserController, :change_semester)
+    post("/get_change_semester", UserController, :get_change_semester)
 
     resources("/ehehomeworks", EhomeworkController)
     get("/ehomework/:class_id", EhomeworkController, :ehomework)

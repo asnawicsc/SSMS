@@ -3604,6 +3604,46 @@ defmodule SchoolWeb.UserChannel do
     end
   end
 
+  def handle_in("change_semester", payload, socket) do
+    semester =
+      Repo.all(
+        from(
+          s in School.Affairs.Semester,
+          where:
+            s.id == ^payload["semester_id"] and s.institution_id == ^payload["institution_id"]
+        )
+      )
+      |> hd
+
+    user = Repo.get_by(User, id: payload["user_id"])
+
+    # conn = %{
+    #   private: %{
+    #     plug_session: %{
+    #       "institution_id" => payload["institution_id"],
+    #       "user_id" => payload["user_id"],
+    #       "semester_id" => payload["semester_id"],
+    #       "style" => user.styles
+    #     }
+    #   }
+    # }
+
+    # conn
+    #      |> put_session(:user_id, user.id)
+    #      |> put_session(:semester_id, payload["semester_id"]
+    #      |> put_session(:institution_id, payload["institution_id"])
+    #      |> put_session(:style, user.styles)
+
+    action = "Semester Updated"
+
+    broadcast(socket, "semester_changed", %{
+      action: action,
+      semester: payload["semester_id"]
+    })
+
+    {:noreply, socket}
+  end
+
   # Add authorization logic here as required.
   defp authorized?(_payload) do
     true

@@ -37,13 +37,21 @@ table tr td{
 		<td><%= class %></td>
 		<%= for gender_o <- gender do %>
 		<td>
-			<% data = classes |> Enum.filter(fn x -> x.class == class end) |> Enum.filter(fn x -> x.gender == gender_o end) |> hd() %>
-			<%= data.gender_count %>
+			
+			<% data = classes |> Enum.filter(fn x -> x.class == class end) |> Enum.filter(fn x -> x.gender == gender_o end) 
+			data=if data == [] do
+				0
+
+			else
+				data=data|>hd
+
+				data.gender_count
+				
+			end %>
+			<%= data %>
 		</td>
 		<% end %>
-		<td>
-			<%= classes |> Enum.filter(fn x -> x.class == class end) |> Enum.map(fn x -> x.gender_count end) |> Enum.sum() %>
-		</td>
+		<td><%= classes |> Enum.filter(fn x -> x.class == class end) |> Enum.map(fn x -> x.gender_count end) |> Enum.sum() %></td>
 	</tr>
 	<% end %>
 	<tr style="background-color: grey; color: white;">

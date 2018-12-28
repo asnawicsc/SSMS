@@ -763,32 +763,63 @@ defmodule SchoolWeb.PdfController do
       )
 
     data =
-      Repo.all(
-        from(
-          s in Student,
-          left_join: sc in StudentClass,
-          on: sc.sudent_id == s.id,
-          left_join: c in Class,
-          on: c.id == sc.class_id,
-          left_join: l in Level,
-          on: l.id == c.level_id,
-          left_join: sm in Semester,
-          on: sm.id == sc.semester_id,
-          where:
-            sc.institute_id == ^conn.private.plug_session["institution_id"] and
-              s.institution_id == ^conn.private.plug_session["institution_id"] and
-              c.institution_id == ^conn.private.plug_session["institution_id"] and
-              l.institution_id == ^conn.private.plug_session["institution_id"] and
-              sm.institution_id == ^conn.private.plug_session["institution_id"],
-          group_by: [l.name, c.name, s.sex],
-          select: %{
-            class: c.name,
-            gender: s.sex,
-            gender_count: count(s.sex),
-            level: l.name
-          }
+      if class_name == "ALL" do
+        Repo.all(
+          from(
+            s in Student,
+            left_join: sc in StudentClass,
+            on: sc.sudent_id == s.id,
+            left_join: c in Class,
+            on: c.id == sc.class_id,
+            left_join: l in Level,
+            on: l.id == c.level_id,
+            left_join: sm in Semester,
+            on: sm.id == sc.semester_id,
+            where:
+              sc.institute_id == ^conn.private.plug_session["institution_id"] and
+                s.institution_id == ^conn.private.plug_session["institution_id"] and
+                c.institution_id == ^conn.private.plug_session["institution_id"] and
+                l.institution_id == ^conn.private.plug_session["institution_id"] and
+                sm.institution_id == ^conn.private.plug_session["institution_id"] and
+                sc.semester_id == ^semester.id,
+            group_by: [l.name, c.name, s.sex],
+            select: %{
+              class: c.name,
+              gender: s.sex,
+              gender_count: count(s.sex),
+              level: l.name
+            }
+          )
         )
-      )
+      else
+        Repo.all(
+          from(
+            s in Student,
+            left_join: sc in StudentClass,
+            on: sc.sudent_id == s.id,
+            left_join: c in Class,
+            on: c.id == sc.class_id,
+            left_join: l in Level,
+            on: l.id == c.level_id,
+            left_join: sm in Semester,
+            on: sm.id == sc.semester_id,
+            where:
+              sc.institute_id == ^conn.private.plug_session["institution_id"] and
+                s.institution_id == ^conn.private.plug_session["institution_id"] and
+                c.institution_id == ^conn.private.plug_session["institution_id"] and
+                l.institution_id == ^conn.private.plug_session["institution_id"] and
+                sm.institution_id == ^conn.private.plug_session["institution_id"] and
+                sc.semester_id == ^semester.id and c.name == ^class_name,
+            group_by: [l.name, c.name, s.sex],
+            select: %{
+              class: c.name,
+              gender: s.sex,
+              gender_count: count(s.sex),
+              level: l.name
+            }
+          )
+        )
+      end
 
     html =
       Phoenix.View.render_to_string(

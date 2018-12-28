@@ -30,23 +30,23 @@
           </div>
 
           <div class="form-group col-md-2">
-            <%= label f, (gettext "cname"),  class: "control-label" %>
+            <%= label f, (gettext "Other Name"),  class: "control-label" %>
             <%= text_input f, :cname, class: "form-control" %>
             <%= error_tag f, :cname %>
           </div>
 
          <div class="form-group col-md-2">
-            <%= label f, (gettext "icno"),  class: "control-label" %>
+            <%= label f, (gettext "IC No"),  class: "control-label" %>
             <%= text_input f, :icno, class: "form-control" %>
             <%= error_tag f, :icno %>
           </div>
             <div class="form-group col-md-2">
-            <%= label f, (gettext "sex"),  class: "control-label" %>
+            <%= label f, (gettext "Sex"),  class: "control-label" %>
             <%= text_input f, :sex, class: "form-control" %>
             <%= error_tag f, :sex %>
           </div>
             <div class="form-group col-md-2">
-            <%= label f, (gettext "race"),  class: "control-label" %>
+            <%= label f, (gettext "Race"),  class: "control-label" %>
             <%= text_input f, :race, class: "form-control" %>
             <%= error_tag f, :race %>
           </div>
@@ -55,36 +55,36 @@
         <div class="form-row">
             
               <div class="form-group col-md-2">
-            <%= label f, (gettext "religion"),  class: "control-label" %>
+            <%= label f, (gettext "Religion"),  class: "control-label" %>
             <%= text_input f, :religion, class: "form-control" %>
             <%= error_tag f, :religion %>
           </div>
 
               <div class="form-group col-md-2">
-            <%= label f, (gettext "nation"),  class: "control-label" %>
+            <%= label f, (gettext "Nationality"),  class: "control-label" %>
             <%= text_input f, :nation, class: "form-control" %>
             <%= error_tag f, :nation %>
           </div>
 
               <div class="form-group col-md-2">
-            <%= label f, (gettext "bdate"),  class: "control-label" %>
+            <%= label f, (gettext "Birth Date"),  class: "control-label" %>
             <%= text_input f, :bdate, class: "form-control" %>
             <%= error_tag f, :bdate %>
           </div>
 
               <div class="form-group col-md-2">
-            <%= label f, (gettext "addr1"),  class: "control-label" %>
+            <%= label f, (gettext "Address 1"),  class: "control-label" %>
             <%= text_input f, :addr1, class: "form-control" %>
             <%= error_tag f, :addr1 %>
           </div>
             <div class="form-group col-md-2">
-            <%= label f, (gettext "addr2"),  class: "control-label" %>
+            <%= label f, (gettext "Address 2"),  class: "control-label" %>
             <%= text_input f, :addr2, class: "form-control" %>
             <%= error_tag f, :addr2 %>
           </div>
 
               <div class="form-group col-md-2">
-            <%= label f, (gettext "addr3"),  class: "control-label" %>
+            <%= label f, (gettext "Address 3"),  class: "control-label" %>
             <%= text_input f, :addr3, class: "form-control" %>
             <%= error_tag f, :addr3 %>
           </div>
@@ -93,36 +93,36 @@
             
 
               <div class="form-group col-md-2">
-            <%= label f, (gettext "poscod"),  class: "control-label" %>
+            <%= label f, (gettext "Postcode"),  class: "control-label" %>
             <%= text_input f, :poscod, class: "form-control" %>
             <%= error_tag f, :poscod %>
           </div>
 
               <div class="form-group col-md-2">
-            <%= label f, (gettext "district"),  class: "control-label" %>
+            <%= label f, (gettext "District"),  class: "control-label" %>
             <%= text_input f, :district, class: "form-control" %>
             <%= error_tag f, :district %>
           </div>
 
             <div class="form-group col-md-2">
-            <%= label f, (gettext "state"),  class: "control-label" %>
+            <%= label f, (gettext "State"),  class: "control-label" %>
             <%= text_input f, :state, class: "form-control" %>
             <%= error_tag f, :state %>
           </div>
           <div class="form-group col-md-2">
-            <%= label f, (gettext "tel"),  class: "control-label" %>
+            <%= label f, (gettext "Phone Number"),  class: "control-label" %>
             <%= text_input f, :tel, class: "form-control" %>
             <%= error_tag f, :tel %>
           </div>
 
           <div class="form-group col-md-2">
-            <%= label f, (gettext "regdate"),  class: "control-label" %>
+            <%= label f, (gettext "Registration Date"),  class: "control-label" %>
             <%= text_input f, :regdate, class: "form-control" %>
             <%= error_tag f, :regdate %>
           </div>
 
           <div class="form-group col-md-2">
-            <%= label f, (gettext "qdate"),  class: "control-label" %>
+            <%= label f, (gettext "Quit Date"),  class: "control-label" %>
             <%= text_input f, :qdate, class: "form-control" %>
             <%= error_tag f, :qdate %>
           </div>
@@ -134,12 +134,12 @@
     
           <div class="form-group col-md-2">
             <%= label f, (gettext "rank"),  class: "control-label" %>
-            <%= number_input f, :rank, class: "form-control" %>
+            <%= number_input f, :rank, class: "form-control"  %>
             <%= error_tag f, :rank %>
           </div>
 
             <div class="form-group col-md-2">
-            <%= label f, (gettext "postitle"),  class: "control-label" %>
+            <%= label f, (gettext "Position Title"),  class: "control-label" %>
             <%= text_input f, :postitle, class: "form-control" %>
             <%= error_tag f, :postitle %>
           </div>
