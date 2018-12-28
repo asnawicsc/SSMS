@@ -32,7 +32,7 @@ defmodule SchoolWeb.UserController do
         from(
           s in School.Affairs.Semester,
           where:
-            s.end_date > ^Timex.today() and s.start_date < ^Timex.today() and
+            s.id == ^conn.private.plug_session["semester_id"] and
               s.institution_id == ^access.institution_id
         )
       )
