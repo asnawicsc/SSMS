@@ -29,13 +29,14 @@ defmodule SchoolWeb.PdfController do
             where: sm.id == ^semester.id,
             select: %{
               student_id: s.id,
-              name: s.name
+              name: s.name,
+              class_id: sc.class_id
             }
           )
         )
       end
       |> List.flatten()
-      |> Enum.sort()
+      |> Enum.sort_by(fn x -> x.class_id end)
       |> Enum.dedup()
 
     html =
@@ -1479,7 +1480,8 @@ defmodule SchoolWeb.PdfController do
       Repo.get_by(School.Settings.Institution, id: conn.private.plug_session["institution_id"])
 
     semester =
-      Repo.get_by(School.Affairs.Semester,
+      Repo.get_by(
+        School.Affairs.Semester,
         id: semester_id,
         institution_id: conn.private.plug_session["institution_id"]
       )
