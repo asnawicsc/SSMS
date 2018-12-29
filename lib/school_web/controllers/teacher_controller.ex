@@ -6,18 +6,63 @@ defmodule SchoolWeb.TeacherController do
   alias School.Settings.User
   alias School.Settings.UserAccess
   require IEx
+  import Mogrify
 
   def index(conn, _params) do
     teacher =
       Affairs.list_teacher()
       |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
-      |> Enum.filter(fn x -> x.is_delete != true end)
+      |> Enum.filter(fn x -> x.is_delete != 1 end)
 
     render(conn, "index.html", teacher: teacher)
   end
 
+  def e_discipline(conn, params) do
+    user = Repo.get(User, conn.private.plug_session["user_id"])
+
+    teacher =
+      if user.role == "Teacher" do
+        teacher = Repo.get_by(Teacher, email: user.email)
+      end
+
+    messages = Repo.all(from(e in School.Affairs.Ediscipline, where: e.teacher_id == ^teacher.id))
+    render(conn, "e_discipline.html", messages: messages)
+  end
+
   def teacher_attendance(conn, params) do
     render(conn, "teacher_attendance.html")
+  end
+
+  def edit_teacher_access(conn, params) do
+    user = Repo.get_by(User, id: params["user_id"])
+
+    crypted_password = Comeonin.Bcrypt.hashpwsalt(params["password"])
+
+    params = Map.put(params, "password", params["password"])
+    params = Map.put(params, "crypted_password", crypted_password)
+    params = Map.put(params, "name", params["name"])
+
+    case Settings.update_user(user, params) do
+      {:ok, user} ->
+        conn
+        |> put_flash(:info, "User updated successfully.")
+        |> redirect(to: teacher_path(conn, :index))
+
+      {:error} ->
+        render(conn, "edit_teacher_login.html", user: user)
+    end
+  end
+
+  def delete_teacher_login(conn, params) do
+    user = Settings.get_user!(params["id"])
+
+    user_access = Repo.get_by(School.Settings.UserAccess, user_id: user.id)
+    Settings.delete_user_access(user_access)
+    Settings.delete_user(user)
+
+    conn
+    |> put_flash(:info, "Teacher Login successfully deleted.")
+    |> redirect(to: teacher_path(conn, :index))
   end
 
   def mark_teacher_attendance(conn, params) do
@@ -78,12 +123,15 @@ defmodule SchoolWeb.TeacherController do
         Map.put(each, :attend, false)
       end
 
-    if attended_teachers != [] do
-      attended_teachers =
-        for each <- attended_teachers do
-          Map.put(each, :attend, true)
-        end
-    end
+    attended_teachers =
+      if attended_teachers != [] do
+        attended_teachers =
+          for each <- attended_teachers do
+            Map.put(each, :attend, true)
+          end
+      else
+        attended_teachers = []
+      end
 
     teachers = List.flatten(remaining, attended_teachers)
 
@@ -108,6 +156,12 @@ defmodule SchoolWeb.TeacherController do
       end
       |> Enum.filter(fn x -> x != nil end)
       |> Enum.join(",")
+
+    if teacher_ids == "" do
+      conn
+      |> put_flash(:info, "Attendance inserted fail, please mark all teacher.")
+      |> redirect(to: teacher_path(conn, :teacher_attendance))
+    end
 
     Attendance.changeset(attendance, %{teacher_id: teacher_ids}) |> Repo.update!()
 
@@ -245,6 +299,12 @@ defmodule SchoolWeb.TeacherController do
     end
   end
 
+  def edit_teacher_login(conn, params) do
+    user = Repo.get_by(User, id: params["id"])
+
+    render(conn, "edit_teacher_login.html", user: user)
+  end
+
   def teacher_timetable(conn, _params) do
     teacher = Affairs.list_teacher()
 
@@ -271,9 +331,10 @@ defmodule SchoolWeb.TeacherController do
 
     teacher =
       Repo.all(
-        from(
-          t in Teacher,
-          where: t.institution_id == ^conn.private.plug_session["institution_id"]
+        from(s in School.Affairs.Teacher,
+          where:
+            s.institution_id == ^conn.private.plug_session["institution_id"] and s.is_delete != 1,
+          order_by: [asc: s.rank, asc: s.name]
         )
       )
       |> Enum.with_index()
@@ -287,6 +348,12 @@ defmodule SchoolWeb.TeacherController do
   end
 
   def create(conn, %{"teacher" => teacher_params}) do
+    image_params = teacher_params["image1"]
+    result = upload_image(image_params)
+
+    teacher_params = Map.put(teacher_params, "image_bin", result.bin)
+    teacher_params = Map.put(teacher_params, "image_filename", result.filename)
+
     teacher_params =
       Map.put(teacher_params, "institution_id", conn.private.plug_session["institution_id"])
 
@@ -312,6 +379,31 @@ defmodule SchoolWeb.TeacherController do
       |> put_flash(:info, "Code Already Exist.")
       |> redirect(to: teacher_path(conn, :new))
     end
+  end
+
+  def upload_image(param) do
+    {:ok, seconds} = Timex.format(Timex.now(), "%s", :strftime)
+
+    path = File.cwd!() <> "/media"
+    image_path = Application.app_dir(:school, "priv/static/images")
+
+    if File.exists?(path) == false do
+      File.mkdir(File.cwd!() <> "/media")
+    end
+
+    fl = param.filename |> String.replace(" ", "_")
+    absolute_path = path <> "/#{seconds <> fl}"
+    absolute_path_bin = path <> "/bin_" <> "#{seconds <> fl}"
+    File.cp(param.path, absolute_path)
+    File.rm(image_path <> "/uploads")
+    File.ln_s(path, image_path <> "/uploads")
+
+    resized = Mogrify.open(absolute_path) |> resize("200x200") |> save(path: absolute_path_bin)
+    {:ok, bin} = File.read(resized.path)
+
+    # File.rm(resized.path)
+
+    %{filename: seconds <> fl, bin: Base.encode64(bin)}
   end
 
   def show(conn, %{"id" => id}) do
@@ -342,12 +434,41 @@ defmodule SchoolWeb.TeacherController do
 
     teacher_params =
       if teacher_params["is_delete"] == "true" do
-        Map.put(teacher_params, "is_delete", true)
+        Map.put(teacher_params, "is_delete", "1")
       else
-        Map.put(teacher_params, "is_delete", false)
+        teacher_params
       end
 
-    case Affairs.update_teacher(teacher, teacher_params) do
+    teacher_params =
+      if teacher_params["is_delete"] == "false" do
+        Map.put(teacher_params, "is_delete", "0")
+      else
+        teacher_params
+      end
+
+    image_params = teacher_params["image1"]
+
+    teacher_params =
+      if image_params != nil do
+        result = upload_image(image_params)
+
+        Map.put(teacher_params, "image_bin", result.bin)
+      else
+        teacher_params
+      end
+
+    teacher_params =
+      if image_params != nil do
+        result = upload_image(image_params)
+
+        Map.put(teacher_params, "image_filename", result.filename)
+      else
+        teacher_params
+      end
+
+    teacherss = Teacher.changeset(teacher, teacher_params)
+
+    case Repo.update(teacherss) do
       {:ok, teacher} ->
         url = teacher_path(conn, :index, focus: teacher.code)
         referer = conn.req_headers |> Enum.filter(fn x -> elem(x, 0) == "referer" end)

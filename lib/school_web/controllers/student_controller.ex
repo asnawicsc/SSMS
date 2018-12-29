@@ -4,6 +4,7 @@ defmodule SchoolWeb.StudentController do
   alias School.Affairs
   alias School.Affairs.Student
   require IEx
+  import Mogrify
 
   def index(conn, _params) do
     students =
@@ -741,6 +742,12 @@ defmodule SchoolWeb.StudentController do
     student_params =
       Map.put(student_params, "institution_id", conn.private.plug_session["institution_id"])
 
+    image_params = student_params["image1"]
+    result = upload_image(image_params)
+
+    student_params = Map.put(student_params, "image_bin", result.bin)
+    student_params = Map.put(student_params, "image_filename", result.filename)
+
     case Affairs.create_student(student_params) do
       {:ok, student} ->
         conn
@@ -750,6 +757,31 @@ defmodule SchoolWeb.StudentController do
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
+  end
+
+  def upload_image(param) do
+    {:ok, seconds} = Timex.format(Timex.now(), "%s", :strftime)
+
+    path = File.cwd!() <> "/media"
+    image_path = Application.app_dir(:school, "priv/static/images")
+
+    if File.exists?(path) == false do
+      File.mkdir(File.cwd!() <> "/media")
+    end
+
+    fl = param.filename |> String.replace(" ", "_")
+    absolute_path = path <> "/#{seconds <> fl}"
+    absolute_path_bin = path <> "/bin_" <> "#{seconds <> fl}"
+    File.cp(param.path, absolute_path)
+    File.rm(image_path <> "/uploads")
+    File.ln_s(path, image_path <> "/uploads")
+
+    resized = Mogrify.open(absolute_path) |> resize("200x200") |> save(path: absolute_path_bin)
+    {:ok, bin} = File.read(resized.path)
+
+    # File.rm(resized.path)
+
+    %{filename: seconds <> fl, bin: Base.encode64(bin)}
   end
 
   def print_students(conn, %{"id" => id}) do
@@ -816,7 +848,29 @@ defmodule SchoolWeb.StudentController do
   def update_changes(conn, params) do
     student = Affairs.get_student!(params["student_id"])
 
-    case Affairs.update_student(student, params) do
+    image_params = params["image1"]
+
+    params =
+      if image_params != nil do
+        result = upload_image(image_params)
+
+        Map.put(params, "image_bin", result.bin)
+      else
+        params
+      end
+
+    params =
+      if image_params != nil do
+        result = upload_image(image_params)
+
+        Map.put(params, "image_filename", result.filename)
+      else
+        params
+      end
+
+    studentss = Student.changeset(student, params)
+
+    case Repo.update(studentss) do
       {:ok, student} ->
         url = student_path(conn, :index, focus: student.id)
         referer = conn.req_headers |> Enum.filter(fn x -> elem(x, 0) == "referer" end)

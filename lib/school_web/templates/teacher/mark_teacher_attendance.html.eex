@@ -7,7 +7,7 @@
 </div>
 
 <div class= "row">
-	<div class="col-lg-6">
+	<div class="col-lg-12">
 		<div class="card mb-3 border-success">
 		    <div class="card-header text-white bg-success">Attendance</div>
 		        <div class="card-body">
@@ -15,12 +15,20 @@
 		        		<thead>
 			                <tr>
 			                  <th><%= gettext "Name" %></th>
-			                  <th><%= gettext "Action" %></th>
+			                  <th><div class="row" style="margin-right: 22px;">Action<div class="checkbox c-checkbox"> <label class="needsclick">
+                                    <input class="needsclick" type="checkbox" id="checkAll" value="">
+                                   <span class="fa fa-check"></span></label></div></div></th>
 			                  <th><%= gettext "Absent Reason" %></th>
 			                </tr>
 		             	</thead>
+
+
+                                
+                              
 		             	<tbody>
 		             		<form action="/submit_teacher_attendance">
+
+		             			
 		             			<input type="hidden" name="attendance_id" value="<%= @attendance.id %>">
 		             			<%= for teacher <- @teachers do %>
 				              	<tr>
@@ -31,7 +39,7 @@
 					              		<td>
 					              			<div class="checkbox c-checkbox">
 			                                 	<label>
-			                                    	<input type="checkbox" name = "<%= teacher.id %>-attend" checked="" value="<%= teacher.id %>">
+			                                    	<input type="checkbox" ids="check[]" name = "<%= teacher.id %>-attend" checked="" value="<%= teacher.id %>">
 			                                    	<span class="fa fa-check"></span>
 			                                    </label>
 		                              		</div>
@@ -50,7 +58,7 @@
 					              		<td>
 					              			<div class="checkbox c-checkbox">
 			                                 	<label>
-			                                    	<input type="checkbox" id="<%= teacher.id %>" name = "<%= teacher.id %>-attend" value="<%= teacher.id %>">
+			                                    	<input type="checkbox" ids="check[]" id="<%= teacher.id %>" name = "<%= teacher.id %>-attend" value="<%= teacher.id %>">
 			                                    	<span class="fa fa-check"></span>
 			                                    </label>
 		                              		</div>
@@ -60,11 +68,12 @@
 						              		<td>
 						              			<div id="<%= teacher.id %>_select" style="display: block;">
 						              			<select class="custom-select custom-select" id="<%= teacher.id %>" name="<%= teacher.id %>-abs_reason">
-						              				
+						              				<option value=""></option>
 						              				<%= for reason <- absent_reasons do %>
 						              					<%= if reason == absent.reason do %>
 						              					<option selected=""><%= absent.reason %></option>
 						              					<% else %>
+
 														<option value="<%= reason %>"><%= reason %></option>
 														<% end %>
 													<% end %>
@@ -113,4 +122,61 @@
                 $('#'+std_id+'_select').css('display','block');
             }
         });
+
+
+	 $("#checkAll").click(function () {
+    $('input:checkbox').not(this).prop('checked', this.checked);
+	 	$('input[ids="check[]"]').each(function(){
+
+	 		 if($(this).is(":checked")){
+            	var std_id = $(this).val();
+                	console.log(std_id)
+
+                $('#'+std_id+'_select').css('display','none');
+
+            }
+            else if($(this).is(":not(:checked)")){
+                var std_id = $(this).val();
+       			console.log(std_id)
+                $('#'+std_id+'_select').css('display','block');
+            }
+
+
+
+});
+
+    
+
+   
+
+ });
 </script>
+
+
+<%#         $('button[data-original-title="Select All Categories"]').click(function() {
+            var li_list = $('ol.not_selected_catalog_categories').find("li")
+            $(li_list).each(function() {
+
+                var li = $(this);
+                $(li).find(".fa").attr("class", "fa fa-minus-circle")
+                var subcat_id = $("span.selected_id").html()
+                var tag_id = $(this).attr("id")
+                var brand = location.pathname.split("/")[1];
+                $.ajax({
+                    url: "/" + brand + "/discount_insert_into_catalog",
+                    dataType: "json",
+                    data: {
+                        subcat_id: subcat_id,
+                        tag_id: tag_id
+                    }
+                }).done(function(j) {
+                    $(j).each(function() {
+
+
+                    })
+                })
+                $("ol.selected_catalog_categories").append(li);
+            })
+
+
+        }) %>

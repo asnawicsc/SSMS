@@ -8,7 +8,7 @@
 
 		<div class="row">
   
-		    <div class="col-lg-6">
+		    <div class="col-lg-12">
 		      <div class="card mb-3 border-success">
 		         <div class="card-header text-white bg-success">Attendance of <%= @class.name %></div>
 		         <div class="card-body">
@@ -17,7 +17,9 @@
 		                <tr>
 		                  <th><%= gettext "Name" %></th>
 
-		                  <th><%= gettext "Action" %></th>
+		                  <th><div class="row" style="margin-right: 22px;">Action<div class="checkbox c-checkbox"> <label class="needsclick">
+                                    <input class="needsclick" type="checkbox" id="checkAll4" value="">
+                                   <span class="fa fa-check"></span></label></div></div></th>
 		                  <th><%= gettext "Absent Reason" %></th>
 		                </tr>
 		              </thead>
@@ -33,7 +35,7 @@
 			              		<td>
 			              			<div class="checkbox c-checkbox">
 	                                 	<label>
-	                                    	<input type="checkbox" name = "<%= student.id %>-attend" checked="" value="<%= student.id %>">
+	                                    	<input type="checkbox" ids="check[]" name = "<%= student.id %>-attend" checked="" value="<%= student.id %>">
 	                                    	<span class="fa fa-check"></span>
 	                                    </label>
                               		</div>
@@ -52,7 +54,7 @@
 			              		<td>
 			              			<div class="checkbox c-checkbox">
 	                                 	<label>
-	                                    	<input type="checkbox" id="<%= student.id %>" name = "<%= student.id %>-attend" value="<%= student.id %>">
+	                                    	<input type="checkbox" ids="check[]" id="<%= student.id %>" name = "<%= student.id %>-attend" value="<%= student.id %>">
 	                                    	<span class="fa fa-check"></span>
 	                                    </label>
                               		</div>
@@ -115,4 +117,32 @@
                 $('#'+std_id+'_select').css('display','block');
             }
         });
+
+
+		 $("#checkAll4").click(function () {
+    $('input:checkbox').not(this).prop('checked', this.checked);
+	 	$('input[ids="check[]"]').each(function(){
+
+	 		 if($(this).is(":checked")){
+            	var std_id = $(this).val();
+                	console.log(std_id)
+
+                $('#'+std_id+'_select').css('display','none');
+
+            }
+            else if($(this).is(":not(:checked)")){
+                var std_id = $(this).val();
+       			console.log(std_id)
+                $('#'+std_id+'_select').css('display','block');
+            }
+
+
+
+});
+
+    
+
+   
+
+ });
 </script>

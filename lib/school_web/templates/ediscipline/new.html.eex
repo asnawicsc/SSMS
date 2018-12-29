@@ -1,0 +1,5 @@
+<h2>New Ediscipline</h2>
+
+<%= render "form.html", Map.put(assigns, :action, ediscipline_path(@conn, :create)) %>
+
+<span><%= link "Back", to: ediscipline_path(@conn, :index) %></span>

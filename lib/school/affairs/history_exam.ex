@@ -13,7 +13,7 @@ defmodule School.Affairs.HistoryExam do
     field(:student_name, :string)
     field(:student_no, :integer)
     field(:subject_code, :string)
-    field(:subject_mark, :decimal)
+    field(:subject_mark, :decimal, default: 0.0)
     field(:subject_name, :string)
     field(:chinese_name, :string)
     field(:year, :integer)

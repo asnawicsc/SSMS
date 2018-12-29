@@ -24,7 +24,7 @@
                     <div class="card-body">
 
 
-<%= form_for @changeset, student_path(@conn, :create), fn f -> %>
+<%= form_for @changeset, student_path(@conn, :create),[ multipart: true], fn f -> %>
   <%= if @changeset.action do %>
     <div class="alert alert-danger">
       <p>Oops, something went wrong! Please check the errors below.</p>
@@ -50,43 +50,43 @@
   </div>
 
   <div class="form-group col-md-2">
-    <%= label f, (gettext "ic"), class: "" %>
+    <%= label f, (gettext "IC No"), class: "" %>
     <%= text_input f, :ic, class: "form-control" %>
     <%= error_tag f, :ic %>
   </div>
 
   <div class="form-group col-md-2">
-    <%= label f, (gettext "dob"), class: "" %>
+    <%= label f, (gettext "Date of Birth"), class: "" %>
     <%= text_input f, :dob, class: "form-control" %>
     <%= error_tag f, :dob %>
   </div>
 
   <div class="form-group col-md-2">
-    <%= label f, :pob, class: "" %>
+    <%= label f, (gettext "Place of Birth"), class: "" %>
     <%= text_input f, :pob, class: "form-control" %>
     <%= error_tag f, :pob %>
   </div>
   </div>
   <div class="form-row">
   <div class="form-group col-md-2">
-    <%= label f, :b_cert, class: "" %>
+    <%= label f, (gettext "Birth Certificatte"), class: "" %>
     <%= text_input f, :b_cert, class: "form-control" %>
     <%= error_tag f, :b_cert %>
   </div>
   <div class="form-group col-md-2">
-    <%= label f, :race, class: "" %>
+      <%= label f, (gettext "Race"), class: "" %>
     <%= select f, :race, race, class: "form-control" %>
     <%= error_tag f, :race %>
   </div>
 
   <div class="form-group col-md-2">
-    <%= label f, :religion, class: "" %>
+      <%= label f, (gettext "Religion"), class: "" %>
     <%= select f, :religion, religion, class: "form-control" %>
     <%= error_tag f, :religion %>
   </div>
 
   <div class="form-group col-md-2">
-    <%= label f, :nationality, class: "" %>
+       <%= label f, (gettext "Nationality"), class: "" %>
     <%= select f, :nationality,nationality, class: "form-control" %>
     <%= error_tag f, :nationality %>
   </div>
@@ -95,43 +95,43 @@
 
 
   <div class="form-group col-md-3">
-    <%= label f, :line1, class: "" %>
+     <%= label f, (gettext "Address 1"), class: "" %>
     <%= text_input f, :line1, class: "form-control" %>
     <%= error_tag f, :line1 %>
   </div>
 
   <div class="form-group col-md-3">
-    <%= label f, :line2, class: "" %>
+      <%= label f, (gettext "Address 2"), class: "" %>
     <%= text_input f, :line2, class: "form-control" %>
     <%= error_tag f, :line2 %>
   </div>
 
   <div class="form-group col-md-2">
-    <%= label f, :postcode, class: "" %>
+     <%= label f, (gettext "Postcode"), class: "" %>
     <%= text_input f, :postcode, class: "form-control" %>
     <%= error_tag f, :postcode %>
   </div>
 
   <div class="form-group col-md-2">
-    <%= label f, :town, class: "" %>
+      <%= label f, (gettext "Town"), class: "" %>
     <%= text_input f, :town, class: "form-control" %>
     <%= error_tag f, :town %>
   </div>
 
   <div class="form-group col-md-2">
-    <%= label f, :state, class: "" %>
+    <%= label f, (gettext "State"), class: "" %>
     <%= text_input f, :state, class: "form-control" %>
     <%= error_tag f, :state %>
   </div>
 
   <div class="form-group col-md-2">
-    <%= label f, :country, class: "" %>
+      <%= label f, (gettext "Country"), class: "" %>
     <%= text_input f, :country, class: "form-control" %>
     <%= error_tag f, :country %>
   </div>
 
   <div class="form-group col-md-2">
-    <%= label f, :phone, class: "" %>
+     <%= label f, (gettext "Phone Number"), class: "" %>
     <%= text_input f, :phone, class: "form-control" %>
     <%= error_tag f, :phone %>
   </div>
@@ -141,59 +141,59 @@
 
 <div class="form-row">
   <div class="form-group col-md-2">
-    <%= label f, :is_oku, class: "" %>
+      <%= label f, (gettext "OKU ?"), class: "" %>
     <%= checkbox f, :is_oku, class: "checkbox" %>
     <%= error_tag f, :is_oku %>
   </div>
 
   <div class="form-group col-md-2">
-    <%= label f, :oku_no, class: "" %>
+      <%= label f, (gettext "OKU NO"), class: "" %>
     <%= text_input f, :oku_no, class: "form-control" %>
     <%= error_tag f, :oku_no %>
   </div>
 
   <div class="form-group col-md-2">
-    <%= label f, :oku_cat, class: "" %>
+      <%= label f, (gettext "OKU Category"), class: "" %>
     <%= text_input f, :oku_cat, class: "form-control" %>
     <%= error_tag f, :oku_cat %>
   </div>
 
   <div class="form-group col-md-2">
-    <%= label f, :transport, class: "" %>
+   <%= label f, (gettext "Transportation"), class: "" %>
     <%= select f, :transport, transport, class: "form-control" %>
     <%= error_tag f, :transport %>
   </div>
 
   <div class="form-group col-md-2">
-    <%= label f, :distance, class: "" %>
+     <%= label f, (gettext "Distance from School"), class: "" %>
     <%= text_input f, :distance, class: "form-control" %>
     <%= error_tag f, :distance %>
   </div>
 
   <div class="form-group col-md-2">
-    <%= label f, :blood_type, class: "" %>
+      <%= label f, (gettext "Blood Type"), class: "" %>
     <%= select f, :blood_type, blood_type, class: "form-control" %>
     <%= error_tag f, :blood_type %>
   </div>
 
   <div class="form-group col-md-2">
-    <%= label f, :position_in_house, class: "" %>
+     <%= label f, (gettext "Position In House"), class: "" %>
     <%= text_input f, :position_in_house, class: "form-control" %>
     <%= error_tag f, :position_in_house %>
   </div>
 
   <div class="form-group col-md-2">
-    <%= label f, :subject_ids, class: "" %>
+     <%= label f, (gettext "Subject IDs"), class: "" %>
     <%= text_input f, :subject_ids, class: "form-control" %>
     <%= error_tag f, :subject_ids %>
   </div>
   <div class="form-group col-md-3">
-    <%= label f, :institution_id, class: "" %>
+      <%= label f, (gettext "School Name"), class: "" %>
     <%= select f, :institution_id, institutes, class: "form-control" %>
     <%= error_tag f, :institution_id %>
   </div>
   <div class="form-group col-md-3">
-    <%= label f, :student_no, class: "" %>
+     <%= label f, (gettext "Student No"), class: "" %>
     <%= text_input f, :student_no, class: "form-control" %>
     <%= error_tag f, :student_no %>
   </div>
@@ -201,24 +201,24 @@
 
 <div class="form-row">
   <div class="form-group col-md-2">
-    <%= label f, :guardtype, class: "" %>
+      <%= label f, (gettext "Guardian Type"), class: "" %>
     <%= text_input f, :guardtype, class: "form-control" %>
     <%= error_tag f, :guardtype %>
   </div>
     <div class="form-group col-md-2">
-    <%= label f, :gicno, class: "" %>
+     <%= label f, (gettext "Guardian IC No"), class: "" %>
     <%= text_input f, :gicno, class: "form-control" %>
     <%= error_tag f, :gicno %>
     
   </div>
     <div class="form-group col-md-2">
-    <%= label f, :ficno, class: "" %>
+     <%= label f, (gettext "Father IC No"), class: "" %>
     <%= text_input f, :ficno, class: "form-control" %>
    
     <%= error_tag f, :ficno %>
   </div>
     <div class="form-group col-md-2">
-    <%= label f, :micno, class: "" %>
+     <%= label f, (gettext "Mother IC No"), class: "" %>
     <%= text_input f, :micno, class: "form-control" %>
 
     <%= error_tag f, :micno %>
@@ -228,6 +228,18 @@
 
   </div>
 </div>
+
+
+                <div class="form-group">
+    <center>
+      <label>Student Picture</label><br>
+      <img id="preview5" alt="Click here to select student picture" style='width:auto; height: 200px;' src='data:image/png;base64, ""'>
+       <%= file_input f, :image1, accept: ".png, .jpg, .jpeg"  ,id: "imgInp5", style: "display: none;"%>
+    </center>
+  </div>
+
+
+
   <div class="form-group ">
     <%= submit "Submit", class: "btn btn-primary" %>
   </div>
@@ -239,3 +251,22 @@
 </div>
 
 
+   <script type="text/javascript">
+      $(window).ready(function(){
+        $("#imgInp5").change(function(){
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#preview5').attr('src', e.target.result);
+                 
+                }
+                reader.readAsDataURL($("#imgInp5")[0].files[0]);
+        });
+
+
+        $("img#preview5").click(function(){
+          $("input#imgInp5").click()
+        })
+    
+
+      });
+   </script>

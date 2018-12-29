@@ -45,10 +45,13 @@ defmodule School.Affairs.Teacher do
     field(:tccjob6, :string)
     field(:institution_id, :integer)
     field(:email, :string)
-    field(:is_delete, :boolean, default: false)
+    field(:is_delete, :integer, default: 0)
     field(:tranfer_in, :string)
     field(:tranfer_out, :string)
     field(:reason, :string)
+    field(:image_bin, :binary)
+    field(:image_filename, :string)
+    field(:rank, :integer)
 
     timestamps()
   end
@@ -89,7 +92,11 @@ defmodule School.Affairs.Teacher do
       :email,
       :tranfer_in,
       :tranfer_out,
-      :reason
+      :reason,
+      :image_bin,
+      :image_filename,
+      :rank,
+      :is_delete
     ])
     |> validate_required([:icno, :email, :name, :code])
   end

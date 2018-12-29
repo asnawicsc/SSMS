@@ -222,6 +222,12 @@ defmodule SchoolWeb.AttendanceController do
       end
       |> Enum.filter(fn x -> x != nil end)
 
+    if abs_ids == "" do
+      conn
+      |> put_flash(:info, "Attendance inserted fail, please mark all students.")
+      |> redirect(to: attendance_path(conn, :index))
+    end
+
     attended_std = student_ids |> String.split(",")
     inform_parents_student_attendance(attended_std)
     abs_ids = abs_ids -- attended_std
@@ -250,43 +256,47 @@ defmodule SchoolWeb.AttendanceController do
   end
 
   def inform_parents_student_attendance(attended_std) do
-    for id <- attended_std do
-      student = Affairs.get_student!(id)
-      IO.inspect(student)
+    if attended_std != [] do
+      for id <- attended_std do
+        if id != "" do
+          student = Affairs.get_student!(id)
+          IO.inspect(student)
 
-      guardian =
-        if student.gicno != nil do
-          Repo.get_by(Parent, icno: student.gicno)
-        else
-          nil
+          guardian =
+            if student.gicno != nil do
+              Repo.get_by(Parent, icno: student.gicno)
+            else
+              nil
+            end
+
+          father =
+            if student.ficno != nil do
+              Repo.get_by(Parent, icno: student.ficno)
+            else
+              nil
+            end
+
+          mother =
+            if student.micno != nil do
+              Repo.get_by(Parent, icno: student.micno)
+            else
+              nil
+            end
+
+          cond do
+            guardian != nil ->
+              fb_send_attedance_report(guardian, student)
+
+            father != nil ->
+              fb_send_attedance_report(father, student)
+
+            mother != nil ->
+              fb_send_attedance_report(mother, student)
+
+            true ->
+              nil
+          end
         end
-
-      father =
-        if student.ficno != nil do
-          Repo.get_by(Parent, icno: student.ficno)
-        else
-          nil
-        end
-
-      mother =
-        if student.micno != nil do
-          Repo.get_by(Parent, icno: student.micno)
-        else
-          nil
-        end
-
-      cond do
-        guardian != nil ->
-          fb_send_attedance_report(guardian, student)
-
-        father != nil ->
-          fb_send_attedance_report(father, student)
-
-        mother != nil ->
-          fb_send_attedance_report(mother, student)
-
-        true ->
-          nil
       end
     end
   end

@@ -1,23 +1,36 @@
-<center><b>SENARAI MURID MENGIKUT KELAS</b></center><br>
-<center><b><%= @institution.name %></b></br></center>
-<p  style="margin-right: 10px; margin-left: 10px;">Kelas: <b><%= @class.name %></b> &nbsp;&nbsp; Year: <b><%= @semester.year %></b> &nbsp;&nbsp; Semester: <b><%= @semester.sem %></b></p>
 
+<table class="table" border="1"  width="100%">
+  
+  <tbody>
+<td >
+<b><%= @institution.name %></b></br>
+班级<b> Kelas: <%= @class.name %></b> <br>
+老师<b> Nama GURU : ________________________________________________________________ </b><br>
+事项<b> PERKARA &nbsp;&nbsp;&nbsp;: ________________________________________________________________</b><b style="margin-left: 10px;"> 日期 Tarikh:<%= SchoolWeb.LayoutView.my_time(DateTime.utc_now) %></b> 
 
+</td>
+    </tbody>
+</table>
 
-<table class="table" border="1" style="border-collapse: collapse;   align="center"  width="100%" >
+<table class="table" border="1" width="100%" >
   <thead>
     <tr align="center">
       <th><%= gettext "Bil." %></th>
-      <th><%= gettext "Bil Dlm Sekolah" %></th>
-      <th><%= gettext "B. Cina" %></th>
-      <th><%= gettext "Bahasa Malaysia" %></th>
-      <th><%= gettext "Jantina" %></th>
-      <th><%= gettext "Tarikh Lahir" %></th>
-      <th><%= gettext "Tempat Lahir" %></th>
-      <th><%= gettext "Umur Pada 1hb Jan" %></th>
-      <th><%= gettext "No Sijil Beranak" %></th>
-      <th><%= gettext "Tarikh Masuk" %></th>
-      <th><%= gettext "Bangsa" %></th>
+      <th><%= gettext "学号" %></th>
+        <th><%= gettext "Name" %></th>
+      <th><%= gettext "姓名" %></th>
+      <th><%= gettext "Jan" %></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+
 
     </tr>
   </thead>
@@ -28,26 +41,46 @@
 
     <tr align="center">
       <td><%= no+1 %></td>
-       <td><%= item.id %></td>
-       <td><%= item.chinese_name %></td>
-       <td><%= item.name %></td>
-       <td><%= item.sex %></td>
-       <td><%= item.dob %></td>
-       <td><%= item.pob %></td>
-       <td></td>
-       <td><%= item.b_cert %></td>
-       <td></td>
-       <td>
-       	<%= if item.race == "C" do "CINA" end %>
-       	<%= if item.race == "M" do "MELAYU" end %>
-       	<%= if item.race == "I" do "INDIA" end %>
-       	<%= if item.race == "I" do "LAIN-LAIN" end %>
-
-       	</td>
+       <td><%= item.id_no %></td>
+        <%= if String.length(item.name) > 40 do %>
+       <td align="left" style="font-size: 14px; width: auto; height: auto;" ><%=  item.name %></td>
+        <% else %>
+        <td align="left" ><%=  item.name %></td>
+       <% end  %>
+       <td width="80px"><%= item.chinese_name %></td>
+       <td><%= if item.sex == "M" do "L" end %>
+        <%= if item.sex == "F" do "P" end %></td>
+       <td width="42px"></td>
+       <td width="42px"></td>
+       <td width="42px"></td>
+       <td width="42px"></td>
+       <td width="42px"></td>
+       <td width="42px"></td>
+       <td width="42px"></td>
+       <td width="42px"></td>
+       <td width="42px"></td>
+       <td width="42px"></td>
 
     </tr>
 <% end %>
+
+
   </tbody>
 </table>
 
+<style type="text/css">
+  
+  table { 
 
+    border-spacing: 0;
+    border-collapse: collapse;
+    font-size: 15px;
+    white-space: nowrap;
+}
+td {
+    padding:4px;
+}
+td img {
+    display:block;
+}
+</style>

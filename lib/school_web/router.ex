@@ -158,7 +158,7 @@ defmodule SchoolWeb.Router do
     get("/logout", UserController, :logout)
     resources("/students", StudentController)
 
-    get("/update_changes/:student_id", StudentController, :update_changes)
+    post("/update_changes/:student_id", StudentController, :update_changes)
     post("/upload_students", StudentController, :pre_upload_students)
     post("/upload_teachers", TeacherController, :pre_upload_teachers)
     post("/upload_parents", ParentController, :pre_upload_parents)
@@ -215,6 +215,7 @@ defmodule SchoolWeb.Router do
     get("/record_attendance", AttendanceController, :record_attendance)
 
     resources("/teacher", TeacherController)
+    get("/e_discipline", TeacherController, :e_discipline)
     get("/teacher_attendance", TeacherController, :teacher_attendance)
     get("/mark_teacher_attendance", TeacherController, :mark_teacher_attendance)
     get("/submit_teacher_attendance", TeacherController, :submit_teacher_attendance)
@@ -225,6 +226,8 @@ defmodule SchoolWeb.Router do
     post("/upload_subjects", SubjectController, :upload_subjects)
     resources("/parent", ParentController)
     post("/upload_parents", ParentController, :upload_parents)
+
+    get("/create_clerk", UserController, :create_clerk)
 
     resources("/timetable", TimetableController)
     get("/timetable/teacher/:user_id/list", TimetableController, :teacher_timetable_list)
@@ -392,10 +395,16 @@ defmodule SchoolWeb.Router do
     get("/parent_listing", ParentController, :parent_listing)
 
     get("/admin_dashboard", PageController, :admin_dashboard)
-
+    get("/clerk_dashboard", PageController, :clerk_dashboard)
     get("/support_dashboard", PageController, :support_dashboard)
     get("/login_teacher", TeacherController, :login_teacher)
     get("/create_teacher_login/:id", TeacherController, :create_teacher_login)
+
+    get("/edit_teacher_login/:id", TeacherController, :edit_teacher_login)
+
+    post("/edit_teacher_access", TeacherController, :edit_teacher_access)
+    get("/delete_teacher_login/:id", TeacherController, :delete_teacher_login)
+
     resources("/sync_list", SyncListController)
     get("/apply_color", PageController, :apply_color)
     get("/create_semesters", SemesterController, :create_semesters)
@@ -440,6 +449,19 @@ defmodule SchoolWeb.Router do
 
     resources("/announcements", AnnouncementController)
     get("/announcements/:id/broadcast", AnnouncementController, :broadcast)
+    resources("/edisciplines", EdisciplineController)
+    get("/ediscipline_form", EdisciplineController, :ediscipline_form)
+    get("/msg_details", EdisciplineController, :msg_details)
+    get("/show_message_details/:msg_id", EdisciplineController, :show_message_details)
+    get("/update_summary", EdisciplineController, :update_summary)
+    get("/change_semester", UserController, :change_semester)
+    post("/get_change_semester", UserController, :get_change_semester)
+
+    resources("/ehehomeworks", EhomeworkController)
+    get("/ehomework/:class_id", EhomeworkController, :ehomework)
+    get("/show_ehomework_calendar/class/:class_id", EhomeworkController, :show_ehomework_calendar)
+    get("/view_homework/class/:class_id/end_date/:end_date", EhomeworkController, :view_homework)
+    get("/update_ehomework/:ehomework_id", EhomeworkController, :update_ehomework)
     get("/*path", PageController, :no_page_found)
   end
 end

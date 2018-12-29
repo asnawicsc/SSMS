@@ -51,6 +51,19 @@
             </div>
           <% end %>
 
+           <%= if user.role == "Clerk" do %>
+           <div class="navbar-header">
+               <a class="navbar-brand" href="/clerk_dashboard">
+                  <div class="brand-logo">
+                     <img class="img-fluid" src="/img/tail.png" width="80px" height="70px" alt="App Logo">
+                  </div>
+                  <div class="brand-logo-collapsed">
+                     <img class="img-fluid" src="/img/head.png" alt="App Logo">
+                  </div>
+               </a>
+            </div>
+          <% end %>
+
    <% end %>
 <% end %>
            
@@ -90,12 +103,15 @@
                               <li class="nav-item d-none d-md-block">
                      <%= if @conn.private.plug_session["semester_id"] != nil do %>
                      <% semester=Repo.get_by(School.Affairs.Semester, %{id: @conn.private.plug_session["semester_id"] }) %>
-                      <a class="nav-link" href="#" >
+                      <a class="nav-link" href="/change_semester" >
                         <%= if semester != nil do %>
                   Current Semester: <%= semester.start_date %> - <%= semester.end_date %>
                   <% end %>
                     <% end %>
                       </a>
+
+
+
                
                </li>
 

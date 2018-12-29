@@ -24,7 +24,7 @@
                           <div class="form-row">
                          	<div class="form-group col-md-2">
                          <select class="custom-select -custom-select-sm" name="class" required="required">
-                            <%= for class <- @classes do %>
+                            <%= for class <- @classes|>Enum.sort_by(fn x -> x.name end) do %>
                                 <option>
                                     <%= class.name %>
                                 </option>
@@ -35,7 +35,7 @@
                        	<div class="form-group col-md-3">
                         <select class="custom-select -custom-select-sm" name="exam" required="required">
 
-                            <%= for exam <- @exams do %>
+                            <%= for exam <- @exams|>Enum.sort_by(fn x -> x.name end) do %>
 
                             <% standard=Repo.get_by(School.Affairs.Level, id: exam.level_id) %>
                                 <option value="<%= exam.id %>">

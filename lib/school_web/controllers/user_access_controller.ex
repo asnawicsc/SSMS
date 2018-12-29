@@ -18,15 +18,36 @@ defmodule SchoolWeb.UserAccessController do
 
   def user_access_pass(conn, %{"id" => id}) do
     institutions =
-      Repo.all(
-        from(
-          u in Institution,
-          select: %{
-            id: u.id,
-            name: u.name
-          }
-        )
-      )
+      if conn.private.plug_session["user_id"] != nil do
+        user_id = conn.private.plug_session["user_id"]
+        user = Repo.get_by(Settings.User, %{id: user_id})
+
+        institutions =
+          if user.role == "Admin" do
+            institutions =
+              Repo.all(
+                from(
+                  u in Institution,
+                  select: %{
+                    id: u.id,
+                    name: u.name
+                  }
+                )
+              )
+          else
+            institutions =
+              Repo.all(
+                from(
+                  u in Institution,
+                  select: %{
+                    id: u.id,
+                    name: u.name
+                  }
+                )
+              )
+              |> Enum.filter(fn x -> x.id == conn.private.plug_session["institution_id"] end)
+          end
+      end
 
     selected =
       Repo.all(

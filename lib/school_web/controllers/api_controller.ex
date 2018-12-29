@@ -6,6 +6,42 @@ defmodule SchoolWeb.ApiController do
   alias School.Settings.{Institution, User, Parameter}
   require IEx
 
+  def edcp_inform_parent(chatfuel_block_name, params) do
+    ed_details = Repo.get(School.Affairs.Ediscipline, params.id)
+    bot_id = "5bd1836d0ecd9f0159d5f60a"
+
+    ct = "mELtlMAHYqR0BvgEiMq8zVek3uYUK3OJMbtyrdNPTrQB9ndV0fM7lWTFZbM4MZvD"
+    chatfuel_message_tag = "COMMUNITY_ALERT"
+    message = ed_details.message |> URI.encode()
+    title = ed_details.title |> URI.encode()
+
+    # uri =
+    #  "https://api.chatfuel.com/bots/#{bot_id}/users/2254055204618063/send?chatfuel_token=#{ct}&chatfuel_message_tag=#{
+    #    chatfuel_message_tag
+    #  }&chatfuel_block_name=#{chatfuel_block_name}&title=#{title}&message=#{message}"
+
+    uri =
+      "https://api.chatfuel.com/bots/#{bot_id}/users/#{ed_details.psid}/send?chatfuel_token=#{ct}&chatfuel_message_tag=#{
+        chatfuel_message_tag
+      }&chatfuel_block_name=#{chatfuel_block_name}&title=#{title}&message=#{message}"
+
+    case HTTPoison.request(:post, uri, "", [{"Content-Type", "application/json"}], []) do
+      {:ok, %HTTPoison.Response{body: body}} ->
+        IO.inspect(Poison.decode(body))
+        IO.puts("message sent!")
+
+      {:error, %HTTPoison.Error{reason: reason}} ->
+        IO.inspect(Poison.decode(reason))
+
+      {:ok, %HTTPoison.Response{status_code: 400, body: body}} ->
+        IO.inspect(Poison.decode(body))
+        IO.puts("message sent!")
+
+      _ ->
+        IO.puts("dont know how to catch this")
+    end
+  end
+
   def personal_broadcast(chatfuel_block_name, user_attribute_list_map, psid) do
     bot_id = "5bd1836d0ecd9f0159d5f60a"
 

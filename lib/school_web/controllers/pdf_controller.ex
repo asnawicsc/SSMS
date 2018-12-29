@@ -764,32 +764,63 @@ defmodule SchoolWeb.PdfController do
       )
 
     data =
-      Repo.all(
-        from(
-          s in Student,
-          left_join: sc in StudentClass,
-          on: sc.sudent_id == s.id,
-          left_join: c in Class,
-          on: c.id == sc.class_id,
-          left_join: l in Level,
-          on: l.id == c.level_id,
-          left_join: sm in Semester,
-          on: sm.id == sc.semester_id,
-          where:
-            sc.institute_id == ^conn.private.plug_session["institution_id"] and
-              s.institution_id == ^conn.private.plug_session["institution_id"] and
-              c.institution_id == ^conn.private.plug_session["institution_id"] and
-              l.institution_id == ^conn.private.plug_session["institution_id"] and
-              sm.institution_id == ^conn.private.plug_session["institution_id"],
-          group_by: [l.name, c.name, s.sex],
-          select: %{
-            class: c.name,
-            gender: s.sex,
-            gender_count: count(s.sex),
-            level: l.name
-          }
+      if class_name == "ALL" do
+        Repo.all(
+          from(
+            s in Student,
+            left_join: sc in StudentClass,
+            on: sc.sudent_id == s.id,
+            left_join: c in Class,
+            on: c.id == sc.class_id,
+            left_join: l in Level,
+            on: l.id == c.level_id,
+            left_join: sm in Semester,
+            on: sm.id == sc.semester_id,
+            where:
+              sc.institute_id == ^conn.private.plug_session["institution_id"] and
+                s.institution_id == ^conn.private.plug_session["institution_id"] and
+                c.institution_id == ^conn.private.plug_session["institution_id"] and
+                l.institution_id == ^conn.private.plug_session["institution_id"] and
+                sm.institution_id == ^conn.private.plug_session["institution_id"] and
+                sc.semester_id == ^semester.id,
+            group_by: [l.name, c.name, s.sex],
+            select: %{
+              class: c.name,
+              gender: s.sex,
+              gender_count: count(s.sex),
+              level: l.name
+            }
+          )
         )
-      )
+      else
+        Repo.all(
+          from(
+            s in Student,
+            left_join: sc in StudentClass,
+            on: sc.sudent_id == s.id,
+            left_join: c in Class,
+            on: c.id == sc.class_id,
+            left_join: l in Level,
+            on: l.id == c.level_id,
+            left_join: sm in Semester,
+            on: sm.id == sc.semester_id,
+            where:
+              sc.institute_id == ^conn.private.plug_session["institution_id"] and
+                s.institution_id == ^conn.private.plug_session["institution_id"] and
+                c.institution_id == ^conn.private.plug_session["institution_id"] and
+                l.institution_id == ^conn.private.plug_session["institution_id"] and
+                sm.institution_id == ^conn.private.plug_session["institution_id"] and
+                sc.semester_id == ^semester.id and c.name == ^class_name,
+            group_by: [l.name, c.name, s.sex],
+            select: %{
+              class: c.name,
+              gender: s.sex,
+              gender_count: count(s.sex),
+              level: l.name
+            }
+          )
+        )
+      end
 
     html =
       Phoenix.View.render_to_string(
@@ -1463,18 +1494,33 @@ defmodule SchoolWeb.PdfController do
               s.semester_id == ^semester_id,
           select: %{
             id: s.sudent_id,
+            id_no: s.id,
             chinese_name: r.chinese_name,
             name: r.name,
-            sex: r.sex,
-            dob: r.dob,
-            pob: r.pob,
-            b_cert: r.b_cert,
-            religion: r.religion,
-            race: r.race
-          }
+            sex: r.sex
+          },
+          order_by: [desc: r.sex, asc: r.name]
         )
       )
-      |> Enum.with_index()
+
+    number = 40
+
+    add = number - (all |> Enum.count())
+
+    range = 1..add
+
+    empty_colum =
+      for item <- range do
+        %{
+          id: "",
+          id_no: "",
+          chinese_name: "",
+          name: "",
+          sex: ""
+        }
+      end
+
+    all = (all ++ empty_colum) |> Enum.with_index()
 
     institution =
       Repo.get_by(School.Settings.Institution, id: conn.private.plug_session["institution_id"])
@@ -1518,9 +1564,7 @@ defmodule SchoolWeb.PdfController do
           "--margin-bottom",
           "5",
           "--encoding",
-          "utf-8",
-          "--orientation",
-          "Landscape"
+          "utf-8"
         ],
         delete_temporary: true
       )
@@ -1536,9 +1580,29 @@ defmodule SchoolWeb.PdfController do
     institution = Repo.get_by(School.Settings.Institution, id: inst_id)
 
     teacher =
-      Affairs.list_teacher()
-      |> Enum.filter(fn x -> x.institution_id == inst_id end)
-      |> Enum.with_index()
+      Repo.all(
+        from(s in School.Affairs.Teacher,
+          where: s.institution_id == ^inst_id and s.is_delete != 1,
+          select: %{name: s.name, cname: s.cname},
+          order_by: [asc: s.rank, asc: s.name]
+        )
+      )
+
+    number = 40
+
+    add = number - (teacher |> Enum.count())
+
+    range = 1..add
+
+    empty_colum =
+      for item <- range do
+        %{
+          name: "",
+          cname: ""
+        }
+      end
+
+    teacher = (teacher ++ empty_colum) |> Enum.with_index()
 
     html =
       Phoenix.View.render_to_string(
@@ -1564,9 +1628,7 @@ defmodule SchoolWeb.PdfController do
           "--margin-bottom",
           "5",
           "--encoding",
-          "utf-8",
-          "--orientation",
-          "Landscape"
+          "utf-8"
         ],
         delete_temporary: true
       )
@@ -2015,7 +2077,7 @@ defmodule SchoolWeb.PdfController do
           "--encoding",
           "utf-8",
           "--orientation",
-          "Landscape"
+          "Portrait"
         ],
         delete_temporary: true
       )

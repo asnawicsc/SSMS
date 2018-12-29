@@ -33,7 +33,11 @@ defmodule SchoolWeb.HistoryExamController do
           left_join: l in Level,
           on: em.level_id == l.id,
           group_by: [em.name, em.id, sm.start_date, sm.id],
-          where: em.institution_id == ^conn.private.plug_session["institution_id"],
+          where:
+            em.institution_id == ^conn.private.plug_session["institution_id"] and
+              s.institution_id == ^conn.private.plug_session["institution_id"] and
+              sm.institution_id == ^conn.private.plug_session["institution_id"] and
+              l.institution_id == ^conn.private.plug_session["institution_id"],
           select: %{
             exam_name: em.name,
             semester: sm.start_date,
@@ -44,11 +48,23 @@ defmodule SchoolWeb.HistoryExamController do
         )
       )
 
-    a = Affairs.list_history_exam()
+    a =
+      Repo.all(
+        from(s in HistoryExam,
+          where: s.institution_id == ^conn.private.plug_session["institution_id"],
+          select: %{year: s.year, exam_name: s.exam_name, class_name: s.class_name}
+        )
+      )
 
     history_exam =
       if a != [] do
-        Affairs.list_history_exam() |> hd
+        Repo.all(
+          from(s in HistoryExam,
+            where: s.institution_id == ^conn.private.plug_session["institution_id"],
+            select: %{year: s.year, exam_name: s.exam_name, class_name: s.class_name}
+          )
+        )
+        |> hd
       else
         []
       end
@@ -155,23 +171,28 @@ defmodule SchoolWeb.HistoryExamController do
   end
 
   def history_exam_result_class(conn, params) do
+    all =
+      Repo.all(
+        from(s in HistoryExam,
+          where: s.institution_id == ^conn.private.plug_session["institution_id"],
+          select: %{year: s.year, exam_name: s.exam_name, class_name: s.class_name}
+        )
+      )
+
     year =
-      Affairs.list_history_exam()
-      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+      all
       |> Enum.map(fn x -> x.year end)
       |> Enum.uniq()
       |> Enum.filter(fn x -> x != nil end)
 
     exam_name =
-      Affairs.list_history_exam()
-      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+      all
       |> Enum.map(fn x -> x.exam_name end)
       |> Enum.uniq()
       |> Enum.filter(fn x -> x != nil end)
 
     class_name =
-      Affairs.list_history_exam()
-      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+      all
       |> Enum.map(fn x -> x.class_name end)
       |> Enum.uniq()
       |> Enum.filter(fn x -> x != nil end)

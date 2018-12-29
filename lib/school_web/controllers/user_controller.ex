@@ -22,6 +22,33 @@ defmodule SchoolWeb.UserController do
     end
   end
 
+  def change_semester(conn, params) do
+    user = Repo.get_by(User, id: conn.private.plug_session["user_id"])
+
+    access = Repo.get_by(Settings.UserAccess, user_id: user.id)
+
+    current_sem =
+      Repo.all(
+        from(
+          s in School.Affairs.Semester,
+          where:
+            s.id == ^conn.private.plug_session["semester_id"] and
+              s.institution_id == ^access.institution_id
+        )
+      )
+      |> hd
+
+    all =
+      Repo.all(
+        from(
+          s in School.Affairs.Semester,
+          where: s.institution_id == ^access.institution_id
+        )
+      )
+
+    render(conn, "change_semester.html", current_sem: current_sem, all: all)
+  end
+
   def assign_lib_access(conn, params) do
     users =
       Repo.all(
@@ -33,6 +60,28 @@ defmodule SchoolWeb.UserController do
       )
 
     render(conn, "library_assign.html", users: users)
+  end
+
+  def get_change_semester(conn, params) do
+    semester =
+      Repo.all(
+        from(
+          s in School.Affairs.Semester,
+          where:
+            s.id == ^params["change_semester"] and
+              s.institution_id == ^conn.private.plug_session["institution_id"]
+        )
+      )
+      |> hd
+
+    user = Repo.get_by(User, id: conn.private.plug_session["user_id"])
+
+    conn
+    |> put_session(:user_id, user.id)
+    |> put_session(:semester_id, semester.id)
+    |> put_session(:institution_id, conn.private.plug_session["institution_id"])
+    |> put_session(:style, user.styles)
+    |> redirect(to: page_path(conn, :dashboard))
   end
 
   def authenticate(conn, %{"email" => email, "password" => password}) do
@@ -102,12 +151,21 @@ defmodule SchoolWeb.UserController do
             |> put_session(:style, user.styles)
             |> redirect(to: page_path(conn, :support_dashboard))
           else
-            conn
-            |> put_session(:user_id, user.id)
-            |> put_session(:semester_id, current_sem.id)
-            |> put_session(:institution_id, access.institution_id)
-            |> put_session(:style, user.styles)
-            |> redirect(to: page_path(conn, :dashboard))
+            if user.role == "Clerk" do
+              conn
+              |> put_session(:user_id, user.id)
+              |> put_session(:semester_id, current_sem.id)
+              |> put_session(:institution_id, access.institution_id)
+              |> put_session(:style, user.styles)
+              |> redirect(to: page_path(conn, :clerk_dashboard))
+            else
+              conn
+              |> put_session(:user_id, user.id)
+              |> put_session(:semester_id, current_sem.id)
+              |> put_session(:institution_id, access.institution_id)
+              |> put_session(:style, user.styles)
+              |> redirect(to: page_path(conn, :dashboard))
+            end
           end
         end
       else
@@ -188,6 +246,20 @@ defmodule SchoolWeb.UserController do
     render(conn, "register_new_user.html")
   end
 
+  def create_clerk(conn, _params) do
+    users =
+      Repo.all(
+        from(s in User,
+          left_join: g in Settings.UserAccess,
+          on: s.id == g.user_id,
+          where:
+            g.institution_id == ^conn.private.plug_session["institution_id"] and s.role == "Clerk"
+        )
+      )
+
+    render(conn, "create_clerk.html", users: users)
+  end
+
   def index(conn, _params) do
     users = Settings.list_users()
 
@@ -229,7 +301,8 @@ defmodule SchoolWeb.UserController do
 
   def update(conn, %{"id" => id, "user" => user_params, "is_librarian" => is_librarian}) do
     user = Settings.get_user!(id)
-    crypted_password = Comeonin.Bcrypt.hashpwsalt(user.password)
+
+    crypted_password = Comeonin.Bcrypt.hashpwsalt(user_params["password"])
 
     user_params = Map.put(user_params, "is_librarian", is_librarian)
     user_params = Map.put(user_params, "crypted_password", crypted_password)

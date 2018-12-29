@@ -1,0 +1,5 @@
+<h2>New Ehomework</h2>
+
+<%= render "form.html", Map.put(assigns, :action, ehomework_path(@conn, :create)) %>
+
+<span><%= link "Back", to: ehomework_path(@conn, :index) %></span>
