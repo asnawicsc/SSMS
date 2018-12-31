@@ -42,8 +42,8 @@
                         <tbody></tbody>
                     </table>
                 </div>
-                  <div id="all_class" hidden="" style="overflow:scroll;" >
-                        <div class="col-sm-10" style="overflow:scroll;" >
+                  <div id="all_class" hidden="" >
+                        <div class="col-sm-10" style="overflow:scroll; height: 400px;">
   <%= for class <- @classes|>Enum.sort_by(fn x -> x.name end) do %>
 
  <div class="radio c-radio" ><label><input type="radio" name="change_classes"  id="change_classes" value="<%= class.id %>"><span class="fa fa-circle"></span>Class: <%= class.name %></label></div>
@@ -390,7 +390,7 @@
 
           
                       swal({
-                    
+
                     title: 'Tranfer to Class ',
                     text:  $("div#all_class").html(),
                     type: "warning",
@@ -444,3 +444,5 @@
              });
        })
 </script>
+
+
