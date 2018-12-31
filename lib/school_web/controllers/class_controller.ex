@@ -656,7 +656,9 @@ defmodule SchoolWeb.ClassController do
       |> put_flash(:info, "Please select a class.")
       |> redirect(to: institution_path(conn, :index))
     else
-      classes = Affairs.list_classes(conn.private.plug_session["institution_id"])
+      classes =
+        Affairs.list_classes(conn.private.plug_session["institution_id"])
+        |> Enum.filter(fn x -> x.is_delete != 1 end)
 
       render(conn, "index.html", classes: classes)
     end

@@ -327,7 +327,8 @@ defmodule School.Affairs do
           remarks: c.remarks,
           level_id: l.name,
           teacher_id: c.teacher_id,
-          standard_id: l.id
+          standard_id: l.id,
+          is_delete: c.is_delete
         }
       )
     )

@@ -10,8 +10,9 @@
       border-collapse: collapse;
       border: 2px solid rgb(200, 200, 200);
       letter-spacing: 1px;
-      font-size: 0.4rem;
+      font-size: 6px;
         font-weight: bold;
+          white-space: nowrap;
     }
 
     td,
@@ -20,13 +21,8 @@
       padding: 2px 2px;
     }
 
-    td {
-    
-    }
 
-    caption {
-      padding: 10px;
-    }
+  
   </style>
 </head>
 <% require IEx %>
@@ -83,7 +79,7 @@
                 <td>
                   <%= student.id%>
                 </td>
-                <td align="left" style="width: 500px;">
+                <td align="left" style="width: 300px;">
                   <%= student.name%>
                 </td>
                 <td>
@@ -204,7 +200,7 @@
                           <%= for date <- dates do %>
                             <% weekday = Elixir.Timex.weekday(NaiveDateTime.to_date(date)) %>
                               <td style="width: 200px; text-align: center;">
-                                <%= Repo.all(from a in Absent, where: a.absent_date ==^ NaiveDateTime.to_date(date)) |> Enum.count()   %>
+                                <%= Repo.all(from a in Absent, where: a.absent_date ==^ NaiveDateTime.to_date(date) and a.institution_id == ^@conn.private.plug_session["institution_id"]) |> Enum.count()   %>
 
                               </td>
 
@@ -259,6 +255,9 @@
     </div>
 
     <div style="page-break-before: always;">
+      <h5 align="center"><%= @institution.name %></h5>
+<h5 align="center">Jadual Kedatangan Murid Bagi Kelas <%= @class.name %>, Pada Bulan <%=@start_date.month|> Timex.month_name()
+ %>,Tahun <%=@start_date.year %> </h5>
 
       <table style="float: left;" style="border-right:0px solid;">
         <tr align="center">
@@ -390,7 +389,8 @@
                           <% end %>
                             <td style="width: 400px; text-align: center;">
                                  <%= if student.sudent_id != "" do %>
-                              <%= Repo.all(from a in Absent, where: a.absent_date in ^all_dates2 and a.student_id == ^Integer.to_string(student.sudent_id)) |> Enum.count()  %>
+                              <%= Repo.all(from a in Absent, where: a.absent_date in ^all_dates2 and a.student_id == ^Integer.to_string(student.sudent_id) and a.institution_id == ^@conn.private.plug_session["institution_id"] and a.semester_id==^@semester_id) |> Enum.count()  %>
+
 
                               <%end %>
 
@@ -412,13 +412,13 @@
                               <%= for date <- dates do %>
                                 <% weekday = Elixir.Timex.weekday(NaiveDateTime.to_date(date)) %>
                                   <td style="width: 200px; text-align: center;">
-                                    <%= Repo.all(from a in Absent, where: a.absent_date ==^ NaiveDateTime.to_date(date)) |> Enum.count()   %>
+                                    <%= Repo.all(from a in Absent, where: a.absent_date ==^ NaiveDateTime.to_date(date) and a.institution_id == ^@conn.private.plug_session["institution_id"] and a.semester_id==^@semester_id) |> Enum.count()   %>
 
                                   </td>
 
                                   <% end %>
                                     <td style="width: 400px; text-align: center;">
-                                      <%= Repo.all(from a in Absent, where: a.absent_date in ^all_dates2 and a.class_id == ^@class.id) |> Enum.count()  %>
+                                      <%= Repo.all(from a in Absent, where: a.absent_date in ^all_dates2 and a.class_id == ^@class.id and a.institution_id == ^@conn.private.plug_session["institution_id"] and a.semester_id==^@semester_id) |> Enum.count()  %>
                                     </td>
                                     <td style="width: 400px; text-align: center;">
                                     </td>

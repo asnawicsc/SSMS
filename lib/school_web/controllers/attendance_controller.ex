@@ -411,11 +411,13 @@ defmodule SchoolWeb.AttendanceController do
       Phoenix.View.render_to_string(
         SchoolWeb.AttendanceView,
         "report.html",
+        conn: conn,
         class: class,
         students: students,
         attendance: attendance,
         start_date: start_date,
         end_date: end_date,
+        semester_id: semester_id,
         institution: institution,
         start_month:
           Date.new(
