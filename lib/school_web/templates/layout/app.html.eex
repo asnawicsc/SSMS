@@ -61,6 +61,7 @@
    <script src="/vendor/jquery.easing/jquery.easing.js"></script>
    <!-- ANIMO-->
    <script src="/vendor/animo/animo.js"></script>
+     <script src="/vendor/slimScroll/jquery.slimscroll.min.js"></script>
    <!-- SCREENFULL-->
    <script src="/vendor/screenfull/dist/screenfull.js"></script>
    <!-- LOCALIZE-->

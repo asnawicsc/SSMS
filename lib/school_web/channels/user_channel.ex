@@ -3561,6 +3561,33 @@ defmodule SchoolWeb.UserChannel do
     {:reply, {:error, %{students: students, name: student.name, student_id: student.id}}, socket}
   end
 
+  def handle_in("tranfer_from_class", payload, socket) do
+    ex_class =
+      Repo.get_by(
+        School.Affairs.StudentClass,
+        sudent_id: payload["student_id"],
+        semester_id: payload["semester_id"],
+        class_id: payload["class_id"]
+      )
+
+    new_class = %{
+      sudent_id: payload["student_id"],
+      semester_id: payload["semester_id"],
+      class_id: payload["classes_id"],
+      institute_id: payload["institution_id"]
+    }
+
+    student = Affairs.get_student!(payload["student_id"])
+
+    Affairs.delete_student_class(ex_class)
+
+    Affairs.create_student_class(new_class)
+
+    students = Affairs.get_student_list(payload["class_id"], payload["semester_id"])
+
+    {:reply, {:error, %{students: students, name: student.name, student_id: student.id}}, socket}
+  end
+
   def handle_in(
         "add_coco_students",
         %{
