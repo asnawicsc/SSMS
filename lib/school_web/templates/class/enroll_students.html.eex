@@ -42,14 +42,20 @@
                         <tbody></tbody>
                     </table>
                 </div>
-                  <div id="all_class" hidden="" style="overflow:scroll;">
+                  <div id="all_class" hidden="" style="overflow:scroll;" >
+                        <div class="col-sm-10" style="overflow:scroll;" >
   <%= for class <- @classes|>Enum.sort_by(fn x -> x.name end) do %>
 
-     <div class="col-sm-10"><div class="radio c-radio"><label><input type="radio" name="change_classes"  id="change_classes" value="<%= class.id %>"><span class="fa fa-circle"></span>Class: <%= class.name %></label></div></div>
+ <div class="radio c-radio" ><label><input type="radio" name="change_classes"  id="change_classes" value="<%= class.id %>"><span class="fa fa-circle"></span>Class: <%= class.name %></label></div>
      <% end %>
+     </div>
             </div>
         </div>
       </div>
+
+
+                       
+                           
 
         <!-- END card-->
     </div>
@@ -384,6 +390,7 @@
 
           
                       swal({
+                    
                     title: 'Tranfer to Class ',
                     text:  $("div#all_class").html(),
                     type: "warning",
@@ -437,23 +444,3 @@
              });
        })
 </script>
-
-   <button class="btn btn-primary btn-lg" type="button" data-toggle="modal" data-target="#myModal">Default modal</button>
-
-      <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-         <div class="modal-content">
-            <div class="modal-header">
-               <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-               </button>
-               <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-            </div>
-            <div class="modal-body">...</div>
-            <div class="modal-footer">
-               <button class="btn btn-default" type="button" data-dismiss="modal">Close</button>
-               <button class="btn btn-primary" type="button">Save changes</button>
-            </div>
-         </div>
-      </div>
-   </div>
