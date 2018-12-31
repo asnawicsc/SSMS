@@ -1,0 +1,243 @@
+<link rel="stylesheet" type="text/css" href="/vendor/jquery_datetimepicker/jquery.datetimepicker.min.css"/ >
+<script src="/vendor/jquery_datetimepicker/jquery.datetimepicker.full.min.js"></script>
+<div class="content-heading">
+
+   <div>Teachers Attendance
+   </div>
+
+
+                    
+                          <div class="ml-auto" style="margin-top: 10px; margin-right: 10px;" >  
+                            <label class="switch switch-sm">
+                                  <input type="radio" checked="check_time" id="check_time_in_mode"   name="radioSwitch">
+                                 <span></span>Time In 
+                              </label>
+                              <label class="switch switch-sm">
+                                  <input type="radio" id="check_time_out_mode" name="radioSwitch">
+                                 <span></span>Time Out
+                              </label>
+                           </div>
+                      
+</div>
+
+<div class="row">
+  
+  <div class="col-md-12">
+        <!-- START card-->
+        <div class="card card-default">
+            <div class="card-body" id="">
+                <form>
+                    <div class="form-group">
+                        <label>Single Mark Attendance</label>
+                        <input class="form-control" id="qt" placeholder="Enter query" type="text">
+                    </div>
+                </form>
+                <div class="table-responsive">
+                    <table class="table" id="result">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <%= gettext("Name") %>
+                                </th>
+                                <th>
+                                    <%= gettext("Chinese Name") %>
+                                </th>
+                                <th>
+                                    <%= gettext("IC") %>
+                                </th>
+                               
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- END card-->
+    </div>
+</div>
+
+
+<div class="row">
+   <div class="col-md-6">
+        <!-- START card-->
+        <div class="card card-default">
+            <div class="card-body" id="">
+                <form>
+                    <div class="form-group">
+                        <label>List Teacher</label>
+                       
+                    </div>
+                </form>
+                <div class="table-responsive">
+                    <table class="table" id="datatable1">
+                        <thead>
+                            <tr>
+                             
+                               <th>
+                                    <%= gettext("Name") %>
+                                </th>
+                                <th>
+                                    <%= gettext("Chinese Name") %>
+                                </th>
+                               
+                             
+                            </tr>
+                        </thead>
+                        <tbody>
+                          <%= for noty <- @not_yet do %>
+                          <tr>
+                          
+                            <td><%= noty.name %></td>
+                            <td><%= noty.cname %></td>
+
+                          </tr>
+<% end %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- END card-->
+    </div>
+
+  <div class="col-md-6">
+        <!-- START card-->
+
+        <div class="card card-default">
+            <div class="card-body" id="">
+                <form>
+                    <div class="form-group">
+                        <label>Attended Teacher</label>
+                     
+                    </div>
+                </form>
+                <div class="table-responsive">
+                            <table class="table" id="datatable2">
+                        <thead>
+                            <tr>
+                             
+                                <th>
+                                    <%= gettext("Name") %>
+                                </th>
+                                <th>
+                                    <%= gettext("Chinese Name") %>
+                                </th>
+                                <th>
+                                    <%= gettext("Time In") %>
+                                </th>
+                               
+                                <th>
+                                    <%= gettext("Time Out") %>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <%= for ta <- @teachers_attend do %>
+                          <tr>
+                           
+                              <td><%= ta.name %></td>
+                                <td><%= ta.cname %></td>
+                                 <td><%= ta.time_in %></td>
+                                  <td><%= ta.time_out %></td>
+                          </tr>
+                          <% end %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- END card-->
+    </div>
+</div>
+
+<script type="text/javascript">
+  $("input.date").datetimepicker({timepicker:false,format:'Y-m-d'})
+
+
+
+         document.getElementById("qt").onkeydown = function(e) {
+           e = e || window.event;
+    
+           switch (e.keyCode || e.which) {
+             case 37:
+             case 36:
+             case 18:
+               if (e.altKey) {
+                 return false;
+               }
+           }
+    
+         };
+         document.getElementById("qt").onkeyup = function(e) {
+    
+           var term = $("input#qt").val()
+           console.log(term)
+           channel.push("qt_term", {term: term, user_id: window.currentUser, institution_id: window.currentInstitute}).receive(
+           "ok", payload => {
+    
+    
+             var data = payload.students
+
+    
+             $("table#result").DataTable({
+                  destroy: true,
+                 data: data,
+          
+             
+                 columns: [
+                     {data: 'name'},
+                     {data: 'c_name'},
+                     {data: 'ic'},
+                     {data: 'id',
+                        render: function(data, type, row, meta){
+                          var html = '<div class="btn btn-primary add_to_class" id="'+data+'">Attend</div>'   
+                        return html
+                      }
+                     }
+    
+                 ]
+             });
+    
+           }
+          )
+         };
+
+
+                 $(document).on("click", ".add_to_class", function(){
+
+                  if(document.getElementById('check_time_in_mode').checked) {
+
+                    var mode ="time_in"
+                  }
+
+                     if(document.getElementById('check_time_out_mode').checked) {
+
+                    var mode ="time_out"
+                  }
+        
+          var teacher_id = $(this).attr("id")
+           channel.push("create_teacher_attendance", {mode: mode,teacher_id: teacher_id, user_id: window.currentUser, institution_id: window.currentInstitute, semester_id: window.currentSemester})
+        })
+
+
+      channel.on("show_teacher_attendance_record", payload => {
+
+    location.reload();
+
+  })
+
+             var mode = $("input[name='check_mode']").val();
+
+       $('#check_time_in_mode').click(function() {
+   alert("Alert: You Switch you mode to Time In")
+ })
+
+          $('#check_time_out_mode').click(function() {
+   alert("Alert: You Switch you mode to Time Out")
+});
+
+  
+
+</script>

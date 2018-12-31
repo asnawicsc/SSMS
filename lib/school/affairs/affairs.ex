@@ -5143,4 +5143,100 @@ defmodule School.Affairs do
   def change_ehomework(%Ehomework{} = ehomework) do
     Ehomework.changeset(ehomework, %{})
   end
+
+  alias School.Affairs.TeacherAttendance
+
+  @doc """
+  Returns the list of teacher_attendance.
+
+  ## Examples
+
+      iex> list_teacher_attendance()
+      [%TeacherAttendance{}, ...]
+
+  """
+  def list_teacher_attendance do
+    Repo.all(TeacherAttendance)
+  end
+
+  @doc """
+  Gets a single teacher_attendance.
+
+  Raises `Ecto.NoResultsError` if the Teacher attendance does not exist.
+
+  ## Examples
+
+      iex> get_teacher_attendance!(123)
+      %TeacherAttendance{}
+
+      iex> get_teacher_attendance!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_teacher_attendance!(id), do: Repo.get!(TeacherAttendance, id)
+
+  @doc """
+  Creates a teacher_attendance.
+
+  ## Examples
+
+      iex> create_teacher_attendance(%{field: value})
+      {:ok, %TeacherAttendance{}}
+
+      iex> create_teacher_attendance(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_teacher_attendance(attrs \\ %{}) do
+    %TeacherAttendance{}
+    |> TeacherAttendance.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a teacher_attendance.
+
+  ## Examples
+
+      iex> update_teacher_attendance(teacher_attendance, %{field: new_value})
+      {:ok, %TeacherAttendance{}}
+
+      iex> update_teacher_attendance(teacher_attendance, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_teacher_attendance(%TeacherAttendance{} = teacher_attendance, attrs) do
+    teacher_attendance
+    |> TeacherAttendance.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a TeacherAttendance.
+
+  ## Examples
+
+      iex> delete_teacher_attendance(teacher_attendance)
+      {:ok, %TeacherAttendance{}}
+
+      iex> delete_teacher_attendance(teacher_attendance)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_teacher_attendance(%TeacherAttendance{} = teacher_attendance) do
+    Repo.delete(teacher_attendance)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking teacher_attendance changes.
+
+  ## Examples
+
+      iex> change_teacher_attendance(teacher_attendance)
+      %Ecto.Changeset{source: %TeacherAttendance{}}
+
+  """
+  def change_teacher_attendance(%TeacherAttendance{} = teacher_attendance) do
+    TeacherAttendance.changeset(teacher_attendance, %{})
+  end
 end

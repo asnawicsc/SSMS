@@ -216,7 +216,7 @@ defmodule SchoolWeb.Router do
 
     resources("/teacher", TeacherController)
     get("/e_discipline", TeacherController, :e_discipline)
-    get("/teacher_attendance", TeacherController, :teacher_attendance)
+    get("/teacher_attendances", TeacherController, :teacher_attendances)
     get("/mark_teacher_attendance", TeacherController, :mark_teacher_attendance)
     get("/submit_teacher_attendance", TeacherController, :submit_teacher_attendance)
     post("/upload_teachers", TeacherController, :upload_teachers)
@@ -446,6 +446,8 @@ defmodule SchoolWeb.Router do
       HeadCountController,
       :generate_head_count_mark
     )
+
+    resources("/teacher_attendance", TeacherAttendanceController)
 
     resources("/announcements", AnnouncementController)
     get("/announcements/:id/broadcast", AnnouncementController, :broadcast)

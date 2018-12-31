@@ -3998,4 +3998,72 @@ defmodule School.AffairsTest do
       assert %Ecto.Changeset{} = Affairs.change_ehomework(ehomework)
     end
   end
+
+  describe "teacher_attendance" do
+    alias School.Affairs.TeacherAttendance
+
+    @valid_attrs %{institution_id: 42, semester_id: 42, teacher_id: 42, time_id: "some time_id", time_out: "some time_out"}
+    @update_attrs %{institution_id: 43, semester_id: 43, teacher_id: 43, time_id: "some updated time_id", time_out: "some updated time_out"}
+    @invalid_attrs %{institution_id: nil, semester_id: nil, teacher_id: nil, time_id: nil, time_out: nil}
+
+    def teacher_attendance_fixture(attrs \\ %{}) do
+      {:ok, teacher_attendance} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_teacher_attendance()
+
+      teacher_attendance
+    end
+
+    test "list_teacher_attendance/0 returns all teacher_attendance" do
+      teacher_attendance = teacher_attendance_fixture()
+      assert Affairs.list_teacher_attendance() == [teacher_attendance]
+    end
+
+    test "get_teacher_attendance!/1 returns the teacher_attendance with given id" do
+      teacher_attendance = teacher_attendance_fixture()
+      assert Affairs.get_teacher_attendance!(teacher_attendance.id) == teacher_attendance
+    end
+
+    test "create_teacher_attendance/1 with valid data creates a teacher_attendance" do
+      assert {:ok, %TeacherAttendance{} = teacher_attendance} = Affairs.create_teacher_attendance(@valid_attrs)
+      assert teacher_attendance.institution_id == 42
+      assert teacher_attendance.semester_id == 42
+      assert teacher_attendance.teacher_id == 42
+      assert teacher_attendance.time_id == "some time_id"
+      assert teacher_attendance.time_out == "some time_out"
+    end
+
+    test "create_teacher_attendance/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_teacher_attendance(@invalid_attrs)
+    end
+
+    test "update_teacher_attendance/2 with valid data updates the teacher_attendance" do
+      teacher_attendance = teacher_attendance_fixture()
+      assert {:ok, teacher_attendance} = Affairs.update_teacher_attendance(teacher_attendance, @update_attrs)
+      assert %TeacherAttendance{} = teacher_attendance
+      assert teacher_attendance.institution_id == 43
+      assert teacher_attendance.semester_id == 43
+      assert teacher_attendance.teacher_id == 43
+      assert teacher_attendance.time_id == "some updated time_id"
+      assert teacher_attendance.time_out == "some updated time_out"
+    end
+
+    test "update_teacher_attendance/2 with invalid data returns error changeset" do
+      teacher_attendance = teacher_attendance_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_teacher_attendance(teacher_attendance, @invalid_attrs)
+      assert teacher_attendance == Affairs.get_teacher_attendance!(teacher_attendance.id)
+    end
+
+    test "delete_teacher_attendance/1 deletes the teacher_attendance" do
+      teacher_attendance = teacher_attendance_fixture()
+      assert {:ok, %TeacherAttendance{}} = Affairs.delete_teacher_attendance(teacher_attendance)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_teacher_attendance!(teacher_attendance.id) end
+    end
+
+    test "change_teacher_attendance/1 returns a teacher_attendance changeset" do
+      teacher_attendance = teacher_attendance_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_teacher_attendance(teacher_attendance)
+    end
+  end
 end

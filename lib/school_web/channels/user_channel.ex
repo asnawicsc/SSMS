@@ -3422,6 +3422,59 @@ defmodule SchoolWeb.UserChannel do
   end
 
   def handle_in(
+        "qt_term",
+        %{"term" => term, "user_id" => user_id, "institution_id" => institution_id},
+        socket
+      ) do
+    user = Repo.get(User, user_id)
+    term = "%#{term}%"
+
+    all_teacher =
+      Repo.all(
+        from(
+          s in Teacher,
+          where:
+            s.institution_id == ^institution_id and
+              (ilike(s.icno, ^term) or ilike(s.name, ^term) or ilike(s.cname, ^term) or
+                 ilike(s.icno, ^term)),
+          select: %{
+            name: s.name,
+            c_name: s.cname,
+            ic: s.icno,
+            id: s.id
+          },
+          limit: 100
+        )
+      )
+
+    # student =
+    #   Repo.all(
+    #     from(
+    #       s in StudentClass,
+    #       left_join: g in Student,
+    #       on: s.sudent_id == g.id,
+    #       where: g.institution_id == ^institution_id,
+    #       select: %{
+    #         name: g.name,
+    #         c_name: g.chinese_name,
+    #         ic: g.ic,
+    #         b_cert: g.b_cert,
+    #         gicno: g.gicno,
+    #         ficno: g.ficno,
+    #         micno: g.micno,
+    #         phone: g.phone,
+    #         id: g.id
+    #       },
+    #       limit: 100
+    #     )
+    #   )
+
+    students = all_teacher
+
+    {:reply, {:ok, %{students: students}}, socket}
+  end
+
+  def handle_in(
         "load_class_students",
         %{
           "semester_id" => semester_id,
@@ -3434,6 +3487,97 @@ defmodule SchoolWeb.UserChannel do
     students = Affairs.get_student_list(class_id, semester_id)
 
     {:reply, {:ok, %{students: students}}, socket}
+  end
+
+  def handle_in(
+        "create_teacher_attendance",
+        %{
+          "semester_id" => semester_id,
+          "user_id" => user_id,
+          "institution_id" => institution_id,
+          "teacher_id" => teacher_id,
+          "mode" => mode
+        },
+        socket
+      ) do
+    date_time = NaiveDateTime.utc_now()
+
+    time_in = NaiveDateTime.to_string(date_time)
+
+    date = time_in |> String.split_at(10) |> elem(0)
+
+    attns =
+      Repo.get_by(School.Affairs.TeacherAttendance,
+        teacher_id: teacher_id,
+        institution_id: institution_id,
+        date: date
+      )
+
+    msg =
+      if attns == nil do
+        msg =
+          if mode == "time_out" do
+            msg = "Plese Switch to Time In Mode"
+          else
+            params = %{
+              institution_id: institution_id,
+              semester_id: semester_id,
+              teacher_id: teacher_id,
+              time_in: time_in,
+              date: date
+            }
+
+            Affairs.create_teacher_attendance(params)
+            msg = "Created Succesfully"
+          end
+
+        msg
+      else
+        attn =
+          Repo.get_by(School.Affairs.TeacherAttendance,
+            teacher_id: teacher_id,
+            institution_id: institution_id,
+            date: date
+          )
+
+        msg =
+          if mode == "time_in" do
+            msg =
+              if attn.time_in == nil do
+                params = %{
+                  time_in: time_in
+                }
+
+                Affairs.update_teacher_attendance(attn, params)
+
+                msg = "Created Succesfully"
+              else
+                msg = "Time In alrdy fill up"
+              end
+
+            msg
+          else
+            msg =
+              if attn.time_out == nil do
+                params = %{
+                  time_out: time_in
+                }
+
+                Affairs.update_teacher_attendance(attn, params)
+
+                msg = "Created Succesfully"
+              else
+                msg = "Time In alrdy fill up"
+              end
+
+            msg
+          end
+
+        msg
+      end
+
+    broadcast(socket, "show_teacher_attendance_record", %{})
+    {:noreply, socket}
   end
 
   def handle_in(

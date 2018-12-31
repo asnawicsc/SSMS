@@ -29,8 +29,62 @@ defmodule SchoolWeb.TeacherController do
     render(conn, "e_discipline.html", messages: messages)
   end
 
-  def teacher_attendance(conn, params) do
-    render(conn, "teacher_attendance.html")
+  def teacher_attendances(conn, params) do
+    date_time = NaiveDateTime.utc_now()
+
+    date = NaiveDateTime.to_string(date_time) |> String.split_at(10) |> elem(0)
+
+    teachers_attend =
+      Repo.all(
+        from(
+          t in Teacher,
+          left_join: j in School.Affairs.TeacherAttendance,
+          on: t.id == j.teacher_id,
+          select: %{id: t.id},
+          where:
+            t.institution_id == ^conn.private.plug_session["institution_id"] and
+              j.institution_id == ^conn.private.plug_session["institution_id"]
+        )
+      )
+
+    all =
+      Repo.all(
+        from(
+          t in Teacher,
+          select: %{id: t.id},
+          where: t.institution_id == ^conn.private.plug_session["institution_id"]
+        )
+      )
+
+    not_yet = all -- teachers_attend
+
+    not_yet_full =
+      for item <- not_yet do
+        teacher = Repo.get_by(Teacher, id: item.id)
+
+        %{name: teacher.name, cname: teacher.cname, id: teacher.id}
+      end
+
+    teachers_attend_full =
+      for item <- teachers_attend do
+        teacher = Repo.get_by(Teacher, id: item.id)
+
+        teacher_attendance =
+          Repo.get_by(School.Affairs.TeacherAttendance, teacher_id: item.id, date: date)
+
+        %{
+          name: teacher.name,
+          cname: teacher.cname,
+          id: teacher.id,
+          time_in: teacher_attendance.time_in,
+          time_out: teacher_attendance.time_out
+        }
+      end
+
+    render(conn, "teacher_attendances.html",
+      not_yet: not_yet_full,
+      teachers_attend: teachers_attend_full
+    )
   end
 
   def edit_teacher_access(conn, params) do

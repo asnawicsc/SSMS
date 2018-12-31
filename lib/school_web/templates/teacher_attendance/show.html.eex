@@ -1,0 +1,33 @@
+<h2>Show Teacher attendance</h2>
+
+<ul>
+
+  <li>
+    <strong>Institution:</strong>
+    <%= @teacher_attendance.institution_id %>
+  </li>
+
+  <li>
+    <strong>Teacher:</strong>
+    <%= @teacher_attendance.teacher_id %>
+  </li>
+
+  <li>
+    <strong>Semester:</strong>
+    <%= @teacher_attendance.semester_id %>
+  </li>
+
+  <li>
+    <strong>Time:</strong>
+    <%= @teacher_attendance.time_id %>
+  </li>
+
+  <li>
+    <strong>Time out:</strong>
+    <%= @teacher_attendance.time_out %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: teacher_attendance_path(@conn, :edit, @teacher_attendance) %></span>
+<span><%= link "Back", to: teacher_attendance_path(@conn, :index) %></span>
