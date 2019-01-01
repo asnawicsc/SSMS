@@ -1,7 +1,7 @@
 
 
 <b  style="font-size: 25px;"><%= @institution.name %></b></br>
-班级<b> Kelas: <%= @class.name %></b><center><b>Student Listing</b> </center><br>
+班级<b> Kelas: <%= @class.name %></b><center><b>Student Listing 学生名单</b> </center><br>
 
 
 
@@ -9,16 +9,16 @@
   <thead>
     <tr align="center">
       <th><%= gettext "Bil." %></th>
-      <th><%= gettext "Bil Dlm" %><br><%= gettext "Sekolah" %><br><%= gettext "学校的数字" %></th>
-      <th><%= gettext "B. (Cina)" %><br><%= gettext "中文" %></th>
-        <th><%= gettext "Bahasa Malaysia" %><br><%= gettext "马来西亚语" %></th>
+      <th><%= gettext "Bil Dlm" %><br><%= gettext "Sekolah" %><br><%= gettext "学生编号" %></th>
+      <th><%= gettext "B. (Cina)" %><br><%= gettext "中文名字" %></th>
+        <th><%= gettext "Bahasa Malaysia" %><br><%= gettext "马来文名字" %></th>
       <th><%= gettext "Jan-" %><br><%= gettext "tina" %><br><%= gettext "性别" %></th>
       <th><%= gettext "Tarikh" %><br><%= gettext "Lahir" %><br><%= gettext "出生日期" %></th>
-      <th><%= gettext "Tempat" %><br><%= gettext "Lahir" %><br><%= gettext "出生地" %></th>
-      <th><%= gettext "Umur" %><br><%= gettext "Pada" %><br><%= gettext "1hb Jan" %><%= gettext "几岁" %></th>
-      <th><%= gettext "No.Sijil" %><br><%= gettext "Beranak" %><br><%= gettext "出生证号码" %></th>
-      <th><%= gettext "Tarikh" %><br><%= gettext "Masuk" %><br><%= gettext "进入日期" %></th>
-      <th><%= gettext "Bangsa" %><br><%= gettext "国家" %></th>
+      <th><%= gettext "Tempat" %><br><%= gettext "Lahir" %><br><%= gettext "出生地方" %></th>
+      <th><%= gettext "Umur" %><br><%= gettext "Pada" %><br><%= gettext "1hb Jan" %><br><%= gettext "年龄" %></th>
+      <th><%= gettext "No.Sijil" %><br><%= gettext "Beranak" %><br><%= gettext "出生纸号码" %></th>
+      <th><%= gettext "Tarikh" %><br><%= gettext "Masuk" %><br><%= gettext "入学日期" %></th>
+      <th><%= gettext "Bangsa" %><br><%= gettext "种族" %></th>
      
 
 
@@ -49,7 +49,7 @@
        <td ><%= if item.race == "C" do "CINA" end %>
         <%= if item.race == "M" do "MELAYU" end %>
         <%= if item.race == "I" do "INDIA" end %>
-        <%= if item.race == "I" do "LAIN-LAIN" end %></td>
+        <%= if item.race == "O" do "LAIN-LAIN" end %></td>
     
 
     </tr>

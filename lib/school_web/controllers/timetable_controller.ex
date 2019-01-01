@@ -63,6 +63,8 @@ defmodule SchoolWeb.TimetableController do
   end
 
   def class_timetable(conn, params) do
+    IEx.pry()
+
     events =
       case School.Affairs.get_class!(params["class_id"]) do
         class ->

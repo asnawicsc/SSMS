@@ -44,6 +44,8 @@ defmodule School.Affairs.Student do
     field(:weight, :string)
     field(:image_bin, :binary)
     field(:image_filename, :string)
+    field(:register_date, :string)
+    field(:quit_date, :string)
 
     timestamps()
   end
@@ -90,7 +92,9 @@ defmodule School.Affairs.Student do
       :weight,
       :height,
       :image_bin,
-      :image_filename
+      :image_filename,
+      :register_date,
+      :quit_date
     ])
     |> validate_required([:student_no])
     |> unique_constraint(:student_no)

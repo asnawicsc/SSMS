@@ -370,7 +370,8 @@ defmodule SchoolWeb.TeacherController do
       Repo.all(
         from(
           t in Teacher,
-          where: t.institution_id == ^conn.private.plug_session["institution_id"]
+          where:
+            t.institution_id == ^conn.private.plug_session["institution_id"] and t.is_delete != 1
         )
       )
       |> Enum.with_index()
