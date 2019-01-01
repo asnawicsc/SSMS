@@ -109,12 +109,12 @@ defmodule SchoolWeb.UserController do
               %{id: 0, start_date: "Not set", end_date: "Not set"}
             end
 
-          # conn
-          # |> put_session(:user_id, user.id)
-          # |> put_session(:semester_id, current_sem.id)
-          # |> put_session(:institution_id, institution_id.id)
-          # |> put_session(:style, user.styles)
-          # |> redirect(to: page_path(conn, :admin_dashboard))
+          conn
+          |> put_session(:user_id, user.id)
+          |> put_session(:semester_id, current_sem.id)
+          |> put_session(:institution_id, institution_id.id)
+          |> put_session(:style, user.styles)
+          |> redirect(to: page_path(conn, :admin_dashboard))
         end
 
         access = Repo.get_by(Settings.UserAccess, user_id: user.id)
