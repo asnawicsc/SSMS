@@ -1572,6 +1572,112 @@ defmodule SchoolWeb.PdfController do
     |> resp(200, pdf_binary)
   end
 
+  def student_class_listing_jpn(conn, params) do
+    class_id = params["class_id"]
+    semester_id = params["semester_id"]
+
+    all =
+      Repo.all(
+        from(
+          s in School.Affairs.StudentClass,
+          left_join: g in School.Affairs.Class,
+          on: s.class_id == g.id,
+          left_join: r in School.Affairs.Student,
+          on: r.id == s.sudent_id,
+          where:
+            s.class_id == ^class_id and
+              g.institution_id == ^conn.private.plug_session["institution_id"] and
+              r.institution_id == ^conn.private.plug_session["institution_id"] and
+              s.semester_id == ^semester_id,
+          select: %{
+            id: s.sudent_id,
+            id_no: s.id,
+            chinese_name: r.chinese_name,
+            name: r.name,
+            sex: r.sex,
+            dob: r.dob,
+            pob: r.pob,
+            race: r.race,
+            b_cert: r.b_cert
+          },
+          order_by: [desc: r.sex, asc: r.name]
+        )
+      )
+
+    number = 40
+
+    add = number - (all |> Enum.count())
+
+    range = 1..add
+
+    empty_colum =
+      for item <- range do
+        %{
+          id: "",
+          id_no: "",
+          chinese_name: "",
+          name: "",
+          sex: "",
+          dob: "",
+          pob: "",
+          race: "",
+          b_cert: ""
+        }
+      end
+
+    all = (all ++ empty_colum) |> Enum.with_index()
+
+    institution =
+      Repo.get_by(School.Settings.Institution, id: conn.private.plug_session["institution_id"])
+
+    semester =
+      Repo.get_by(School.Affairs.Semester,
+        id: semester_id,
+        institution_id: conn.private.plug_session["institution_id"]
+      )
+
+    class =
+      Repo.get_by(School.Affairs.Class, %{
+        id: class_id,
+        institution_id: conn.private.plug_session["institution_id"]
+      })
+
+    html =
+      Phoenix.View.render_to_string(
+        SchoolWeb.PdfView,
+        "student_class_listing_jpn.html",
+        all: all,
+        class: class,
+        semester: semester,
+        institution: institution
+      )
+
+    pdf_params = %{"html" => html}
+
+    pdf_binary =
+      PdfGenerator.generate_binary!(
+        pdf_params["html"],
+        size: "A4",
+        shell_params: [
+          "--margin-left",
+          "5",
+          "--margin-right",
+          "5",
+          "--margin-top",
+          "5",
+          "--margin-bottom",
+          "5",
+          "--encoding",
+          "utf-8"
+        ],
+        delete_temporary: true
+      )
+
+    conn
+    |> put_resp_header("Content-Type", "application/pdf")
+    |> resp(200, pdf_binary)
+  end
+
   def teacher_listing(conn, params) do
     inst_id = conn.private.plug_session["institution_id"]
 

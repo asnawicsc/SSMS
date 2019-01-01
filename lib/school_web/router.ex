@@ -58,6 +58,7 @@ defmodule SchoolWeb.Router do
     post("/standard_ranking", PdfController, :standard_ranking)
 
     post("/student_class_listing", PdfController, :student_class_listing)
+    post("/student_class_listing_jpn", PdfController, :student_class_listing_jpn)
     post("/teacher_listing", PdfController, :teacher_listing)
     post("/exam_result_analysis_class", PdfController, :exam_result_analysis_class)
 
