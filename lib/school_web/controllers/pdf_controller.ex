@@ -1598,11 +1598,40 @@ defmodule SchoolWeb.PdfController do
             dob: r.dob,
             pob: r.pob,
             race: r.race,
-            b_cert: r.b_cert
+            b_cert: r.b_cert,
+            register_date: r.register_date
           },
           order_by: [desc: r.sex, asc: r.name]
         )
       )
+
+    for item <- all do
+      dob =
+        if item.dob != nil do
+          item.dob |> String.split_at(10) |> elem(0) |> String.replace(".", "/")
+        end
+
+      umo_1jan =
+        if item.dob != nil do
+          a = item.dob |> String.split_at(10) |> elem(0)
+
+          day = a |> String.split_at(2) |> elem(0)
+          month = a |> String.split_at(5) |> elem(0) |> String.split_at(3) |> elem(1)
+          year = a |> String.split_at(6) |> elem(1)
+
+          if item.register_date != nil do
+            day = item.register_date |> String.split_at(2) |> elem(0)
+
+            month =
+              item.register_date |> String.split_at(5) |> elem(0) |> String.split_at(3) |> elem(1)
+
+            year = item.register_date |> String.split_at(6) |> elem(1)
+          end
+
+          IEx.pry()
+        else
+        end
+    end
 
     number = 40
 
