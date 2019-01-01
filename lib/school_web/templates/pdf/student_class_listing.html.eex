@@ -48,8 +48,8 @@
         <td align="left" ><%=  item.name %></td>
        <% end  %>
        <td width="80px"><%= item.chinese_name %></td>
-       <td><%= if item.sex == "M" do "L" end %>
-        <%= if item.sex == "F" do "P" end %></td>
+       <td><%= if item.sex == "M" or item.sex == "LELAKI" do "L" end %>
+        <%= if item.sex == "F" or item.sex == "PEREMPUAN" do "P" end %></td>
        <td width="42px"></td>
        <td width="42px"></td>
        <td width="42px"></td>
