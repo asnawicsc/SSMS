@@ -24,7 +24,7 @@
 </div>
 
 <div class="row">
-  <div class="col-lg-7">
+  <div class="col-lg-12">
      <%= if   @conn.private.plug_session["user_id"] != nil do %>
             
                                       <% user_id=@conn.private.plug_session["user_id"] %>
@@ -40,7 +40,7 @@
       
        
 
-        <%= render( SchoolWeb.TeacherView ,"teacher_attendance.html",conn: @conn) %>
+        <%= render( SchoolWeb.TeacherView ,"teacher_attendances.html",conn: @conn,not_yet: @not_yet,teachers_attend: @teachers_attend) %>
 
     </div>
 
