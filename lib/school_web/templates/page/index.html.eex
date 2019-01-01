@@ -115,11 +115,16 @@
 
               "Teacher" -> 
                 teacher = Repo.get_by(Affairs.Teacher,email: user.email) 
+                if teacher == nil do
+                  []
+                  else 
                 Repo.all(from c in Affairs.Class, where: c.teacher_id == ^teacher.id) 
+                end
 
                  "Clerk" ->
                 Repo.all(from c in Affairs.Class, where: c.institution_id == ^@conn.private.plug_session["institution_id"]) 
-
+                _ ->
+                  []
              end 
 
              %>
@@ -210,7 +215,9 @@
 
                     <% user = Repo.get(Settings.User,a.private.plug_session["user_id"])
                       teacher = Repo.get_by(Affairs.Teacher,email: user.email)  %>
+                      <%= if teacher != nil do %>
           <a href ="/teacher/<%= teacher.id %>"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Teacher Information</button></a>
+          <% end %>
     
 
        </div>
@@ -270,7 +277,14 @@
 
               "Teacher" -> 
                 teacher = Repo.get_by(Affairs.Teacher,email: user.email) 
+                if teacher != nil do 
+
                 Repo.all(from c in Affairs.Class, where: c.teacher_id == ^teacher.id) 
+                    else 
+                      []
+
+                      
+                end 
              end 
 
              %>
