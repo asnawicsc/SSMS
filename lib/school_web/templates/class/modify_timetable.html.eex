@@ -76,6 +76,7 @@
   
       <div class="card mb-3 border-default"  data-step="2" data-intro="Click on the date or time block on the calendar.">
          <div class="card-header text-white bg-primary">Timetable    </div>
+         <button class="printBtn hidden-print">Print</button>
           <div class="ml-auto" style="margin-top: 10px; margin-right: 10px;" >  <label class="switch switch-sm">
                                 Delete Mode: &nbsp; <input type="checkbox" id="check_mode" name="check_mode" checked="true">
 
@@ -105,6 +106,14 @@
 
 <script type="text/javascript">
 			  $(document).ready(function(){
+
+
+
+  $('.printBtn').on('click', function (){
+    window.print();
+  });
+
+
   if (RegExp('how_to', 'gi').test(window.location.search)) {
     
     
