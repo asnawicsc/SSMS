@@ -3,7 +3,7 @@
   
   <tbody>
 <td >
-<b><%= @institution.name %></b></br>
+<b  style="font-size: 25px;"><%= @institution.name %></b></br>
 班级<b> Kelas: <%= @class.name %></b> <br>
 老师<b> Nama GURU : ________________________________________________________________ </b><br>
 事项<b> PERKARA &nbsp;&nbsp;&nbsp;: ________________________________________________________________</b><b style="margin-left: 10px;"> 日期 Tarikh:<%= SchoolWeb.LayoutView.my_time(DateTime.utc_now) %></b> 
@@ -47,7 +47,7 @@
         <% else %>
         <td align="left" ><%=  item.name %></td>
        <% end  %>
-       <td width="80px"><%= item.chinese_name %></td>
+       <td width="80px" style="font-size: 14px;"><%= item.chinese_name %></td>
        <td><%= if item.sex == "M" or item.sex == "LELAKI" do "L" end %>
         <%= if item.sex == "F" or item.sex == "PEREMPUAN" do "P" end %></td>
        <td width="42px"></td>
