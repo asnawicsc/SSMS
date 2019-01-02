@@ -34,7 +34,7 @@
        <td><%= item.id_no %></td>
         <td width="80px" style="font-size: 14px;"><%= item.chinese_name %></td>
         <%= if String.length(item.name) > 40 do %>
-       <td align="left" style="font-size: 14px; width: auto; height: auto;" ><%=  item.name %></td>
+       <td align="left" style="font-size: 13px; width: auto; height: auto;" ><%=  item.name %></td>
         <% else %>
         <td align="left" ><%=  item.name %></td>
        <% end  %>
@@ -43,8 +43,8 @@
         <%= if item.sex == "F" or item.sex == "PEREMPUAN" do "P" end %></td>
        <td ><%= item.dob %></td>
        <td ><%= item.pob %></td>
-       <td></td>
-       <td ><%= item.umo_1jan %></td>
+       <td><%= item.umo_1jan %></td>
+       <td ><%= item.b_cert %></td>
        <td ><%= item.register_date %></td>
        <td ><%= if item.race == "C" do "CINA" end %>
         <%= if item.race == "M" do "MELAYU" end %>
@@ -65,7 +65,7 @@
 
     border-spacing: 0;
     border-collapse: collapse;
-    font-size: 15px;
+    font-size: 14px;
     white-space: nowrap;
 }
 td {
