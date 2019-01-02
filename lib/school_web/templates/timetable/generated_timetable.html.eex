@@ -4,7 +4,7 @@
   <div id="content">
       
 
-          <link rel="stylesheet" href="<%= Application.app_dir(:accounting3, "priv/static") %>/css/jquery.skedTape.css">
+    <link rel="stylesheet" href="<%= Application.app_dir(:school, "priv/static") %>/css/jquery.skedTape.css">
     </head>
   
     <body>
