@@ -1,19 +1,24 @@
 
 <!DOCTYPE html>
 
-
+  <div id="content">
       
-          <link rel="stylesheet" href="/css/jquery.skedTape.css">
+
+          <link rel="stylesheet" href="<%= Application.app_dir(:accounting3, "priv/static") %>/css/jquery.skedTape.css">
     </head>
+  
     <body>
         <div class="container">
             <div class="mb-4">
-            
+            <center><h4>Class: <%= @class.name %></h4></center>
                 
                 <div id="sked1"></div>
-            </div>
-       
+            </div><center>
+         <a href="/class_setting/<%= @class.id %>"><button class="btn btn-sm btn-primary" type="submit">Back</button></a>
+          <button class="btn btn-sm btn-primary" id="cmd" type="submit">Print</button>
+           </center>
         </div>
+</body>
 
 
 
@@ -21,7 +26,7 @@
    <script src="<%= static_path(@conn, "/js/jquery.skedTape.js") %> "></script>
 
 
-         
+</div>         
            
 
         <script type="text/javascript">
@@ -54,6 +59,7 @@
                 ];
 
             var events =maps;
+
             // -------------------------- Helpers ------------------------------
              function start(hours, minutes) {
                 var date = new Date();
@@ -86,6 +92,20 @@
            
           })
 
+var doc = new jsPDF();
+var specialElementHandlers = {
+    '#editor': function (element, renderer) {
+        return true;
+    }
+};
+
+$('#cmd').click(function () {
+    doc.fromHTML($('#content').html(), 15, 15, {
+        'width': 170,
+            'elementHandlers': specialElementHandlers
+    });
+    doc.save('Class_Timetable.pdf');
+});
 
    
         </script>

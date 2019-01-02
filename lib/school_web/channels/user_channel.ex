@@ -3188,7 +3188,9 @@ defmodule SchoolWeb.UserChannel do
           "user_id" => user_id,
           "start_date" => start_date,
           "end_date" => end_date,
-          "event_id_str" => event_id_str
+          "event_id_str" => event_id_str,
+          "institution_id" => institution_id,
+          "semester_id" => semester_id
         },
         socket
       ) do
@@ -3199,7 +3201,9 @@ defmodule SchoolWeb.UserChannel do
       # create a new period 
       teacher = Affairs.get_teacher!(user_id)
 
-      {:ok, timetable} = School.Affairs.initialize_calendar(teacher.id)
+      {:ok, timetable} =
+        School.Affairs.initialize_calendar(institution_id, semester_id, teacher.id)
+
       subject_id = event_id_str |> String.split("_") |> List.first()
       class_id = event_id_str |> String.split("_") |> List.last()
 
@@ -3241,7 +3245,8 @@ defmodule SchoolWeb.UserChannel do
     else
       case School.Affairs.get_teacher(user_id) do
         {:ok, teacher} ->
-          {:ok, timetable} = School.Affairs.initialize_calendar(teacher.id)
+          {:ok, timetable} =
+            School.Affairs.initialize_calendar(institution_id, semester_id, teacher.id)
 
           # need to find that period and update it
           period = Repo.get(School.Affairs.Period, period_id)

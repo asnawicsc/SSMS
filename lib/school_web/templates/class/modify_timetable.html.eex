@@ -151,7 +151,9 @@
 						   		channel.push("save_period", {
 						   			period_id: 0, 
 						   			event_id_str: subject_id + "_" + class_id,
-						   			user_id: teacher_id, 
+						   			user_id: teacher_id,
+						   			semester_id:  window.currentSemester, 
+						   			institution_id: window.currentInstitute,
 						   			start_date: start.toISOString(), 
 						   			end_date: end.toISOString()})
 
@@ -257,7 +259,9 @@
 						   		channel.push("save_period", {
 						   			period_id: event.period_id, 
 						   			event_id_str: event._id,
-						   			user_id: window.currentUser, 
+						   			user_id: window.currentUser,
+						   			semester_id:  window.currentSemester, 
+						   			institution_id: window.currentInstitute, 
 						   			start_date: dayWrapper2.toISOString(), 
 						   			end_date: e_dayWrapper2.toISOString()})
 

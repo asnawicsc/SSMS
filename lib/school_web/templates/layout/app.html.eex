@@ -106,7 +106,7 @@
     <link rel="stylesheet" href="/css/richtext.min.css">
     <script src="/js/jquery.richtext.min.js"></script>
 
-
+<script src="/js/jspdf.min.js"></script>
 <script src="/vendor/datatables.net-bs4/jquery.dataTables.js"></script>
 <script src="/vendor/datatables.net-bs4/dataTables.bootstrap4.js"></script>
 <script src="/vendor/datatables.net-bs4/dataTables.buttons.js"></script>

@@ -98,6 +98,7 @@
                            <div class="card b">
                               <div class="card-header bg-gray-lighter text-bold">Timetable</div>
                               <div class="card-body">
+                                 <a href="/generated_timetable/<%= @conn.params["class_id"]%>"><button class="btn btn-sm btn-primary" type="submit">Preview Class Timetable</button></a>
                                  <div id='calendar'></div>
                                  <div data-step="3" data-intro="Click here to add the period.">
                                    

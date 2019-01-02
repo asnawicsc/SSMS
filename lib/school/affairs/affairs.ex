@@ -3931,7 +3931,7 @@ defmodule School.Affairs do
     end
   end
 
-  def initialize_calendar(teacher_id) do
+  def initialize_calendar(institution_id, semester_id, teacher_id) do
     # create a calendar
 
     {:ok, timetable} =
@@ -3942,7 +3942,12 @@ defmodule School.Affairs do
 
         {:no, timetable_id} ->
           {:ok, timetable} =
-            Timetable.changeset(%Timetable{}, %{teacher_id: teacher_id}) |> Repo.insert()
+            Timetable.changeset(%Timetable{}, %{
+              teacher_id: teacher_id,
+              institution_id: institution_id,
+              semester_id: semester_id
+            })
+            |> Repo.insert()
       end
 
     {:ok, timetable}
@@ -4217,6 +4222,10 @@ defmodule School.Affairs do
 
   def get_inst_id(conn) do
     conn.private.plug_session["institution_id"]
+  end
+
+  def get_semester_id(conn) do
+    conn.private.plug_session["semester_id"]
   end
 
   def get_periods(institution_id) do

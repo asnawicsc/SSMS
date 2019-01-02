@@ -49,6 +49,7 @@
        <td ><%= if item.race == "C" or item.race == "CINA" do "CINA" end %>
         <%= if item.race == "M" or item.race == "MELAYU" do "MELAYU" end %>
         <%= if item.race == "I" or item.race == "INDIA" do "INDIA" end %>
+         <%= if item.race == "THAI" or item.race == "T" do "THAI" end %>
         <%= if item.race == "O"  or item.race == "LAIN-LAIN" do "LAIN-LAIN" end %></td>
     
 
