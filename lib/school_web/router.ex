@@ -247,6 +247,8 @@ defmodule SchoolWeb.Router do
     resources("/exam_master", ExamMasterController)
     resources("/time_period", TimePeriodController)
 
+    get("/print_timetable/:panel", PdfController, :print_timetable)
+
     get("/exam/marking/:id/:c_id/:s_id", ExamController, :marking)
     get("/cocurriculum/marking/:id/:semester_id", CoCurriculumController, :marking)
 

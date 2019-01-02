@@ -31,6 +31,7 @@
     <link rel="stylesheet" href="/vendor/sweetalert/dist/sweetalert.css">
    <!-- =============== BOOTSTRAP STYLES ===============-->
    <link rel="stylesheet" href="/css/bootstrap.css" id="bscss">
+
    <!-- =============== APP STYLES ===============-->
    <link rel="stylesheet" href="/css/app_angle.css" id="maincss">
        <script type="text/javascript">
@@ -75,7 +76,7 @@
 
   <script src="/vendor/datatables-colvis/js/dataTables.colVis.js"></script>
    <script src="/vendor/datatables-responsive/js/dataTables.responsive.js"></script>
-
+     
    <!-- =============== PAGE VENDOR SCRIPTS ===============-->
             <script src="/vendor/jquery-bootgrid/dist/jquery.bootgrid.js"></script>
    <script src="/vendor/jquery-bootgrid/dist/jquery.bootgrid.fa.js"></script>

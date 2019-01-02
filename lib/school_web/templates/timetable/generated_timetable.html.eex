@@ -1,33 +1,30 @@
 
 <!DOCTYPE html>
-
-  <div id="content">
-      
-          <link rel="stylesheet" href="/css/jquery.skedTape.css">
-          <link rel="stylesheet" href="<%= Application.app_dir(:school, "priv/static") %>/css/jquery.skedTape.css">
-    </head>
   
-    <body>
-        <div class="container">
+
+
+<body>
+<div id='dad'>
+ <div class="container">
+    <link rel="stylesheet" href="/css/jquery.skedTape.css" >
             <div class="mb-4">
             <center><h4>Class: <%= @class.name %></h4></center>
                 
                 <div id="sked1"></div>
-            </div><center>
-         <a href="/class_setting/<%= @class.id %>"><button class="btn btn-sm btn-primary" type="submit">Back</button></a>
-          <button class="btn btn-sm btn-primary" id="cmd" type="submit">Print</button>
-           </center>
+            </div>
+         
         </div>
-</body>
+             <script src="<%= static_path(@conn, "/js/jquery.skedTape.js") %> "></script> 
+             </div>      
+    </body>
 
+</html>
+<center>
+<a href="/class_setting/<%= @class.id %>"><button class="btn btn-sm btn-primary" type="submit">Back</button></a>
+          <button class="btn btn-sm btn-primary" onclick="PrintPanel();"  id="cmd" name="print_btn" type="submit">Print</button>
+           </center>
+        
 
-
-       
-   <script src="<%= static_path(@conn, "/js/jquery.skedTape.js") %> "></script>
-
-
-</div>         
-           
 
         <script type="text/javascript">
 
@@ -88,26 +85,35 @@
                 events: events
                
             });
-           
+
            
           })
 
-var doc = new jsPDF();
-var specialElementHandlers = {
-    '#editor': function (element, renderer) {
-        return true;
-    }
-};
 
-$('#cmd').click(function () {
-    doc.fromHTML($('#content').html(), 15, 15, {
-        'width': 170,
-            'elementHandlers': specialElementHandlers
-    });
-    doc.save('Class_Timetable.pdf');
-});
+  function PrintPanel() {
+    var panel = document.getElementById("dad");
+    var printWindow = window.open('', '', '');
+
+    
+    // Make sure the relative URL to the stylesheet works:
+
+    
+    // Add the stylesheet link and inline styles to the new document:
+
+  
+    
+    printWindow.document.write('</head><body >');
+    printWindow.document.write(panel.innerHTML);
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+    setTimeout(function () {
+        printWindow.print();
+    }, 500);
+    return false;
+}
+
 
    
         </script>
-    </body>
-</html>
+
+

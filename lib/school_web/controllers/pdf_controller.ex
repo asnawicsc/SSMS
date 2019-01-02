@@ -72,6 +72,10 @@ defmodule SchoolWeb.PdfController do
     |> resp(200, pdf_binary)
   end
 
+  def print_timetable(conn, params) do
+    IEx.pry()
+  end
+
   def parent_listing(conn, params) do
     school = Repo.get(Institution, conn.private.plug_session["institution_id"])
 
