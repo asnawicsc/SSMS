@@ -202,22 +202,22 @@
                                        <input class="form-control" id="inputContact8" name="position_in_house" type="text" value="<%= @student.position_in_house %>">
                                     </div>
                                  </div>
-                                      <div class="form-group row">
+                                 <div class="form-group row">
                                     <label class="text-bold col-xl-2 col-md-3 col-4 col-form-label text-right" for="inputContact8">Register Date</label>
                                     <div class="col-xl-10 col-md-9 col-8">
-                                       <input class="form-control" id="inputContact8" name="register_date" type="text" value="<%= @student.register_date %>">
+                                       <input class="form-control" id="inputContact8" name="register_date" type="text" placeholder="12/02/2012" value="<%= @student.register_date %>">
                                     </div>
                                  </div>
-                                      <div class="form-group row">
+                                 <div class="form-group row">
                                     <label class="text-bold col-xl-2 col-md-3 col-4 col-form-label text-right" for="inputContact8">Quit Date</label>
                                     <div class="col-xl-10 col-md-9 col-8">
-                                       <input class="form-control" id="inputContact8" name="quit_date" type="text" value="<%= @student.quit_date %>">
+                                       <input class="form-control" id="inputContact8" name="quit_date" type="text" placeholder="12/02/2012" value="<%= @student.quit_date %>">
                                     </div>
                                  </div>
                                    <div class="form-group row">
                                     <label class="text-bold col-xl-2 col-md-3 col-4 col-form-label text-right" for="inputContact8">Father IC:</label>
                                     <div class="col-xl-10 col-md-9 col-8">
-                                       <input class="form-control" id="inputContact8" name="ficno" type="text" value="<%= @student.ficno %>">
+                                       <input class="form-control" id="inputContact8" name="ficno" type="text"  value="<%= @student.ficno %>">
                                     </div>
                                  </div>
                                    <div class="form-group row">

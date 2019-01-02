@@ -44,8 +44,8 @@
        <td ><%= item.dob %></td>
        <td ><%= item.pob %></td>
        <td></td>
-       <td ><%= item.b_cert %></td>
-       <td ></td>
+       <td ><%= item.umo_1jan %></td>
+       <td ><%= item.register_date %></td>
        <td ><%= if item.race == "C" do "CINA" end %>
         <%= if item.race == "M" do "MELAYU" end %>
         <%= if item.race == "I" do "INDIA" end %>

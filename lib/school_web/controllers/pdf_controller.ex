@@ -1605,37 +1605,80 @@ defmodule SchoolWeb.PdfController do
         )
       )
 
-    for item <- all do
-      dob =
-        if item.dob != nil do
-          item.dob |> String.split_at(10) |> elem(0) |> String.replace(".", "/")
-        end
-
-      umo_1jan =
-        if item.dob != nil do
-          a = item.dob |> String.split_at(10) |> elem(0)
-
-          day = a |> String.split_at(2) |> elem(0)
-          month = a |> String.split_at(5) |> elem(0) |> String.split_at(3) |> elem(1)
-          year = a |> String.split_at(6) |> elem(1)
-
-          if item.register_date != nil do
-            day = item.register_date |> String.split_at(2) |> elem(0)
-
-            month =
-              item.register_date |> String.split_at(5) |> elem(0) |> String.split_at(3) |> elem(1)
-
-            year = item.register_date |> String.split_at(6) |> elem(1)
+    new_all =
+      for item <- all do
+        dob =
+          if item.dob != nil do
+            item.dob |> String.split_at(10) |> elem(0) |> String.replace(".", "/")
+          else
           end
 
-          IEx.pry()
-        else
-        end
-    end
+        umo_1jan =
+          if item.dob != nil do
+            a = item.dob |> String.split_at(10) |> elem(0)
+
+            day = a |> String.split_at(2) |> elem(0) |> String.to_integer()
+
+            month =
+              a
+              |> String.split_at(5)
+              |> elem(0)
+              |> String.split_at(3)
+              |> elem(1)
+              |> String.to_integer()
+
+            year = a |> String.split_at(6) |> elem(1) |> String.to_integer()
+
+            umo_1jan =
+              if item.register_date != nil do
+                day_r = item.register_date |> String.split_at(2) |> elem(0) |> String.to_integer()
+
+                month_r =
+                  item.register_date
+                  |> String.split_at(5)
+                  |> elem(0)
+                  |> String.split_at(3)
+                  |> elem(1)
+                  |> String.to_integer()
+
+                year_r =
+                  item.register_date |> String.split_at(6) |> elem(1) |> String.to_integer()
+
+                year_total = year_r - 1 - year
+
+                month_total = 12 - month
+
+                month_new = month_total |> Integer.to_string()
+                year_new = year_total |> Integer.to_string()
+
+                umo_1jan = year_new <> "-" <> month_new
+
+                umo_1jan
+              else
+              end
+
+            umo_1jan
+          else
+          end
+
+        %{
+          id: item.id,
+          id_no: item.id_no,
+          chinese_name: item.chinese_name,
+          name: item.name,
+          sex: item.sex,
+          dob: dob,
+          pob: item.pob,
+          race: item.race,
+          b_cert: item.b_cert,
+          register_date: item.register_date,
+          umo_1jan: umo_1jan
+        }
+      end
 
     number = 40
 
-    add = number - (all |> Enum.count())
+    add = number - (new_all |> Enum.count())
 
     range = 1..add
 
@@ -1650,11 +1693,13 @@ defmodule SchoolWeb.PdfController do
           dob: "",
           pob: "",
           race: "",
-          b_cert: ""
+          b_cert: "",
+          register_date: "",
+          umo_1jan: ""
         }
       end
 
-    all = (all ++ empty_colum) |> Enum.with_index()
+    all = (new_all ++ empty_colum) |> Enum.with_index()
 
     institution =
       Repo.get_by(School.Settings.Institution, id: conn.private.plug_session["institution_id"])
