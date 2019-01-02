@@ -45,7 +45,9 @@
                      <div class="card-body">
                         <div class="row py-4 justify-content-center">
                            <div class="col-12 col-sm-10">
-                              <form class="form-horizontal" action="/update_changes/<%= @student.id %>">
+                              <form class="form-horizontal" action="/update_changes/<%= @student.id %>" method="post" enctype="multipart/form-data">
+
+                                  <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
                                  <div class="form-group row">
                                     <label class="text-bold col-xl-2 col-md-3 col-4 col-form-label text-right" for="inputContact1">Name</label>
                                     <div class="col-xl-10 col-md-9 col-8">
@@ -181,13 +183,13 @@
                                  <div class="form-group row">
                                     <label class="text-bold col-xl-2 col-md-3 col-4 col-form-label text-right" for="inputContact8">Register Date</label>
                                     <div class="col-xl-10 col-md-9 col-8">
-                                       <input class="form-control" id="inputContact8" name="register_date" type="text" label="12/02/2012" value="<%= @student.register_date %>">
+                                       <input class="form-control" id="inputContact8" name="register_date" type="text" placeholder="12/02/2012" value="<%= @student.register_date %>">
                                     </div>
                                  </div>
                                  <div class="form-group row">
                                     <label class="text-bold col-xl-2 col-md-3 col-4 col-form-label text-right" for="inputContact8">Quit Date</label>
                                     <div class="col-xl-10 col-md-9 col-8">
-                                       <input class="form-control" id="inputContact8" name="quit_date" type="text" label="12/02/2012" value="<%= @student.quit_date %>">
+                                       <input class="form-control" id="inputContact8" name="quit_date" type="text" placeholder="12/02/2012" value="<%= @student.quit_date %>">
                                     </div>
                                  </div>
                                 
