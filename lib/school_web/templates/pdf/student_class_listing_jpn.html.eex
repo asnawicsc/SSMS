@@ -39,17 +39,17 @@
         <td align="left" ><%=  item.name %></td>
        <% end  %>
       
-       <td><%= if item.sex == "M" or item.sex == "LELAKI" do "L" end %>
-        <%= if item.sex == "F" or item.sex == "PEREMPUAN" do "P" end %></td>
+       <td><%= if item.sex == "M" or item.sex == "L" or item.sex == "MALE" or item.sex == "LELAKI" do "L" end %>
+        <%= if item.sex == "F" or item.sex == "P" or item.sex == "FEMALE" or item.sex == "PEREMPUAN" do "P" end %></td>
        <td ><%= item.dob %></td>
        <td ><%= item.pob %></td>
        <td><%= item.umo_1jan %></td>
        <td ><%= item.b_cert %></td>
        <td ><%= item.register_date %></td>
-       <td ><%= if item.race == "C" do "CINA" end %>
-        <%= if item.race == "M" do "MELAYU" end %>
-        <%= if item.race == "I" do "INDIA" end %>
-        <%= if item.race == "O" do "LAIN-LAIN" end %></td>
+       <td ><%= if item.race == "C" or item.race == "CINA" do "CINA" end %>
+        <%= if item.race == "M" or item.race == "MELAYU" do "MELAYU" end %>
+        <%= if item.race == "I" or item.race == "INDIA" do "INDIA" end %>
+        <%= if item.race == "O"  or item.race == "LAIN-LAIN" do "LAIN-LAIN" end %></td>
     
 
     </tr>
