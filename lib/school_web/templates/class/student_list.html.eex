@@ -46,7 +46,7 @@
         <% item=item|>elem(0) %>
     <tr>
       <td><%= no+1 %></td>
-       <td><%= item.id_no %></td>
+       <td><%= item.id %></td>
        <td><%= item.chinese_name %></td>
        <td><%= item.name %></td>
        <td><%= item.sex %></td>

@@ -1,12 +1,48 @@
 
 <!DOCTYPE html>
-  
-
+   <link rel="stylesheet" href="/css/jquery.skedTape.css" >
 
 <body>
-<div id='dad'>
+<div id='dad' style="margin-left: 10px;">
+    <div class= "row">
+                        <div class="col-lg-3">
+                     <center>
+                  <table class="table"  style="width: 300px; margin-top: 30px;" border="1">
+  <thead>
+    <tr bgcolor="gray" style="font: white;" align="center">
+
+      <th colspan="2"><b style="color:white;">Subject Info</th>
+      
+    </tr>
+    <tr bgcolor="gray" style="font: white;" align="center">
+
+      <th><b style="color:white;">Teacher </th>
+      <th><b style="color:white;">Subject</th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for period <- @period|>Enum.group_by(fn x -> x.subject_id end) do %>
+
+    <% period=period|>elem(1)|>hd() %>
+
+<%  subject = Repo.get_by(Subject, id: period.subject_id) %>
+<%  teacher = Repo.get_by(Teacher, id: period.teacher_id) %>
+    <tr>
+
+      <td><%= teacher.name %></td>
+      <td align="center"><%= subject.description %></td>
+     
+
+     
+    </tr>
+<% end %>
+  </tbody>
+</table>
+  </center> 
+</div>
+    <div class="col-lg-9">
  <div class="container">
-    <link rel="stylesheet" href="/css/jquery.skedTape.css" >
+ 
             <div class="mb-4">
             <center><h4>Class: <%= @class.name %></h4></center>
                 
@@ -15,15 +51,28 @@
          
         </div>
              <script src="<%= static_path(@conn, "/js/jquery.skedTape.js") %> "></script> 
-             </div>      
+              <script src="<%= static_path(@conn, "/js/jspdf.min.js") %> "></script>
+             
+              </div>
+
+
+            
+             </div>  
+             </div>   
     </body>
 
+<script type="text/javascript" src="/js/html2canvas.js"></script> 
+ 
+     
 </html>
+<br>
 <center>
 <a href="/class_setting/<%= @class.id %>"><button class="btn btn-sm btn-primary" type="submit">Back</button></a>
-          <button class="btn btn-sm btn-primary" onclick="PrintPanel();"  id="cmd" name="print_btn" type="submit">Print</button>
+          <button class="btn btn-sm btn-primary"   id="cmd" name="print_btn" type="submit">Print</button>
            </center>
         
+  
+
 
 
         <script type="text/javascript">
@@ -76,44 +125,93 @@
             // --------------------------- Example 1 ---------------------------
             var $sked1 = $('#sked1').skedTape({
                 caption: 'Day',
-                start: start(8,0),
+                start: start(08,0),
                 end: end(18, 0),
                 showEventTime: true,
+                showEventText: 'sdsd',
                 showEventDuration: true,
-                scrollWithYWheel: true,
+                scrollWithYWheel: false,
                 locations: locations,
                 events: events
                
             });
 
+
+
+
            
           })
 
 
-  function PrintPanel() {
-    var panel = document.getElementById("dad");
-    var printWindow = window.open('', '', '');
+
+
+
+
+$(function() { 
+    $("#cmd").click(function() { 
+  html2canvas(document.querySelector("#dad")).then(canvas => {
+    console.log(canvas);
+        saveAs(canvas.toDataURL(), 'Class Timetable.png');    //or whatever you want to execute
+});
+
+    });
+}); 
+
+
+function saveAs(uri, filename) {
+
+    var link = document.createElement('a');
+
+    if (typeof link.download === 'string') {
+
+        link.href = uri;
+        link.download = filename;
+
+        //Firefox requires the link to be in the body
+        document.body.appendChild(link);
+
+        //simulate click
+        link.click();
+
+        //remove the link when done
+        document.body.removeChild(link);
+
+    } else {
+
+        window.open(uri);
+
+    }
+}
+
+
+//   function PrintPanel() {
+//     var panel = document.getElementById("dad");
+//     var printWindow = window.open('', '', '');
 
     
-    // Make sure the relative URL to the stylesheet works:
+//     // Make sure the relative URL to the stylesheet works:
 
     
-    // Add the stylesheet link and inline styles to the new document:
+//     // Add the stylesheet link and inline styles to the new document:
 
   
     
-    printWindow.document.write('</head><body >');
-    printWindow.document.write(panel.innerHTML);
-    printWindow.document.write('</body></html>');
-    printWindow.document.close();
-    setTimeout(function () {
-        printWindow.print();
-    }, 500);
-    return false;
-}
+//     printWindow.document.write('</head><body >');
+//     printWindow.document.write(panel.innerHTML);
+//     printWindow.document.write('</body></html>');
+//     printWindow.document.close();
+//     setTimeout(function () {
+//         printWindow.print();
+//     }, 500);
+//     return false;
+
 
 
    
         </script>
+
+
+
+
 
 

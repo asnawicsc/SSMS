@@ -83,7 +83,12 @@ defmodule SchoolWeb.TimetableController do
     events =
       case School.Affairs.get_teacher(params["user_id"]) do
         {:ok, teacher} ->
-          {:ok, timetable} = School.Affairs.initialize_calendar(teacher.id)
+          {:ok, timetable} =
+            School.Affairs.initialize_calendar(
+              conn.private.plug_session["institution_id"],
+              conn.private.plug_session["semester_id"],
+              teacher.id
+            )
 
           School.Affairs.teacher_period_list(teacher.id)
 
@@ -131,7 +136,12 @@ defmodule SchoolWeb.TimetableController do
       {:ok, teacher} ->
         true
 
-        {:ok, timetable} = School.Affairs.initialize_calendar(teacher.id)
+        {:ok, timetable} =
+          School.Affairs.initialize_calendar(
+            conn.private.plug_session["institution_id"],
+            conn.private.plug_session["semester_id"],
+            teacher.id
+          )
 
         periods = Affairs.get_inst_id(conn) |> Affairs.get_periods()
 
@@ -238,6 +248,10 @@ defmodule SchoolWeb.TimetableController do
 
     class = Repo.get_by(Class, id: params["id"])
 
-    render(conn, "generated_timetable.html", all2: Poison.encode!(all2), class: class)
+    render(conn, "generated_timetable.html",
+      all2: Poison.encode!(all2),
+      class: class,
+      period: period
+    )
   end
 end
