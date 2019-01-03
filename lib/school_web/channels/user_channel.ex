@@ -1128,7 +1128,7 @@ defmodule SchoolWeb.UserChannel do
           where: s.class_id == ^class_id and s.semester_id == ^semester_id,
           select: %{
             id: r.id,
-            id_no: r.sudent_id,
+            id_no: r.student_no,
             chinese_name: r.chinese_name,
             name: r.name,
             sex: r.sex,
