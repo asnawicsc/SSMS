@@ -19,6 +19,7 @@
               <table class="table" class="datatable1">
                 <thead>
                   <tr>
+                    <th></th>
                   <th>Name</th>
                   <th>B cert</th>
                   </tr>
@@ -28,6 +29,7 @@
                 <% else %>
                 <%= for student <- @students do %>
                     <tr>
+                       <td class="text-left"> <img id="preview6"  style='width:20px; height: 20px;' src='data:image/png;base64, <%= student.image_bin %>'></td>
                       <td class="text-left">
                    
                    

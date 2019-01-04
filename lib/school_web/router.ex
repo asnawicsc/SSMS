@@ -324,6 +324,12 @@ defmodule SchoolWeb.Router do
       :create_teacher_cocurriculum_job
     )
 
+    post(
+      "/generate_teacher_image",
+      TeacherController,
+      :generate_teacher_image
+    )
+
     post("/create_teacher_hem_job", TeacherHemJobController, :create_teacher_hem_job)
 
     get("/standard_setting", SubjectController, :standard_setting)
