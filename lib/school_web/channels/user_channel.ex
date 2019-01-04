@@ -3486,7 +3486,8 @@ defmodule SchoolWeb.UserChannel do
           "user_id" => user_id,
           "institution_id" => institution_id,
           "semester_id" => semester_id,
-          "mode" => mode
+          "mode" => mode,
+          "date_time" => date_time
         },
         socket
       ) do
@@ -3501,11 +3502,11 @@ defmodule SchoolWeb.UserChannel do
     if teacher != nil do
       teacher_id = teacher.id
 
-      date_time = NaiveDateTime.utc_now()
+      date_time = date_time
 
-      time_in = NaiveDateTime.to_string(date_time)
+      time_in = date_time
 
-      date = time_in |> String.split_at(10) |> elem(0)
+      date = time_in |> String.split_at(8) |> elem(0)
 
       attns =
         Repo.get_by(School.Affairs.TeacherAttendance,

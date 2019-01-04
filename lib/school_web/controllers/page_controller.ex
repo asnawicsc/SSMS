@@ -452,6 +452,20 @@ defmodule SchoolWeb.PageController do
 
     date = NaiveDateTime.to_string(date_time) |> String.split_at(10) |> elem(0)
 
+    year = date |> String.split_at(4) |> elem(0) |> String.to_integer()
+
+    day = date |> String.split_at(8) |> elem(1) |> String.to_integer()
+
+    m = date |> String.split_at(5) |> elem(1)
+
+    month = m |> String.split_at(2) |> elem(0) |> String.to_integer()
+
+    new_day = day |> Integer.to_string()
+    new_month = month |> Integer.to_string()
+    new_year = year |> Integer.to_string()
+
+    date = new_day <> "-" <> new_month <> "-" <> new_year
+
     teachers_attend =
       Repo.all(
         from(
@@ -508,7 +522,7 @@ defmodule SchoolWeb.PageController do
       end
 
     teachers_attend_full =
-      if teachers_attend_full != [] do
+      if teachers_attend_full != [nil] do
         teachers_attend_full |> Enum.filter(fn x -> x.date == date end)
       else
         []

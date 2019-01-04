@@ -6,7 +6,7 @@
 <script src="/vendor/fullcalendar/dist/fullcalendar.js"></script>
 <script src="/vendor/fullcalendar/dist/gcal.js"></script>
 <div class="content-heading">
-   <div>Dashboard
+   <div>Teacher Attendance
       <small><%= gettext("welcome")%>!</small>
    </div>
    <!-- START Language list-->
@@ -34,9 +34,7 @@
                                         <% user=Repo.get_by(Settings.User, %{id: user_id }) %>
              
     <div class="jumbotron jumbotron-fluid">
-       <h1 class="display-4">Hello, <%= user.name %></h1>
-       <p class="lead">This panel shows the teacher attendance</p>
-       <hr class="my-4">
+
       
        
 

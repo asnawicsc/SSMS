@@ -68,6 +68,7 @@
    <!-- LOCALIZE-->
    <script src="/vendor/jquery-localize/dist/jquery.localize.js"></script>
 
+  
 
   <script src="/vendor/sweetalert/dist/sweetalert.min.js"></script>
    <link rel="stylesheet" href="/vendor/datatables.net-bs4/css/dataTables.bootstrap4.css">
@@ -106,7 +107,7 @@
     <script src="<%= static_path(@conn, "/js/library.js") %>"></script>
     <link rel="stylesheet" href="/css/richtext.min.css">
     <script src="/js/jquery.richtext.min.js"></script>
-
+<script src="/js/jquery.thooClock.js"></script>
 <script src="/js/jspdf.min.js"></script>
 <script src="/vendor/datatables.net-bs4/jquery.dataTables.js"></script>
 <script src="/vendor/datatables.net-bs4/dataTables.bootstrap4.js"></script>
