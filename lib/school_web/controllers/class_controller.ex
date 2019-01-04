@@ -309,7 +309,8 @@ defmodule SchoolWeb.ClassController do
               st.semester_id == ^conn.private.plug_session["semester_id"],
           select: %{
             id: st.sudent_id,
-            name: s.name
+            name: s.name,
+            image_bin: s.image_bin
           },
           order_by: [asc: s.name]
         )
