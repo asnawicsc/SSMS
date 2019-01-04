@@ -3498,8 +3498,6 @@ defmodule SchoolWeb.UserChannel do
         institution_id: institution_id
       )
 
-    IEx.pry()
-
     if teacher != nil do
       teacher_id = teacher.id
 
@@ -3579,7 +3577,7 @@ defmodule SchoolWeb.UserChannel do
           msg
         end
 
-      {:reply, {:ok, %{teacher: teacher}}, socket}
+      {:reply, {:ok, %{msg: msg}}, socket}
     else
       {:reply, {:error, %{}}, socket}
     end

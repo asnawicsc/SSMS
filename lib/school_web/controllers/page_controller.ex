@@ -490,14 +490,19 @@ defmodule SchoolWeb.PageController do
         teacher_attendance =
           Repo.get_by(School.Affairs.TeacherAttendance, teacher_id: item.id, date: date)
 
-        %{
-          name: teacher.name,
-          cname: teacher.cname,
-          id: teacher.id,
-          time_in: teacher_attendance.time_in,
-          time_out: teacher_attendance.time_out
-        }
+        if teacher_attendance != nil do
+          %{
+            name: teacher.name,
+            cname: teacher.cname,
+            image_bin: teacher.image_bin,
+            id: teacher.id,
+            time_in: teacher_attendance.time_in,
+            time_out: teacher_attendance.time_out,
+            date: teacher_attendance.date
+          }
+        end
       end
+      |> Enum.filter(fn x -> x.date == date end)
 
     changeset = Settings.change_institution(%Institution{})
 
