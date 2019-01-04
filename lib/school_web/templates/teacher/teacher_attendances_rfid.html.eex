@@ -1,0 +1,147 @@
+<link rel="stylesheet" type="text/css" href="/vendor/jquery_datetimepicker/jquery.datetimepicker.min.css"/ >
+<script src="/vendor/jquery_datetimepicker/jquery.datetimepicker.full.min.js"></script>
+<div class="content-heading">
+
+   <div>Teachers Attendance
+   </div>
+
+
+                    
+                          <div class="ml-auto" style="margin-top: 10px; margin-right: 10px;" >  
+                            <label class="switch switch-sm">
+                                  <input type="radio" checked="check_time" id="check_time_in_mode"   name="radioSwitch">
+                                 <span></span>Time In 
+                              </label>
+                              <label class="switch switch-sm">
+                                  <input type="radio" id="check_time_out_mode" name="radioSwitch">
+                                 <span></span>Time Out
+                              </label>
+                           </div>
+                      
+</div>
+
+<div class="row">
+  
+  <div class="col-md-12">
+        <!-- START card-->
+        <div class="card card-default">
+            <div class="card-body" id="">
+                <form>
+                    <div class="form-group">
+                        <label>Single Mark Attendance</label>
+                        <input class="form-control" id="qt" placeholder="Enter query" onkeypress="return runScript(event)" type="text">
+                    </div>
+                </form>
+    
+            </div>
+        </div>
+        <!-- END card-->
+    </div>
+</div>
+
+
+<div class="row">
+   
+
+  <div class="col-md-12">
+        <!-- START card-->
+
+        <div class="card card-default">
+            <div class="card-body" id="">
+                <form>
+                    <div class="form-group">
+                        <label>Attended Teacher</label>
+                     
+                    </div>
+                </form>
+                <div class="table-responsive">
+                            <table class="table" id="datatable2">
+                        <thead>
+                            <tr>
+                             
+                                <th>
+                                    <%= gettext("Name") %>
+                                </th>
+                                <th>
+                                    <%= gettext("Chinese Name") %>
+                                </th>
+                                <th>
+                                    <%= gettext("Time In") %>
+                                </th>
+                               
+                                <th>
+                                    <%= gettext("Time Out") %>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <%= for ta <- @teachers_attend do %>
+                          <tr>
+                           
+                              <td><%= ta.name %></td>
+                                <td><%= ta.cname %></td>
+                                 <td><%= ta.time_in %></td>
+                                  <td><%= ta.time_out %></td>
+                          </tr>
+                          <% end %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- END card-->
+    </div>
+</div>
+
+<script type="text/javascript">
+
+
+                       $(document).on("click", ".add_to_class", function(){
+
+                  if(document.getElementById('check_time_in_mode').checked) {
+
+                    var mode ="time_in"
+                  }
+
+                     if(document.getElementById('check_time_out_mode').checked) {
+
+                    var mode ="time_out"
+                  }
+
+                   })
+
+
+             var mode = $("input[name='check_mode']").val();
+
+       $('#check_time_in_mode').click(function() {
+   alert("Alert: You Switch you mode to Time In")
+ })
+
+          $('#check_time_out_mode').click(function() {
+   alert("Alert: You Switch you mode to Time Out")
+});
+
+
+
+alert(mode);
+
+
+function runScript(e) {
+    //See notes about 'which' and 'key'
+    if (e.keyCode == 13) {
+        var term = $("input#qt").val()
+
+       alert(term);
+        alert(window.currentUser);
+        alert(window.currentInstitute);
+        alert(window.currentSemester);
+        alert(mode);
+
+         channel.push("qt_term_rfid", {term: term, user_id: window.currentUser, institution_id: window.currentInstitute, semester_id: window.currentSemester, mode: mode})
+       
+    }
+}
+  
+
+</script>
+

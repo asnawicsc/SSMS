@@ -3480,6 +3480,112 @@ defmodule SchoolWeb.UserChannel do
   end
 
   def handle_in(
+        "qt_term_rfid",
+        %{
+          "term" => term,
+          "user_id" => user_id,
+          "institution_id" => institution_id,
+          "semester_id" => semester_id,
+          "mode" => mode
+        },
+        socket
+      ) do
+    user = Repo.get(User, user_id)
+
+    teacher =
+      Repo.get_by(School.Affairs.Teacher,
+        icno: term,
+        institution_id: institution_id
+      )
+
+    IEx.pry()
+
+    if teacher != nil do
+      teacher_id = teacher.id
+
+      date_time = NaiveDateTime.utc_now()
+
+      time_in = NaiveDateTime.to_string(date_time)
+
+      date = time_in |> String.split_at(10) |> elem(0)
+
+      attns =
+        Repo.get_by(School.Affairs.TeacherAttendance,
+          teacher_id: teacher_id,
+          institution_id: institution_id,
+          date: date
+        )
+
+      msg =
+        if attns == nil do
+          msg =
+            if mode == "time_out" do
+              msg = "Plese Switch to Time In Mode"
+            else
+              params = %{
+                institution_id: institution_id,
+                semester_id: semester_id,
+                teacher_id: teacher_id,
+                time_in: time_in,
+                date: date
+              }
+
+              Affairs.create_teacher_attendance(params)
+              msg = "Created Succesfully"
+            end
+
+          msg
+        else
+          attn =
+            Repo.get_by(School.Affairs.TeacherAttendance,
+              teacher_id: teacher_id,
+              institution_id: institution_id,
+              date: date
+            )
+
+          msg =
+            if mode == "time_in" do
+              msg =
+                if attn.time_in == nil do
+                  params = %{
+                    time_in: time_in
+                  }
+
+                  Affairs.update_teacher_attendance(attn, params)
+
+                  msg = "Created Succesfully"
+                else
+                  msg = "Time In alrdy fill up"
+                end
+
+              msg
+            else
+              msg =
+                if attn.time_out == nil do
+                  params = %{
+                    time_out: time_in
+                  }
+
+                  Affairs.update_teacher_attendance(attn, params)
+
+                  msg = "Created Succesfully"
+                else
+                  msg = "Time In alrdy fill up"
+                end
+
+              msg
+            end
+
+          msg
+        end
+
+      {:reply, {:ok, %{teacher: teacher}}, socket}
+    else
+      {:reply, {:error, %{}}, socket}
+    end
+  end
+
+  def handle_in(
         "load_class_students",
         %{
           "semester_id" => semester_id,

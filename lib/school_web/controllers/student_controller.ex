@@ -743,7 +743,7 @@ defmodule SchoolWeb.StudentController do
       Map.put(student_params, "institution_id", conn.private.plug_session["institution_id"])
 
     image_params = student_params["image1"]
-    result = upload_image(image_params)
+    result = upload_image(image_params, conn)
 
     student_params = Map.put(student_params, "image_bin", result.bin)
     student_params = Map.put(student_params, "image_filename", result.filename)
@@ -759,14 +759,16 @@ defmodule SchoolWeb.StudentController do
     end
   end
 
-  def upload_image(param) do
+  def upload_image(param, conn) do
     {:ok, seconds} = Timex.format(Timex.now(), "%s", :strftime)
 
-    path = File.cwd!() <> "/media"
+    institute = Repo.get(Institution, conn.private.plug_session["institution_id"])
+
+    path = File.cwd!() <> "/media/" <> institute.name
     image_path = Application.app_dir(:school, "priv/static/images")
 
     if File.exists?(path) == false do
-      File.mkdir(File.cwd!() <> "/media")
+      File.mkdir(File.cwd!() <> "/media/" <> institute.name)
     end
 
     fl = param.filename |> String.replace(" ", "_")
@@ -782,6 +784,38 @@ defmodule SchoolWeb.StudentController do
     # File.rm(resized.path)
 
     %{filename: seconds <> fl, bin: Base.encode64(bin)}
+  end
+
+  def generate_student_image(conn, params) do
+    all_params = params["item"]["image1"]
+
+    for image_params <- all_params do
+      result = upload_image(image_params, conn)
+
+      params = Map.put(params, "image_bin", result.bin)
+      params = Map.put(params, "image_filename", result.filename)
+
+      student = image_params
+
+      student_no = student.filename |> String.split(".") |> hd
+
+      student =
+        Repo.get_by(Student,
+          student_no: student_no,
+          institution_id: conn.private.plug_session["institution_id"]
+        )
+
+      if student != nil do
+        student_params = %{image_bin: result.bin, image_filename: result.filename}
+
+        Affairs.update_student(student, student_params)
+      else
+      end
+    end
+
+    conn
+    |> put_flash(:info, "Student Upload Succesfully")
+    |> redirect(to: student_path(conn, :index))
   end
 
   def print_students(conn, %{"id" => id}) do
@@ -852,7 +886,7 @@ defmodule SchoolWeb.StudentController do
 
     params =
       if image_params != nil do
-        result = upload_image(image_params)
+        result = upload_image(image_params, conn)
 
         Map.put(params, "image_bin", result.bin)
       else
@@ -861,7 +895,7 @@ defmodule SchoolWeb.StudentController do
 
     params =
       if image_params != nil do
-        result = upload_image(image_params)
+        result = upload_image(image_params, conn)
 
         Map.put(params, "image_filename", result.filename)
       else

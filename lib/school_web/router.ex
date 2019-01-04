@@ -251,6 +251,7 @@ defmodule SchoolWeb.Router do
 
     get("/exam/marking/:id/:c_id/:s_id", ExamController, :marking)
     get("/cocurriculum/marking/:id/:semester_id", CoCurriculumController, :marking)
+    post("/generate_student_image", StudentController, :generate_student_image)
 
     resources("/exam", ExamController)
     get("/exam", ExamController, :index)

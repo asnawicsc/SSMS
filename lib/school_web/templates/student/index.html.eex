@@ -106,6 +106,34 @@
               </div>
             </div>
           </div>
+
+                   <div class="card card-default d-none d-lg-block">
+            <div class="card-body">
+          <p class="lead">Upload Student Image</p> 
+            <div class="row" style="margin-top: 10px;">
+                <div class="col-lg-12">
+                  <div class="panel">
+                    <div class="panel-heading">Bulk Upload Students</div>
+                    <div class="panel-body">
+                      <%= form_for @conn, student_path(@conn, :generate_student_image), [as: :item, multipart: true], fn f -> %>
+
+                          <%= label f, "", class: "control-label" %>
+                           <%= file_input f, :image1, accept: ".png, .jpg, .jpeg"  ,id: "imgInp5", multiple: true %>
+                          <%= error_tag f, :file %>
+
+                        <div class="form-group">
+                          <br>
+                          <%= submit "Submit", class: "btn btn-primary" %>
+                        </div>
+                      <% end %>
+
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="col-lg-12" aria-label="student_details">
@@ -121,4 +149,26 @@
 
      $('.table').DataTable();
   })
+
+
+
+      $(window).ready(function(){
+        $("#imgInp5").change(function(){
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#preview5').attr('src', e.target.result);
+                 
+                }
+                reader.readAsDataURL($("#imgInp5")[0].files[0]);
+        });
+
+
+        $("img#preview5").click(function(){
+          $("input#imgInp5").click()
+        })
+    
+
+      });
+ 
+
 </script>
