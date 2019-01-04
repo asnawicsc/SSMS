@@ -26,7 +26,7 @@
                             <option value="0">
                                 <%= gettext("All Class")%>
                             </option>
-                            <%= for class <- @classes do %>
+                            <%= for class <- @classes|>Enum.sort_by(fn x -> x.name end) do %>
                                 <option value="<%= class.id %>">
                                     <%= class.name %>
                                 </option>

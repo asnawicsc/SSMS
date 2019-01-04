@@ -346,7 +346,9 @@ defmodule SchoolWeb.PdfController do
             student = Map.put(student, :class, class.name)
             {class, student}
           else
-            student_class = Repo.get_by(StudentClass, sudent_id: student.id)
+            student_class =
+              Repo.get_by(StudentClass, sudent_id: student.id, semester_id: semester.id)
+
             class = Repo.get(Class, student_class.class_id)
             student = Map.put(student, :class, class.name)
             {class, student}

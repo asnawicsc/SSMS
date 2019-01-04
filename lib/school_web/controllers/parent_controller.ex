@@ -11,7 +11,11 @@ defmodule SchoolWeb.ParentController do
       |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
 
     semesters =
-      Repo.all(from(s in Semester))
+      Repo.all(
+        from(s in Semester,
+          order_by: [desc: s.year]
+        )
+      )
       |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
 
     classes =

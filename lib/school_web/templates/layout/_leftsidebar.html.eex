@@ -221,7 +221,7 @@
                            <span data-localize="sidebar.heading.HEADER">Student Management</span>
                         </li>
                         <li class=" ">
-                           <a href="/student_lists/<%= @conn.private.plug_session["user_id"]%>" title="School Setup">
+                           <a href="/students" title="School Setup">
                             <em class="icon-user"></em>
                               <span data-localize="sidebar.nav.extra.EXTRA"><%= gettext "Students" %></span>
                            </a>

@@ -279,6 +279,13 @@
 
                                       <a class="btn btn-xs btn-success" href="javascript:void(0);" onclick="create_sub()">Show me how</a>
                                    </div>
+
+                                    <div class="list-group-item bt0" >
+                                  
+                                     <em class="fa-fw fas fa-question mr-2"></em>How to make an Announcement?
+
+                                      <a class="btn btn-xs btn-success" href="/announcements">Show me how</a>
+                                   </div>
                        
                
                                 
