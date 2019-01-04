@@ -102,27 +102,48 @@
     $(window).ready(function(){
 
 $( "input#qt" ).focus();
-                     
+
+var ds = localStorage.getItem('mode')
+
+if (ds == 'time_in')
+ {
+
+  $('#check_time_in_mode').attr("checked",true)
+ }
+
+ if (ds == 'time_out')
+ {
+
+  $('#check_time_out_mode').attr("checked",true)
+
+ }
+
                   if(document.getElementById('check_time_in_mode').checked) {
 
                     var mode ="time_in"
+                      localStorage.setItem('mode', mode);
                   }
 
                      if(document.getElementById('check_time_out_mode').checked) {
 
                     var mode ="time_out"
+                     localStorage.setItem('mode', mode);
                   }
 
        $('#check_time_in_mode').click(function() {
    alert("Alert: You Switch you mode to Time In")
     location.reload();
 
+   
+
  })
 
           $('#check_time_out_mode').click(function() {
    alert("Alert: You Switch you mode to Time Out")
-    location.reload();
+      location.reload();
+   
 });
+
 
 
 
@@ -154,7 +175,7 @@ $(function() {
 var d = new Date($.now());
 var date_time= d.getDate()+"-"+(d.getMonth()+1)+"-"+d.getFullYear()+" "+d.getHours()+":"+d.getMinutes()+":"+d.getSeconds();
 
-
+ var mode=localStorage.getItem("mode");
   
         var term = $("input#qt").val()
        channel.push("qt_term_rfid", {date_time: date_time,term: term, user_id: window.currentUser, institution_id: window.currentInstitute, semester_id: window.currentSemester, mode: mode}).receive(
