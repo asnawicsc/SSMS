@@ -1,5 +1,5 @@
 
-                IEx.pry()<link rel="stylesheet" href="/vendor/fullcalendar/dist/fullcalendar.css">
+              <link rel="stylesheet" href="/vendor/fullcalendar/dist/fullcalendar.css">
 <!-- MOMENT JS-->
 <script src="/vendor/moment/min/moment-with-locales.js"></script>
 <!-- FULLCALENDAR-->
