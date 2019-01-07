@@ -351,6 +351,7 @@ defmodule SchoolWeb.PdfController do
 
             class = Repo.get(Class, student_class.class_id)
             student = Map.put(student, :class, class.name)
+
             {class, student}
           end
 
@@ -360,10 +361,10 @@ defmodule SchoolWeb.PdfController do
 
             height_d =
               for height <- heights do
-                l_id =
+                semester_id =
                   String.split(height, "-") |> List.to_tuple() |> elem(0) |> String.to_integer()
 
-                if l_id == class.level_id do
+                if semester_id == semester.id do
                   height
                 else
                   nil
@@ -391,10 +392,10 @@ defmodule SchoolWeb.PdfController do
 
             weight_d =
               for weight <- weights do
-                l_id =
+                semester_id =
                   String.split(weight, "-") |> List.to_tuple() |> elem(0) |> String.to_integer()
 
-                if l_id == class.level_id do
+                if semester_id == semester.id do
                   weight
                 else
                   nil

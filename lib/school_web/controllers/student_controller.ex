@@ -97,58 +97,28 @@ defmodule SchoolWeb.StudentController do
 
   def height_weight_semester(conn, params) do
     user = Repo.get(User, conn.private.plug_session["user_id"])
-    semester = Repo.get(Semester, params["semester_id"])
+    semester_id = conn.private.plug_session["semester_id"] |> Integer.to_string()
 
     students =
-      if user.role == "Teacher" do
-        teacher = Repo.get_by(Teacher, email: user.email)
-
-        students =
-          Repo.all(
-            from(
-              s in Student,
-              left_join: sc in StudentClass,
-              on: sc.sudent_id == s.id,
-              left_join: c in Class,
-              on: c.id == sc.class_id,
-              left_join: t in Teacher,
-              on: t.id == c.teacher_id,
-              where: t.id == ^teacher.id and sc.semester_id == ^semester.id,
-              select: %{
-                name: s.name,
-                chinese_name: s.chinese_name,
-                height: s.height,
-                weight: s.weight,
-                id: s.id
-              }
-            )
-          )
-
-        students
-      else
-        students =
-          Repo.all(
-            from(
-              s in Student,
-              left_join: sc in StudentClass,
-              on: sc.sudent_id == s.id,
-              left_join: c in Class,
-              on: c.id == sc.class_id,
-              left_join: t in Teacher,
-              on: t.id == c.teacher_id,
-              where: sc.semester_id == ^semester.id,
-              select: %{
-                name: s.name,
-                chinese_name: s.chinese_name,
-                height: s.height,
-                weight: s.weight,
-                id: s.id
-              }
-            )
-          )
-
-        students
-      end
+      Repo.all(
+        from(
+          s in Student,
+          left_join: c in StudentClass,
+          on: c.sudent_id == s.id,
+          where:
+            c.class_id == ^params["class_id"] and
+              c.semester_id == ^conn.private.plug_session["semester_id"] and
+              s.institution_id == ^conn.private.plug_session["institution_id"],
+          order_by: [asc: s.name],
+          select: %{
+            id: s.id,
+            name: s.name,
+            chinese_name: s.chinese_name,
+            height: s.height,
+            weight: s.weight
+          }
+        )
+      )
 
     students =
       for student <- students do
@@ -160,7 +130,7 @@ defmodule SchoolWeb.StudentController do
               for height <- heights do
                 l_id = String.split(height, "-") |> List.to_tuple() |> elem(0)
 
-                if l_id == params["semester_id"] do
+                if l_id == semester_id do
                   height
                 end
               end
@@ -183,7 +153,7 @@ defmodule SchoolWeb.StudentController do
               for weight <- weights do
                 l_id = String.split(weight, "-") |> List.to_tuple() |> elem(0)
 
-                if l_id == params["semester_id"] do
+                if l_id == semester_id do
                   weight
                 end
               end
@@ -202,7 +172,7 @@ defmodule SchoolWeb.StudentController do
         student = Map.put(student, :weight, weight)
       end
 
-    render(conn, "height_weight_semester.html", students: students, semester_id: semester.id)
+    render(conn, "height_weight_semester.html", students: students, semester_id: semester_id)
   end
 
   def edit_height_weight(conn, params) do
@@ -322,7 +292,7 @@ defmodule SchoolWeb.StudentController do
 
     conn
     |> put_flash(:info, "Height and weight updated successfully.")
-    |> redirect(to: "/height_weight/#{params["semester_id"]}")
+    |> redirect(to: "/classes")
   end
 
   def student_lists(conn, params) do
@@ -430,8 +400,18 @@ defmodule SchoolWeb.StudentController do
       Repo.all(
         from(
           s in Student,
-          where: s.institution_id == ^conn.private.plug_session["institution_id"],
-          order_by: [asc: s.name]
+          left_join: c in StudentClass,
+          on: c.sudent_id == s.id,
+          where:
+            c.class_id == ^params["class_id"] and
+              c.semester_id == ^conn.private.plug_session["semester_id"] and
+              s.institution_id == ^conn.private.plug_session["institution_id"],
+          order_by: [asc: s.name],
+          select: %{
+            id: s.id,
+            name: s.name,
+            chinese_name: s.chinese_name
+          }
         )
       )
 
@@ -463,6 +443,7 @@ defmodule SchoolWeb.StudentController do
           on: c.sudent_id == s.id,
           where:
             c.class_id == ^params["class_id"] and
+              c.semester_id == ^conn.private.plug_session["semester_id"] and
               s.institution_id == ^conn.private.plug_session["institution_id"],
           order_by: [asc: s.name],
           select: %{
@@ -473,11 +454,11 @@ defmodule SchoolWeb.StudentController do
         )
       )
 
-    student_class = Repo.all(from(s in StudentClass, where: s.class_id == ^params["class_id"]))
-    level_id = hd(student_class).level_id
-    level = Repo.all(from(l in Level, where: l.id == ^level_id))
+    # student_class = Repo.all(from(s in StudentClass, where: s.class_id == ^params["class_id"]))
+    # level_id = hd(student_class).level_id
+    # level = Repo.all(from(l in Level, where: l.id == ^level_id))
 
-    render(conn, "height_weight.html", students: students, levels: level)
+    render(conn, "height_weight.html", students: students)
   end
 
   def new(conn, _params) do

@@ -191,11 +191,11 @@ defmodule SchoolWeb.Router do
 
     get("/submit_student_transfer", StudentController, :submit_student_transfer)
     get("/students_transfer", StudentController, :students_transfer)
-    get("/height_weight", StudentController, :height_weight)
+    get("/height_weight/:class_id", StudentController, :height_weight)
     get("/height_weight_class/:class_id", StudentController, :height_weight_class)
     get("/student_certificate", StudentController, :student_certificate)
     get("/student_lists/:user_id", StudentController, :student_lists)
-    get("/height_weight/:semester_id", StudentController, :height_weight_semester)
+    get("/height_weight_semester/:class_id", StudentController, :height_weight_semester)
     get("/edit_height_weight/:student_id/:semester_id", StudentController, :edit_height_weight)
     get("/submit_height_weight", StudentController, :submit_height_weight)
 
