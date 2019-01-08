@@ -41,7 +41,7 @@
 
     <tr align="center">
       <td><%= no+1 %></td>
-       <td><%= item.id %></td>
+       <td><%= item.id_no %></td>
         <%= if String.length(item.name) > 40 do %>
        <td align="left" style="font-size: 14px; width: auto; height: auto;" ><%=  item.name %></td>
         <% else %>
