@@ -303,7 +303,9 @@ defmodule SchoolWeb.ClassController do
         from(
           st in StudentClass,
           left_join: s in Student,
-          on: s.id == st.sudent_id,
+          on:
+            s.id == st.sudent_id and
+              s.institution_id == ^conn.private.plug_session["institution_id"],
           where:
             st.class_id == ^class_id and
               st.semester_id == ^conn.private.plug_session["semester_id"],
@@ -315,6 +317,32 @@ defmodule SchoolWeb.ClassController do
           order_by: [asc: s.name]
         )
       )
+
+    monitor =
+      Repo.all(
+        from(
+          st in StudentClass,
+          left_join: s in Student,
+          on:
+            s.id == st.sudent_id and
+              s.institution_id == ^conn.private.plug_session["institution_id"],
+          where:
+            st.class_id == ^class_id and
+              st.semester_id == ^conn.private.plug_session["semester_id"] and st.is_monitor == ^1,
+          select: %{
+            id: st.sudent_id,
+            name: s.name,
+            image_bin: s.image_bin
+          },
+          order_by: [asc: s.name]
+        )
+      )
+
+    monitor =
+      if monitor != [] do
+        monitor |> hd()
+      else
+      end
 
     subject_class =
       Repo.all(
@@ -332,6 +360,7 @@ defmodule SchoolWeb.ClassController do
     render(
       conn,
       "chosen_class_setting.html",
+      monitor: monitor,
       teacher: teacher,
       class: class,
       class_id: class_id,
@@ -340,6 +369,196 @@ defmodule SchoolWeb.ClassController do
       students: students,
       subject_class: subject_class
     )
+  end
+
+  def class_monitor(conn, params) do
+    students =
+      Repo.all(
+        from(
+          s in Student,
+          left_join: c in StudentClass,
+          on: c.sudent_id == s.id,
+          where:
+            c.class_id == ^params["class_id"] and
+              c.semester_id == ^conn.private.plug_session["semester_id"] and
+              s.institution_id == ^conn.private.plug_session["institution_id"],
+          order_by: [asc: s.name],
+          select: %{
+            id: s.id,
+            name: s.name,
+            chinese_name: s.chinese_name
+          }
+        )
+      )
+
+    class = Repo.get_by(Class, id: params["class_id"])
+
+    render(conn, "class_monitor.html",
+      class: class,
+      class_id: params["class_id"],
+      students: students
+    )
+  end
+
+  def create_monitor(conn, params) do
+    user = Repo.get_by(User, email: params["email"])
+
+    if user != nil do
+      conn
+      |> put_flash(:info, "User/Email already exist.")
+      |> redirect(to: "/class_monitor/#{params["class_id"]}")
+    else
+      password = params["password"]
+      crypted_password = Comeonin.Bcrypt.hashpwsalt(password)
+
+      class = Repo.get_by(Class, id: params["class_id"])
+
+      user_params = %{
+        email: params["email"],
+        name: params["name"],
+        password: params["password"],
+        crypted_password: crypted_password,
+        role: "Monitor",
+        is_librarian: false
+      }
+
+      case Settings.create_user(user_params) do
+        {:ok, user} ->
+          Settings.create_user_access(%{
+            institution_id: conn.private.plug_session["institution_id"],
+            user_id: user.id
+          })
+
+          student =
+            Repo.get_by(StudentClass,
+              sudent_id: params["student_id"],
+              class_id: params["class_id"],
+              semester_id: conn.private.plug_session["semester_id"],
+              institute_id: conn.private.plug_session["institution_id"]
+            )
+
+          if student != nil do
+            student_params = %{is_monitor: 1}
+
+            School.Affairs.update_student_class(student, student_params)
+          else
+          end
+
+          conn
+          |> put_flash(:info, "Monitor succesfully created.")
+          |> redirect(to: "/class_setting/#{params["class_id"]}")
+
+        {:error, user} ->
+          conn
+          |> put_flash(:info, "Having Problem in Creating a Teacher Login.")
+          |> redirect(to: "/class_monitor/#{params["class_id"]}")
+      end
+    end
+  end
+
+  def edit_monitor(conn, params) do
+    students =
+      Repo.all(
+        from(
+          s in Student,
+          left_join: c in StudentClass,
+          on: c.sudent_id == s.id,
+          where:
+            c.class_id == ^params["class_id"] and
+              c.semester_id == ^conn.private.plug_session["semester_id"] and
+              s.institution_id == ^conn.private.plug_session["institution_id"],
+          order_by: [asc: s.name],
+          select: %{
+            id: s.id,
+            name: s.name,
+            chinese_name: s.chinese_name
+          }
+        )
+      )
+
+    monitor =
+      Repo.all(
+        from(
+          st in StudentClass,
+          left_join: s in Student,
+          on:
+            s.id == st.sudent_id and
+              s.institution_id == ^conn.private.plug_session["institution_id"],
+          where:
+            st.class_id == ^params["class_id"] and
+              st.semester_id == ^conn.private.plug_session["semester_id"] and st.is_monitor == ^1,
+          select: %{
+            id: st.sudent_id,
+            name: s.name,
+            image_bin: s.image_bin
+          },
+          order_by: [asc: s.name]
+        )
+      )
+
+    monitor =
+      if monitor != [] do
+        monitor |> hd()
+      else
+      end
+
+    class = Repo.get_by(Class, id: params["class_id"])
+
+    email = class.name <> "@gmail.com"
+
+    user = Repo.get_by(User, email: email)
+
+    render(conn, "edit_monitor.html",
+      monitor: monitor,
+      class_id: params["class_id"],
+      students: students,
+      user: user,
+      email: email,
+      class: class
+    )
+  end
+
+  def generate_edit_monitor(conn, params) do
+    user = Repo.get_by(User, email: params["email"])
+
+    password = params["password"]
+    crypted_password = Comeonin.Bcrypt.hashpwsalt(password)
+
+    user_params = %{
+      name: params["name"],
+      password: params["password"],
+      crypted_password: crypted_password
+    }
+
+    Settings.update_user(user, user_params)
+
+    existing_monitor =
+      Repo.get_by(StudentClass,
+        is_monitor: 1,
+        class_id: params["class_id"],
+        semester_id: conn.private.plug_session["semester_id"],
+        institute_id: conn.private.plug_session["institution_id"]
+      )
+
+    student_existing_monitor = %{is_monitor: 0}
+
+    School.Affairs.update_student_class(existing_monitor, student_existing_monitor)
+
+    new_monitor =
+      Repo.get_by(StudentClass,
+        sudent_id: params["student_id"],
+        class_id: params["class_id"],
+        semester_id: conn.private.plug_session["semester_id"],
+        institute_id: conn.private.plug_session["institution_id"]
+      )
+
+    student_new_monitor = %{is_monitor: 1}
+
+    School.Affairs.update_student_class(new_monitor, student_new_monitor)
+
+    conn
+    |> put_flash(:info, "Monitor Updated Succesfully")
+    |> redirect(to: "/class_setting/#{params["class_id"]}")
   end
 
   def modify_timetable(conn, params) do

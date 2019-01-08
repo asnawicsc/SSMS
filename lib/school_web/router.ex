@@ -204,6 +204,16 @@ defmodule SchoolWeb.Router do
     get("/classes/enroll_students", ClassController, :enroll_students)
     resources("/classes", ClassController)
     get("/classes/:id/students", ClassController, :students)
+
+    post("/create_monitor", ClassController, :create_monitor)
+
+    get("/edit_monitor/:class_id", ClassController, :edit_monitor)
+
+    post("/edit_monitor", ClassController, :edit_monitor)
+
+    post("/generate_edit_monitor", ClassController, :generate_edit_monitor)
+
+    get("/class_monitor/:class_id", ClassController, :class_monitor)
     get("/classes/:id/sync_library_membership", ClassController, :sync_library_membership)
     get("/sync_library_membership_all", ClassController, :sync_library_membership_all)
     get("/add_to_class_semester", ClassController, :add_to_class_semester)
@@ -407,6 +417,7 @@ defmodule SchoolWeb.Router do
     get("/admin_dashboard", PageController, :admin_dashboard)
     get("/clerk_dashboard", PageController, :clerk_dashboard)
     get("/support_dashboard", PageController, :support_dashboard)
+    get("/monitor_dashboard", PageController, :monitor_dashboard)
     get("/login_teacher", TeacherController, :login_teacher)
     get("/create_teacher_login/:id", TeacherController, :create_teacher_login)
 

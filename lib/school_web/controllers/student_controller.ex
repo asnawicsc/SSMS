@@ -724,16 +724,22 @@ defmodule SchoolWeb.StudentController do
       Map.put(student_params, "institution_id", conn.private.plug_session["institution_id"])
 
     image_params = student_params["image1"]
-    result = upload_image(image_params, conn)
 
-    student_params = Map.put(student_params, "image_bin", result.bin)
-    student_params = Map.put(student_params, "image_filename", result.filename)
+    student_params =
+      if image_params != nil do
+        result = upload_image(image_params, conn)
+
+        student_params = Map.put(student_params, "image_bin", result.bin)
+        student_params = Map.put(student_params, "image_filename", result.filename)
+      else
+        student_params
+      end
 
     case Affairs.create_student(student_params) do
       {:ok, student} ->
         conn
         |> put_flash(:info, "Student created successfully.")
-        |> redirect(to: student_path(conn, :show, student))
+        |> redirect(to: student_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)

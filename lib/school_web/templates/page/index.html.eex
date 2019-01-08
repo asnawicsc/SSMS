@@ -113,6 +113,9 @@
               "Support" ->
                 Repo.all(from c in Affairs.Class, where: c.institution_id == ^@conn.private.plug_session["institution_id"]) 
 
+                 "Monitor" ->
+                Repo.all(from c in Affairs.Class, where: c.institution_id == ^@conn.private.plug_session["institution_id"]) 
+
               "Teacher" -> 
                 teacher = Repo.get_by(Affairs.Teacher,email: user.email) 
                 if teacher == nil do
@@ -124,6 +127,7 @@
                  "Clerk" ->
                 Repo.all(from c in Affairs.Class, where: c.institution_id == ^@conn.private.plug_session["institution_id"]) 
                 _ ->
+
                   []
              end 
 
@@ -273,6 +277,8 @@
                 Repo.all(from c in Affairs.Class, where: c.institution_id == ^@conn.private.plug_session["institution_id"]) 
 
               "Support" ->
+                Repo.all(from c in Affairs.Class, where: c.institution_id == ^@conn.private.plug_session["institution_id"]) 
+                 "Monitor" ->
                 Repo.all(from c in Affairs.Class, where: c.institution_id == ^@conn.private.plug_session["institution_id"]) 
 
               "Teacher" -> 

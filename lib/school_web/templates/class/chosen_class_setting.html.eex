@@ -37,8 +37,10 @@
                      <div class="tab-content p-0 b0">
                         <div class="tab-pane active" id="tabSetting1">
                            <div class="card b">
-                              <div class="card-header bg-gray-lighter text-bold">Class Info</div>
+                              <div class="card-header bg-gray-lighter text-bold">Class Info  </div>
                               <div class="card-body">
+
+
                                  <form action="#">
                                     <div class="form-group">
                                         Class Name:<br>
@@ -60,7 +62,17 @@
                                         Class Teacher:<br>
                                         <input type="text" name="teacher_name" disabled="" value="<%= @teacher %>">
                                     </div>
+                                    <div class="form-group">
+                                        Class Monitor:<br>
+                                      <%= if @monitor == nil do %>
+                                            <input type="text" name="monitor_name" disabled="" > 
+                                       <a href="/class_monitor/<%= @conn.params["class_id"]%>" id="how_to" >Create</a> <% else %>  
+                                         <input type="text" name="monitor_name" disabled="" value="<%= @monitor.name %>"> 
+                                       <a href="/edit_monitor/<%= @conn.params["class_id"]%> " id="how_to" >Edit</a><% end %>
+                                    </div>
                                  </form>
+
+
                               </div>
                            </div>
                         </div>

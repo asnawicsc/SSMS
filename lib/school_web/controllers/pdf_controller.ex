@@ -1500,7 +1500,7 @@ defmodule SchoolWeb.PdfController do
               s.semester_id == ^semester_id,
           select: %{
             id: s.sudent_id,
-            id_no: s.id,
+            id_no: r.student_no,
             chinese_name: r.chinese_name,
             name: r.name,
             sex: r.sex
@@ -1598,7 +1598,7 @@ defmodule SchoolWeb.PdfController do
               s.semester_id == ^semester_id,
           select: %{
             id: s.sudent_id,
-            id_no: s.id,
+            id_no: r.student_no,
             chinese_name: r.chinese_name,
             name: r.name,
             sex: r.sex,

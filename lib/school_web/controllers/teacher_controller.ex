@@ -404,10 +404,16 @@ defmodule SchoolWeb.TeacherController do
 
   def create(conn, %{"teacher" => teacher_params}) do
     image_params = teacher_params["image1"]
-    result = upload_image(image_params, conn)
 
-    teacher_params = Map.put(teacher_params, "image_bin", result.bin)
-    teacher_params = Map.put(teacher_params, "image_filename", result.filename)
+    teacher_params =
+      if image_params != nil do
+        result = upload_image(image_params, conn)
+
+        teacher_params = Map.put(teacher_params, "image_bin", result.bin)
+        teacher_params = Map.put(teacher_params, "image_filename", result.filename)
+      else
+        teacher_params
+      end
 
     teacher_params =
       Map.put(teacher_params, "institution_id", conn.private.plug_session["institution_id"])

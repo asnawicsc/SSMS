@@ -13,6 +13,12 @@ defmodule SchoolWeb.PageController do
         "Support" ->
           :support_dashboard
 
+        "Clerk" ->
+          :clerk_dashboard
+
+        "Monitor" ->
+          :monitor_dashboard
+
         "Admin" ->
           :admin_dashboard
 
@@ -364,6 +370,12 @@ defmodule SchoolWeb.PageController do
           "Support" ->
             "support_page.html"
 
+          "Clerk" ->
+            "clerk_page.html"
+
+          "Monitor" ->
+            "monitor_page.html"
+
           "Admin" ->
             "admin_page.html"
 
@@ -436,6 +448,40 @@ defmodule SchoolWeb.PageController do
       institution: institution,
       users: users,
       changeset: changeset
+    )
+  end
+
+  def monitor_dashboard(conn, params) do
+    user_id = conn.private.plug_session["user_id"]
+
+    user = Repo.get_by(User, id: user_id)
+
+    class = Repo.get_by(School.Affairs.Class, name: user.name)
+
+    subjects =
+      Repo.all(
+        from(
+          st in SubjectTeachClass,
+          left_join: c in Class,
+          on: st.class_id == c.id,
+          left_join: s in Subject,
+          on: st.subject_id == s.id,
+          where: c.id == ^class.id,
+          select: %{
+            description: s.description,
+            subject_id: s.id
+          }
+        )
+      )
+
+    IEx.pry()
+
+    render(
+      conn,
+      "monitor_page.html",
+      class_id: class.id,
+      class: class,
+      subjects: subjects
     )
   end
 
