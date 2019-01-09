@@ -22,6 +22,7 @@
                     <th></th>
                   <th>Name</th>
                   <th>B cert</th>
+                  <th>Student No</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -40,6 +41,9 @@
                     </td>
                     <td class="text-left">              
                         <div><%= student.b_cert  %></div>                 
+                    </td>
+                    <td class="text-left">              
+                        <div><%= student.student_no  %></div>                 
                     </td>
                   </tr>
                 <% end %>
