@@ -474,8 +474,6 @@ defmodule SchoolWeb.PageController do
         )
       )
 
-    IEx.pry()
-
     render(
       conn,
       "monitor_page.html",

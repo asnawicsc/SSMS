@@ -160,12 +160,14 @@ defmodule SchoolWeb.UserController do
               |> redirect(to: page_path(conn, :clerk_dashboard))
             else
               if user.role == "Monitor" do
+                class = Repo.get_by(School.Affairs.Class, name: user.name)
+
                 conn
                 |> put_session(:user_id, user.id)
                 |> put_session(:semester_id, current_sem.id)
                 |> put_session(:institution_id, access.institution_id)
                 |> put_session(:style, user.styles)
-                |> redirect(to: page_path(conn, :monitor_dashboard))
+                |> redirect(to: page_path(conn, :monitor_dashboard, class.id))
               else
                 conn
                 |> put_session(:user_id, user.id)

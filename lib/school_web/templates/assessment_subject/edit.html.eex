@@ -1,0 +1,5 @@
+<h2>Edit Assessment subject</h2>
+
+<%= render "form.html", Map.put(assigns, :action, assessment_subject_path(@conn, :update, @assessment_subject)) %>
+
+<span><%= link "Back", to: assessment_subject_path(@conn, :index) %></span>

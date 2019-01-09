@@ -1,0 +1,38 @@
+<h2>Listing Assessment mark</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Institution</th>
+      <th>Semester</th>
+      <th>Subject</th>
+      <th>Standard</th>
+      <th>Class</th>
+      <th>Student</th>
+      <th>Rules break</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for assessment_mark <- @assessment_mark do %>
+    <tr>
+      <td><%= assessment_mark.institution_id %></td>
+      <td><%= assessment_mark.semester_id %></td>
+      <td><%= assessment_mark.subject_id %></td>
+      <td><%= assessment_mark.standard_id %></td>
+      <td><%= assessment_mark.class_id %></td>
+      <td><%= assessment_mark.student_id %></td>
+      <td><%= assessment_mark.rules_break_id %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: assessment_mark_path(@conn, :show, assessment_mark), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: assessment_mark_path(@conn, :edit, assessment_mark), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: assessment_mark_path(@conn, :delete, assessment_mark), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Assessment mark", to: assessment_mark_path(@conn, :new) %></span>

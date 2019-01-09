@@ -163,10 +163,10 @@
                                  <!-- Name and Job-->
                                  <div class="user-block-info">
                                      
-                                              <a href="/user_info/<%= user_id %>" title="User Profile" style="text-decoration:none;display:block;">
+                                            
                                     <span class="user-block-name" >Hello, <%= user.name %> </span>
                                     <span class="user-block-role"><%= user.role %></span>
-                                    </a>
+                                
                               
 
                                  </div>

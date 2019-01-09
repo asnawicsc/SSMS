@@ -1,0 +1,44 @@
+<div class="content-heading">
+   <div>Exam List
+      <small><%= gettext("welcome")%>!</small>
+   </div>
+   <!-- START Language list-->
+   <div class="ml-auto">
+
+   </div>
+   <!-- END Language list-->
+</div>
+
+ <div class="card">
+
+               <div class="card-body">
+                  <div class="table-responsive bootgrid">
+                     <table class="table " id="datatable1">
+                        <thead>
+                           <tr>
+                      
+                              <th data-column-id="sender">Class</th>
+                              <th data-column-id="" data-order="desc">Subject</th>
+                              <th data-column-id="commands" data-formatter="commands" data-sortable="false">
+                                Action</div>
+                              </th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <%= for as <- @a |> Enum.sort do %>
+                           <tr>
+                            
+                              <td><%= as.class %></td>
+                              <td><%= as.subject %></td>
+                              <td>
+                          <a href="/generate_rules_break/<%= as.id %>/<%= as.class_id %>/<%= as.subject_id %>"> <button class="btn btn-labeled btn-info" type="button">
+                           <span class="btn-label"><i class="fas fa fa-arrow-right"></i></span>Marking</button></a>
+                           </tr>
+                          <% end %>
+                      
+                        </tbody>
+                     </table>
+                  </div>
+               </div>
+</div>  
+               

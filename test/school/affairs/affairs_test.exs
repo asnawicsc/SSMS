@@ -4066,4 +4066,206 @@ defmodule School.AffairsTest do
       assert %Ecto.Changeset{} = Affairs.change_teacher_attendance(teacher_attendance)
     end
   end
+
+  describe "rules_break" do
+    alias School.Affairs.RulesBreak
+
+    @valid_attrs %{institution_id: 42, level: 42, remark: "some remark"}
+    @update_attrs %{institution_id: 43, level: 43, remark: "some updated remark"}
+    @invalid_attrs %{institution_id: nil, level: nil, remark: nil}
+
+    def rules_break_fixture(attrs \\ %{}) do
+      {:ok, rules_break} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_rules_break()
+
+      rules_break
+    end
+
+    test "list_rules_break/0 returns all rules_break" do
+      rules_break = rules_break_fixture()
+      assert Affairs.list_rules_break() == [rules_break]
+    end
+
+    test "get_rules_break!/1 returns the rules_break with given id" do
+      rules_break = rules_break_fixture()
+      assert Affairs.get_rules_break!(rules_break.id) == rules_break
+    end
+
+    test "create_rules_break/1 with valid data creates a rules_break" do
+      assert {:ok, %RulesBreak{} = rules_break} = Affairs.create_rules_break(@valid_attrs)
+      assert rules_break.institution_id == 42
+      assert rules_break.level == 42
+      assert rules_break.remark == "some remark"
+    end
+
+    test "create_rules_break/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_rules_break(@invalid_attrs)
+    end
+
+    test "update_rules_break/2 with valid data updates the rules_break" do
+      rules_break = rules_break_fixture()
+      assert {:ok, rules_break} = Affairs.update_rules_break(rules_break, @update_attrs)
+      assert %RulesBreak{} = rules_break
+      assert rules_break.institution_id == 43
+      assert rules_break.level == 43
+      assert rules_break.remark == "some updated remark"
+    end
+
+    test "update_rules_break/2 with invalid data returns error changeset" do
+      rules_break = rules_break_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_rules_break(rules_break, @invalid_attrs)
+      assert rules_break == Affairs.get_rules_break!(rules_break.id)
+    end
+
+    test "delete_rules_break/1 deletes the rules_break" do
+      rules_break = rules_break_fixture()
+      assert {:ok, %RulesBreak{}} = Affairs.delete_rules_break(rules_break)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_rules_break!(rules_break.id) end
+    end
+
+    test "change_rules_break/1 returns a rules_break changeset" do
+      rules_break = rules_break_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_rules_break(rules_break)
+    end
+  end
+
+  describe "assessment_subject" do
+    alias School.Affairs.AssessmentSubject
+
+    @valid_attrs %{institution_id: 42, semester_id: 42, standard_id: 42, subject_id: 42}
+    @update_attrs %{institution_id: 43, semester_id: 43, standard_id: 43, subject_id: 43}
+    @invalid_attrs %{institution_id: nil, semester_id: nil, standard_id: nil, subject_id: nil}
+
+    def assessment_subject_fixture(attrs \\ %{}) do
+      {:ok, assessment_subject} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_assessment_subject()
+
+      assessment_subject
+    end
+
+    test "list_assessment_subject/0 returns all assessment_subject" do
+      assessment_subject = assessment_subject_fixture()
+      assert Affairs.list_assessment_subject() == [assessment_subject]
+    end
+
+    test "get_assessment_subject!/1 returns the assessment_subject with given id" do
+      assessment_subject = assessment_subject_fixture()
+      assert Affairs.get_assessment_subject!(assessment_subject.id) == assessment_subject
+    end
+
+    test "create_assessment_subject/1 with valid data creates a assessment_subject" do
+      assert {:ok, %AssessmentSubject{} = assessment_subject} = Affairs.create_assessment_subject(@valid_attrs)
+      assert assessment_subject.institution_id == 42
+      assert assessment_subject.semester_id == 42
+      assert assessment_subject.standard_id == 42
+      assert assessment_subject.subject_id == 42
+    end
+
+    test "create_assessment_subject/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_assessment_subject(@invalid_attrs)
+    end
+
+    test "update_assessment_subject/2 with valid data updates the assessment_subject" do
+      assessment_subject = assessment_subject_fixture()
+      assert {:ok, assessment_subject} = Affairs.update_assessment_subject(assessment_subject, @update_attrs)
+      assert %AssessmentSubject{} = assessment_subject
+      assert assessment_subject.institution_id == 43
+      assert assessment_subject.semester_id == 43
+      assert assessment_subject.standard_id == 43
+      assert assessment_subject.subject_id == 43
+    end
+
+    test "update_assessment_subject/2 with invalid data returns error changeset" do
+      assessment_subject = assessment_subject_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_assessment_subject(assessment_subject, @invalid_attrs)
+      assert assessment_subject == Affairs.get_assessment_subject!(assessment_subject.id)
+    end
+
+    test "delete_assessment_subject/1 deletes the assessment_subject" do
+      assessment_subject = assessment_subject_fixture()
+      assert {:ok, %AssessmentSubject{}} = Affairs.delete_assessment_subject(assessment_subject)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_assessment_subject!(assessment_subject.id) end
+    end
+
+    test "change_assessment_subject/1 returns a assessment_subject changeset" do
+      assessment_subject = assessment_subject_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_assessment_subject(assessment_subject)
+    end
+  end
+
+  describe "assessment_mark" do
+    alias School.Affairs.AssessmentMark
+
+    @valid_attrs %{class_id: 42, institution_id: 42, rules_break_id: 42, semester_id: 42, standard_id: 42, student_id: 42, subject_id: 42}
+    @update_attrs %{class_id: 43, institution_id: 43, rules_break_id: 43, semester_id: 43, standard_id: 43, student_id: 43, subject_id: 43}
+    @invalid_attrs %{class_id: nil, institution_id: nil, rules_break_id: nil, semester_id: nil, standard_id: nil, student_id: nil, subject_id: nil}
+
+    def assessment_mark_fixture(attrs \\ %{}) do
+      {:ok, assessment_mark} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_assessment_mark()
+
+      assessment_mark
+    end
+
+    test "list_assessment_mark/0 returns all assessment_mark" do
+      assessment_mark = assessment_mark_fixture()
+      assert Affairs.list_assessment_mark() == [assessment_mark]
+    end
+
+    test "get_assessment_mark!/1 returns the assessment_mark with given id" do
+      assessment_mark = assessment_mark_fixture()
+      assert Affairs.get_assessment_mark!(assessment_mark.id) == assessment_mark
+    end
+
+    test "create_assessment_mark/1 with valid data creates a assessment_mark" do
+      assert {:ok, %AssessmentMark{} = assessment_mark} = Affairs.create_assessment_mark(@valid_attrs)
+      assert assessment_mark.class_id == 42
+      assert assessment_mark.institution_id == 42
+      assert assessment_mark.rules_break_id == 42
+      assert assessment_mark.semester_id == 42
+      assert assessment_mark.standard_id == 42
+      assert assessment_mark.student_id == 42
+      assert assessment_mark.subject_id == 42
+    end
+
+    test "create_assessment_mark/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_assessment_mark(@invalid_attrs)
+    end
+
+    test "update_assessment_mark/2 with valid data updates the assessment_mark" do
+      assessment_mark = assessment_mark_fixture()
+      assert {:ok, assessment_mark} = Affairs.update_assessment_mark(assessment_mark, @update_attrs)
+      assert %AssessmentMark{} = assessment_mark
+      assert assessment_mark.class_id == 43
+      assert assessment_mark.institution_id == 43
+      assert assessment_mark.rules_break_id == 43
+      assert assessment_mark.semester_id == 43
+      assert assessment_mark.standard_id == 43
+      assert assessment_mark.student_id == 43
+      assert assessment_mark.subject_id == 43
+    end
+
+    test "update_assessment_mark/2 with invalid data returns error changeset" do
+      assessment_mark = assessment_mark_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_assessment_mark(assessment_mark, @invalid_attrs)
+      assert assessment_mark == Affairs.get_assessment_mark!(assessment_mark.id)
+    end
+
+    test "delete_assessment_mark/1 deletes the assessment_mark" do
+      assessment_mark = assessment_mark_fixture()
+      assert {:ok, %AssessmentMark{}} = Affairs.delete_assessment_mark(assessment_mark)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_assessment_mark!(assessment_mark.id) end
+    end
+
+    test "change_assessment_mark/1 returns a assessment_mark changeset" do
+      assessment_mark = assessment_mark_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_assessment_mark(assessment_mark)
+    end
+  end
 end

@@ -417,7 +417,7 @@ defmodule SchoolWeb.Router do
     get("/admin_dashboard", PageController, :admin_dashboard)
     get("/clerk_dashboard", PageController, :clerk_dashboard)
     get("/support_dashboard", PageController, :support_dashboard)
-    get("/monitor_dashboard", PageController, :monitor_dashboard)
+    get("/monitor_dashboard/:class_id", PageController, :monitor_dashboard)
     get("/login_teacher", TeacherController, :login_teacher)
     get("/create_teacher_login/:id", TeacherController, :create_teacher_login)
 
@@ -479,6 +479,24 @@ defmodule SchoolWeb.Router do
     get("/update_summary", EdisciplineController, :update_summary)
     get("/change_semester", UserController, :change_semester)
     post("/get_change_semester", UserController, :get_change_semester)
+
+    get("/default_rules_break", RulesBreakController, :default_rules_break)
+    resources("/rules_break", RulesBreakController)
+
+    resources("/assessment_subject", AssessmentSubjectController)
+
+    get("/generate_assessment_subject", AssessmentSubjectController, :generate_assessment_subject)
+    post("/create_assessment_subject", AssessmentSubjectController, :create_assessment_subject)
+
+    get("/assign_level", AssessmentSubjectController, :assign_level)
+
+    get(
+      "/generate_rules_break/:assessment_id/:class_id/:subject_id",
+      AssessmentSubjectController,
+      :generate_rules_break
+    )
+
+    resources("/assessment_mark", AssessmentMarkController)
 
     resources("/ehehomeworks", EhomeworkController)
     get("/ehomework/:class_id", EhomeworkController, :ehomework)

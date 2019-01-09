@@ -500,6 +500,28 @@
         </div>
       </div>
         <div class="col-lg-6">
+        <div class="card card-default mb-3">
+         
+           <div class="card-body">
+                 <em class="fa-2x mr-2 mb-3 fas fa-chalkboard-teacher"></em>
+                  <span style="font-weight: bolder;font-size: 17px;"><%= gettext("Assessment Management")%></span>
+                 <ol style="padding-left: 15px;">
+                    <li><p class="card-text"><%= gettext("Generate Rules Break")%></p></li>
+                    <li><p class="card-text"><%= gettext("Assessment Subject")%></p></li>
+
+                   
+                  </ol>
+              <a href ="/rules_break"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Rules Break</button></a>
+               <a href ="/assessment_subject"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List Assessment Subject</button></a>
+               <a href ="/generate_assessment_subject"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Generate Assessment Subject</button></a>
+                <a href ="/assign_level"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Assign Level</button></a>
+        
+           </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+       <div class="col-lg-6">
           <div class="card card-default mb-3">
     
              <div class="card-body">
@@ -543,6 +565,9 @@
                  <a href ="/list_class_comment"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Comments</button></a>
              </div>
           </div>
+        </div>
+        <div class="col-lg-6">
+         
         </div>
     </div>
    

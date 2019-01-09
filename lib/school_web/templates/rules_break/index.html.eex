@@ -1,0 +1,53 @@
+
+<div class="content-heading">
+   <div>Listing Rules break
+      <small><%= gettext("welcome")%>!</small>
+   </div>
+
+</div>
+
+
+<div class="row">
+
+   
+
+        <div class="col-lg-12">
+
+            <div class="card">
+
+                <div class="card-body">
+                  <p><a href="/default_rules_break">Used Default Rules Break</a></p>
+<table class="table" id="datatable1">
+  <thead>
+    <tr>
+
+      <th>Level</th>
+      <th>Remark</th>
+ 
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for rules_break <- @rules_break do %>
+    <tr>
+
+      <td><%= rules_break.level %></td>
+      <td><%= rules_break.remark %></td>
+
+    <td class="text-right">
+        <span><%= link "Show", to: rules_break_path(@conn, :show, rules_break), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: rules_break_path(@conn, :edit, rules_break), class: "btn btn-default btn-xs" %></span>
+       
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+</div>
+</div>
+</div>
+</div>
+
+<span><%= link "New Rules break", to: rules_break_path(@conn, :new) %></span>

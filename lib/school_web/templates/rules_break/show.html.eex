@@ -1,0 +1,20 @@
+<h2>Show Rules break</h2>
+
+<ul>
+
+
+
+  <li>
+    <strong>Level:</strong>
+    <%= @rules_break.level %>
+  </li>
+
+  <li>
+    <strong>Remark:</strong>
+    <%= @rules_break.remark %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: rules_break_path(@conn, :edit, @rules_break) %></span>
+<span><%= link "Back", to: rules_break_path(@conn, :index) %></span>

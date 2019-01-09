@@ -304,7 +304,8 @@ defmodule SchoolWeb.ExamController do
               left_join: s in School.Affairs.Class,
               on: s.level_id == m.level_id,
               where:
-                s.institution_id == ^conn.private.plug_session["institution_id"] and
+                m.semester_id == ^conn.private.plug_session["semester_id"] and
+                  s.institution_id == ^conn.private.plug_session["institution_id"] and
                   g.institution_id == ^conn.private.plug_session["institution_id"] and
                   q.institution_id == ^conn.private.plug_session["institution_id"] and
                   m.institution_id == ^conn.private.plug_session["institution_id"],
@@ -327,10 +328,14 @@ defmodule SchoolWeb.ExamController do
           Repo.all(
             from(
               p in School.Affairs.Period,
+              left_join: f in School.Affairs.Timetable,
+              on: p.timetable_id == f.id,
               left_join: s in School.Affairs.Class,
               on: s.id == p.class_id,
               where:
-                s.institution_id == ^conn.private.plug_session["institution_id"] and
+                f.institution_id == ^conn.private.plug_session["institution_id"] and
+                  f.semester_id == ^conn.private.plug_session["semester_id"] and
+                  s.institution_id == ^conn.private.plug_session["institution_id"] and
                   p.teacher_id == ^teacher.id,
               select: %{id: s.id, name: s.name}
             )
@@ -352,7 +357,8 @@ defmodule SchoolWeb.ExamController do
               left_join: h in School.Affairs.Period,
               on: h.subject_id == p.subject_id,
               where:
-                h.class_id == s.id and h.teacher_id == ^teacher.id and
+                m.semester_id == ^conn.private.plug_session["semester_id"] and h.class_id == s.id and
+                  h.teacher_id == ^teacher.id and
                   s.institution_id == ^conn.private.plug_session["institution_id"] and
                   g.institution_id == ^conn.private.plug_session["institution_id"] and
                   q.institution_id == ^conn.private.plug_session["institution_id"] and
