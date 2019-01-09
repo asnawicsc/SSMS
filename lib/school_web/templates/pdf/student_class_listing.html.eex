@@ -43,7 +43,7 @@
       <td><%= no+1 %></td>
        <td><%= item.id_no %></td>
         <%= if String.length(item.name) > 34 do %>
-       <td align="left" style="font-size: 13px; width: auto; height: auto;" ><%=  item.name %></td>
+       <td align="left" style="font-size: 10px; width: auto; height: auto;" ><%=  item.name %></td>
         <% else %>
         <td align="left" ><%=  item.name %></td>
        <% end  %>
