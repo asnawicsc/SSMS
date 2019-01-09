@@ -68,6 +68,12 @@ defmodule SchoolWeb.Router do
       :exam_result_analysis_class_standard
     )
 
+    post(
+      "/class_assessment",
+      PdfController,
+      :class_assessment
+    )
+
     get("/student_list_by_co", PdfController, :student_list_by_co)
 
     post("/height_weight_report_show", PdfController, :height_weight_report_show)
@@ -496,7 +502,17 @@ defmodule SchoolWeb.Router do
       :generate_rules_break
     )
 
+    post("/create_rules_break", AssessmentSubjectController, :create_rules_break)
+
+    post("/edit_rules_break", AssessmentSubjectController, :edit_rules_break)
+
     resources("/assessment_mark", AssessmentMarkController)
+
+    get(
+      "/assessment_report",
+      AssessmentMarkController,
+      :assessment_report
+    )
 
     resources("/ehehomeworks", EhomeworkController)
     get("/ehomework/:class_id", EhomeworkController, :ehomework)

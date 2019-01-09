@@ -1816,6 +1816,64 @@ defmodule SchoolWeb.PdfController do
     |> resp(200, pdf_binary)
   end
 
+  def class_assessment(conn, params) do
+    inst_id = conn.private.plug_session["institution_id"]
+    institution = Repo.get_by(School.Settings.Institution, id: inst_id)
+
+    mark =
+      Repo.all(
+        from(s in School.Affairs.AssessmentMark,
+          where:
+            s.institution_id == ^inst_id and s.class_id == ^params["class"] and
+              s.semester_id == ^params["semester"]
+        )
+      )
+      |> Enum.group_by(fn x -> x.student_id end)
+
+    semester =
+      Repo.get_by(School.Affairs.Semester,
+        id: params["semester"],
+        institution_id: conn.private.plug_session["institution_id"]
+      )
+
+    class = Repo.get_by(School.Affairs.Class, id: params["class"])
+
+    html =
+      Phoenix.View.render_to_string(
+        SchoolWeb.PdfView,
+        "student_assessment.html",
+        mark: mark,
+        class: class,
+        semester: semester,
+        institution: institution
+      )
+
+    pdf_params = %{"html" => html}
+
+    pdf_binary =
+      PdfGenerator.generate_binary!(
+        pdf_params["html"],
+        size: "A4",
+        shell_params: [
+          "--margin-left",
+          "5",
+          "--margin-right",
+          "5",
+          "--margin-top",
+          "5",
+          "--margin-bottom",
+          "5",
+          "--encoding",
+          "utf-8"
+        ],
+        delete_temporary: true
+      )
+
+    conn
+    |> put_resp_header("Content-Type", "application/pdf")
+    |> resp(200, pdf_binary)
+  end
+
   def teacher_listing(conn, params) do
     inst_id = conn.private.plug_session["institution_id"]
 

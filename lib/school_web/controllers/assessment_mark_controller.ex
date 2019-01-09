@@ -9,6 +9,19 @@ defmodule SchoolWeb.AssessmentMarkController do
     render(conn, "index.html", assessment_mark: assessment_mark)
   end
 
+  def assessment_report(conn, params) do
+    semesters =
+      Repo.all(from(s in Semester))
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
+    classes =
+      Repo.all(
+        from(c in Class, where: c.institution_id == ^conn.private.plug_session["institution_id"])
+      )
+
+    render(conn, "assessment_report.html", semesters: semesters, classes: classes)
+  end
+
   def new(conn, _params) do
     changeset = Affairs.change_assessment_mark(%AssessmentMark{})
     render(conn, "new.html", changeset: changeset)
@@ -20,6 +33,7 @@ defmodule SchoolWeb.AssessmentMarkController do
         conn
         |> put_flash(:info, "Assessment mark created successfully.")
         |> redirect(to: assessment_mark_path(conn, :show, assessment_mark))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
@@ -44,6 +58,7 @@ defmodule SchoolWeb.AssessmentMarkController do
         conn
         |> put_flash(:info, "Assessment mark updated successfully.")
         |> redirect(to: assessment_mark_path(conn, :show, assessment_mark))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", assessment_mark: assessment_mark, changeset: changeset)
     end

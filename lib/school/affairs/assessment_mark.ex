@@ -10,8 +10,8 @@ defmodule School.Affairs.AssessmentMark do
     field(:student_id, :integer)
     field(:subject_id, :integer)
     field(:assessment_subject_id, :integer)
-    field(:assessment_subject_level, :string)
-
+    field(:assessment_subject_level, :integer)
+    field(:assessment_subject_level_desc, :string)
     timestamps()
   end
 
@@ -26,7 +26,8 @@ defmodule School.Affairs.AssessmentMark do
       :class_id,
       :student_id,
       :assessment_subject_id,
-      :assessment_subject_level
+      :assessment_subject_level,
+      :assessment_subject_level_desc
     ])
     |> validate_required([
       :institution_id,
@@ -36,7 +37,8 @@ defmodule School.Affairs.AssessmentMark do
       :class_id,
       :student_id,
       :assessment_subject_id,
-      :assessment_subject_level
+      :assessment_subject_level,
+      :assessment_subject_level_desc
     ])
   end
 end

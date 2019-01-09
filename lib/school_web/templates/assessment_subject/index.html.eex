@@ -30,13 +30,19 @@
 <% standard = School.Repo.get_by(School.Affairs.Level,institution_id: @conn.private.plug_session["institution_id"],id: assessment_subject.standard_id) %>
     <tr>
      
-      <td> <%= if semester != nil , do: semester.start_date, else: "Unknown Semester" %></td>
+      <td> <%= if semester != nil do %> 
+       <%=  semester.start_date  %> - <%= semester.end_date %>
+       
+       <% else  %>
+        <%=  "Unknown Semester" %>
+          <% end %>
+        </td>
       <td> <%= if subject != nil , do: subject.description , else: "Unknown Subject" %></td>
       <td><%= if standard != nil , do: standard.name , else: "Unknown Standard" %></td>
 
       <td class="text-right">
        
-        <span><%= link "Show", to: assessment_subject_path(@conn, :show, assessment_subject), class: "btn btn-default btn-xs" %></span>
+        
         <span><%= link "Edit Rules Break", to: assessment_subject_path(@conn, :edit, assessment_subject), class: "btn btn-default btn-xs" %></span>
         <span><%= link "Delete", to: assessment_subject_path(@conn, :delete, assessment_subject), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
       </td>

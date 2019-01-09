@@ -1,5 +1,5 @@
 
-<form method="post" action="/create_rules_break" class="form-horizontal">
+<form method="post" action="/edit_rules_break" class="form-horizontal">
    <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
    <input type="hidden" name="class_id" value="<%= @class.id %>">
     <input type="hidden" name="subject_id" value="<%= @subject.id %>">
@@ -23,12 +23,15 @@
                                  </tr>
                               </thead>
                               <tbody>
-                                <%= for item <- @students|>Enum.sort_by(fn x -> x.id end) do %>
+                                <%= for item <- @exist|>Enum.sort_by(fn x -> x.student_id end) do %>
+                           <% student = Repo.get_by(Affairs.Student, id: item.student_id,institution_id: @conn.private.plug_session["institution_id"]) %>
                                  <tr>
-                                    <td><%= item.name %></td>
-                                    <td><%= item.chinese_name %></td>
-                                       <input type="hidden" name="student[<%= item.id %>]" value="<%= item.id %>">
-                                    <td><select class="form-control"  name="student[<%= item.id %>]"  required="" >
+                                    <td><%= student.name %></td>
+                                    <td><%= student.chinese_name %></td>
+                                       <input type="hidden" name="student[<%= item.student_id %>]" value="<%= item.id %>">
+                                    <td><select class="form-control"  name="student[<%= item.student_id %>]"  required="" >
+                                       <option value="<%= item.assessment_subject_level %>" selected="selected" >(Level <%= item.assessment_subject_level %>) <%= item.assessment_subject_level_desc %>
+                                            </option>
                            <%= for a <- @level|>Enum.uniq |> Enum.sort_by(fn x -> x.id end) do %>
                                             <option value="<%= a.id %>" >(Level <%= a.id %>) <%= a.desc %>
                                             </option>

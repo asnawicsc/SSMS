@@ -174,24 +174,6 @@ defmodule SchoolWeb.AssessmentSubjectController do
 
     subject = Repo.get_by(School.Affairs.Subject, id: subject_id)
 
-    students =
-      Repo.all(
-        from(
-          s in Student,
-          left_join: c in StudentClass,
-          on: c.sudent_id == s.id,
-          where:
-            c.class_id == ^class_id and c.semester_id == ^conn.private.plug_session["semester_id"] and
-              s.institution_id == ^conn.private.plug_session["institution_id"],
-          order_by: [asc: s.name],
-          select: %{
-            id: s.id,
-            name: s.name,
-            chinese_name: s.chinese_name
-          }
-        )
-      )
-
     level1 = assessment_subject.level1
     level2 = assessment_subject.level2
     level3 = assessment_subject.level3
@@ -208,168 +190,204 @@ defmodule SchoolWeb.AssessmentSubjectController do
       %{id: 6, desc: level6}
     ]
 
-    if students == [] do
-      conn
-      |> put_flash(:info, "No Student In the Class")
-      |> redirect(to: assessment_subject_path(conn, :assign_level))
+    exist =
+      Repo.all(
+        from(s in School.Affairs.AssessmentMark,
+          where:
+            s.class_id == ^class_id and
+              s.institution_id == ^conn.private.plug_session["institution_id"] and
+              s.semester_id == ^conn.private.plug_session["semester_id"] and
+              s.subject_id == ^subject_id and s.assessment_subject_id == ^assessment_id
+        )
+      )
+
+    if exist == [] do
+      students =
+        Repo.all(
+          from(
+            s in Student,
+            left_join: c in StudentClass,
+            on: c.sudent_id == s.id,
+            where:
+              c.class_id == ^class_id and
+                c.semester_id == ^conn.private.plug_session["semester_id"] and
+                s.institution_id == ^conn.private.plug_session["institution_id"],
+            order_by: [asc: s.name],
+            select: %{
+              id: s.id,
+              name: s.name,
+              chinese_name: s.chinese_name
+            }
+          )
+        )
+
+      if students == [] do
+        conn
+        |> put_flash(:info, "No Student In the Class")
+        |> redirect(to: assessment_subject_path(conn, :assign_level))
+      else
+        render(
+          conn,
+          "generate_rules_break.html",
+          students: students,
+          assessment_subject: assessment_subject,
+          class: class,
+          subject: subject,
+          level: level
+        )
+      end
     else
       render(
         conn,
-        "generate_rules_break.html",
-        students: students,
+        "edit_rules_break.html",
+        exist: exist,
         assessment_subject: assessment_subject,
         class: class,
         subject: subject,
         level: level
       )
     end
+  end
 
-    # exam = Repo.get_by(School.Affairs.Exam, %{id: exam_id, subject_id: subject_id})
-    # exam_master = Repo.get_by(School.Affairs.ExamMaster, id: exam.exam_master_id)
+  def create_rules_break(conn, params) do
+    assessment_subject_id = params["assessment_subject_id"]
+    class_id = params["class_id"]
+    subject_id = params["subject_id"]
 
-    # all =
-    #   Repo.all(
-    #     from(
-    #       s in School.Affairs.ExamMark,
-    #       where:
-    #         s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
-    #       select: %{
-    #         class_id: s.class_id,
-    #         subject_id: s.subject_id,
-    #         exam_id: s.exam_id,
-    #         student_id: s.student_id,
-    #         mark: s.mark
-    #       }
-    #     )
-    #   )
+    student = params["student"]
 
-    # if all == [] do
-    #   class =
-    #     Repo.get_by(School.Affairs.Class, %{
-    #       id: class_id,
-    #       institution_id: conn.private.plug_session["institution_id"]
-    #     })
+    for item <- student do
+      student_id = item |> elem(0)
+      level = item |> elem(1)
 
-    #   subject =
-    #     Repo.get_by(School.Affairs.Subject, %{
-    #       id: subject_id,
-    #       institution_id: conn.private.plug_session["institution_id"]
-    #     })
+      assessment_subject =
+        Repo.get_by(Affairs.AssessmentSubject,
+          id: assessment_subject_id,
+          institution_id: conn.private.plug_session["institution_id"]
+        )
 
-    #   verify =
-    #     Repo.all(
-    #       from(
-    #         s in School.Affairs.Period,
-    #         where: s.class_id == ^class.id and s.subject_id == ^subject.id,
-    #         select: %{teacher_id: s.teacher_id}
-    #       )
-    #     )
+      level1 = assessment_subject.level1
+      level2 = assessment_subject.level2
+      level3 = assessment_subject.level3
+      level4 = assessment_subject.level4
+      level5 = assessment_subject.level5
+      level6 = assessment_subject.level6
 
-    #   student =
-    #     Repo.all(
-    #       from(
-    #         s in School.Affairs.StudentClass,
-    #         left_join: p in Student,
-    #         on: p.id == s.sudent_id,
-    #         where:
-    #           s.class_id == ^class.id and
-    #             p.institution_id == ^conn.private.plug_session["institution_id"] and
-    #             s.semester_id == ^exam_master.semester_id,
-    #         select: %{id: p.id, student_name: p.name}
-    #       )
-    #     )
+      assessment_subject_level_desc =
+        case level do
+          "1" ->
+            level1
 
-    #   if student == [] do
-    #     conn
-    #     |> put_flash(:info, "No Student in the Class,Please Enroll Student to Class first.")
-    #     |> redirect(to: exam_path(conn, :mark_sheet))
-    #   else
-    #     render(
-    #       conn,
-    #       "mark.html",
-    #       all: all,
-    #       student: student,
-    #       class: class,
-    #       subject: subject,
-    #       exam_id: exam_id
-    #     )
-    #   end
-    # else
-    #   class =
-    #     Repo.get_by(School.Affairs.Class, %{
-    #       id: class_id,
-    #       institution_id: conn.private.plug_session["institution_id"]
-    #     })
+          "2" ->
+            level2
 
-    #   exam_id = params["id"]
+          "3" ->
+            level3
 
-    #   subject =
-    #     Repo.get_by(School.Affairs.Subject, %{
-    #       id: subject_id,
-    #       institution_id: conn.private.plug_session["institution_id"]
-    #     })
+          "4" ->
+            level4
 
-    #   # all_student=Repo.all(from s in School.Affairs.StudentClass,   
-    #   #   where: e.subject_id==^subject.id and s.class_id==^class.id and e.exam_id==^exam_id and e.student_id != s.sudent_id,
-    #   #   select: %{
-    #   #     name: s.sudent_id,
-    #   #     mark: e.mark
-    #   #     })
-    #   t =
-    #     Repo.all(
-    #       from(
-    #         s in School.Affairs.StudentClass,
-    #         left_join: p in Student,
-    #         on: p.id == s.sudent_id,
-    #         where:
-    #           s.class_id == ^class.id and
-    #             p.institution_id == ^conn.private.plug_session["institution_id"] and
-    #             s.semester_id == ^exam_master.semester_id,
-    #         select: %{id: p.id, student_name: p.name}
-    #       )
-    #     )
+          "5" ->
+            level5
 
-    #   fi =
-    #     for item <- t do
-    #       a = Enum.filter(all, fn x -> x.student_id == item.id end)
+          "6" ->
+            level6
+        end
 
-    #       if a == [] do
-    #         %{
-    #           class_id: class_id,
-    #           exam_id: exam_id,
-    #           student_id: item.id,
-    #           subject_id: subject_id,
-    #           student_name: item.student_name,
-    #           mark: 0
-    #         }
-    #       else
-    #       end
-    #     end
-    #     |> Enum.filter(fn x -> x != nil end)
+      assessment_mark_params = %{
+        class_id: String.to_integer(class_id),
+        institution_id: conn.private.plug_session["institution_id"],
+        semester_id: conn.private.plug_session["semester_id"],
+        standard_id: assessment_subject.standard_id,
+        subject_id: String.to_integer(subject_id),
+        assessment_subject_id: String.to_integer(assessment_subject_id),
+        student_id: String.to_integer(student_id),
+        assessment_subject_level: String.to_integer(level),
+        assessment_subject_level_desc: assessment_subject_level_desc
+      }
 
-    #   # csrf = Phoenix.Controller.get_csrf_token()
+      Affairs.create_assessment_mark(assessment_mark_params)
+    end
 
-    #   # {Phoenix.View.render_to_string(
-    #   #    SchoolWeb.ExamView,
-    #   #    "edit_mark.html",
-    #   #    all: all,
-    #   #    fi: fi,
-    #   #    class: class,
-    #   #    exam_id: exam_id,
-    #   #    subject: subject,
+    conn
+    |> put_flash(:info, "Assessment mark created successfully.")
+    |> redirect(to: assessment_subject_path(conn, :assign_level))
+  end
 
-    #   #  )}
+  def edit_rules_break(conn, params) do
+    assessment_subject_id = params["assessment_subject_id"]
+    class_id = params["class_id"]
+    subject_id = params["subject_id"]
 
-    #   render(
-    #     conn,
-    #     "edit_mark.html",
-    #     all: all,
-    #     fi: fi,
-    #     class: class,
-    #     exam_id: exam_id,
-    #     subject: subject
-    #   )
-    # end
+    student = params["student"]
+
+    for item <- student do
+      student_id = item |> elem(0)
+      level = item |> elem(1)
+
+      assessment_subject =
+        Repo.get_by(Affairs.AssessmentSubject,
+          id: assessment_subject_id,
+          institution_id: conn.private.plug_session["institution_id"]
+        )
+
+      level1 = assessment_subject.level1
+      level2 = assessment_subject.level2
+      level3 = assessment_subject.level3
+      level4 = assessment_subject.level4
+      level5 = assessment_subject.level5
+      level6 = assessment_subject.level6
+
+      assessment_subject_level_desc =
+        case level do
+          "1" ->
+            level1
+
+          "2" ->
+            level2
+
+          "3" ->
+            level3
+
+          "4" ->
+            level4
+
+          "5" ->
+            level5
+
+          "6" ->
+            level6
+        end
+
+      assessment_mark =
+        Repo.get_by(Affairs.AssessmentMark,
+          class_id: String.to_integer(class_id),
+          institution_id: conn.private.plug_session["institution_id"],
+          semester_id: conn.private.plug_session["semester_id"],
+          standard_id: assessment_subject.standard_id,
+          subject_id: String.to_integer(subject_id),
+          assessment_subject_id: String.to_integer(assessment_subject_id),
+          student_id: String.to_integer(student_id)
+        )
+
+      assessment_mark_params = %{
+        class_id: String.to_integer(class_id),
+        institution_id: conn.private.plug_session["institution_id"],
+        semester_id: conn.private.plug_session["semester_id"],
+        standard_id: assessment_subject.standard_id,
+        subject_id: String.to_integer(subject_id),
+        assessment_subject_id: String.to_integer(assessment_subject_id),
+        student_id: String.to_integer(student_id),
+        assessment_subject_level: String.to_integer(level),
+        assessment_subject_level_desc: assessment_subject_level_desc
+      }
+
+      Affairs.update_assessment_mark(assessment_mark, assessment_mark_params)
+    end
+
+    conn
+    |> put_flash(:info, "Assessment mark updated successfully.")
+    |> redirect(to: assessment_subject_path(conn, :assign_level))
   end
 
   def new(conn, _params) do

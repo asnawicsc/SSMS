@@ -1,4 +1,15 @@
-<h2>Edit Assessment subject</h2>
+
+
+<div class="content-heading">
+   <div>Edit Assessment subject
+      <small><%= gettext("welcome")%>!</small>
+   </div>
+   <!-- START Language list-->
+   <div class="ml-auto">
+
+   </div>
+   <!-- END Language list-->
+</div>
 
 <%= render "form.html", Map.put(assigns, :action, assessment_subject_path(@conn, :update, @assessment_subject)) %>
 
