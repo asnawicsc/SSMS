@@ -32,9 +32,14 @@
     <%= @assessment_mark.student_id %>
   </li>
 
+   <li>
+    <strong>Assesment ID</strong>
+    <%= @assessment_mark.assessment_subject_id %>
+  </li>
+
   <li>
-    <strong>Rules break:</strong>
-    <%= @assessment_mark.rules_break_id %>
+    <strong>Level</strong>
+    <%= @assessment_mark.assessment_subject_level %>
   </li>
 
 </ul>

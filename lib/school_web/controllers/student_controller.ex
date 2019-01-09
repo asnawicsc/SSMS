@@ -910,7 +910,15 @@ defmodule SchoolWeb.StudentController do
         end
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html", student: student, changeset: changeset)
+        errors = changeset.errors |> Keyword.keys()
+
+        {reason, message} = changeset.errors |> hd()
+        {proper_message, message_list} = message
+        final_reason = Atom.to_string(reason) <> " " <> proper_message
+
+        conn
+        |> put_flash(:info, final_reason)
+        |> redirect(to: student_path(conn, :index))
     end
   end
 

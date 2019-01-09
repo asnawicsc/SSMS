@@ -42,9 +42,15 @@
   </div>
 
   <div class="form-group">
-    <%= label f, :rules_break_id, class: "control-label" %>
-    <%= number_input f, :rules_break_id, class: "form-control" %>
-    <%= error_tag f, :rules_break_id %>
+    <%= label f, :assessment_subject_id, class: "control-label" %>
+    <%= number_input f, :assessment_subject_level, class: "form-control" %>
+    <%= error_tag f, :assessment_subject_level %>
+  </div>
+
+   <div class="form-group">
+    <%= label f, :assessment_subject_level, class: "control-label" %>
+    <%= text_input f, :assessment_subject_level, class: "form-control" %>
+    <%= error_tag f, :assessment_subject_level %>
   </div>
 
   <div class="form-group">

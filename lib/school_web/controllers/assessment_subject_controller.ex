@@ -93,8 +93,8 @@ defmodule SchoolWeb.AssessmentSubjectController do
                   p.semester_id == ^conn.private.plug_session["semester_id"],
               select: %{
                 id: p.id,
-                subject_id: g.subject_id,
-                class_id: g.class_id,
+                subject_id: g.id,
+                class_id: s.id,
                 class: s.name,
                 subject: g.description
               }
@@ -168,7 +168,61 @@ defmodule SchoolWeb.AssessmentSubjectController do
     class_id = params["class_id"]
     assessment_id = params["assessment_id"]
 
-    IEx.pry()
+    assessment_subject = Repo.get_by(School.Affairs.AssessmentSubject, id: assessment_id)
+
+    class = Repo.get_by(School.Affairs.Class, id: class_id)
+
+    subject = Repo.get_by(School.Affairs.Subject, id: subject_id)
+
+    students =
+      Repo.all(
+        from(
+          s in Student,
+          left_join: c in StudentClass,
+          on: c.sudent_id == s.id,
+          where:
+            c.class_id == ^class_id and c.semester_id == ^conn.private.plug_session["semester_id"] and
+              s.institution_id == ^conn.private.plug_session["institution_id"],
+          order_by: [asc: s.name],
+          select: %{
+            id: s.id,
+            name: s.name,
+            chinese_name: s.chinese_name
+          }
+        )
+      )
+
+    level1 = assessment_subject.level1
+    level2 = assessment_subject.level2
+    level3 = assessment_subject.level3
+    level4 = assessment_subject.level4
+    level5 = assessment_subject.level5
+    level6 = assessment_subject.level6
+
+    level = [
+      %{id: 1, desc: level1},
+      %{id: 2, desc: level2},
+      %{id: 3, desc: level3},
+      %{id: 4, desc: level4},
+      %{id: 5, desc: level5},
+      %{id: 6, desc: level6}
+    ]
+
+    if students == [] do
+      conn
+      |> put_flash(:info, "No Student In the Class")
+      |> redirect(to: assessment_subject_path(conn, :assign_level))
+    else
+      render(
+        conn,
+        "generate_rules_break.html",
+        students: students,
+        assessment_subject: assessment_subject,
+        class: class,
+        subject: subject,
+        level: level
+      )
+    end
 
     # exam = Repo.get_by(School.Affairs.Exam, %{id: exam_id, subject_id: subject_id})
     # exam_master = Repo.get_by(School.Affairs.ExamMaster, id: exam.exam_master_id)
