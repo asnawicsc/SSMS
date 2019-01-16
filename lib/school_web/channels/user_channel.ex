@@ -1118,30 +1118,57 @@ defmodule SchoolWeb.UserChannel do
     semester_id = payload["semester_id"]
 
     all =
-      Repo.all(
-        from(
-          s in School.Affairs.StudentClass,
-          left_join: g in School.Affairs.Class,
-          on: s.class_id == g.id,
-          left_join: r in School.Affairs.Student,
-          on: r.id == s.sudent_id,
-          where: s.class_id == ^class_id and s.semester_id == ^semester_id,
-          select: %{
-            id: r.id,
-            id_no: r.student_no,
-            chinese_name: r.chinese_name,
-            name: r.name,
-            sex: r.sex,
-            dob: r.dob,
-            pob: r.pob,
-            b_cert: r.b_cert,
-            religion: r.religion,
-            race: r.race
-          },
-          order_by: [desc: r.sex, asc: r.name]
+      if class_id != "ALL" do
+        Repo.all(
+          from(
+            s in School.Affairs.StudentClass,
+            left_join: g in School.Affairs.Class,
+            on: s.class_id == g.id,
+            left_join: r in School.Affairs.Student,
+            on: r.id == s.sudent_id,
+            where: s.class_id == ^class_id and s.semester_id == ^semester_id,
+            select: %{
+              id: r.id,
+              id_no: r.student_no,
+              chinese_name: r.chinese_name,
+              name: r.name,
+              sex: r.sex,
+              dob: r.dob,
+              pob: r.pob,
+              b_cert: r.b_cert,
+              religion: r.religion,
+              race: r.race
+            },
+            order_by: [desc: r.sex, asc: r.name]
+          )
         )
-      )
-      |> Enum.with_index()
+        |> Enum.with_index()
+      else
+        Repo.all(
+          from(
+            s in School.Affairs.StudentClass,
+            left_join: g in School.Affairs.Class,
+            on: s.class_id == g.id,
+            left_join: r in School.Affairs.Student,
+            on: r.id == s.sudent_id,
+            where: s.semester_id == ^semester_id,
+            select: %{
+              id: r.id,
+              id_no: r.student_no,
+              chinese_name: r.chinese_name,
+              name: r.name,
+              sex: r.sex,
+              dob: r.dob,
+              pob: r.pob,
+              b_cert: r.b_cert,
+              religion: r.religion,
+              race: r.race
+            },
+            order_by: [desc: r.sex, asc: r.name]
+          )
+        )
+        |> Enum.with_index()
+      end
 
     html =
       if all != [] do
