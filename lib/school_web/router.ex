@@ -514,6 +514,34 @@ defmodule SchoolWeb.Router do
       :assessment_report
     )
 
+    resources("/mark_sheet_history", MarkSheetHistoryController)
+
+    get(
+      "/history_report_card",
+      ExamController,
+      :history_report_card
+    )
+
+    post(
+      "/pre_upload_mark_sheet_history",
+      MarkSheetHistorysController,
+      :pre_upload_mark_sheet_history
+    )
+
+    post(
+      "/upload_mark_sheet_history",
+      MarkSheetHistorysController,
+      :upload_mark_sheet_history
+    )
+
+    resources("/mark_sheet_historys", MarkSheetHistorysController)
+
+    post(
+      "/history_report_card_class",
+      MarkSheetHistorysController,
+      :history_report_card_class
+    )
+
     resources("/ehehomeworks", EhomeworkController)
     get("/ehomework/:class_id", EhomeworkController, :ehomework)
     get("/show_ehomework_calendar/class/:class_id", EhomeworkController, :show_ehomework_calendar)

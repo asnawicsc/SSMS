@@ -5536,4 +5536,196 @@ defmodule School.Affairs do
   def change_assessment_mark(%AssessmentMark{} = assessment_mark) do
     AssessmentMark.changeset(assessment_mark, %{})
   end
+
+  alias School.Affairs.MarkSheetHistory
+
+  @doc """
+  Returns the list of mark_sheet_history.
+
+  ## Examples
+
+      iex> list_mark_sheet_history()
+      [%MarkSheetHistory{}, ...]
+
+  """
+  def list_mark_sheet_history do
+    Repo.all(MarkSheetHistory)
+  end
+
+  @doc """
+  Gets a single mark_sheet_history.
+
+  Raises `Ecto.NoResultsError` if the Mark sheet history does not exist.
+
+  ## Examples
+
+      iex> get_mark_sheet_history!(123)
+      %MarkSheetHistory{}
+
+      iex> get_mark_sheet_history!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_mark_sheet_history!(id), do: Repo.get!(MarkSheetHistory, id)
+
+  @doc """
+  Creates a mark_sheet_history.
+
+  ## Examples
+
+      iex> create_mark_sheet_history(%{field: value})
+      {:ok, %MarkSheetHistory{}}
+
+      iex> create_mark_sheet_history(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_mark_sheet_history(attrs \\ %{}) do
+    %MarkSheetHistory{}
+    |> MarkSheetHistory.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a mark_sheet_history.
+
+  ## Examples
+
+      iex> update_mark_sheet_history(mark_sheet_history, %{field: new_value})
+      {:ok, %MarkSheetHistory{}}
+
+      iex> update_mark_sheet_history(mark_sheet_history, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_mark_sheet_history(%MarkSheetHistory{} = mark_sheet_history, attrs) do
+    mark_sheet_history
+    |> MarkSheetHistory.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a MarkSheetHistory.
+
+  ## Examples
+
+      iex> delete_mark_sheet_history(mark_sheet_history)
+      {:ok, %MarkSheetHistory{}}
+
+      iex> delete_mark_sheet_history(mark_sheet_history)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_mark_sheet_history(%MarkSheetHistory{} = mark_sheet_history) do
+    Repo.delete(mark_sheet_history)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking mark_sheet_history changes.
+
+  ## Examples
+
+      iex> change_mark_sheet_history(mark_sheet_history)
+      %Ecto.Changeset{source: %MarkSheetHistory{}}
+
+  """
+  def change_mark_sheet_history(%MarkSheetHistory{} = mark_sheet_history) do
+    MarkSheetHistory.changeset(mark_sheet_history, %{})
+  end
+
+  alias School.Affairs.MarkSheetHistorys
+
+  @doc """
+  Returns the list of mark_sheet_historys.
+
+  ## Examples
+
+      iex> list_mark_sheet_historys()
+      [%MarkSheetHistorys{}, ...]
+
+  """
+  def list_mark_sheet_historys do
+    Repo.all(MarkSheetHistorys)
+  end
+
+  @doc """
+  Gets a single mark_sheet_historys.
+
+  Raises `Ecto.NoResultsError` if the Mark sheet historys does not exist.
+
+  ## Examples
+
+      iex> get_mark_sheet_historys!(123)
+      %MarkSheetHistorys{}
+
+      iex> get_mark_sheet_historys!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_mark_sheet_historys!(id), do: Repo.get!(MarkSheetHistorys, id)
+
+  @doc """
+  Creates a mark_sheet_historys.
+
+  ## Examples
+
+      iex> create_mark_sheet_historys(%{field: value})
+      {:ok, %MarkSheetHistorys{}}
+
+      iex> create_mark_sheet_historys(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_mark_sheet_historys(attrs \\ %{}) do
+    %MarkSheetHistorys{}
+    |> MarkSheetHistorys.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a mark_sheet_historys.
+
+  ## Examples
+
+      iex> update_mark_sheet_historys(mark_sheet_historys, %{field: new_value})
+      {:ok, %MarkSheetHistorys{}}
+
+      iex> update_mark_sheet_historys(mark_sheet_historys, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_mark_sheet_historys(%MarkSheetHistorys{} = mark_sheet_historys, attrs) do
+    mark_sheet_historys
+    |> MarkSheetHistorys.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a MarkSheetHistorys.
+
+  ## Examples
+
+      iex> delete_mark_sheet_historys(mark_sheet_historys)
+      {:ok, %MarkSheetHistorys{}}
+
+      iex> delete_mark_sheet_historys(mark_sheet_historys)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_mark_sheet_historys(%MarkSheetHistorys{} = mark_sheet_historys) do
+    Repo.delete(mark_sheet_historys)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking mark_sheet_historys changes.
+
+  ## Examples
+
+      iex> change_mark_sheet_historys(mark_sheet_historys)
+      %Ecto.Changeset{source: %MarkSheetHistorys{}}
+
+  """
+  def change_mark_sheet_historys(%MarkSheetHistorys{} = mark_sheet_historys) do
+    MarkSheetHistorys.changeset(mark_sheet_historys, %{})
+  end
 end

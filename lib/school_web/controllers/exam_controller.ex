@@ -1969,4 +1969,31 @@ defmodule SchoolWeb.ExamController do
     |> put_flash(:info, "Exam deleted successfully.")
     |> redirect(to: exam_path(conn, :index))
   end
+
+  def history_report_card(conn, params) do
+    all =
+      Repo.all(
+        from(s in Affairs.MarkSheetHistorys,
+          where: s.institution_id == ^conn.private.plug_session["institution_id"],
+          select: %{year: s.year, class: s.class}
+        )
+      )
+
+    year =
+      all
+      |> Enum.map(fn x -> x.year end)
+      |> Enum.uniq()
+      |> Enum.filter(fn x -> x != nil end)
+
+    class_name =
+      all
+      |> Enum.map(fn x -> x.class end)
+      |> Enum.uniq()
+      |> Enum.filter(fn x -> x != nil end)
+
+    render(conn, "history_report_card.html",
+      year: year,
+      class_name: class_name
+    )
+  end
 end

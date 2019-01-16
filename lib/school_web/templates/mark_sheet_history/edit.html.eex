@@ -1,0 +1,5 @@
+<h2>Edit Mark sheet history</h2>
+
+<%= render "form.html", Map.put(assigns, :action, mark_sheet_history_path(@conn, :update, @mark_sheet_history)) %>
+
+<span><%= link "Back", to: mark_sheet_history_path(@conn, :index) %></span>

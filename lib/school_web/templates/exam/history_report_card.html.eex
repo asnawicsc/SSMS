@@ -1,0 +1,125 @@
+<div class="content-heading">
+    <div>List History Report Card
+        <small><%= gettext("welcome")%>!</small>
+    </div>
+    <!-- START Language list-->
+    <div class="ml-auto">
+
+    </div>
+    <!-- END Language list-->
+</div>
+
+<div class="row">
+
+    <%= render( SchoolWeb.ExamView ,"history_report_nav.html",conn: @conn) %>
+
+       <div class="col-lg-6">
+
+            <div class="card">
+
+                <div class="card-body">
+                    <div aria-label="project_nilam">
+                        <div class="content">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="card ">
+
+                                            <div class="card-header ">
+                                            	 <form method="post" action="/history_report_card_class">
+                                                <div class="row">
+
+                                                   
+                                                        <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+                                                   
+                                                    <div id="gne" class="form-group col-md-3">
+                                                      <label class="bmd-label-floating"><%= gettext "Year" %></label>
+                                                        <select class="custom-select -custom-select-sm"  required="required" name="year">
+                                                              <option selected="">Choose a year</option>
+                           <%= for a <- @year |> Enum.sort do %>
+                                            <option value="<%= a %>" ><%= a %>
+                                            </option>
+                                          <% end %>
+                                        </select>
+
+                                                    </div>
+
+                   
+
+                                                                                      <div id="gne" class="form-group col-md-3">
+                                                      <label class="bmd-label-floating"><%= gettext "Class Name" %></label>
+                                                        <select class="custom-select -custom-select-sm"  required="required" name="class_name">
+                                                              <option selected="">Choose a class</option>
+                           <%= for a <- @class_name |> Enum.sort do %>
+                                            <option value="<%= a %>" ><%= a %>
+                                            </option>
+                                          <% end %>
+                                        </select>
+                                        
+                                                    </div>
+
+
+                                     <div id="gne" class="form-group col-md-3">
+                                                    
+                                              <input class="btn btn-primary" name="" value="Create" type="submit" style="margin-top: 27px;">       
+                                        
+                                                    </div>
+
+
+                                                    
+
+                                                    </div>
+
+                                               </form>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+            
+          </div>
+
+
+
+            <div class="col-lg-3" aria-label="student_upload">
+          <div class="card card-default d-none d-lg-block">
+            <div class="card-body">
+          <p class="lead">Upload Report Card History</p> 
+            <div class="row" style="margin-top: 10px;">
+                <div class="col-lg-12">
+                  <div class="panel">
+                    <div class="panel-heading">Bulk Upload</div>
+                    <div class="panel-body">
+                      <%= form_for @conn, mark_sheet_historys_path(@conn, :pre_upload_mark_sheet_history), [as: :item, multipart: true], fn f -> %>
+
+                          <%= label f, "", class: "control-label" %>
+                          <%= file_input f, :file, accept: ".csv"%>
+                          <%= error_tag f, :file %>
+
+                        <div class="form-group">
+                          <br>
+                          <%= submit "Submit", class: "btn btn-primary" %>
+                        </div>
+                      <% end %>
+
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+</div>
+

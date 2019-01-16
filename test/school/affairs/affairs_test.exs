@@ -4268,4 +4268,224 @@ defmodule School.AffairsTest do
       assert %Ecto.Changeset{} = Affairs.change_assessment_mark(assessment_mark)
     end
   end
+
+  describe "mark_sheet_history" do
+    alias School.Affairs.MarkSheetHistory
+
+    @valid_attrs %{cdesc: "some cdesc", class: "some class", cname: "some cname", description: "some description", institution_id: 42, name: "some name", s1g: "some s1g", s1m: "some s1m", s2g: "some s2g", s2m: "some s2m", s3g: "some s3g", stuid: "some stuid", subject: "some subject", t1g: "some t1g", t1m: "some t1m", t2g: "some t2g", t2m: "some t2m", t3g: "some t3g", t3m: "some t3m", t4g: "some t4g", t4m: "some t4m", t5g: "some t5g", t5m: "some t5m", t6g: "some t6g", t6m: "some t6m", year: "some year"}
+    @update_attrs %{cdesc: "some updated cdesc", class: "some updated class", cname: "some updated cname", description: "some updated description", institution_id: 43, name: "some updated name", s1g: "some updated s1g", s1m: "some updated s1m", s2g: "some updated s2g", s2m: "some updated s2m", s3g: "some updated s3g", stuid: "some updated stuid", subject: "some updated subject", t1g: "some updated t1g", t1m: "some updated t1m", t2g: "some updated t2g", t2m: "some updated t2m", t3g: "some updated t3g", t3m: "some updated t3m", t4g: "some updated t4g", t4m: "some updated t4m", t5g: "some updated t5g", t5m: "some updated t5m", t6g: "some updated t6g", t6m: "some updated t6m", year: "some updated year"}
+    @invalid_attrs %{cdesc: nil, class: nil, cname: nil, description: nil, institution_id: nil, name: nil, s1g: nil, s1m: nil, s2g: nil, s2m: nil, s3g: nil, stuid: nil, subject: nil, t1g: nil, t1m: nil, t2g: nil, t2m: nil, t3g: nil, t3m: nil, t4g: nil, t4m: nil, t5g: nil, t5m: nil, t6g: nil, t6m: nil, year: nil}
+
+    def mark_sheet_history_fixture(attrs \\ %{}) do
+      {:ok, mark_sheet_history} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_mark_sheet_history()
+
+      mark_sheet_history
+    end
+
+    test "list_mark_sheet_history/0 returns all mark_sheet_history" do
+      mark_sheet_history = mark_sheet_history_fixture()
+      assert Affairs.list_mark_sheet_history() == [mark_sheet_history]
+    end
+
+    test "get_mark_sheet_history!/1 returns the mark_sheet_history with given id" do
+      mark_sheet_history = mark_sheet_history_fixture()
+      assert Affairs.get_mark_sheet_history!(mark_sheet_history.id) == mark_sheet_history
+    end
+
+    test "create_mark_sheet_history/1 with valid data creates a mark_sheet_history" do
+      assert {:ok, %MarkSheetHistory{} = mark_sheet_history} = Affairs.create_mark_sheet_history(@valid_attrs)
+      assert mark_sheet_history.cdesc == "some cdesc"
+      assert mark_sheet_history.class == "some class"
+      assert mark_sheet_history.cname == "some cname"
+      assert mark_sheet_history.description == "some description"
+      assert mark_sheet_history.institution_id == 42
+      assert mark_sheet_history.name == "some name"
+      assert mark_sheet_history.s1g == "some s1g"
+      assert mark_sheet_history.s1m == "some s1m"
+      assert mark_sheet_history.s2g == "some s2g"
+      assert mark_sheet_history.s2m == "some s2m"
+      assert mark_sheet_history.s3g == "some s3g"
+      assert mark_sheet_history.stuid == "some stuid"
+      assert mark_sheet_history.subject == "some subject"
+      assert mark_sheet_history.t1g == "some t1g"
+      assert mark_sheet_history.t1m == "some t1m"
+      assert mark_sheet_history.t2g == "some t2g"
+      assert mark_sheet_history.t2m == "some t2m"
+      assert mark_sheet_history.t3g == "some t3g"
+      assert mark_sheet_history.t3m == "some t3m"
+      assert mark_sheet_history.t4g == "some t4g"
+      assert mark_sheet_history.t4m == "some t4m"
+      assert mark_sheet_history.t5g == "some t5g"
+      assert mark_sheet_history.t5m == "some t5m"
+      assert mark_sheet_history.t6g == "some t6g"
+      assert mark_sheet_history.t6m == "some t6m"
+      assert mark_sheet_history.year == "some year"
+    end
+
+    test "create_mark_sheet_history/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_mark_sheet_history(@invalid_attrs)
+    end
+
+    test "update_mark_sheet_history/2 with valid data updates the mark_sheet_history" do
+      mark_sheet_history = mark_sheet_history_fixture()
+      assert {:ok, mark_sheet_history} = Affairs.update_mark_sheet_history(mark_sheet_history, @update_attrs)
+      assert %MarkSheetHistory{} = mark_sheet_history
+      assert mark_sheet_history.cdesc == "some updated cdesc"
+      assert mark_sheet_history.class == "some updated class"
+      assert mark_sheet_history.cname == "some updated cname"
+      assert mark_sheet_history.description == "some updated description"
+      assert mark_sheet_history.institution_id == 43
+      assert mark_sheet_history.name == "some updated name"
+      assert mark_sheet_history.s1g == "some updated s1g"
+      assert mark_sheet_history.s1m == "some updated s1m"
+      assert mark_sheet_history.s2g == "some updated s2g"
+      assert mark_sheet_history.s2m == "some updated s2m"
+      assert mark_sheet_history.s3g == "some updated s3g"
+      assert mark_sheet_history.stuid == "some updated stuid"
+      assert mark_sheet_history.subject == "some updated subject"
+      assert mark_sheet_history.t1g == "some updated t1g"
+      assert mark_sheet_history.t1m == "some updated t1m"
+      assert mark_sheet_history.t2g == "some updated t2g"
+      assert mark_sheet_history.t2m == "some updated t2m"
+      assert mark_sheet_history.t3g == "some updated t3g"
+      assert mark_sheet_history.t3m == "some updated t3m"
+      assert mark_sheet_history.t4g == "some updated t4g"
+      assert mark_sheet_history.t4m == "some updated t4m"
+      assert mark_sheet_history.t5g == "some updated t5g"
+      assert mark_sheet_history.t5m == "some updated t5m"
+      assert mark_sheet_history.t6g == "some updated t6g"
+      assert mark_sheet_history.t6m == "some updated t6m"
+      assert mark_sheet_history.year == "some updated year"
+    end
+
+    test "update_mark_sheet_history/2 with invalid data returns error changeset" do
+      mark_sheet_history = mark_sheet_history_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_mark_sheet_history(mark_sheet_history, @invalid_attrs)
+      assert mark_sheet_history == Affairs.get_mark_sheet_history!(mark_sheet_history.id)
+    end
+
+    test "delete_mark_sheet_history/1 deletes the mark_sheet_history" do
+      mark_sheet_history = mark_sheet_history_fixture()
+      assert {:ok, %MarkSheetHistory{}} = Affairs.delete_mark_sheet_history(mark_sheet_history)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_mark_sheet_history!(mark_sheet_history.id) end
+    end
+
+    test "change_mark_sheet_history/1 returns a mark_sheet_history changeset" do
+      mark_sheet_history = mark_sheet_history_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_mark_sheet_history(mark_sheet_history)
+    end
+  end
+
+  describe "mark_sheet_historys" do
+    alias School.Affairs.MarkSheetHistorys
+
+    @valid_attrs %{cdesc: "some cdesc", class: "some class", cname: "some cname", description: "some description", institution_id: 42, name: "some name", s1g: "some s1g", s1m: "some s1m", s2g: "some s2g", s2m: "some s2m", s3g: "some s3g", stuid: "some stuid", subject: "some subject", t1g: "some t1g", t1m: "some t1m", t2g: "some t2g", t2m: "some t2m", t3g: "some t3g", t3m: "some t3m", t4g: "some t4g", t4m: "some t4m", t5g: "some t5g", t5m: "some t5m", t6g: "some t6g", t6m: "some t6m", year: "some year"}
+    @update_attrs %{cdesc: "some updated cdesc", class: "some updated class", cname: "some updated cname", description: "some updated description", institution_id: 43, name: "some updated name", s1g: "some updated s1g", s1m: "some updated s1m", s2g: "some updated s2g", s2m: "some updated s2m", s3g: "some updated s3g", stuid: "some updated stuid", subject: "some updated subject", t1g: "some updated t1g", t1m: "some updated t1m", t2g: "some updated t2g", t2m: "some updated t2m", t3g: "some updated t3g", t3m: "some updated t3m", t4g: "some updated t4g", t4m: "some updated t4m", t5g: "some updated t5g", t5m: "some updated t5m", t6g: "some updated t6g", t6m: "some updated t6m", year: "some updated year"}
+    @invalid_attrs %{cdesc: nil, class: nil, cname: nil, description: nil, institution_id: nil, name: nil, s1g: nil, s1m: nil, s2g: nil, s2m: nil, s3g: nil, stuid: nil, subject: nil, t1g: nil, t1m: nil, t2g: nil, t2m: nil, t3g: nil, t3m: nil, t4g: nil, t4m: nil, t5g: nil, t5m: nil, t6g: nil, t6m: nil, year: nil}
+
+    def mark_sheet_historys_fixture(attrs \\ %{}) do
+      {:ok, mark_sheet_historys} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_mark_sheet_historys()
+
+      mark_sheet_historys
+    end
+
+    test "list_mark_sheet_historys/0 returns all mark_sheet_historys" do
+      mark_sheet_historys = mark_sheet_historys_fixture()
+      assert Affairs.list_mark_sheet_historys() == [mark_sheet_historys]
+    end
+
+    test "get_mark_sheet_historys!/1 returns the mark_sheet_historys with given id" do
+      mark_sheet_historys = mark_sheet_historys_fixture()
+      assert Affairs.get_mark_sheet_historys!(mark_sheet_historys.id) == mark_sheet_historys
+    end
+
+    test "create_mark_sheet_historys/1 with valid data creates a mark_sheet_historys" do
+      assert {:ok, %MarkSheetHistorys{} = mark_sheet_historys} = Affairs.create_mark_sheet_historys(@valid_attrs)
+      assert mark_sheet_historys.cdesc == "some cdesc"
+      assert mark_sheet_historys.class == "some class"
+      assert mark_sheet_historys.cname == "some cname"
+      assert mark_sheet_historys.description == "some description"
+      assert mark_sheet_historys.institution_id == 42
+      assert mark_sheet_historys.name == "some name"
+      assert mark_sheet_historys.s1g == "some s1g"
+      assert mark_sheet_historys.s1m == "some s1m"
+      assert mark_sheet_historys.s2g == "some s2g"
+      assert mark_sheet_historys.s2m == "some s2m"
+      assert mark_sheet_historys.s3g == "some s3g"
+      assert mark_sheet_historys.stuid == "some stuid"
+      assert mark_sheet_historys.subject == "some subject"
+      assert mark_sheet_historys.t1g == "some t1g"
+      assert mark_sheet_historys.t1m == "some t1m"
+      assert mark_sheet_historys.t2g == "some t2g"
+      assert mark_sheet_historys.t2m == "some t2m"
+      assert mark_sheet_historys.t3g == "some t3g"
+      assert mark_sheet_historys.t3m == "some t3m"
+      assert mark_sheet_historys.t4g == "some t4g"
+      assert mark_sheet_historys.t4m == "some t4m"
+      assert mark_sheet_historys.t5g == "some t5g"
+      assert mark_sheet_historys.t5m == "some t5m"
+      assert mark_sheet_historys.t6g == "some t6g"
+      assert mark_sheet_historys.t6m == "some t6m"
+      assert mark_sheet_historys.year == "some year"
+    end
+
+    test "create_mark_sheet_historys/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_mark_sheet_historys(@invalid_attrs)
+    end
+
+    test "update_mark_sheet_historys/2 with valid data updates the mark_sheet_historys" do
+      mark_sheet_historys = mark_sheet_historys_fixture()
+      assert {:ok, mark_sheet_historys} = Affairs.update_mark_sheet_historys(mark_sheet_historys, @update_attrs)
+      assert %MarkSheetHistorys{} = mark_sheet_historys
+      assert mark_sheet_historys.cdesc == "some updated cdesc"
+      assert mark_sheet_historys.class == "some updated class"
+      assert mark_sheet_historys.cname == "some updated cname"
+      assert mark_sheet_historys.description == "some updated description"
+      assert mark_sheet_historys.institution_id == 43
+      assert mark_sheet_historys.name == "some updated name"
+      assert mark_sheet_historys.s1g == "some updated s1g"
+      assert mark_sheet_historys.s1m == "some updated s1m"
+      assert mark_sheet_historys.s2g == "some updated s2g"
+      assert mark_sheet_historys.s2m == "some updated s2m"
+      assert mark_sheet_historys.s3g == "some updated s3g"
+      assert mark_sheet_historys.stuid == "some updated stuid"
+      assert mark_sheet_historys.subject == "some updated subject"
+      assert mark_sheet_historys.t1g == "some updated t1g"
+      assert mark_sheet_historys.t1m == "some updated t1m"
+      assert mark_sheet_historys.t2g == "some updated t2g"
+      assert mark_sheet_historys.t2m == "some updated t2m"
+      assert mark_sheet_historys.t3g == "some updated t3g"
+      assert mark_sheet_historys.t3m == "some updated t3m"
+      assert mark_sheet_historys.t4g == "some updated t4g"
+      assert mark_sheet_historys.t4m == "some updated t4m"
+      assert mark_sheet_historys.t5g == "some updated t5g"
+      assert mark_sheet_historys.t5m == "some updated t5m"
+      assert mark_sheet_historys.t6g == "some updated t6g"
+      assert mark_sheet_historys.t6m == "some updated t6m"
+      assert mark_sheet_historys.year == "some updated year"
+    end
+
+    test "update_mark_sheet_historys/2 with invalid data returns error changeset" do
+      mark_sheet_historys = mark_sheet_historys_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_mark_sheet_historys(mark_sheet_historys, @invalid_attrs)
+      assert mark_sheet_historys == Affairs.get_mark_sheet_historys!(mark_sheet_historys.id)
+    end
+
+    test "delete_mark_sheet_historys/1 deletes the mark_sheet_historys" do
+      mark_sheet_historys = mark_sheet_historys_fixture()
+      assert {:ok, %MarkSheetHistorys{}} = Affairs.delete_mark_sheet_historys(mark_sheet_historys)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_mark_sheet_historys!(mark_sheet_historys.id) end
+    end
+
+    test "change_mark_sheet_historys/1 returns a mark_sheet_historys changeset" do
+      mark_sheet_historys = mark_sheet_historys_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_mark_sheet_historys(mark_sheet_historys)
+    end
+  end
 end
