@@ -11,7 +11,22 @@ defmodule SchoolWeb.StudentController do
       Repo.all(
         from(
           s in Student,
-          where: s.institution_id == ^conn.private.plug_session["institution_id"],
+          left_join: g in StudentClass,
+          on: s.id == g.sudent_id,
+          left_join: k in Class,
+          on: k.id == g.class_id,
+          where:
+            s.institution_id == ^conn.private.plug_session["institution_id"] and
+              g.semester_id == ^conn.private.plug_session["semester_id"],
+          select: %{
+            image_bin: s.image_bin,
+            id: s.id,
+            chinese_name: s.chinese_name,
+            b_cert: s.b_cert,
+            student_no: s.student_no,
+            name: s.name,
+            class_name: k.name
+          },
           order_by: [asc: s.name]
         )
       )

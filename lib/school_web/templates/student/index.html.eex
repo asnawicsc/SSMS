@@ -23,12 +23,14 @@
                   <th>Name</th>
                   <th>B cert</th>
                   <th>Student No</th>
+                   <th>Class Name</th>
                   </tr>
                 </thead>
                 <tbody>
                 <%= if @students == nil do %> 
                 <% else %>
                 <%= for student <- @students do %>
+                <%=  %>
                     <tr>
                        <td class="text-left"> <img id="preview6"  style='width:20px; height: 20px;' src='data:image/png;base64, <%= student.image_bin %>'></td>
                       <td class="text-left">
@@ -44,6 +46,9 @@
                     </td>
                     <td class="text-left">              
                         <div><%= student.student_no  %></div>                 
+                    </td>
+                     <td class="text-left">              
+                        <div><%= student.class_name  %></div>                 
                     </td>
                   </tr>
                 <% end %>
