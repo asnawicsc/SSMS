@@ -141,7 +141,8 @@ defmodule SchoolWeb.StudentCommentController do
           on: b.student_id == s.sudent_id,
           left_join: c in School.Affairs.Class,
           on: s.class_id == c.id,
-          where: s.class_id == ^class.id,
+          where:
+            s.class_id == ^class.id and s.semester_id == ^conn.private.plug_session["semester_id"],
           select: %{
             student_id: a.id,
             chinese_name: a.chinese_name,
@@ -189,7 +190,9 @@ defmodule SchoolWeb.StudentCommentController do
               on: b.student_id == s.sudent_id,
               left_join: c in School.Affairs.Class,
               on: s.class_id == c.id,
-              where: s.class_id == ^class.id,
+              where:
+                s.class_id == ^class.id and
+                  s.semester_id == ^conn.private.plug_session["semester_id"],
               select: %{
                 student_id: a.id,
                 chinese_name: a.chinese_name,

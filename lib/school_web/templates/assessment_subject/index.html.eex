@@ -55,4 +55,3 @@
 </div>
 </div>
 
-<span><%= link "New Assessment subject", to: assessment_subject_path(@conn, :new) %></span>
