@@ -176,6 +176,7 @@ defmodule SchoolWeb.ClassController do
 
   def reg_lib_student(student, lib_id, uri) do
     name = String.replace(student.name, " ", "+")
+    chinese_name = student.chinese_name
 
     ic =
       if student.ic == nil do
@@ -192,9 +193,9 @@ defmodule SchoolWeb.ClassController do
       end
 
     path =
-      "?scope=get_user_register_response&lib_id=#{lib_id}&name=#{name}&ic=#{ic}&phone=#{phone}&code=#{
-        student.student_no
-      }"
+      "?scope=get_user_register_response&lib_id=#{lib_id}&chinese_name=#{chinese_name}&name=#{
+        name
+      }&ic=#{ic}&phone=#{phone}&code=#{student.student_no}"
 
     IO.inspect(uri <> path)
     response = HTTPoison.get!(uri <> path, [{"Content-Type", "application/json"}]).body
