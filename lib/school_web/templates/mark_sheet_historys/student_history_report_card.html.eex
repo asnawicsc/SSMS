@@ -10,6 +10,36 @@
 
   <% profile=all_date|>hd() %>
 
+ <%  year=case profile.year do
+        "2018" ->
+          "二千八十"
+
+        "2017" ->
+         "二千一十七"
+
+        "2016" ->
+         "二十六"
+
+        "2015" ->
+          "二千一十五"
+
+        "2014" ->
+          "二千四十四"
+
+           "2013" ->
+         "二千一十三"
+
+           "2012" ->
+          "二千一二十二"
+
+           "2011" ->
+          "二千一十一"
+
+           "2010" ->
+          "二千一点"
+
+      end %>
+
 
 <div  style="page-break-before: always;">
 
@@ -800,11 +830,17 @@ else
 
 
 <body>
-  <center><h4>REPORT CARD</h4></center>
+
 
   <table  class="table" >
+
+    <tr align="center">
+  <td colspan="6" align="center" style="margin: 3px; padding: 3px; border-left: 0; border-right: 0; border-top: 0" ><h5>醒侨学校</h5><br>
+        <h5><%= year %> 成绩单</h5></td>
+  
+ </tr>
      <tr align="left">
-  <td colspan="5">为学生命名: <%= profile.cname %> <br>
+  <td colspan="5">学生姓名: <%= profile.cname %> <br>
         Nama Murid: <%= profile.name %></font></td>
   
   <td>教室<br>
@@ -813,259 +849,259 @@ else
 
 
  <tr align="center" >
-  <td colspan="2" align="center" style="margin: 5px; padding: 5px;" ><b>主题 MATA PELAJARAN</b></td>
-  <td align="center" style="margin: 5px; padding: 5px;">考试 <BR>PKBS1</td>
-  <td align="center" style="margin: 5px; padding: 5px;">考试 <BR>PKBS1</td>
-  <td align="center" style="margin: 5px; padding: 5px;">考试 <BR>PKBS3</td>
-  <td align="center" style="margin: 5px; padding: 5px;">平均 <BR>Purata</td>
+  <td colspan="2" align="center" style="margin: 3px; padding: 3px;" ><b>科目名称 MATA PELAJARAN</b></td>
+  <td align="center" style="margin: 3px; padding: 3px;">评审一 <BR>PKBS1</td>
+  <td align="center" style="margin: 3px; padding: 3px;">评审二 <BR>PKBS1</td>
+  <td align="center" style="margin: 3px; padding: 3px;">评审三 <BR>PKBS3</td>
+  <td align="center" style="margin: 3px; padding: 3px;">平均 <BR>Purata</td>
  </tr>
 
  <tr  align="center">
-  <td rowspan="4"  style="margin: 5px; padding: 5px;" align="left"><BR> <b>马来语 <br> Bahasa <br> Malaysia </b><BR></td>
-  <td style="margin: 5px; padding: 5px;" align="left">口服 Lisan</td>
-  <td style="margin: 5px; padding: 5px;"><%= bml1 %></td>
-  <td style="margin: 5px; padding: 5px;"><%= bml2 %></td>
-   <td style="margin: 5px; padding: 5px;"><%= bml3 %></td>
-    <td style="margin: 5px; padding: 5px;"></td>
+  <td rowspan="4"  style="margin: 3px; padding: 3px;" align="left"><BR> <b>国语 <br> Bahasa <br> Malaysia </b><BR></td>
+  <td style="margin: 3px; padding: 3px;" align="left">口服 Lisan</td>
+  <td style="margin: 3px; padding: 3px;"><%= bml1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= bml2 %></td>
+   <td style="margin: 3px; padding: 3px;"><%= bml3 %></td>
+    <td style="margin: 3px; padding: 3px;"></td>
   
  </tr>
  <tr align="center">
-  <td style="margin: 5px; padding: 5px;" align="left">阅读 Bacaan</td>
-  <td style="margin: 5px; padding: 5px;"><%= bmb1 %></td>
-  <td style="margin: 5px; padding: 5px;"><%= bmb2 %></td>
-   <td style="margin: 5px; padding: 5px;"><%= bmb3 %></td>
-    <td style="margin: 5px; padding: 5px;"></td>
+  <td style="margin: 3px; padding: 3px;" align="left">阅读 Bacaan</td>
+  <td style="margin: 3px; padding: 3px;"><%= bmb1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= bmb2 %></td>
+   <td style="margin: 3px; padding: 3px;"><%= bmb3 %></td>
+    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
  <tr align="center">
-  <td style="margin: 5px; padding: 5px;" align="left">写作 Penulisan</td>
-  <td style="margin: 5px; padding: 5px;"><%= bmp1 %></td>
-  <td style="margin: 5px; padding: 5px;"><%= bmp2 %></td>
-  <td style="margin: 5px; padding: 5px;"><%= bmp3 %></td>
-   <td style="margin: 5px; padding: 5px;"></td>
+  <td style="margin: 3px; padding: 3px;" align="left">写作 Penulisan</td>
+  <td style="margin: 3px; padding: 3px;"><%= bmp1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= bmp2 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= bmp3 %></td>
+   <td style="margin: 3px; padding: 3px;"></td>
  </tr>
  <tr align="center">
-  <td style="margin: 5px; padding: 5px;" align="left">理解 Pemahaman</td>
-  <td style="margin: 5px; padding: 5px;"><%= bmpm1 %></td>
-  <td style="margin: 5px; padding: 5px;"><%= bmpm2 %></td>
-  <td style="margin: 5px; padding: 5px;"><%= bmpm3 %></td>
-   <td style="margin: 5px; padding: 5px;"></td>
+  <td style="margin: 3px; padding: 3px;" align="left">理解 Pemahaman</td>
+  <td style="margin: 3px; padding: 3px;"><%= bmpm1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= bmpm2 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= bmpm3 %></td>
+   <td style="margin: 3px; padding: 3px;"></td>
  </tr>
  <tr align="center">
- <td rowspan="4"  style="margin: 5px; padding: 5px;" align="left"><BR><b>马来语 <br> Bahasa <br> Inggeris</b></td>
-  <td style="margin: 5px; padding: 5px;" align="left">口服 Lisan</td>
-  <td style="margin: 5px; padding: 5px;"><%= ingl1 %></td>
-  <td style="margin: 5px; padding: 5px;"><%= ingl2 %></td>
-   <td style="margin: 5px; padding: 5px;"><%= ingl3 %></td>
-    <td style="margin: 5px; padding: 5px;"></td>
+ <td rowspan="4"  style="margin: 3px; padding: 3px;" align="left"><BR><b>英语 <br> Bahasa <br> Inggeris</b></td>
+  <td style="margin: 3px; padding: 3px;" align="left">口服 Lisan</td>
+  <td style="margin: 3px; padding: 3px;"><%= ingl1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= ingl2 %></td>
+   <td style="margin: 3px; padding: 3px;"><%= ingl3 %></td>
+    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
  <tr align="center">
-  <td style="margin: 5px; padding: 5px;" align="left">阅读 Bacaan</td>
-  <td style="margin: 5px; padding: 5px;"><%= ingb1 %></td>
-  <td style="margin: 5px; padding: 5px;"><%= ingb2 %></td>
-   <td style="margin: 5px; padding: 5px;"><%= ingb3 %></td>
-    <td style="margin: 5px; padding: 5px;"></td>
+  <td style="margin: 3px; padding: 3px;" align="left">阅读 Bacaan</td>
+  <td style="margin: 3px; padding: 3px;"><%= ingb1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= ingb2 %></td>
+   <td style="margin: 3px; padding: 3px;"><%= ingb3 %></td>
+    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
  <tr align="center">
-  <td style="margin: 5px; padding: 5px;" align="left">写作 Penulisan</td>
-<td style="margin: 5px; padding: 5px;"><%= ingp1 %></td>
-  <td style="margin: 5px; padding: 5px;"><%= ingp2 %></td>
-   <td style="margin: 5px; padding: 5px;"><%= ingp3 %></td>
-   <td style="margin: 5px; padding: 5px;"></td>
+  <td style="margin: 3px; padding: 3px;" align="left">写作 Penulisan</td>
+<td style="margin: 3px; padding: 3px;"><%= ingp1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= ingp2 %></td>
+   <td style="margin: 3px; padding: 3px;"><%= ingp3 %></td>
+   <td style="margin: 3px; padding: 3px;"></td>
  </tr>
  <tr align="center">
-  <td style="margin: 5px; padding: 5px;" align="left">理解 Pemahaman</td>
-  <td style="margin: 5px; padding: 5px;"><%= ingpm1 %></td>
-  <td style="margin: 5px; padding: 5px;"><%= ingpm2 %></td>
-  <td style="margin: 5px; padding: 5px;"><%= ingpm3 %></td>
-   <td style="margin: 5px; padding: 5px;"></td>
+  <td style="margin: 3px; padding: 3px;" align="left">理解 Pemahaman</td>
+  <td style="margin: 3px; padding: 3px;"><%= ingpm1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= ingpm2 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= ingpm3 %></td>
+   <td style="margin: 3px; padding: 3px;"></td>
  </tr align="center">
  <tr align="center">
- <td rowspan="4"  style="margin: 5px; padding: 5px;" align="left"><b><BR>马来语 <br> Bahasa <br> Cina</b></td>
-  <td style="margin: 5px; padding: 5px;" align="left">口服 Lisan</td>
-  <td style="margin: 5px; padding: 5px;"><%= chl1 %></td>
-  <td style="margin: 5px; padding: 5px;"><%= chl2 %></td>
-   <td style="margin: 5px; padding: 5px;"><%= chl3 %></td>
-    <td style="margin: 5px; padding: 5px;"></td>
+ <td rowspan="4"  style="margin: 3px; padding: 3px;" align="left"><b><BR>华语 <br> Bahasa <br> Cina</b></td>
+  <td style="margin: 3px; padding: 3px;" align="left">口服 Lisan</td>
+  <td style="margin: 3px; padding: 3px;"><%= chl1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= chl2 %></td>
+   <td style="margin: 3px; padding: 3px;"><%= chl3 %></td>
+    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
  <tr align="center">
-  <td style="margin: 5px; padding: 5px;" align="left">阅读 Bacaan</td>
-  <td style="margin: 5px; padding: 5px;"><%= chb1 %></td>
-  <td style="margin: 5px; padding: 5px;"><%= chb2 %></td>
-   <td style="margin: 5px; padding: 5px;"><%= chb3 %></td>
-    <td style="margin: 5px; padding: 5px;"></td>
+  <td style="margin: 3px; padding: 3px;" align="left">阅读 Bacaan</td>
+  <td style="margin: 3px; padding: 3px;"><%= chb1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= chb2 %></td>
+   <td style="margin: 3px; padding: 3px;"><%= chb3 %></td>
+    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
  <tr align="center">
-  <td style="margin: 5px; padding: 5px;" align="left">写作 Penulisan</td>
- <td style="margin: 5px; padding: 5px;"><%= chp1 %></td>
-  <td style="margin: 5px; padding: 5px;"><%= chp2 %></td>
-   <td style="margin: 5px; padding: 5px;"><%= chp3 %></td>
-   <td style="margin: 5px; padding: 5px;"></td>
+  <td style="margin: 3px; padding: 3px;" align="left">写作 Penulisan</td>
+ <td style="margin: 3px; padding: 3px;"><%= chp1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= chp2 %></td>
+   <td style="margin: 3px; padding: 3px;"><%= chp3 %></td>
+   <td style="margin: 3px; padding: 3px;"></td>
  </tr>
  <tr align="center">
   <td style="margin: 5px; padding: 5px; " align="left">理解 Pemahaman</td>
- <td style="margin: 5px; padding: 5px;"><%= chpm1 %></td>
-  <td style="margin: 5px; padding: 5px;"><%= chpm2 %></td>
-   <td style="margin: 5px; padding: 5px;"><%= chpm3 %></td>
-   <td style="margin: 5px; padding: 5px;"></td>
+ <td style="margin: 3px; padding: 3px;"><%= chpm1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= chpm2 %></td>
+   <td style="margin: 3px; padding: 3px;"><%= chpm3 %></td>
+   <td style="margin: 3px; padding: 3px;"></td>
  </tr>
 <tr align="center">
   <td style="margin: 5px; padding: 5px; border-right: 0" align="left">数学</td>
   <td  style="margin: 5px; padding: 5px; border-left: 0"" align="left">Matematik</td>
-  <td style="margin: 5px; padding: 5px;"><%= math1 %></td>
-  <td style="margin: 5px; padding: 5px;"><%= math2 %></td>
-   <td style="margin: 5px; padding: 5px;"><%= math3 %></td>
-    <td style="margin: 5px; padding: 5px;"></td>
+  <td style="margin: 3px; padding: 3px;"><%= math1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= math2 %></td>
+   <td style="margin: 3px; padding: 3px;"><%= math3 %></td>
+    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
  <tr align="center">
     <td style="margin: 5px; padding: 5px; border-right: 0"" align="left">科学</td>
   <td  style="margin: 5px; padding: 5px; border-left: 0"" align="left">Sains</td>
-  <td style="margin: 5px; padding: 5px;"><%= sains1 %></td>
-  <td style="margin: 5px; padding: 5px;"><%= sains2 %></td>
-   <td style="margin: 5px; padding: 5px;"><%= sains3 %></td>
-    <td style="margin: 5px; padding: 5px;"></td>
+  <td style="margin: 3px; padding: 3px;"><%= sains1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= sains2 %></td>
+   <td style="margin: 3px; padding: 3px;"><%= sains3 %></td>
+    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
  <tr align="center">
    <td style="margin: 5px; padding: 5px; border-right: 0"" align="left">道德教育</td>
   <td style="margin: 5px; padding: 5px; border-left: 0" align="left">Pendidikan Moral</td>
-  <td style="margin: 5px; padding: 5px;"></td>
-  <td style="margin: 5px; padding: 5px;"></td>
-  <td style="margin: 5px; padding: 5px;"></td>
-   <td style="margin: 5px; padding: 5px;"></td>
+  <td style="margin: 3px; padding: 3px;"></td>
+  <td style="margin: 3px; padding: 3px;"></td>
+  <td style="margin: 3px; padding: 3px;"></td>
+   <td style="margin: 3px; padding: 3px;"></td>
  </tr>
  <tr align="center">
-  <td style="margin: 5px; padding: 5px; border-right: 0"" align="left">伊斯兰教</td>
+  <td style="margin: 5px; padding: 5px; border-right: 0"" align="left">回教</td>
   <td style="margin: 5px; padding: 5px; border-left: 0" align="left">Agama Islam</td>
- <td style="margin: 5px; padding: 5px;"><%= agama1 %></td>
-  <td style="margin: 5px; padding: 5px;"><%= agama2 %></td>
-   <td style="margin: 5px; padding: 5px;"><%= agama3 %></td>
-    <td style="margin: 5px; padding: 5px;"></td>
+ <td style="margin: 3px; padding: 3px;"><%= agama1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= agama2 %></td>
+   <td style="margin: 3px; padding: 3px;"><%= agama3 %></td>
+    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
       <td style="margin: 5px; padding: 5px; border-right: 0"" align="left">历史</td>
   <td style="margin: 5px; padding: 5px; border-left: 0" align="left">Sejarah</td>
- <td style="margin: 5px; padding: 5px;"><%= sej1 %></td>
-  <td style="margin: 5px; padding: 5px;"><%= sej2 %></td>
-   <td style="margin: 5px; padding: 5px;"><%= sej3 %></td>
-    <td style="margin: 5px; padding: 5px;"></td>
+ <td style="margin: 3px; padding: 3px;"><%= sej1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= sej2 %></td>
+   <td style="margin: 3px; padding: 3px;"><%= sej3 %></td>
+    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
           <td style="margin: 5px; padding: 5px; border-right: 0"" align="left">设计和技术</td>
   <td style="margin: 5px; padding: 5px; border-left: 0" align="left">RBT</td>
- <td style="margin: 5px; padding: 5px;"><%= rbt1 %></td>
-  <td style="margin: 5px; padding: 5px;"><%= rbt2 %></td>
-   <td style="margin: 5px; padding: 5px;"><%= rbt3 %></td>
-    <td style="margin: 5px; padding: 5px;"></td>
+ <td style="margin: 3px; padding: 3px;"><%= rbt1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= rbt2 %></td>
+   <td style="margin: 3px; padding: 3px;"><%= rbt3 %></td>
+    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
        <td style="margin: 5px; padding: 5px; border-right: 0"" align="left">通信信息技术</td>
   <td style="margin: 5px; padding: 5px; border-left: 0" align="left">TMK</td>
-  <td style="margin: 5px; padding: 5px;"><%= tmk1 %></td>
-  <td style="margin: 5px; padding: 5px;"><%= tmk2 %></td>
-   <td style="margin: 5px; padding: 5px;"><%= tmk3 %></td>
-    <td style="margin: 5px; padding: 5px;"></td>
+  <td style="margin: 3px; padding: 3px;"><%= tmk1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= tmk2 %></td>
+   <td style="margin: 3px; padding: 3px;"><%= tmk3 %></td>
+    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center"  >
   <td style="margin: 5px; padding: 5px; border-right: 0"  align="left">艺术教育</td>
   <td style="margin: 5px; padding: 5px; border-left: 0"  align="left">Pendidikan Kesenian</td>
-  <td style="margin: 5px; padding: 5px;"><%= seni1 %></td>
-  <td style="margin: 5px; padding: 5px;"><%= seni2 %></td>
-  <td style="margin: 5px; padding: 5px;"><%= seni3 %></td>
-   <td style="margin: 5px; padding: 5px;"></td>
+  <td style="margin: 3px; padding: 3px;"><%= seni1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= seni2 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= seni3 %></td>
+   <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
-      <td style="margin: 5px; padding: 5px; border-right: 0"" align="left">体育</td>
+      <td style="margin: 5px; padding: 5px; border-right: 0"" align="left">体健</td>
   <td style="margin: 5px; padding: 5px; border-left: 0" align="left">PJK</td>
-    <td style="margin: 5px; padding: 5px;"><%= pj1 %></td>
-  <td style="margin: 5px; padding: 5px;"><%= pj2 %></td>
-  <td style="margin: 5px; padding: 5px;"><%= pj3 %></td>
-   <td style="margin: 5px; padding: 5px;"></td>
+    <td style="margin: 3px; padding: 3px;"><%= pj1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= pj2 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= pj3 %></td>
+   <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
-  <td colspan="2" style="margin: 5px; padding: 5px;" align="left"></td>
-  <td style="margin: 5px; padding: 5px;">&nbsp;</td>
-  <td style="margin: 5px; padding: 5px;">&nbsp;</td>
-  <td style="margin: 5px; padding: 5px;">&nbsp;</td>
-   <td style="margin: 5px; padding: 5px;"></td>
+  <td colspan="2" style="margin: 3px; padding: 3px;" align="left"></td>
+  <td style="margin: 3px; padding: 3px;">&nbsp;</td>
+  <td style="margin: 3px; padding: 3px;">&nbsp;</td>
+  <td style="margin: 3px; padding: 3px;">&nbsp;</td>
+   <td style="margin: 3px; padding: 3px;"></td>
  </tr>
  <tr align="center">
 
-  <td colspan="2" style="margin: 5px; padding: 5px;" align="left"></td>
-  <td style="margin: 5px; padding: 5px;">&nbsp;</td>
-  <td style="margin: 5px; padding: 5px;">&nbsp;</td>
-  <td style="margin: 5px; padding: 5px;">&nbsp;</td>
-   <td style="margin: 5px; padding: 5px;"></td>
+  <td colspan="2" style="margin: 3px; padding: 3px;" align="left"></td>
+  <td style="margin: 3px; padding: 3px;">&nbsp;</td>
+  <td style="margin: 3px; padding: 3px;">&nbsp;</td>
+  <td style="margin: 3px; padding: 3px;">&nbsp;</td>
+   <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
-     <td style="margin: 5px; padding: 5px; border-right: 0"" align="left">行为</td>
+     <td style="margin: 5px; padding: 5px; border-right: 0"" align="left">操行</td>
   <td  style="margin: 5px; padding: 5px; border-left: 0" align="left">Kelakuan</td>
-    <td style="margin: 5px; padding: 5px;"><%= laku1 %></td>
-  <td style="margin: 5px; padding: 5px;"><%= laku2 %></td>
-  <td style="margin: 5px; padding: 5px;"><%= laku3 %></td>
-   <td style="margin: 5px; padding: 5px;"></td>
+    <td style="margin: 3px; padding: 3px;"><%= laku1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= laku2 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= laku3 %></td>
+   <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
-    <td style="margin: 5px; padding: 5px; border-right: 0"" align="left">抵港</td>
+    <td style="margin: 5px; padding: 5px; border-right: 0"" align="left">出席日数</td>
   <td style="margin: 5px; padding: 5px; border-left: 0" align="left">Kedatangan</td>
-    <td style="margin: 5px; padding: 5px;"><%= kedatangan1 %></td>
-  <td style="margin: 5px; padding: 5px;"><%= kedatangan2 %></td>
-  <td style="margin: 5px; padding: 5px;"><%= kedatangan3 %></td>
-   <td style="margin: 5px; padding: 5px;"></td>
+    <td style="margin: 3px; padding: 3px;"><%= kedatangan1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= kedatangan2 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= kedatangan3 %></td>
+   <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
   <td style="margin: 5px; padding: 5px; border-right: 0"" align="left">总分</td>
    <td  style="margin: 5px; padding: 5px; border-left: 0" align="left">Jumlah Markah</td>
-      <td style="margin: 5px; padding: 5px;"><%= total1 %></td>
-  <td style="margin: 5px; padding: 5px;"><%= total2 %></td>
-  <td style="margin: 5px; padding: 5px;"><%= total3 %></td>
-   <td style="margin: 5px; padding: 5px;"></td>
+      <td style="margin: 3px; padding: 3px;"><%= total1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= total2 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= total3 %></td>
+   <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center" >
   <td  style="margin: 5px; padding: 5px; border-right: 0"" align="left">平均 </td>
   <td  style="margin: 5px; padding: 5px; border-left: 0" align="left">Purata</td>
-        <td style="margin: 5px; padding: 5px;"><%= averg1 %></td>
-  <td style="margin: 5px; padding: 5px;"><%= averg2 %></td>
-  <td style="margin: 5px; padding: 5px;"><%= averg3 %></td>
-   <td style="margin: 5px; padding: 5px;"></td>
+        <td style="margin: 3px; padding: 3px;"><%= averg1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= averg2 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= averg3 %></td>
+   <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
-  <td style="margin: 5px; padding: 5px; border-right: 0""  align="left">在教室里的位置</td>
+  <td style="margin: 5px; padding: 5px; border-right: 0""  align="left">本班名次</td>
    <td style="margin: 5px; padding: 5px; border-left: 0"  align="left">Kedudukan Dalam Kelas</td>
-        <td style="margin: 5px; padding: 5px;"><%= crank1 %></td>
-  <td style="margin: 5px; padding: 5px;"><%= crank2 %></td>
-  <td style="margin: 5px; padding: 5px;"><%= crank3 %></td>
-   <td style="margin: 5px; padding: 5px;"></td>
+        <td style="margin: 3px; padding: 3px;"><%= crank1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= crank2 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= crank3 %></td>
+   <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
-  <td style="margin: 5px; padding: 5px; border-right: 0"" align="left" >以度为单位</td>
+  <td style="margin: 5px; padding: 5px; border-right: 0"" align="left" >全级名次</td>
   <td style="margin: 5px; padding: 5px; border-left: 0" align="left">Kedudukan Dalam Darjah</td>
-        <td style="margin: 5px; padding: 5px;"><%= srank1 %></td>
-  <td style="margin: 5px; padding: 5px;"><%= srank2 %></td>
-  <td style="margin: 5px; padding: 5px;"><%= srank3 %></td>
-   <td style="margin: 5px; padding: 5px;"></td>
+        <td style="margin: 3px; padding: 3px;"><%= srank1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= srank2 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= srank3 %></td>
+   <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
-  <td colspan="2" style="margin: 5px; padding: 5px;" align="left">老师的签名 <br>T.Tangan Guru Besar</td>
-  <td style="margin: 5px; padding: 5px;"></td>
-  <td style="margin: 5px; padding: 5px;"></td>
-  <td style="margin: 5px; padding: 5px;"></td>
-   <td style="margin: 5px; padding: 5px;"></td>
+  <td colspan="2" style="margin: 3px; padding: 3px;" align="left">校长签名 <br>T.Tangan Guru Besar</td>
+  <td style="margin: 3px; padding: 3px;"></td>
+  <td style="margin: 3px; padding: 3px;"></td>
+  <td style="margin: 3px; padding: 3px;"></td>
+   <td style="margin: 3px; padding: 3px;"></td>
  </tr>
  <tr align="center">
-   <td colspan="2" style="margin: 5px; padding: 5px;" align="left">老师的学位标志 <br>T.Tangan Guru Darjah</td>
-  <td style="margin: 5px; padding: 5px;"></td>
-  <td style="margin: 5px; padding: 5px;"></td>
-  <td style="margin: 5px; padding: 5px;"></td>
-   <td style="margin: 5px; padding: 5px;"></td>
+   <td colspan="2" style="margin: 3px; padding: 3px;" align="left">级任签名 <br>T.Tangan Guru Darjah</td>
+  <td style="margin: 3px; padding: 3px;"></td>
+  <td style="margin: 3px; padding: 3px;"></td>
+  <td style="margin: 3px; padding: 3px;"></td>
+   <td style="margin: 3px; padding: 3px;"></td>
  </tr>
  <tr align="center">
-   <td colspan="2" style="margin: 5px; padding: 5px;" align="left">父母或监护人的签名 <br>T.Tangan Ibubapa/Penjaga</td>
+   <td colspan="2" style="margin: 3px; padding: 3px;" align="left">家长 <br>T.Tangan Ibubapa/Penjaga</td>
    
-  <td style="margin: 5px; padding: 5px;"></td>
-  <td style="margin: 5px; padding: 5px;"></td>
-  <td style="margin: 5px; padding: 5px;"></td>
-   <td style="margin: 5px; padding: 5px;"></td>
+  <td style="margin: 3px; padding: 3px;"></td>
+  <td style="margin: 3px; padding: 3px;"></td>
+  <td style="margin: 3px; padding: 3px;"></td>
+   <td style="margin: 3px; padding: 3px;"></td>
  </tr>
-   <td colspan="6" align="left" style="margin: 5px; padding: 5px;" height="100px;">评论 Komen:</td>
+   <td colspan="6" align="left" style="margin: 3px; padding: 3px;" height="100px;">评语 Komen:</td>
   
  </tr>
 
