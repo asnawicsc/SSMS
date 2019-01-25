@@ -5,6 +5,7 @@ defmodule SchoolWeb.TimetableController do
   alias School.Affairs
   alias School.Affairs.Timetable
   alias School.Affairs.Subject
+  alias School.Affairs.Class
 
   def index(conn, _params) do
     timetable = Affairs.list_timetable()
@@ -82,7 +83,12 @@ defmodule SchoolWeb.TimetableController do
     events =
       case School.Affairs.get_teacher(params["user_id"]) do
         {:ok, teacher} ->
-          {:ok, timetable} = School.Affairs.initialize_calendar(teacher.id)
+          {:ok, timetable} =
+            School.Affairs.initialize_calendar(
+              conn.private.plug_session["institution_id"],
+              conn.private.plug_session["semester_id"],
+              teacher.id
+            )
 
           School.Affairs.teacher_period_list(teacher.id)
 
@@ -130,7 +136,12 @@ defmodule SchoolWeb.TimetableController do
       {:ok, teacher} ->
         true
 
-        {:ok, timetable} = School.Affairs.initialize_calendar(teacher.id)
+        {:ok, timetable} =
+          School.Affairs.initialize_calendar(
+            conn.private.plug_session["institution_id"],
+            conn.private.plug_session["semester_id"],
+            teacher.id
+          )
 
         periods = Affairs.get_inst_id(conn) |> Affairs.get_periods()
 
@@ -149,32 +160,32 @@ defmodule SchoolWeb.TimetableController do
     changeset = Affairs.change_timetable(%Timetable{})
     class_id = params["id"]
 
-    class = School.Affairs.get_class!(class_id)
-
     period =
       Repo.all(
-        from(
-          p in School.Affairs.Period,
-          left_join: s in School.Affairs.Subject,
-          on: s.id == p.subject_id,
-          left_join: t in School.Affairs.Teacher,
-          on: t.id == p.teacher_id,
-          left_join: d in School.Affairs.Day,
-          on: d.name == p.day,
-          where: p.class_id == ^class_id,
+        from(p in School.Affairs.Period,
+          left_join: r in School.Affairs.Timetable,
+          on: p.timetable_id == r.id,
+          where:
+            r.institution_id == ^conn.private.plug_session["institution_id"] and
+              r.semester_id == ^conn.private.plug_session["semester_id"],
           select: %{
-            day_number: d.number,
-            end_time: p.end_time,
-            start_time: p.start_time,
-            s_code: s.code
+            start_datetime: p.start_datetime,
+            end_datetime: p.end_datetime,
+            class_id: p.class_id,
+            subject_id: p.subject_id,
+            teacher_id: p.teacher_id
           }
         )
       )
 
     all =
       for item <- period do
-        e = item.end_time.hour
-        s = item.start_time.hour
+        e = item.end_datetime.hour
+        s = item.start_datetime.hour
+
+        subject = Repo.get_by(Subject, id: item.subject_id)
+
+        g = item.end_datetime.day
 
         e =
           if e == 0 do
@@ -190,16 +201,16 @@ defmodule SchoolWeb.TimetableController do
             s
           end
 
-        %{day_number: item.day_number, end_time: e, start_time: s, s_code: item.s_code}
+        %{day_number: g, end_time: e, start_time: s, s_code: subject.code}
       end
       |> Enum.group_by(fn x -> x.day_number end)
 
     all2 =
       for item <- period do
-        e = item.end_time.hour
-        s = item.start_time.hour
-        sm = item.start_time.minute
-        em = item.end_time.minute
+        e = item.end_datetime.hour
+        s = item.start_datetime.hour
+        sm = item.start_datetime.minute
+        em = item.end_datetime.minute
 
         e =
           if e == 0 do
@@ -215,17 +226,32 @@ defmodule SchoolWeb.TimetableController do
             s
           end
 
-        %{
-          location: item.day_number,
-          end_hour: e,
-          end_minute: em,
-          start_minute: sm,
-          start_hour: s,
-          name: item.s_code
-        }
+        g = item.end_datetime.day
+        subject = Repo.get_by(Subject, id: item.subject_id)
+
+        all =
+          if g < 7 do
+            %{
+              location: g,
+              end_hour: e,
+              end_minute: em,
+              start_minute: sm,
+              start_hour: s,
+              name: subject.description
+            }
+          else
+          end
+
+        all
       end
       |> Enum.reject(fn x -> x == nil end)
 
-    render(conn, "generated_timetable.html", all2: Poison.encode!(all2))
+    class = Repo.get_by(Class, id: params["id"])
+
+    render(conn, "generated_timetable.html",
+      all2: Poison.encode!(all2),
+      class: class,
+      period: period
+    )
   end
 end

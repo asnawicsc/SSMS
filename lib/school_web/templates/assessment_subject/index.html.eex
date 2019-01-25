@@ -1,0 +1,57 @@
+<div class="content-heading">
+    <div>Listing Assessment subject
+      <small></small>
+    </div>
+</div>
+
+      <div class="row">
+          
+                <div class="col-lg-12" >
+                  <div class="card card-default d-none d-lg-block">
+                    <div class="card-body">
+<table class="table">
+  <thead>
+    <tr>
+      
+      <th>Semester</th>
+      <th>Subject</th>
+      <th>Standard</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for assessment_subject <- @assessment_subject do %>
+
+
+<% subject = School.Repo.get_by(School.Affairs.Subject,institution_id: @conn.private.plug_session["institution_id"],id: assessment_subject.subject_id) %>
+<% semester = School.Repo.get_by(School.Affairs.Semester,institution_id: @conn.private.plug_session["institution_id"],id: assessment_subject.semester_id) %>
+
+<% standard = School.Repo.get_by(School.Affairs.Level,institution_id: @conn.private.plug_session["institution_id"],id: assessment_subject.standard_id) %>
+    <tr>
+     
+      <td> <%= if semester != nil do %> 
+       <%=  semester.start_date  %> - <%= semester.end_date %>
+       
+       <% else  %>
+        <%=  "Unknown Semester" %>
+          <% end %>
+        </td>
+      <td> <%= if subject != nil , do: subject.description , else: "Unknown Subject" %></td>
+      <td><%= if standard != nil , do: standard.name , else: "Unknown Standard" %></td>
+
+      <td class="text-right">
+       
+        
+        <span><%= link "Edit Rules Break", to: assessment_subject_path(@conn, :edit, assessment_subject), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: assessment_subject_path(@conn, :delete, assessment_subject), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+

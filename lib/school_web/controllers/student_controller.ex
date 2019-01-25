@@ -11,7 +11,22 @@ defmodule SchoolWeb.StudentController do
       Repo.all(
         from(
           s in Student,
-          where: s.institution_id == ^conn.private.plug_session["institution_id"],
+          left_join: g in StudentClass,
+          on: s.id == g.sudent_id,
+          left_join: k in Class,
+          on: k.id == g.class_id,
+          where:
+            s.institution_id == ^conn.private.plug_session["institution_id"] and
+              g.semester_id == ^conn.private.plug_session["semester_id"],
+          select: %{
+            image_bin: s.image_bin,
+            id: s.id,
+            chinese_name: s.chinese_name,
+            b_cert: s.b_cert,
+            student_no: s.student_no,
+            name: s.name,
+            class_name: k.name
+          },
           order_by: [asc: s.name]
         )
       )
@@ -97,58 +112,28 @@ defmodule SchoolWeb.StudentController do
 
   def height_weight_semester(conn, params) do
     user = Repo.get(User, conn.private.plug_session["user_id"])
-    semester = Repo.get(Semester, params["semester_id"])
+    semester_id = conn.private.plug_session["semester_id"] |> Integer.to_string()
 
     students =
-      if user.role == "Teacher" do
-        teacher = Repo.get_by(Teacher, email: user.email)
-
-        students =
-          Repo.all(
-            from(
-              s in Student,
-              left_join: sc in StudentClass,
-              on: sc.sudent_id == s.id,
-              left_join: c in Class,
-              on: c.id == sc.class_id,
-              left_join: t in Teacher,
-              on: t.id == c.teacher_id,
-              where: t.id == ^teacher.id and sc.semester_id == ^semester.id,
-              select: %{
-                name: s.name,
-                chinese_name: s.chinese_name,
-                height: s.height,
-                weight: s.weight,
-                id: s.id
-              }
-            )
-          )
-
-        students
-      else
-        students =
-          Repo.all(
-            from(
-              s in Student,
-              left_join: sc in StudentClass,
-              on: sc.sudent_id == s.id,
-              left_join: c in Class,
-              on: c.id == sc.class_id,
-              left_join: t in Teacher,
-              on: t.id == c.teacher_id,
-              where: sc.semester_id == ^semester.id,
-              select: %{
-                name: s.name,
-                chinese_name: s.chinese_name,
-                height: s.height,
-                weight: s.weight,
-                id: s.id
-              }
-            )
-          )
-
-        students
-      end
+      Repo.all(
+        from(
+          s in Student,
+          left_join: c in StudentClass,
+          on: c.sudent_id == s.id,
+          where:
+            c.class_id == ^params["class_id"] and
+              c.semester_id == ^conn.private.plug_session["semester_id"] and
+              s.institution_id == ^conn.private.plug_session["institution_id"],
+          order_by: [asc: s.name],
+          select: %{
+            id: s.id,
+            name: s.name,
+            chinese_name: s.chinese_name,
+            height: s.height,
+            weight: s.weight
+          }
+        )
+      )
 
     students =
       for student <- students do
@@ -160,7 +145,7 @@ defmodule SchoolWeb.StudentController do
               for height <- heights do
                 l_id = String.split(height, "-") |> List.to_tuple() |> elem(0)
 
-                if l_id == params["semester_id"] do
+                if l_id == semester_id do
                   height
                 end
               end
@@ -183,7 +168,7 @@ defmodule SchoolWeb.StudentController do
               for weight <- weights do
                 l_id = String.split(weight, "-") |> List.to_tuple() |> elem(0)
 
-                if l_id == params["semester_id"] do
+                if l_id == semester_id do
                   weight
                 end
               end
@@ -202,7 +187,7 @@ defmodule SchoolWeb.StudentController do
         student = Map.put(student, :weight, weight)
       end
 
-    render(conn, "height_weight_semester.html", students: students, semester_id: semester.id)
+    render(conn, "height_weight_semester.html", students: students, semester_id: semester_id)
   end
 
   def edit_height_weight(conn, params) do
@@ -322,7 +307,7 @@ defmodule SchoolWeb.StudentController do
 
     conn
     |> put_flash(:info, "Height and weight updated successfully.")
-    |> redirect(to: "/height_weight/#{params["semester_id"]}")
+    |> redirect(to: "/classes")
   end
 
   def student_lists(conn, params) do
@@ -430,8 +415,18 @@ defmodule SchoolWeb.StudentController do
       Repo.all(
         from(
           s in Student,
-          where: s.institution_id == ^conn.private.plug_session["institution_id"],
-          order_by: [asc: s.name]
+          left_join: c in StudentClass,
+          on: c.sudent_id == s.id,
+          where:
+            c.class_id == ^params["class_id"] and
+              c.semester_id == ^conn.private.plug_session["semester_id"] and
+              s.institution_id == ^conn.private.plug_session["institution_id"],
+          order_by: [asc: s.name],
+          select: %{
+            id: s.id,
+            name: s.name,
+            chinese_name: s.chinese_name
+          }
         )
       )
 
@@ -463,6 +458,7 @@ defmodule SchoolWeb.StudentController do
           on: c.sudent_id == s.id,
           where:
             c.class_id == ^params["class_id"] and
+              c.semester_id == ^conn.private.plug_session["semester_id"] and
               s.institution_id == ^conn.private.plug_session["institution_id"],
           order_by: [asc: s.name],
           select: %{
@@ -473,11 +469,11 @@ defmodule SchoolWeb.StudentController do
         )
       )
 
-    student_class = Repo.all(from(s in StudentClass, where: s.class_id == ^params["class_id"]))
-    level_id = hd(student_class).level_id
-    level = Repo.all(from(l in Level, where: l.id == ^level_id))
+    # student_class = Repo.all(from(s in StudentClass, where: s.class_id == ^params["class_id"]))
+    # level_id = hd(student_class).level_id
+    # level = Repo.all(from(l in Level, where: l.id == ^level_id))
 
-    render(conn, "height_weight.html", students: students, levels: level)
+    render(conn, "height_weight.html", students: students)
   end
 
   def new(conn, _params) do
@@ -743,30 +739,38 @@ defmodule SchoolWeb.StudentController do
       Map.put(student_params, "institution_id", conn.private.plug_session["institution_id"])
 
     image_params = student_params["image1"]
-    result = upload_image(image_params)
 
-    student_params = Map.put(student_params, "image_bin", result.bin)
-    student_params = Map.put(student_params, "image_filename", result.filename)
+    student_params =
+      if image_params != nil do
+        result = upload_image(image_params, conn)
+
+        student_params = Map.put(student_params, "image_bin", result.bin)
+        student_params = Map.put(student_params, "image_filename", result.filename)
+      else
+        student_params
+      end
 
     case Affairs.create_student(student_params) do
       {:ok, student} ->
         conn
         |> put_flash(:info, "Student created successfully.")
-        |> redirect(to: student_path(conn, :show, student))
+        |> redirect(to: student_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
   end
 
-  def upload_image(param) do
+  def upload_image(param, conn) do
     {:ok, seconds} = Timex.format(Timex.now(), "%s", :strftime)
 
-    path = File.cwd!() <> "/media"
+    institute = Repo.get(Institution, conn.private.plug_session["institution_id"])
+
+    path = File.cwd!() <> "/media/" <> institute.name
     image_path = Application.app_dir(:school, "priv/static/images")
 
     if File.exists?(path) == false do
-      File.mkdir(File.cwd!() <> "/media")
+      File.mkdir(File.cwd!() <> "/media/" <> institute.name)
     end
 
     fl = param.filename |> String.replace(" ", "_")
@@ -782,6 +786,38 @@ defmodule SchoolWeb.StudentController do
     # File.rm(resized.path)
 
     %{filename: seconds <> fl, bin: Base.encode64(bin)}
+  end
+
+  def generate_student_image(conn, params) do
+    all_params = params["item"]["image1"]
+
+    for image_params <- all_params do
+      result = upload_image(image_params, conn)
+
+      params = Map.put(params, "image_bin", result.bin)
+      params = Map.put(params, "image_filename", result.filename)
+
+      student = image_params
+
+      student_no = student.filename |> String.split(".") |> hd
+
+      student =
+        Repo.get_by(Student,
+          student_no: student_no,
+          institution_id: conn.private.plug_session["institution_id"]
+        )
+
+      if student != nil do
+        student_params = %{image_bin: result.bin, image_filename: result.filename}
+
+        Affairs.update_student(student, student_params)
+      else
+      end
+    end
+
+    conn
+    |> put_flash(:info, "Student Upload Succesfully")
+    |> redirect(to: student_path(conn, :index))
   end
 
   def print_students(conn, %{"id" => id}) do
@@ -852,7 +888,7 @@ defmodule SchoolWeb.StudentController do
 
     params =
       if image_params != nil do
-        result = upload_image(image_params)
+        result = upload_image(image_params, conn)
 
         Map.put(params, "image_bin", result.bin)
       else
@@ -861,7 +897,7 @@ defmodule SchoolWeb.StudentController do
 
     params =
       if image_params != nil do
-        result = upload_image(image_params)
+        result = upload_image(image_params, conn)
 
         Map.put(params, "image_filename", result.filename)
       else
@@ -889,7 +925,15 @@ defmodule SchoolWeb.StudentController do
         end
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html", student: student, changeset: changeset)
+        errors = changeset.errors |> Keyword.keys()
+
+        {reason, message} = changeset.errors |> hd()
+        {proper_message, message_list} = message
+        final_reason = Atom.to_string(reason) <> " " <> proper_message
+
+        conn
+        |> put_flash(:info, final_reason)
+        |> redirect(to: student_path(conn, :index))
     end
   end
 

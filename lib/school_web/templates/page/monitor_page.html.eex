@@ -1,0 +1,2 @@
+
+         <%= render( SchoolWeb.EhomeworkView ,"ehomework.html",conn: @conn, class_id: @class_id, class: @class, subjects: @subjects) %>

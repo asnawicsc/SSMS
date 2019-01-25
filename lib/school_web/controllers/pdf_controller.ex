@@ -73,6 +73,10 @@ defmodule SchoolWeb.PdfController do
     |> resp(200, pdf_binary)
   end
 
+  def print_timetable(conn, params) do
+    IEx.pry()
+  end
+
   def parent_listing(conn, params) do
     school = Repo.get(Institution, conn.private.plug_session["institution_id"])
 
@@ -343,9 +347,12 @@ defmodule SchoolWeb.PdfController do
             student = Map.put(student, :class, class.name)
             {class, student}
           else
-            student_class = Repo.get_by(StudentClass, sudent_id: student.id)
+            student_class =
+              Repo.get_by(StudentClass, sudent_id: student.id, semester_id: semester.id)
+
             class = Repo.get(Class, student_class.class_id)
             student = Map.put(student, :class, class.name)
+
             {class, student}
           end
 
@@ -355,10 +362,10 @@ defmodule SchoolWeb.PdfController do
 
             height_d =
               for height <- heights do
-                l_id =
+                semester_id =
                   String.split(height, "-") |> List.to_tuple() |> elem(0) |> String.to_integer()
 
-                if l_id == class.level_id do
+                if semester_id == semester.id do
                   height
                 else
                   nil
@@ -386,10 +393,10 @@ defmodule SchoolWeb.PdfController do
 
             weight_d =
               for weight <- weights do
-                l_id =
+                semester_id =
                   String.split(weight, "-") |> List.to_tuple() |> elem(0) |> String.to_integer()
 
-                if l_id == class.level_id do
+                if semester_id == semester.id do
                   weight
                 else
                   nil
@@ -1479,29 +1486,108 @@ defmodule SchoolWeb.PdfController do
     class_id = params["class_id"]
     semester_id = params["semester_id"]
 
-    all =
-      Repo.all(
-        from(
-          s in School.Affairs.StudentClass,
-          left_join: g in School.Affairs.Class,
-          on: s.class_id == g.id,
-          left_join: r in School.Affairs.Student,
-          on: r.id == s.sudent_id,
-          where:
-            s.class_id == ^class_id and
-              g.institution_id == ^conn.private.plug_session["institution_id"] and
-              r.institution_id == ^conn.private.plug_session["institution_id"] and
-              s.semester_id == ^semester_id,
-          select: %{
-            id: s.sudent_id,
-            id_no: s.id,
-            chinese_name: r.chinese_name,
-            name: r.name,
-            sex: r.sex
-          },
-          order_by: [desc: r.sex, asc: r.name]
-        )
-      )
+    {male, female} =
+      if class_id != "ALL" do
+        male =
+          Repo.all(
+            from(
+              s in School.Affairs.StudentClass,
+              left_join: g in School.Affairs.Class,
+              on: s.class_id == g.id,
+              left_join: r in School.Affairs.Student,
+              on: r.id == s.sudent_id,
+              where:
+                s.class_id == ^class_id and
+                  g.institution_id == ^conn.private.plug_session["institution_id"] and
+                  r.institution_id == ^conn.private.plug_session["institution_id"] and
+                  s.semester_id == ^semester_id and r.sex == "M",
+              select: %{
+                id: s.sudent_id,
+                id_no: r.student_no,
+                chinese_name: r.chinese_name,
+                name: r.name,
+                sex: r.sex
+              },
+              order_by: [asc: r.name]
+            )
+          )
+
+        female =
+          Repo.all(
+            from(
+              s in School.Affairs.StudentClass,
+              left_join: g in School.Affairs.Class,
+              on: s.class_id == g.id,
+              left_join: r in School.Affairs.Student,
+              on: r.id == s.sudent_id,
+              where:
+                s.class_id == ^class_id and
+                  g.institution_id == ^conn.private.plug_session["institution_id"] and
+                  r.institution_id == ^conn.private.plug_session["institution_id"] and
+                  s.semester_id == ^semester_id and r.sex == "F",
+              select: %{
+                id: s.sudent_id,
+                id_no: r.student_no,
+                chinese_name: r.chinese_name,
+                name: r.name,
+                sex: r.sex
+              },
+              order_by: [asc: r.name]
+            )
+          )
+
+        {male, female}
+      else
+        male =
+          Repo.all(
+            from(
+              s in School.Affairs.StudentClass,
+              left_join: g in School.Affairs.Class,
+              on: s.class_id == g.id,
+              left_join: r in School.Affairs.Student,
+              on: r.id == s.sudent_id,
+              where:
+                g.institution_id == ^conn.private.plug_session["institution_id"] and
+                  r.institution_id == ^conn.private.plug_session["institution_id"] and
+                  s.semester_id == ^semester_id and r.sex == "M",
+              select: %{
+                id: s.sudent_id,
+                id_no: r.student_no,
+                chinese_name: r.chinese_name,
+                name: r.name,
+                sex: r.sex
+              },
+              order_by: [asc: r.name]
+            )
+          )
+
+        female =
+          Repo.all(
+            from(
+              s in School.Affairs.StudentClass,
+              left_join: g in School.Affairs.Class,
+              on: s.class_id == g.id,
+              left_join: r in School.Affairs.Student,
+              on: r.id == s.sudent_id,
+              where:
+                g.institution_id == ^conn.private.plug_session["institution_id"] and
+                  r.institution_id == ^conn.private.plug_session["institution_id"] and
+                  s.semester_id == ^semester_id and r.sex == "F",
+              select: %{
+                id: s.sudent_id,
+                id_no: r.student_no,
+                chinese_name: r.chinese_name,
+                name: r.name,
+                sex: r.sex
+              },
+              order_by: [asc: r.name]
+            )
+          )
+
+        {male, female}
+      end
+
+    all = male ++ female
 
     number = 40
 
@@ -1533,16 +1619,356 @@ defmodule SchoolWeb.PdfController do
       )
 
     class =
-      Repo.get_by(School.Affairs.Class, %{
-        id: class_id,
-        institution_id: conn.private.plug_session["institution_id"]
-      })
+      if class_id != "ALL" do
+        Repo.get_by(School.Affairs.Class, %{
+          id: class_id,
+          institution_id: conn.private.plug_session["institution_id"]
+        })
+      else
+        %{name: "ALL"}
+      end
 
     html =
       Phoenix.View.render_to_string(
         SchoolWeb.PdfView,
         "student_class_listing.html",
         all: all,
+        class: class,
+        semester: semester,
+        institution: institution
+      )
+
+    pdf_params = %{"html" => html}
+
+    pdf_binary =
+      PdfGenerator.generate_binary!(
+        pdf_params["html"],
+        size: "A4",
+        shell_params: [
+          "--margin-left",
+          "5",
+          "--margin-right",
+          "5",
+          "--margin-top",
+          "5",
+          "--margin-bottom",
+          "5",
+          "--encoding",
+          "utf-8"
+        ],
+        delete_temporary: true
+      )
+
+    conn
+    |> put_resp_header("Content-Type", "application/pdf")
+    |> resp(200, pdf_binary)
+  end
+
+  def student_class_listing_jpn(conn, params) do
+    class_id = params["class_id"]
+    semester_id = params["semester_id"]
+
+    {male, female} =
+      if class_id != "ALL" do
+        male =
+          Repo.all(
+            from(
+              s in School.Affairs.StudentClass,
+              left_join: g in School.Affairs.Class,
+              on: s.class_id == g.id,
+              left_join: r in School.Affairs.Student,
+              on: r.id == s.sudent_id,
+              where:
+                s.class_id == ^class_id and
+                  g.institution_id == ^conn.private.plug_session["institution_id"] and
+                  r.institution_id == ^conn.private.plug_session["institution_id"] and
+                  s.semester_id == ^semester_id and r.sex == "M",
+              select: %{
+                id: s.sudent_id,
+                id_no: r.student_no,
+                chinese_name: r.chinese_name,
+                name: r.name,
+                sex: r.sex,
+                dob: r.dob,
+                pob: r.pob,
+                race: r.race,
+                b_cert: r.b_cert,
+                register_date: r.register_date
+              },
+              order_by: [asc: r.name]
+            )
+          )
+
+        female =
+          Repo.all(
+            from(
+              s in School.Affairs.StudentClass,
+              left_join: g in School.Affairs.Class,
+              on: s.class_id == g.id,
+              left_join: r in School.Affairs.Student,
+              on: r.id == s.sudent_id,
+              where:
+                s.class_id == ^class_id and
+                  g.institution_id == ^conn.private.plug_session["institution_id"] and
+                  r.institution_id == ^conn.private.plug_session["institution_id"] and
+                  s.semester_id == ^semester_id and r.sex == "F",
+              select: %{
+                id: s.sudent_id,
+                id_no: r.student_no,
+                chinese_name: r.chinese_name,
+                name: r.name,
+                sex: r.sex,
+                dob: r.dob,
+                pob: r.pob,
+                race: r.race,
+                b_cert: r.b_cert,
+                register_date: r.register_date
+              },
+              order_by: [asc: r.name]
+            )
+          )
+
+        {male, female}
+      else
+        male =
+          Repo.all(
+            from(
+              s in School.Affairs.StudentClass,
+              left_join: g in School.Affairs.Class,
+              on: s.class_id == g.id,
+              left_join: r in School.Affairs.Student,
+              on: r.id == s.sudent_id,
+              where:
+                g.institution_id == ^conn.private.plug_session["institution_id"] and
+                  r.institution_id == ^conn.private.plug_session["institution_id"] and
+                  s.semester_id == ^semester_id and r.sex == "M",
+              select: %{
+                id: s.sudent_id,
+                id_no: r.student_no,
+                chinese_name: r.chinese_name,
+                name: r.name,
+                sex: r.sex,
+                dob: r.dob,
+                pob: r.pob,
+                race: r.race,
+                b_cert: r.b_cert,
+                register_date: r.register_date
+              },
+              order_by: [asc: r.name]
+            )
+          )
+
+        female =
+          Repo.all(
+            from(
+              s in School.Affairs.StudentClass,
+              left_join: g in School.Affairs.Class,
+              on: s.class_id == g.id,
+              left_join: r in School.Affairs.Student,
+              on: r.id == s.sudent_id,
+              where:
+                g.institution_id == ^conn.private.plug_session["institution_id"] and
+                  r.institution_id == ^conn.private.plug_session["institution_id"] and
+                  s.semester_id == ^semester_id and r.sex == "F",
+              select: %{
+                id: s.sudent_id,
+                id_no: r.student_no,
+                chinese_name: r.chinese_name,
+                name: r.name,
+                sex: r.sex,
+                dob: r.dob,
+                pob: r.pob,
+                race: r.race,
+                b_cert: r.b_cert,
+                register_date: r.register_date
+              },
+              order_by: [asc: r.name]
+            )
+          )
+
+        {male, female}
+      end
+
+    all = male ++ female
+
+    new_all =
+      for item <- all do
+        dob =
+          if item.dob != nil do
+            item.dob |> String.split_at(10) |> elem(0) |> String.replace(".", "/")
+          else
+          end
+
+        umo_1jan =
+          if item.dob != nil do
+            a = item.dob |> String.split_at(10) |> elem(0)
+
+            day = a |> String.split_at(2) |> elem(0) |> String.to_integer()
+
+            month =
+              a
+              |> String.split_at(5)
+              |> elem(0)
+              |> String.split_at(3)
+              |> elem(1)
+              |> String.to_integer()
+
+            year = a |> String.split_at(6) |> elem(1) |> String.to_integer()
+
+            umo_1jan =
+              if item.register_date != nil do
+                day_r = item.register_date |> String.split_at(2) |> elem(0) |> String.to_integer()
+
+                month_r =
+                  item.register_date
+                  |> String.split_at(5)
+                  |> elem(0)
+                  |> String.split_at(3)
+                  |> elem(1)
+                  |> String.to_integer()
+
+                year_r =
+                  item.register_date |> String.split_at(6) |> elem(1) |> String.to_integer()
+
+                year_total = year_r - 1 - year
+
+                month_total = 12 - month
+
+                month_new = month_total |> Integer.to_string()
+                year_new = year_total |> Integer.to_string()
+
+                umo_1jan = year_new <> "-" <> month_new
+
+                umo_1jan
+              else
+              end
+
+            umo_1jan
+          else
+          end
+
+        %{
+          id: item.id,
+          id_no: item.id_no,
+          chinese_name: item.chinese_name,
+          name: item.name,
+          sex: item.sex,
+          dob: dob,
+          pob: item.pob,
+          race: item.race,
+          b_cert: item.b_cert,
+          register_date: item.register_date,
+          umo_1jan: umo_1jan
+        }
+      end
+
+    number = 40
+
+    add = number - (new_all |> Enum.count())
+
+    range = 1..add
+
+    empty_colum =
+      for item <- range do
+        %{
+          id: "",
+          id_no: "",
+          chinese_name: "",
+          name: "",
+          sex: "",
+          dob: "",
+          pob: "",
+          race: "",
+          b_cert: "",
+          register_date: "",
+          umo_1jan: ""
+        }
+      end
+
+    all = (new_all ++ empty_colum) |> Enum.with_index()
+
+    institution =
+      Repo.get_by(School.Settings.Institution, id: conn.private.plug_session["institution_id"])
+
+    semester =
+      Repo.get_by(School.Affairs.Semester,
+        id: semester_id,
+        institution_id: conn.private.plug_session["institution_id"]
+      )
+
+    class =
+      if class_id != "ALL" do
+        Repo.get_by(School.Affairs.Class, %{
+          id: class_id,
+          institution_id: conn.private.plug_session["institution_id"]
+        })
+      else
+        %{name: "ALL"}
+      end
+
+    html =
+      Phoenix.View.render_to_string(
+        SchoolWeb.PdfView,
+        "student_class_listing_jpn.html",
+        all: all,
+        class: class,
+        semester: semester,
+        institution: institution
+      )
+
+    pdf_params = %{"html" => html}
+
+    pdf_binary =
+      PdfGenerator.generate_binary!(
+        pdf_params["html"],
+        size: "A4",
+        shell_params: [
+          "--margin-left",
+          "5",
+          "--margin-right",
+          "5",
+          "--margin-top",
+          "5",
+          "--margin-bottom",
+          "5",
+          "--encoding",
+          "utf-8"
+        ],
+        delete_temporary: true
+      )
+
+    conn
+    |> put_resp_header("Content-Type", "application/pdf")
+    |> resp(200, pdf_binary)
+  end
+
+  def class_assessment(conn, params) do
+    inst_id = conn.private.plug_session["institution_id"]
+    institution = Repo.get_by(School.Settings.Institution, id: inst_id)
+
+    mark =
+      Repo.all(
+        from(s in School.Affairs.AssessmentMark,
+          where:
+            s.institution_id == ^inst_id and s.class_id == ^params["class"] and
+              s.semester_id == ^params["semester"]
+        )
+      )
+      |> Enum.group_by(fn x -> x.student_id end)
+
+    semester =
+      Repo.get_by(School.Affairs.Semester,
+        id: params["semester"],
+        institution_id: conn.private.plug_session["institution_id"]
+      )
+
+    class = Repo.get_by(School.Affairs.Class, id: params["class"])
+
+    html =
+      Phoenix.View.render_to_string(
+        SchoolWeb.PdfView,
+        "student_assessment.html",
+        mark: mark,
         class: class,
         semester: semester,
         institution: institution

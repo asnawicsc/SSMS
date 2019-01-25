@@ -13,6 +13,12 @@ defmodule SchoolWeb.PageController do
         "Support" ->
           :support_dashboard
 
+        "Clerk" ->
+          :clerk_dashboard
+
+        "Monitor" ->
+          :monitor_dashboard
+
         "Admin" ->
           :admin_dashboard
 
@@ -364,6 +370,12 @@ defmodule SchoolWeb.PageController do
           "Support" ->
             "support_page.html"
 
+          "Clerk" ->
+            "clerk_page.html"
+
+          "Monitor" ->
+            "monitor_page.html"
+
           "Admin" ->
             "admin_page.html"
 
@@ -439,6 +451,38 @@ defmodule SchoolWeb.PageController do
     )
   end
 
+  def monitor_dashboard(conn, params) do
+    user_id = conn.private.plug_session["user_id"]
+
+    user = Repo.get_by(User, id: user_id)
+
+    class = Repo.get_by(School.Affairs.Class, name: user.name)
+
+    subjects =
+      Repo.all(
+        from(
+          st in SubjectTeachClass,
+          left_join: c in Class,
+          on: st.class_id == c.id,
+          left_join: s in Subject,
+          on: st.subject_id == s.id,
+          where: c.id == ^class.id,
+          select: %{
+            description: s.description,
+            subject_id: s.id
+          }
+        )
+      )
+
+    render(
+      conn,
+      "monitor_page.html",
+      class_id: class.id,
+      class: class,
+      subjects: subjects
+    )
+  end
+
   def clerk_dashboard(conn, _params) do
     current_sem =
       Repo.all(
@@ -447,6 +491,86 @@ defmodule SchoolWeb.PageController do
           where: s.end_date > ^Timex.today() and s.start_date < ^Timex.today()
         )
       )
+
+    date_time = NaiveDateTime.utc_now()
+
+    date = NaiveDateTime.to_string(date_time) |> String.split_at(10) |> elem(0)
+
+    year = date |> String.split_at(4) |> elem(0) |> String.to_integer()
+
+    day = date |> String.split_at(8) |> elem(1) |> String.to_integer()
+
+    m = date |> String.split_at(5) |> elem(1)
+
+    month = m |> String.split_at(2) |> elem(0) |> String.to_integer()
+
+    new_day = day |> Integer.to_string()
+    new_month = month |> Integer.to_string()
+    new_year = year |> Integer.to_string()
+
+    date = new_day <> "-" <> new_month <> "-" <> new_year
+
+    teachers_attend =
+      Repo.all(
+        from(
+          t in Teacher,
+          left_join: j in School.Affairs.TeacherAttendance,
+          on: t.id == j.teacher_id,
+          select: %{id: t.id},
+          where:
+            t.institution_id == ^conn.private.plug_session["institution_id"] and
+              j.institution_id == ^conn.private.plug_session["institution_id"]
+        )
+      )
+
+    all =
+      Repo.all(
+        from(
+          t in Teacher,
+          select: %{id: t.id},
+          where: t.institution_id == ^conn.private.plug_session["institution_id"]
+        )
+      )
+
+    not_yet = all -- teachers_attend
+
+    not_yet_full =
+      for item <- not_yet do
+        teacher = Repo.get_by(Teacher, id: item.id)
+
+        %{name: teacher.name, cname: teacher.cname, id: teacher.id}
+      end
+
+    teachers_attend_full =
+      for item <- teachers_attend do
+        teacher = Repo.get_by(Teacher, id: item.id)
+
+        teacher_attendance =
+          Repo.get_by(School.Affairs.TeacherAttendance, teacher_id: item.id, date: date)
+
+        teacher_attendance =
+          if teacher_attendance != nil do
+            %{
+              name: teacher.name,
+              cname: teacher.cname,
+              image_bin: teacher.image_bin,
+              id: teacher.id,
+              time_in: teacher_attendance.time_in,
+              time_out: teacher_attendance.time_out,
+              date: teacher_attendance.date
+            }
+          else
+          end
+
+        teacher_attendance
+      end
+
+    teachers_attend_full =
+      if teachers_attend_full != [nil] do
+        teachers_attend_full |> Enum.filter(fn x -> x.date == date end)
+      else
+        []
+      end
 
     changeset = Settings.change_institution(%Institution{})
 
@@ -467,7 +591,9 @@ defmodule SchoolWeb.PageController do
       current_sem: current_sem,
       institution: institution,
       users: users,
-      changeset: changeset
+      changeset: changeset,
+      not_yet: not_yet_full,
+      teachers_attend: teachers_attend_full
     )
   end
 

@@ -1,0 +1,138 @@
+<h2>Show Mark sheet history</h2>
+
+<ul>
+
+  <li>
+    <strong>Institution:</strong>
+    <%= @mark_sheet_history.institution_id %>
+  </li>
+
+  <li>
+    <strong>Stuid:</strong>
+    <%= @mark_sheet_history.stuid %>
+  </li>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @mark_sheet_history.name %>
+  </li>
+
+  <li>
+    <strong>Cname:</strong>
+    <%= @mark_sheet_history.cname %>
+  </li>
+
+  <li>
+    <strong>Class:</strong>
+    <%= @mark_sheet_history.class %>
+  </li>
+
+  <li>
+    <strong>Subject:</strong>
+    <%= @mark_sheet_history.subject %>
+  </li>
+
+  <li>
+    <strong>Description:</strong>
+    <%= @mark_sheet_history.description %>
+  </li>
+
+  <li>
+    <strong>Cdesc:</strong>
+    <%= @mark_sheet_history.cdesc %>
+  </li>
+
+  <li>
+    <strong>Year:</strong>
+    <%= @mark_sheet_history.year %>
+  </li>
+
+  <li>
+    <strong>T1m:</strong>
+    <%= @mark_sheet_history.t1m %>
+  </li>
+
+  <li>
+    <strong>T2m:</strong>
+    <%= @mark_sheet_history.t2m %>
+  </li>
+
+  <li>
+    <strong>T3m:</strong>
+    <%= @mark_sheet_history.t3m %>
+  </li>
+
+  <li>
+    <strong>T4m:</strong>
+    <%= @mark_sheet_history.t4m %>
+  </li>
+
+  <li>
+    <strong>T5m:</strong>
+    <%= @mark_sheet_history.t5m %>
+  </li>
+
+  <li>
+    <strong>T6m:</strong>
+    <%= @mark_sheet_history.t6m %>
+  </li>
+
+  <li>
+    <strong>S1m:</strong>
+    <%= @mark_sheet_history.s1m %>
+  </li>
+
+  <li>
+    <strong>S2m:</strong>
+    <%= @mark_sheet_history.s2m %>
+  </li>
+
+  <li>
+    <strong>T1g:</strong>
+    <%= @mark_sheet_history.t1g %>
+  </li>
+
+  <li>
+    <strong>T2g:</strong>
+    <%= @mark_sheet_history.t2g %>
+  </li>
+
+  <li>
+    <strong>T3g:</strong>
+    <%= @mark_sheet_history.t3g %>
+  </li>
+
+  <li>
+    <strong>T4g:</strong>
+    <%= @mark_sheet_history.t4g %>
+  </li>
+
+  <li>
+    <strong>T5g:</strong>
+    <%= @mark_sheet_history.t5g %>
+  </li>
+
+  <li>
+    <strong>T6g:</strong>
+    <%= @mark_sheet_history.t6g %>
+  </li>
+
+  <li>
+    <strong>S1g:</strong>
+    <%= @mark_sheet_history.s1g %>
+  </li>
+
+  <li>
+    <strong>S2g:</strong>
+    <%= @mark_sheet_history.s2g %>
+  </li>
+
+  <li>
+    <strong>S3g:</strong>
+    <%= @mark_sheet_history.s3g %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: mark_sheet_history_path(@conn, :edit, @mark_sheet_history) %></span>
+<span><%= link "Back", to: mark_sheet_history_path(@conn, :index) %></span>

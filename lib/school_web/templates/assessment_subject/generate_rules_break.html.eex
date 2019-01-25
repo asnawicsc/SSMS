@@ -1,0 +1,54 @@
+
+<form method="post" action="/create_rules_break" class="form-horizontal">
+   <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+   <input type="hidden" name="class_id" value="<%= @class.id %>">
+    <input type="hidden" name="subject_id" value="<%= @subject.id %>">
+     <input type="hidden" name="assessment_subject_id" value="<%= @assessment_subject.id %>">
+     
+   				<center>
+               <div class="col-6" >
+                  <!-- START card-->
+                  <div class="card card-default">
+                     <div class="card-header">Rules Break for <%= @subject.description %> (Class :<%=@class.name %>)</div>
+                     <div class="card-body">
+                        <!-- START table-responsive-->
+                        <div class="table-responsive">
+                             <table class="table table-striped table-bordered table-hover">
+                              <thead>
+                                 <tr>
+                                    <th style="background-color:#D3D3D3"><%= gettext "Student Name" %></th>
+                                    <th style="background-color:#D3D3D3"><%= gettext "Other Name" %></th>
+                                    <th style="background-color:#D3D3D3"><%= gettext "Level" %></th>
+                              
+                                 </tr>
+                              </thead>
+                              <tbody>
+                                <%= for item <- @students|>Enum.sort_by(fn x -> x.id end) do %>
+                                 <tr>
+                                    <td><%= item.name %></td>
+                                    <td><%= item.chinese_name %></td>
+                                       <input type="hidden" name="student[<%= item.id %>]" value="<%= item.id %>">
+                                    <td><select class="form-control"  name="student[<%= item.id %>]"  required="" >
+                           <%= for a <- @level|>Enum.uniq |> Enum.sort_by(fn x -> x.id end) do %>
+                                            <option value="<%= a.id %>" >(Level <%= a.id %>) <%= a.desc %>
+                                            </option>
+                                          <% end %>
+                                        </select></td>
+                                
+                                 </tr>
+                                    <% end %>
+                              </tbody>
+                           </table>
+                        </div>
+                        <!-- END table-responsive-->
+                     </div>
+                        <center><input class="btn btn-primary" name="" value="Submit" type="submit" style="margin-bottom: 10px"></center> 
+
+                  </div>
+                  <!-- END card-->
+               </div>
+            
+        </center>
+
+
+</form>

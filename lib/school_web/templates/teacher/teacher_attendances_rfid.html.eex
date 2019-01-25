@@ -1,0 +1,220 @@
+<link rel="stylesheet" type="text/css" href="/vendor/jquery_datetimepicker/jquery.datetimepicker.min.css"/ >
+<script src="/vendor/jquery_datetimepicker/jquery.datetimepicker.full.min.js"></script>
+
+
+<div class="row">
+
+<div class="col-md-5">
+        <!-- START card-->
+        <div class="card card-default">
+            <div class="card-body" id="">
+                <div id="myclock" align="center"></div>
+            </div>
+        </div>
+        <!-- END card-->
+    </div>
+  
+  <div class="col-md-7">
+        <!-- START card-->
+
+        <div class="card card-default">
+            <div class="card-body" id="">
+              <div class="row ml-auto" align="right">
+               <label class="switch switch-sm">
+                                  <input type="radio" checked="check_time" id="check_time_in_mode"   name="radioSwitch">
+                                 <span></span> &nbsp; Time In 
+                              </label>&nbsp;&nbsp;
+                              <label class="switch switch-sm">
+                                  <input type="radio" id="check_time_out_mode" name="radioSwitch">
+                                 <span></span> &nbsp; Time Out
+                              </label>
+                            </div>
+                <form>
+                    <div class="form-group">
+                        <label>Single Mark Attendance</label>
+                        <input class="form-control" id="qt" placeholder="Enter query" name="dad" type="text">
+                    </div>
+                </form>
+    
+            </div>
+        </div>
+        <!-- END card-->
+    </div>
+</div>
+
+
+<div class="row">
+   
+
+  <div class="col-md-12">
+        <!-- START card-->
+
+        <div class="card card-default">
+            <div class="card-body" id="">
+                <form>
+                    <div class="form-group">
+                        <label>Attended Teacher</label>
+                     
+                    </div>
+                </form>
+                <div class="table-responsive">
+                            <table class="table" id="datatable2">
+                        <thead>
+                            <tr>
+                                <th>Picture</th>
+                                <th>
+                                    <%= gettext("Name") %>
+                                </th>
+                                <th>
+                                    <%= gettext("Chinese Name") %>
+                                </th>
+                                <th>
+                                    <%= gettext("Time In") %>
+                                </th>
+                               
+                                <th>
+                                    <%= gettext("Time Out") %>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <%= for ta <- @teachers_attend do %>
+                          <tr>
+                              <td class="text-left"> <img id="preview6"  style='width:20px; height: 20px;' src='data:image/png;base64, <%= ta.image_bin %>'></td>
+                              <td><%= ta.name %></td>
+                                <td><%= ta.cname %></td>
+                                 <td><%= ta.time_in %></td>
+                                  <td><%= ta.time_out %></td>
+                          </tr>
+                          <% end %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- END card-->
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    $(window).ready(function(){
+
+$( "input#qt" ).focus();
+
+var ds = localStorage.getItem('mode')
+
+if (ds == 'time_in')
+ {
+
+  $('#check_time_in_mode').attr("checked",true)
+ }
+
+ if (ds == 'time_out')
+ {
+
+  $('#check_time_out_mode').attr("checked",true)
+
+ }
+
+                  if(document.getElementById('check_time_in_mode').checked) {
+
+                    var mode ="time_in"
+                      localStorage.setItem('mode', mode);
+                  }
+
+                     if(document.getElementById('check_time_out_mode').checked) {
+
+                    var mode ="time_out"
+                     localStorage.setItem('mode', mode);
+                  }
+
+       $('#check_time_in_mode').click(function() {
+   alert("Alert: You Switch you mode to Time In")
+    location.reload();
+
+   
+
+ })
+
+          $('#check_time_out_mode').click(function() {
+   alert("Alert: You Switch you mode to Time Out")
+      location.reload();
+   
+});
+
+
+
+
+// function runScript(e) {
+//     //See notes about 'which' and 'key'
+//     if (e.keyCode == 13) {
+//         var term = $("input#qt").val()
+
+//           console.log(term)
+
+        
+       
+//     }
+// }
+
+
+
+$(function() {
+
+
+
+  //press enter on text area..
+
+  $('#qt').keypress(function(e) {
+    var key = e.which;
+    if (key == 13) // the enter key code
+    {
+
+var d = new Date($.now());
+var date_time= d.getDate()+"-"+(d.getMonth()+1)+"-"+d.getFullYear()+" "+d.getHours()+":"+d.getMinutes()+":"+d.getSeconds();
+
+ var mode=localStorage.getItem("mode");
+  
+        var term = $("input#qt").val()
+       channel.push("qt_term_rfid", {date_time: date_time,term: term, user_id: window.currentUser, institution_id: window.currentInstitute, semester_id: window.currentSemester, mode: mode}).receive(
+                     "ok", payload => {
+                        alert("dad")
+
+                      
+
+    
+                     });
+    }
+  });
+
+});
+
+
+
+  
+})
+
+    $('#myclock').thooClock({
+
+
+size:250,
+dialColor:'#000000',
+dialBackgroundColor:'transparent',
+secondHandColor:'#F3A829',
+minuteHandColor:'#222222',
+hourHandColor:'#222222',
+alarmHandColor:'#FFFFFF',
+alarmHandTipColor:'#026729',
+hourCorrection:'+0',
+alarmCount:1,
+showNumerals:true
+
+
+
+  });
+
+
+</script>
+

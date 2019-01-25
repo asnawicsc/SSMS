@@ -1,0 +1,108 @@
+<% require IEx %>
+<link rel="stylesheet" href="<%= Application.app_dir(:school, "priv/static") %>/css/bootstrap.min.css">
+<style type="text/css">
+	
+</style>
+
+<%= for all_data <- @mark do %>
+
+	<% all_date=all_data|>elem(1) %>
+ 
+<div  style="page-break-before: always;">
+
+
+	<% student_no=all_data|>elem(0) %>
+
+ <% student =
+      Repo.get_by(School.Affairs.Student,
+        id: student_no ) %>
+
+         <% class =
+      Repo.get_by(School.Affairs.Class,
+        id: student_no ) %>
+
+
+	<h4 align="center"> PELAPORAN PENTAKSIRAN BILIK DARJAH</h4>
+	<p align="center"><%= @institution.name %><br/><%= @semester.start_date.year%> 成绩表 </p>
+
+	NAMA MURID:<%= student.name  %><BR>
+	KELAS:<%= @class.name  %><BR>
+	JANTINA:<%= student.sex  %><BR>
+	LAPORAN PENTAKSIRAN AKHIR TAHUN<BR>
+	SEKOLAH: <%= @institution.name %><BR>
+	<br>
+
+
+  
+
+  </div>
+
+
+<body>
+  <table class="table" align="center" border="1" >
+    <thead>
+  
+      <tr>
+        <td bgcolor="#001a4d" align="center"><font color="white">BIL</font></td>
+        <td bgcolor="#001a4d" align="center"><font color="white">MATA PELAJARAN</font></td>
+        <td bgcolor="#001a4d" align="center"><font color="white">TAHAP PENGUASAAN </font></td>
+        <td bgcolor="#001a4d" align="center"><font color="white">PENYATAAN </font></td>
+      </tr>
+     
+    </thead>
+    <tbody>
+      <%= for item <- all_date|>Enum.with_index() do %>
+
+      <% a = item |>elem(0) %>
+
+      <% bil = item |>elem(1) %>
+
+        <% subject =
+      Repo.get_by(School.Affairs.Subject,
+        id: a.subject_id
+        
+      ) %>
+      <tr>
+        <td align="center"> <%= bil + 1 %> </td>
+        <td ><%= subject.description %></td>
+        <td align="center"> <%= a.assessment_subject_level %></td>
+        <td ><%= a.assessment_subject_level_desc %></td>
+   
+      
+      </tr>       
+       <% end %>
+    </tbody>    
+
+  </table>
+  <br>
+
+  <table>
+  	<td>ULASAN TAMBAHAN:<Br>
+  	(Jika ada)</td><td>____________________________________________________________________________ <bR>
+  				____________________________________________________________________________<bR>
+  			____________________________________________________________________________<bR>
+  		____________________________________________________________________________<bR></td>
+  </table>
+
+<br>
+<br>
+<br>
+<br>
+  
+    	
+    		 <% class_teacher =
+      Repo.get_by(School.Affairs.Teacher,
+        id: @class.teacher_id ) %>
+        	_________________________<br>
+    		<%= class_teacher.name %><bR>
+    		<%= @class.name %><br>
+    		<%= @institution.name %>
+  		
+ 
+   
+</body>
+
+
+</div>
+<% end %>
+

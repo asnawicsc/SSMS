@@ -1,0 +1,39 @@
+<div class="content-heading">
+    <div>Adjust Header
+    </div>
+</div>
+
+		
+<form class="form-horizontal" method="POST" action="/upload_mark_sheet_history">
+	  <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+	    <input type="hidden" name="batch_id" value="<%= @batch_id%>">
+	<% attrs = [ :stuid, :name, :cname, :class, :subject, :description, :cdesc, :year, :t1m, :t2m, :t3m, :t4m, :t5m, :t6m, :s1m, :s2m, :t1g, :t2g, :t3g, :t4g, :t5g, :t6g, :s1g, :s2g, :s3g, :s3m
+    ] |> Enum.map(fn x -> Atom.to_string(x) end) %>
+
+<%= for header <- @headers do %>
+
+	<div class="form-group row">
+	   <label class="col-md-2 col-form-label"><%= header%> </label>
+	   <div class="col-md-10">
+
+	      <select name="header[<%= header%>]" class="custom-select custom-select-sm">
+	         <option>Open this select menu</option>
+						<%= for attr <- attrs do	%>
+			
+				
+						
+							   <option  
+
+<%= if String.jaro_distance(header, attr) > 0.9, do: "selected=''" %>
+
+							      value="<%= attr%>"><%= attr%></option>
+					
+						<% end %>
+	      </select>
+
+	   </div>
+	</div>
+
+	<% end %>
+	<button type="submit">Submit</button>
+</form>

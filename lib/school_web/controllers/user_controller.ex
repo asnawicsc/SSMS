@@ -97,7 +97,7 @@ defmodule SchoolWeb.UserController do
               from(
                 s in School.Affairs.Semester,
                 where:
-                  s.end_date > ^Timex.today() and s.start_date < ^Timex.today() and
+                  s.end_date >= ^Timex.today() and s.start_date <= ^Timex.today() and
                     s.institution_id == ^institution_id.id
               )
             )
@@ -124,7 +124,7 @@ defmodule SchoolWeb.UserController do
             from(
               s in School.Affairs.Semester,
               where:
-                s.end_date > ^Timex.today() and s.start_date < ^Timex.today() and
+                s.end_date >= ^Timex.today() and s.start_date <= ^Timex.today() and
                   s.institution_id == ^access.institution_id
             )
           )
@@ -159,12 +159,23 @@ defmodule SchoolWeb.UserController do
               |> put_session(:style, user.styles)
               |> redirect(to: page_path(conn, :clerk_dashboard))
             else
-              conn
-              |> put_session(:user_id, user.id)
-              |> put_session(:semester_id, current_sem.id)
-              |> put_session(:institution_id, access.institution_id)
-              |> put_session(:style, user.styles)
-              |> redirect(to: page_path(conn, :dashboard))
+              if user.role == "Monitor" do
+                class = Repo.get_by(School.Affairs.Class, name: user.name)
+
+                conn
+                |> put_session(:user_id, user.id)
+                |> put_session(:semester_id, current_sem.id)
+                |> put_session(:institution_id, access.institution_id)
+                |> put_session(:style, user.styles)
+                |> redirect(to: page_path(conn, :monitor_dashboard, class.id))
+              else
+                conn
+                |> put_session(:user_id, user.id)
+                |> put_session(:semester_id, current_sem.id)
+                |> put_session(:institution_id, access.institution_id)
+                |> put_session(:style, user.styles)
+                |> redirect(to: page_path(conn, :dashboard))
+              end
             end
           end
         end

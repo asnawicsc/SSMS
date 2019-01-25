@@ -1,0 +1,1141 @@
+<% require IEx %>
+<link rel="stylesheet" href="<%= Application.app_dir(:school, "priv/static") %>/css/bootstrap.min.css">
+<style type="text/css">
+	
+</style>
+
+<%= for all_data <- @a do %>
+
+	<% all_date=all_data|>elem(1) %>
+
+  <% profile=all_date|>hd() %>
+
+ <%  year=case profile.year do
+        "2018" ->
+          "二千八十"
+
+        "2017" ->
+         "二千一十七"
+
+        "2016" ->
+         "二十六"
+
+        "2015" ->
+          "二千一十五"
+
+        "2014" ->
+          "二千四十四"
+
+           "2013" ->
+         "二千一十三"
+
+           "2012" ->
+          "二千一二十二"
+
+           "2011" ->
+          "二千一十一"
+
+           "2010" ->
+          "二千一点"
+
+      end %>
+
+
+<div  style="page-break-before: always;">
+
+
+
+  </div>
+
+  <% 
+
+    bml= all_date|>Enum.filter(fn x -> x.subject =="MA04" end)|>hd
+
+ bml1=if bml.s1m != nil do
+  bml.s1m
+else
+   bml.s1g
+ end
+
+  bml2=if bml.s2m != nil do
+  bml.s2m
+else
+   bml.s2g
+ end
+
+   bml3=if bml.s3m != nil do
+  bml.s3m
+else
+   bml.s3g
+ end
+
+   bmb= all_date|>Enum.filter(fn x -> x.subject =="MA03" end)|>hd
+
+ bmb1=if bmb.s1m != nil do
+  bmb.s1m
+else
+   bmb.s1g
+ end
+
+  bmb2=if bmb.s2m != nil do
+  bmb.s2m
+else
+   bmb.s2g
+ end
+
+   bmb3=if bmb.s3m != nil do
+  bmb.s3m
+else
+   bmb.s3g
+ end
+
+    bmp= all_date|>Enum.filter(fn x -> x.subject =="MA01" end)|>hd
+
+ bmp1=if bmp.s1m != nil do
+  bmp.s1m
+else
+   bmp.s1g
+ end
+
+  bmp2=if bmp.s2m != nil do
+  bmp.s2m
+else
+   bmp.s2g
+ end
+
+   bmp3=if bmp.s3m != nil do
+  bmp.s3m
+else
+   bmp.s3g
+ end
+
+     bmpm= all_date|>Enum.filter(fn x -> x.subject =="MA02" end)|>hd
+
+ bmpm1=if bmpm.s1m != nil do
+  bmpm.s1m
+else
+   bmpm.s1g
+ end
+
+  bmpm2=if bmpm.s2m != nil do
+  bmpm.s2m
+else
+   bmpm.s2g
+ end
+
+   bmpm3=if bmpm.s3m != nil do
+  bmpm.s3m
+else
+   bmpm.s3g
+ end
+
+ingl= all_date|>Enum.filter(fn x -> x.subject =="ING04" end)|>hd
+
+ ingl1=if ingl.s1m != nil do
+  ingl.s1m
+else
+   ingl.s1g
+ end
+
+  ingl2=if ingl.s2m != nil do
+  ingl.s2m
+else
+   ingl.s2g
+ end
+
+   ingl3=if ingl.s3m != nil do
+  ingl.s3m
+else
+   ingl.s3g
+ end
+
+   ingb= all_date|>Enum.filter(fn x -> x.subject =="ING03" end)|>hd
+
+ ingb1=if ingb.s1m != nil do
+  ingb.s1m
+else
+   ingb.s1g
+ end
+
+  ingb2=if ingb.s2m != nil do
+  ingb.s2m
+else
+   ingb.s2g
+ end
+
+   ingb3=if ingb.s3m != nil do
+  ingb.s3m
+else
+   ingb.s3g
+ end
+
+    ingp= all_date|>Enum.filter(fn x -> x.subject =="ING01" end)|>hd
+
+ ingp1=if ingp.s1m != nil do
+  ingp.s1m
+else
+   ingp.s1g
+ end
+
+  ingp2=if ingp.s2m != nil do
+  ingp.s2m
+else
+   ingp.s2g
+ end
+
+   ingp3=if ingp.s3m != nil do
+  ingp.s3m
+else
+   ingp.s3g
+ end
+
+     ingpm= all_date|>Enum.filter(fn x -> x.subject =="ING02" end)|>hd
+
+ ingpm1=if ingpm.s1m != nil do
+  ingpm.s1m
+else
+   ingpm.s1g
+ end
+
+  ingpm2=if ingpm.s2m != nil do
+  ingpm.s2m
+else
+   ingpm.s2g
+ end
+
+   ingpm3=if ingpm.s3m != nil do
+  ingpm.s3m
+else
+   ingpm.s3g
+ end
+
+
+     chl= all_date|>Enum.filter(fn x -> x.subject =="CH04" end)|>hd
+
+ chl1=if chl.s1m != nil do
+  chl.s1m
+else
+   chl.s1g
+ end
+
+  chl2=if chl.s2m != nil do
+  chl.s2m
+else
+   chl.s2g
+ end
+
+   chl3=if chl.s3m != nil do
+  chl.s3m
+else
+   chl.s3g
+ end
+
+   chb= all_date|>Enum.filter(fn x -> x.subject =="CH03" end)|>hd
+
+ chb1=if chb.s1m != nil do
+  chb.s1m
+else
+   chb.s1g
+ end
+
+  chb2=if chb.s2m != nil do
+  chb.s2m
+else
+   chb.s2g
+ end
+
+   chb3=if chb.s3m != nil do
+  chb.s3m
+else
+   chb.s3g
+ end
+
+    chp= all_date|>Enum.filter(fn x -> x.subject =="CH01" end)|>hd
+
+ chp1=if chp.s1m != nil do
+  chp.s1m
+else
+   chp.s1g
+ end
+
+  chp2=if chp.s2m != nil do
+  chp.s2m
+else
+   chp.s2g
+ end
+
+   chp3=if chp.s3m != nil do
+  chp.s3m
+else
+   chp.s3g
+ end
+
+     chpm= all_date|>Enum.filter(fn x -> x.subject =="CH02" end)|>hd
+
+ chpm1=if chpm.s1m != nil do
+  chpm.s1m
+else
+   chpm.s1g
+ end
+
+  chpm2=if chpm.s2m != nil do
+  chpm.s2m
+else
+   chpm.s2g
+ end
+
+   chpm3=if chpm.s3m != nil do
+  chpm.s3m
+else
+   chpm.s3g
+ end
+
+
+    math= all_date|>Enum.filter(fn x -> x.subject =="MATH" end)|>hd
+
+ math1=if math.s1m != nil do
+  math.s1m
+else
+   math.s1g
+ end
+
+  math2=if math.s2m != nil do
+  math.s2m
+else
+   math.s2g
+ end
+
+   math3=if math.s3m != nil do
+  math.s3m
+else
+   math.s3g
+ end
+
+     sains= all_date|>Enum.filter(fn x -> x.subject =="SAINS" end)|>hd
+
+ sains1=if sains.s1m != nil do
+  sains.s1m
+else
+   sains.s1g
+ end
+
+  sains2=if sains.s2m != nil do
+  sains.s2m
+else
+   sains.s2g
+ end
+
+   sains3=if sains.s3m != nil do
+  sains.s3m
+else
+   sains.s3g
+ end
+
+
+ agama= all_date|>Enum.filter(fn x -> x.subject =="AGAMA" end)|>hd
+
+ agama1=if agama.s1m != nil do
+  agama.s1m
+else
+   agama.s1g
+ end
+
+  agama2=if agama.s2m != nil do
+  agama.s2m
+else
+   agama.s2g
+ end
+
+  agama3=if agama.s3m != nil do
+  agama.s3m
+else
+   agama.s3g
+ end
+
+ sej= all_date|>Enum.filter(fn x -> x.subject =="SEJ" end)
+
+ {sej1,sej2,sej3}=if sej != [] do
+
+  sej=sej|>hd
+
+
+ sej1=if sej.s1m != nil do
+  sej.s1m
+else
+   sej.s1g
+ end
+
+  sej2=if sej.s2m != nil do
+  sej.s2m
+else
+   sej.s2g
+ end
+
+  sej3=if sej.s3m != nil do
+  sej.s3m
+else
+   sej.s3g
+ end
+
+ {sej1,sej2,sej3}
+
+ else
+
+  sej1=nil
+
+  sej2=nil
+
+  sej3=nil
+
+  {sej1,sej2,sej3}
+   
+ end
+
+
+  rbt= all_date|>Enum.filter(fn x -> x.subject =="RBT" end)
+
+ {rbt1,rbt2,rbt3}=if rbt != [] do
+
+  rbt=rbt|>hd
+
+
+ rbt1=if rbt.s1m != nil do
+  rbt.s1m
+else
+   rbt.s1g
+ end
+
+  rbt2=if rbt.s2m != nil do
+  rbt.s2m
+else
+   rbt.s2g
+ end
+
+  rbt3=if rbt.s3m != nil do
+  rbt.s3m
+else
+   rbt.s3g
+ end
+
+ {sej1,sej2,sej3}
+
+ else
+
+  rbt1=nil
+
+  rbt2=nil
+
+  rbt3=nil
+
+ {rbt1,rbt2,rbt3}
+   
+ end
+
+   tmk= all_date|>Enum.filter(fn x -> x.subject =="TMK" end)
+
+ {tmk1,tmk2,tmk3}=if tmk != [] do
+
+  tmk=tmk|>hd
+
+
+ tmk1=if tmk.s1m != nil do
+  tmk.s1m
+else
+   tmk.s1g
+ end
+
+  tmk2=if tmk.s2m != nil do
+  tmk.s2m
+else
+   tmk.s2g
+ end
+
+  tmk3=if tmk.s3m != nil do
+  tmk.s3m
+else
+   tmk.s3g
+ end
+
+{tmk1,tmk2,tmk3}
+
+ else
+
+  tmk1=nil
+
+  tmk2=nil
+
+  tmk3=nil
+
+ {tmk1,tmk2,tmk3}
+   
+ end
+
+
+    seni= all_date|>Enum.filter(fn x -> x.subject =="SENIAN" end)
+
+     {seni1,seni2,seni3}=if seni != [] do
+
+  seni=seni|>hd
+
+
+ seni1=if seni.s1m != nil do
+  seni.s1m
+else
+   seni.s1g
+ end
+
+  seni2=if seni.s2m != nil do
+  seni.s2m
+else
+   seni.s2g
+ end
+
+   seni3=if seni.s3m != nil do
+  seni.s3m
+else
+   seni.s3g
+ end
+
+ {seni1,seni2,seni3}
+
+else
+
+
+  seni1=nil
+
+  seni2=nil
+
+  seni3=nil
+
+{seni1,seni2,seni3}
+   
+end
+
+
+
+
+
+
+    pj= all_date|>Enum.filter(fn x -> x.subject =="PJ" end)
+
+ {pj1,pj2,pj3}=if pj != [] do
+
+  pj=pj|>hd
+
+
+ pj1=if pj.s1m != nil do
+  pj.s1m
+else
+   pj.s1g
+ end
+
+  pj2=if pj.s2m != nil do
+  pj.s2m
+else
+   pj.s2g
+ end
+
+  pj3=if pj.s3m != nil do
+  pj.s3m
+else
+   pj.s3g
+ end
+
+{pj1,pj2,pj3}
+
+ else
+
+  pj1=nil
+
+  pj2=nil
+
+  pj3=nil
+
+{pj1,pj2,pj3}
+   
+ end
+
+
+     laku= all_date|>Enum.filter(fn x -> x.subject =="LAKU" end)
+
+ {laku1,laku2,laku3}=if laku != [] do
+
+  laku=laku|>hd
+
+
+
+
+ laku1=if laku.s1m != nil do
+  laku.s1m
+else
+   laku.s1g
+ end
+
+  laku2=if laku.s2m != nil do
+  laku.s2m
+else
+   laku.s2g
+ end
+
+  laku3=if laku.s3m != nil do
+  laku.s3m
+else
+   laku.s3g
+ end
+
+ {laku1,laku2,laku3}
+
+ else
+
+  laku1=nil
+
+  laku2=nil
+
+  laku3=nil
+
+ {laku1,laku2,laku3}
+   
+ end
+
+
+
+     kedatangan= all_date|>Enum.filter(fn x -> x.subject =="HADIR" end)
+
+ {kedatangan1,kedatangan2,kedatangan3}=if kedatangan != [] do
+
+  kedatangan=kedatangan|>hd
+
+
+ kedatangan1=if kedatangan.s1m != nil do
+  kedatangan.s1m
+else
+   kedatangan.s1g
+ end
+
+  kedatangan2=if kedatangan.s2m != nil do
+  kedatangan.s2m
+else
+   kedatangan.s2g
+ end
+
+  kedatangan3=if kedatangan.s3m != nil do
+  kedatangan.s3m
+else
+   kedatangan.s3g
+ end
+
+{kedatangan1,kedatangan2,kedatangan3}
+
+ else
+
+  kedatangan1=nil
+
+  kedatangan2=nil
+
+  kedatangan3=nil
+
+{kedatangan1,kedatangan2,kedatangan3}
+   
+ end
+
+
+
+     total= all_date|>Enum.filter(fn x -> x.subject =="TOTAL" end)
+
+ {total1,total2,total3}=if total != [] do
+
+  total=total|>hd
+
+
+ total1=if total.s1m != nil do
+  total.s1m
+else
+   total.s1g
+ end
+
+  total2=if total.s2m != nil do
+  total.s2m
+else
+   total.s2g
+ end
+
+  total3=if total.s3m != nil do
+  total.s3m
+else
+   total.s3g
+ end
+
+{total1,total2,total3}
+
+ else
+
+  total3=nil
+
+  total2=nil
+
+  total1=nil
+
+{total1,total2,total3}
+   
+ end
+
+
+      averg= all_date|>Enum.filter(fn x -> x.subject =="AVERG" end)
+
+ {averg1,averg2,averg3}=if averg != [] do
+
+  averg=averg|>hd
+
+
+ averg1=if averg.s1m != nil do
+  averg.s1m
+else
+   averg.s1g
+ end
+
+  averg2=if averg.s2m != nil do
+  averg.s2m
+else
+   averg.s2g
+ end
+
+  averg3=if averg.s3m != nil do
+  averg.s3m
+else
+   averg.s3g
+ end
+
+{averg1,averg2,averg3}
+
+ else
+
+  averg3=nil
+
+  averg2=nil
+
+  averg1=nil
+
+{averg1,averg2,averg3}
+   
+ end
+
+
+
+      crank= all_date|>Enum.filter(fn x -> x.subject =="CRANK" end)
+
+ {crank1,crank2,crank3}=if crank != [] do
+
+  crank=crank|>hd
+
+
+ crank1=if crank.s1m != nil do
+  crank.s1m
+else
+   crank.s1g
+ end
+
+  crank2=if crank.s2m != nil do
+  crank.s2m
+else
+   crank.s2g
+ end
+
+  crank3=if crank.s3m != nil do
+  crank.s3m
+else
+   crank.s3g
+ end
+
+{crank1,crank2,crank3}
+
+ else
+
+  crank3=nil
+
+  crank2=nil
+
+  crank1=nil
+
+{crank1,crank2,crank3}
+   
+ end
+
+
+
+       srank= all_date|>Enum.filter(fn x -> x.subject =="SRANK" end)
+
+ {srank1,srank2,srank3}=if srank != [] do
+
+  srank=srank|>hd
+
+
+ srank1=if srank.s1m != nil do
+  srank.s1m
+else
+   srank.s1g
+ end
+
+  srank2=if srank.s2m != nil do
+  srank.s2m
+else
+   srank.s2g
+ end
+
+  srank3=if srank.s3m != nil do
+  srank.s3m
+else
+   srank.s3g
+ end
+
+{srank1,srank2,srank3}
+
+ else
+
+  srank3=nil
+
+  srank2=nil
+
+  srank1=nil
+
+{srank1,srank2,srank3}
+   
+ end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   %>
+
+
+<body>
+
+
+  <table  class="table" >
+
+    <tr align="center">
+  <td colspan="6" align="center" style="margin: 3px; padding: 3px; border-left: 0; border-right: 0; border-top: 0" ><h5>醒侨学校</h5><br>
+        <h5><%= year %> 成绩单</h5></td>
+  
+ </tr>
+     <tr align="left">
+  <td colspan="5">学生姓名: <%= profile.cname %> <br>
+        Nama Murid: <%= profile.name %></font></td>
+  
+  <td>教室<br>
+        Darjah: <%= profile.class %></font></td>
+ </tr>
+
+
+ <tr align="center" >
+  <td colspan="2" align="center" style="margin: 3px; padding: 3px;" ><b>科目名称 MATA PELAJARAN</b></td>
+  <td align="center" style="margin: 3px; padding: 3px;">评审一 <BR>PKBS1</td>
+  <td align="center" style="margin: 3px; padding: 3px;">评审二 <BR>PKBS1</td>
+  <td align="center" style="margin: 3px; padding: 3px;">评审三 <BR>PKBS3</td>
+  <td align="center" style="margin: 3px; padding: 3px;">平均 <BR>Purata</td>
+ </tr>
+
+ <tr  align="center">
+  <td rowspan="4"  style="margin: 3px; padding: 3px;" align="left"><BR> <b>国语 <br> Bahasa <br> Malaysia </b><BR></td>
+  <td style="margin: 3px; padding: 3px;" align="left">口服 Lisan</td>
+  <td style="margin: 3px; padding: 3px;"><%= bml1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= bml2 %></td>
+   <td style="margin: 3px; padding: 3px;"><%= bml3 %></td>
+    <td style="margin: 3px; padding: 3px;"></td>
+  
+ </tr>
+ <tr align="center">
+  <td style="margin: 3px; padding: 3px;" align="left">阅读 Bacaan</td>
+  <td style="margin: 3px; padding: 3px;"><%= bmb1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= bmb2 %></td>
+   <td style="margin: 3px; padding: 3px;"><%= bmb3 %></td>
+    <td style="margin: 3px; padding: 3px;"></td>
+ </tr>
+ <tr align="center">
+  <td style="margin: 3px; padding: 3px;" align="left">写作 Penulisan</td>
+  <td style="margin: 3px; padding: 3px;"><%= bmp1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= bmp2 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= bmp3 %></td>
+   <td style="margin: 3px; padding: 3px;"></td>
+ </tr>
+ <tr align="center">
+  <td style="margin: 3px; padding: 3px;" align="left">理解 Pemahaman</td>
+  <td style="margin: 3px; padding: 3px;"><%= bmpm1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= bmpm2 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= bmpm3 %></td>
+   <td style="margin: 3px; padding: 3px;"></td>
+ </tr>
+ <tr align="center">
+ <td rowspan="4"  style="margin: 3px; padding: 3px;" align="left"><BR><b>英语 <br> Bahasa <br> Inggeris</b></td>
+  <td style="margin: 3px; padding: 3px;" align="left">口服 Lisan</td>
+  <td style="margin: 3px; padding: 3px;"><%= ingl1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= ingl2 %></td>
+   <td style="margin: 3px; padding: 3px;"><%= ingl3 %></td>
+    <td style="margin: 3px; padding: 3px;"></td>
+ </tr>
+ <tr align="center">
+  <td style="margin: 3px; padding: 3px;" align="left">阅读 Bacaan</td>
+  <td style="margin: 3px; padding: 3px;"><%= ingb1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= ingb2 %></td>
+   <td style="margin: 3px; padding: 3px;"><%= ingb3 %></td>
+    <td style="margin: 3px; padding: 3px;"></td>
+ </tr>
+ <tr align="center">
+  <td style="margin: 3px; padding: 3px;" align="left">写作 Penulisan</td>
+<td style="margin: 3px; padding: 3px;"><%= ingp1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= ingp2 %></td>
+   <td style="margin: 3px; padding: 3px;"><%= ingp3 %></td>
+   <td style="margin: 3px; padding: 3px;"></td>
+ </tr>
+ <tr align="center">
+  <td style="margin: 3px; padding: 3px;" align="left">理解 Pemahaman</td>
+  <td style="margin: 3px; padding: 3px;"><%= ingpm1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= ingpm2 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= ingpm3 %></td>
+   <td style="margin: 3px; padding: 3px;"></td>
+ </tr align="center">
+ <tr align="center">
+ <td rowspan="4"  style="margin: 3px; padding: 3px;" align="left"><b><BR>华语 <br> Bahasa <br> Cina</b></td>
+  <td style="margin: 3px; padding: 3px;" align="left">口服 Lisan</td>
+  <td style="margin: 3px; padding: 3px;"><%= chl1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= chl2 %></td>
+   <td style="margin: 3px; padding: 3px;"><%= chl3 %></td>
+    <td style="margin: 3px; padding: 3px;"></td>
+ </tr>
+ <tr align="center">
+  <td style="margin: 3px; padding: 3px;" align="left">阅读 Bacaan</td>
+  <td style="margin: 3px; padding: 3px;"><%= chb1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= chb2 %></td>
+   <td style="margin: 3px; padding: 3px;"><%= chb3 %></td>
+    <td style="margin: 3px; padding: 3px;"></td>
+ </tr>
+ <tr align="center">
+  <td style="margin: 3px; padding: 3px;" align="left">写作 Penulisan</td>
+ <td style="margin: 3px; padding: 3px;"><%= chp1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= chp2 %></td>
+   <td style="margin: 3px; padding: 3px;"><%= chp3 %></td>
+   <td style="margin: 3px; padding: 3px;"></td>
+ </tr>
+ <tr align="center">
+  <td style="margin: 5px; padding: 5px; " align="left">理解 Pemahaman</td>
+ <td style="margin: 3px; padding: 3px;"><%= chpm1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= chpm2 %></td>
+   <td style="margin: 3px; padding: 3px;"><%= chpm3 %></td>
+   <td style="margin: 3px; padding: 3px;"></td>
+ </tr>
+<tr align="center">
+  <td style="margin: 5px; padding: 5px; border-right: 0" align="left">数学</td>
+  <td  style="margin: 5px; padding: 5px; border-left: 0"" align="left">Matematik</td>
+  <td style="margin: 3px; padding: 3px;"><%= math1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= math2 %></td>
+   <td style="margin: 3px; padding: 3px;"><%= math3 %></td>
+    <td style="margin: 3px; padding: 3px;"></td>
+ </tr>
+ <tr align="center">
+    <td style="margin: 5px; padding: 5px; border-right: 0"" align="left">科学</td>
+  <td  style="margin: 5px; padding: 5px; border-left: 0"" align="left">Sains</td>
+  <td style="margin: 3px; padding: 3px;"><%= sains1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= sains2 %></td>
+   <td style="margin: 3px; padding: 3px;"><%= sains3 %></td>
+    <td style="margin: 3px; padding: 3px;"></td>
+ </tr>
+ <tr align="center">
+   <td style="margin: 5px; padding: 5px; border-right: 0"" align="left">道德教育</td>
+  <td style="margin: 5px; padding: 5px; border-left: 0" align="left">Pendidikan Moral</td>
+  <td style="margin: 3px; padding: 3px;"></td>
+  <td style="margin: 3px; padding: 3px;"></td>
+  <td style="margin: 3px; padding: 3px;"></td>
+   <td style="margin: 3px; padding: 3px;"></td>
+ </tr>
+ <tr align="center">
+  <td style="margin: 5px; padding: 5px; border-right: 0"" align="left">回教</td>
+  <td style="margin: 5px; padding: 5px; border-left: 0" align="left">Agama Islam</td>
+ <td style="margin: 3px; padding: 3px;"><%= agama1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= agama2 %></td>
+   <td style="margin: 3px; padding: 3px;"><%= agama3 %></td>
+    <td style="margin: 3px; padding: 3px;"></td>
+ </tr>
+  <tr align="center">
+      <td style="margin: 5px; padding: 5px; border-right: 0"" align="left">历史</td>
+  <td style="margin: 5px; padding: 5px; border-left: 0" align="left">Sejarah</td>
+ <td style="margin: 3px; padding: 3px;"><%= sej1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= sej2 %></td>
+   <td style="margin: 3px; padding: 3px;"><%= sej3 %></td>
+    <td style="margin: 3px; padding: 3px;"></td>
+ </tr>
+  <tr align="center">
+          <td style="margin: 5px; padding: 5px; border-right: 0"" align="left">设计和技术</td>
+  <td style="margin: 5px; padding: 5px; border-left: 0" align="left">RBT</td>
+ <td style="margin: 3px; padding: 3px;"><%= rbt1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= rbt2 %></td>
+   <td style="margin: 3px; padding: 3px;"><%= rbt3 %></td>
+    <td style="margin: 3px; padding: 3px;"></td>
+ </tr>
+  <tr align="center">
+       <td style="margin: 5px; padding: 5px; border-right: 0"" align="left">通信信息技术</td>
+  <td style="margin: 5px; padding: 5px; border-left: 0" align="left">TMK</td>
+  <td style="margin: 3px; padding: 3px;"><%= tmk1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= tmk2 %></td>
+   <td style="margin: 3px; padding: 3px;"><%= tmk3 %></td>
+    <td style="margin: 3px; padding: 3px;"></td>
+ </tr>
+  <tr align="center"  >
+  <td style="margin: 5px; padding: 5px; border-right: 0"  align="left">艺术教育</td>
+  <td style="margin: 5px; padding: 5px; border-left: 0"  align="left">Pendidikan Kesenian</td>
+  <td style="margin: 3px; padding: 3px;"><%= seni1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= seni2 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= seni3 %></td>
+   <td style="margin: 3px; padding: 3px;"></td>
+ </tr>
+  <tr align="center">
+      <td style="margin: 5px; padding: 5px; border-right: 0"" align="left">体健</td>
+  <td style="margin: 5px; padding: 5px; border-left: 0" align="left">PJK</td>
+    <td style="margin: 3px; padding: 3px;"><%= pj1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= pj2 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= pj3 %></td>
+   <td style="margin: 3px; padding: 3px;"></td>
+ </tr>
+  <tr align="center">
+  <td colspan="2" style="margin: 3px; padding: 3px;" align="left"></td>
+  <td style="margin: 3px; padding: 3px;">&nbsp;</td>
+  <td style="margin: 3px; padding: 3px;">&nbsp;</td>
+  <td style="margin: 3px; padding: 3px;">&nbsp;</td>
+   <td style="margin: 3px; padding: 3px;"></td>
+ </tr>
+ <tr align="center">
+
+  <td colspan="2" style="margin: 3px; padding: 3px;" align="left"></td>
+  <td style="margin: 3px; padding: 3px;">&nbsp;</td>
+  <td style="margin: 3px; padding: 3px;">&nbsp;</td>
+  <td style="margin: 3px; padding: 3px;">&nbsp;</td>
+   <td style="margin: 3px; padding: 3px;"></td>
+ </tr>
+  <tr align="center">
+     <td style="margin: 5px; padding: 5px; border-right: 0"" align="left">操行</td>
+  <td  style="margin: 5px; padding: 5px; border-left: 0" align="left">Kelakuan</td>
+    <td style="margin: 3px; padding: 3px;"><%= laku1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= laku2 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= laku3 %></td>
+   <td style="margin: 3px; padding: 3px;"></td>
+ </tr>
+  <tr align="center">
+    <td style="margin: 5px; padding: 5px; border-right: 0"" align="left">出席日数</td>
+  <td style="margin: 5px; padding: 5px; border-left: 0" align="left">Kedatangan</td>
+    <td style="margin: 3px; padding: 3px;"><%= kedatangan1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= kedatangan2 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= kedatangan3 %></td>
+   <td style="margin: 3px; padding: 3px;"></td>
+ </tr>
+  <tr align="center">
+  <td style="margin: 5px; padding: 5px; border-right: 0"" align="left">总分</td>
+   <td  style="margin: 5px; padding: 5px; border-left: 0" align="left">Jumlah Markah</td>
+      <td style="margin: 3px; padding: 3px;"><%= total1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= total2 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= total3 %></td>
+   <td style="margin: 3px; padding: 3px;"></td>
+ </tr>
+  <tr align="center" >
+  <td  style="margin: 5px; padding: 5px; border-right: 0"" align="left">平均 </td>
+  <td  style="margin: 5px; padding: 5px; border-left: 0" align="left">Purata</td>
+        <td style="margin: 3px; padding: 3px;"><%= averg1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= averg2 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= averg3 %></td>
+   <td style="margin: 3px; padding: 3px;"></td>
+ </tr>
+  <tr align="center">
+  <td style="margin: 5px; padding: 5px; border-right: 0""  align="left">本班名次</td>
+   <td style="margin: 5px; padding: 5px; border-left: 0"  align="left">Kedudukan Dalam Kelas</td>
+        <td style="margin: 3px; padding: 3px;"><%= crank1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= crank2 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= crank3 %></td>
+   <td style="margin: 3px; padding: 3px;"></td>
+ </tr>
+  <tr align="center">
+  <td style="margin: 5px; padding: 5px; border-right: 0"" align="left" >全级名次</td>
+  <td style="margin: 5px; padding: 5px; border-left: 0" align="left">Kedudukan Dalam Darjah</td>
+        <td style="margin: 3px; padding: 3px;"><%= srank1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= srank2 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= srank3 %></td>
+   <td style="margin: 3px; padding: 3px;"></td>
+ </tr>
+  <tr align="center">
+  <td colspan="2" style="margin: 3px; padding: 3px;" align="left">校长签名 <br>T.Tangan Guru Besar</td>
+  <td style="margin: 3px; padding: 3px;"></td>
+  <td style="margin: 3px; padding: 3px;"></td>
+  <td style="margin: 3px; padding: 3px;"></td>
+   <td style="margin: 3px; padding: 3px;"></td>
+ </tr>
+ <tr align="center">
+   <td colspan="2" style="margin: 3px; padding: 3px;" align="left">级任签名 <br>T.Tangan Guru Darjah</td>
+  <td style="margin: 3px; padding: 3px;"></td>
+  <td style="margin: 3px; padding: 3px;"></td>
+  <td style="margin: 3px; padding: 3px;"></td>
+   <td style="margin: 3px; padding: 3px;"></td>
+ </tr>
+ <tr align="center">
+   <td colspan="2" style="margin: 3px; padding: 3px;" align="left">家长 <br>T.Tangan Ibubapa/Penjaga</td>
+   
+  <td style="margin: 3px; padding: 3px;"></td>
+  <td style="margin: 3px; padding: 3px;"></td>
+  <td style="margin: 3px; padding: 3px;"></td>
+   <td style="margin: 3px; padding: 3px;"></td>
+ </tr>
+   <td colspan="6" align="left" style="margin: 3px; padding: 3px;" height="100px;">评语 Komen:</td>
+  
+ </tr>
+
+
+</table>
+
+
+
+   
+</body>
+
+
+</div>
+<% end %>
+
+<style type="text/css">
+  
+   table {
+        border-collapse: collapse;
+       
+    }
+    
+    td {
+        margin: 0px;
+        padding: 5px;
+    
+        border:1px solid #080808;
+    }
+    
+    .border {
+        border: 1px solid #080808;
+    }
+
+    .noborders td {
+        border:0;
+    }
+</style>

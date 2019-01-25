@@ -1,4 +1,5 @@
-<link rel="stylesheet" href="/vendor/fullcalendar/dist/fullcalendar.css">
+
+              <link rel="stylesheet" href="/vendor/fullcalendar/dist/fullcalendar.css">
 <!-- MOMENT JS-->
 <script src="/vendor/moment/min/moment-with-locales.js"></script>
 <!-- FULLCALENDAR-->
@@ -279,6 +280,13 @@
 
                                       <a class="btn btn-xs btn-success" href="javascript:void(0);" onclick="create_sub()">Show me how</a>
                                    </div>
+
+                                    <div class="list-group-item bt0" >
+                                  
+                                     <em class="fa-fw fas fa-question mr-2"></em>How to make an Announcement?
+
+                                      <a class="btn btn-xs btn-success" href="/announcements">Show me how</a>
+                                   </div>
                        
                
                                 
@@ -421,36 +429,7 @@
                   </ol>
                 <a href="/students"><button class="mb-1 btn-sm btn btn-outline-primary"  type="button">List</button></a>
                   <a href="/students/new"><button class="mb-1 btn-sm btn btn-outline-primary"  type="button">Create Student</button></a>
-                  <div class="btn-group">
-                   <button class="mb-1 btn-sm btn btn-outline-primary" type="button">Height & Weight</button>
-                   <button class="mb-1 btn-sm dropdown-toggle btn btn-outline-primary" type="button" data-toggle="dropdown" aria-expanded="false">
-                      <span class="sr-only">info</span>
-                   </button>
-                   <% require IEx %>
-                   <% user = Repo.get(Settings.User,@conn.private.plug_session["user_id"]) %>
-
-                   <% all_semesters=if user.role == "Teacher" do 
-                       teacher = Repo.get_by(Affairs.Teacher,email: user.email) 
-                      all_semesters= Repo.all(from c in Affairs.Semester, where: c.institution_id == ^@conn.private.plug_session["institution_id"]) 
-                      all_semesters
-                    end %>
-
-
-                   <%  all_semesters =if user.role == "Admin" or user.role == "Support" or user.role == "Clerk" do 
-                       all_semesters =Repo.all(from c in Affairs.Semester, where: c.institution_id == ^@conn.private.plug_session["institution_id"]) 
-                       
-                   end %>
-
-
-                   <div class="dropdown-menu" role="menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(67px, 33px, 0px);">
-                  
-                    <%= for semester <- all_semesters do %>
-                      <a class="dropdown-item" href="/height_weight/<%= semester.id %>"><%= semester.start_date %> - <%= semester.end_date %></a>
-                    <% end %>
-                   </div>
-
-
-                </div>
+                 
                  <a href="/sync_library_membership_all"><button class="mb-1 btn-sm btn btn-outline-primary"  type="button">Sync Library</button></a>
               </div>
           </div>
@@ -521,6 +500,28 @@
         </div>
       </div>
         <div class="col-lg-6">
+        <div class="card card-default mb-3">
+         
+           <div class="card-body">
+                 <em class="fa-2x mr-2 mb-3 fas fa-chalkboard-teacher"></em>
+                  <span style="font-weight: bolder;font-size: 17px;"><%= gettext("Assessment Management")%></span>
+                 <ol style="padding-left: 15px;">
+                    <li><p class="card-text"><%= gettext("Generate Rules Break")%></p></li>
+                    <li><p class="card-text"><%= gettext("Assessment Subject")%></p></li>
+
+                   
+                  </ol>
+          
+               <a href ="/assessment_subject"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List Assessment Subject</button></a>
+               <a href ="/generate_assessment_subject"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Generate Assessment Subject</button></a>
+                <a href ="/assign_level"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Assign Level</button></a>
+        
+           </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+       <div class="col-lg-6">
           <div class="card card-default mb-3">
     
              <div class="card-body">
@@ -564,6 +565,9 @@
                  <a href ="/list_class_comment"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Comments</button></a>
              </div>
           </div>
+        </div>
+        <div class="col-lg-6">
+         
         </div>
     </div>
    

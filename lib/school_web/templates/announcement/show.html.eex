@@ -1,10 +1,23 @@
-<h2>Show Announcement</h2>
-<% require IEx %>
+<div class="content-heading">
+   <div>Show Announcement
+   </div>
+</div>
+
+
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
 <div>
 	<% m = @announcement.message %>
 
     <strong>Message:</strong>
     <%= text_to_html(m) %>
+</div>
+
+</div>
+</div>
+</div>
 </div>
 
 

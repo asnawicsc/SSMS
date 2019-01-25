@@ -1,0 +1,58 @@
+<h2>Show Assessment subject</h2>
+
+<ul>
+
+  <li>
+    <strong>Institution:</strong>
+    <%= @assessment_subject.institution_id %>
+  </li>
+
+  <li>
+    <strong>Semester:</strong>
+    <%= @assessment_subject.semester_id %>
+  </li>
+
+  <li>
+    <strong>Subject:</strong>
+    <%= @assessment_subject.subject_id %>
+  </li>
+
+  <li>
+    <strong>Standard:</strong>
+    <%= @assessment_subject.standard_id %>
+  </li>
+
+    <li>
+    <strong>Level 1:</strong>
+    <%= @assessment_subject.level1 %>
+  </li>
+
+    <li>
+    <strong>Level 2:</strong>
+    <%= @assessment_subject.level2 %>
+  </li>
+
+    <li>
+    <strong>Level 3:</strong>
+    <%= @assessment_subject.level3 %>
+  </li>
+
+    <li>
+    <strong>Level 4:</strong>
+    <%= @assessment_subject.level4 %>
+  </li>
+
+    <li>
+    <strong>Level 5:</strong>
+    <%= @assessment_subject.level5 %>
+  </li>
+
+    <li>
+    <strong>Level 6:</strong>
+    <%= @assessment_subject.level6 %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: assessment_subject_path(@conn, :edit, @assessment_subject) %></span>
+<span><%= link "Back", to: assessment_subject_path(@conn, :index) %></span>

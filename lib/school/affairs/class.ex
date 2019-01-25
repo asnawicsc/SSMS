@@ -9,6 +9,7 @@ defmodule School.Affairs.Class do
     field(:level_id, :integer)
     field(:teacher_id, :integer)
     field(:next_class, :string)
+    field(:is_delete, :integer, default: 0)
 
     timestamps()
   end
@@ -16,7 +17,15 @@ defmodule School.Affairs.Class do
   @doc false
   def changeset(class, attrs) do
     class
-    |> cast(attrs, [:teacher_id, :level_id, :institution_id, :name, :remarks, :next_class])
+    |> cast(attrs, [
+      :teacher_id,
+      :level_id,
+      :institution_id,
+      :name,
+      :remarks,
+      :next_class,
+      :is_delete
+    ])
     |> validate_required([:name, :institution_id])
   end
 end

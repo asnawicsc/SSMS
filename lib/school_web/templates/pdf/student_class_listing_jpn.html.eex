@@ -1,0 +1,78 @@
+
+
+<b  style="font-size: 25px;"><%= @institution.name %></b></br>
+班级<b> Kelas: <%= @class.name %></b><center><b>Student Listing 学生名单</b> </center><br>
+
+
+
+<table class="table" border="1" width="100%" >
+  <thead>
+    <tr align="center">
+      <th><%= gettext "Bil." %></th>
+      <th><%= gettext "Bil Dlm" %><br><%= gettext "Sekolah" %><br><%= gettext "学生编号" %></th>
+      <th><%= gettext "B. (Cina)" %><br><%= gettext "中文名字" %></th>
+        <th><%= gettext "Bahasa Malaysia" %><br><%= gettext "马来文名字" %></th>
+      <th><%= gettext "Jan-" %><br><%= gettext "tina" %><br><%= gettext "性别" %></th>
+      <th><%= gettext "Tarikh" %><br><%= gettext "Lahir" %><br><%= gettext "出生日期" %></th>
+      <th><%= gettext "Tempat" %><br><%= gettext "Lahir" %><br><%= gettext "出生地方" %></th>
+      <th><%= gettext "Umur" %><br><%= gettext "Pada" %><br><%= gettext "1hb Jan" %><br><%= gettext "年龄" %></th>
+      <th><%= gettext "No.Sijil" %><br><%= gettext "Beranak" %><br><%= gettext "出生纸号码" %></th>
+      <th><%= gettext "Tarikh" %><br><%= gettext "Masuk" %><br><%= gettext "入学日期" %></th>
+      <th><%= gettext "Bangsa" %><br><%= gettext "种族" %></th>
+     
+
+
+    </tr>
+  </thead>
+  <tbody>
+<%= for item <- @all do %>
+<% no=item|>elem(1) %>
+<% item=item|>elem(0) %>
+
+    <tr align="center">
+      <td><%= no+1 %></td>
+       <td><%= item.id_no %></td>
+        <td width="80px" style="font-size: 14px;"><%= item.chinese_name %></td>
+        <%= if String.length(item.name) > 40 do %>
+       <td align="left" style="font-size: 13px; width: auto; height: auto;" ><%=  item.name %></td>
+        <% else %>
+        <td align="left" ><%=  item.name %></td>
+       <% end  %>
+      
+       <td><%= if item.sex == "M" or item.sex == "L" or item.sex == "MALE" or item.sex == "LELAKI" do "L" end %>
+        <%= if item.sex == "F" or item.sex == "P" or item.sex == "FEMALE" or item.sex == "PEREMPUAN" do "P" end %></td>
+       <td ><%= item.dob %></td>
+       <td ><%= item.pob %></td>
+       <td><%= item.umo_1jan %></td>
+       <td ><%= item.b_cert %></td>
+       <td ><%= item.register_date %></td>
+       <td ><%= if item.race == "C" or item.race == "CINA" do "CINA" end %>
+        <%= if item.race == "M" or item.race == "MELAYU" do "MELAYU" end %>
+        <%= if item.race == "I" or item.race == "INDIA" do "INDIA" end %>
+         <%= if item.race == "THAI" or item.race == "T" do "THAI" end %>
+        <%= if item.race == "O"  or item.race == "LAIN-LAIN" do "LAIN-LAIN" end %></td>
+    
+
+    </tr>
+<% end %>
+
+
+  </tbody>
+</table>
+
+<style type="text/css">
+  
+  table { 
+
+    border-spacing: 0;
+    border-collapse: collapse;
+    font-size: 14px;
+    white-space: nowrap;
+}
+td {
+    padding:5px;
+}
+td img {
+    display:block;
+}
+</style>

@@ -1118,30 +1118,57 @@ defmodule SchoolWeb.UserChannel do
     semester_id = payload["semester_id"]
 
     all =
-      Repo.all(
-        from(
-          s in School.Affairs.StudentClass,
-          left_join: g in School.Affairs.Class,
-          on: s.class_id == g.id,
-          left_join: r in School.Affairs.Student,
-          on: r.id == s.sudent_id,
-          where: s.class_id == ^class_id and s.semester_id == ^semester_id,
-          select: %{
-            id: s.sudent_id,
-            id_no: s.id,
-            chinese_name: r.chinese_name,
-            name: r.name,
-            sex: r.sex,
-            dob: r.dob,
-            pob: r.pob,
-            b_cert: r.b_cert,
-            religion: r.religion,
-            race: r.race
-          },
-          order_by: [desc: r.sex, asc: r.name]
+      if class_id != "ALL" do
+        Repo.all(
+          from(
+            s in School.Affairs.StudentClass,
+            left_join: g in School.Affairs.Class,
+            on: s.class_id == g.id,
+            left_join: r in School.Affairs.Student,
+            on: r.id == s.sudent_id,
+            where: s.class_id == ^class_id and s.semester_id == ^semester_id,
+            select: %{
+              id: r.id,
+              id_no: r.student_no,
+              chinese_name: r.chinese_name,
+              name: r.name,
+              sex: r.sex,
+              dob: r.dob,
+              pob: r.pob,
+              b_cert: r.b_cert,
+              religion: r.religion,
+              race: r.race
+            },
+            order_by: [desc: r.sex, asc: r.name]
+          )
         )
-      )
-      |> Enum.with_index()
+        |> Enum.with_index()
+      else
+        Repo.all(
+          from(
+            s in School.Affairs.StudentClass,
+            left_join: g in School.Affairs.Class,
+            on: s.class_id == g.id,
+            left_join: r in School.Affairs.Student,
+            on: r.id == s.sudent_id,
+            where: s.semester_id == ^semester_id,
+            select: %{
+              id: r.id,
+              id_no: r.student_no,
+              chinese_name: r.chinese_name,
+              name: r.name,
+              sex: r.sex,
+              dob: r.dob,
+              pob: r.pob,
+              b_cert: r.b_cert,
+              religion: r.religion,
+              race: r.race
+            },
+            order_by: [desc: r.sex, asc: r.name]
+          )
+        )
+        |> Enum.with_index()
+      end
 
     html =
       if all != [] do
@@ -3188,7 +3215,9 @@ defmodule SchoolWeb.UserChannel do
           "user_id" => user_id,
           "start_date" => start_date,
           "end_date" => end_date,
-          "event_id_str" => event_id_str
+          "event_id_str" => event_id_str,
+          "institution_id" => institution_id,
+          "semester_id" => semester_id
         },
         socket
       ) do
@@ -3199,7 +3228,9 @@ defmodule SchoolWeb.UserChannel do
       # create a new period 
       teacher = Affairs.get_teacher!(user_id)
 
-      {:ok, timetable} = School.Affairs.initialize_calendar(teacher.id)
+      {:ok, timetable} =
+        School.Affairs.initialize_calendar(institution_id, semester_id, teacher.id)
+
       subject_id = event_id_str |> String.split("_") |> List.first()
       class_id = event_id_str |> String.split("_") |> List.last()
 
@@ -3241,7 +3272,8 @@ defmodule SchoolWeb.UserChannel do
     else
       case School.Affairs.get_teacher(user_id) do
         {:ok, teacher} ->
-          {:ok, timetable} = School.Affairs.initialize_calendar(teacher.id)
+          {:ok, timetable} =
+            School.Affairs.initialize_calendar(institution_id, semester_id, teacher.id)
 
           # need to find that period and update it
           period = Repo.get(School.Affairs.Period, period_id)
@@ -3422,6 +3454,164 @@ defmodule SchoolWeb.UserChannel do
   end
 
   def handle_in(
+        "qt_term",
+        %{"term" => term, "user_id" => user_id, "institution_id" => institution_id},
+        socket
+      ) do
+    user = Repo.get(User, user_id)
+    term = "%#{term}%"
+
+    all_teacher =
+      Repo.all(
+        from(
+          s in Teacher,
+          where:
+            s.institution_id == ^institution_id and
+              (ilike(s.icno, ^term) or ilike(s.name, ^term) or ilike(s.cname, ^term) or
+                 ilike(s.icno, ^term)),
+          select: %{
+            name: s.name,
+            c_name: s.cname,
+            ic: s.icno,
+            id: s.id
+          },
+          limit: 100
+        )
+      )
+
+    # student =
+    #   Repo.all(
+    #     from(
+    #       s in StudentClass,
+    #       left_join: g in Student,
+    #       on: s.sudent_id == g.id,
+    #       where: g.institution_id == ^institution_id,
+    #       select: %{
+    #         name: g.name,
+    #         c_name: g.chinese_name,
+    #         ic: g.ic,
+    #         b_cert: g.b_cert,
+    #         gicno: g.gicno,
+    #         ficno: g.ficno,
+    #         micno: g.micno,
+    #         phone: g.phone,
+    #         id: g.id
+    #       },
+    #       limit: 100
+    #     )
+    #   )
+
+    students = all_teacher
+
+    {:reply, {:ok, %{students: students}}, socket}
+  end
+
+  def handle_in(
+        "qt_term_rfid",
+        %{
+          "term" => term,
+          "user_id" => user_id,
+          "institution_id" => institution_id,
+          "semester_id" => semester_id,
+          "mode" => mode,
+          "date_time" => date_time
+        },
+        socket
+      ) do
+    user = Repo.get(User, user_id)
+
+    teacher =
+      Repo.get_by(School.Affairs.Teacher,
+        icno: term,
+        institution_id: institution_id
+      )
+
+    if teacher != nil do
+      teacher_id = teacher.id
+
+      date_time = date_time
+
+      time_in = date_time
+
+      date = time_in |> String.split_at(8) |> elem(0)
+
+      attns =
+        Repo.get_by(School.Affairs.TeacherAttendance,
+          teacher_id: teacher_id,
+          institution_id: institution_id,
+          date: date
+        )
+
+      msg =
+        if attns == nil do
+          msg =
+            if mode == "time_out" do
+              msg = "Plese Switch to Time In Mode"
+            else
+              params = %{
+                institution_id: institution_id,
+                semester_id: semester_id,
+                teacher_id: teacher_id,
+                time_in: time_in,
+                date: date
+              }
+
+              Affairs.create_teacher_attendance(params)
+              msg = "Created Succesfully"
+            end
+
+          msg
+        else
+          attn =
+            Repo.get_by(School.Affairs.TeacherAttendance,
+              teacher_id: teacher_id,
+              institution_id: institution_id,
+              date: date
+            )
+
+          msg =
+            if mode == "time_in" do
+              msg =
+                if attn.time_in == nil do
+                  params = %{
+                    time_in: time_in
+                  }
+
+                  Affairs.update_teacher_attendance(attn, params)
+
+                  msg = "Created Succesfully"
+                else
+                  msg = "Time In alrdy fill up"
+                end
+
+              msg
+            else
+              msg =
+                if attn.time_out == nil do
+                  params = %{
+                    time_out: time_in
+                  }
+
+                  Affairs.update_teacher_attendance(attn, params)
+
+                  msg = "Created Succesfully"
+                else
+                  msg = "Time In alrdy fill up"
+                end
+
+              msg
+            end
+
+          msg
+        end
+
+      {:reply, {:ok, %{msg: msg}}, socket}
+    else
+      {:reply, {:error, %{}}, socket}
+    end
+  end
+
+  def handle_in(
         "load_class_students",
         %{
           "semester_id" => semester_id,
@@ -3434,6 +3624,97 @@ defmodule SchoolWeb.UserChannel do
     students = Affairs.get_student_list(class_id, semester_id)
 
     {:reply, {:ok, %{students: students}}, socket}
+  end
+
+  def handle_in(
+        "create_teacher_attendance",
+        %{
+          "semester_id" => semester_id,
+          "user_id" => user_id,
+          "institution_id" => institution_id,
+          "teacher_id" => teacher_id,
+          "mode" => mode
+        },
+        socket
+      ) do
+    date_time = NaiveDateTime.utc_now()
+
+    time_in = NaiveDateTime.to_string(date_time)
+
+    date = time_in |> String.split_at(10) |> elem(0)
+
+    attns =
+      Repo.get_by(School.Affairs.TeacherAttendance,
+        teacher_id: teacher_id,
+        institution_id: institution_id,
+        date: date
+      )
+
+    msg =
+      if attns == nil do
+        msg =
+          if mode == "time_out" do
+            msg = "Plese Switch to Time In Mode"
+          else
+            params = %{
+              institution_id: institution_id,
+              semester_id: semester_id,
+              teacher_id: teacher_id,
+              time_in: time_in,
+              date: date
+            }
+
+            Affairs.create_teacher_attendance(params)
+            msg = "Created Succesfully"
+          end
+
+        msg
+      else
+        attn =
+          Repo.get_by(School.Affairs.TeacherAttendance,
+            teacher_id: teacher_id,
+            institution_id: institution_id,
+            date: date
+          )
+
+        msg =
+          if mode == "time_in" do
+            msg =
+              if attn.time_in == nil do
+                params = %{
+                  time_in: time_in
+                }
+
+                Affairs.update_teacher_attendance(attn, params)
+
+                msg = "Created Succesfully"
+              else
+                msg = "Time In alrdy fill up"
+              end
+
+            msg
+          else
+            msg =
+              if attn.time_out == nil do
+                params = %{
+                  time_out: time_in
+                }
+
+                Affairs.update_teacher_attendance(attn, params)
+
+                msg = "Created Succesfully"
+              else
+                msg = "Time In alrdy fill up"
+              end
+
+            msg
+          end
+
+        msg
+      end
+
+    broadcast(socket, "show_teacher_attendance_record", %{})
+    {:noreply, socket}
   end
 
   def handle_in(
@@ -3555,6 +3836,33 @@ defmodule SchoolWeb.UserChannel do
     student = Affairs.get_student!(payload["student_id"])
 
     Affairs.delete_student_class(ex_class)
+
+    students = Affairs.get_student_list(payload["class_id"], payload["semester_id"])
+
+    {:reply, {:error, %{students: students, name: student.name, student_id: student.id}}, socket}
+  end
+
+  def handle_in("tranfer_from_class", payload, socket) do
+    ex_class =
+      Repo.get_by(
+        School.Affairs.StudentClass,
+        sudent_id: payload["student_id"],
+        semester_id: payload["semester_id"],
+        class_id: payload["class_id"]
+      )
+
+    new_class = %{
+      sudent_id: payload["student_id"],
+      semester_id: payload["semester_id"],
+      class_id: payload["classes_id"],
+      institute_id: payload["institution_id"]
+    }
+
+    student = Affairs.get_student!(payload["student_id"])
+
+    Affairs.delete_student_class(ex_class)
+
+    Affairs.create_student_class(new_class)
 
     students = Affairs.get_student_list(payload["class_id"], payload["semester_id"])
 

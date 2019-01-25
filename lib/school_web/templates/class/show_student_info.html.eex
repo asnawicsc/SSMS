@@ -45,7 +45,19 @@
                      <div class="card-body">
                         <div class="row py-4 justify-content-center">
                            <div class="col-12 col-sm-10">
-                              <form class="form-horizontal" action="/update_changes/<%= @student.id %>">
+                              <form class="form-horizontal" action="/update_changes/<%= @student.id %>" method="post" enctype="multipart/form-data">
+
+                                  <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+                                     <div class="form-group">
+                                  <center>
+                                    <label>Student Picture</label><br>
+
+
+                                    <img id="preview6" alt="Click here to select student picture" style='width:auto; height: 200px;' src='data:image/png;base64, <%= @student.image_bin %>'>
+                                      <input  id="imgInp6" name="image1" type="file"  style="display: none;">
+                                 
+                                  </center>
+                               </div>
                                  <div class="form-group row">
                                     <label class="text-bold col-xl-2 col-md-3 col-4 col-form-label text-right" for="inputContact1">Name</label>
                                     <div class="col-xl-10 col-md-9 col-8">
@@ -178,7 +190,19 @@
                                        <input class="form-control" id="inputContact8" name="position_in_house" type="text" value="<%= @student.position_in_house %>">
                                     </div>
                                  </div>
+                                 <div class="form-group row">
+                                    <label class="text-bold col-xl-2 col-md-3 col-4 col-form-label text-right" for="inputContact8">Register Date</label>
+                                    <div class="col-xl-10 col-md-9 col-8">
+                                       <input class="form-control" id="inputContact8" name="register_date" type="text" placeholder="12/02/2012" value="<%= @student.register_date %>">
+                                    </div>
                                  </div>
+                                 <div class="form-group row">
+                                    <label class="text-bold col-xl-2 col-md-3 col-4 col-form-label text-right" for="inputContact8">Quit Date</label>
+                                    <div class="col-xl-10 col-md-9 col-8">
+                                       <input class="form-control" id="inputContact8" name="quit_date" type="text" placeholder="12/02/2012" value="<%= @student.quit_date %>">
+                                    </div>
+                                 </div>
+                                
                                    <div class="form-group row">
                                     <label class="text-bold col-xl-2 col-md-3 col-4 col-form-label text-right" for="inputContact8">Father IC:</label>
                                     <div class="col-xl-10 col-md-9 col-8">
@@ -211,3 +235,22 @@
                </div>
             </div>
   
+                                    <script type="text/javascript">
+      $(window).ready(function(){
+        $("#imgInp6").change(function(){
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#preview6').attr('src', e.target.result);
+                 
+                }
+                reader.readAsDataURL($("#imgInp6")[0].files[0]);
+        });
+
+
+        $("img#preview6").click(function(){
+          $("input#imgInp6").click()
+        })
+    
+
+      });
+   </script>

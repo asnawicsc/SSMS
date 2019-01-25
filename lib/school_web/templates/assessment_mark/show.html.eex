@@ -1,0 +1,48 @@
+<h2>Show Assessment mark</h2>
+
+<ul>
+
+  <li>
+    <strong>Institution:</strong>
+    <%= @assessment_mark.institution_id %>
+  </li>
+
+  <li>
+    <strong>Semester:</strong>
+    <%= @assessment_mark.semester_id %>
+  </li>
+
+  <li>
+    <strong>Subject:</strong>
+    <%= @assessment_mark.subject_id %>
+  </li>
+
+  <li>
+    <strong>Standard:</strong>
+    <%= @assessment_mark.standard_id %>
+  </li>
+
+  <li>
+    <strong>Class:</strong>
+    <%= @assessment_mark.class_id %>
+  </li>
+
+  <li>
+    <strong>Student:</strong>
+    <%= @assessment_mark.student_id %>
+  </li>
+
+   <li>
+    <strong>Assesment ID</strong>
+    <%= @assessment_mark.assessment_subject_id %>
+  </li>
+
+  <li>
+    <strong>Level</strong>
+    <%= @assessment_mark.assessment_subject_level %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: assessment_mark_path(@conn, :edit, @assessment_mark) %></span>
+<span><%= link "Back", to: assessment_mark_path(@conn, :index) %></span>

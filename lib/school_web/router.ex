@@ -58,6 +58,7 @@ defmodule SchoolWeb.Router do
     post("/standard_ranking", PdfController, :standard_ranking)
 
     post("/student_class_listing", PdfController, :student_class_listing)
+    post("/student_class_listing_jpn", PdfController, :student_class_listing_jpn)
     post("/teacher_listing", PdfController, :teacher_listing)
     post("/exam_result_analysis_class", PdfController, :exam_result_analysis_class)
 
@@ -65,6 +66,12 @@ defmodule SchoolWeb.Router do
       "/exam_result_analysis_class_standard",
       PdfController,
       :exam_result_analysis_class_standard
+    )
+
+    post(
+      "/class_assessment",
+      PdfController,
+      :class_assessment
     )
 
     get("/student_list_by_co", PdfController, :student_list_by_co)
@@ -190,11 +197,11 @@ defmodule SchoolWeb.Router do
 
     get("/submit_student_transfer", StudentController, :submit_student_transfer)
     get("/students_transfer", StudentController, :students_transfer)
-    get("/height_weight", StudentController, :height_weight)
+    get("/height_weight/:class_id", StudentController, :height_weight)
     get("/height_weight_class/:class_id", StudentController, :height_weight_class)
     get("/student_certificate", StudentController, :student_certificate)
     get("/student_lists/:user_id", StudentController, :student_lists)
-    get("/height_weight/:semester_id", StudentController, :height_weight_semester)
+    get("/height_weight_semester/:class_id", StudentController, :height_weight_semester)
     get("/edit_height_weight/:student_id/:semester_id", StudentController, :edit_height_weight)
     get("/submit_height_weight", StudentController, :submit_height_weight)
 
@@ -203,6 +210,16 @@ defmodule SchoolWeb.Router do
     get("/classes/enroll_students", ClassController, :enroll_students)
     resources("/classes", ClassController)
     get("/classes/:id/students", ClassController, :students)
+
+    post("/create_monitor", ClassController, :create_monitor)
+
+    get("/edit_monitor/:class_id", ClassController, :edit_monitor)
+
+    post("/edit_monitor", ClassController, :edit_monitor)
+
+    post("/generate_edit_monitor", ClassController, :generate_edit_monitor)
+
+    get("/class_monitor/:class_id", ClassController, :class_monitor)
     get("/classes/:id/sync_library_membership", ClassController, :sync_library_membership)
     get("/sync_library_membership_all", ClassController, :sync_library_membership_all)
     get("/add_to_class_semester", ClassController, :add_to_class_semester)
@@ -216,7 +233,7 @@ defmodule SchoolWeb.Router do
 
     resources("/teacher", TeacherController)
     get("/e_discipline", TeacherController, :e_discipline)
-    get("/teacher_attendance", TeacherController, :teacher_attendance)
+    get("/teacher_attendances", TeacherController, :teacher_attendances)
     get("/mark_teacher_attendance", TeacherController, :mark_teacher_attendance)
     get("/submit_teacher_attendance", TeacherController, :submit_teacher_attendance)
     post("/upload_teachers", TeacherController, :upload_teachers)
@@ -246,8 +263,11 @@ defmodule SchoolWeb.Router do
     resources("/exam_master", ExamMasterController)
     resources("/time_period", TimePeriodController)
 
+    get("/print_timetable/:panel", PdfController, :print_timetable)
+
     get("/exam/marking/:id/:c_id/:s_id", ExamController, :marking)
     get("/cocurriculum/marking/:id/:semester_id", CoCurriculumController, :marking)
+    post("/generate_student_image", StudentController, :generate_student_image)
 
     resources("/exam", ExamController)
     get("/exam", ExamController, :index)
@@ -318,6 +338,12 @@ defmodule SchoolWeb.Router do
       "/create_teacher_cocurriculum_job",
       TeacherCoCurriculumJobController,
       :create_teacher_cocurriculum_job
+    )
+
+    post(
+      "/generate_teacher_image",
+      TeacherController,
+      :generate_teacher_image
     )
 
     post("/create_teacher_hem_job", TeacherHemJobController, :create_teacher_hem_job)
@@ -397,6 +423,7 @@ defmodule SchoolWeb.Router do
     get("/admin_dashboard", PageController, :admin_dashboard)
     get("/clerk_dashboard", PageController, :clerk_dashboard)
     get("/support_dashboard", PageController, :support_dashboard)
+    get("/monitor_dashboard/:class_id", PageController, :monitor_dashboard)
     get("/login_teacher", TeacherController, :login_teacher)
     get("/create_teacher_login/:id", TeacherController, :create_teacher_login)
 
@@ -447,6 +474,8 @@ defmodule SchoolWeb.Router do
       :generate_head_count_mark
     )
 
+    resources("/teacher_attendance", TeacherAttendanceController)
+
     resources("/announcements", AnnouncementController)
     get("/announcements/:id/broadcast", AnnouncementController, :broadcast)
     resources("/edisciplines", EdisciplineController)
@@ -456,6 +485,62 @@ defmodule SchoolWeb.Router do
     get("/update_summary", EdisciplineController, :update_summary)
     get("/change_semester", UserController, :change_semester)
     post("/get_change_semester", UserController, :get_change_semester)
+
+    get("/default_rules_break", RulesBreakController, :default_rules_break)
+    resources("/rules_break", RulesBreakController)
+
+    resources("/assessment_subject", AssessmentSubjectController)
+
+    get("/generate_assessment_subject", AssessmentSubjectController, :generate_assessment_subject)
+    post("/create_assessment_subject", AssessmentSubjectController, :create_assessment_subject)
+
+    get("/assign_level", AssessmentSubjectController, :assign_level)
+
+    get(
+      "/generate_rules_break/:assessment_id/:class_id/:subject_id",
+      AssessmentSubjectController,
+      :generate_rules_break
+    )
+
+    post("/create_rules_break", AssessmentSubjectController, :create_rules_break)
+
+    post("/edit_rules_break", AssessmentSubjectController, :edit_rules_break)
+
+    resources("/assessment_mark", AssessmentMarkController)
+
+    get(
+      "/assessment_report",
+      AssessmentMarkController,
+      :assessment_report
+    )
+
+    resources("/mark_sheet_history", MarkSheetHistoryController)
+
+    get(
+      "/history_report_card",
+      ExamController,
+      :history_report_card
+    )
+
+    post(
+      "/pre_upload_mark_sheet_history",
+      MarkSheetHistorysController,
+      :pre_upload_mark_sheet_history
+    )
+
+    post(
+      "/upload_mark_sheet_history",
+      MarkSheetHistorysController,
+      :upload_mark_sheet_history
+    )
+
+    resources("/mark_sheet_historys", MarkSheetHistorysController)
+
+    post(
+      "/history_report_card_class",
+      MarkSheetHistorysController,
+      :history_report_card_class
+    )
 
     resources("/ehehomeworks", EhomeworkController)
     get("/ehomework/:class_id", EhomeworkController, :ehomework)

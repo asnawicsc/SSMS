@@ -1,0 +1,76 @@
+<h2>Listing Mark sheet history</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Institution</th>
+      <th>Stuid</th>
+      <th>Name</th>
+      <th>Cname</th>
+      <th>Class</th>
+      <th>Subject</th>
+      <th>Description</th>
+      <th>Cdesc</th>
+      <th>Year</th>
+      <th>T1m</th>
+      <th>T2m</th>
+      <th>T3m</th>
+      <th>T4m</th>
+      <th>T5m</th>
+      <th>T6m</th>
+      <th>S1m</th>
+      <th>S2m</th>
+      <th>T1g</th>
+      <th>T2g</th>
+      <th>T3g</th>
+      <th>T4g</th>
+      <th>T5g</th>
+      <th>T6g</th>
+      <th>S1g</th>
+      <th>S2g</th>
+      <th>S3g</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for mark_sheet_history <- @mark_sheet_history do %>
+    <tr>
+      <td><%= mark_sheet_history.institution_id %></td>
+      <td><%= mark_sheet_history.stuid %></td>
+      <td><%= mark_sheet_history.name %></td>
+      <td><%= mark_sheet_history.cname %></td>
+      <td><%= mark_sheet_history.class %></td>
+      <td><%= mark_sheet_history.subject %></td>
+      <td><%= mark_sheet_history.description %></td>
+      <td><%= mark_sheet_history.cdesc %></td>
+      <td><%= mark_sheet_history.year %></td>
+      <td><%= mark_sheet_history.t1m %></td>
+      <td><%= mark_sheet_history.t2m %></td>
+      <td><%= mark_sheet_history.t3m %></td>
+      <td><%= mark_sheet_history.t4m %></td>
+      <td><%= mark_sheet_history.t5m %></td>
+      <td><%= mark_sheet_history.t6m %></td>
+      <td><%= mark_sheet_history.s1m %></td>
+      <td><%= mark_sheet_history.s2m %></td>
+      <td><%= mark_sheet_history.t1g %></td>
+      <td><%= mark_sheet_history.t2g %></td>
+      <td><%= mark_sheet_history.t3g %></td>
+      <td><%= mark_sheet_history.t4g %></td>
+      <td><%= mark_sheet_history.t5g %></td>
+      <td><%= mark_sheet_history.t6g %></td>
+      <td><%= mark_sheet_history.s1g %></td>
+      <td><%= mark_sheet_history.s2g %></td>
+      <td><%= mark_sheet_history.s3g %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: mark_sheet_history_path(@conn, :show, mark_sheet_history), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: mark_sheet_history_path(@conn, :edit, mark_sheet_history), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: mark_sheet_history_path(@conn, :delete, mark_sheet_history), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Mark sheet history", to: mark_sheet_history_path(@conn, :new) %></span>

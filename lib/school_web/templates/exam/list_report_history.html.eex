@@ -72,6 +72,26 @@
                            </div>
                         </div>
                      </div>
+                       <div class="col-lg-3 col-md-5">
+                        <div class="card" data-filter-group="movie">
+                           <div class="card-body text-center">
+                              <div class="d-flex">
+                                 <div class="ml-auto">
+                                    <a class="text-muted mr-1" href="/history_report_card" title="Download">
+                                       <em class="fa fa-download fa-fw"></em>
+                                    </a>
+                                 </div>
+                              </div>
+                              <a class="px-4" href="/history_report_card">
+                                 <em class="fa-5x fas fa-book text-pink"></em>
+                              </a>
+                              <p>
+                                 <small class="text-dark">History Report Card</small>
+                              </p>
+                           
+                           </div>
+                        </div>
+                     </div>
                      
 
                </div>

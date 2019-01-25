@@ -1,0 +1,198 @@
+<div class="content-heading">
+    <div>New Assesment Subject Base On Standard
+    </div>
+</div>
+
+<form method="post" action="/create_assessment_subject" class="form-horizontal">
+    <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+    <div class="col-lg-12">
+        <div class="card card-default d-none d-lg-block">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group ">
+                            <label>
+                                <%= gettext "Semester" %>
+                            </label>
+                            <select class="custom-select custom-select" required="required"  name="semester">
+                                   <option selected="selected">Choose a semester</option>
+                                <%= for a <- @semester |> Enum.sort do %>
+                                    <option value="<%= a.id %>">
+                                        <%= a.start_date %> -        <%= a.end_date %>
+                                    </option>
+                                    <% end %>
+                            </select>
+                        </div>
+                </div>
+
+                                        <div class="col-sm-6">
+                        <div class="form-group ">
+                            <label>
+                                <%= gettext "Standard" %>
+                            </label>
+                            <select class="custom-select custom-select" required="required" onchange="getvalsd(this);" name="level">
+                                 <option selected="selected">Choose a standard</option>
+                                <%= for a <- @ level |> Enum.sort do %>
+                                    <option value="<%= a.id %>">
+                                       <%= a.name %>
+                                    </option>
+                                    <% end %>
+                            </select>
+                        </div>
+                    </div>
+
+    
+   
+
+                </div>
+
+                <input type="hidden" name="subject">
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <%= gettext "Subject" %>
+                            </div>
+                            <div class="card-body">
+                                <ol class="s_unmark" id="s_unmark">
+                                 
+                                        <li id="">
+                                           
+                                        </li>
+                                        
+                                </ol>
+                            </div>
+                            <div class="card-footer">
+                                <button type="button" rel="tooltip" title="" class="btn btn-primary btn-link btn-sm show_menu_cata" data-original-title="subject">
+
+                                    Select All -->
+
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <%= gettext "Selected Subject" %>
+                            </div>
+                            <div class="card-body">
+                                <ol class="s_mark" id="s_mark">
+
+                                </ol>
+                            </div>
+                            <div class="card-footer">
+                                <button type="button" rel="tooltip" title="" class="btn btn-primary btn-link btn-sm show_menu_cata" data-original-title="un subject">
+
+                                    <-- Unselect All </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+      
+
+
+            </div><center>   <input style="margin-bottom: 30px;" class="btn btn-primary" name="" value="Submit" type="submit"></center>
+                 
+        </div>
+
+                
+
+    </div>
+
+
+  
+
+
+</form>
+
+<script type="text/javascript">
+
+
+
+
+    function getvalsd(sel){
+        d = sel.value
+
+        channel.push("sub_teach_class", {level_id: d, user_id: window.currentUser,institution_id: window.currentInstitute}) .receive("ok", payload => {
+
+
+
+             console.log(Object.values(payload.subject));
+
+            $("#s_unmark").html("")
+
+            var list = payload.subject
+            $(list).each(function(i, v){
+
+            var li = '<li id="'+v.subject_id+'">'+v.subject_name+'</li>'
+                    $("#s_unmark").append(li) 
+            })
+
+
+
+       
+      
+            
+        })
+
+       
+
+      
+
+    }
+
+
+
+
+    $("ol#s_unmark").on("click", "li", function() {
+
+        $("ol#s_mark").append(this)
+        var list_ids = []
+        $("ol#s_mark li").each(function() {
+            var id = $(this).attr("id")
+            list_ids.push(id)
+        })
+        $("input[name='subject']").val(list_ids)
+    })
+
+    $("ol#s_mark").on("click", "li", function() {
+
+        $("ol#s_unmark").append(this)
+
+    })
+
+    $('button[data-original-title="subject"]').click(function() {
+        var li_list = $('ol#s_unmark').find("li")
+        var list_ids = []
+        $(li_list).each(function() {
+            var id = $(this).attr("id")
+            list_ids.push(id)
+            var li = $(this);
+
+            $("ol#s_mark").append(li);
+        })
+
+        $("input[name='subject']").val(list_ids)
+
+    })
+
+    $('button[data-original-title="un subject"]').click(function() {
+        var li_list = $('ol#s_mark').find("li")
+        $(li_list).each(function() {
+
+            var li = $(this);
+
+            $("ol#s_unmark").append(li);
+        })
+
+    })
+
+
+  
+
+
+
+</script>

@@ -25,6 +25,7 @@
                         <table class="table" id="datatable1">
                           <thead>
                             <tr>
+                              <th></th>
                                 <th>Name</th>
                                 <th>User Login</th>
                              
@@ -33,6 +34,7 @@
                             <tbody>
                             <%= for teacher <- @teacher do %>
                               <tr>
+                                <td class="text-left"> <img id="preview6"  style='width:20px; height: 20px;' src='data:image/png;base64, <%= teacher.image_bin %>'></td>
                                 <td>   
                                   <div id="<%= teacher.code %> " class="btn btn-link teacher"><%= teacher.name %></div></td>
                                 <td>
@@ -91,7 +93,38 @@
                       </div>
                     </div>
                   </div>
+
+                  <div class="card card-default d-none d-lg-block">
+                    <div class="card-body">
+                     <p class="lead">Click on a teacher name in the left panel. </p> 
+                        <div class="row" style="margin-top: 40px;">
+                        <div class="col-lg-12">
+                          <div class="panel">
+                            <div class="panel-heading">Bulk Upload Teachers Image</div>
+                            <div class="panel-body">
+                               <%= form_for @conn, teacher_path(@conn, :generate_teacher_image), [as: :item, multipart: true], fn f -> %>
+
+                          <%= label f, "", class: "control-label" %>
+                           <%= file_input f, :image1, accept: ".png, .jpg, .jpeg"  ,id: "imgInp5", multiple: true %>
+                          <%= error_tag f, :file %>
+
+                                
+                                  <%= submit "Upload", class: "btn btn-primary" %>
+                                
+                              <% end %>
+
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
+
+
+
                 <div class="col-lg-12" aria-label="teacher_details">
                 </div>
             <% end %>
@@ -103,8 +136,11 @@
                   <%= render("show.html", conn: @conn, teacher: teacher)%>
 
              <% end %>
+
+
   
       </div>
+
 
 <span><%= link "New Teacher", to: teacher_path(@conn, :new) %></span>
 

@@ -118,7 +118,7 @@
 						var end_date = event.end._d ;
 						var dayWrapper = moment(start_date);
 						var e_dayWrapper = moment(end_date);
-							dayWrapper.subtract(8, 'hours');
+							dayWrapper.subtract(0, 'hours');
 						  swal({
 						    title: "Are you sure?",
 						    text: "You want to save " + title + " on " + dayWrapper.format("dddd, MMMM Do YYYY, h:mm:ss a"),
@@ -133,8 +133,8 @@
 						    if (isConfirm) {
 						var dayWrapper2 = moment(start_date);
 						var e_dayWrapper2 = moment(end_date);
-						dayWrapper2.subtract(8, 'hours');
-						e_dayWrapper2.subtract(8, 'hours');
+						dayWrapper2.subtract(0, 'hours');
+						e_dayWrapper2.subtract(0, 'hours');
 						   		channel.push("save_period", {
 						   			period_id: event.period_id, 
 						   			event_id_str: event._id,
@@ -157,7 +157,7 @@
 						var end_date = event.end._d ;
 						var dayWrapper = moment(start_date);
 						var e_dayWrapper = moment(end_date);
-							dayWrapper.subtract(8, 'hours');
+							dayWrapper.subtract(0, 'hours');
 						  swal({
 						    title: "Are you sure?",
 						    text: "You want to save " + title + " on " + dayWrapper.format("dddd, MMMM Do YYYY, h:mm:ss a"),
@@ -172,8 +172,8 @@
 						    if (isConfirm) {
 						var dayWrapper2 = moment(start_date);
 						var e_dayWrapper2 = moment(end_date);
-						dayWrapper2.subtract(8, 'hours');
-						e_dayWrapper2.subtract(8, 'hours');
+						dayWrapper2.subtract(0, 'hours');
+						e_dayWrapper2.subtract(0, 'hours');
 						   		channel.push("save_period", {
 						   			period_id: event.period_id, 
 						   			event_id_str: event._id,

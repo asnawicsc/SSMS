@@ -327,7 +327,8 @@ defmodule School.Affairs do
           remarks: c.remarks,
           level_id: l.name,
           teacher_id: c.teacher_id,
-          standard_id: l.id
+          standard_id: l.id,
+          is_delete: c.is_delete
         }
       )
     )
@@ -3930,7 +3931,7 @@ defmodule School.Affairs do
     end
   end
 
-  def initialize_calendar(teacher_id) do
+  def initialize_calendar(institution_id, semester_id, teacher_id) do
     # create a calendar
 
     {:ok, timetable} =
@@ -3941,7 +3942,12 @@ defmodule School.Affairs do
 
         {:no, timetable_id} ->
           {:ok, timetable} =
-            Timetable.changeset(%Timetable{}, %{teacher_id: teacher_id}) |> Repo.insert()
+            Timetable.changeset(%Timetable{}, %{
+              teacher_id: teacher_id,
+              institution_id: institution_id,
+              semester_id: semester_id
+            })
+            |> Repo.insert()
       end
 
     {:ok, timetable}
@@ -4216,6 +4222,10 @@ defmodule School.Affairs do
 
   def get_inst_id(conn) do
     conn.private.plug_session["institution_id"]
+  end
+
+  def get_semester_id(conn) do
+    conn.private.plug_session["semester_id"]
   end
 
   def get_periods(institution_id) do
@@ -5141,5 +5151,581 @@ defmodule School.Affairs do
   """
   def change_ehomework(%Ehomework{} = ehomework) do
     Ehomework.changeset(ehomework, %{})
+  end
+
+  alias School.Affairs.TeacherAttendance
+
+  @doc """
+  Returns the list of teacher_attendance.
+
+  ## Examples
+
+      iex> list_teacher_attendance()
+      [%TeacherAttendance{}, ...]
+
+  """
+  def list_teacher_attendance do
+    Repo.all(TeacherAttendance)
+  end
+
+  @doc """
+  Gets a single teacher_attendance.
+
+  Raises `Ecto.NoResultsError` if the Teacher attendance does not exist.
+
+  ## Examples
+
+      iex> get_teacher_attendance!(123)
+      %TeacherAttendance{}
+
+      iex> get_teacher_attendance!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_teacher_attendance!(id), do: Repo.get!(TeacherAttendance, id)
+
+  @doc """
+  Creates a teacher_attendance.
+
+  ## Examples
+
+      iex> create_teacher_attendance(%{field: value})
+      {:ok, %TeacherAttendance{}}
+
+      iex> create_teacher_attendance(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_teacher_attendance(attrs \\ %{}) do
+    %TeacherAttendance{}
+    |> TeacherAttendance.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a teacher_attendance.
+
+  ## Examples
+
+      iex> update_teacher_attendance(teacher_attendance, %{field: new_value})
+      {:ok, %TeacherAttendance{}}
+
+      iex> update_teacher_attendance(teacher_attendance, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_teacher_attendance(%TeacherAttendance{} = teacher_attendance, attrs) do
+    teacher_attendance
+    |> TeacherAttendance.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a TeacherAttendance.
+
+  ## Examples
+
+      iex> delete_teacher_attendance(teacher_attendance)
+      {:ok, %TeacherAttendance{}}
+
+      iex> delete_teacher_attendance(teacher_attendance)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_teacher_attendance(%TeacherAttendance{} = teacher_attendance) do
+    Repo.delete(teacher_attendance)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking teacher_attendance changes.
+
+  ## Examples
+
+      iex> change_teacher_attendance(teacher_attendance)
+      %Ecto.Changeset{source: %TeacherAttendance{}}
+
+  """
+  def change_teacher_attendance(%TeacherAttendance{} = teacher_attendance) do
+    TeacherAttendance.changeset(teacher_attendance, %{})
+  end
+
+  alias School.Affairs.RulesBreak
+
+  @doc """
+  Returns the list of rules_break.
+
+  ## Examples
+
+      iex> list_rules_break()
+      [%RulesBreak{}, ...]
+
+  """
+  def list_rules_break do
+    Repo.all(RulesBreak)
+  end
+
+  @doc """
+  Gets a single rules_break.
+
+  Raises `Ecto.NoResultsError` if the Rules break does not exist.
+
+  ## Examples
+
+      iex> get_rules_break!(123)
+      %RulesBreak{}
+
+      iex> get_rules_break!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_rules_break!(id), do: Repo.get!(RulesBreak, id)
+
+  @doc """
+  Creates a rules_break.
+
+  ## Examples
+
+      iex> create_rules_break(%{field: value})
+      {:ok, %RulesBreak{}}
+
+      iex> create_rules_break(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_rules_break(attrs \\ %{}) do
+    %RulesBreak{}
+    |> RulesBreak.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a rules_break.
+
+  ## Examples
+
+      iex> update_rules_break(rules_break, %{field: new_value})
+      {:ok, %RulesBreak{}}
+
+      iex> update_rules_break(rules_break, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_rules_break(%RulesBreak{} = rules_break, attrs) do
+    rules_break
+    |> RulesBreak.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a RulesBreak.
+
+  ## Examples
+
+      iex> delete_rules_break(rules_break)
+      {:ok, %RulesBreak{}}
+
+      iex> delete_rules_break(rules_break)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_rules_break(%RulesBreak{} = rules_break) do
+    Repo.delete(rules_break)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking rules_break changes.
+
+  ## Examples
+
+      iex> change_rules_break(rules_break)
+      %Ecto.Changeset{source: %RulesBreak{}}
+
+  """
+  def change_rules_break(%RulesBreak{} = rules_break) do
+    RulesBreak.changeset(rules_break, %{})
+  end
+
+  alias School.Affairs.AssessmentSubject
+
+  @doc """
+  Returns the list of assessment_subject.
+
+  ## Examples
+
+      iex> list_assessment_subject()
+      [%AssessmentSubject{}, ...]
+
+  """
+  def list_assessment_subject do
+    Repo.all(AssessmentSubject)
+  end
+
+  @doc """
+  Gets a single assessment_subject.
+
+  Raises `Ecto.NoResultsError` if the Assessment subject does not exist.
+
+  ## Examples
+
+      iex> get_assessment_subject!(123)
+      %AssessmentSubject{}
+
+      iex> get_assessment_subject!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_assessment_subject!(id), do: Repo.get!(AssessmentSubject, id)
+
+  @doc """
+  Creates a assessment_subject.
+
+  ## Examples
+
+      iex> create_assessment_subject(%{field: value})
+      {:ok, %AssessmentSubject{}}
+
+      iex> create_assessment_subject(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_assessment_subject(attrs \\ %{}) do
+    %AssessmentSubject{}
+    |> AssessmentSubject.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a assessment_subject.
+
+  ## Examples
+
+      iex> update_assessment_subject(assessment_subject, %{field: new_value})
+      {:ok, %AssessmentSubject{}}
+
+      iex> update_assessment_subject(assessment_subject, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_assessment_subject(%AssessmentSubject{} = assessment_subject, attrs) do
+    assessment_subject
+    |> AssessmentSubject.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a AssessmentSubject.
+
+  ## Examples
+
+      iex> delete_assessment_subject(assessment_subject)
+      {:ok, %AssessmentSubject{}}
+
+      iex> delete_assessment_subject(assessment_subject)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_assessment_subject(%AssessmentSubject{} = assessment_subject) do
+    Repo.delete(assessment_subject)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking assessment_subject changes.
+
+  ## Examples
+
+      iex> change_assessment_subject(assessment_subject)
+      %Ecto.Changeset{source: %AssessmentSubject{}}
+
+  """
+  def change_assessment_subject(%AssessmentSubject{} = assessment_subject) do
+    AssessmentSubject.changeset(assessment_subject, %{})
+  end
+
+  alias School.Affairs.AssessmentMark
+
+  @doc """
+  Returns the list of assessment_mark.
+
+  ## Examples
+
+      iex> list_assessment_mark()
+      [%AssessmentMark{}, ...]
+
+  """
+  def list_assessment_mark do
+    Repo.all(AssessmentMark)
+  end
+
+  @doc """
+  Gets a single assessment_mark.
+
+  Raises `Ecto.NoResultsError` if the Assessment mark does not exist.
+
+  ## Examples
+
+      iex> get_assessment_mark!(123)
+      %AssessmentMark{}
+
+      iex> get_assessment_mark!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_assessment_mark!(id), do: Repo.get!(AssessmentMark, id)
+
+  @doc """
+  Creates a assessment_mark.
+
+  ## Examples
+
+      iex> create_assessment_mark(%{field: value})
+      {:ok, %AssessmentMark{}}
+
+      iex> create_assessment_mark(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_assessment_mark(attrs \\ %{}) do
+    %AssessmentMark{}
+    |> AssessmentMark.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a assessment_mark.
+
+  ## Examples
+
+      iex> update_assessment_mark(assessment_mark, %{field: new_value})
+      {:ok, %AssessmentMark{}}
+
+      iex> update_assessment_mark(assessment_mark, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_assessment_mark(%AssessmentMark{} = assessment_mark, attrs) do
+    assessment_mark
+    |> AssessmentMark.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a AssessmentMark.
+
+  ## Examples
+
+      iex> delete_assessment_mark(assessment_mark)
+      {:ok, %AssessmentMark{}}
+
+      iex> delete_assessment_mark(assessment_mark)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_assessment_mark(%AssessmentMark{} = assessment_mark) do
+    Repo.delete(assessment_mark)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking assessment_mark changes.
+
+  ## Examples
+
+      iex> change_assessment_mark(assessment_mark)
+      %Ecto.Changeset{source: %AssessmentMark{}}
+
+  """
+  def change_assessment_mark(%AssessmentMark{} = assessment_mark) do
+    AssessmentMark.changeset(assessment_mark, %{})
+  end
+
+  alias School.Affairs.MarkSheetHistory
+
+  @doc """
+  Returns the list of mark_sheet_history.
+
+  ## Examples
+
+      iex> list_mark_sheet_history()
+      [%MarkSheetHistory{}, ...]
+
+  """
+  def list_mark_sheet_history do
+    Repo.all(MarkSheetHistory)
+  end
+
+  @doc """
+  Gets a single mark_sheet_history.
+
+  Raises `Ecto.NoResultsError` if the Mark sheet history does not exist.
+
+  ## Examples
+
+      iex> get_mark_sheet_history!(123)
+      %MarkSheetHistory{}
+
+      iex> get_mark_sheet_history!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_mark_sheet_history!(id), do: Repo.get!(MarkSheetHistory, id)
+
+  @doc """
+  Creates a mark_sheet_history.
+
+  ## Examples
+
+      iex> create_mark_sheet_history(%{field: value})
+      {:ok, %MarkSheetHistory{}}
+
+      iex> create_mark_sheet_history(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_mark_sheet_history(attrs \\ %{}) do
+    %MarkSheetHistory{}
+    |> MarkSheetHistory.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a mark_sheet_history.
+
+  ## Examples
+
+      iex> update_mark_sheet_history(mark_sheet_history, %{field: new_value})
+      {:ok, %MarkSheetHistory{}}
+
+      iex> update_mark_sheet_history(mark_sheet_history, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_mark_sheet_history(%MarkSheetHistory{} = mark_sheet_history, attrs) do
+    mark_sheet_history
+    |> MarkSheetHistory.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a MarkSheetHistory.
+
+  ## Examples
+
+      iex> delete_mark_sheet_history(mark_sheet_history)
+      {:ok, %MarkSheetHistory{}}
+
+      iex> delete_mark_sheet_history(mark_sheet_history)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_mark_sheet_history(%MarkSheetHistory{} = mark_sheet_history) do
+    Repo.delete(mark_sheet_history)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking mark_sheet_history changes.
+
+  ## Examples
+
+      iex> change_mark_sheet_history(mark_sheet_history)
+      %Ecto.Changeset{source: %MarkSheetHistory{}}
+
+  """
+  def change_mark_sheet_history(%MarkSheetHistory{} = mark_sheet_history) do
+    MarkSheetHistory.changeset(mark_sheet_history, %{})
+  end
+
+  alias School.Affairs.MarkSheetHistorys
+
+  @doc """
+  Returns the list of mark_sheet_historys.
+
+  ## Examples
+
+      iex> list_mark_sheet_historys()
+      [%MarkSheetHistorys{}, ...]
+
+  """
+  def list_mark_sheet_historys do
+    Repo.all(MarkSheetHistorys)
+  end
+
+  @doc """
+  Gets a single mark_sheet_historys.
+
+  Raises `Ecto.NoResultsError` if the Mark sheet historys does not exist.
+
+  ## Examples
+
+      iex> get_mark_sheet_historys!(123)
+      %MarkSheetHistorys{}
+
+      iex> get_mark_sheet_historys!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_mark_sheet_historys!(id), do: Repo.get!(MarkSheetHistorys, id)
+
+  @doc """
+  Creates a mark_sheet_historys.
+
+  ## Examples
+
+      iex> create_mark_sheet_historys(%{field: value})
+      {:ok, %MarkSheetHistorys{}}
+
+      iex> create_mark_sheet_historys(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_mark_sheet_historys(attrs \\ %{}) do
+    %MarkSheetHistorys{}
+    |> MarkSheetHistorys.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a mark_sheet_historys.
+
+  ## Examples
+
+      iex> update_mark_sheet_historys(mark_sheet_historys, %{field: new_value})
+      {:ok, %MarkSheetHistorys{}}
+
+      iex> update_mark_sheet_historys(mark_sheet_historys, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_mark_sheet_historys(%MarkSheetHistorys{} = mark_sheet_historys, attrs) do
+    mark_sheet_historys
+    |> MarkSheetHistorys.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a MarkSheetHistorys.
+
+  ## Examples
+
+      iex> delete_mark_sheet_historys(mark_sheet_historys)
+      {:ok, %MarkSheetHistorys{}}
+
+      iex> delete_mark_sheet_historys(mark_sheet_historys)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_mark_sheet_historys(%MarkSheetHistorys{} = mark_sheet_historys) do
+    Repo.delete(mark_sheet_historys)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking mark_sheet_historys changes.
+
+  ## Examples
+
+      iex> change_mark_sheet_historys(mark_sheet_historys)
+      %Ecto.Changeset{source: %MarkSheetHistorys{}}
+
+  """
+  def change_mark_sheet_historys(%MarkSheetHistorys{} = mark_sheet_historys) do
+    MarkSheetHistorys.changeset(mark_sheet_historys, %{})
   end
 end

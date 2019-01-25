@@ -31,6 +31,7 @@
     <link rel="stylesheet" href="/vendor/sweetalert/dist/sweetalert.css">
    <!-- =============== BOOTSTRAP STYLES ===============-->
    <link rel="stylesheet" href="/css/bootstrap.css" id="bscss">
+
    <!-- =============== APP STYLES ===============-->
    <link rel="stylesheet" href="/css/app_angle.css" id="maincss">
        <script type="text/javascript">
@@ -61,11 +62,13 @@
    <script src="/vendor/jquery.easing/jquery.easing.js"></script>
    <!-- ANIMO-->
    <script src="/vendor/animo/animo.js"></script>
+     <script src="/vendor/slimScroll/jquery.slimscroll.min.js"></script>
    <!-- SCREENFULL-->
    <script src="/vendor/screenfull/dist/screenfull.js"></script>
    <!-- LOCALIZE-->
    <script src="/vendor/jquery-localize/dist/jquery.localize.js"></script>
 
+  
 
   <script src="/vendor/sweetalert/dist/sweetalert.min.js"></script>
    <link rel="stylesheet" href="/vendor/datatables.net-bs4/css/dataTables.bootstrap4.css">
@@ -74,7 +77,7 @@
 
   <script src="/vendor/datatables-colvis/js/dataTables.colVis.js"></script>
    <script src="/vendor/datatables-responsive/js/dataTables.responsive.js"></script>
-
+     
    <!-- =============== PAGE VENDOR SCRIPTS ===============-->
             <script src="/vendor/jquery-bootgrid/dist/jquery.bootgrid.js"></script>
    <script src="/vendor/jquery-bootgrid/dist/jquery.bootgrid.fa.js"></script>
@@ -104,8 +107,8 @@
     <script src="<%= static_path(@conn, "/js/library.js") %>"></script>
     <link rel="stylesheet" href="/css/richtext.min.css">
     <script src="/js/jquery.richtext.min.js"></script>
-
-
+<script src="/js/jquery.thooClock.js"></script>
+<script src="/js/jspdf.min.js"></script>
 <script src="/vendor/datatables.net-bs4/jquery.dataTables.js"></script>
 <script src="/vendor/datatables.net-bs4/dataTables.bootstrap4.js"></script>
 <script src="/vendor/datatables.net-bs4/dataTables.buttons.js"></script>

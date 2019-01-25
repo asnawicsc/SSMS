@@ -52,7 +52,7 @@
       <td><%= period.start_datetime %></td>
       <td><%= period.end_datetime %></td>
       <td><%= period.title  %></td>
-     <td><span><%= link "Delete", to: period_path(@conn, :delete, period.id), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span></td>
+     <td></td>
  
     </tr>
 <% end %>

@@ -34,6 +34,7 @@
                                   <div id="gne" class="form-group col-md-3">
 
                                        <select class="custom-select -custom-select-sm" onchange="getval(this);" required="required" name="class_id">
+                                        <option value="ALL">ALL</option>
                                         <%= for a <- @class |> Enum.sort_by(fn x -> x.name end) do %>
                                         <option value="<%= a.id %>">
                                             <%= a.name %>

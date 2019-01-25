@@ -6,7 +6,7 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-5">
         <!-- START card-->
         <div class="card card-default">
             <div class="card-header"></div>
@@ -42,10 +42,21 @@
                         <tbody></tbody>
                     </table>
                 </div>
+                  <div id="all_class" hidden="" >
+                        <div class="col-sm-10" style="overflow:scroll; height: 400px;">
+  <%= for class <- @classes|>Enum.sort_by(fn x -> x.name end) do %>
 
-       
+ <div class="radio c-radio" ><label><input type="radio" name="change_classes"  id="change_classes" value="<%= class.id %>"><span class="fa fa-circle"></span>Class: <%= class.name %></label></div>
+     <% end %>
+     </div>
             </div>
         </div>
+      </div>
+
+
+                       
+                           
+
         <!-- END card-->
     </div>
     <div class="col-md-7">
@@ -137,8 +148,9 @@
                                  {data: 'name'},
                                  {data: 'id',
                                     render: function(data, type, row, meta){
-                                      var html = '<div class="btn btn-primary remove_from_class" aria-label="'+data+'">Remove</div>'   
-                                    return html
+                                      var html = '<div class="btn btn-primary btn-sm remove_from_class" aria-label="'+data+'">Remove</div> <div class="btn btn-success btn-sm tranfer_from_class" aria-label="'+data+'">Tranfer</div>'   
+                           
+                        return html
                                   }
                                  }
                 
@@ -221,7 +233,8 @@
                      {data: 'name'},
                      {data: 'id',
                         render: function(data, type, row, meta){
-                          var html = '<div class="btn btn-primary remove_from_class" aria-label="'+data+'">Remove</div>'   
+                                    var html = '<div class="btn btn-primary btn-sm remove_from_class" aria-label="'+data+'">Remove</div> <div class="btn btn-success btn-sm tranfer_from_class" aria-label="'+data+'">Tranfer</div>'   
+                           
                         return html
                       }
                      }
@@ -346,7 +359,8 @@
                      {data: 'name'},
                      {data: 'id',
                         render: function(data, type, row, meta){
-                          var html = '<div class="btn btn-primary remove_from_class" aria-label="'+data+'">Remove</div>'   
+                                 var html = '<div class="btn btn-primary btn-sm remove_from_class" aria-label="'+data+'">Remove</div> <div class="btn btn-success btn-sm tranfer_from_class" aria-label="'+data+'">Tranfer</div>'   
+                           
                         return html
                       }
                      }
@@ -360,5 +374,75 @@
             
                     }})
              });
+
+
+            $(document).on("click", ".tranfer_from_class", function(){
+    
+         var id = $("select#show_class").val()
+          var semester_id = $("select#semesters").val()
+    
+       
+    
+       $("ol#student_list").append( $(this))
+            var student_id = $(this).attr("aria-label")
+       
+
+
+          
+                      swal({
+
+                    title: 'Tranfer to Class ',
+                    text:  $("div#all_class").html(),
+                    type: "warning",
+                    html: "dasdasdsad",
+                    showCancelButton: true,
+                    confirmButtonColor: "#5d9cec",
+                    confirmButtonText: "Yes, tranfer it!",
+                    cancelButtonText: "No, dont tranfer it!",
+                    closeOnConfirm: true,
+                    closeOnCancel: false
+                  }, function(isConfirm) {
+                    if (isConfirm) {
+
+     
+        var classes_id = $('input[name="change_classes"]:checked').val();
+
+     
+
+          channel.push("tranfer_from_class",  {classes_id: classes_id,student_id: student_id, semester_id: semester_id, class_id: id, user_id: window.currentUser, institution_id: window.currentInstitute})
+     .receive(
+                     "error", payload => {
+    
+                            var data = payload.students
+
+
+                     $("table#remove_from_class").html("")
+                    
+             $("table#remove_from_class").DataTable({
+                  destroy: true,
+                 data: data,
+          
+             
+                 columns: [
+                     {data: 'name'},
+                     {data: 'id',
+                        render: function(data, type, row, meta){
+                                var html = '<div class="btn btn-primary btn-sm remove_from_class" aria-label="'+data+'">Remove</div> <div class="btn btn-success btn-sm tranfer_from_class" aria-label="'+data+'">Tranfer</div>'   
+                           
+                        return html
+                      }
+                     }
+    
+                 ]
+             });
+                      })
+    
+                   } else {
+                      swal("Cancelled", "No student tranfer!", "info");
+            
+                    }})
+             });
        })
 </script>
+
+

@@ -1,5 +1,12 @@
-<h2>Listing Announcements</h2>
+<div class="content-heading">
+   <div>Listing Announcements
+   </div>
+</div>
 
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
 <table class="table">
   <thead>
     <tr>
@@ -22,5 +29,10 @@
 <% end %>
   </tbody>
 </table>
+
+</div>
+</div>
+</div>
+</div>
 
 <span><%= link "New Announcement", to: announcement_path(@conn, :new) %></span>
