@@ -167,7 +167,8 @@ defmodule SchoolWeb.TimetableController do
           on: p.timetable_id == r.id,
           where:
             r.institution_id == ^conn.private.plug_session["institution_id"] and
-              r.semester_id == ^conn.private.plug_session["semester_id"],
+              r.semester_id == ^conn.private.plug_session["semester_id"] and
+              p.teacher_id == r.teacher_id and p.class_id == ^class_id,
           select: %{
             start_datetime: p.start_datetime,
             end_datetime: p.end_datetime,

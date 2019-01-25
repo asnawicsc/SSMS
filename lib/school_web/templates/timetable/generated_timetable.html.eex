@@ -86,37 +86,52 @@
 
    $(maps).each(function(i,v) {
           console.log(v)
+
+
              v["start"]= start(v["start_hour"],v["start_minute"])
              v["end"]= end(v["end_hour"],v["end_minute"])
+
+
         })
+
 
 
             // --------------------------- Data --------------------------------
             var locations = [
-                {id: '1', name: 'Sunday'},
-                {id: '2', name: 'Monday'},
-                {id: '3', name: 'Tuesday'},
-                {id: '4', name: 'Wednesday'},
-                {id: '5', name: 'Thursday'},
-                {id: '6', name: 'Friday'},
-                {id: '7', name: 'Saturday'}
+                {id: 1, name: 'Sunday'},
+                {id: 2, name: 'Monday'},
+                {id: 3, name: 'Tuesday'},
+                {id: 4, name: 'Wednesday'},
+                {id: 5, name: 'Thursday'},
+                {id: 6, name: 'Friday'},
+                {id: 7, name: 'Saturday'}
                   
               
                 ];
 
-            var events =maps;
+            var events =
+           
+                 maps
+            
+         
+           
+
+
+
+        
 
             // -------------------------- Helpers ------------------------------
-             function start(hours, minutes) {
-                var date = new Date();
-                date.setUTCHours(hours, minutes, 0, 0);
-                console.log(date)
-                return date;
 
+            function start(hours, minutes) {
+                 // var date = new Date('01 January 2019 08:00 UTC');
+                  var date = new Date('01 January 2019 00:00 UTC');
+             
+                return date;
             }
-              function end(hours, minutes) {
-                var date = new Date();
-                date.setUTCHours(hours, minutes, 0, 0);
+            function end(hours, minutes) {
+                 // var date = new Date('01 January 2019 08:00 UTC');
+                    var date = new Date('01 January 2019 00:00 UTC');
+        
                 return date;
             }
             

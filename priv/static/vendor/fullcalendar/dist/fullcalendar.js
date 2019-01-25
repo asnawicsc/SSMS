@@ -2629,8 +2629,8 @@ exports.globalDefaults = {
     // editable: false,
     // nowIndicator: false,
     scrollTime: '06:00:00',
-    minTime: '08:00:00',
-    maxTime: '18:00:00',
+    minTime: '07:00:00',
+    maxTime: '24:00:00',
     showNonCurrentDates: true,
     // event ajax
     lazyFetching: true,

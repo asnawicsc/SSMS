@@ -209,7 +209,7 @@
 
 			  $('#calendar').fullCalendar({
 			    // put your options and callbacks here
-			    header: { center: 'month,agendaWeek' }, 
+			    header: { center: 'month,agendaWeek,listWeek' }, 
 			    selectable: true,
 			     unselectAuto: false,
 			    editable: true,
@@ -363,3 +363,4 @@ if(document.getElementById('check_mode').checked) {
 		
 			  })
 			</script>
+
