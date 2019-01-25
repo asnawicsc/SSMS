@@ -146,7 +146,9 @@ defmodule SchoolWeb.ClassController do
     students_in =
       Repo.all(
         from(t in School.Affairs.Student,
-          where: t.institution_id == ^School.Affairs.inst_id(conn),
+          left_join sc in School.Affairs.StudentClass, on: sc.sudent_id == t.id,
+          left_join c in School.Affairs.Class, on: sc.class_id == c.id,
+          where: t.institution_id == ^School.Affairs.inst_id(conn) ,
           select: %{
             chinese_name: t.chinese_name,
             name: t.name,
@@ -154,7 +156,8 @@ defmodule SchoolWeb.ClassController do
             ic: t.ic,
             student_no: t.student_no,
             phone: t.phone,
-            b_cert: t.b_cert
+            b_cert: t.b_cert,
+            line1: c.name
           }
         )
       )
@@ -197,7 +200,7 @@ defmodule SchoolWeb.ClassController do
     path =
       "?scope=get_user_register_response&lib_id=#{lib_id}&chinese_name=#{chinese_name}&name=#{
         name
-      }&ic=#{ic}&phone=#{phone}&code=#{student.student_no}"
+      }&ic=#{ic}&phone=#{phone}&code=#{student.student_no}&line=#{student.line1}"
 
     IO.inspect(uri <> path)
     response = HTTPoison.get!(uri <> path, [{"Content-Type", "application/json"}]).body
