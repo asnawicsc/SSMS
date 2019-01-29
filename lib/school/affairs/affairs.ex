@@ -4269,7 +4269,7 @@ defmodule School.Affairs do
     if time == nil do
       nil
     else
-      Timex.shift(time, hours: 8)
+      time
     end
   end
 

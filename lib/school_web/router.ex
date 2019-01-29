@@ -114,7 +114,9 @@ defmodule SchoolWeb.Router do
     post("/library/book/history_data", PageController, :history_data)
     post("/library/book/outstanding", PageController, :outstanding)
     get("/library/outstanding_all", PageController, :outstanding_all)
+    post("/upload_timetable", ClassController, :upload_timetable)
 
+    post("/pre_upload_timetable", ClassController, :pre_upload_timetable)
     resources("/examperiod", ExamPeriodController)
 
     get(
