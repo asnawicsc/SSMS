@@ -15,10 +15,24 @@
     <%= error_tag f, :code %>
   </div>
 
+
+
   <div class="form-group">
     <%= label f, (gettext "description"), class: "control-label" %>
     <%= text_input f, :description, class: "form-control" %>
     <%= error_tag f, :description %>
+  </div>
+
+      <div class="form-group">
+    <%= label f, (gettext "timetable code"), class: "control-label" %>
+    <%= text_input f, :timetable_code, class: "form-control" %>
+    <%= error_tag f, :timetable_code %>
+  </div>
+
+      <div class="form-group">
+    <%= label f, (gettext "timetable description"), class: "control-label" %>
+    <%= text_input f, :timetable_description, class: "form-control" %>
+    <%= error_tag f, :timetable_description %>
   </div>
 
 

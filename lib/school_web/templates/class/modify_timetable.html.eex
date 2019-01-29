@@ -71,6 +71,7 @@
            </div>
  
       </div>
+
   </div>
   <div class="col-lg-9">
   
@@ -209,7 +210,7 @@
 
 			  $('#calendar').fullCalendar({
 			    // put your options and callbacks here
-			    header: { center: 'month,agendaWeek' }, 
+			    header: { center: 'month,agendaWeek,listWeek' }, 
 			    selectable: true,
 			     unselectAuto: false,
 			    editable: true,
@@ -226,8 +227,8 @@
 						var end_date = end._d ;
 						var dayWrapper = moment(start_date);
 						var e_dayWrapper = moment(end_date);
-						dayWrapper.subtract(0, 'hours');
-						e_dayWrapper.subtract(0, 'hours'); 
+						dayWrapper.subtract(8, 'hours');
+						e_dayWrapper.subtract(8, 'hours'); 
 						$("input[name='start']").val(dayWrapper.format("YYYY/MM/DD HH:mm"))
 						$("input[name='end']").val(e_dayWrapper.format("YYYY/MM/DD HH:mm"))
 				
@@ -362,4 +363,60 @@ if(document.getElementById('check_mode').checked) {
 
 		
 			  })
+
+
+		// jQuery('.datetimepicker').datetimepicker();
+
+  //       $(document).change(function(){
+  //       var b = $("input[name='recursive_start']").val()
+  //       var a = $("input[name='recursive_end']").val()
+  //       var recursive_start = moment(b, "YYYY/MM/DD HH:mm");
+  //       var recursive_end = moment(a, "YYYY/MM/DD HH:mm");
+
+		// 		$('#calendar').fullCalendar( 'select', recursive_start,  recursive_end  )
+
+  //       }); 
+
+
+  //       $("div#create_recursive_event").click(function(){
+  //       	var teacher_id = $("select[name='teacher_id']").val();
+  //       	var subject_id = $("select[name='subject_id']").val();
+  //       	var class_id = "<%= @conn.params["class_id"]%>"
+		// 	        var b = $("input[name='start']").val()
+		// 	        var a = $("input[name='end']").val()
+		// 	        var start = moment(b, "YYYY/MM/DD HH:mm");
+		// 	        var end = moment(a, "YYYY/MM/DD HH:mm");
+  //       			var title = "rando"
+		// 				  swal({
+		// 				    title: "Are you sure?",
+		// 				    text: "You want to save " + title + " on " + b,
+		// 				    type: "warning",
+		// 				    showCancelButton: true,
+		// 				    confirmButtonColor: "#5d9cec",
+		// 				    confirmButtonText: "Yes, save it!",
+		// 				    cancelButtonText: "No, dont save it!",
+		// 				    closeOnConfirm: false,
+		// 				    closeOnCancel: false
+		// 				  }, function(isConfirm) {
+		// 				    if (isConfirm) {
+	
+					
+		// 				   		channel.push("save_period", {
+		// 				   			period_id: 0, 
+		// 				   			event_id_str: subject_id + "_" + class_id,
+		// 				   			user_id: teacher_id,
+		// 				   			semester_id:  window.currentSemester, 
+		// 				   			institution_id: window.currentInstitute,
+		// 				   			start_date: start.toISOString(), 
+		// 				   			end_date: end.toISOString()})
+
+		// 				    } else {
+		// 				      swal("Cancelled", "No event saved!", "info");
+						 
+
+		// 				     		      revertFunc();
+		// 				    }
+		// 				  });
+  //       });
 			</script>
+

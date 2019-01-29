@@ -13,7 +13,9 @@
                             <tr>
                               <th>Code</th>
                               <th>Name</th>
-                              <th>Description</th>
+                              <th>Timetable Code </th>
+                              <th>Timetable Name</th>
+                        
                               <th></th>
                             </tr>
                             </thead>
@@ -22,7 +24,8 @@
                             <tr>
                               <td><%= subject.code %></td>
                               <td><%= subject.description %></td>
-                              <td><%= subject.cdesc %></td>
+                              <td><%= subject.timetable_code %></td>
+                                 <td><%= subject.timetable_description %></td>
                               <td class="text-right">
                                
                                

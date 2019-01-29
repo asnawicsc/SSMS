@@ -223,7 +223,7 @@
 
            $('#calendar').fullCalendar({
              // put your options and callbacks here
-             header: { center: 'month,agendaWeek' }, 
+             header: { center: 'month,agendaWeek,listWeek' }, 
 
       
             eventLimit: true, // when too many events in a day, show the popover

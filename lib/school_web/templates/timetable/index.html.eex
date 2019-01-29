@@ -8,6 +8,7 @@
       <th>Level</th>
       <th>Period</th>
       <th>Semester</th>
+      <th>Teacher</th>
 
       <th></th>
     </tr>
@@ -20,6 +21,8 @@
       <td><%= timetable.level_id %></td>
       <td><%= timetable.period_id %></td>
       <td><%= timetable.semester_id %></td>
+       <td><%= timetable.teacher_id %></td>
+      
 
       <td class="text-right">
         <span><%= link "Show", to: timetable_path(@conn, :show, timetable), class: "btn btn-default btn-xs" %></span>
