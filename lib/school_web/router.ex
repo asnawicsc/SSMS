@@ -74,6 +74,12 @@ defmodule SchoolWeb.Router do
       :class_assessment
     )
 
+    post(
+      "/head_count_listing",
+      PdfController,
+      :head_count_listing
+    )
+
     get("/student_list_by_co", PdfController, :student_list_by_co)
 
     post("/height_weight_report_show", PdfController, :height_weight_report_show)
@@ -373,6 +379,7 @@ defmodule SchoolWeb.Router do
     get("/co_mark", CoCurriculumController, :co_mark)
     post("/create_co_mark", CoCurriculumController, :create_co_mark)
     post("/edit_co_mark", CoCurriculumController, :edit_co_mark)
+    get("/headcount_report", HeadCountController, :headcount_report)
 
     get(
       "/student_report_by_cocurriculum",

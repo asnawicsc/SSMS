@@ -14,6 +14,27 @@ defmodule SchoolWeb.HeadCountController do
     render(conn, "index.html", subject_teach_class: subject_teach_class)
   end
 
+  def headcount_report(conn, params) do
+    semesters =
+      Repo.all(from(s in Semester))
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
+    class =
+      Repo.all(
+        from(
+          s in School.Affairs.Class,
+          select: %{institution_id: s.institution_id, id: s.id, name: s.name}
+        )
+      )
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
+    subjects =
+      Repo.all(from(s in School.Affairs.Subject))
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
+    render(conn, "head_count_report.html", class: class, semesters: semesters, subjects: subjects)
+  end
+
   def generate_head_count(conn, %{"id" => id}) do
     all =
       Repo.all(

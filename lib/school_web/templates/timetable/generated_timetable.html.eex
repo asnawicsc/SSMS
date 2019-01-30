@@ -118,25 +118,24 @@
 
             // -------------------------- Helpers ------------------------------
 
-            function start(hours, minutes) {
-                 // var date = new Date('01 January 2019 08:00 UTC');
-                  var date = new Date('01 January 2019 00:00 UTC');
-             
+             function start(hours, minutes) {
+                var date = new Date();
+                date.setUTCHours(hours, minutes, 0, 0);
+                console.log(date)
+                return date;
+
+            }
+              function end(hours, minutes) {
+                var date = new Date();
+                date.setUTCHours(hours, minutes, 0, 0);
                 return date;
             }
-            function end(hours, minutes) {
-                 // var date = new Date('01 January 2019 08:00 UTC');
-                    var date = new Date('01 January 2019 00:00 UTC');
-        
-                return date;
-            }
-            
             
           
             // --------------------------- Example 1 ---------------------------
             var $sked1 = $('#sked1').skedTape({
                 caption: 'Day',
-                start: start(08,0),
+                start: start(07,0),
                 end: end(18, 0),
                 showEventTime: true,
                 showEventText: 'sdsd',

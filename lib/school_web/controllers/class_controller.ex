@@ -846,6 +846,7 @@ defmodule SchoolWeb.ClassController do
 
     IO.inspect(uri <> path)
     response = HTTPoison.get!(uri <> path, [{"Content-Type", "application/json"}]).body
+    IO.inspect(response)
   end
 
   def edit_class(conn, params) do
