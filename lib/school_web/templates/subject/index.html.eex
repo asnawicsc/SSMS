@@ -30,6 +30,7 @@
                                
                                
                                 <span><%= link "Edit", to: subject_path(@conn, :edit,  subject.id), class: "btn btn-default btn-xs" %></span>
+                                       <span><%= link "Delete", to: subject_path(@conn, :delete, subject.id), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
                                
                               </td>
                             </tr>
