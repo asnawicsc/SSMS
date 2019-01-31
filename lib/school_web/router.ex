@@ -543,6 +543,12 @@ defmodule SchoolWeb.Router do
       :upload_mark_sheet_history
     )
 
+    get(
+      "/user_login_report",
+      PdfController,
+      :user_login_report
+    )
+
     resources("/mark_sheet_historys", MarkSheetHistorysController)
 
     post(

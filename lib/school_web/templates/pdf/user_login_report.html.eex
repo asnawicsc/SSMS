@@ -1,0 +1,62 @@
+<center><b>SENARAI LOGIN</b></center><br>
+<center><b><%= @school.name %></b></center>
+<Br>
+
+
+<%= for user <- @users do %>
+
+<% category= user|>elem(0) %>
+
+<% user= user|>elem(1) %>
+
+
+<center><b><%= category %></b></center><br>
+<table class="table" border="1" style="border-collapse: collapse;" width="100%" >
+  <thead>
+    <tr align="center">
+      <th><%= gettext "Bil." %></th>
+      <th><%= gettext "Name" %></th>
+       <th><%= gettext "Email" %></th>
+      <th><%= gettext "Password" %></th>
+      <th><%= gettext "Role" %></th>
+      <th><%= gettext "Librian" %></th>
+  
+
+
+    </tr>
+  </thead>
+  <tbody>
+<%= for item <- user|>Enum.with_index do %>
+<% no=item|>elem(1) %>
+<% item=item|>elem(0) %>
+
+    <tr align="center">
+      <td><%= no+1 %></td>
+       <td align="left"><%= item.name %></td>
+       <td><%= item.email %></td>
+        <td><%= item.password %></td>
+        <td><%= item.role %></td>
+        <td><%= item.is_librarian %></td>
+
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<br>
+<% end %>
+<style type="text/css">
+  
+  table { 
+    border-spacing: 0;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+td {
+    padding:5px;
+}
+td img {
+    display:block;
+}
+</style>
+

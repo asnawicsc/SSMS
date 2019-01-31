@@ -821,7 +821,13 @@ defmodule SchoolWeb.ClassController do
 
   def reg_lib_student(student, lib_id, uri) do
     name = String.replace(student.name, " ", "+")
-    chinese_name = Base.url_encode64(student.chinese_name)
+
+    chinese_name =
+      if student.chinese_name != nil do
+        Base.url_encode64(student.chinese_name)
+      else
+        ""
+      end
 
     IO.inspect(chinese_name)
 

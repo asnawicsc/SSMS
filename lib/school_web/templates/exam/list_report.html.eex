@@ -390,6 +390,27 @@
                            </div>
                         </div>
                      </div>
+
+                                           <div class="col-lg-3 col-md-5">
+                        <div class="card" data-filter-group="code">
+                           <div class="card-body text-center">
+                              <div class="d-flex">
+                                 <div class="ml-auto">
+                                    <a class="text-muted mr-1" href="/user_login_report" title="Download">
+                                       <em class="fa fa-download fa-fw"></em>
+                                    </a>
+                                 </div>
+                              </div>
+                              <a class="px-4" href="/user_login_report">
+                                 <em class="fa-5x fa fa-user"></em>
+                              </a>
+                              <p>
+                                 <small class="text-dark">User Login Report</small>
+                              </p>
+                              
+                           </div>
+                        </div>
+                     </div>
                      
 
                </div>

@@ -145,6 +145,53 @@ defmodule SchoolWeb.PdfController do
     end
   end
 
+  def user_login_report(conn, params) do
+    users =
+      Repo.all(
+        from(s in User,
+          left_join: g in Settings.UserAccess,
+          on: s.id == g.user_id,
+          where: g.institution_id == ^conn.private.plug_session["institution_id"]
+        )
+      )
+      |> Enum.group_by(fn x -> x.role end)
+
+    school = Repo.get(Institution, conn.private.plug_session["institution_id"])
+
+    html =
+      Phoenix.View.render_to_string(
+        SchoolWeb.PdfView,
+        "user_login_report.html",
+        users: users,
+        school: school
+      )
+
+    pdf_params = %{"html" => html}
+
+    pdf_binary =
+      PdfGenerator.generate_binary!(
+        pdf_params["html"],
+        size: "A4",
+        shell_params: [
+          "--margin-left",
+          "5",
+          "--margin-right",
+          "5",
+          "--margin-top",
+          "5",
+          "--margin-bottom",
+          "5",
+          "--encoding",
+          "utf-8"
+        ],
+        delete_temporary: true
+      )
+
+    conn
+    |> put_resp_header("Content-Type", "application/pdf")
+    |> resp(200, pdf_binary)
+  end
+
   def print_timetable(conn, params) do
     IEx.pry()
   end
