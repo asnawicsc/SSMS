@@ -824,7 +824,13 @@ defmodule SchoolWeb.ClassController do
 
   def reg_lib_student(student, lib_id, uri) do
     name = String.replace(student.name, " ", "+")
-    chinese_name = Base.url_encode64(student.chinese_name)
+
+    chinese_name =
+      if student.chinese_name != nil do
+        Base.url_encode64(student.chinese_name)
+      else
+        ""
+      end
 
     IO.inspect(chinese_name)
 
@@ -849,6 +855,7 @@ defmodule SchoolWeb.ClassController do
 
     IO.inspect(uri <> path)
     response = HTTPoison.get!(uri <> path, [{"Content-Type", "application/json"}]).body
+    IO.inspect(response)
   end
 
   def edit_class(conn, params) do

@@ -73,6 +73,126 @@ defmodule SchoolWeb.PdfController do
     |> resp(200, pdf_binary)
   end
 
+  def head_count_listing(conn, params) do
+    class_id = params["class_id"]
+    subject_id = params["subject_id"]
+    school = Repo.get(Institution, conn.private.plug_session["institution_id"])
+
+    all =
+      Repo.all(
+        from(
+          s in School.Affairs.HeadCount,
+          left_join: p in School.Affairs.Student,
+          on: s.student_id == p.id,
+          where:
+            s.class_id == ^class_id and s.subject_id == ^subject_id and
+              s.institution_id == ^conn.private.plug_session["institution_id"] and
+              p.institution_id == ^conn.private.plug_session["institution_id"] and
+              s.semester_id == ^conn.private.plug_session["semester_id"],
+          select: %{
+            student_name: p.name,
+            chinese_name: p.chinese_name,
+            sex: p.sex,
+            class_id: s.class_id,
+            subject_id: s.subject_id,
+            student_id: s.student_id,
+            mark: s.targer_mark
+          }
+        )
+      )
+
+    if all == [] do
+      conn
+      |> put_flash(:info, "Data Is Empty, Please Choose Other Selection")
+      |> redirect(to: head_count_path(conn, :headcount_report))
+    else
+      class = Affairs.get_class!(class_id)
+      subject = Affairs.get_subject!(subject_id)
+
+      html =
+        Phoenix.View.render_to_string(
+          SchoolWeb.PdfView,
+          "head_count_listing.html",
+          class: class,
+          subject: subject,
+          all: all,
+          institution: school
+        )
+
+      pdf_params = %{"html" => html}
+
+      pdf_binary =
+        PdfGenerator.generate_binary!(
+          pdf_params["html"],
+          size: "A4",
+          shell_params: [
+            "--margin-left",
+            "5",
+            "--margin-right",
+            "5",
+            "--margin-top",
+            "5",
+            "--margin-bottom",
+            "5",
+            "--encoding",
+            "utf-8"
+          ],
+          delete_temporary: true
+        )
+
+      conn
+      |> put_resp_header("Content-Type", "application/pdf")
+      |> resp(200, pdf_binary)
+    end
+  end
+
+  def user_login_report(conn, params) do
+    users =
+      Repo.all(
+        from(s in User,
+          left_join: g in Settings.UserAccess,
+          on: s.id == g.user_id,
+          where: g.institution_id == ^conn.private.plug_session["institution_id"]
+        )
+      )
+      |> Enum.group_by(fn x -> x.role end)
+
+    school = Repo.get(Institution, conn.private.plug_session["institution_id"])
+
+    html =
+      Phoenix.View.render_to_string(
+        SchoolWeb.PdfView,
+        "user_login_report.html",
+        users: users,
+        school: school
+      )
+
+    pdf_params = %{"html" => html}
+
+    pdf_binary =
+      PdfGenerator.generate_binary!(
+        pdf_params["html"],
+        size: "A4",
+        shell_params: [
+          "--margin-left",
+          "5",
+          "--margin-right",
+          "5",
+          "--margin-top",
+          "5",
+          "--margin-bottom",
+          "5",
+          "--encoding",
+          "utf-8"
+        ],
+        delete_temporary: true
+      )
+
+    conn
+    |> put_resp_header("Content-Type", "application/pdf")
+    |> resp(200, pdf_binary)
+  end
+
   def print_timetable(conn, params) do
     IEx.pry()
   end

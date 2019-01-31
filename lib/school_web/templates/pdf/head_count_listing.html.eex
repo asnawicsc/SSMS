@@ -1,0 +1,73 @@
+
+
+<b  style="font-size: 22px;"><%= @institution.name %></b></br>
+<h4><u>ANALISIS DAN TARGET MATA PELAJARAN MENGIKUT PANITIA-Keseluruhan Pencapaioan setiap murid</u></h4>
+<h4>Mata Pelajaran: <%= @subject.code %></h4>
+<h4>Kelas : <%= @class.name %> &nbsp; Tahun:   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nama Guru: </h4>
+
+
+    <table class="display" align="center" style="border-collapse: collapse;" border="1" width="100%">
+ 
+      <tr align="center">
+        <th colspan="3">MAKLUMAT MURID</th>
+  
+        <th  colspan="14">UJIAN</th>
+        
+      </tr>
+      <tr align="center">
+        <th >No</th>
+        <th >Name</th>
+        <th >Jan</th>
+        <th align="center" colspan="2">TOV</th>
+   		  <th align="center" colspan="2">Ujian 1</th>
+   		    <th align="center" colspan="2">Pertengahan<br> Tahun</th>
+   		      <th align="center" colspan="2">Ujian 3</th>
+   		        <th align="center" colspan="2">Peperiksaan <br>Akhir</th>
+   		        <th align="center" colspan="2">ETR</th>
+   		           <th align="center" colspan="2" >UPSR</th>
+       
+      </tr>
+     	<%= for item <- @all|>Enum.with_index do %>
+     	 <% no = item|>elem(1) %>
+          <% item = item|>elem(0) %>
+		<tr align="center">
+			<td><%= no + 1 %></td>
+			<td align="left"><%= item.student_name %> <%= item.chinese_name %></td>
+			<td><%= if item.sex == "M" or item.sex == "L" or item.sex == "MALE" or item.sex == "LELAKI" do "L" end %>
+        <%= if item.sex == "F" or item.sex == "P" or item.sex == "FEMALE" or item.sex == "PEREMPUAN" do "P" end %></td>
+	
+			<td > &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;</td>
+			<td > &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;</td>		
+
+			<td > &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;</td>
+			<td > &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;</td>
+
+			<td > &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;</td>
+			<td> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;</td>
+
+			<td > &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;</td>
+			<td > &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;</td>
+
+			<td > &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;</td>
+			<td> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;</td>
+
+			<td > &nbsp;&nbsp;&nbsp;<%= item.mark %> &nbsp;&nbsp;&nbsp;</td>
+			<td >&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;</td>
+
+			<td colspan="2"></td>
+		
+		
+		</tr>
+
+	<% end %>
+
+      
+
+    </table>
+
+
+  </body>
+</html>
+
+
+
