@@ -85,7 +85,15 @@ defmodule SchoolWeb.UserController do
   end
 
   def authenticate(conn, %{"email" => email, "password" => password}) do
-    user = Repo.get_by(User, email: email)
+    email = email |> String.downcase()
+    a = Repo.get_by(User, email: email)
+
+    user =
+      if a == nil do
+        Repo.get_by(User, email: String.downcase(email))
+      else
+        Repo.get_by(User, email: email)
+      end
 
     if user != nil do
       if Comeonin.Bcrypt.checkpw(password, user.crypted_password) do
