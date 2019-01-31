@@ -85,7 +85,6 @@ defmodule SchoolWeb.UserController do
   end
 
   def authenticate(conn, %{"email" => email, "password" => password}) do
-    email = email |> String.downcase()
     a = Repo.get_by(User, email: email)
 
     user =
