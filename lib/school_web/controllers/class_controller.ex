@@ -791,9 +791,11 @@ defmodule SchoolWeb.ClassController do
     students_in =
       Repo.all(
         from(t in School.Affairs.Student,
-          left_join sc in School.Affairs.StudentClass, on: sc.sudent_id == t.id,
-          left_join c in School.Affairs.Class, on: sc.class_id == c.id,
-          where: t.institution_id == ^School.Affairs.inst_id(conn) ,
+          left_join: sc in School.Affairs.StudentClass,
+          on: sc.sudent_id == t.id,
+          left_join: c in School.Affairs.Class,
+          on: sc.class_id == c.id,
+          where: t.institution_id == ^School.Affairs.inst_id(conn),
           select: %{
             chinese_name: t.chinese_name,
             name: t.name,
