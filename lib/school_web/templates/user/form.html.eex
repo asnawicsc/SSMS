@@ -36,11 +36,7 @@
     <%= error_tag f, :g_token %>
   </div>
 
-  <div class="form-group">
-    <%= label f, :password, class: "control-label" %>
-    <%= text_input f, :password, class: "form-control" %>
-    <%= error_tag f, :password %>
-  </div>
+
 
   <%= if @changeset.data.is_librarian == true do %>
   <input type="hidden" id="checkbox" name="is_librarian" value ="true">

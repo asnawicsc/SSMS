@@ -93,15 +93,19 @@
      
                     <li><p class="card-text"><%= gettext("Manage class to view class info such as time table. \nCan manage students according to class.")%></p></li>
                   </ol>
+
           <div class="btn-group">
+
              <button class="mb-1 btn-sm btn btn-outline-primary" type="button">Manage</button>
              <button class="mb-1 btn-sm dropdown-toggle btn btn-outline-primary" type="button" data-toggle="dropdown" aria-expanded="false">
                 <span class="sr-only">info</span>
              </button>
+
+
              <% require IEx %>
              <% user = Repo.get(Settings.User,@conn.private.plug_session["user_id"]) %>
 
-       
+         <a  href="/class_setting"]"><button class="mb-1 btn-sm btn btn-outline-primary" type="button" style="display: none;">Settings</button></a>
 
 
              <%  all_classes = 
@@ -140,6 +144,48 @@
               <% end %>
              </div>
           </div>
+
+
+          <div class="btn-group">
+
+             <button class="mb-1 btn-sm btn btn-outline-primary" type="button">Class Teaching</button>
+             <button class="mb-1 btn-sm dropdown-toggle btn btn-outline-primary" type="button" data-toggle="dropdown" aria-expanded="false">
+                <span class="sr-only">info</span>
+             </button>
+
+
+             <% require IEx %>
+             <% user = Repo.get(Settings.User,@conn.private.plug_session["user_id"]) %>
+
+         <a  href="/class_setting"]"><button class="mb-1 btn-sm btn btn-outline-primary" type="button" style="display: none;">Settings</button></a>
+
+
+             <%  all_classes = 
+
+             case user.role do 
+        
+              "Teacher" -> 
+                teacher = Repo.get_by(Affairs.Teacher,email: user.email) 
+                if teacher == nil do
+                  []
+                  else 
+                Repo.all(from k in Affairs.Class,left_join:  c in Affairs.Period, on: c.class_id==k.id,left_join: g in Affairs.Timetable, on: c.timetable_id==g.id, where: c.teacher_id == ^teacher.id and g.institution_id==^@conn.private.plug_session["institution_id"] and k.institution_id==^@conn.private.plug_session["institution_id"] and g.semester_id==^@conn.private.plug_session["semester_id"])|>Enum.uniq 
+                end
+              end
+             %>
+
+
+             <div class="dropdown-menu" role="menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(67px, 33px, 0px);">
+              <%= for class <- all_classes do %>
+                <a class="dropdown-item" href="/class_teaching/<%= class.id %>"><%= class.name %></a>
+              <% end %>
+             </div>
+          </div>
+
+
+         
+
+
           <a  href="/class_setting"]"><button class="mb-1 btn-sm btn btn-outline-primary" type="button" style="display: none;">Settings</button></a>
        </div>
     </div>
@@ -184,9 +230,11 @@
 
                   <ol style="padding-left: 15px;">
        
-                     <li><p class="card-text"><%= gettext("Mark an exam paper according to semesters.")%></p></li>
+                     <li><p class="card-text"><%= gettext("Mark an exam paper  according to semesters.")%></p></li>
                   </ol>
           <a href="/mark_sheet"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Mark</button></a>
+
+
          
 
        </div>

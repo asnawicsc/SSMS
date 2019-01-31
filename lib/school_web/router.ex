@@ -544,6 +544,12 @@ defmodule SchoolWeb.Router do
     )
 
     get(
+      "/class_teaching/:id",
+      ClassController,
+      :class_teaching
+    )
+
+    get(
       "/user_login_report",
       PdfController,
       :user_login_report

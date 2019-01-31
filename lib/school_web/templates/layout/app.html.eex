@@ -68,7 +68,9 @@
    <!-- LOCALIZE-->
    <script src="/vendor/jquery-localize/dist/jquery.localize.js"></script>
 
-  
+   <script src="/vendor/demo/demo-rtl.js"></script>
+   <!-- =============== PAGE VENDOR SCRIPTS ===============-->
+   <script src="/vendor/demo/demo-panels.js"></script>
 
   <script src="/vendor/sweetalert/dist/sweetalert.min.js"></script>
    <link rel="stylesheet" href="/vendor/datatables.net-bs4/css/dataTables.bootstrap4.css">

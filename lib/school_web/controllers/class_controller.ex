@@ -26,6 +26,35 @@ defmodule SchoolWeb.ClassController do
     render(conn, "class_transfer.html", classes: all_classes)
   end
 
+  def class_teaching(conn, params) do
+    students =
+      Repo.all(
+        from(
+          s in Student,
+          left_join: g in StudentClass,
+          on: s.id == g.sudent_id,
+          left_join: k in Class,
+          on: k.id == g.class_id,
+          where:
+            s.institution_id == ^conn.private.plug_session["institution_id"] and
+              g.semester_id == ^conn.private.plug_session["semester_id"] and
+              g.class_id == ^params["id"] and k.id == ^params["id"],
+          select: %{
+            image_bin: s.image_bin,
+            id: s.id,
+            chinese_name: s.chinese_name,
+            b_cert: s.b_cert,
+            student_no: s.student_no,
+            name: s.name,
+            class_name: k.name
+          },
+          order_by: [asc: s.name]
+        )
+      )
+
+    render(conn, "class_teaching.html", students: students, id: params["id"])
+  end
+
   def pre_upload_timetable(conn, params) do
     bin = params["item"]["file"].path |> File.read() |> elem(1)
     usr = Settings.current_user(conn)

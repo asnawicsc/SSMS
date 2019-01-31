@@ -1,0 +1,37 @@
+<div class="content-heading">
+    <div>Student Class Teaching
+    </div>
+</div>
+<a href="/dashboard"><button class="mb-1 btn-sm btn btn-outline-primary" type="button"><i class="fas fa-chevron-left"></i> Back</button></a>
+      <div class="row">
+          
+                <div class="col-lg-12" >
+                  <div class="card card-default d-none d-lg-block">
+                    <div class="card-body">
+                      <div class="table-responsive">
+                        <table class="table" id="datatable1">
+                          <thead>
+                            <tr>
+                              <th>Name</th>
+                              <th>Other Name</th>
+                              <th>Student No</th>
+         
+                            </tr>
+                            </thead>
+                            <tbody>
+                             <%= for student <- @students do %>
+                            <tr>
+                              <td><%= student.name %></td>
+                              <td><%= student.chinese_name %></td>
+                              <td><%= student.student_no %></td>
+                            </tr>
+                            <% end %>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+</div>
+
+
