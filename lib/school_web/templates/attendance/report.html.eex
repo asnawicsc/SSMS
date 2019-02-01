@@ -10,7 +10,7 @@
       border-collapse: collapse;
       border: 2px solid rgb(200, 200, 200);
       letter-spacing: 1px;
-      font-size: 6px;
+      font-size: 10px;
         font-weight: bold;
           white-space: nowrap;
     }
@@ -40,8 +40,8 @@
           <th style="height: 100px;">Bil</th>
           <th>Kod Murid</th>
           <th>Nama Penuh</th>
-          <th> Name Chinese </th>
-          <th>Jantina (M/F)</th>
+          <th></th>
+          <th>Jantina <br>(M/F)</th>
         </tr>
 
        <% all= @students|>Enum.count %>
@@ -83,7 +83,7 @@
                   <%= student.name%>
                 </td>
                 <td>
-                  <%= student.chinese_name%>
+                  <%= student.chinese_name %>
                 </td>
                 <td>
                   <%= student.sex%>
@@ -305,13 +305,13 @@
             </tr>
             <% end %>
               <tr>
-                <td style="height: 13px;"></td>
+                <td style="height: 17px;"></td>
               </tr>
               <tr>
-                <td style="height: 13px"></td>
+                <td style="height: 17px"></td>
               </tr>
               <tr>
-                <td style="height: 13px"></td>
+                <td style="height: 17px"></td>
               </tr>
 
       </table>
