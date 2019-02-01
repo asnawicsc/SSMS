@@ -555,6 +555,12 @@ defmodule SchoolWeb.Router do
       :user_login_report
     )
 
+    post(
+      "/csv_student_class",
+      StudentController,
+      :csv_student_class
+    )
+
     resources("/mark_sheet_historys", MarkSheetHistorysController)
 
     post(

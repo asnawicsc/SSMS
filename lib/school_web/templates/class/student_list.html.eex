@@ -16,7 +16,16 @@
  <input type="hidden" name="class_id" value="<%= @class_id %>">
   <input type="hidden" name="semester_id" value="<%= @semester_id %>">
   <input type="hidden" name="_csrf_token" value="<%= @csrf %>">
-  <button class="mb-1 btn btn-primary" type="submit" name="" value="Generate">Print (JPM FORMAT)</button>
+  <button class="mb-1 btn btn-danger" type="submit" name="" value="Generate">Print (JPM FORMAT)</button>
+
+</form>
+&nbsp;
+&nbsp;
+ <form action="csv_student_class" method="POST">
+ <input type="hidden" name="class_id" value="<%= @class_id %>">
+  <input type="hidden" name="semester_id" value="<%= @semester_id %>">
+  <input type="hidden" name="_csrf_token" value="<%= @csrf %>">
+  <button class="mb-1 btn btn-success" type="submit" name="" value="Generate">CSV</button>
 
 </form>
 </div>
