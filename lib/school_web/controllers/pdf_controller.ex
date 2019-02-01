@@ -1922,7 +1922,7 @@ defmodule SchoolWeb.PdfController do
 
           umo_1jan =
             if item.dob != nil do
-              a = day = item.dob |> String.split("/") |> Enum.fetch!(0) |> String.to_integer()
+              a = day = item.dob |> String.split("/") |> Enum.fetch!(2) |> String.to_integer()
 
               month =
                 item.dob
@@ -1930,7 +1930,7 @@ defmodule SchoolWeb.PdfController do
                 |> Enum.fetch!(1)
                 |> String.to_integer()
 
-              year = item.dob |> String.split("/") |> Enum.fetch!(2) |> String.to_integer()
+              year = item.dob |> String.split("/") |> Enum.fetch!(0) |> String.to_integer()
 
               umo_1jan =
                 if item.register_date != nil do
