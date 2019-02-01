@@ -1911,155 +1911,305 @@ defmodule SchoolWeb.PdfController do
 
     all = male ++ female
 
-    new_all =
-      for item <- all do
-        dob =
-          if item.dob != nil do
-            item.dob |> String.split_at(10) |> elem(0) |> String.replace(".", "/")
-          else
-          end
+    if conn.private.plug_session["institution_id"] == 9 do
+      new_all =
+        for item <- all do
+          dob =
+            if item.dob != nil do
+              item.dob
+            else
+            end
 
-        umo_1jan =
-          if item.dob != nil do
-            a = item.dob |> String.split_at(10) |> elem(0)
+          umo_1jan =
+            if item.dob != nil do
+              a = day = item.dob |> String.split("/") |> Enum.fetch!(0) |> String.to_integer()
 
-            day = a |> String.split_at(2) |> elem(0) |> String.to_integer()
+              month =
+                item.dob
+                |> String.split("/")
+                |> Enum.fetch!(1)
+                |> String.to_integer()
 
-            month =
-              a
-              |> String.split_at(5)
-              |> elem(0)
-              |> String.split_at(3)
-              |> elem(1)
-              |> String.to_integer()
+              year = item.dob |> String.split("/") |> Enum.fetch!(2) |> String.to_integer()
 
-            year = a |> String.split_at(6) |> elem(1) |> String.to_integer()
+              umo_1jan =
+                if item.register_date != nil do
+                  day_r =
+                    item.register_date |> String.split_at(2) |> elem(0) |> String.to_integer()
 
-            umo_1jan =
-              if item.register_date != nil do
-                day_r = item.register_date |> String.split_at(2) |> elem(0) |> String.to_integer()
+                  month_r =
+                    item.register_date
+                    |> String.split_at(5)
+                    |> elem(0)
+                    |> String.split_at(3)
+                    |> elem(1)
+                    |> String.to_integer()
 
-                month_r =
-                  item.register_date
-                  |> String.split_at(5)
-                  |> elem(0)
-                  |> String.split_at(3)
-                  |> elem(1)
-                  |> String.to_integer()
+                  year_r =
+                    item.register_date |> String.split_at(6) |> elem(1) |> String.to_integer()
 
-                year_r =
-                  item.register_date |> String.split_at(6) |> elem(1) |> String.to_integer()
+                  year_total = year_r - 1 - year
 
-                year_total = year_r - 1 - year
+                  month_total = 12 - month
 
-                month_total = 12 - month
+                  month_new = month_total |> Integer.to_string()
+                  year_new = year_total |> Integer.to_string()
 
-                month_new = month_total |> Integer.to_string()
-                year_new = year_total |> Integer.to_string()
+                  umo_1jan = year_new <> "-" <> month_new
 
-                umo_1jan = year_new <> "-" <> month_new
+                  umo_1jan
+                else
+                end
 
-                umo_1jan
-              else
-              end
+              umo_1jan
+            else
+            end
 
-            umo_1jan
-          else
-          end
+          %{
+            id: item.id,
+            id_no: item.id_no,
+            chinese_name: item.chinese_name,
+            name: item.name,
+            sex: item.sex,
+            dob: dob,
+            pob: item.pob,
+            race: item.race,
+            b_cert: item.b_cert,
+            register_date: item.register_date,
+            umo_1jan: umo_1jan
+          }
+        end
 
-        %{
-          id: item.id,
-          id_no: item.id_no,
-          chinese_name: item.chinese_name,
-          name: item.name,
-          sex: item.sex,
-          dob: dob,
-          pob: item.pob,
-          race: item.race,
-          b_cert: item.b_cert,
-          register_date: item.register_date,
-          umo_1jan: umo_1jan
-        }
-      end
+      number = 40
 
-    number = 40
+      add = number - (new_all |> Enum.count())
 
-    add = number - (new_all |> Enum.count())
+      range = 1..add
 
-    range = 1..add
+      empty_colum =
+        for item <- range do
+          %{
+            id: "",
+            id_no: "",
+            chinese_name: "",
+            name: "",
+            sex: "",
+            dob: "",
+            pob: "",
+            race: "",
+            b_cert: "",
+            register_date: "",
+            umo_1jan: ""
+          }
+        end
 
-    empty_colum =
-      for item <- range do
-        %{
-          id: "",
-          id_no: "",
-          chinese_name: "",
-          name: "",
-          sex: "",
-          dob: "",
-          pob: "",
-          race: "",
-          b_cert: "",
-          register_date: "",
-          umo_1jan: ""
-        }
-      end
+      all = (new_all ++ empty_colum) |> Enum.with_index()
 
-    all = (new_all ++ empty_colum) |> Enum.with_index()
+      institution =
+        Repo.get_by(School.Settings.Institution, id: conn.private.plug_session["institution_id"])
 
-    institution =
-      Repo.get_by(School.Settings.Institution, id: conn.private.plug_session["institution_id"])
-
-    semester =
-      Repo.get_by(School.Affairs.Semester,
-        id: semester_id,
-        institution_id: conn.private.plug_session["institution_id"]
-      )
-
-    class =
-      if class_id != "ALL" do
-        Repo.get_by(School.Affairs.Class, %{
-          id: class_id,
+      semester =
+        Repo.get_by(School.Affairs.Semester,
+          id: semester_id,
           institution_id: conn.private.plug_session["institution_id"]
-        })
-      else
-        %{name: "ALL"}
-      end
+        )
 
-    html =
-      Phoenix.View.render_to_string(
-        SchoolWeb.PdfView,
-        "student_class_listing_jpn.html",
-        all: all,
-        class: class,
-        semester: semester,
-        institution: institution
-      )
+      class =
+        if class_id != "ALL" do
+          Repo.get_by(School.Affairs.Class, %{
+            id: class_id,
+            institution_id: conn.private.plug_session["institution_id"]
+          })
+        else
+          %{name: "ALL"}
+        end
 
-    pdf_params = %{"html" => html}
+      html =
+        Phoenix.View.render_to_string(
+          SchoolWeb.PdfView,
+          "student_class_listing_jpn.html",
+          all: all,
+          class: class,
+          semester: semester,
+          institution: institution
+        )
 
-    pdf_binary =
-      PdfGenerator.generate_binary!(
-        pdf_params["html"],
-        size: "A4",
-        shell_params: [
-          "--margin-left",
-          "5",
-          "--margin-right",
-          "5",
-          "--margin-top",
-          "5",
-          "--margin-bottom",
-          "5",
-          "--encoding",
-          "utf-8"
-        ],
-        delete_temporary: true
-      )
+      pdf_params = %{"html" => html}
 
-    conn
-    |> put_resp_header("Content-Type", "application/pdf")
-    |> resp(200, pdf_binary)
+      pdf_binary =
+        PdfGenerator.generate_binary!(
+          pdf_params["html"],
+          size: "A4",
+          shell_params: [
+            "--margin-left",
+            "5",
+            "--margin-right",
+            "5",
+            "--margin-top",
+            "5",
+            "--margin-bottom",
+            "5",
+            "--encoding",
+            "utf-8"
+          ],
+          delete_temporary: true
+        )
+
+      conn
+      |> put_resp_header("Content-Type", "application/pdf")
+      |> resp(200, pdf_binary)
+    else
+      new_all =
+        for item <- all do
+          dob =
+            if item.dob != nil do
+              item.dob |> String.split_at(10) |> elem(0) |> String.replace(".", "/")
+            else
+            end
+
+          umo_1jan =
+            if item.dob != nil do
+              a = item.dob |> String.split_at(10) |> elem(0)
+
+              day = a |> String.split_at(2) |> elem(0) |> String.to_integer()
+
+              month =
+                a
+                |> String.split_at(5)
+                |> elem(0)
+                |> String.split_at(3)
+                |> elem(1)
+                |> String.to_integer()
+
+              year = a |> String.split_at(6) |> elem(1) |> String.to_integer()
+
+              umo_1jan =
+                if item.register_date != nil do
+                  day_r =
+                    item.register_date |> String.split_at(2) |> elem(0) |> String.to_integer()
+
+                  month_r =
+                    item.register_date
+                    |> String.split_at(5)
+                    |> elem(0)
+                    |> String.split_at(3)
+                    |> elem(1)
+                    |> String.to_integer()
+
+                  year_r =
+                    item.register_date |> String.split_at(6) |> elem(1) |> String.to_integer()
+
+                  year_total = year_r - 1 - year
+
+                  month_total = 12 - month
+
+                  month_new = month_total |> Integer.to_string()
+                  year_new = year_total |> Integer.to_string()
+
+                  umo_1jan = year_new <> "-" <> month_new
+
+                  umo_1jan
+                else
+                end
+
+              umo_1jan
+            else
+            end
+
+          %{
+            id: item.id,
+            id_no: item.id_no,
+            chinese_name: item.chinese_name,
+            name: item.name,
+            sex: item.sex,
+            dob: dob,
+            pob: item.pob,
+            race: item.race,
+            b_cert: item.b_cert,
+            register_date: item.register_date,
+            umo_1jan: umo_1jan
+          }
+        end
+
+      number = 40
+
+      add = number - (new_all |> Enum.count())
+
+      range = 1..add
+
+      empty_colum =
+        for item <- range do
+          %{
+            id: "",
+            id_no: "",
+            chinese_name: "",
+            name: "",
+            sex: "",
+            dob: "",
+            pob: "",
+            race: "",
+            b_cert: "",
+            register_date: "",
+            umo_1jan: ""
+          }
+        end
+
+      all = (new_all ++ empty_colum) |> Enum.with_index()
+
+      institution =
+        Repo.get_by(School.Settings.Institution, id: conn.private.plug_session["institution_id"])
+
+      semester =
+        Repo.get_by(School.Affairs.Semester,
+          id: semester_id,
+          institution_id: conn.private.plug_session["institution_id"]
+        )
+
+      class =
+        if class_id != "ALL" do
+          Repo.get_by(School.Affairs.Class, %{
+            id: class_id,
+            institution_id: conn.private.plug_session["institution_id"]
+          })
+        else
+          %{name: "ALL"}
+        end
+
+      html =
+        Phoenix.View.render_to_string(
+          SchoolWeb.PdfView,
+          "student_class_listing_jpn.html",
+          all: all,
+          class: class,
+          semester: semester,
+          institution: institution
+        )
+
+      pdf_params = %{"html" => html}
+
+      pdf_binary =
+        PdfGenerator.generate_binary!(
+          pdf_params["html"],
+          size: "A4",
+          shell_params: [
+            "--margin-left",
+            "5",
+            "--margin-right",
+            "5",
+            "--margin-top",
+            "5",
+            "--margin-bottom",
+            "5",
+            "--encoding",
+            "utf-8"
+          ],
+          delete_temporary: true
+        )
+
+      conn
+      |> put_resp_header("Content-Type", "application/pdf")
+      |> resp(200, pdf_binary)
+    end
   end
 
   def class_assessment(conn, params) do
