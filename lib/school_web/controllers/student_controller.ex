@@ -56,9 +56,14 @@ defmodule SchoolWeb.StudentController do
   end
 
   def csv_student_class(conn, params) do
+    class = Repo.get(Class, params["class_id"])
+
     conn
     |> put_resp_content_type("text/csv")
-    |> put_resp_header("content-disposition", "attachment; filename=\"Student List.csv\"")
+    |> put_resp_header(
+      "content-disposition",
+      "attachment; filename=\"Student List- #{class.name}.csv\""
+    )
     |> send_resp(200, csv_content_stud(conn, params))
   end
 
