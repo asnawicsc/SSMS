@@ -115,6 +115,8 @@
 
                   <%= for date <- dates do %>
 
+                
+
                     <td style="text-align: center;">
                       <%= date.day %>
                     </td>
@@ -122,14 +124,37 @@
                     <% end %>
 
                 </tr>
-                <%= for student <- students do %>
+                <%= for student <- students|>Enum.with_index do %>
 
-               
+                 <% no =student|>elem(1) %>
+            <% student =student|>elem(0) %>
+               <% number = no + 1 %>
                   <tr>
                   
                       
                   
                     <%= for date <- dates do %>
+
+                      <% holiday= Repo.all(from s in School.Affairs.Holiday)|>Enum.filter(fn x -> x.institution_id==@conn.private.plug_session["institution_id"] end)|>Enum.filter(fn x -> x.semester_id==@conn.private.plug_session["semester_id"] end) %>
+                  <% hol=Enum.filter(holiday, fn x -> x.date == NaiveDateTime.to_date(date) end)%>
+                    
+
+
+
+                     <%= if hol != [] do %>
+                    <% hol=hol|>hd %>
+                  
+                 
+                    <% hol=hol.description|>String.split("") %>
+                    
+                        <% hol_count= hol|>Enum.count %>
+                     <%= if number < hol_count do %>
+                       
+                  <td align="center"> <%= hol|>Enum.fetch!(number) %></td>
+                       <%= else %>
+                      <td> &nbsp;  </td>
+                        <% end  %>
+                      <% else %>
                    
                       <td style="width: 200px; text-align: center;">
                            <%= if student.sudent_id != "" do %>
@@ -186,6 +211,10 @@
                                
                                  <% end %>
                       </td>
+
+                      <% end %>
+
+
                       <% end %>
 
                   </tr>

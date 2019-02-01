@@ -19,7 +19,7 @@
   </div>
 
   <div class="form-group">
-    <%= label f, :semester_id, class: "control-label" %>
+    <%= label f, :semester_start, class: "control-label" %>
     <%= select f, :semester_id, semester, class: "form-control" %>
     <%= error_tag f, :semester_id %>
   </div>

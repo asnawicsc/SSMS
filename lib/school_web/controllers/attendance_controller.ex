@@ -328,6 +328,7 @@ defmodule SchoolWeb.AttendanceController do
     semester_id = params["semester"]
     class = Repo.get(Class, class_id)
     params["month"]
+    year = params["year"]
 
     start_date =
       Date.new(String.to_integer(params["year"]), String.to_integer(params["month"]), 1)
@@ -412,6 +413,7 @@ defmodule SchoolWeb.AttendanceController do
         SchoolWeb.AttendanceView,
         "report.html",
         conn: conn,
+        year: year,
         class: class,
         students: students,
         attendance: attendance,
@@ -468,7 +470,7 @@ defmodule SchoolWeb.AttendanceController do
           "--encoding",
           "utf-8",
           "--orientation",
-          "Landscape"
+          "Portrait"
         ],
         delete_temporary: true
       )
