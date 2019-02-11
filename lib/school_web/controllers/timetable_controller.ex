@@ -238,7 +238,7 @@ defmodule SchoolWeb.TimetableController do
               end_minute: em,
               start_minute: sm,
               start_hour: s,
-              name: subject.description
+              name: subject.code
             }
           else
           end

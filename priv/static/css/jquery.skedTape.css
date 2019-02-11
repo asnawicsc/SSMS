@@ -183,7 +183,7 @@
 }
 
 .sked-tape__event {
-  background-color: #EC6A5E;
+  background-color: #EFEFEF;
   transition: 200ms background-color;
   top: 1px;
   bottom: 0;
@@ -193,7 +193,7 @@
   white-space: nowrap;
   overflow: hidden;
   font-size: 12px;
-  color: white;
+  color: black;
   border: 1px solid #e32c1b;
   min-width: 10px;
   cursor: default;
@@ -201,7 +201,7 @@
 }
 
 .sked-tape__event:hover {
-  background-color: #e74030;
+  background-color: #EFEFEF;
 }
 
 .sked-tape__event--low-gap {

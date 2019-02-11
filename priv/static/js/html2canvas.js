@@ -1632,6 +1632,9 @@ var testBase64 = function testBase64(document, src) {
         // Single pixel base64 image renders fine on iOS 10.3???
         img.src = src;
 
+
+        alert(img.src)
+
         var onload = function onload() {
             try {
                 ctx.drawImage(img, 0, 0);

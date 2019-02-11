@@ -406,7 +406,7 @@
                 <a href ="/subject_teach_class"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List Subject Period</button></a>
               
               <div id="createSubjectPeriod" class="btn-group" data-step="" data-intro="After created subject, you can now create Subject Period.">
-               <a id="subjectPeriod" href ="/subject_teach_class/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Subject Period</button></a>
+               <a id="subjectPeriod" href ="/subject_teach_class/new"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Class/Standard Subject </button></a>
                </div>
            </div>
 

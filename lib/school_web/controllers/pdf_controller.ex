@@ -101,6 +101,97 @@ defmodule SchoolWeb.PdfController do
         )
       )
 
+    a =
+      Repo.all(
+        from(
+          p in School.Affairs.Exam,
+          left_join: m in School.Affairs.ExamMaster,
+          on: m.id == p.exam_master_id,
+          left_join: h in School.Affairs.ExamMark,
+          on: h.exam_id == p.id,
+          left_join: k in School.Affairs.HeadCount,
+          on: k.student_id == h.student_id,
+          left_join: q in School.Affairs.Level,
+          on: q.id == m.level_id,
+          left_join: g in School.Affairs.Subject,
+          on: g.id == p.subject_id,
+          left_join: l in School.Affairs.Student,
+          on: k.student_id == l.id,
+          left_join: s in School.Affairs.Class,
+          on: s.level_id == m.level_id,
+          where:
+            m.semester_id == ^conn.private.plug_session["semester_id"] and s.id == ^class_id and
+              g.id == ^subject_id and h.subject_id == ^subject_id and h.class_id == ^class_id and
+              m.semester_id == ^conn.private.plug_session["semester_id"] and
+              s.institution_id == ^conn.private.plug_session["institution_id"] and
+              g.institution_id == ^conn.private.plug_session["institution_id"] and
+              q.institution_id == ^conn.private.plug_session["institution_id"] and
+              m.institution_id == ^conn.private.plug_session["institution_id"],
+          select: %{
+            id: p.id,
+            student_id: h.student_id,
+            mark: h.mark,
+            h_count_mark: k.targer_mark,
+            c_id: s.id,
+            s_id: g.id,
+            class: s.name,
+            exam: m.name,
+            sex: l.sex,
+            student_name: l.name,
+            chinese_name: l.chinese_name,
+            subject: g.description
+          }
+        )
+      )
+
+    IEx.pry()
+
+    f =
+      Repo.all(
+        from(
+          p in School.Affairs.Exam,
+          left_join: m in School.Affairs.ExamMaster,
+          on: m.id == p.exam_master_id,
+          left_join: h in School.Affairs.ExamMark,
+          on: h.exam_id == p.id,
+          left_join: k in School.Affairs.HeadCount,
+          on: k.student_id == h.student_id,
+          left_join: q in School.Affairs.Level,
+          on: q.id == m.level_id,
+          left_join: g in School.Affairs.Subject,
+          on: g.id == p.subject_id,
+          left_join: l in School.Affairs.Student,
+          on: k.student_id == l.id,
+          left_join: s in School.Affairs.Class,
+          on: s.level_id == m.level_id,
+          where:
+            m.semester_id == ^conn.private.plug_session["semester_id"] and s.id == ^class_id and
+              g.id == ^subject_id and h.subject_id == ^subject_id and h.class_id == ^class_id and
+              m.semester_id == ^conn.private.plug_session["semester_id"] and
+              s.institution_id == ^conn.private.plug_session["institution_id"] and
+              g.institution_id == ^conn.private.plug_session["institution_id"] and
+              q.institution_id == ^conn.private.plug_session["institution_id"] and
+              m.institution_id == ^conn.private.plug_session["institution_id"],
+          select: %{
+            id: p.id,
+            student_id: h.student_id,
+            mark: h.mark,
+            h_count_mark: k.targer_mark,
+            c_id: s.id,
+            s_id: g.id,
+            class: s.name,
+            exam: m.name,
+            sex: l.sex,
+            student_name: l.name,
+            chinese_name: l.chinese_name,
+            subject: g.description
+          }
+        )
+      )
+      |> Enum.group_by(fn x -> x.exam end)
+      |> Map.keys()
+      |> Enum.sort()
+
     if all == [] do
       conn
       |> put_flash(:info, "Data Is Empty, Please Choose Other Selection")
@@ -116,7 +207,9 @@ defmodule SchoolWeb.PdfController do
           class: class,
           subject: subject,
           all: all,
-          institution: school
+          institution: school,
+          a: a,
+          f: f
         )
 
       pdf_params = %{"html" => html}

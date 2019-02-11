@@ -6,68 +6,62 @@
 <h4>Kelas : <%= @class.name %> &nbsp; Tahun:   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nama Guru: </h4>
 
 
-    <table class="display" align="center" style="border-collapse: collapse;" border="1" width="100%">
- 
-      <tr align="center">
-        <th colspan="3">MAKLUMAT MURID</th>
+<table  class="display" align="center" style="border-collapse: collapse;" border="1" width="100%">
+
   
-        <th  colspan="14">UJIAN</th>
-        
-      </tr>
-      <tr align="center">
+
+     
+        <tr align="center">
         <th >No</th>
         <th >Name</th>
         <th >Jan</th>
-        <th align="center" colspan="2">TOV</th>
-   		  <th align="center" colspan="2">Ujian 1</th>
-   		    <th align="center" colspan="2">Pertengahan<br> Tahun</th>
-   		      <th align="center" colspan="2">Ujian 3</th>
-   		        <th align="center" colspan="2">Peperiksaan <br>Akhir</th>
-   		        <th align="center" colspan="2">ETR</th>
-   		           <th align="center" colspan="2" >UPSR</th>
-       
-      </tr>
-     	<%= for item <- @all|>Enum.with_index do %>
-     	 <% no = item|>elem(1) %>
-          <% item = item|>elem(0) %>
-		<tr align="center">
-			<td><%= no + 1 %></td>
-			<td align="left"><%= item.student_name %> <%= item.chinese_name %></td>
-			<td><%= if item.sex == "M" or item.sex == "L" or item.sex == "MALE" or item.sex == "LELAKI" do "L" end %>
-        <%= if item.sex == "F" or item.sex == "P" or item.sex == "FEMALE" or item.sex == "PEREMPUAN" do "P" end %></td>
-	
-			<td > &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;</td>
-			<td > &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;</td>		
+           <%= for item <- @f  do %>
+          <th align="center" colspan="2">
+         <%= item %>
+       </th>
+        <% end %>
+         <th align="center" colspan="2" >ETR</th>
+          <th  >UPSR</th>
+        </tr>
+        
 
-			<td > &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;</td>
-			<td > &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;</td>
+  
+        
 
-			<td > &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;</td>
-			<td> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;</td>
+        
+               <%= for student <- @a|>Enum.group_by(fn x -> x.student_id end)|>Enum.with_index do %>
+         <% no = student|>elem(1) %>
+          
+          <% student = student|>elem(0)|>elem(1)|>hd %>
+            
+        
+              <tr  align="center">
+                <td><%= no + 1 %></td>
+               <td align="left"><%= student.student_name %> <%= student.chinese_name %></td>
+                <td><%= if student.sex == "M" or student.sex == "L" or student.sex == "MALE" or student.sex == "LELAKI" do "L" end %>
+                  <%= if student.sex == "F" or student.sex == "P" or student.sex == "FEMALE" or student.sex == "PEREMPUAN" do "P" end %></td>
 
-			<td > &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;</td>
-			<td > &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;</td>
+                  <%= for sub <- @f  do %>
+            <% all= @a|>Enum.filter(fn x -> x.exam== sub and x.student_id== student.student_id end)|>hd %>
+         
+                    <td ><%= all.mark %></td>
+                    <td >&nbsp; &nbsp; &nbsp;</td>
+             <% end %>
+               <td><%= student.h_count_mark %></td>
+               <td>&nbsp; &nbsp; &nbsp;</td>
+                 <td > </td>
 
-			<td > &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;</td>
-			<td> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;</td>
+              </tr>
+          
+        
 
-			<td > &nbsp;&nbsp;&nbsp;<%= item.mark %> &nbsp;&nbsp;&nbsp;</td>
-			<td >&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;</td>
-
-			<td colspan="2"></td>
-		
-		
-		</tr>
-
-	<% end %>
-
+         <% end %>
+     
+             
       
-
-    </table>
+       
+</table>
 
 
   </body>
 </html>
-
-
-
