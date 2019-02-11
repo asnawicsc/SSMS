@@ -1001,6 +1001,7 @@ defmodule SchoolWeb.ClassController do
           select: %{
             id: st.sudent_id,
             name: s.name,
+            chinese_name: s.chinese_name,
             image_bin: s.image_bin
           },
           order_by: [asc: s.name]

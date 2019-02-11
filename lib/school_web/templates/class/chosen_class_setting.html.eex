@@ -140,7 +140,7 @@
                           
                                 <tr>
                                    <td class="text-left"> <img id="preview6"  style='width:20px; height: 20px;' src='data:image/png;base64, <%= student.image_bin %>'></td>
-                                  <td><b><%= student.name %></b></td>
+                                  <td><b><%= student.name %><%= student.chinese_name %></b></td>
                                   <td> <a href="/show_student_info/<%= student.id %>">
                                         <button class="btn btn-labeled btn-info btn-xs mb-2" type="button">
                                         <span class="btn-label"><i class="fa fa-search"></i></span>Info</button></a></td>                         

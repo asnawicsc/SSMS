@@ -142,7 +142,7 @@
                 showEventTime: true,
                 showEventText: true,
                 showEventDuration: true,
-                scrollWithYWheel: false,
+                scrollWithYWheel: true,
                 locations: locations,
                 events: events
                

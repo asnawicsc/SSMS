@@ -109,94 +109,102 @@ defmodule SchoolWeb.AttendanceController do
   end
 
   def mark_attendance(conn, params) do
-    class =
-      Repo.get_by(
-        Class,
-        id: params["class_id"],
-        institution_id: conn.private.plug_session["institution_id"]
-      )
+    holiday = Repo.get_by(School.Affairs.Holiday, date: params["date"])
 
-    attendance =
-      Repo.get_by(
-        Attendance,
-        attendance_date: params["date"],
-        class_id: params["class_id"],
-        semester_id: conn.private.plug_session["semester_id"],
-        institution_id: conn.private.plug_session["institution_id"]
-      )
-
-    {attendance} =
-      if attendance == nil do
-        cg =
-          Attendance.changeset(%Attendance{}, %{
-            institution_id: Affairs.inst_id(conn),
-            attendance_date: params["date"],
-            class_id: params["class_id"],
-            semester_id: conn.private.plug_session["semester_id"]
-          })
-
-        {:ok, attendance} = Repo.insert(cg)
-        {attendance}
-      else
-        {Repo.get_by(
-           Attendance,
-           attendance_date: params["date"],
-           class_id: params["class_id"],
-           semester_id: conn.private.plug_session["semester_id"]
-         )}
-      end
-
-    students =
-      Repo.all(
-        from(
-          s in Student,
-          left_join: sc in StudentClass,
-          on: sc.sudent_id == s.id,
-          where:
-            sc.institute_id == ^Affairs.inst_id(conn) and
-              sc.semester_id == ^conn.private.plug_session["semester_id"] and
-              s.institution_id == ^conn.private.plug_session["institution_id"] and
-              sc.class_id == ^params["class_id"],
-          order_by: [s.name]
+    if holiday == nil do
+      class =
+        Repo.get_by(
+          Class,
+          id: params["class_id"],
+          institution_id: conn.private.plug_session["institution_id"]
         )
+
+      attendance =
+        Repo.get_by(
+          Attendance,
+          attendance_date: params["date"],
+          class_id: params["class_id"],
+          semester_id: conn.private.plug_session["semester_id"],
+          institution_id: conn.private.plug_session["institution_id"]
+        )
+
+      {attendance} =
+        if attendance == nil do
+          cg =
+            Attendance.changeset(%Attendance{}, %{
+              institution_id: Affairs.inst_id(conn),
+              attendance_date: params["date"],
+              class_id: params["class_id"],
+              semester_id: conn.private.plug_session["semester_id"]
+            })
+
+          {:ok, attendance} = Repo.insert(cg)
+          {attendance}
+        else
+          {Repo.get_by(
+             Attendance,
+             attendance_date: params["date"],
+             class_id: params["class_id"],
+             semester_id: conn.private.plug_session["semester_id"]
+           )}
+        end
+
+      students =
+        Repo.all(
+          from(
+            s in Student,
+            left_join: sc in StudentClass,
+            on: sc.sudent_id == s.id,
+            where:
+              sc.institute_id == ^Affairs.inst_id(conn) and
+                sc.semester_id == ^conn.private.plug_session["semester_id"] and
+                s.institution_id == ^conn.private.plug_session["institution_id"] and
+                sc.class_id == ^params["class_id"],
+            order_by: [s.name]
+          )
+        )
+
+      student_ids = attendance.student_id |> String.split(",") |> Enum.reject(fn x -> x == "" end)
+
+      attended_students =
+        if student_ids != [] do
+          Repo.all(from(s in Student, where: s.id in ^student_ids, order_by: [s.name]))
+        else
+          []
+        end
+
+      rem = students -- attended_students
+
+      rem =
+        for each <- rem do
+          Map.put(each, :attend, false)
+        end
+
+      attended_students =
+        if attended_students != [] do
+          attended_students =
+            for each <- attended_students do
+              Map.put(each, :attend, true)
+            end
+        else
+          []
+        end
+
+      students = List.flatten(rem, attended_students)
+
+      render(
+        conn,
+        "mark_attendance2.html",
+        class: class,
+        attendance: attendance,
+        students: students,
+        date: params["date"]
       )
-
-    student_ids = attendance.student_id |> String.split(",") |> Enum.reject(fn x -> x == "" end)
-
-    attended_students =
-      if student_ids != [] do
-        Repo.all(from(s in Student, where: s.id in ^student_ids, order_by: [s.name]))
-      else
-        []
-      end
-
-    rem = students -- attended_students
-
-    rem =
-      for each <- rem do
-        Map.put(each, :attend, false)
-      end
-
-    attended_students =
-      if attended_students != [] do
-        attended_students =
-          for each <- attended_students do
-            Map.put(each, :attend, true)
-          end
-      else
-        []
-      end
-
-    students = List.flatten(rem, attended_students)
-
-    render(
-      conn,
-      "mark_attendance2.html",
-      class: class,
-      attendance: attendance,
-      students: students,
-      date: params["date"]
-    )
+    else
+      conn
+      |> put_flash(:info, "This Date is reserveed for #{holiday.description} ")
+      |> redirect(to: attendance_path(conn, :index))
+    end
   end
 
   def record_attendance(conn, params) do

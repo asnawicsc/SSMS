@@ -39,7 +39,7 @@
   padding: 0 15px;
   background-color: #EFEFEF;
   line-height: 54px;
-  height: 54px;
+  height: 84px;
 }
 
 .sked-tape__aside li:not(:last-of-type) {
@@ -149,8 +149,9 @@
 
 .sked-tape__event-row {
   position: relative;
+  top: 0px;
   background-color: #F4F4F4;
-  height: 54px;
+  height: 84px;
 }
 
 .sked-tape__event-row:nth-child(odd) {
@@ -238,7 +239,7 @@
 
 .sked-tape__center {
   position: relative;
-  top: 50%;
+  top: 40%;
   -webkit-transform: translateY(-50%);
           transform: translateY(-50%);
   display: block;
