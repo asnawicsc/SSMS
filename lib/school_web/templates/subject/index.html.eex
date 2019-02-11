@@ -2,46 +2,6 @@
     <div>Listing Subject
     </div>
 </div>
-      <div class="row">
-          
-                <div class="col-lg-12" >
-                  <div class="card card-default d-none d-lg-block">
-                    <div class="card-body">
-                      <div class="table-responsive">
-                        <table class="table" id="datatable1">
-                          <thead>
-                            <tr>
-                              <th>Code</th>
-                              <th>Name</th>
-                              <th>Timetable Code </th>
-                              <th>Timetable Name</th>
-                        
-                              <th></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                             <%= for subject <- @subjects do %>
-                            <tr>
-                              <td><%= subject.code %></td>
-                              <td><%= subject.description %></td>
-                              <td><%= subject.timetable_code %></td>
-                                 <td><%= subject.timetable_description %></td>
-                              <td class="text-right">
-                               
-                               
-                                <span><%= link "Edit", to: subject_path(@conn, :edit,  subject.id), class: "btn btn-default btn-xs" %></span>
-                                       <span><%= link "Delete", to: subject_path(@conn, :delete, subject.id), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
-                               
-                              </td>
-                            </tr>
-                            <% end %>
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-</div>
 
 
 <% group_user = @subjects |> Enum.group_by(fn x -> x.timetable_code end) %>
@@ -53,9 +13,9 @@
 
         <div class="list-group">
 
-           <a class="list-group-item list-group-item-action active show" href="#tabSetting5" data-toggle="tab">ALL</a>
+           <a class="list-group-item list-group-item-action active show" href="#tabSetting4" data-toggle="tab">ALL</a>
            <%= for group <- groups do %>
-           <a class="list-group-item list-group-item-action" href="#<%= group%>" data-toggle="tab"><%= group%></a>
+           <a class="list-group-item list-group-item-action" href="#<%= group %>" data-toggle="tab"><%= group%></a>
            <% end %>
           
         </div>
@@ -66,7 +26,7 @@
 
 
 
-        <div class="tab-pane active show" id="tabSetting5">
+        <div class="tab-pane active show" id="tabSetting4">
            <div class="card b">
 
 
@@ -125,7 +85,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                             <%= for subject <- @subjects do %>
+                             <%= for subject <- group_user[group] do %>
                                 <tr>
                               <td><%= subject.code %></td>
                               <td><%= subject.description %></td>

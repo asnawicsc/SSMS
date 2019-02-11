@@ -776,7 +776,7 @@ $.fn.skedTape.defaults = {
 	/**
 	 * Whether to show dates bar.
 	 */
-	showDates: true,
+	showDates: false,
 	/**
 	 * Minimum gap between entries to show minutes.
 	 */
