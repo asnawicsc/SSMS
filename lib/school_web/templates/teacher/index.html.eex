@@ -36,7 +36,7 @@
                               <tr>
                                 <td class="text-left"> <img id="preview6"  style='width:20px; height: 20px;' src='data:image/png;base64, <%= teacher.image_bin %>'></td>
                                 <td>   
-                                  <div id="<%= teacher.code %> " class="btn btn-link teacher"><%= teacher.name %></div></td>
+                                  <div id="<%= teacher.code %> " class="btn btn-link teacher"><%= teacher.name %> <%= teacher.cname %></div></td>
                                 <td>
                                   <%= if teacher.email != nil do %>
                                     <%= if Repo.get_by(User, email: teacher.email) != nil  do  %>

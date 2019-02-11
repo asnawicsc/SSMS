@@ -144,8 +144,6 @@ defmodule SchoolWeb.PdfController do
         )
       )
 
-    IEx.pry()
-
     f =
       Repo.all(
         from(
