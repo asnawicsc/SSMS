@@ -179,33 +179,6 @@ defmodule SchoolWeb.TimetableController do
         )
       )
 
-    all =
-      for item <- period do
-        e = item.end_datetime.hour
-        s = item.start_datetime.hour
-
-        subject = Repo.get_by(Subject, id: item.subject_id)
-
-        g = item.end_datetime.day
-
-        e =
-          if e == 0 do
-            12
-          else
-            e
-          end
-
-        s =
-          if s == 0 do
-            12
-          else
-            s
-          end
-
-        %{day_number: g, end_time: e, start_time: s, s_code: subject.code}
-      end
-      |> Enum.group_by(fn x -> x.day_number end)
-
     all2 =
       for item <- period do
         e = item.end_datetime.hour
@@ -227,25 +200,26 @@ defmodule SchoolWeb.TimetableController do
             s
           end
 
+        date = DateTime.to_date(item.end_datetime)
+
+        a = Timex.days_to_end_of_week(date)
+
+        exact_date = 7 - a
+        # IEx.pry()
         g = item.end_datetime.day
         subject = Repo.get_by(Subject, id: item.subject_id)
 
-        all =
-          if g < 7 do
-            %{
-              location: g,
-              end_hour: e,
-              end_minute: em,
-              start_minute: sm,
-              start_hour: s,
-              name: subject.code
-            }
-          else
-          end
-
-        all
+        %{
+          location: exact_date,
+          end_hour: e,
+          end_minute: em,
+          start_minute: sm,
+          start_hour: s,
+          name: subject.code
+        }
       end
       |> Enum.reject(fn x -> x == nil end)
+      |> Enum.uniq()
 
     class = Repo.get_by(Class, id: params["id"])
 
