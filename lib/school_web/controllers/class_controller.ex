@@ -147,14 +147,32 @@ defmodule SchoolWeb.ClassController do
         day_end_time = c |> Enum.fetch!(4)
         day_name = c |> Enum.fetch!(5)
 
-        class = Repo.get_by(School.Affairs.Class, name: class_name)
+        class =
+          Repo.get_by(School.Affairs.Class,
+            name: class_name,
+            institution_id: conn.private.plug_session["institution_id"]
+          )
 
-        teacher = Repo.get_by(School.Affairs.Teacher, cname: teacher_name)
+        teacher =
+          Repo.get_by(School.Affairs.Teacher,
+            cname: teacher_name,
+            institution_id: conn.private.plug_session["institution_id"]
+          )
 
-        time_table = Repo.get_by(School.Affairs.Timetable, teacher_id: teacher.id)
+        time_table =
+          Repo.get_by(School.Affairs.Timetable,
+            teacher_id: teacher.id,
+            institution_id: conn.private.plug_session["institution_id"]
+          )
 
         subject =
-          Repo.all(from(s in School.Affairs.Subject, where: s.timetable_code == ^subject_code))
+          Repo.all(
+            from(s in School.Affairs.Subject,
+              where:
+                s.timetable_code == ^subject_code and
+                  s.institution_id == ^conn.private.plug_session["institution_id"]
+            )
+          )
           |> hd
 
         day_number =
