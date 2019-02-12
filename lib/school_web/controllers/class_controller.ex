@@ -232,7 +232,7 @@ defmodule SchoolWeb.ClassController do
             hour_start = condition_start |> List.first() |> String.to_integer()
 
             gg =
-              if hour_start <= 10 do
+              if hour_start < 10 do
                 "0" <> day_start_time <> ":00"
               else
                 day_start_time <> ":00"
@@ -245,7 +245,7 @@ defmodule SchoolWeb.ClassController do
             hour_end = condition_end |> List.first() |> String.to_integer()
 
             gg2 =
-              if hour_end <= 10 do
+              if hour_end < 10 do
                 "0" <> day_end_time <> ":00"
               else
                 day_end_time <> ":00"
