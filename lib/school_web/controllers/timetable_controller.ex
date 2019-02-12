@@ -215,7 +215,7 @@ defmodule SchoolWeb.TimetableController do
           end_minute: em,
           start_minute: sm,
           start_hour: s,
-          name: subject.code
+          name: subject.timetable_code
         }
       end
       |> Enum.reject(fn x -> x == nil end)
