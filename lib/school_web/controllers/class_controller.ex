@@ -824,7 +824,9 @@ defmodule SchoolWeb.ClassController do
           on: sc.sudent_id == t.id,
           left_join: c in School.Affairs.Class,
           on: sc.class_id == c.id,
-          where: t.institution_id == ^School.Affairs.inst_id(conn),
+          where:
+            t.institution_id == ^School.Affairs.inst_id(conn) and
+              sc.semester_id == ^conn.private.plug_session["semester_id"],
           select: %{
             chinese_name: t.chinese_name,
             name: t.name,
