@@ -186,7 +186,7 @@ defmodule SchoolWeb.ClassController do
             "Wednesday" ->
               3
 
-            "Thuesday" ->
+            "Thursday" ->
               4
 
             "Friday" ->
