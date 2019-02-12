@@ -69,3 +69,52 @@
     <% end %>
 </div>
 </form>
+<center>
+  <div class="col-lg-8">
+  
+      <div class="card mb-3 border-default"  data-step="2" data-intro="Click on the date or time block on the calendar.">
+         <div class="card-header text-white bg-primary">Attendence </div>
+        
+
+                        
+                         
+         <div class="card-body">
+      <center><div id='calendar_attendance' style="width: 800px; height: 700px;"></div></center>
+
+         </div>
+      </div>
+              
+  </div>
+</center>
+
+<script type="text/javascript">
+  $("input.date").datetimepicker({timepicker:false,format:'Y-m-d'})
+
+</script>
+
+<script type="text/javascript">
+    
+
+
+    var maps = JSON.parse('<%=raw(@list_class_attendence)%>')
+    
+        $('#calendar_attendance').fullCalendar({
+
+
+  
+          header: {
+           
+            center: 'month'
+          },
+      
+          weekNumbers: false,
+          navLinks: true, // can click day/week names to navigate views
+          editable: true,
+          eventLimit: true, // allow "more" link when too many events
+          events: maps
+         
+        });
+     
+
+      </script>
+

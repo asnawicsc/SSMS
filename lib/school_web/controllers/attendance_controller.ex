@@ -49,6 +49,25 @@ defmodule SchoolWeb.AttendanceController do
     send_resp(conn, 200, map)
   end
 
+  def class_attendance(conn, params) do
+    events =
+      case School.Affairs.get_class!(params["class_id"]) do
+        class ->
+          IEx.pry()
+          School.Affairs.all_attandence(class.id)
+
+        {:error, message} ->
+          []
+      end
+      |> Poison.encode!()
+
+    IEx.pry()
+
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(200, events)
+  end
+
   def add_to_class_attendance(conn, %{
         "institute_id" => institute_id,
         "semester_id" => semester_id,
@@ -493,7 +512,7 @@ defmodule SchoolWeb.AttendanceController do
 
     user = Repo.get_by(School.Settings.User, %{id: user_id})
 
-    {attendance, classes} =
+    {attendance, classes, list} =
       if user.role == "Admin" or user.role == "Support" do
         attendance = Affairs.list_attendance()
 
@@ -510,7 +529,77 @@ defmodule SchoolWeb.AttendanceController do
           )
           |> Enum.group_by(fn x -> x.level end)
 
-        {attendance, classes}
+        list_class_holiday =
+          Repo.all(
+            from(
+              p in School.Affairs.Holiday,
+              where: p.institution_id == ^conn.private.plug_session["institution_id"],
+              select: %{
+                start: p.date,
+                title: p.description,
+                color: "#ff9f89"
+              }
+            )
+          )
+
+        list_class_attendence =
+          Repo.all(
+            from(p in School.Affairs.Attendance,
+              left_join: s in School.Affairs.Class,
+              on: p.class_id == s.id,
+              where:
+                p.institution_id == ^conn.private.plug_session["institution_id"] and
+                  s.institution_id == ^conn.private.plug_session["institution_id"],
+              select: %{
+                start: p.attendance_date,
+                title: s.name,
+                color: "yellow",
+                student_id: p.student_id
+              }
+            )
+          )
+          |> Enum.group_by(fn x -> {x.start, x.title} end)
+
+        list_class_attendence =
+          for item <- list_class_attendence do
+            for ar <- item |> elem(1) do
+              count = ar.student_id |> String.split(",") |> Enum.count() |> Integer.to_string()
+
+              title = ar.title
+
+              class =
+                Repo.get_by(School.Affairs.Class,
+                  name: title,
+                  institution_id: conn.private.plug_session["institution_id"]
+                )
+
+              student_class =
+                Repo.all(
+                  from(s in School.Affairs.StudentClass,
+                    where:
+                      s.institute_id == ^conn.private.plug_session["institution_id"] and
+                        s.semester_id == ^conn.private.plug_session["semester_id"] and
+                        s.class_id == ^class.id
+                  )
+                )
+                |> Enum.count()
+                |> Integer.to_string()
+
+              b = title <> "-" <> count <> "/" <> student_class
+
+              date = ar.start
+              color = ar.color
+
+              %{start: date, title: b, color: color}
+            end
+          end
+          |> List.flatten()
+
+        list =
+          (list_class_attendence ++ list_class_holiday)
+          |> Poison.encode!()
+
+        {attendance, classes, list}
       else
         teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email})
 
@@ -522,6 +611,52 @@ defmodule SchoolWeb.AttendanceController do
           |> put_flash(:info, "You are not assign to any class")
           |> redirect(to: page_path(conn, :index))
         end
+
+        list_class_holiday =
+          Repo.all(
+            from(p in School.Affairs.Holiday,
+              where: p.institution_id == ^conn.private.plug_session["institution_id"],
+              select: %{
+                start: p.date,
+                title: p.description,
+                color: "#ff9f89"
+              }
+            )
+          )
+
+        list_class_attendence =
+          Repo.all(
+            from(p in School.Affairs.Attendance,
+              left_join: s in School.Affairs.Class,
+              on: p.class_id == s.id,
+              where:
+                p.institution_id == ^conn.private.plug_session["institution_id"] and
+                  s.institution_id == ^conn.private.plug_session["institution_id"],
+              select: %{
+                start: p.attendance_date,
+                title: s.name,
+                color: "yellow"
+              }
+            )
+          )
+          |> Enum.group_by(fn x -> {x.title, x.start} end)
+
+        list_class_attendence =
+          for item <- list_class_attendence do
+            count = item |> elem(1) |> Enum.count()
+            title = item |> elem(0) |> elem(0)
+            date = item |> elem(0) |> elem(1)
+            color = "green"
+
+            a = count |> Integer.to_string()
+            b = title <> "  Total Attend: " <> a
+
+            %{start: date, title: b, color: "yellow"}
+          end
+
+        list =
+          (list_class_attendence ++ list_class_holiday)
+          |> Poison.encode!()
 
         attendance =
           for each_class <- class do
@@ -545,10 +680,14 @@ defmodule SchoolWeb.AttendanceController do
           |> List.flatten()
           |> Enum.group_by(fn x -> x.level end)
 
-        {attendance, classes}
+        {attendance, classes, list}
       end
 
-    render(conn, "index.html", attendance: attendance, classes: classes)
+    render(conn, "index.html",
+      attendance: attendance,
+      classes: classes,
+      list_class_attendence: list
+    )
   end
 
   def generate_attendance_report(conn, params) do

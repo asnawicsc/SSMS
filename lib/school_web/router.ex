@@ -262,6 +262,7 @@ defmodule SchoolWeb.Router do
     get("/timetable/edit_event/:period_id", PeriodController, :edit_event)
     get("/timetable/delete_event/:id/:class_id", PeriodController, :delete)
     get("/generated_timetable/:id", TimetableController, :generated_timetable)
+    get("/generated_timetable/:id", TimetableController, :generated_timetable)
     resources("/period", PeriodController)
     get("/create_period/:subject_id/:class_id", PeriodController, :get_create_period)
     post("/create_period", PeriodController, :create_period)
@@ -270,6 +271,8 @@ defmodule SchoolWeb.Router do
     resources("/grade", GradeController)
     resources("/exam_master", ExamMasterController)
     resources("/time_period", TimePeriodController)
+
+    get("/attendance/class/:class_id", AttendanceController, :class_attendance)
 
     get("/print_timetable/:panel", PdfController, :print_timetable)
 

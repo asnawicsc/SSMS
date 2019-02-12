@@ -4179,6 +4179,39 @@ defmodule School.Affairs do
     a
   end
 
+  def all_attandence(class_id) do
+    a =
+      Repo.all(
+        from(
+          p in School.Affairs.Holiday,
+          where:
+            p.institution_id == ^@conn.private.plug_session["institution_id"] and
+              p.semester_id == ^@conn.private.plug_session["semester_id"],
+          select: %{
+            start: p.date,
+            title: p.description
+          }
+        )
+      )
+
+    IEx.pry()
+
+    # |> Enum.map(fn x ->
+    #   %{
+    #     start: my_time(x.start_datetime),
+    #     end: my_time(x.end_datetime),
+    #     title: x.subject <> " - " <> x.teacher,
+    #     description: x.teacher,
+    #     period_id: x.period_id,
+    #     google_event_id: x.google_event_id,
+    #     updated_at: x.updated_at,
+    #     color: x.color
+    #   }
+    # end)
+
+    a
+  end
+
   def teacher_period_list(teacher_id, period_ids) do
     a =
       Repo.all(
