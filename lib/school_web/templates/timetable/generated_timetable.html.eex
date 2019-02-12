@@ -32,7 +32,7 @@
     <tr>
 
       <td><%= teacher.name %></td>
-      <td align="center"><%= subject.description %> (<%= subject.code %>)</td>
+      <td align="center"><%= subject.timetable_description %> (<%= subject.timetable_code %>)</td>
      
 
      
