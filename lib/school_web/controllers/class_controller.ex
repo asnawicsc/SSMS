@@ -139,13 +139,17 @@ defmodule SchoolWeb.ClassController do
 
         check = c |> Enum.with_index()
 
-        class_name = c |> Enum.fetch!(0)
-        subject_code = c |> Enum.fetch!(1)
-        teacher_name = c |> Enum.fetch!(2)
+        class_name = c |> Enum.fetch!(0) |> String.trim()
 
-        day_start_time = c |> Enum.fetch!(3)
-        day_end_time = c |> Enum.fetch!(4)
-        day_name = c |> Enum.fetch!(5)
+        subject_code = c |> Enum.fetch!(1) |> String.trim()
+
+        teacher_name = c |> Enum.fetch!(2) |> String.trim()
+
+        day_start_time = c |> Enum.fetch!(3) |> String.trim()
+
+        day_end_time = c |> Enum.fetch!(4) |> String.trim()
+
+        day_name = c |> Enum.fetch!(5) |> String.trim()
 
         class =
           Repo.get_by(School.Affairs.Class,
@@ -173,7 +177,13 @@ defmodule SchoolWeb.ClassController do
                   s.institution_id == ^conn.private.plug_session["institution_id"]
             )
           )
-          |> hd
+
+        subject =
+          if subject == [] do
+            IO.inspect(subject_code)
+          else
+            subject |> hd
+          end
 
         day_number =
           case day_name do

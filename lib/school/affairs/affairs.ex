@@ -4152,7 +4152,7 @@ defmodule School.Affairs do
           where: p.class_id == ^class_id,
           select: %{
             period_id: p.id,
-            subject: s.description,
+            subject: s.timetable_code,
             class: c.name,
             start_datetime: p.start_datetime,
             end_datetime: p.end_datetime,
