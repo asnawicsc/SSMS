@@ -85,6 +85,20 @@ defmodule SchoolWeb.PdfController do
     subject_info = Repo.get_by(School.Affairs.Subject, id: subject_id)
     class_info = Repo.get_by(School.Affairs.Class, id: class_id)
 
+    teacher =
+      Repo.all(
+        from(
+          p in School.Affairs.Period,
+          left_join: m in School.Affairs.Teacher,
+          on: p.teacher_id == m.id,
+          where: p.subject_id == ^subject_id,
+          select: %{
+            teacher: m.name
+          }
+        )
+      )
+      |> hd
+
     student_class =
       Repo.all(
         from(
@@ -311,7 +325,9 @@ defmodule SchoolWeb.PdfController do
         etr: etr,
         school: school,
         semester_year: year |> Integer.to_string(),
-        exam_name: exam_name
+        exam_name: exam_name,
+        semester: semester,
+        teacher: teacher
       )
 
     pdf_params = %{"html" => html}

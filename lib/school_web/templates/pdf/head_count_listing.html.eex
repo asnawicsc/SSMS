@@ -26,9 +26,9 @@
 
 
 <b  style="font-size: 22px;"><%= @school.name %></b></br>
-<h4><u>ANALISIS DAN TARGET MATA PELAJARAN MENGIKUT PANITIA-Keseluruhan Pencapaioan setiap murid</u></h4>
+<h4><u>ANALISIS DAN TARGET MATA PELAJARAN MENGIKUT PANITIA-Keseluruhan Pencapaian setiap murid</u></h4>
 <h4>Mata Pelajaran: <%= @subject.description %></h4>
-<h4>Kelas : <%= @class.name %> &nbsp; Tahun:   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nama Guru: </h4>
+<h4>Kelas : <%= @class.name %> &nbsp; Tahun: <%= @semester.year %>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nama Guru: <%= @teacher.teacher %> </h4>
 
 
 <table  class="display" align="center" style="border-collapse: collapse;" border="1" width="100%">
@@ -40,12 +40,12 @@
         <th >No</th>
         <th >Name</th>
         <th >Jan</th>
-         <th colspan="2">Tov</th>
+         <th colspan="2">TOV</th>
          <%= for item <- @exam_name do %>
             <th colspan="2"><%= item.exam %></th>
          <% end %>
          <td colspan="2">ETR</td>
-         <td>UPSR</td>
+       
        
           
 
@@ -150,7 +150,7 @@
             
          <% end %>
 
-          <td> </td>
+         
      </tr>
          <% end %>
      
