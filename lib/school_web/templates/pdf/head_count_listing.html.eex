@@ -1,6 +1,28 @@
 
 
+  <style>
+    html {
+      font-family: sans-serif;
+    }
 
+    table {
+      border-collapse: collapse;
+      border: 2px solid rgb(200, 200, 200);
+      letter-spacing: 1px;
+      font-size: 10px;
+        font-weight: bold;
+          white-space: nowrap;
+    }
+
+    td,
+    th {
+      border: 1px solid rgb(190, 190, 190);
+      padding: 2px 2px;
+    }
+
+
+  
+  </style>
 
 
 <b  style="font-size: 22px;"><%= @school.name %></b></br>
