@@ -103,7 +103,8 @@ defmodule SchoolWeb.PdfController do
             class_id: s.class_id,
             student_id: s.sudent_id,
             student_no: p.student_no
-          }
+          },
+          order_by: [desc: p.sex, asc: p.name]
         )
       )
 

@@ -27,7 +27,7 @@
 
 <b  style="font-size: 22px;"><%= @school.name %></b></br>
 <h4><u>ANALISIS DAN TARGET MATA PELAJARAN MENGIKUT PANITIA-Keseluruhan Pencapaioan setiap murid</u></h4>
-<h4>Mata Pelajaran: <%= @subject.code %></h4>
+<h4>Mata Pelajaran: <%= @subject.description %></h4>
 <h4>Kelas : <%= @class.name %> &nbsp; Tahun:   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nama Guru: </h4>
 
 
@@ -99,13 +99,15 @@
 
                 <% else %>
 
-                   <td ><%= mark.mark %></td>
+                   <td > <%= if mark.mark == 0  do " "  end %>
+                    <%= if mark.mark > 0  do mark.mark end %></td>
                    <td>
                     <%= if mark.mark >= 80 and mark.mark <= 100 do "A" end %>
                     <%= if mark.mark >= 60 and mark.mark <= 79 do "B" end %>
                     <%= if mark.mark >= 50 and mark.mark <= 59 do "C" end %>
                      <%= if mark.mark >= 40 and mark.mark <= 49 do "D" end %>
                         <%= if mark.mark <= 39  do "E" end %>
+                         <%= if mark.mark == 0  do " " end %>
                     </td> 
                <% end %>
 
@@ -129,13 +131,15 @@
 
           <% else %>
 
-             <td ><%= a.mark %></td>
+             <td > <%= if a.mark == 0  do " "  end %>
+                    <%= if a.mark > 0  do a.mark end %></td>
              <td>
                     <%= if a.mark >= 80 and a.mark <= 100 do "A" end %>
                     <%= if a.mark >= 60 and a.mark <= 79 do "B" end %>
                     <%= if a.mark >= 50 and a.mark <= 59 do "C" end %>
                      <%= if a.mark >= 40 and a.mark <= 49 do "D" end %>
                         <%= if a.mark <= 39  do "E" end %>
+                        <%= if mark.mark == 0  do " " end %>
                     </td> 
          <% end %>
 
