@@ -78,7 +78,36 @@ defmodule SchoolWeb.PdfController do
     subject_id = params["subject_id"]
     school = Repo.get(Institution, conn.private.plug_session["institution_id"])
 
-    all =
+    semester = Repo.get(Semester, conn.private.plug_session["semester_id"])
+
+    semester_year = semester.year
+
+    subject_info = Repo.get_by(School.Affairs.Subject, id: subject_id)
+    class_info = Repo.get_by(School.Affairs.Class, id: class_id)
+
+    student_class =
+      Repo.all(
+        from(
+          s in School.Affairs.StudentClass,
+          left_join: p in School.Affairs.Student,
+          on: s.sudent_id == p.id,
+          where:
+            s.class_id == ^class_id and
+              s.institute_id == ^conn.private.plug_session["institution_id"] and
+              p.institution_id == ^conn.private.plug_session["institution_id"] and
+              s.semester_id == ^conn.private.plug_session["semester_id"],
+          select: %{
+            student_name: p.name,
+            chinese_name: p.chinese_name,
+            sex: p.sex,
+            class_id: s.class_id,
+            student_id: s.sudent_id,
+            student_no: p.student_no
+          }
+        )
+      )
+
+    etr =
       Repo.all(
         from(
           s in School.Affairs.HeadCount,
@@ -101,7 +130,23 @@ defmodule SchoolWeb.PdfController do
         )
       )
 
-    a =
+    exam_name =
+      Repo.all(
+        from(
+          p in School.Affairs.Exam,
+          left_join: m in School.Affairs.ExamMaster,
+          on: m.id == p.exam_master_id,
+          where:
+            m.semester_id == ^conn.private.plug_session["semester_id"] and
+              m.institution_id == ^conn.private.plug_session["institution_id"] and
+              p.subject_id == ^subject_id and m.level_id == ^class_info.level_id,
+          select: %{
+            exam: m.name
+          }
+        )
+      )
+
+    exam =
       Repo.all(
         from(
           p in School.Affairs.Exam,
@@ -109,132 +154,191 @@ defmodule SchoolWeb.PdfController do
           on: m.id == p.exam_master_id,
           left_join: h in School.Affairs.ExamMark,
           on: h.exam_id == p.id,
-          left_join: k in School.Affairs.HeadCount,
-          on: k.student_id == h.student_id,
-          left_join: q in School.Affairs.Level,
-          on: q.id == m.level_id,
-          left_join: g in School.Affairs.Subject,
-          on: g.id == p.subject_id,
-          left_join: l in School.Affairs.Student,
-          on: k.student_id == l.id,
-          left_join: s in School.Affairs.Class,
-          on: s.level_id == m.level_id,
           where:
-            m.semester_id == ^conn.private.plug_session["semester_id"] and s.id == ^class_id and
-              g.id == ^subject_id and h.subject_id == ^subject_id and h.class_id == ^class_id and
-              m.semester_id == ^conn.private.plug_session["semester_id"] and
-              s.institution_id == ^conn.private.plug_session["institution_id"] and
-              g.institution_id == ^conn.private.plug_session["institution_id"] and
-              q.institution_id == ^conn.private.plug_session["institution_id"] and
-              m.institution_id == ^conn.private.plug_session["institution_id"],
+            m.semester_id == ^conn.private.plug_session["semester_id"] and
+              m.institution_id == ^conn.private.plug_session["institution_id"] and
+              h.subject_id == ^subject_id and h.class_id == ^class_id,
           select: %{
-            id: p.id,
             student_id: h.student_id,
             mark: h.mark,
-            h_count_mark: k.targer_mark,
-            c_id: s.id,
-            s_id: g.id,
-            class: s.name,
-            exam: m.name,
-            sex: l.sex,
-            student_name: l.name,
-            chinese_name: l.chinese_name,
-            subject: g.description
+            class_id: h.class_id,
+            exam: m.name
           }
         )
       )
 
-    f =
-      Repo.all(
-        from(
-          p in School.Affairs.Exam,
-          left_join: m in School.Affairs.ExamMaster,
-          on: m.id == p.exam_master_id,
-          left_join: h in School.Affairs.ExamMark,
-          on: h.exam_id == p.id,
-          left_join: k in School.Affairs.HeadCount,
-          on: k.student_id == h.student_id,
-          left_join: q in School.Affairs.Level,
-          on: q.id == m.level_id,
-          left_join: g in School.Affairs.Subject,
-          on: g.id == p.subject_id,
-          left_join: l in School.Affairs.Student,
-          on: k.student_id == l.id,
-          left_join: s in School.Affairs.Class,
-          on: s.level_id == m.level_id,
-          where:
-            m.semester_id == ^conn.private.plug_session["semester_id"] and s.id == ^class_id and
-              g.id == ^subject_id and h.subject_id == ^subject_id and h.class_id == ^class_id and
-              m.semester_id == ^conn.private.plug_session["semester_id"] and
-              s.institution_id == ^conn.private.plug_session["institution_id"] and
-              g.institution_id == ^conn.private.plug_session["institution_id"] and
-              q.institution_id == ^conn.private.plug_session["institution_id"] and
-              m.institution_id == ^conn.private.plug_session["institution_id"],
-          select: %{
-            id: p.id,
-            student_id: h.student_id,
-            mark: h.mark,
-            h_count_mark: k.targer_mark,
-            c_id: s.id,
-            s_id: g.id,
-            class: s.name,
-            exam: m.name,
-            sex: l.sex,
-            student_name: l.name,
-            chinese_name: l.chinese_name,
-            subject: g.description
-          }
-        )
+    # all =
+    #   Repo.all(
+    #     from(
+    #       s in School.Affairs.HeadCount,
+    #       left_join: p in School.Affairs.Student,
+    #       on: s.student_id == p.id,
+    #       where:
+    #         s.class_id == ^class_id and s.subject_id == ^subject_id and
+    #           s.institution_id == ^conn.private.plug_session["institution_id"] and
+    #           p.institution_id == ^conn.private.plug_session["institution_id"] and
+    #           s.semester_id == ^conn.private.plug_session["semester_id"],
+    #       select: %{
+    #         student_name: p.name,
+    #         chinese_name: p.chinese_name,
+    #         sex: p.sex,
+    #         class_id: s.class_id,
+    #         subject_id: s.subject_id,
+    #         student_id: s.student_id,
+    #         mark: s.targer_mark
+    #       }
+    #     )
+    #   )
+
+    # a =
+    #   Repo.all(
+    #     from(
+    #       p in School.Affairs.Exam,
+    #       left_join: m in School.Affairs.ExamMaster,
+    #       on: m.id == p.exam_master_id,
+    #       left_join: h in School.Affairs.ExamMark,
+    #       on: h.exam_id == p.id,
+    #       left_join: k in School.Affairs.HeadCount,
+    #       on: k.student_id == h.student_id,
+    #       left_join: q in School.Affairs.Level,
+    #       on: q.id == m.level_id,
+    #       left_join: g in School.Affairs.Subject,
+    #       on: g.id == p.subject_id,
+    #       left_join: l in School.Affairs.Student,
+    #       on: k.student_id == l.id,
+    #       left_join: s in School.Affairs.Class,
+    #       on: s.level_id == m.level_id,
+    #       where:
+    #         m.semester_id == ^conn.private.plug_session["semester_id"] and s.id == ^class_id and
+    #           g.id == ^subject_id and h.subject_id == ^subject_id and h.class_id == ^class_id and
+    #           m.semester_id == ^conn.private.plug_session["semester_id"] and
+    #           s.institution_id == ^conn.private.plug_session["institution_id"] and
+    #           g.institution_id == ^conn.private.plug_session["institution_id"] and
+    #           q.institution_id == ^conn.private.plug_session["institution_id"] and
+    #           m.institution_id == ^conn.private.plug_session["institution_id"],
+    #       select: %{
+    #         id: p.id,
+    #         student_id: h.student_id,
+    #         mark: h.mark,
+    #         h_count_mark: k.targer_mark,
+    #         c_id: s.id,
+    #         s_id: g.id,
+    #         class: s.name,
+    #         exam: m.name,
+    #         sex: l.sex,
+    #         student_name: l.name,
+    #         chinese_name: l.chinese_name,
+    #         subject: g.description
+    #       }
+    #     )
+    #   )
+
+    # f =
+    #   Repo.all(
+    #     from(
+    #       p in School.Affairs.Exam,
+    #       left_join: m in School.Affairs.ExamMaster,
+    #       on: m.id == p.exam_master_id,
+    #       left_join: h in School.Affairs.ExamMark,
+    #       on: h.exam_id == p.id,
+    #       left_join: k in School.Affairs.HeadCount,
+    #       on: k.student_id == h.student_id,
+    #       left_join: q in School.Affairs.Level,
+    #       on: q.id == m.level_id,
+    #       left_join: g in School.Affairs.Subject,
+    #       on: g.id == p.subject_id,
+    #       left_join: l in School.Affairs.Student,
+    #       on: k.student_id == l.id,
+    #       left_join: s in School.Affairs.Class,
+    #       on: s.level_id == m.level_id,
+    #       where:
+    #         m.semester_id == ^conn.private.plug_session["semester_id"] and s.id == ^class_id and
+    #           g.id == ^subject_id and h.subject_id == ^subject_id and h.class_id == ^class_id and
+    #           m.semester_id == ^conn.private.plug_session["semester_id"] and
+    #           s.institution_id == ^conn.private.plug_session["institution_id"] and
+    #           g.institution_id == ^conn.private.plug_session["institution_id"] and
+    #           q.institution_id == ^conn.private.plug_session["institution_id"] and
+    #           m.institution_id == ^conn.private.plug_session["institution_id"],
+    #       select: %{
+    #         id: p.id,
+    #         student_id: h.student_id,
+    #         mark: h.mark,
+    #         h_count_mark: k.targer_mark,
+    #         c_id: s.id,
+    #         s_id: g.id,
+    #         class: s.name,
+    #         exam: m.name,
+    #         sex: l.sex,
+    #         student_name: l.name,
+    #         chinese_name: l.chinese_name,
+    #         subject: g.description
+    #       }
+    #     )
+    #   )
+    #   |> Enum.group_by(fn x -> x.exam end)
+    #   |> Map.keys()
+    #   |> Enum.sort()
+
+    # if all == [] do
+    #   conn
+    #   |> put_flash(:info, "Data Is Empty, Please Choose Other Selection")
+    #   |> redirect(to: head_count_path(conn, :headcount_report))
+    # else
+
+    # html =
+    #   Phoenix.View.render_to_string(
+    #     SchoolWeb.PdfView,
+    #     "head_count_listing.html",
+    #     class: class,
+    #     subject: subject_info,
+    #     all: all,
+    #     institution: school,
+    #     a: a,
+    #     f: f
+    #   )
+
+    year = semester_year - 1
+
+    html =
+      Phoenix.View.render_to_string(
+        SchoolWeb.PdfView,
+        "head_count_listing.html",
+        class: class_info,
+        subject: subject_info,
+        student_class: student_class,
+        exam: exam,
+        etr: etr,
+        school: school,
+        semester_year: year |> Integer.to_string(),
+        exam_name: exam_name
       )
-      |> Enum.group_by(fn x -> x.exam end)
-      |> Map.keys()
-      |> Enum.sort()
 
-    if all == [] do
-      conn
-      |> put_flash(:info, "Data Is Empty, Please Choose Other Selection")
-      |> redirect(to: head_count_path(conn, :headcount_report))
-    else
-      class = Affairs.get_class!(class_id)
-      subject = Affairs.get_subject!(subject_id)
+    pdf_params = %{"html" => html}
 
-      html =
-        Phoenix.View.render_to_string(
-          SchoolWeb.PdfView,
-          "head_count_listing.html",
-          class: class,
-          subject: subject,
-          all: all,
-          institution: school,
-          a: a,
-          f: f
-        )
+    pdf_binary =
+      PdfGenerator.generate_binary!(
+        pdf_params["html"],
+        size: "A4",
+        shell_params: [
+          "--margin-left",
+          "5",
+          "--margin-right",
+          "5",
+          "--margin-top",
+          "5",
+          "--margin-bottom",
+          "5",
+          "--encoding",
+          "utf-8"
+        ],
+        delete_temporary: true
+      )
 
-      pdf_params = %{"html" => html}
+    conn
+    |> put_resp_header("Content-Type", "application/pdf")
+    |> resp(200, pdf_binary)
 
-      pdf_binary =
-        PdfGenerator.generate_binary!(
-          pdf_params["html"],
-          size: "A4",
-          shell_params: [
-            "--margin-left",
-            "5",
-            "--margin-right",
-            "5",
-            "--margin-top",
-            "5",
-            "--margin-bottom",
-            "5",
-            "--encoding",
-            "utf-8"
-          ],
-          delete_temporary: true
-        )
-
-      conn
-      |> put_resp_header("Content-Type", "application/pdf")
-      |> resp(200, pdf_binary)
-    end
+    # end
   end
 
   def user_login_report(conn, params) do

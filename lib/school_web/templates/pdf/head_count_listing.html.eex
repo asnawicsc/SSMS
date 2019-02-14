@@ -1,6 +1,9 @@
 
 
-<b  style="font-size: 22px;"><%= @institution.name %></b></br>
+
+
+
+<b  style="font-size: 22px;"><%= @school.name %></b></br>
 <h4><u>ANALISIS DAN TARGET MATA PELAJARAN MENGIKUT PANITIA-Keseluruhan Pencapaioan setiap murid</u></h4>
 <h4>Mata Pelajaran: <%= @subject.code %></h4>
 <h4>Kelas : <%= @class.name %> &nbsp; Tahun:   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nama Guru: </h4>
@@ -15,24 +18,23 @@
         <th >No</th>
         <th >Name</th>
         <th >Jan</th>
-           <%= for item <- @f  do %>
-          <th align="center" colspan="2">
-         <%= item %>
-       </th>
-        <% end %>
-         <th align="center" colspan="2" >ETR</th>
-          <th  >UPSR</th>
-        </tr>
-        
+         <th colspan="2">Tov</th>
+         <%= for item <- @exam_name do %>
+            <th colspan="2"><%= item.exam %></th>
+         <% end %>
+         <td colspan="2">ETR</td>
+         <td>UPSR</td>
+       
+          
 
   
         
 
         
-               <%= for student <- @a|>Enum.group_by(fn x -> x.student_id end)|>Enum.with_index do %>
+       <%= for student <- @student_class|>Enum.with_index do %>
          <% no = student|>elem(1) %>
           
-          <% student = student|>elem(0)|>elem(1)|>hd %>
+          <% student = student|>elem(0) %>
             
         
               <tr  align="center">
@@ -41,20 +43,89 @@
                 <td><%= if student.sex == "M" or student.sex == "L" or student.sex == "MALE" or student.sex == "LELAKI" do "L" end %>
                   <%= if student.sex == "F" or student.sex == "P" or student.sex == "FEMALE" or student.sex == "PEREMPUAN" do "P" end %></td>
 
-                  <%= for sub <- @f  do %>
-            <% all= @a|>Enum.filter(fn x -> x.exam== sub and x.student_id== student.student_id end)|>hd %>
+
          
-                    <td ><%= all.mark %></td>
-                    <td >&nbsp; &nbsp; &nbsp;</td>
-             <% end %>
-               <td><%= student.h_count_mark %></td>
-               <td>&nbsp; &nbsp; &nbsp;</td>
-                 <td > </td>
+          <% require IEx %>
+        <%  tov=Repo.get_by(School.Affairs.MarkSheetHistorys, stuid: student.student_no,description: @subject.description,year: @semester_year,institution_id:  @school.id) %>
 
-              </tr>
+          <%=   if tov == nil do  %>
+
+          <td></td> 
+          <td></td> 
+
+          <% else %>
+
+             <td><%= tov.s2m %> </td>
+             <td><%= tov.s2g %> </td> 
+         <% end %>
+         <%= for item <- @exam_name do %>
+
+               <% mark= @exam|>Enum.filter(fn x -> x.exam== item.exam and x.student_id== student.student_id end)%>
+
+               <%= if mark == [] do %>
+
+                  <td> </td>
+                  <td></td> 
+
+                  <% else %>
+                 
+                <% mark= mark|>hd %>
+                   <%=   if mark == nil do  %>
+
+                <td> </td> 
+                <td></td> 
+
+                <% else %>
+
+                   <td ><%= mark.mark %></td>
+                   <td>
+                    <%= if mark.mark >= 80 and mark.mark <= 100 do "A" end %>
+                    <%= if mark.mark >= 60 and mark.mark <= 79 do "B" end %>
+                    <%= if mark.mark >= 50 and mark.mark <= 59 do "C" end %>
+                     <%= if mark.mark >= 40 and mark.mark <= 49 do "D" end %>
+                        <%= if mark.mark <= 39  do "E" end %>
+                    </td> 
+               <% end %>
+
+                   <% end %>
+         <% end %>
+
+          <% etr= @etr|>Enum.filter(fn x -> x.student_id== student.student_id and x.subject_id== @subject.id end)%>
+
+         <%= if etr == [] do %>
+
+            <td> </td>
+            <td></td> 
+
+            <% else %>
+           
+          <% a= etr|>hd %>
+             <%=   if a == nil do  %>
+
+          <td> </td> 
+          <td></td> 
+
+          <% else %>
+
+             <td ><%= a.mark %></td>
+             <td>
+                    <%= if a.mark >= 80 and a.mark <= 100 do "A" end %>
+                    <%= if a.mark >= 60 and a.mark <= 79 do "B" end %>
+                    <%= if a.mark >= 50 and a.mark <= 59 do "C" end %>
+                     <%= if a.mark >= 40 and a.mark <= 49 do "D" end %>
+                        <%= if a.mark <= 39  do "E" end %>
+                    </td> 
+         <% end %>
+
+           
+
+      
           
-        
+            
+         <% end %>
 
+          <td> </td>
+     </tr>
          <% end %>
      
              
