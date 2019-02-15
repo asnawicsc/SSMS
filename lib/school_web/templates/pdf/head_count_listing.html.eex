@@ -70,7 +70,7 @@ td img {
 
           <% else %>
 
-             <td style="width: 50px;"><%= if tov.s2m == nil  do "  "  end %>
+             <td style="width: 20px;"><%= if tov.s2m == nil  do "  "  end %>
                  <%= if tov.s2m != nil  do tov.s2m end %></td>
              <td><%= if tov.s2g == nil  do "  "  end %>
                  <%= if tov.s2g != nil  do tov.s2g end %></td> 
