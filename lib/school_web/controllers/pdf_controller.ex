@@ -96,7 +96,7 @@ defmodule SchoolWeb.PdfController do
           left_join: h in School.Affairs.Teacher,
           on: q.teacher_id == h.id,
           where:
-            g.timetable_code == ^subject_info.timetable_code and
+            g.timetable_code == ^subject_info.timetable_code and m.class_id == ^class_id and
               q.institution_id == ^conn.private.plug_session["institution_id"] and
               q.semester_id == ^conn.private.plug_session["semester_id"],
           select: %{
