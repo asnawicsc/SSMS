@@ -9,8 +9,14 @@ defmodule SchoolWeb.LevelController do
     levels =
       Affairs.list_levels()
       |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+      |> Enum.map(fn x -> %{id: x.id, name: x.name, student_ids: add_student_ids(x.id)} end)
 
     render(conn, "index.html", levels: levels)
+  end
+
+  def add_student_ids(level_id) do
+    Repo.all(from(sc in StudentClass, where: sc.level_id == ^level_id, select: sc.sudent_id))
+    |> Enum.join(",")
   end
 
   def new(conn, _params) do
@@ -21,14 +27,16 @@ defmodule SchoolWeb.LevelController do
   def default_standard(conn, _params) do
     all =
       Repo.all(
-        from(s in School.Affairs.Level,
+        from(
+          s in School.Affairs.Level,
           where: s.institution_id == ^conn.private.plug_session["institution_id"]
         )
       )
 
     if all != [] do
       Repo.delete_all(
-        from(s in School.Affairs.Level,
+        from(
+          s in School.Affairs.Level,
           where: s.institution_id == ^conn.private.plug_session["institution_id"]
         )
       )
