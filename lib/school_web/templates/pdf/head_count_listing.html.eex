@@ -1,28 +1,21 @@
 
-
-  <style>
-    html {
-      font-family: sans-serif;
-    }
-
-    table {
-      border-collapse: collapse;
-      border: 2px solid rgb(200, 200, 200);
-      letter-spacing: 1px;
-      font-size: 10px;
-        font-weight: bold;
-          white-space: nowrap;
-    }
-
-    td,
-    th {
-      border: 1px solid rgb(190, 190, 190);
-      padding: 2px 2px;
-    }
-
-
+<style type="text/css">
   
-  </style>
+  table { 
+
+    border-spacing: 0;
+    border-collapse: collapse;
+    font-size: 14px;
+    white-space: nowrap;
+}
+td {
+    padding:4px;
+}
+td img {
+    display:block;
+}
+</style>
+
 
 
 <b  style="font-size: 22px;"><%= @school.name %></b></br>
@@ -31,7 +24,7 @@
 <h4>Kelas : <%= @class.name %> &nbsp; Tahun: <%= @semester.year %>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nama Guru: <%= @teacher.teacher %> </h4>
 
 
-<table  class="display" align="center" style="border-collapse: collapse;" border="1" width="100%">
+<table  class="display" align="center" style="border-collapse: collapse;" border="1" width="100%" >
 
   
 
@@ -99,7 +92,7 @@
 
                 <% else %>
 
-                   <td > <%= if mark.mark == 0  do " "  end %>
+                   <td > <%= if mark.mark == 0  do "  "  end %>
                     <%= if mark.mark > 0  do mark.mark end %></td>
                    <td>
                     <%= if mark.mark >= 80 and mark.mark <= 100 do "A" end %>
@@ -107,7 +100,7 @@
                     <%= if mark.mark >= 50 and mark.mark <= 59 do "C" end %>
                      <%= if mark.mark >= 40 and mark.mark <= 49 do "D" end %>
                         <%= if mark.mark > 0 and mark.mark <= 39   do "E" end %>
-                         <%= if mark.mark == 0  do " " end %>
+                         <%= if mark.mark == 0  do "  " end %>
                     </td> 
                <% end %>
 
@@ -131,7 +124,7 @@
 
           <% else %>
 
-             <td > <%= if a.mark == 0  do " "  end %>
+             <td > <%= if a.mark == 0  do "  "  end %>
                     <%= if a.mark > 0  do a.mark end %></td>
              <td>
                     <%= if a.mark >= 80 and a.mark <= 100 do "A" end %>
@@ -139,7 +132,7 @@
                     <%= if a.mark >= 50 and a.mark <= 59 do "C" end %>
                      <%= if a.mark >= 40 and a.mark <= 49 do "D" end %>
                         <%= if a.mark > 0 and a.mark <= 39  do "E" end %>
-                        <%= if a.mark == 0  do " " end %>
+                        <%= if a.mark == 0  do "  " end %>
                     </td> 
          <% end %>
 
