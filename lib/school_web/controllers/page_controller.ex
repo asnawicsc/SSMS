@@ -960,49 +960,104 @@ defmodule SchoolWeb.PageController do
       end
 
     lib_id = inst.library_organization_id
-    student_ids = params["ids"] |> String.split("\r\n")
+    student_ids = params["ids"] |> String.split(",")
 
     map_list =
       for id <- student_ids do
-        student =
-          Repo.get_by(
-            Student,
-            student_no: id,
-            institution_id: conn.private.plug_session["institution_id"]
+        students =
+          Repo.all(
+            from(
+              s in Student,
+              left_join: sc in StudentClass,
+              on: sc.sudent_id == s.id,
+              left_join: c in Class,
+              on: c.id == sc.class_id,
+              where: s.id == ^id and sc.semester_id == ^conn.private.plug_session["semester_id"],
+              select: %{
+                id: s.id,
+                semester_id: sc.semester_id,
+                name: s.name,
+                chinese_name: s.chinese_name,
+                class: c.name,
+                ic: s.ic,
+                student_no: s.student_no
+              }
+            )
           )
 
-        f_bin = template["front_bin"]
-        b_bin = template["back_bin"]
+        if students != [] do
+          student = hd(students)
 
-        # front bin
-        f_bin = f_bin |> String.replace("_name_", student.name)
-        f_bin = f_bin |> String.replace("_cname_", student.chinese_name)
-        f_bin = f_bin |> String.replace("_stu_id_", student.student_no)
-        f_bin = f_bin |> String.replace("_ic_)", student.ic)
+          f_bin = template["front_bin"]
+          b_bin = template["back_bin"]
 
-        # back bin
-        b_bin = b_bin |> String.replace("_name_", student.name)
-        b_bin = b_bin |> String.replace("_cname_", student.chinese_name)
-        b_bin = b_bin |> String.replace("_stu_id_", student.student_no)
-        b_bin = b_bin |> String.replace("_ic_", student.ic)
+          # front bin
+          f_bin = f_bin |> String.replace("_name_", student.name)
 
-        image_path = Application.app_dir(:school, "priv/static/images")
+          f_bin =
+            f_bin
+            |> String.replace(
+              "_cname_",
+              if(student.chinese_name == nil, do: "", else: student.chinese_name)
+            )
 
-        Barlix.Code39.encode!(student.student_no)
-        |> Barlix.PNG.print(file: image_path <> "/#{student.student_no}.png", xdim: 5)
+          f_bin =
+            f_bin
+            |> String.replace(
+              "_line1_",
+              if(student.class == nil, do: "", else: student.class)
+            )
 
-        {:ok, bin} = File.read(image_path <> "/#{student.student_no}.png")
+          f_bin =
+            f_bin |> String.replace("_ic_no_", if(student.ic == nil, do: "", else: student.ic))
 
-        image_bin = Base.encode64(bin)
-        image_str = "<img style='width: 80%;' src='data:image/png;base64, #{image_bin}'>"
+          f_bin = f_bin |> String.replace("_membership_code_", student.student_no)
 
-        File.rm!(image_path <> "/#{student.student_no}.png")
+          if b_bin != nil do
+            # back bin
+            b_bin = b_bin |> String.replace("_name_", student.name)
 
-        f_bin = f_bin |> String.replace("_barcode_", image_str)
-        b_bin = b_bin |> String.replace("_barcode_", image_str)
+            b_bin =
+              b_bin
+              |> String.replace(
+                "_cname_",
+                if(student.chinese_name == nil, do: "", else: student.chinese_name)
+              )
 
-        map = %{contents: f_bin, styles: template["css_bin"], contents2: b_bin}
-        map
+            b_bin =
+              b_bin
+              |> String.replace(
+                "_line1_",
+                if(student.class == nil, do: "", else: student.class)
+              )
+
+            b_bin = b_bin |> String.replace("_membership_code_", student.student_no)
+
+            b_bin =
+              b_bin |> String.replace("_ic_no_", if(student.ic == nil, do: "", else: student.ic))
+          end
+
+          image_path = Application.app_dir(:school, "priv/static/images")
+
+          Barlix.Code39.encode!(student.student_no)
+          |> Barlix.PNG.print(file: image_path <> "/#{student.student_no}.png", xdim: 5)
+
+          {:ok, bin} = File.read(image_path <> "/#{student.student_no}.png")
+
+          image_bin = Base.encode64(bin)
+          image_str = "<img style='width: 80%;' src='data:image/png;base64, #{image_bin}'>"
+
+          File.rm!(image_path <> "/#{student.student_no}.png")
+
+          f_bin = f_bin |> String.replace("_barcode_", image_str)
+
+          if b_bin != nil do
+            b_bin = b_bin |> String.replace("_barcode_", image_str)
+          end
+
+          map = %{contents: f_bin, styles: template["css_bin"], contents2: b_bin}
+          map
+        end
       end
 
     html =
