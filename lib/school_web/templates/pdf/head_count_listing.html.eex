@@ -70,8 +70,10 @@ td img {
 
           <% else %>
 
-             <td><%= tov.s2m %> </td>
-             <td><%= tov.s2g %> </td> 
+             <td><%= if tov.s2m == nil  do "  "  end %>
+                 <%= if tov.s2m != nil  do tov.s2m end %></td>
+             <td><%= if tov.s2g == nil  do "  "  end %>
+                 <%= if tov.s2g != nil  do tov.s2g end %></td> 
          <% end %>
          <%= for item <- @exam_name do %>
 
