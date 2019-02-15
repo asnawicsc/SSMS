@@ -19,7 +19,7 @@ td img {
 
 
 <b  style="font-size: 22px;"><%= @school.name %></b></br>
-<h4><u>ANALISIS DAN TARGET MATA PELAJARAN MENGIKUT PANITIA-Keseluruhan Pencapaian setiap murid</u></h4>
+<h4><u>ANALISIS DAN TARGET MATA PELAJARAN</u></h4>
 <h4>Mata Pelajaran: <%= @subject.description %></h4>
 <h4>Kelas : <%= @class.name %> &nbsp; Tahun: <%= @semester.year %>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nama Guru: <%= @teacher.teacher %><%= @teacher.cteacher %> </h4>
 
@@ -65,14 +65,14 @@ td img {
 
           <%=   if tov == nil do  %>
 
-          <td></td> 
-          <td></td> 
+          <td style="width: 20px;"></td> 
+          <td style="width: 20px;"></td> 
 
           <% else %>
 
              <td style="width: 20px;"><%= if tov.s2m == nil  do "  "  end %>
                  <%= if tov.s2m != nil  do tov.s2m end %></td>
-             <td><%= if tov.s2g == nil  do "  "  end %>
+             <td style="width: 20px;"><%= if tov.s2g == nil  do "  "  end %>
                  <%= if tov.s2g != nil  do tov.s2g end %></td> 
          <% end %>
          <%= for item <- @exam_name do %>
@@ -81,22 +81,22 @@ td img {
 
                <%= if mark == [] do %>
 
-                  <td> </td>
-                  <td></td> 
+                  <td style="width: 20px;"> </td>
+                  <td style="width: 20px;"></td> 
 
                   <% else %>
                  
                 <% mark= mark|>hd %>
                    <%=   if mark == nil do  %>
 
-                <td> </td> 
-                <td></td> 
+                <td style="width: 20px;"> </td> 
+                <td style="width: 20px;"></td> 
 
                 <% else %>
 
-                   <td > <%= if mark.mark == 0  do "  "  end %>
+                   <td style="width: 20px;"> <%= if mark.mark == 0  do "  "  end %>
                     <%= if mark.mark > 0  do mark.mark end %></td>
-                   <td>
+                   <td style="width: 20px;">
                     <%= if mark.mark >= 80 and mark.mark <= 100 do "A" end %>
                     <%= if mark.mark >= 60 and mark.mark <= 79 do "B" end %>
                     <%= if mark.mark >= 50 and mark.mark <= 59 do "C" end %>
@@ -113,22 +113,22 @@ td img {
 
          <%= if etr == [] do %>
 
-            <td> </td>
-            <td></td> 
+            <td style="width: 20px;"> </td>
+            <td style="width: 20px;"></td> 
 
             <% else %>
            
           <% a= etr|>hd %>
              <%=   if a == nil do  %>
 
-          <td> </td> 
-          <td></td> 
+          <td style="width: 20px;"> </td> 
+          <td style="width: 20px;"></td> 
 
           <% else %>
 
-             <td > <%= if a.mark == 0  do "  "  end %>
+             <td style="width: 20px;"> <%= if a.mark == 0  do "  "  end %>
                     <%= if a.mark > 0  do a.mark end %></td>
-             <td>
+             <td style="width: 20px;">
                     <%= if a.mark >= 80 and a.mark <= 100 do "A" end %>
                     <%= if a.mark >= 60 and a.mark <= 79 do "B" end %>
                     <%= if a.mark >= 50 and a.mark <= 59 do "C" end %>
