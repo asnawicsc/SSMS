@@ -88,14 +88,20 @@ defmodule SchoolWeb.PdfController do
     teacher =
       Repo.all(
         from(
-          p in School.Affairs.Period,
+          q in School.Affairs.Timetable,
+          left_join: m in School.Affairs.Period,
+          on: m.timetable_id == q.id,
           left_join: g in School.Affairs.Subject,
-          on: p.subject_id == g.id,
+          on: m.subject_id == g.id,
           left_join: h in School.Affairs.Teacher,
-          on: p.teacher_id == h.id,
-          where: g.timetable_code == ^subject_info.timetable_code,
+          on: q.teacher_id == h.id,
+          where:
+            g.timetable_code == ^subject_info.timetable_code and
+              q.institution_id == ^conn.private.plug_session["institution_id"] and
+              q.semester_id == ^conn.private.plug_session["semester_id"],
           select: %{
-            teacher: h.name
+            teacher: h.name,
+            cteacher: h.cname
           }
         )
       )

@@ -21,7 +21,7 @@ td img {
 <b  style="font-size: 22px;"><%= @school.name %></b></br>
 <h4><u>ANALISIS DAN TARGET MATA PELAJARAN MENGIKUT PANITIA-Keseluruhan Pencapaian setiap murid</u></h4>
 <h4>Mata Pelajaran: <%= @subject.description %></h4>
-<h4>Kelas : <%= @class.name %> &nbsp; Tahun: <%= @semester.year %>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nama Guru: <%= @teacher.teacher %> </h4>
+<h4>Kelas : <%= @class.name %> &nbsp; Tahun: <%= @semester.year %>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nama Guru: <%= @teacher.teacher %><%= @teacher.cteacher %> </h4>
 
 
 <table  class="display" align="center" style="border-collapse: collapse;" border="1" width="100%" >
