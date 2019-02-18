@@ -80,6 +80,8 @@
         <a class="mb-1 btn-sm btn btn-outline-warning" href="/classes/<%= class.id %>/edit">Edit</a>
     <a class="mb-1 btn-sm btn btn-outline-success" href="/class_setting/<%= class.id %>">View</a>
         <a class="mb-1 btn-sm btn btn-outline-primary" href="/height_weight_semester/<%= class.id %>">Heigth & Weight</a>
+
+         <a class="mb-1 btn-sm btn btn-outline-primary" href="/classes/<%= class.id %>/sync_library_membership">Sync Library</a>
       
 
 
