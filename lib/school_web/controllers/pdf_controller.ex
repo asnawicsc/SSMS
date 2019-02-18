@@ -105,7 +105,13 @@ defmodule SchoolWeb.PdfController do
           }
         )
       )
-      |> hd
+
+    teacher =
+      if teacher != [] do
+        teacher |> hd
+      else
+        []
+      end
 
     student_class =
       Repo.all(

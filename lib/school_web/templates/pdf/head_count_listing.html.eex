@@ -37,7 +37,7 @@ td img {
          <%= for item <- @exam_name do %>
             <th colspan="2"><%= item.exam %></th>
          <% end %>
-         <td colspan="2">ETR</td>
+         <th colspan="2">ETR</th>
        
        
           
@@ -54,7 +54,7 @@ td img {
         
               <tr  align="center">
                 <td><%= no + 1 %></td>
-               <td align="left"><%= student.student_name %> <%= student.chinese_name %></td>
+               <td align="left" width="100px;"><%= student.student_name %> <%= student.chinese_name %></td>
                 <td><%= if student.sex == "M" or student.sex == "L" or student.sex == "MALE" or student.sex == "LELAKI" do "L" end %>
                   <%= if student.sex == "F" or student.sex == "P" or student.sex == "FEMALE" or student.sex == "PEREMPUAN" do "P" end %></td>
 
