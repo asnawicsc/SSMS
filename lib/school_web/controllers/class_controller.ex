@@ -813,6 +813,8 @@ defmodule SchoolWeb.ClassController do
           s in School.Affairs.StudentClass,
           left_join: t in School.Affairs.Student,
           on: t.id == s.sudent_id,
+          left_join: c in School.Affairs.Class,
+          on: s.class_id == c.id,
           where:
             s.institute_id == ^School.Affairs.inst_id(conn) and
               s.semester_id == ^conn.private.plug_session["semester_id"] and
@@ -824,7 +826,8 @@ defmodule SchoolWeb.ClassController do
             ic: t.ic,
             student_no: t.student_no,
             phone: t.phone,
-            b_cert: t.b_cert
+            b_cert: t.b_cert,
+            line1: c.name
           }
         )
       )
