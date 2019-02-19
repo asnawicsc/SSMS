@@ -91,7 +91,6 @@ defmodule SchoolWeb.ClassController do
       |> Enum.map(fn x -> params["header"][x] end)
 
     contents = tl(data) |> Enum.uniq() |> Enum.sort() |> Enum.filter(fn x -> x != [""] end)
-    IEx.pry()
 
     result =
       for content <- contents do
