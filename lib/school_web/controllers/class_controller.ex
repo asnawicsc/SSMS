@@ -159,7 +159,7 @@ defmodule SchoolWeb.ClassController do
 
         teacher =
           Repo.get_by(School.Affairs.Teacher,
-            cname: teacher_name,
+            name: teacher_name,
             institution_id: conn.private.plug_session["institution_id"]
           )
 
