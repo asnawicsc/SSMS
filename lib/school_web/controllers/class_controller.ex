@@ -91,6 +91,7 @@ defmodule SchoolWeb.ClassController do
       |> Enum.map(fn x -> params["header"][x] end)
 
     contents = tl(data) |> Enum.uniq() |> Enum.sort() |> Enum.filter(fn x -> x != [""] end)
+    IEx.pry()
 
     result =
       for content <- contents do
@@ -277,200 +278,6 @@ defmodule SchoolWeb.ClassController do
                 start_datetime: complete_start_date
               })
             end
-
-            # if day == day_name do
-            #   Affairs.create_period(%{
-            #     timetable_id: timetable.id,
-            #     teacher_id: teacher.id,
-            #     subject_id: subject.id,
-            #     class_id: class.id,
-            #     end_datetime: complete_end_date,
-            #     start_datetime: complete_start_date
-            #   })
-            # end
-
-            # if item > 7 and item <= 14 do
-            #   number = item - 7
-
-            #   day = number |> Timex.day_name()
-
-            #   tarikh = items
-            #   date = tarikh |> Date.to_string()
-
-            #   condition_start = day_start_time |> String.split(":")
-
-            #   hour_start = condition_start |> List.first() |> String.to_integer()
-
-            #   gg =
-            #     if hour_start <= 10 do
-            #       "0" <> day_start_time <> ":00"
-            #     else
-            #       day_start_time <> ":00"
-            #     end
-
-            #   complete_start_date = date <> " " <> gg
-
-            #   condition_end = day_end_time |> String.split(":")
-
-            #   hour_end = condition_end |> List.first() |> String.to_integer()
-
-            #   gg2 =
-            #     if hour_end <= 10 do
-            #       "0" <> day_end_time <> ":00"
-            #     else
-            #       day_end_time <> ":00"
-            #     end
-
-            #   complete_end_date = date <> " " <> gg2
-
-            #   if day == day_name do
-            #     Affairs.create_period(%{
-            #       timetable_id: timetable.id,
-            #       teacher_id: teacher.id,
-            #       subject_id: subject.id,
-            #       class_id: class.id,
-            #       end_datetime: complete_end_date,
-            #       start_datetime: complete_start_date
-            #     })
-            #   end
-            # end
-
-            # if item > 14 and item <= 21 do
-            #   number = item - 14
-
-            #   day = number |> Timex.day_name()
-
-            #   tarikh = items
-            #   date = tarikh |> Date.to_string()
-
-            #   condition_start = day_start_time |> String.split(":")
-
-            #   hour_start = condition_start |> List.first() |> String.to_integer()
-
-            #   gg =
-            #     if hour_start <= 10 do
-            #       "0" <> day_start_time <> ":00"
-            #     else
-            #       day_start_time <> ":00"
-            #     end
-
-            #   complete_start_date = date <> " " <> gg
-
-            #   condition_end = day_end_time |> String.split(":")
-
-            #   hour_end = condition_end |> List.first() |> String.to_integer()
-
-            #   gg2 =
-            #     if hour_end <= 10 do
-            #       "0" <> day_end_time <> ":00"
-            #     else
-            #       day_end_time <> ":00"
-            #     end
-
-            #   complete_end_date = date <> " " <> gg2
-
-            #   if day == day_name do
-            #     Affairs.create_period(%{
-            #       timetable_id: timetable.id,
-            #       teacher_id: teacher.id,
-            #       subject_id: subject.id,
-            #       class_id: class.id,
-            #       end_datetime: complete_end_date,
-            #       start_datetime: complete_start_date
-            #     })
-            #   end
-            # end
-
-            # if item > 21 and item <= 28 do
-            #   number = item - 21
-
-            #   day = number |> Timex.day_name()
-
-            #   tarikh = items
-            #   date = tarikh |> Date.to_string()
-
-            #   condition_start = day_start_time |> String.split(":")
-
-            #   hour_start = condition_start |> List.first() |> String.to_integer()
-
-            #   gg =
-            #     if hour_start <= 10 do
-            #       "0" <> day_start_time <> ":00"
-            #     else
-            #       day_start_time <> ":00"
-            #     end
-
-            #   complete_start_date = date <> " " <> gg
-
-            #   condition_end = day_end_time |> String.split(":")
-
-            #   hour_end = condition_end |> List.first() |> String.to_integer()
-
-            #   gg2 =
-            #     if hour_end <= 10 do
-            #       "0" <> day_end_time <> ":00"
-            #     else
-            #       day_end_time <> ":00"
-            #     end
-
-            #   complete_end_date = date <> " " <> gg2
-
-            #   if day == day_name do
-            #     Affairs.create_period(%{
-            #       timetable_id: timetable.id,
-            #       teacher_id: teacher.id,
-            #       subject_id: subject.id,
-            #       class_id: class.id,
-            #       end_datetime: complete_end_date,
-            #       start_datetime: complete_start_date
-            #     })
-            #   end
-            # end
-
-            # if item > 28 and item <= 31 do
-            #   number = item - 28
-            #   day = number |> Timex.day_name()
-
-            #   tarikh = items
-            #   date = tarikh |> Date.to_string()
-
-            #   condition_start = day_start_time |> String.split(":")
-
-            #   hour_start = condition_start |> List.first() |> String.to_integer()
-
-            #   gg =
-            #     if hour_start <= 10 do
-            #       "0" <> day_start_time <> ":00"
-            #     else
-            #       day_start_time <> ":00"
-            #     end
-
-            #   complete_start_date = date <> " " <> gg
-
-            #   condition_end = day_end_time |> String.split(":")
-
-            #   hour_end = condition_end |> List.first() |> String.to_integer()
-
-            #   gg2 =
-            #     if hour_end <= 10 do
-            #       "0" <> day_end_time <> ":00"
-            #     else
-            #       day_end_time <> ":00"
-            #     end
-
-            #   complete_end_date = date <> " " <> gg2
-
-            #   if day == day_name do
-            #     Affairs.create_period(%{
-            #       timetable_id: timetable.id,
-            #       teacher_id: teacher.id,
-            #       subject_id: subject.id,
-            #       class_id: class.id,
-            #       end_datetime: complete_end_date,
-            #       start_datetime: complete_start_date
-            #     })
-            #   end
-            # end
           end
         else
           timetable =
@@ -534,191 +341,6 @@ defmodule SchoolWeb.ClassController do
                 start_datetime: complete_start_date
               })
             end
-
-            # if item > 7 and item <= 14 do
-            #   number = item - 7
-
-            #   day = number |> Timex.day_name()
-
-            #   tarikh = items
-            #   date = tarikh |> Date.to_string()
-
-            #   condition_start = day_start_time |> String.split(":")
-
-            #   hour_start = condition_start |> List.first() |> String.to_integer()
-
-            #   gg =
-            #     if hour_start <= 10 do
-            #       "0" <> day_start_time <> ":00"
-            #     else
-            #       day_start_time <> ":00"
-            #     end
-
-            #   complete_start_date = date <> " " <> gg
-
-            #   condition_end = day_end_time |> String.split(":")
-
-            #   hour_end = condition_end |> List.first() |> String.to_integer()
-
-            #   gg2 =
-            #     if hour_end <= 10 do
-            #       "0" <> day_end_time <> ":00"
-            #     else
-            #       day_end_time <> ":00"
-            #     end
-
-            #   complete_end_date = date <> " " <> gg2
-
-            #   if day == day_name do
-            #     Affairs.create_period(%{
-            #       timetable_id: timetable.id,
-            #       teacher_id: teacher.id,
-            #       subject_id: subject.id,
-            #       class_id: class.id,
-            #       end_datetime: complete_end_date,
-            #       start_datetime: complete_start_date
-            #     })
-            #   end
-            # end
-
-            # if item > 14 and item <= 21 do
-            #   number = item - 14
-
-            #   day = number |> Timex.day_name()
-
-            #   tarikh = items
-            #   date = tarikh |> Date.to_string()
-
-            #   condition_start = day_start_time |> String.split(":")
-
-            #   hour_start = condition_start |> List.first() |> String.to_integer()
-
-            #   gg =
-            #     if hour_start <= 10 do
-            #       "0" <> day_start_time <> ":00"
-            #     else
-            #       day_start_time <> ":00"
-            #     end
-
-            #   complete_start_date = date <> " " <> gg
-
-            #   condition_end = day_end_time |> String.split(":")
-
-            #   hour_end = condition_end |> List.first() |> String.to_integer()
-
-            #   gg2 =
-            #     if hour_end <= 10 do
-            #       "0" <> day_end_time <> ":00"
-            #     else
-            #       day_end_time <> ":00"
-            #     end
-
-            #   complete_end_date = date <> " " <> gg2
-
-            #   if day == day_name do
-            #     Affairs.create_period(%{
-            #       timetable_id: timetable.id,
-            #       teacher_id: teacher.id,
-            #       subject_id: subject.id,
-            #       class_id: class.id,
-            #       end_datetime: complete_end_date,
-            #       start_datetime: complete_start_date
-            #     })
-            #   end
-            # end
-
-            # if item > 21 and item <= 28 do
-            #   number = item - 21
-
-            #   day = number |> Timex.day_name()
-
-            #   tarikh = items
-            #   date = tarikh |> Date.to_string()
-
-            #   condition_start = day_start_time |> String.split(":")
-
-            #   hour_start = condition_start |> List.first() |> String.to_integer()
-
-            #   gg =
-            #     if hour_start <= 10 do
-            #       "0" <> day_start_time <> ":00"
-            #     else
-            #       day_start_time <> ":00"
-            #     end
-
-            #   complete_start_date = date <> " " <> gg
-
-            #   condition_end = day_end_time |> String.split(":")
-
-            #   hour_end = condition_end |> List.first() |> String.to_integer()
-
-            #   gg2 =
-            #     if hour_end <= 10 do
-            #       "0" <> day_end_time <> ":00"
-            #     else
-            #       day_end_time <> ":00"
-            #     end
-
-            #   complete_end_date = date <> " " <> gg2
-
-            #   if day == day_name do
-            #     Affairs.create_period(%{
-            #       timetable_id: timetable.id,
-            #       teacher_id: teacher.id,
-            #       subject_id: subject.id,
-            #       class_id: class.id,
-            #       end_datetime: complete_end_date,
-            #       start_datetime: complete_start_date
-            #     })
-            #   end
-            # end
-
-            # if item > 28 and item <= 31 do
-            #   number = item - 28
-            #   day = number |> Timex.day_name()
-
-            #   if day == day_name do
-            #     tarikh = items
-            #     date = tarikh |> Date.to_string()
-
-            #     condition_start = day_start_time |> String.split(":")
-
-            #     hour_start = condition_start |> List.first() |> String.to_integer()
-
-            #     gg =
-            #       if hour_start <= 10 do
-            #         "0" <> day_start_time <> ":00"
-            #       else
-            #         day_start_time <> ":00"
-            #       end
-
-            #     complete_start_date = date <> " " <> gg
-
-            #     condition_end = day_end_time |> String.split(":")
-
-            #     hour_end = condition_end |> List.first() |> String.to_integer()
-
-            #     gg2 =
-            #       if hour_end <= 10 do
-            #         "0" <> day_end_time <> ":00"
-            #       else
-            #         day_end_time <> ":00"
-            #       end
-
-            #     complete_end_date = date <> " " <> gg2
-
-            #     if day == day_name do
-            #       Affairs.create_period(%{
-            #         timetable_id: timetable.id,
-            #         teacher_id: teacher.id,
-            #         subject_id: subject.id,
-            #         class_id: class.id,
-            #         end_datetime: complete_end_date,
-            #         start_datetime: complete_start_date
-            #       })
-            #     end
-            #   end
-            # end
           end
         end
       end
@@ -804,6 +426,61 @@ defmodule SchoolWeb.ClassController do
       )
 
     render(conn, "class_analysis.html", semesters: semesters, classes: classes)
+  end
+
+  def student_sync_library_membership(conn, params) do
+    students_in =
+      Repo.all(
+        from(
+          s in School.Affairs.StudentClass,
+          left_join: t in School.Affairs.Student,
+          on: t.id == s.sudent_id,
+          left_join: c in School.Affairs.Class,
+          on: s.class_id == c.id,
+          where:
+            s.institute_id == ^School.Affairs.inst_id(conn) and
+              s.semester_id == ^conn.private.plug_session["semester_id"] and
+              s.sudent_id == ^String.to_integer(params["id"]),
+          select: %{
+            chinese_name: t.chinese_name,
+            name: t.name,
+            id: t.id,
+            ic: t.ic,
+            student_no: t.student_no,
+            phone: t.phone,
+            b_cert: t.b_cert,
+            line1: c.name
+          }
+        )
+      )
+
+    inst = Repo.get(Institution, School.Affairs.inst_id(conn))
+
+    student_id = params["id"]
+
+    uri = Application.get_env(:school, :api)[:url]
+    lib_id = inst.library_organization_id
+
+    a =
+      for student <- students_in do
+        Task.start_link(__MODULE__, :reg_lib_student, [student, lib_id, uri])
+      end
+
+    url = student_path(conn, :index, focus: student_id)
+    referer = conn.req_headers |> Enum.filter(fn x -> elem(x, 0) == "referer" end)
+
+    if referer != [] do
+      refer = hd(referer)
+      url = refer |> elem(1) |> String.split("?") |> List.first()
+
+      conn
+      |> put_flash(:info, "Library membership synced!.")
+      |> redirect(external: url <> "?focus=#{student_id}")
+    else
+      conn
+      |> put_flash(:info, "Library membership synced!.")
+      |> redirect(to: url)
+    end
   end
 
   def sync_library_membership(conn, params) do

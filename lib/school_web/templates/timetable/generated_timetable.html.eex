@@ -138,8 +138,8 @@
             // --------------------------- Example 1 ---------------------------
             var $sked1 = $('#sked1').skedTape({
                 caption: 'Day',
-                start: start(07,40),
-                end: end(13, 0),
+                start: start(07,0),
+                end: end(14, 0),
                 showEventTime: true,
                 showEventText: true,
                 showEventDuration: true,
