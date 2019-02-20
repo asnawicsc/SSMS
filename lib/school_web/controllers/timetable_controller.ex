@@ -231,7 +231,7 @@ defmodule SchoolWeb.TimetableController do
       class: class,
       period: period,
       first_hour: first_hour,
-      last_hour: last_hour
+      last_hour: last_hour + 1
     )
   end
 end
