@@ -25,7 +25,7 @@
                         <table class="table" id="datatable1">
                           <thead>
                             <tr>
-                              <th></th>
+                             
                                 <th>Name</th>
                                 <th>User Login</th>
                              
@@ -34,7 +34,7 @@
                             <tbody>
                             <%= for teacher <- @teacher do %>
                               <tr>
-                                <td class="text-left"> <img id="preview6"  style='width:20px; height: 20px;' src='data:image/png;base64, <%= teacher.image_bin %>'></td>
+                                
                                 <td>   
                                   <div id="<%= teacher.code %> " class="btn btn-link teacher"><%= teacher.name %> <%= teacher.cname %></div></td>
                                 <td>
@@ -67,6 +67,8 @@
                     </div>
                   </div>
                 </div>
+
+             
                 <div class="col-lg-4" aria-label="teacher_upload">
                   <div class="card card-default d-none d-lg-block">
                     <div class="card-body">
