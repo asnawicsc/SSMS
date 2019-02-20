@@ -221,12 +221,17 @@ defmodule SchoolWeb.TimetableController do
       |> Enum.reject(fn x -> x == nil end)
       |> Enum.uniq()
 
+    first_hour = all2 |> Enum.map(fn x -> x.start_hour end) |> Enum.min()
+    last_hour = all2 |> Enum.map(fn x -> x.end_hour end) |> Enum.max()
+
     class = Repo.get_by(Class, id: params["id"])
 
     render(conn, "generated_timetable.html",
       all2: Poison.encode!(all2),
       class: class,
-      period: period
+      period: period,
+      first_hour: first_hour,
+      last_hour: last_hour
     )
   end
 end

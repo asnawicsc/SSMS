@@ -86,6 +86,10 @@
 
     var maps = JSON.parse('<%=raw(@all2)%>')
 
+      var first_hour = JSON.parse('<%= @first_hour %>')
+
+        var last_hour = JSON.parse('<%= @last_hour %>')
+
    $(maps).each(function(i,v) {
           console.log(v)
 
@@ -138,8 +142,8 @@
             // --------------------------- Example 1 ---------------------------
             var $sked1 = $('#sked1').skedTape({
                 caption: 'Day',
-                start: start(07,0),
-                end: end(14, 0),
+                start: start(first_hour,0),
+                end: end(last_hour, 0),
                 showEventTime: true,
                 showEventText: true,
                 showEventDuration: true,
