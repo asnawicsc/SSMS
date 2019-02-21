@@ -514,10 +514,11 @@ defmodule SchoolWeb.StudentController do
                     select: %{
                       image_bin: s.image_bin,
                       id: s.id,
-                      name: s.name,
                       chinese_name: s.chinese_name,
-                      class: cl.name,
-                      b_cert: s.b_cert
+                      b_cert: s.b_cert,
+                      student_no: s.student_no,
+                      name: s.name,
+                      class_name: cl.name
                     }
                   )
                 )
@@ -545,11 +546,13 @@ defmodule SchoolWeb.StudentController do
                   c.semester_id == ^conn.private.plug_session["semester_id"],
               order_by: [asc: s.name],
               select: %{
+                image_bin: s.image_bin,
                 id: s.id,
-                name: s.name,
                 chinese_name: s.chinese_name,
-                class: cl.name,
-                b_cert: s.b_cert
+                b_cert: s.b_cert,
+                student_no: s.student_no,
+                name: s.name,
+                class_name: cl.name
               }
             )
           )
