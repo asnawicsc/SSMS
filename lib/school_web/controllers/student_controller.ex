@@ -508,10 +508,11 @@ defmodule SchoolWeb.StudentController do
                       s.id == ^student.student_id and
                         s.institution_id == ^conn.private.plug_session["institution_id"] and
                         c.institute_id == ^conn.private.plug_session["institution_id"] and
-                        cl.institute_id == ^conn.private.plug_session["institution_id"] and
+                        cl.institution_id == ^conn.private.plug_session["institution_id"] and
                         c.semester_id == ^conn.private.plug_session["semester_id"],
                     order_by: [asc: s.name],
                     select: %{
+                      image_bin: s.image_bin,
                       id: s.id,
                       name: s.name,
                       chinese_name: s.chinese_name,
