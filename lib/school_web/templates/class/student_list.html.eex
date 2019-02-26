@@ -21,6 +21,15 @@
 </form>
 &nbsp;
 &nbsp;
+ <form action="/pdf/student_class_listing_parent" method="POST">
+ <input type="hidden" name="class_id" value="<%= @class_id %>">
+  <input type="hidden" name="semester_id" value="<%= @semester_id %>">
+  <input type="hidden" name="_csrf_token" value="<%= @csrf %>">
+  <button class="mb-1 btn btn-warning" type="submit" name="" value="Generate">Print (Parent Info)</button>
+
+</form>
+&nbsp;
+&nbsp;
  <form action="csv_student_class" method="POST">
  <input type="hidden" name="class_id" value="<%= @class_id %>">
   <input type="hidden" name="semester_id" value="<%= @semester_id %>">

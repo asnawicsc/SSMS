@@ -1,0 +1,77 @@
+
+<table class="table" border="1"  width="100%">
+  
+  <tbody>
+<td >
+<b  style="font-size: 25px;"><%= @institution.name %></b></br>
+班级<b> Kelas: <%= @class.name %></b> <br>
+老师<b> Nama GURU : ________________________________________________________________ </b><br>
+事项<b> PERKARA &nbsp;&nbsp;&nbsp;: ________________________________________________________________</b><b style="margin-left: 376px;"> 日期 Tarikh:<%= SchoolWeb.LayoutView.my_time(DateTime.utc_now) %></b> 
+
+&nbsp;&nbsp; &nbsp;  </td>
+    </tbody>
+</table>
+
+<table class="table" border="1" width="100%" >
+  <thead>
+    <tr align="center">
+      <th><%= gettext "No" %></th>
+      <th><%= gettext "Name" %></th>
+      <th><%= gettext "中文姓名" %></th>
+      <th><%= gettext "No.KP" %></th>
+      <th><%= gettext "No. Sijil Lahir" %></th>
+      <th>Nama Bapa</th>
+      <th>No. Tel Bimbit Bapa</th>
+      <th>Nama Ibu</th>
+      <th>No. Tel Bimbit Ibu</th>
+      <th>Alamat Rumah</th>
+     
+
+
+    </tr>
+  </thead>
+  <tbody>
+<%= for item <- @all do %>
+<% no=item|>elem(1) %>
+<% item=item|>elem(0) %>
+
+    <tr align="center">
+      <td><%= no+1 %></td>
+        <%= if String.length(item.name) > 34 do %>
+       <td align="left" style="font-size: 10px; width: auto; height: auto;" ><%=  item.name %></td>
+        <% else %>
+        <td align="left" ><%=  item.name %></td>
+       <% end  %>
+       <td width="80px" style="font-size: 14px;"><%= item.chinese_name %></td>
+       <td ><%= item.icno %></td>
+       <td ><%= item.b_cert %></td>
+       <td ><%= item.fname %></td>
+       <td><%= item.fhphone %></td>
+       <td ><%= item.mname %></td>
+       <td ><%= item.mphone %></td>
+       <td ><%= item.line1 %>&nbsp;<%= item.line2 %>&nbsp; <%= item.postcode %>&nbsp;<%= item.town %>&nbsp;<%= item.state %>&nbsp;<%= item.country %></td>
+       
+
+    </tr>
+<% end %>
+
+
+  </tbody>
+</table>
+
+<style type="text/css">
+  
+  table { 
+
+    border-spacing: 0;
+    border-collapse: collapse;
+    font-size: 16px;
+    white-space: nowrap;
+}
+td {
+    padding:4px;
+}
+td img {
+    display:block;
+}
+</style>
