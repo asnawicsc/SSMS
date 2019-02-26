@@ -2621,6 +2621,50 @@ defmodule SchoolWeb.PdfController do
             {mphone, mname}
           end
 
+        a =
+          if item.line1 != nil do
+            item.line1 <> ","
+          else
+            ","
+          end
+
+        b =
+          if item.line2 != nil do
+            item.line2 <> ","
+          else
+            ","
+          end
+
+        c =
+          if item.postcode != nil do
+            item.postcode <> ","
+          else
+            ","
+          end
+
+        d =
+          if item.town != nil do
+            item.town <> ","
+          else
+            ","
+          end
+
+        e =
+          if item.state != nil do
+            item.state <> ","
+          else
+            ","
+          end
+
+        f =
+          if item.country != nil do
+            item.country
+          else
+            ""
+          end
+
+        address = a <> b <> c <> d <> e <> f
+
         %{
           name: item.name,
           chinese_name: item.chinese_name,
@@ -2630,12 +2674,7 @@ defmodule SchoolWeb.PdfController do
           fhphone: fhphone,
           mname: mname,
           mphone: mphone,
-          line1: item.line1,
-          line2: item.line2,
-          postcode: item.postcode,
-          town: item.town,
-          state: item.state,
-          country: item.country
+          address: address
         }
       end
 
@@ -2656,12 +2695,7 @@ defmodule SchoolWeb.PdfController do
           fhphone: "",
           mname: "",
           mphone: "",
-          line1: "",
-          line2: "",
-          postcode: "",
-          town: "",
-          state: "",
-          country: ""
+          address: ""
         }
       end
 
