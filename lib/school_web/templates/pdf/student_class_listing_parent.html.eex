@@ -49,7 +49,7 @@
        <td><%= item.fhphone %></td>
        <td ><%= item.mname %></td>
        <td ><%= item.mphone %></td>
-       <td ><%= item.line1 %>&nbsp;<%= item.line2 %>&nbsp;<%= item.postcode %><br><%= item.town %>&nbsp;<%= item.state %>&nbsp;<%= item.country %></td>
+       <td ><%= item.line1 %><br><%= item.line2 %><br><%= item.postcode %><br><%= item.town %>&nbsp;<%= item.state %>&nbsp;<%= item.country %></td>
        
 
     </tr>
