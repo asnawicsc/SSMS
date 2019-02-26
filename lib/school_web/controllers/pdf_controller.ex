@@ -2575,8 +2575,25 @@ defmodule SchoolWeb.PdfController do
 
     all =
       for item <- all do
-        father = Repo.get_by(School.Affairs.Parent, icno: item.ficno)
-        mother = Repo.get_by(School.Affairs.Parent, icno: item.ficno)
+        ficno = item.ficno
+        micno = item.micno
+
+        ficno =
+          if ficno == nil do
+            ""
+          else
+            ficno
+          end
+
+        micno =
+          if micno == nil do
+            ""
+          else
+            micno
+          end
+
+        father = Repo.get_by(School.Affairs.Parent, icno: ficno)
+        mother = Repo.get_by(School.Affairs.Parent, icno: micno)
 
         {fhphone, fname} =
           if father != nil do
