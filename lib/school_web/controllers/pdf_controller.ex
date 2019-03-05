@@ -2747,7 +2747,9 @@ defmodule SchoolWeb.PdfController do
           "--margin-bottom",
           "5",
           "--encoding",
-          "utf-8"
+          "utf-8",
+          "--orientation",
+          "Landscape"
         ],
         delete_temporary: true
       )
