@@ -968,7 +968,7 @@ defmodule SchoolWeb.ClassController do
       Repo.all(
         from(s in School.Affairs.Subject,
           where: s.institution_id == ^inst_id,
-          select: %{timetable_description: s.timetable_description}
+          select: %{id: s.id, timetable_description: s.timetable_description}
         )
       )
       |> Enum.uniq()
