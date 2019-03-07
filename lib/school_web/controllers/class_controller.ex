@@ -965,8 +965,12 @@ defmodule SchoolWeb.ClassController do
     teachers = Affairs.list_teacher(inst_id)
 
     subjects =
-      Affairs.list_subject(inst_id)
-      |> Enum.filter(fn x -> x.timetable_description end)
+      Repo.all(
+        from(s in School.Affairs.Subject,
+          where: s.institution_id == ^inst_id,
+          select: %{timetable_description: s.timetable_description}
+        )
+      )
       |> Enum.uniq()
 
     class = Repo.get(Class, params["class_id"])
