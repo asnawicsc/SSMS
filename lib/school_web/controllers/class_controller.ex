@@ -963,7 +963,12 @@ defmodule SchoolWeb.ClassController do
   def modify_timetable(conn, params) do
     inst_id = Affairs.get_inst_id(conn)
     teachers = Affairs.list_teacher(inst_id)
-    subjects = Affairs.list_subject(inst_id)
+
+    subjects =
+      Affairs.list_subject(inst_id)
+      |> Enum.filter(fn x -> x.timetable_description end)
+      |> Enum.uniq()
+
     class = Repo.get(Class, params["class_id"])
     render(conn, "modify_timetable.html", class: class, teachers: teachers, subjects: subjects)
   end
