@@ -971,7 +971,7 @@ defmodule SchoolWeb.ClassController do
           select: %{id: s.id, timetable_description: s.timetable_description}
         )
       )
-      |> Enum.uniq()
+      |> Enum.uniq_by(fn x -> x.timetable_description end)
 
     class = Repo.get(Class, params["class_id"])
     render(conn, "modify_timetable.html", class: class, teachers: teachers, subjects: subjects)
