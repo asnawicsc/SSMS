@@ -74,7 +74,8 @@ defmodule SchoolWeb.ExamGradeController do
           where:
             em.institution_id == ^conn.private.plug_session["institution_id"] and
               e.institution_id == ^conn.private.plug_session["institution_id"] and
-              sm.id == ^params["semester_id"] and em.name == ^params["exam_name"],
+              sm.id == ^params["semester_id"] and em.name == ^params["exam_name"] and
+              em.level_id == ^params["level"],
           select: %{
             name: e.name,
             min: e.min,
