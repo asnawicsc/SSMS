@@ -308,7 +308,8 @@ defmodule SchoolWeb.ExamController do
                   s.institution_id == ^conn.private.plug_session["institution_id"] and
                   g.institution_id == ^conn.private.plug_session["institution_id"] and
                   q.institution_id == ^conn.private.plug_session["institution_id"] and
-                  m.institution_id == ^conn.private.plug_session["institution_id"],
+                  m.institution_id == ^conn.private.plug_session["institution_id"] and
+                  s.is_delete == 0,
               select: %{
                 id: p.id,
                 c_id: s.id,
@@ -319,6 +320,8 @@ defmodule SchoolWeb.ExamController do
               }
             )
           )
+
+        IO.inspect(a)
 
         {class, a}
       else
@@ -362,7 +365,8 @@ defmodule SchoolWeb.ExamController do
                   s.institution_id == ^conn.private.plug_session["institution_id"] and
                   g.institution_id == ^conn.private.plug_session["institution_id"] and
                   q.institution_id == ^conn.private.plug_session["institution_id"] and
-                  m.institution_id == ^conn.private.plug_session["institution_id"],
+                  m.institution_id == ^conn.private.plug_session["institution_id"] and
+                  s.is_delete == 0,
               select: %{
                 id: p.id,
                 c_id: s.id,
@@ -373,6 +377,7 @@ defmodule SchoolWeb.ExamController do
               }
             )
           )
+          |> Enum.uniq()
 
         {class, a}
       end
