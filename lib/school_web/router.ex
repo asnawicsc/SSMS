@@ -31,7 +31,7 @@ defmodule SchoolWeb.Router do
     get("/contacts_us", PageController, :contacts_us)
     post("/match_parents_ic", ParentController, :match_parents_ic)
     get("/redirect_from_li6", PageController, :redirect_from_li6)
-    post("/delete_duplicate_icno", ParentController, :delete_duplicate_icno)
+    get("/delete_duplicate_icno", ParentController, :delete_duplicate_icno)
   end
 
   # Other scopes may use custom stacks.
