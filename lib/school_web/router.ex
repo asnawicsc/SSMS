@@ -134,7 +134,7 @@ defmodule SchoolWeb.Router do
     )
 
     get(
-      "/show_exam_grade/:exam_name/semester/:semester_id/:level",
+      "/show_exam_grade/:exam_name/semester/:semester_id/standard/:level",
       ExamGradeController,
       :show_exam_grade
     )

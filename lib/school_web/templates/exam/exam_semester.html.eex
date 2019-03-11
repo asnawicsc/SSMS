@@ -30,7 +30,7 @@
                         Exam Period
                       </button></a>
 
-                       <a href="/show_exam_grade/<%= e.exam_name %>/semester/<%= e.semester_id %>/<%= e.level %>"><button class="btn btn-labeled btn-xs btn-success mb-2" type="button" >
+                       <a href="/show_exam_grade/<%= e.exam_name %>/semester/<%= e.semester_id %>/standard/<%= e.level %>"><button class="btn btn-labeled btn-xs btn-success mb-2" type="button" >
                         <span class="btn-label"><i class="fa fa-search"></i></span>
                         Exam Grade
                       </button></a>
