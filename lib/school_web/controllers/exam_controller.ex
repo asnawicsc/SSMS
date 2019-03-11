@@ -333,8 +333,16 @@ defmodule SchoolWeb.ExamController do
         class =
           Repo.all(
             from(
-              s in School.Affairs.Class,
-              where: s.institution_id == ^conn.private.plug_session["institution_id"],
+              p in School.Affairs.Period,
+              left_join: f in School.Affairs.Timetable,
+              on: p.timetable_id == f.id,
+              left_join: s in School.Affairs.Class,
+              on: s.id == p.class_id,
+              where:
+                f.institution_id == ^conn.private.plug_session["institution_id"] and
+                  f.semester_id == ^conn.private.plug_session["semester_id"] and
+                  s.institution_id == ^conn.private.plug_session["institution_id"] and
+                  p.teacher_id == ^teacher.id,
               select: %{id: s.id, name: s.name}
             )
           )
@@ -346,35 +354,92 @@ defmodule SchoolWeb.ExamController do
             class
           end
 
-        a =
+        period_subjects =
           Repo.all(
             from(
-              p in School.Affairs.Exam,
-              left_join: m in School.Affairs.ExamMaster,
-              on: m.id == p.exam_master_id,
-              left_join: q in School.Affairs.Level,
-              on: q.id == m.level_id,
-              left_join: g in School.Affairs.Subject,
-              on: g.id == p.subject_id,
-              left_join: s in School.Affairs.Class,
-              on: s.level_id == m.level_id,
-              where:
-                m.semester_id == ^conn.private.plug_session["semester_id"] and
-                  s.institution_id == ^conn.private.plug_session["institution_id"] and
-                  g.institution_id == ^conn.private.plug_session["institution_id"] and
-                  q.institution_id == ^conn.private.plug_session["institution_id"] and
-                  m.institution_id == ^conn.private.plug_session["institution_id"] and
-                  s.is_delete == 0,
+              p in School.Affairs.Period,
+              left_join: tt in School.Affairs.Timetable,
+              on: p.timetable_id == tt.id,
+              left_join: s in School.Affairs.Subject,
+              on: s.id == p.subject_id,
+              left_join: c in School.Affairs.Class,
+              on: c.id == p.class_id,
+              left_join: t in School.Affairs.Teacher,
+              on: t.id == p.teacher_id,
+              where: tt.teacher_id == ^teacher.id,
               select: %{
-                id: p.id,
-                c_id: s.id,
-                s_id: g.id,
-                class: s.name,
-                exam: m.name,
-                subject: g.description
+                subject: s.timetable_description,
+                class: c.name,
+                teacher: t.name
               }
             )
           )
+
+        a =
+          for period_subject <- period_subjects do
+            Repo.all(
+              from(
+                p in School.Affairs.Exam,
+                left_join: m in School.Affairs.ExamMaster,
+                on: m.id == p.exam_master_id,
+                left_join: q in School.Affairs.Level,
+                on: q.id == m.level_id,
+                left_join: g in School.Affairs.Subject,
+                on: g.id == p.subject_id,
+                left_join: s in School.Affairs.Class,
+                on: s.level_id == m.level_id,
+                where:
+                  m.semester_id == ^conn.private.plug_session["semester_id"] and
+                    s.institution_id == ^conn.private.plug_session["institution_id"] and
+                    g.institution_id == ^conn.private.plug_session["institution_id"] and
+                    q.institution_id == ^conn.private.plug_session["institution_id"] and
+                    m.institution_id == ^conn.private.plug_session["institution_id"] and
+                    s.is_delete == 0 and g.timetable_description == ^period_subject.subject and
+                    s.name == ^period_subject.class,
+                select: %{
+                  id: p.id,
+                  c_id: s.id,
+                  s_id: g.id,
+                  class: s.name,
+                  exam: m.name,
+                  subject: g.description
+                }
+              )
+            )
+          end
+          |> List.flatten()
+
+        # a =
+        #   Repo.all(
+        #     from(
+        #       p in School.Affairs.Exam,
+        #       left_join: m in School.Affairs.ExamMaster,
+        #       on: m.id == p.exam_master_id,
+        #       left_join: q in School.Affairs.Level,
+        #       on: q.id == m.level_id,
+        #       left_join: g in School.Affairs.Subject,
+        #       on: g.id == p.subject_id,
+        #       left_join: s in School.Affairs.Class,
+        #       on: s.level_id == m.level_id,
+        #       left_join: f in School.Affairs.Period,
+        #       on: f.s == f.id,
+        #       where:
+        #         m.semester_id == ^conn.private.plug_session["semester_id"] and
+        #           s.institution_id == ^conn.private.plug_session["institution_id"] and
+        #           g.institution_id == ^conn.private.plug_session["institution_id"] and
+        #           q.institution_id == ^conn.private.plug_session["institution_id"] and
+        #           m.institution_id == ^conn.private.plug_session["institution_id"] and
+        #           s.is_delete == 0,
+        #       select: %{
+        #         id: p.id,
+        #         c_id: s.id,
+        #         s_id: g.id,
+        #         class: s.name,
+        #         exam: m.name,
+        #         subject: g.description
+        #       }
+        #     )
+        #   )
 
         {class, a}
       end
