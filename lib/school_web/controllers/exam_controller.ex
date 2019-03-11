@@ -26,6 +26,7 @@ defmodule SchoolWeb.ExamController do
             semester: sm.start_date,
             semester_id: sm.id,
             level: l.name
+            level_id: em.level_id
           }
         )
       )
