@@ -343,7 +343,13 @@ defmodule SchoolWeb.ExamController do
               select: %{id: s.id, name: s.name}
             )
           )
-          |> Enum.uniq()
+
+        class =
+          if class != [] do
+            class |> Enum.uniq()
+          else
+            class
+          end
 
         a =
           Repo.all(
