@@ -189,7 +189,13 @@
           <a  href="/class_setting"]"><button class="mb-1 btn-sm btn btn-outline-primary" type="button" style="display: none;">Settings</button></a>
        </div>
     </div>
+    <div class="card card-default mb-3">
 
+       <% a = @conn %>
+
+
+    
+    </div>
     <div class="card card-default mb-3">
 
        <div class="card-body">

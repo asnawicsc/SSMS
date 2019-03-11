@@ -85,6 +85,9 @@ defmodule School.Affairs.Parent do
       :epstate,
       :inctaxno
     ])
+    |> validate_required([:icno])
+    |> unique_constraint(:icno)
+    |> unique_constraint(:icno)
   end
 
   def delete_duplicate_icno() do

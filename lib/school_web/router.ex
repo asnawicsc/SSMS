@@ -276,6 +276,8 @@ defmodule SchoolWeb.Router do
 
     get("/attendance/class/:class_id", AttendanceController, :class_attendance)
 
+    get("/delete_duplicate_icno", ParentController, :delete_duplicate_icno)
+
     get("/print_timetable/:panel", PdfController, :print_timetable)
 
     get("/exam/marking/:id/:c_id/:s_id", ExamController, :marking)

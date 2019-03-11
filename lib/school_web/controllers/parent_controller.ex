@@ -309,4 +309,26 @@ defmodule SchoolWeb.ParentController do
     |> put_flash(:info, "Parent created successfully.")
     |> redirect(to: parent_path(conn, :index))
   end
+
+  def delete_duplicate_icno() do
+    import Ecto.Query
+
+    s_no =
+      School.Repo.all(
+        from(
+          s in School.Affairs.Parent,
+          group_by: [s.icno],
+          select: %{ct: count(s.icno), no: s.icno}
+        )
+      )
+      |> Enum.filter(fn x -> x.ct > 1 end)
+      |> Enum.map(fn x -> x.no end)
+
+    for s_n <- s_no do
+      students = School.Repo.all(from(s in School.Affairs.Parent, where: s.icno == ^s_n))
+
+      {student, dup_students} = List.pop_at(students, 0)
+      Enum.map(dup_students, fn x -> School.Repo.delete(x) end)
+    end
+  end
 end
