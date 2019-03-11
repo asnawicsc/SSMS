@@ -7,23 +7,28 @@ defmodule SchoolWeb.EhomeworkController do
 
   def ehomework(conn, params) do
     user = Repo.get(User, conn.private.plug_session["user_id"])
+    teacher = Repo.get_by(Affairs.Teacher, email: user.email)
     class = Repo.get(Class, params["class_id"])
 
     subjects =
       Repo.all(
-        from(
-          st in SubjectTeachClass,
-          left_join: c in Class,
-          on: st.class_id == c.id,
+        from(p in School.Affairs.Period,
+          left_join: r in School.Affairs.Timetable,
+          on: p.timetable_id == r.id,
           left_join: s in Subject,
-          on: st.subject_id == s.id,
-          where: c.id == ^class.id,
+          on: p.subject_id == s.id,
+          where:
+            r.institution_id == ^conn.private.plug_session["institution_id"] and
+              r.semester_id == ^conn.private.plug_session["semester_id"] and
+              p.teacher_id == r.teacher_id and p.class_id == ^params["class_id"] and
+              p.teacher_id == ^teacher.id and r.teacher_id == ^teacher.id,
           select: %{
-            description: s.description,
+            description: s.timetable_description,
             subject_id: s.id
           }
         )
       )
+      |> Enum.uniq()
 
     render(conn, "ehomework.html", class: class, subjects: subjects)
   end

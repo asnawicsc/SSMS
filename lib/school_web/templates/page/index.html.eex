@@ -47,7 +47,7 @@
 
   $('#calendar').fullCalendar({
     // put your options and callbacks here
-    header: { center: 'month,agendaWeek' },
+    header: { center: 'month,agendaWeek,list' },
       eventSources: [
 
     // your event source
@@ -336,7 +336,7 @@
                   else 
                 Repo.all(from k in Affairs.Class,left_join:  c in Affairs.Period, on: c.class_id==k.id,left_join: g in Affairs.Timetable, on: c.timetable_id==g.id, where: c.teacher_id == ^teacher.id and g.institution_id==^@conn.private.plug_session["institution_id"] and k.institution_id==^@conn.private.plug_session["institution_id"] and g.semester_id==^@conn.private.plug_session["semester_id"])|>Enum.uniq 
                 end
-                
+
              end 
 
              %>
