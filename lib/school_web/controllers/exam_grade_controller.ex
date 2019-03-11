@@ -74,7 +74,7 @@ defmodule SchoolWeb.ExamGradeController do
           where:
             em.institution_id == ^conn.private.plug_session["institution_id"] and
               e.institution_id == ^conn.private.plug_session["institution_id"] and
-              sm.id == ^params["semester_id"] and em.name == ^params["exam_name"] and
+              sm.id == ^params["semester_id"] and em.id == ^params["exam_name"] and
               em.level_id == ^params["level"],
           select: %{
             name: e.name,
@@ -88,8 +88,9 @@ defmodule SchoolWeb.ExamGradeController do
 
     exam_master_id =
       Repo.get_by(School.Affairs.ExamMaster, %{
-        name: params["exam_name"],
-        semester_id: params["semester_id"]
+        id: params["exam_name"],
+        semester_id: params["semester_id"],
+        level_id: params["level"]
       })
 
     render(
