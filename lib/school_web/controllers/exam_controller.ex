@@ -19,14 +19,15 @@ defmodule SchoolWeb.ExamController do
           on: em.semester_id == sm.id,
           left_join: l in Level,
           on: em.level_id == l.id,
-          group_by: [em.name, l.id, sm.start_date, sm.id],
+          group_by: [em.id, em.name, l.id, sm.start_date, sm.id],
           where: em.institution_id == ^conn.private.plug_session["institution_id"],
           select: %{
+            exam_master_id: em.id,
             exam_name: em.name,
             semester: sm.start_date,
             semester_id: sm.id,
-            level: l.name
-            level_id: em.level_id
+            level: l.name,
+            level_id: l.id
           }
         )
       )
