@@ -13,6 +13,7 @@
               <thead>
                   <tr>
                       <th>Exam Name</th>
+                      <th>Standard</th>
                       <th>Semester</th>
                       <th ></th>
                   </tr>
@@ -21,6 +22,7 @@
                   <%= for e <- @exam_semester |> Enum.sort do %>
                  <tr>
                     <td><%= e.exam_name %></td>
+                    <td><%= e.level %></td>
                     <td><%= e.semester %></td>
                     <td align="right">
                       <a href="/show_exam_period/<%= e.exam_name %>/semester/<%= e.semester_id %>"><button class="btn btn-labeled btn-xs btn-info mb-2" type="button" >
