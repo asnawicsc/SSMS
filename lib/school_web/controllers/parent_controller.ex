@@ -310,7 +310,7 @@ defmodule SchoolWeb.ParentController do
     |> redirect(to: parent_path(conn, :index))
   end
 
-  def delete_duplicate_icno() do
+  def delete_duplicate_icno(conn, params) do
     import Ecto.Query
 
     s_no =
