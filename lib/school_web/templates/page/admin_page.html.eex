@@ -12,7 +12,7 @@
    <!-- START Language list-->
    <div class="ml-auto">
       <div class="btn-group">
-         <a  href="/delete_duplicate_icno"]"><button class="mb-1 btn-sm btn btn-outline-primary" type="button" style="display: none;">Delete Duplicate Parent</button></a>
+     
       </div>
    </div>
    <!-- END Language list-->
@@ -33,7 +33,7 @@
        <h1 class="display-4">Hello, <%= user.name %></h1>
        <p class="lead">This panel shows the list of institutions.</p>
        <hr class="my-4">
-      
+          <a  href="/delete_duplicate_icno"]"><button class="mb-1 btn-sm btn btn-outline-primary" type="button" style="display: none;">Delete Duplicate Parent</button></a>
        
 
         <%= render( SchoolWeb.InstitutionView ,"list_institutions.html",conn: @conn, institution: @institution) %>
