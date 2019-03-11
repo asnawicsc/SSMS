@@ -331,4 +331,8 @@ defmodule SchoolWeb.ParentController do
       Enum.map(dup_students, fn x -> School.Repo.delete(x) end)
     end
   end
+
+  conn
+  |> put_flash(:info, "Parent deleted successfully.")
+  |> redirect(to: page_path(conn, :index))
 end
