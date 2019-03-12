@@ -1941,7 +1941,7 @@ defmodule SchoolWeb.UserChannel do
               Repo.all(
                 from(
                   s in School.Affairs.Student,
-                  where: s.student_id == ^item and s.institution_id == ^inst_id
+                  where: s.id == ^item and s.institution_id == ^inst_id
                 )
               )
               |> hd()
