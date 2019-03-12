@@ -7,10 +7,16 @@ defmodule SchoolWeb.HeadCountController do
 
   def index(conn, _params) do
     subject_teach_class =
-      Affairs.list_subject_teach_class()
-      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+      Repo.all(
+        from(s in School.Affairs.SubjectTeachClass,
+          left_join: k in School.Affairs.Class,
+          on: s.class_id == k.id,
+          where:
+            k.is_delete == ^0 and s.institution_id == ^conn.private.plug_session["institution_id"] and
+              k.institution_id == ^conn.private.plug_session["institution_id"]
+        )
+      )
 
-    head_counts = Affairs.list_head_counts()
     render(conn, "index.html", subject_teach_class: subject_teach_class)
   end
 

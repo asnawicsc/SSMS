@@ -90,7 +90,7 @@ defmodule SchoolWeb.AssessmentSubjectController do
                   q.institution_id == ^conn.private.plug_session["institution_id"] and
                   g.institution_id == ^conn.private.plug_session["institution_id"] and
                   s.institution_id == ^conn.private.plug_session["institution_id"] and
-                  p.semester_id == ^conn.private.plug_session["semester_id"],
+                  p.semester_id == ^conn.private.plug_session["semester_id"] and s.is_delete == 0,
               select: %{
                 id: p.id,
                 subject_id: g.id,

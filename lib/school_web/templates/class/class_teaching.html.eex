@@ -15,6 +15,7 @@
                               <th>Name</th>
                               <th>Other Name</th>
                               <th>Student No</th>
+                               <th>Action</th>
          
                             </tr>
                             </thead>
@@ -24,6 +25,9 @@
                               <td><%= student.name %></td>
                               <td><%= student.chinese_name %></td>
                               <td><%= student.student_no %></td>
+                                <td> <a href="/show_student_info/<%= student.id %>">
+                                        <button class="btn btn-labeled btn-info btn-xs mb-2" type="button">
+                                        <span class="btn-label"><i class="fa fa-search"></i></span>Info</button></a></td>   
                             </tr>
                             <% end %>
                           </tbody>
