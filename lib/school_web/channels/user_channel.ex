@@ -1946,7 +1946,7 @@ defmodule SchoolWeb.UserChannel do
               )
               |> hd()
 
-            s_mark = all_mark |> Enum.filter(fn x -> x.student_name == item end)
+            s_mark = all_mark |> Enum.filter(fn x -> x.student_id == item end)
 
             a =
               if s_mark != [] do
@@ -1955,7 +1955,7 @@ defmodule SchoolWeb.UserChannel do
                 %{
                   chinese_name: student.chinese_name,
                   sex: student.sex,
-                  student_name: item,
+                  student_name: student.name,
                   student_id: student.id,
                   student_mark: -1,
                   exam_name: exam_name,
@@ -2038,6 +2038,8 @@ defmodule SchoolWeb.UserChannel do
 
         chinese_name = new |> elem(1) |> Enum.map(fn x -> x.chinese_name end) |> Enum.uniq() |> hd
 
+        name = new |> elem(1) |> Enum.map(fn x -> x.student_name end) |> Enum.uniq() |> hd
+
         sex = new |> elem(1) |> Enum.map(fn x -> x.sex end) |> Enum.uniq() |> hd
 
         a = new |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "A" end)
@@ -2055,7 +2057,7 @@ defmodule SchoolWeb.UserChannel do
 
         %{
           subject: new |> elem(1) |> Enum.sort_by(fn x -> x.subject_code end),
-          name: new |> elem(0),
+          name: name,
           chinese_name: chinese_name,
           sex: sex,
           student_id: student_id,
@@ -2234,7 +2236,7 @@ defmodule SchoolWeb.UserChannel do
     all =
       for item <- exam_standard do
         exam_name = exam_mark |> Enum.map(fn x -> x.exam_name end) |> Enum.uniq() |> hd
-        student_list = exam_mark |> Enum.map(fn x -> x.student_name end) |> Enum.uniq()
+        student_list = exam_mark |> Enum.map(fn x -> x.student_id end) |> Enum.uniq()
         all_mark = exam_mark |> Enum.filter(fn x -> x.subject_code == item.subject_code end)
 
         subject_code = item.subject_code
@@ -2242,13 +2244,10 @@ defmodule SchoolWeb.UserChannel do
         all =
           for item <- student_list do
             student =
-              Repo.all(
-                from(
-                  s in School.Affairs.Student,
-                  where: s.name == ^item and s.institution_id == ^inst_id
-                )
-              )
-              |> hd()
+              Repo.get_by(School.Affairs.Student, %{
+                id: item,
+                institution_id: inst_id
+              })
 
             student_class =
               Repo.get_by(School.Affairs.StudentClass, %{
@@ -2256,7 +2255,7 @@ defmodule SchoolWeb.UserChannel do
                 semester_id: exam_master.semester_id
               })
 
-            s_mark = all_mark |> Enum.filter(fn x -> x.student_name == item end)
+            s_mark = all_mark |> Enum.filter(fn x -> x.student_id == item end)
 
             a =
               if s_mark != [] do
@@ -2265,7 +2264,7 @@ defmodule SchoolWeb.UserChannel do
                 %{
                   chinese_name: student.chinese_name,
                   sex: student.sex,
-                  student_name: item,
+                  student_name: student.name,
                   student_id: student.id,
                   student_mark: -1,
                   exam_name: exam_name,
@@ -2324,7 +2323,7 @@ defmodule SchoolWeb.UserChannel do
       |> List.flatten()
       |> Enum.filter(fn x -> x != nil end)
 
-    news = mark1 |> Enum.group_by(fn x -> x.student_name end)
+    news = mark1 |> Enum.group_by(fn x -> x.student_id end)
 
     z =
       for new <- news do
@@ -2350,6 +2349,7 @@ defmodule SchoolWeb.UserChannel do
         student_id = new |> elem(1) |> Enum.map(fn x -> x.student_id end) |> Enum.uniq() |> hd
 
         chinese_name = new |> elem(1) |> Enum.map(fn x -> x.chinese_name end) |> Enum.uniq() |> hd
+        name = new |> elem(1) |> Enum.map(fn x -> x.student_name end) |> Enum.uniq() |> hd
 
         sex = new |> elem(1) |> Enum.map(fn x -> x.sex end) |> Enum.uniq() |> hd
 
@@ -2367,7 +2367,7 @@ defmodule SchoolWeb.UserChannel do
 
         %{
           subject: new |> elem(1) |> Enum.sort_by(fn x -> x.subject_code end),
-          name: new |> elem(0),
+          name: name,
           chinese_name: chinese_name,
           sex: sex,
           student_id: student_id,
