@@ -320,7 +320,7 @@ defmodule School.Affairs do
         c in Class,
         left_join: l in Level,
         on: l.id == c.level_id,
-        where: c.institution_id == ^institution_id,
+        where: c.institution_id == ^institution_id and c.is_delete == 0,
         select: %{
           id: c.id,
           name: c.name,

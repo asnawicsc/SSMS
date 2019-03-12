@@ -1071,34 +1071,19 @@ defmodule SchoolWeb.ClassController do
 
     teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email})
 
-    ad =
-      if teacher != nil do
-        Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
-      end
-
     semesters =
       Repo.all(from(s in Semester))
       |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
 
     class =
-      if user.role == "Admin" or user.role == "Support" do
-        Repo.all(
-          from(
-            s in School.Affairs.Class,
-            select: %{institution_id: s.institution_id, id: s.id, name: s.name}
-          )
+      Repo.all(
+        from(
+          s in School.Affairs.Class,
+          where: s.is_delete == ^0,
+          select: %{institution_id: s.institution_id, id: s.id, name: s.name}
         )
-        |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
-      else
-        Repo.all(
-          from(
-            s in School.Affairs.Class,
-            where: s.id == ^ad.id,
-            select: %{institution_id: s.institution_id, id: s.id, name: s.name}
-          )
-        )
-        |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
-      end
+      )
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
 
     render(
       conn,
