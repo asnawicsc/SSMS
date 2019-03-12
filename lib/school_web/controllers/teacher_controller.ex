@@ -508,12 +508,14 @@ defmodule SchoolWeb.TeacherController do
     teacher = Repo.get_by(Teacher, email: user.email)
     changeset = Affairs.change_teacher(teacher)
     teacher = Affairs.get_teacher!(teacher.id)
-    render(conn, "edit.html", teacher: teacher, changeset: changeset)
+
+    render(conn, "edit.html", bin: teacher.image_bin, teacher: teacher, changeset: changeset)
   end
 
   def edit(conn, %{"id" => id}) do
     teacher = Affairs.get_teacher!(id)
     changeset = Affairs.change_teacher(teacher)
+
     render(conn, "edit.html", teacher: teacher, changeset: changeset)
   end
 

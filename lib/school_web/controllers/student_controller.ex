@@ -6,6 +6,11 @@ defmodule SchoolWeb.StudentController do
   require IEx
   import Mogrify
 
+  require Elixlsx
+
+  alias Elixlsx.Sheet
+  alias Elixlsx.Workbook
+
   def index(conn, _params) do
     students =
       Repo.all(
@@ -193,6 +198,170 @@ defmodule SchoolWeb.StudentController do
       end
 
     all = male ++ female
+
+    csv_content = ['No ', 'Name', 'Other Name', 'Sex']
+
+    data =
+      for item <- all |> Enum.with_index() do
+        no = item |> elem(1)
+
+        item = item |> elem(0)
+
+        [no + 1, item.name, item.chinese_name, item.sex]
+      end
+
+    csv_content =
+      List.insert_at(data, 0, csv_content)
+      |> CSV.encode()
+      |> Enum.to_list()
+      |> to_string
+  end
+
+  def excel_student_class(conn, params) do
+    class =
+      if params["class_id"] == "ALL" do
+        %{name: "ALL"}
+      else
+        Repo.get(Class, params["class_id"])
+      end
+
+    conn
+    |> put_resp_content_type("text/csv")
+    |> put_resp_header(
+      "content-disposition",
+      "attachment; filename=\"Student List- #{class.name}.csv\""
+    )
+    |> send_resp(200, excel_content_stud(conn, params))
+  end
+
+  defp excel_content_stud(conn, params) do
+    class_id = params["class_id"]
+    semester_id = params["semester_id"]
+
+    {male, female} =
+      if class_id != "ALL" do
+        male =
+          Repo.all(
+            from(
+              s in School.Affairs.StudentClass,
+              left_join: g in School.Affairs.Class,
+              on: s.class_id == g.id,
+              left_join: r in School.Affairs.Student,
+              on: r.id == s.sudent_id,
+              where:
+                s.class_id == ^class_id and
+                  g.institution_id == ^conn.private.plug_session["institution_id"] and
+                  r.institution_id == ^conn.private.plug_session["institution_id"] and
+                  s.semester_id == ^semester_id and r.sex == "M",
+              select: %{
+                id: s.sudent_id,
+                id_no: r.student_no,
+                chinese_name: r.chinese_name,
+                name: r.name,
+                sex: r.sex,
+                dob: r.dob,
+                pob: r.pob,
+                race: r.race,
+                b_cert: r.b_cert,
+                register_date: r.register_date
+              },
+              order_by: [asc: r.name]
+            )
+          )
+
+        female =
+          Repo.all(
+            from(
+              s in School.Affairs.StudentClass,
+              left_join: g in School.Affairs.Class,
+              on: s.class_id == g.id,
+              left_join: r in School.Affairs.Student,
+              on: r.id == s.sudent_id,
+              where:
+                s.class_id == ^class_id and
+                  g.institution_id == ^conn.private.plug_session["institution_id"] and
+                  r.institution_id == ^conn.private.plug_session["institution_id"] and
+                  s.semester_id == ^semester_id and r.sex == "F",
+              select: %{
+                id: s.sudent_id,
+                id_no: r.student_no,
+                chinese_name: r.chinese_name,
+                name: r.name,
+                sex: r.sex,
+                dob: r.dob,
+                pob: r.pob,
+                race: r.race,
+                b_cert: r.b_cert,
+                register_date: r.register_date
+              },
+              order_by: [asc: r.name]
+            )
+          )
+
+        {male, female}
+      else
+        male =
+          Repo.all(
+            from(
+              s in School.Affairs.StudentClass,
+              left_join: g in School.Affairs.Class,
+              on: s.class_id == g.id,
+              left_join: r in School.Affairs.Student,
+              on: r.id == s.sudent_id,
+              where:
+                g.institution_id == ^conn.private.plug_session["institution_id"] and
+                  r.institution_id == ^conn.private.plug_session["institution_id"] and
+                  s.semester_id == ^semester_id and r.sex == "M",
+              select: %{
+                id: s.sudent_id,
+                id_no: r.student_no,
+                chinese_name: r.chinese_name,
+                name: r.name,
+                sex: r.sex,
+                dob: r.dob,
+                pob: r.pob,
+                race: r.race,
+                b_cert: r.b_cert,
+                register_date: r.register_date
+              },
+              order_by: [asc: r.name]
+            )
+          )
+
+        female =
+          Repo.all(
+            from(
+              s in School.Affairs.StudentClass,
+              left_join: g in School.Affairs.Class,
+              on: s.class_id == g.id,
+              left_join: r in School.Affairs.Student,
+              on: r.id == s.sudent_id,
+              where:
+                g.institution_id == ^conn.private.plug_session["institution_id"] and
+                  r.institution_id == ^conn.private.plug_session["institution_id"] and
+                  s.semester_id == ^semester_id and r.sex == "F",
+              select: %{
+                id: s.sudent_id,
+                id_no: r.student_no,
+                chinese_name: r.chinese_name,
+                name: r.name,
+                sex: r.sex,
+                dob: r.dob,
+                pob: r.pob,
+                race: r.race,
+                b_cert: r.b_cert,
+                register_date: r.register_date
+              },
+              order_by: [asc: r.name]
+            )
+          )
+
+        {male, female}
+      end
+
+    all = male ++ female
+
+    IEx.pry()
 
     csv_content = ['No ', 'Name', 'Other Name', 'Sex']
 

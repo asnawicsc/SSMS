@@ -257,7 +257,7 @@
       <label>Teacher Picture</label><br>
 
 
-      <img id="preview6" alt="Click here to select teacher picture" style='width:auto; height: 200px;' src='data:image/png;base64, ""'>
+      <img id="preview6" alt="Click here to select teacher picture" style='width:auto; height: 200px;' src='data:image/png;base64, <%= @bin%>'>
        <%= file_input f, :image1, accept: ".png, .jpg, .jpeg"  ,id: "imgInp6", style: "display: none;"%>
     </center>
   </div>

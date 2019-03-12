@@ -567,6 +567,12 @@ defmodule SchoolWeb.Router do
       :csv_student_class
     )
 
+    post(
+      "/excel_student_class",
+      StudentController,
+      :excel_student_class
+    )
+
     resources("/mark_sheet_historys", MarkSheetHistorysController)
 
     post(
