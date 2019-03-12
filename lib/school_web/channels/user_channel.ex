@@ -2014,7 +2014,7 @@ defmodule SchoolWeb.UserChannel do
       |> List.flatten()
       |> Enum.filter(fn x -> x != nil end)
 
-    news = mark1 |> Enum.group_by(fn x -> x.student_name end)
+    news = mark1 |> Enum.group_by(fn x -> x.student_id end)
 
     z =
       for new <- news do
