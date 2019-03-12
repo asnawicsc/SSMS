@@ -1930,7 +1930,7 @@ defmodule SchoolWeb.UserChannel do
             []
           end
 
-        student_list = exam_mark |> Enum.map(fn x -> x.student_name end) |> Enum.uniq()
+        student_list = exam_mark |> Enum.map(fn x -> x.student_id end) |> Enum.uniq()
         all_mark = exam_mark |> Enum.filter(fn x -> x.subject_code == item.subject_code end)
 
         subject_code = item.subject_code
@@ -1941,7 +1941,7 @@ defmodule SchoolWeb.UserChannel do
               Repo.all(
                 from(
                   s in School.Affairs.Student,
-                  where: s.name == ^item and s.institution_id == ^inst_id
+                  where: s.student_id == ^item and s.institution_id == ^inst_id
                 )
               )
               |> hd()

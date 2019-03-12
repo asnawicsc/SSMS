@@ -421,7 +421,10 @@ defmodule SchoolWeb.ClassController do
 
     classes =
       Repo.all(
-        from(c in Class, where: c.institution_id == ^conn.private.plug_session["institution_id"])
+        from(c in Class,
+          where:
+            c.institution_id == ^conn.private.plug_session["institution_id"] and c.is_delete == 0
+        )
       )
 
     render(conn, "class_analysis.html", semesters: semesters, classes: classes)
