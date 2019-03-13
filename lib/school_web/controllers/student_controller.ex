@@ -61,7 +61,12 @@ defmodule SchoolWeb.StudentController do
   end
 
   def csv_student_class(conn, params) do
-    class = Repo.get(Class, params["class_id"])
+    class =
+      if params["class_id"] == "ALL" do
+        %{name: "ALL"}
+      else
+        Repo.get(Class, params["class_id"])
+      end
 
     conn
     |> put_resp_content_type("text/csv")
@@ -217,26 +222,39 @@ defmodule SchoolWeb.StudentController do
       |> to_string
   end
 
+  def sheet_cell_insert(sheet, item) do
+    sheet = sheet |> Sheet.set_cell(item |> elem(0), item |> elem(1))
+
+    sheet
+  end
+
+  # def excel_student_class(conn, params) do
+  #   class =
+  #     if params["class_id"] == "ALL" do
+  #       %{name: "ALL"}
+  #     else
+  #       Repo.get(Class, params["class_id"])
+  #     end
+
+  #   conn
+  #   |> put_resp_content_type("text/csv")
+  #   |> put_resp_header(
+  #     "content-disposition",
+  #     "attachment; filename=\"Student List- #{class.name}.csv\""
+  #   )
+  #   |> send_resp(200, excel_content_stud(conn, params))
+  # end
+
   def excel_student_class(conn, params) do
+    class_id = params["class_id"]
+    semester_id = params["semester_id"]
+
     class =
       if params["class_id"] == "ALL" do
         %{name: "ALL"}
       else
         Repo.get(Class, params["class_id"])
       end
-
-    conn
-    |> put_resp_content_type("text/csv")
-    |> put_resp_header(
-      "content-disposition",
-      "attachment; filename=\"Student List- #{class.name}.csv\""
-    )
-    |> send_resp(200, excel_content_stud(conn, params))
-  end
-
-  defp excel_content_stud(conn, params) do
-    class_id = params["class_id"]
-    semester_id = params["semester_id"]
 
     {male, female} =
       if class_id != "ALL" do
@@ -254,16 +272,10 @@ defmodule SchoolWeb.StudentController do
                   r.institution_id == ^conn.private.plug_session["institution_id"] and
                   s.semester_id == ^semester_id and r.sex == "M",
               select: %{
-                id: s.sudent_id,
-                id_no: r.student_no,
-                chinese_name: r.chinese_name,
+                no: "0",
                 name: r.name,
-                sex: r.sex,
-                dob: r.dob,
-                pob: r.pob,
-                race: r.race,
-                b_cert: r.b_cert,
-                register_date: r.register_date
+                chinese_name: r.chinese_name,
+                sex: r.sex
               },
               order_by: [asc: r.name]
             )
@@ -283,16 +295,10 @@ defmodule SchoolWeb.StudentController do
                   r.institution_id == ^conn.private.plug_session["institution_id"] and
                   s.semester_id == ^semester_id and r.sex == "F",
               select: %{
-                id: s.sudent_id,
-                id_no: r.student_no,
-                chinese_name: r.chinese_name,
+                no: "0",
                 name: r.name,
-                sex: r.sex,
-                dob: r.dob,
-                pob: r.pob,
-                race: r.race,
-                b_cert: r.b_cert,
-                register_date: r.register_date
+                chinese_name: r.chinese_name,
+                sex: r.sex
               },
               order_by: [asc: r.name]
             )
@@ -313,16 +319,10 @@ defmodule SchoolWeb.StudentController do
                   r.institution_id == ^conn.private.plug_session["institution_id"] and
                   s.semester_id == ^semester_id and r.sex == "M",
               select: %{
-                id: s.sudent_id,
-                id_no: r.student_no,
-                chinese_name: r.chinese_name,
+                no: "0",
                 name: r.name,
-                sex: r.sex,
-                dob: r.dob,
-                pob: r.pob,
-                race: r.race,
-                b_cert: r.b_cert,
-                register_date: r.register_date
+                chinese_name: r.chinese_name,
+                sex: r.sex
               },
               order_by: [asc: r.name]
             )
@@ -341,16 +341,10 @@ defmodule SchoolWeb.StudentController do
                   r.institution_id == ^conn.private.plug_session["institution_id"] and
                   s.semester_id == ^semester_id and r.sex == "F",
               select: %{
-                id: s.sudent_id,
-                id_no: r.student_no,
-                chinese_name: r.chinese_name,
+                no: "0",
                 name: r.name,
-                sex: r.sex,
-                dob: r.dob,
-                pob: r.pob,
-                race: r.race,
-                b_cert: r.b_cert,
-                register_date: r.register_date
+                chinese_name: r.chinese_name,
+                sex: r.sex
               },
               order_by: [asc: r.name]
             )
@@ -361,24 +355,84 @@ defmodule SchoolWeb.StudentController do
 
     all = male ++ female
 
-    IEx.pry()
+    all =
+      for item <- all |> Enum.with_index() do
+        no = item |> elem(1)
+        item = item |> elem(0)
 
-    csv_content = ['No ', 'Name', 'Other Name', 'Sex']
+        [
+          {:no, (no + 1) |> Integer.to_string()},
+          {:name, item.name},
+          {:chinese_name, item.chinese_name},
+          {:sex, item.sex}
+        ]
+      end
+
+    csv_content = ["No", "Name", "Other Name", "Sex"]
+
+    header =
+      for item <- csv_content |> Enum.with_index() do
+        no = item |> elem(1)
+        start_no = (no + 1) |> Integer.to_string()
+
+        letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" |> String.split("", trim: true)
+
+        alphabert = letters |> Enum.fetch!(no)
+
+        start = alphabert <> "1"
+
+        item = item |> elem(0)
+
+        {start, item}
+      end
 
     data =
       for item <- all |> Enum.with_index() do
         no = item |> elem(1)
-
+        start_no = (no + 2) |> Integer.to_string()
         item = item |> elem(0)
 
-        [no + 1, item.name, item.chinese_name, item.sex]
-      end
+        a =
+          for each <- item |> Enum.with_index() do
+            letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" |> String.split("", trim: true)
+            no = each |> elem(1)
 
-    csv_content =
-      List.insert_at(data, 0, csv_content)
-      |> CSV.encode()
-      |> Enum.to_list()
-      |> to_string
+            item = each |> elem(0) |> elem(1)
+
+            alphabert = letters |> Enum.fetch!(no)
+
+            start = alphabert <> start_no
+
+            {start, item}
+          end
+
+        a
+      end
+      |> List.flatten()
+
+    final = header ++ data
+
+    sheet = Sheet.with_name("StudentList")
+
+    total = Enum.reduce(final, sheet, fn x, sheet -> sheet_cell_insert(sheet, x) end)
+
+    total = total |> Sheet.set_col_width("B", 35.0) |> Sheet.set_col_width("C", 20.0)
+
+    page = %Workbook{sheets: [total]}
+
+    image_path = Application.app_dir(:school, "priv/static/images")
+
+    content = page |> Elixlsx.write_to(image_path <> "/StudentList.xlsx")
+
+    file = File.read!(image_path <> "/StudentList.xlsx")
+
+    conn
+    |> put_resp_content_type("text/xlsx")
+    |> put_resp_header(
+      "content-disposition",
+      "attachment; filename=\"StudentList-#{class.name}.xlsx\""
+    )
+    |> send_resp(200, file)
   end
 
   def submit_student_transfer(conn, params) do
