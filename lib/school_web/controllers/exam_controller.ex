@@ -247,8 +247,6 @@ defmodule SchoolWeb.ExamController do
     tak_lulus = group_subject |> Enum.map(fn x -> x.tak_lulus end) |> Enum.sum()
     total = group_subject |> Enum.map(fn x -> x.total_student end) |> Enum.sum()
 
-    IEx.pry()
-
     render(
       conn,
       "mark_analyse_subject.html",
@@ -1789,6 +1787,303 @@ defmodule SchoolWeb.ExamController do
     |> resp(200, pdf_binary)
   end
 
+  defp get_class_rank(clas_rank, student_id, class_name) do
+    class_rank =
+      clas_rank
+      |> Enum.filter(fn x -> x |> elem(2) == class_name end)
+      |> Enum.sort_by(fn x -> x |> elem(1) end)
+      |> Enum.reverse()
+      |> Enum.with_index()
+      |> Enum.filter(fn x -> x |> elem(0) |> elem(0) == student_id end)
+      |> Enum.map(fn x -> x |> elem(1) end)
+      |> hd
+
+    class_rank = class_rank + 1
+  end
+
+  defp get_total_student_class(clas_rank, class_name) do
+    total_student_class =
+      clas_rank
+      |> Enum.filter(fn x -> x |> elem(2) == class_name end)
+      |> Enum.count()
+
+    total_student_class = total_student_class
+  end
+
+  def all_exam_report_card(conn, params) do
+    class = Repo.get_by(School.Affairs.Class, id: params["class"])
+
+    list_exam =
+      Repo.all(from(s in School.Affairs.ExamMaster, where: s.level_id == ^class.level_id))
+
+    list_stu =
+      for item <- list_exam do
+        all =
+          Repo.all(
+            from(
+              em in School.Affairs.ExamMark,
+              left_join: z in School.Affairs.Exam,
+              on: em.exam_id == z.id,
+              left_join: e in School.Affairs.ExamMaster,
+              on: z.exam_master_id == e.id,
+              left_join: j in School.Affairs.Semester,
+              on: e.semester_id == j.id,
+              left_join: s in School.Affairs.Student,
+              on: em.student_id == s.id,
+              left_join: sc in School.Affairs.StudentClass,
+              on: sc.sudent_id == s.id,
+              left_join: c in School.Affairs.Class,
+              on: sc.class_id == c.id,
+              left_join: sb in School.Affairs.Subject,
+              on: em.subject_id == sb.id,
+              where: e.id == ^item.id and sc.semester_id == ^item.semester_id,
+              select: %{
+                student_id: s.id,
+                student_name: s.name,
+                chinese_name: s.chinese_name,
+                class_name: c.name,
+                exam_master_id: e.id,
+                exam_name: e.name,
+                semester: j.id,
+                subject_code: sb.code,
+                subject_name: sb.description,
+                subject_cname: sb.cdesc,
+                mark: em.mark,
+                standard_id: sc.level_id
+              }
+            )
+          )
+
+        {item.name, all}
+      end
+
+    all_data =
+      for data <- list_stu do
+        data = data |> elem(1)
+
+        deep =
+          for item <- data do
+            grades =
+              Repo.all(
+                from(
+                  g in School.Affairs.ExamGrade,
+                  where:
+                    g.institution_id == ^conn.private.plug_session["institution_id"] and
+                      g.exam_master_id == ^item.exam_master_id
+                )
+              )
+
+            a =
+              for grade <- grades do
+                if item.mark >= grade.min and item.mark <= grade.max do
+                  %{
+                    exam_master_id: item.exam_master_id,
+                    exam_name: item.exam_name,
+                    class_name: item.class_name,
+                    semester: item.semester,
+                    student_id: item.student_id,
+                    student_name: item.student_name,
+                    chinese_name: item.chinese_name,
+                    grade: grade.name,
+                    gpa: grade.gpa,
+                    subject_code: item.subject_code,
+                    subject_name: item.subject_name,
+                    subject_cname: item.subject_cname,
+                    student_mark: item.mark
+                  }
+                end
+              end
+
+            a
+          end
+
+        stdu_rank =
+          deep
+          |> List.flatten()
+          |> Enum.filter(fn x -> x != nil end)
+          |> Enum.group_by(fn x -> x.student_id end)
+
+        std_rank =
+          for item <- stdu_rank do
+            id = item |> elem(0)
+            sum = item |> elem(1) |> Enum.map(fn x -> x.student_mark end) |> Enum.sum()
+
+            {id, sum}
+          end
+          |> Enum.sort_by(fn x -> x |> elem(1) end)
+          |> Enum.reverse()
+          |> Enum.with_index()
+
+        clas_rank =
+          for item <- stdu_rank do
+            id = item |> elem(0)
+
+            sum = item |> elem(1) |> Enum.map(fn x -> x.student_mark end) |> Enum.sum()
+
+            class_name =
+              item |> elem(1) |> Enum.map(fn x -> x.class_name end) |> Enum.uniq() |> hd
+
+            {id, sum, class_name}
+          end
+
+        for item <- std_rank do
+          no = item |> elem(1)
+          item = item |> elem(0)
+
+          no = no + 1
+
+          stud =
+            deep
+            |> List.flatten()
+            |> Enum.filter(fn x -> x != nil end)
+            |> Enum.filter(fn x -> x.student_id == item |> elem(0) end)
+
+          total_student = std_rank |> Enum.count()
+
+          with_rank =
+            for item <- stud do
+              %{
+                exam_master_id: item.exam_master_id,
+                exam_name: item.exam_name,
+                class_name: item.class_name,
+                semester: item.semester,
+                student_id: item.student_id,
+                student_name: item.student_name,
+                chinese_name: item.chinese_name,
+                grade: item.grade,
+                gpa: item.gpa,
+                subject_code: item.subject_code,
+                subject_name: item.subject_name,
+                subject_cname: item.subject_cname,
+                student_mark: item.student_mark,
+                stand_rank: no,
+                class_rank: get_class_rank(clas_rank, item.student_id, item.class_name),
+                total_student: total_student,
+                total_student_class: get_total_student_class(clas_rank, item.class_name)
+              }
+            end
+
+          with_rank
+        end
+      end
+      |> List.flatten()
+      |> Enum.filter(fn x -> x != nil end)
+
+    list =
+      all_data
+      |> Enum.group_by(fn x -> x.student_id end)
+
+    good =
+      for item <- list do
+        student_id = item |> elem(0)
+        item = item |> elem(1)
+
+        student_name = item |> Enum.map(fn x -> x.student_name end) |> Enum.uniq() |> hd
+        student_cname = item |> Enum.map(fn x -> x.chinese_name end) |> Enum.uniq() |> hd
+        class_name = item |> Enum.map(fn x -> x.class_name end) |> Enum.uniq() |> hd
+
+        total_student = item |> Enum.map(fn x -> x.total_student end) |> Enum.uniq() |> hd
+
+        total_student_class =
+          item |> Enum.map(fn x -> x.total_student_class end) |> Enum.uniq() |> hd
+
+        student_comment = Repo.get_by(School.Affairs.StudentComment, student_id: student_id)
+
+        group_exam = item |> Enum.group_by(fn x -> x.exam_master_id end)
+
+        for item <- group_exam do
+          exam_master_id = item |> elem(0)
+          record = item |> elem(1)
+
+          stand_rank = record |> Enum.map(fn x -> x.stand_rank end) |> Enum.uniq() |> hd
+
+          class_rank = record |> Enum.map(fn x -> x.class_rank end) |> Enum.uniq() |> hd
+
+          institution = Repo.get(Institution, conn.private.plug_session["institution_id"])
+          exam = Repo.get_by(School.Affairs.ExamMaster, id: exam_master_id)
+
+          semester = Repo.get_by(School.Affairs.Semester, id: exam.semester_id)
+          a = record |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "A" end)
+          b = record |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "B" end)
+          c = record |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "C" end)
+          d = record |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "D" end)
+          e = record |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "E" end)
+          f = record |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "F" end)
+          g = record |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "G" end)
+
+          per = record |> Enum.map(fn x -> x.student_mark end) |> Enum.count()
+          total_mark = record |> Enum.map(fn x -> x.student_mark end) |> Enum.sum()
+          total_gpa = record |> Enum.map(fn x -> Decimal.to_float(x.gpa) end) |> Enum.sum()
+          cgpa = (total_gpa / per) |> Float.round(2)
+
+          total_per = per * 100
+
+          total_average = (total_mark / total_per * 100) |> Float.round(2)
+
+          %{
+            list_exam: list_exam,
+            semester: semester,
+            total_gpa: total_gpa,
+            total_mark: total_mark,
+            total_average: total_average,
+            a: a,
+            b: b,
+            c: c,
+            d: d,
+            e: e,
+            f: f,
+            g: g,
+            cgpa: cgpa,
+            exam: exam,
+            all_data: record,
+            student_name: student_name,
+            student_cname: student_cname,
+            class_name: class_name,
+            student_comment: student_comment,
+            institution_name: institution.name,
+            rank: stand_rank,
+            class_rank: class_rank,
+            total_student: total_student,
+            total_student_class: total_student_class
+          }
+        end
+      end
+
+    html =
+      Phoenix.View.render_to_string(
+        SchoolWeb.ExamView,
+        "all_exam_report_card.html",
+        students: good
+      )
+
+    pdf_params = %{"html" => html}
+
+    pdf_binary =
+      PdfGenerator.generate_binary!(
+        pdf_params["html"],
+        size: "A4",
+        shell_params: [
+          "--margin-left",
+          "5",
+          "--margin-right",
+          "5",
+          "--margin-top",
+          "5",
+          "--margin-bottom",
+          "5",
+          "--encoding",
+          "utf-8",
+          "--orientation",
+          "Portrait"
+        ],
+        delete_temporary: true
+      )
+
+    conn
+    |> put_resp_header("Content-Type", "application/pdf")
+    |> resp(200, pdf_binary)
+  end
+
   def generate_ranking(conn, params) do
     exam =
       Repo.all(from(e in School.Affairs.ExamMaster))
@@ -2071,3 +2366,21 @@ defmodule SchoolWeb.ExamController do
     )
   end
 end
+
+# {{4696, 429}, 0},
+# {{4726, 408}, 1},
+# {{4717, 400}, 2},
+# {{4640, 397}, 3},
+# {{4736, 396}, 4},
+# {{4688, 384}, 5},
+# {{4737, 374}, 6},
+# {{4563, 356}, 7}
+
+# {{4717, 457}, 0},
+# {{4640, 449}, 1},
+# {{4563, 436}, 2},
+# {{4726, 411}, 3},
+# {{4737, 395}, 4},
+# {{4736, 384}, 5},
+# {{4696, 384}, 6},
+# {{4688, 343}, 7}

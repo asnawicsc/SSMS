@@ -301,6 +301,14 @@ defmodule SchoolWeb.TeacherController do
     )
   end
 
+  def signiture_upload(conn, params) do
+    render(conn, "signiture_upload.html")
+  end
+
+  def upload_signiture(conn, params) do
+    IEx.pry()
+  end
+
   def create_teacher_login(conn, params) do
     teacher =
       Repo.get_by(

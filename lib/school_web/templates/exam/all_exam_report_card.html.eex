@@ -1,0 +1,180 @@
+
+<%= for student <- @students do %>
+<% require IEx %>
+
+<% student_info= student |> hd %>
+
+<div  style="page-break-before: always;">
+  <head>
+    <title a> Student Report Card </title>
+    </head>
+
+  <p align="center"><%= student_info.institution_name %><br/> <%= student_info.semester.year %>成绩表 </p>
+</div>
+
+
+<head>
+  <title a> Student Report Card </title>
+  <h2 align="center"> Student Report Card</h2>
+
+  </div>
+</head>
+<body>
+  <table align="center" class="table">
+    <thead>
+      <tr >
+        <td colspan="3" align="left" >Name Murid : <%=  student_info.student_name  %></td>
+      
+        <td colspan="2" align="right"> Darjah : <%= student_info.class_name %> </td>
+      </tr>
+      <tr>
+
+        <td colspan="3">Mata Pelajaran </td>
+        <%= for exam <- student|>Enum.map(fn x -> x.exam.name end)
+ do %>
+          
+      
+        <td > <%= exam %> </td>
+        
+          <%end %>
+      </tr>
+
+    </thead>
+    <tbody>
+
+           <% record= student|>Enum.map(fn x -> x.all_data end)|>List.flatten|>Enum.group_by(fn x -> x.subject_name end)|>Enum.sort  %>
+
+      
+      <%= for item <- record do %>
+        <% item=item|>elem(1) %>
+
+        <% head = item|>hd %>
+
+        <tr>
+        <td><%= head.subject_code %></td>
+        <td colspan="2"><%= head.subject_name %></td>
+        
+    
+        
+          <%= for exam <- item do %>
+
+         <td align="center"><%= exam.student_mark %>(<%= exam.grade %>)</td>
+         
+          <% end %>
+        
+
+      </tr>
+        <% end %>
+      <tr>
+         <td colspan="3">Jumlah Markah</td>
+              <%= for exam <- student do %>
+
+         <td align="center"><%= exam.total_mark %></td>
+         
+          <% end %>
+          
+        </tr>
+              <tr>
+         <td colspan="3">Purata</td>
+              <%= for exam <- student do %>
+
+         <td align="center"><%= exam.total_average %></td>
+         
+          <% end %>
+          
+        </tr>
+           <tr>
+         <td colspan="3">Kedudukan Dalam Kelas</td>
+              <%= for exam <- student do %>
+
+         <td align="center"><%= exam.class_rank %>/<%= exam.total_student_class %></td>
+         
+          <% end %>
+          
+        </tr>
+
+                      <tr>
+         <td colspan="3">Kedudukan Dalam Tingkatan</td>
+              <%= for exam <- student do %>
+
+         <td align="center"><%= exam.rank %>/<%= exam.total_student %></td>
+         
+          <% end %>
+          
+        </tr>
+ 
+    </tbody>
+<tfoot>
+
+      <tr>
+        <td colspan="3" class="footer">Head Teacher Signiture</td>
+           <%= for exam <- student do %>
+
+         <td align="center"></td>
+         
+          <% end %>
+      </tr>
+      <tr>
+        <td colspan="3" class="footer">Teacher Signiture</td>
+           <%= for exam <- student do %>
+
+         <td align="center"></td>
+         
+          <% end %>
+      </tr>
+      <tr>
+        <td colspan="3" class="footer">Parent Signiture</td>
+          <%= for exam <- student do %>
+
+         <td align="center"></td>
+         
+          <% end %>
+      </tr>
+      <tr >
+        <td colspan="2" class="footer">Comment</td>
+        <td colspan="3"></td>
+
+      </tr>
+ 
+    </tfoot>
+        
+  </table>
+</body>
+
+<style type="text/css">
+  html {
+  font-family:arial;
+  font-size: 18px;
+}
+
+td {
+  border: 1px solid #726E6D;
+  padding: 15px;
+}
+
+thead{
+  font-weight:bold;
+  text-align:center;
+  background: #625D5D;
+  color:white;
+}
+
+table {
+  border-collapse: collapse;
+  margin-left: 10px;
+   margin-right: 10px;
+   width: 1000px;
+   height: : auto;
+
+.footer {
+  text-align:right;
+  font-weight:bold;
+}
+
+tbody >tr:nth-child(odd) {
+  background: #D1D0CE;
+}
+
+</style>
+<% end %>
+

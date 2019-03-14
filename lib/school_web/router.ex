@@ -315,6 +315,7 @@ defmodule SchoolWeb.Router do
     get("/report_card/:exam_name/:exam_id/:id/:rank", ExamController, :report_card)
     get("/all_report_card", ExamController, :all_report_card)
     post("/all_report_card", ExamController, :all_report_card)
+    post("/all_exam_report_card", ExamController, :all_exam_report_card)
     get("/show_guardian/", ParentController, :guardian_listing)
     get("/show_guardian/:id/:student_no", ParentController, :show_guardian)
     resources("/exam_mark", ExamMarkController)
@@ -336,6 +337,10 @@ defmodule SchoolWeb.Router do
     get("/teacher_setting", TeacherController, :teacher_setting)
 
     get("/school_job", TeacherController, :school_job)
+
+    get("/signiture_upload", TeacherController, :signiture_upload)
+
+    post("/upload_signiture", TeacherController, :upload_signiture)
 
     resources("/teacher_school_job", TeacherSchoolJobController)
     resources("/teacher_co_curriculum_job", TeacherCoCurriculumJobController)
@@ -571,6 +576,18 @@ defmodule SchoolWeb.Router do
       "/excel_student_class",
       StudentController,
       :excel_student_class
+    )
+
+    post(
+      "/excel_jpm_class",
+      StudentController,
+      :excel_jpm_class
+    )
+
+    post(
+      "/excel_student_parent",
+      StudentController,
+      :excel_student_parent
     )
 
     resources("/mark_sheet_historys", MarkSheetHistorysController)

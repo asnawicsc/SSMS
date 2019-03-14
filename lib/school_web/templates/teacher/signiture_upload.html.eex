@@ -1,0 +1,25 @@
+                  <div class="card card-default d-none d-lg-block">
+                    <div class="card-body">
+                     <p class="lead">Upload Signiture</p> 
+                        <div class="row" style="margin-top: 40px;">
+                        <div class="col-lg-12">
+                          <div class="panel">
+     
+                            <div class="panel-body">
+                               <%= form_for @conn, teacher_path(@conn, :upload_signiture), [as: :item, multipart: true], fn f -> %>
+
+                                  <%= file_input f, :file%>
+                                  <%= error_tag f, :file %>
+
+                                
+                                  <%= submit "Upload", class: "btn btn-primary" %>
+                                
+                              <% end %>
+
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>

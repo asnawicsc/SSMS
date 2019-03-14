@@ -11,32 +11,34 @@
   <% profile=all_date|>hd() %>
 
  <%  year=case profile.year do
+     "2019" ->
+          "二零一九"
         "2018" ->
-          "二千八十"
+          "二零一八"
 
         "2017" ->
-         "二千一十七"
+         "二零一七"
 
         "2016" ->
-         "二十六"
+         "二零一六"
 
         "2015" ->
-          "二千一十五"
+          "二零一五"
 
         "2014" ->
-          "二千四十四"
+          "二零一四"
 
            "2013" ->
-         "二千一十三"
+         "二零一三"
 
            "2012" ->
-          "二千一二十二"
+          "二零一二"
 
            "2011" ->
-          "二千一十一"
+          "二零一一"
 
            "2010" ->
-          "二千一点"
+          "二零一零"
 
       end %>
 
@@ -858,7 +860,7 @@ else
 
  <tr  align="center">
   <td rowspan="4"  style="margin: 3px; padding: 3px;" align="left"><BR> <b>国语 <br> Bahasa <br> Malaysia </b><BR></td>
-  <td style="margin: 3px; padding: 3px;" align="left">口服 Lisan</td>
+  <td style="margin: 3px; padding: 3px;" align="left">会话 Lisan</td>
   <td style="margin: 3px; padding: 3px;"><%= bml1 %></td>
   <td style="margin: 3px; padding: 3px;"><%= bml2 %></td>
    <td style="margin: 3px; padding: 3px;"><%= bml3 %></td>
@@ -917,7 +919,7 @@ else
  </tr align="center">
  <tr align="center">
  <td rowspan="4"  style="margin: 3px; padding: 3px;" align="left"><b><BR>华语 <br> Bahasa <br> Cina</b></td>
-  <td style="margin: 3px; padding: 3px;" align="left">口服 Lisan</td>
+  <td style="margin: 3px; padding: 3px;" align="left">会话 Lisan</td>
   <td style="margin: 3px; padding: 3px;"><%= chl1 %></td>
   <td style="margin: 3px; padding: 3px;"><%= chl2 %></td>
    <td style="margin: 3px; padding: 3px;"><%= chl3 %></td>

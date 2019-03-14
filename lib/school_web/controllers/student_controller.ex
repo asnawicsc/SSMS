@@ -228,23 +228,6 @@ defmodule SchoolWeb.StudentController do
     sheet
   end
 
-  # def excel_student_class(conn, params) do
-  #   class =
-  #     if params["class_id"] == "ALL" do
-  #       %{name: "ALL"}
-  #     else
-  #       Repo.get(Class, params["class_id"])
-  #     end
-
-  #   conn
-  #   |> put_resp_content_type("text/csv")
-  #   |> put_resp_header(
-  #     "content-disposition",
-  #     "attachment; filename=\"Student List- #{class.name}.csv\""
-  #   )
-  #   |> send_resp(200, excel_content_stud(conn, params))
-  # end
-
   def excel_student_class(conn, params) do
     class_id = params["class_id"]
     semester_id = params["semester_id"]
@@ -431,6 +414,940 @@ defmodule SchoolWeb.StudentController do
     |> put_resp_header(
       "content-disposition",
       "attachment; filename=\"StudentList-#{class.name}.xlsx\""
+    )
+    |> send_resp(200, file)
+  end
+
+  def excel_jpm_class(conn, params) do
+    class_id = params["class_id"]
+    semester_id = params["semester_id"]
+
+    {male, female} =
+      if class_id != "ALL" do
+        male =
+          Repo.all(
+            from(
+              s in School.Affairs.StudentClass,
+              left_join: g in School.Affairs.Class,
+              on: s.class_id == g.id,
+              left_join: r in School.Affairs.Student,
+              on: r.id == s.sudent_id,
+              where:
+                s.class_id == ^class_id and
+                  g.institution_id == ^conn.private.plug_session["institution_id"] and
+                  r.institution_id == ^conn.private.plug_session["institution_id"] and
+                  s.semester_id == ^semester_id and r.sex == "M",
+              select: %{
+                id_no: r.student_no,
+                chinese_name: r.chinese_name,
+                name: r.name,
+                sex: r.sex,
+                dob: r.dob,
+                pob: r.pob,
+                race: r.race,
+                b_cert: r.b_cert,
+                register_date: r.register_date
+              },
+              order_by: [asc: r.name]
+            )
+          )
+
+        female =
+          Repo.all(
+            from(
+              s in School.Affairs.StudentClass,
+              left_join: g in School.Affairs.Class,
+              on: s.class_id == g.id,
+              left_join: r in School.Affairs.Student,
+              on: r.id == s.sudent_id,
+              where:
+                s.class_id == ^class_id and
+                  g.institution_id == ^conn.private.plug_session["institution_id"] and
+                  r.institution_id == ^conn.private.plug_session["institution_id"] and
+                  s.semester_id == ^semester_id and r.sex == "F",
+              select: %{
+                id_no: r.student_no,
+                chinese_name: r.chinese_name,
+                name: r.name,
+                sex: r.sex,
+                dob: r.dob,
+                pob: r.pob,
+                race: r.race,
+                b_cert: r.b_cert,
+                register_date: r.register_date
+              },
+              order_by: [asc: r.name]
+            )
+          )
+
+        {male, female}
+      else
+        male =
+          Repo.all(
+            from(
+              s in School.Affairs.StudentClass,
+              left_join: g in School.Affairs.Class,
+              on: s.class_id == g.id,
+              left_join: r in School.Affairs.Student,
+              on: r.id == s.sudent_id,
+              where:
+                g.institution_id == ^conn.private.plug_session["institution_id"] and
+                  r.institution_id == ^conn.private.plug_session["institution_id"] and
+                  s.semester_id == ^semester_id and r.sex == "M",
+              select: %{
+                id_no: r.student_no,
+                chinese_name: r.chinese_name,
+                name: r.name,
+                sex: r.sex,
+                dob: r.dob,
+                pob: r.pob,
+                race: r.race,
+                b_cert: r.b_cert,
+                register_date: r.register_date
+              },
+              order_by: [asc: r.name]
+            )
+          )
+
+        female =
+          Repo.all(
+            from(
+              s in School.Affairs.StudentClass,
+              left_join: g in School.Affairs.Class,
+              on: s.class_id == g.id,
+              left_join: r in School.Affairs.Student,
+              on: r.id == s.sudent_id,
+              where:
+                g.institution_id == ^conn.private.plug_session["institution_id"] and
+                  r.institution_id == ^conn.private.plug_session["institution_id"] and
+                  s.semester_id == ^semester_id and r.sex == "F",
+              select: %{
+                id_no: r.student_no,
+                chinese_name: r.chinese_name,
+                name: r.name,
+                sex: r.sex,
+                dob: r.dob,
+                pob: r.pob,
+                race: r.race,
+                b_cert: r.b_cert,
+                register_date: r.register_date
+              },
+              order_by: [asc: r.name]
+            )
+          )
+
+        {male, female}
+      end
+
+    all = male ++ female
+
+    if conn.private.plug_session["institution_id"] == 9 do
+      new_all =
+        for item <- all do
+          dob =
+            if item.dob != nil do
+              item.dob
+            else
+            end
+
+          umo_1jan =
+            if item.dob != nil do
+              a = day = item.dob |> String.split("/") |> Enum.fetch!(2) |> String.to_integer()
+
+              month =
+                item.dob
+                |> String.split("/")
+                |> Enum.fetch!(1)
+                |> String.to_integer()
+
+              year = item.dob |> String.split("/") |> Enum.fetch!(0) |> String.to_integer()
+
+              umo_1jan =
+                if item.register_date != nil do
+                  day_r =
+                    item.register_date |> String.split_at(2) |> elem(0) |> String.to_integer()
+
+                  month_r =
+                    item.register_date
+                    |> String.split_at(5)
+                    |> elem(0)
+                    |> String.split_at(3)
+                    |> elem(1)
+                    |> String.to_integer()
+
+                  year_r =
+                    item.register_date |> String.split_at(6) |> elem(1) |> String.to_integer()
+
+                  year_total = year_r - 1 - year
+
+                  month_total = 12 - month
+
+                  month_new = month_total |> Integer.to_string()
+                  year_new = year_total |> Integer.to_string()
+
+                  umo_1jan = year_new <> "-" <> month_new
+
+                  umo_1jan
+                else
+                end
+
+              umo_1jan
+            else
+            end
+
+          %{
+            id_no: item.id_no,
+            chinese_name: item.chinese_name,
+            name: item.name,
+            sex: item.sex,
+            dob: dob,
+            pob: item.pob,
+            race: item.race,
+            b_cert: item.b_cert,
+            register_date: item.register_date,
+            umo_1jan: umo_1jan
+          }
+        end
+
+      number = 40
+
+      add = number - (new_all |> Enum.count())
+
+      range = 1..add
+
+      empty_colum =
+        for item <- range do
+          %{
+            id_no: "",
+            chinese_name: "",
+            name: "",
+            sex: "",
+            dob: "",
+            pob: "",
+            race: "",
+            b_cert: "",
+            register_date: "",
+            umo_1jan: ""
+          }
+        end
+
+      all = new_all ++ empty_colum
+
+      institution =
+        Repo.get_by(School.Settings.Institution, id: conn.private.plug_session["institution_id"])
+
+      semester =
+        Repo.get_by(School.Affairs.Semester,
+          id: semester_id,
+          institution_id: conn.private.plug_session["institution_id"]
+        )
+
+      class =
+        if class_id != "ALL" do
+          Repo.get_by(School.Affairs.Class, %{
+            id: class_id,
+            institution_id: conn.private.plug_session["institution_id"]
+          })
+        else
+          %{name: "ALL"}
+        end
+
+      all =
+        for item <- all |> Enum.with_index() do
+          no = item |> elem(1)
+          item = item |> elem(0)
+
+          [
+            {:no, (no + 1) |> Integer.to_string()},
+            {:id_no, item.id_no},
+            {:chinese_name, item.chinese_name},
+            {:name, item.name},
+            {:sex, item.sex},
+            {:dob, item.dob},
+            {:pob, item.pob},
+            {:umo_1jan, item.umo_1jan},
+            {:b_cert, item.b_cert},
+            {:register_date, item.register_date},
+            {:race, item.race}
+          ]
+        end
+
+      csv_content = [
+        "Bil.",
+        "Bil DlmSekolah学学生编号编号",
+        "B. (Cina)中文名字",
+        "Bahasa Malaysia⻢来⻢来文名字",
+        "Jantina性别别",
+        "TarikhLahir出生日期",
+        "TempatLahir出生地方",
+        "UmurPada1hb Jan年龄",
+        "No.SijilBeranak出生纸号码纸号码",
+        "TarikhMasuk入学学日期",
+        "Bangsa种种族"
+      ]
+
+      header =
+        for item <- csv_content |> Enum.with_index() do
+          no = item |> elem(1)
+          start_no = (no + 1) |> Integer.to_string()
+
+          letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" |> String.split("", trim: true)
+
+          alphabert = letters |> Enum.fetch!(no)
+
+          start = alphabert <> "1"
+
+          item = item |> elem(0)
+
+          {start, item}
+        end
+
+      data =
+        for item <- all |> Enum.with_index() do
+          no = item |> elem(1)
+          start_no = (no + 2) |> Integer.to_string()
+          item = item |> elem(0)
+
+          a =
+            for each <- item |> Enum.with_index() do
+              letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" |> String.split("", trim: true)
+              no = each |> elem(1)
+
+              item = each |> elem(0) |> elem(1)
+
+              alphabert = letters |> Enum.fetch!(no)
+
+              start = alphabert <> start_no
+
+              {start, item}
+            end
+
+          a
+        end
+        |> List.flatten()
+
+      final = header ++ data
+
+      sheet = Sheet.with_name("StudentList(JPN)")
+
+      total = Enum.reduce(final, sheet, fn x, sheet -> sheet_cell_insert(sheet, x) end)
+
+      total = total |> Sheet.set_col_width("B", 35.0) |> Sheet.set_col_width("C", 20.0)
+
+      page = %Workbook{sheets: [total]}
+
+      image_path = Application.app_dir(:school, "priv/static/images")
+
+      content = page |> Elixlsx.write_to(image_path <> "/StudentListJPN.xlsx")
+
+      file = File.read!(image_path <> "/StudentList.xlsx")
+
+      conn
+      |> put_resp_content_type("text/xlsx")
+      |> put_resp_header(
+        "content-disposition",
+        "attachment; filename=\"StudentList-#{class.name}.xlsx\""
+      )
+      |> send_resp(200, file)
+    else
+      new_all =
+        for item <- all do
+          dob =
+            if item.dob != nil do
+              item.dob |> String.split_at(10) |> elem(0) |> String.replace(".", "/")
+            else
+            end
+
+          umo_1jan =
+            if item.dob != nil do
+              a = item.dob |> String.split_at(10) |> elem(0)
+
+              day = a |> String.split_at(2) |> elem(0) |> String.to_integer()
+
+              month =
+                a
+                |> String.split_at(5)
+                |> elem(0)
+                |> String.split_at(3)
+                |> elem(1)
+                |> String.to_integer()
+
+              year = a |> String.split_at(6) |> elem(1) |> String.to_integer()
+
+              umo_1jan =
+                if item.register_date != nil do
+                  day_r =
+                    item.register_date |> String.split_at(2) |> elem(0) |> String.to_integer()
+
+                  month_r =
+                    item.register_date
+                    |> String.split_at(5)
+                    |> elem(0)
+                    |> String.split_at(3)
+                    |> elem(1)
+                    |> String.to_integer()
+
+                  year_r =
+                    item.register_date |> String.split_at(6) |> elem(1) |> String.to_integer()
+
+                  year_total = year_r - 1 - year
+
+                  month_total = 12 - month
+
+                  month_new = month_total |> Integer.to_string()
+                  year_new = year_total |> Integer.to_string()
+
+                  umo_1jan = year_new <> "-" <> month_new
+
+                  umo_1jan
+                else
+                end
+
+              umo_1jan
+            else
+            end
+
+          %{
+            id_no: item.id_no,
+            chinese_name: item.chinese_name,
+            name: item.name,
+            sex: item.sex,
+            dob: dob,
+            pob: item.pob,
+            race: item.race,
+            b_cert: item.b_cert,
+            register_date: item.register_date,
+            umo_1jan: umo_1jan
+          }
+        end
+
+      number = 40
+
+      add = number - (new_all |> Enum.count())
+
+      range = 1..add
+
+      empty_colum =
+        for item <- range do
+          %{
+            id_no: "",
+            chinese_name: "",
+            name: "",
+            sex: "",
+            dob: "",
+            pob: "",
+            race: "",
+            b_cert: "",
+            register_date: "",
+            umo_1jan: ""
+          }
+        end
+
+      all = new_all ++ empty_colum
+
+      institution =
+        Repo.get_by(School.Settings.Institution, id: conn.private.plug_session["institution_id"])
+
+      semester =
+        Repo.get_by(School.Affairs.Semester,
+          id: semester_id,
+          institution_id: conn.private.plug_session["institution_id"]
+        )
+
+      class =
+        if class_id != "ALL" do
+          Repo.get_by(School.Affairs.Class, %{
+            id: class_id,
+            institution_id: conn.private.plug_session["institution_id"]
+          })
+        else
+          %{name: "ALL"}
+        end
+
+      all =
+        for item <- all |> Enum.with_index() do
+          no = item |> elem(1)
+          item = item |> elem(0)
+
+          [
+            {:no, (no + 1) |> Integer.to_string()},
+            {:id_no, item.id_no},
+            {:chinese_name, item.chinese_name},
+            {:name, item.name},
+            {:sex, item.sex},
+            {:dob, item.dob},
+            {:pob, item.pob},
+            {:umo_1jan, item.umo_1jan},
+            {:b_cert, item.b_cert},
+            {:register_date, item.register_date},
+            {:race, item.race}
+          ]
+        end
+
+      csv_content = [
+        "Bil.",
+        "Bil DlmSekolah学学生编号编号",
+        "B. (Cina)中文名字",
+        "Bahasa Malaysia⻢来⻢来文名字",
+        "Jantina性别别",
+        "TarikhLahir出生日期",
+        "TempatLahir出生地方",
+        "UmurPada1hb Jan年龄",
+        "No.SijilBeranak出生纸号码纸号码",
+        "TarikhMasuk入学学日期",
+        "Bangsa种种族"
+      ]
+
+      header =
+        for item <- csv_content |> Enum.with_index() do
+          no = item |> elem(1)
+          start_no = (no + 1) |> Integer.to_string()
+
+          letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" |> String.split("", trim: true)
+
+          alphabert = letters |> Enum.fetch!(no)
+
+          start = alphabert <> "1"
+
+          item = item |> elem(0)
+
+          {start, item}
+        end
+
+      data =
+        for item <- all |> Enum.with_index() do
+          no = item |> elem(1)
+          start_no = (no + 2) |> Integer.to_string()
+          item = item |> elem(0)
+
+          a =
+            for each <- item |> Enum.with_index() do
+              letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" |> String.split("", trim: true)
+              no = each |> elem(1)
+
+              item = each |> elem(0) |> elem(1)
+
+              alphabert = letters |> Enum.fetch!(no)
+
+              start = alphabert <> start_no
+
+              {start, item}
+            end
+
+          a
+        end
+        |> List.flatten()
+
+      final = header ++ data
+
+      sheet = Sheet.with_name("StudentList(JPN)")
+
+      total = Enum.reduce(final, sheet, fn x, sheet -> sheet_cell_insert(sheet, x) end)
+
+      total = total |> Sheet.set_col_width("B", 35.0) |> Sheet.set_col_width("C", 20.0)
+
+      page = %Workbook{sheets: [total]}
+
+      image_path = Application.app_dir(:school, "priv/static/images")
+
+      content = page |> Elixlsx.write_to(image_path <> "/StudentListJPN.xlsx")
+
+      file = File.read!(image_path <> "/StudentListJPN.xlsx")
+
+      conn
+      |> put_resp_content_type("text/xlsx")
+      |> put_resp_header(
+        "content-disposition",
+        "attachment; filename=\"StudentListJPN-#{class.name}.xlsx\""
+      )
+      |> send_resp(200, file)
+    end
+  end
+
+  def excel_student_parent(conn, params) do
+    class_id = params["class_id"]
+    semester_id = params["semester_id"]
+
+    {male, female} =
+      if class_id != "ALL" do
+        male =
+          Repo.all(
+            from(
+              s in School.Affairs.StudentClass,
+              left_join: g in School.Affairs.Class,
+              on: s.class_id == g.id,
+              left_join: r in School.Affairs.Student,
+              on: r.id == s.sudent_id,
+              where:
+                s.class_id == ^class_id and
+                  g.institution_id == ^conn.private.plug_session["institution_id"] and
+                  r.institution_id == ^conn.private.plug_session["institution_id"] and
+                  s.semester_id == ^semester_id and r.sex == "M",
+              select: %{
+                chinese_name: r.chinese_name,
+                name: r.name,
+                icno: r.ic,
+                b_cert: r.b_cert,
+                line1: r.line1,
+                line2: r.line2,
+                postcode: r.postcode,
+                town: r.town,
+                state: r.state,
+                country: r.country,
+                ficno: r.ficno,
+                micno: r.micno
+              },
+              order_by: [asc: r.name]
+            )
+          )
+
+        female =
+          Repo.all(
+            from(
+              s in School.Affairs.StudentClass,
+              left_join: g in School.Affairs.Class,
+              on: s.class_id == g.id,
+              left_join: r in School.Affairs.Student,
+              on: r.id == s.sudent_id,
+              where:
+                s.class_id == ^class_id and
+                  g.institution_id == ^conn.private.plug_session["institution_id"] and
+                  r.institution_id == ^conn.private.plug_session["institution_id"] and
+                  s.semester_id == ^semester_id and r.sex == "F",
+              select: %{
+                chinese_name: r.chinese_name,
+                name: r.name,
+                icno: r.ic,
+                b_cert: r.b_cert,
+                line1: r.line1,
+                line2: r.line2,
+                postcode: r.postcode,
+                town: r.town,
+                state: r.state,
+                country: r.country,
+                ficno: r.ficno,
+                micno: r.micno
+              },
+              order_by: [asc: r.name]
+            )
+          )
+
+        {male, female}
+      else
+        male =
+          Repo.all(
+            from(
+              s in School.Affairs.StudentClass,
+              left_join: g in School.Affairs.Class,
+              on: s.class_id == g.id,
+              left_join: r in School.Affairs.Student,
+              on: r.id == s.sudent_id,
+              where:
+                g.institution_id == ^conn.private.plug_session["institution_id"] and
+                  r.institution_id == ^conn.private.plug_session["institution_id"] and
+                  s.semester_id == ^semester_id and r.sex == "M",
+              select: %{
+                chinese_name: r.chinese_name,
+                name: r.name,
+                icno: r.ic,
+                b_cert: r.b_cert,
+                line1: r.line1,
+                line2: r.line2,
+                postcode: r.postcode,
+                town: r.town,
+                state: r.state,
+                country: r.country,
+                ficno: r.ficno,
+                micno: r.micno
+              },
+              order_by: [asc: r.name]
+            )
+          )
+
+        female =
+          Repo.all(
+            from(
+              s in School.Affairs.StudentClass,
+              left_join: g in School.Affairs.Class,
+              on: s.class_id == g.id,
+              left_join: r in School.Affairs.Student,
+              on: r.id == s.sudent_id,
+              where:
+                g.institution_id == ^conn.private.plug_session["institution_id"] and
+                  r.institution_id == ^conn.private.plug_session["institution_id"] and
+                  s.semester_id == ^semester_id and r.sex == "F",
+              select: %{
+                chinese_name: r.chinese_name,
+                name: r.name,
+                icno: r.ic,
+                b_cert: r.b_cert,
+                line1: r.line1,
+                line2: r.line2,
+                postcode: r.postcode,
+                town: r.town,
+                state: r.state,
+                country: r.country,
+                ficno: r.ficno,
+                micno: r.micno
+              },
+              order_by: [asc: r.name]
+            )
+          )
+
+        {male, female}
+      end
+
+    all = male ++ female
+
+    all =
+      for item <- all do
+        ficno = item.ficno
+        micno = item.micno
+
+        ficno =
+          if ficno == nil do
+            ""
+          else
+            ficno
+          end
+
+        micno =
+          if micno == nil do
+            ""
+          else
+            micno
+          end
+
+        father = Repo.get_by(School.Affairs.Parent, icno: ficno)
+        mother = Repo.get_by(School.Affairs.Parent, icno: micno)
+
+        {fhphone, fname} =
+          if father != nil do
+            fhphone = father.hphone
+            fname = father.name
+
+            {fhphone, fname}
+          else
+            fhphone = ""
+            fname = ""
+
+            {fhphone, fname}
+          end
+
+        {mphone, mname} =
+          if mother != nil do
+            mphone = mother.hphone
+            mname = mother.name
+
+            {mphone, mname}
+          else
+            mphone = ""
+            mname = ""
+
+            {mphone, mname}
+          end
+
+        a =
+          if item.line1 != nil do
+            item.line1 <> ","
+          else
+            ","
+          end
+
+        b =
+          if item.line2 != nil do
+            item.line2 <> ","
+          else
+            ","
+          end
+
+        c =
+          if item.postcode != nil do
+            item.postcode <> ","
+          else
+            ","
+          end
+
+        d =
+          if item.town != nil do
+            item.town <> ","
+          else
+            ","
+          end
+
+        e =
+          if item.state != nil do
+            item.state <> ","
+          else
+            ","
+          end
+
+        f =
+          if item.country != nil do
+            item.country
+          else
+            ""
+          end
+
+        address = a <> b <> c <> d <> e <> f
+
+        %{
+          name: item.name,
+          chinese_name: item.chinese_name,
+          icno: item.icno,
+          b_cert: item.b_cert,
+          fname: fname,
+          fhphone: fhphone,
+          mname: mname,
+          mphone: mphone,
+          address: address
+        }
+      end
+
+    number = 40
+
+    add = number - (all |> Enum.count())
+
+    range = 1..add
+
+    empty_colum =
+      for item <- range do
+        %{
+          name: "",
+          chinese_name: "",
+          icno: "",
+          b_cert: "",
+          fname: "",
+          fhphone: "",
+          mname: "",
+          mphone: "",
+          address: ""
+        }
+      end
+
+    all = all ++ empty_colum
+
+    institution =
+      Repo.get_by(School.Settings.Institution, id: conn.private.plug_session["institution_id"])
+
+    semester =
+      Repo.get_by(School.Affairs.Semester,
+        id: semester_id,
+        institution_id: conn.private.plug_session["institution_id"]
+      )
+
+    class =
+      if class_id != "ALL" do
+        Repo.get_by(School.Affairs.Class, %{
+          id: class_id,
+          institution_id: conn.private.plug_session["institution_id"]
+        })
+      else
+        %{name: "ALL"}
+      end
+
+    all =
+      for item <- all |> Enum.with_index() do
+        no = item |> elem(1)
+        item = item |> elem(0)
+
+        [
+          {:no, (no + 1) |> Integer.to_string()},
+          {:name, item.name},
+          {:chinese_name, item.chinese_name},
+          {:icno, item.icno},
+          {:b_cert, item.b_cert},
+          {:fname, item.fname},
+          {:fhphone, item.fhphone},
+          {:mname, item.mname},
+          {:mphone, item.mphone},
+          {:address, item.address}
+        ]
+      end
+
+    csv_content = [
+      "No.",
+      "Name",
+      "中文姓名",
+      "No.KP",
+      "No. Sijil Lahir",
+      "Nama Bapa",
+      "No. Tel Bimbit Bapa",
+      "Nama Ibu",
+      "No. Tel Bimbit Ibu",
+      "Alamat Rumah"
+    ]
+
+    header =
+      for item <- csv_content |> Enum.with_index() do
+        no = item |> elem(1)
+        start_no = (no + 1) |> Integer.to_string()
+
+        letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" |> String.split("", trim: true)
+
+        alphabert = letters |> Enum.fetch!(no)
+
+        start = alphabert <> "1"
+
+        item = item |> elem(0)
+
+        {start, item}
+      end
+
+    data =
+      for item <- all |> Enum.with_index() do
+        no = item |> elem(1)
+        start_no = (no + 2) |> Integer.to_string()
+        item = item |> elem(0)
+
+        a =
+          for each <- item |> Enum.with_index() do
+            letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" |> String.split("", trim: true)
+            no = each |> elem(1)
+
+            item = each |> elem(0) |> elem(1)
+
+            alphabert = letters |> Enum.fetch!(no)
+
+            start = alphabert <> start_no
+
+            {start, item}
+          end
+
+        a
+      end
+      |> List.flatten()
+
+    final = header ++ data
+
+    sheet = Sheet.with_name("StudentList(ParentInfo)")
+
+    total = Enum.reduce(final, sheet, fn x, sheet -> sheet_cell_insert(sheet, x) end)
+
+    total =
+      total
+      |> Sheet.set_col_width("B", 35.0)
+      |> Sheet.set_col_width("C", 20.0)
+      |> Sheet.set_col_width("D", 20.0)
+      |> Sheet.set_col_width("E", 20.0)
+      |> Sheet.set_col_width("G", 20.0)
+      |> Sheet.set_col_width("J", 50.0)
+      |> Sheet.set_col_width("F", 35.0)
+      |> Sheet.set_col_width("H", 35.0)
+
+    page = %Workbook{sheets: [total]}
+
+    image_path = Application.app_dir(:school, "priv/static/images")
+
+    content = page |> Elixlsx.write_to(image_path <> "/StudentList-ParentInfo.xlsx")
+
+    file = File.read!(image_path <> "/StudentList-ParentInfo.xlsx")
+
+    conn
+    |> put_resp_content_type("text/xlsx")
+    |> put_resp_header(
+      "content-disposition",
+      "attachment; filename=\"StudentList-ParentInfo-#{class.name}.xlsx\""
     )
     |> send_resp(200, file)
   end

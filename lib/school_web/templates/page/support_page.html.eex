@@ -456,6 +456,7 @@
                  <a href ="/mark_sheet"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Mark</button></a>
           <a href ="/exam_history_checklist"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Exam History</button></a>
            <a href ="/head_counts"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Head Count</button></a>
+             <a href ="/signiture_upload"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Head Teacher Signiture Upload</button></a>
              </div>
           </div>
         </div>
