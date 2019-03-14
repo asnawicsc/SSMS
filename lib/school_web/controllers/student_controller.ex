@@ -1352,6 +1352,336 @@ defmodule SchoolWeb.StudentController do
     |> send_resp(200, file)
   end
 
+  def excel_selection_student_class(conn, params) do
+    class_id = params["class_id"]
+    semester_id = params["semester_id"]
+
+    render(conn, "selection_page.html", class_id: class_id, semester_id: semester_id)
+  end
+
+  def generate_student_list_selection(conn, params) do
+    class_id = params["class_id"]
+    semester_id = params["semester_id"]
+
+    class =
+      if params["class_id"] == "ALL" do
+        %{name: "ALL"}
+      else
+        Repo.get(Class, params["class_id"])
+      end
+
+    {male, female} =
+      if class_id != "ALL" do
+        male =
+          Repo.all(
+            from(
+              s in School.Affairs.StudentClass,
+              left_join: g in School.Affairs.Class,
+              on: s.class_id == g.id,
+              left_join: r in School.Affairs.Student,
+              on: r.id == s.sudent_id,
+              where:
+                s.class_id == ^class_id and
+                  g.institution_id == ^conn.private.plug_session["institution_id"] and
+                  r.institution_id == ^conn.private.plug_session["institution_id"] and
+                  s.semester_id == ^semester_id and r.sex == "M",
+              select: %{
+                student_no: r.student_no,
+                b_cert: r.b_cert,
+                name: r.name,
+                chinese_name: r.chinese_name,
+                sex: r.sex,
+                ic: r.ic,
+                dob: r.dob,
+                pob: r.pob,
+                race: r.race,
+                religion: r.religion,
+                nationality: r.nationality,
+                country: r.country,
+                line1: r.line1,
+                line2: r.line2,
+                postcode: r.postcode,
+                town: r.town,
+                state: r.state,
+                phone: r.phone,
+                blood_type: r.blood_type,
+                gicno: r.gicno,
+                ficno: r.ficno,
+                micno: r.micno
+              },
+              order_by: [asc: r.name]
+            )
+          )
+
+        female =
+          Repo.all(
+            from(
+              s in School.Affairs.StudentClass,
+              left_join: g in School.Affairs.Class,
+              on: s.class_id == g.id,
+              left_join: r in School.Affairs.Student,
+              on: r.id == s.sudent_id,
+              where:
+                s.class_id == ^class_id and
+                  g.institution_id == ^conn.private.plug_session["institution_id"] and
+                  r.institution_id == ^conn.private.plug_session["institution_id"] and
+                  s.semester_id == ^semester_id and r.sex == "F",
+              select: %{
+                student_no: r.student_no,
+                b_cert: r.b_cert,
+                name: r.name,
+                chinese_name: r.chinese_name,
+                sex: r.sex,
+                ic: r.ic,
+                dob: r.dob,
+                pob: r.pob,
+                race: r.race,
+                religion: r.religion,
+                nationality: r.nationality,
+                country: r.country,
+                line1: r.line1,
+                line2: r.line2,
+                postcode: r.postcode,
+                town: r.town,
+                state: r.state,
+                phone: r.phone,
+                blood_type: r.blood_type,
+                gicno: r.gicno,
+                ficno: r.ficno,
+                micno: r.micno
+              },
+              order_by: [asc: r.name]
+            )
+          )
+
+        {male, female}
+      else
+        male =
+          Repo.all(
+            from(
+              s in School.Affairs.StudentClass,
+              left_join: g in School.Affairs.Class,
+              on: s.class_id == g.id,
+              left_join: r in School.Affairs.Student,
+              on: r.id == s.sudent_id,
+              where:
+                g.institution_id == ^conn.private.plug_session["institution_id"] and
+                  r.institution_id == ^conn.private.plug_session["institution_id"] and
+                  s.semester_id == ^semester_id and r.sex == "M",
+              select: %{
+                student_no: r.student_no,
+                b_cert: r.b_cert,
+                name: r.name,
+                chinese_name: r.chinese_name,
+                sex: r.sex,
+                ic: r.ic,
+                dob: r.dob,
+                pob: r.pob,
+                race: r.race,
+                religion: r.religion,
+                nationality: r.nationality,
+                country: r.country,
+                line1: r.line1,
+                line2: r.line2,
+                postcode: r.postcode,
+                town: r.town,
+                state: r.state,
+                phone: r.phone,
+                blood_type: r.blood_type,
+                gicno: r.gicno,
+                ficno: r.ficno,
+                micno: r.micno
+              },
+              order_by: [asc: r.name]
+            )
+          )
+
+        female =
+          Repo.all(
+            from(
+              s in School.Affairs.StudentClass,
+              left_join: g in School.Affairs.Class,
+              on: s.class_id == g.id,
+              left_join: r in School.Affairs.Student,
+              on: r.id == s.sudent_id,
+              where:
+                g.institution_id == ^conn.private.plug_session["institution_id"] and
+                  r.institution_id == ^conn.private.plug_session["institution_id"] and
+                  s.semester_id == ^semester_id and r.sex == "F",
+              select: %{
+                student_no: r.student_no,
+                b_cert: r.b_cert,
+                name: r.name,
+                chinese_name: r.chinese_name,
+                sex: r.sex,
+                ic: r.ic,
+                dob: r.dob,
+                pob: r.pob,
+                race: r.race,
+                religion: r.religion,
+                nationality: r.nationality,
+                country: r.country,
+                line1: r.line1,
+                line2: r.line2,
+                postcode: r.postcode,
+                town: r.town,
+                state: r.state,
+                phone: r.phone,
+                blood_type: r.blood_type,
+                gicno: r.gicno,
+                ficno: r.ficno,
+                micno: r.micno
+              },
+              order_by: [asc: r.name]
+            )
+          )
+
+        {male, female}
+      end
+
+    all = male ++ female
+
+    all =
+      for item <- all |> Enum.with_index() do
+        no = item |> elem(1)
+        item = item |> elem(0)
+
+        true_sort = true_sort(params["selection"])
+
+        all =
+          for select <- true_sort do
+            sele = select |> String.to_atom()
+
+            fe = item |> Map.fetch!(sele)
+
+            {sele, fe}
+          end
+
+        all
+      end
+
+    true_sort = true_sort(params["selection"])
+
+    header =
+      for item <- true_sort |> Enum.with_index() do
+        no = item |> elem(1)
+        start_no = (no + 1) |> Integer.to_string()
+
+        letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" |> String.split("", trim: true)
+
+        alphabert = letters |> Enum.fetch!(no)
+
+        start = alphabert <> "1"
+
+        item = item |> elem(0) |> String.upcase()
+
+        {start, item}
+      end
+
+    data =
+      for item <- all |> Enum.with_index() do
+        no = item |> elem(1)
+        start_no = (no + 2) |> Integer.to_string()
+        item = item |> elem(0)
+
+        a =
+          for each <- item |> Enum.with_index() do
+            letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" |> String.split("", trim: true)
+            no = each |> elem(1)
+
+            item = each |> elem(0) |> elem(1)
+
+            alphabert = letters |> Enum.fetch!(no)
+
+            start = alphabert <> start_no
+
+            {start, item}
+          end
+
+        a
+      end
+      |> List.flatten()
+
+    final = header ++ data
+
+    sheet = Sheet.with_name("StudentListSelection")
+
+    total = Enum.reduce(final, sheet, fn x, sheet -> sheet_cell_insert(sheet, x) end)
+
+    total =
+      total
+      |> Sheet.set_col_width("B", 35.0)
+      |> Sheet.set_col_width("C", 35.0)
+      |> Sheet.set_col_width("D", 35.0)
+      |> Sheet.set_col_width("E", 35.0)
+      |> Sheet.set_col_width("F", 35.0)
+      |> Sheet.set_col_width("G", 35.0)
+      |> Sheet.set_col_width("H", 35.0)
+      |> Sheet.set_col_width("I", 35.0)
+      |> Sheet.set_col_width("J", 35.0)
+      |> Sheet.set_col_width("K", 35.0)
+      |> Sheet.set_col_width("L", 35.0)
+      |> Sheet.set_col_width("M", 35.0)
+      |> Sheet.set_col_width("N", 35.0)
+      |> Sheet.set_col_width("O", 35.0)
+
+    page = %Workbook{sheets: [total]}
+
+    image_path = Application.app_dir(:school, "priv/static/images")
+
+    content = page |> Elixlsx.write_to(image_path <> "/StudentListSelection.xlsx")
+
+    file = File.read!(image_path <> "/StudentListSelection.xlsx")
+
+    conn
+    |> put_resp_content_type("text/xlsx")
+    |> put_resp_header(
+      "content-disposition",
+      "attachment; filename=\"StudentListSelection-#{class.name}.xlsx\""
+    )
+    |> send_resp(200, file)
+  end
+
+  defp true_sort(selection) do
+    selection = selection |> Enum.map(fn x -> x end) |> Enum.map(fn x -> x |> elem(0) end)
+
+    attrs =
+      [
+        :student_no,
+        :name,
+        :chinese_name,
+        :sex,
+        :b_cert,
+        :ic,
+        :phone,
+        :dob,
+        :pob,
+        :race,
+        :line1,
+        :line2,
+        :postcode,
+        :town,
+        :state,
+        :nationality,
+        :religion,
+        :country,
+        :blood_type,
+        :gicno,
+        :ficno,
+        :micno
+      ]
+      |> Enum.map(fn x -> Atom.to_string(x) end)
+
+    true_sort =
+      for item <- attrs do
+        for items <- selection do
+          selection |> Enum.filter(fn x -> x == item end)
+        end
+      end
+      |> List.flatten()
+      |> Enum.uniq()
+  end
+
   def submit_student_transfer(conn, params) do
     students =
       Repo.all(

@@ -1,0 +1,44 @@
+<div class="content-heading">
+    <div>Student Listing Selection
+    </div>
+</div>
+<div class="row">
+      <div class="col-lg-8" aria-label="student_table">
+        <div class="card card-default d-none d-lg-block">
+          <div class="card-body">
+		
+<form class="form-horizontal" method="POST" action="/generate_student_list_selection">
+	  <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+	    <input type="hidden" name="class_id" value="<%= @class_id %>">
+  <input type="hidden" name="semester_id" value="<%= @semester_id %>">
+	<% attrs = [:student_no,  :name, :chinese_name,   :sex,    :b_cert,  :ic, :phone,    :dob,      :pob,  :race,   :line1,:line2,:postcode,:town,:state,:nationality, :religion,:country,:blood_type,:gicno,:ficno,:micno,
+    ] |> Enum.map(fn x -> Atom.to_string(x) end) %>
+	                           <label class="col-sm-2 control-label">Field Selection</label>
+                           <div class="col-sm-10">
+                           	<%= for item <- attrs do %>
+                           		
+                           
+                              <div class="checkbox">
+                                 <label>
+
+                                    <input type="checkbox" name="selection[<%= item %>]" > <%= item|>String.upcase %></label>
+                              </div>
+                              
+                             	<% end %>
+                           </div>
+                        
+
+
+
+
+
+
+<button class="mb-1 btn btn-inverse" type="submit" name="" value="Generate">Generate</button>
+</form>
+
+</div>
+</div>
+</div>
+</div>
+
+

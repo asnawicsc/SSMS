@@ -56,6 +56,14 @@
   <button class="mb-1 btn btn-pink" type="submit" name="" value="Generate">Excel(Parent)</button>
 
 </form>
+&nbsp;
+&nbsp;
+ <form action="excel_selection_student_class" method="POST">
+ <input type="hidden" name="class_id" value="<%= @class_id %>">
+  <input type="hidden" name="semester_id" value="<%= @semester_id %>">
+  <input type="hidden" name="_csrf_token" value="<%= @csrf %>">
+  <button class="mb-1 btn btn-inverse" type="submit" name="" value="Generate">Excel Selection</button>
+
 
 </div>
 </div>

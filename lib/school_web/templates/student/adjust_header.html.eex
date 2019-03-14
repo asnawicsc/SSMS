@@ -7,10 +7,8 @@
 <form class="form-horizontal" method="POST" action="/upload_students_final">
 	  <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
 	    <input type="hidden" name="batch_id" value="<%= @batch_id%>">
-	<% attrs = [      :student_no,
+	<% attrs = [:student_no,
       :b_cert,
- 
-
       :name,
       :chinese_name,
       :sex,
@@ -27,10 +25,7 @@
       :town,
       :state,
       :phone,
-
       :blood_type,
- 
- 
       :gicno,
       :ficno,
       :micno,

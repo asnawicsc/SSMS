@@ -590,6 +590,18 @@ defmodule SchoolWeb.Router do
       :excel_student_parent
     )
 
+    post(
+      "/excel_selection_student_class",
+      StudentController,
+      :excel_selection_student_class
+    )
+
+    post(
+      "/generate_student_list_selection",
+      StudentController,
+      :generate_student_list_selection
+    )
+
     resources("/mark_sheet_historys", MarkSheetHistorysController)
 
     post(
