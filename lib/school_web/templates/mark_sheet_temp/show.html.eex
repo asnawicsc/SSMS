@@ -1,0 +1,88 @@
+<h2>Show Mark sheet temp</h2>
+
+<ul>
+
+  <li>
+    <strong>Institution:</strong>
+    <%= @mark_sheet_temp.institution_id %>
+  </li>
+
+  <li>
+    <strong>Stuid:</strong>
+    <%= @mark_sheet_temp.stuid %>
+  </li>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @mark_sheet_temp.name %>
+  </li>
+
+  <li>
+    <strong>Cname:</strong>
+    <%= @mark_sheet_temp.cname %>
+  </li>
+
+  <li>
+    <strong>Class:</strong>
+    <%= @mark_sheet_temp.class %>
+  </li>
+
+  <li>
+    <strong>Subject:</strong>
+    <%= @mark_sheet_temp.subject %>
+  </li>
+
+  <li>
+    <strong>Description:</strong>
+    <%= @mark_sheet_temp.description %>
+  </li>
+
+  <li>
+    <strong>Cdesc:</strong>
+    <%= @mark_sheet_temp.cdesc %>
+  </li>
+
+  <li>
+    <strong>Year:</strong>
+    <%= @mark_sheet_temp.year %>
+  </li>
+
+  <li>
+    <strong>Semester:</strong>
+    <%= @mark_sheet_temp.semester %>
+  </li>
+
+  <li>
+    <strong>S1m:</strong>
+    <%= @mark_sheet_temp.s1m %>
+  </li>
+
+  <li>
+    <strong>S2m:</strong>
+    <%= @mark_sheet_temp.s2m %>
+  </li>
+
+  <li>
+    <strong>S3m:</strong>
+    <%= @mark_sheet_temp.s3m %>
+  </li>
+
+  <li>
+    <strong>S1g:</strong>
+    <%= @mark_sheet_temp.s1g %>
+  </li>
+
+  <li>
+    <strong>S2g:</strong>
+    <%= @mark_sheet_temp.s2g %>
+  </li>
+
+  <li>
+    <strong>S3g:</strong>
+    <%= @mark_sheet_temp.s3g %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: mark_sheet_temp_path(@conn, :edit, @mark_sheet_temp) %></span>
+<span><%= link "Back", to: mark_sheet_temp_path(@conn, :index) %></span>

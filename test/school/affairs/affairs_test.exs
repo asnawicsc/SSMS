@@ -4488,4 +4488,94 @@ defmodule School.AffairsTest do
       assert %Ecto.Changeset{} = Affairs.change_mark_sheet_historys(mark_sheet_historys)
     end
   end
+
+  describe "mark_sheet_temp" do
+    alias School.Affairs.MarkSheetTemp
+
+    @valid_attrs %{cdesc: "some cdesc", class: "some class", cname: "some cname", description: "some description", institution_id: 42, name: "some name", s1g: "some s1g", s1m: "some s1m", s2g: "some s2g", s2m: "some s2m", s3g: "some s3g", s3m: "some s3m", semester: "some semester", stuid: "some stuid", subject: "some subject", year: "some year"}
+    @update_attrs %{cdesc: "some updated cdesc", class: "some updated class", cname: "some updated cname", description: "some updated description", institution_id: 43, name: "some updated name", s1g: "some updated s1g", s1m: "some updated s1m", s2g: "some updated s2g", s2m: "some updated s2m", s3g: "some updated s3g", s3m: "some updated s3m", semester: "some updated semester", stuid: "some updated stuid", subject: "some updated subject", year: "some updated year"}
+    @invalid_attrs %{cdesc: nil, class: nil, cname: nil, description: nil, institution_id: nil, name: nil, s1g: nil, s1m: nil, s2g: nil, s2m: nil, s3g: nil, s3m: nil, semester: nil, stuid: nil, subject: nil, year: nil}
+
+    def mark_sheet_temp_fixture(attrs \\ %{}) do
+      {:ok, mark_sheet_temp} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_mark_sheet_temp()
+
+      mark_sheet_temp
+    end
+
+    test "list_mark_sheet_temp/0 returns all mark_sheet_temp" do
+      mark_sheet_temp = mark_sheet_temp_fixture()
+      assert Affairs.list_mark_sheet_temp() == [mark_sheet_temp]
+    end
+
+    test "get_mark_sheet_temp!/1 returns the mark_sheet_temp with given id" do
+      mark_sheet_temp = mark_sheet_temp_fixture()
+      assert Affairs.get_mark_sheet_temp!(mark_sheet_temp.id) == mark_sheet_temp
+    end
+
+    test "create_mark_sheet_temp/1 with valid data creates a mark_sheet_temp" do
+      assert {:ok, %MarkSheetTemp{} = mark_sheet_temp} = Affairs.create_mark_sheet_temp(@valid_attrs)
+      assert mark_sheet_temp.cdesc == "some cdesc"
+      assert mark_sheet_temp.class == "some class"
+      assert mark_sheet_temp.cname == "some cname"
+      assert mark_sheet_temp.description == "some description"
+      assert mark_sheet_temp.institution_id == 42
+      assert mark_sheet_temp.name == "some name"
+      assert mark_sheet_temp.s1g == "some s1g"
+      assert mark_sheet_temp.s1m == "some s1m"
+      assert mark_sheet_temp.s2g == "some s2g"
+      assert mark_sheet_temp.s2m == "some s2m"
+      assert mark_sheet_temp.s3g == "some s3g"
+      assert mark_sheet_temp.s3m == "some s3m"
+      assert mark_sheet_temp.semester == "some semester"
+      assert mark_sheet_temp.stuid == "some stuid"
+      assert mark_sheet_temp.subject == "some subject"
+      assert mark_sheet_temp.year == "some year"
+    end
+
+    test "create_mark_sheet_temp/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_mark_sheet_temp(@invalid_attrs)
+    end
+
+    test "update_mark_sheet_temp/2 with valid data updates the mark_sheet_temp" do
+      mark_sheet_temp = mark_sheet_temp_fixture()
+      assert {:ok, mark_sheet_temp} = Affairs.update_mark_sheet_temp(mark_sheet_temp, @update_attrs)
+      assert %MarkSheetTemp{} = mark_sheet_temp
+      assert mark_sheet_temp.cdesc == "some updated cdesc"
+      assert mark_sheet_temp.class == "some updated class"
+      assert mark_sheet_temp.cname == "some updated cname"
+      assert mark_sheet_temp.description == "some updated description"
+      assert mark_sheet_temp.institution_id == 43
+      assert mark_sheet_temp.name == "some updated name"
+      assert mark_sheet_temp.s1g == "some updated s1g"
+      assert mark_sheet_temp.s1m == "some updated s1m"
+      assert mark_sheet_temp.s2g == "some updated s2g"
+      assert mark_sheet_temp.s2m == "some updated s2m"
+      assert mark_sheet_temp.s3g == "some updated s3g"
+      assert mark_sheet_temp.s3m == "some updated s3m"
+      assert mark_sheet_temp.semester == "some updated semester"
+      assert mark_sheet_temp.stuid == "some updated stuid"
+      assert mark_sheet_temp.subject == "some updated subject"
+      assert mark_sheet_temp.year == "some updated year"
+    end
+
+    test "update_mark_sheet_temp/2 with invalid data returns error changeset" do
+      mark_sheet_temp = mark_sheet_temp_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_mark_sheet_temp(mark_sheet_temp, @invalid_attrs)
+      assert mark_sheet_temp == Affairs.get_mark_sheet_temp!(mark_sheet_temp.id)
+    end
+
+    test "delete_mark_sheet_temp/1 deletes the mark_sheet_temp" do
+      mark_sheet_temp = mark_sheet_temp_fixture()
+      assert {:ok, %MarkSheetTemp{}} = Affairs.delete_mark_sheet_temp(mark_sheet_temp)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_mark_sheet_temp!(mark_sheet_temp.id) end
+    end
+
+    test "change_mark_sheet_temp/1 returns a mark_sheet_temp changeset" do
+      mark_sheet_temp = mark_sheet_temp_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_mark_sheet_temp(mark_sheet_temp)
+    end
+  end
 end

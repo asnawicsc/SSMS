@@ -611,6 +611,8 @@ defmodule SchoolWeb.Router do
     )
 
     resources("/ehehomeworks", EhomeworkController)
+    resources("/mark_sheet_temp", MarkSheetTempController)
+
     get("/ehomework/:class_id", EhomeworkController, :ehomework)
     get("/show_ehomework_calendar/class/:class_id", EhomeworkController, :show_ehomework_calendar)
     get("/view_homework/class/:class_id/end_date/:end_date", EhomeworkController, :view_homework)

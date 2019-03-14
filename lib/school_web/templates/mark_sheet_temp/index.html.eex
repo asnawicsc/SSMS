@@ -1,0 +1,56 @@
+<h2>Listing Mark sheet temp</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Institution</th>
+      <th>Stuid</th>
+      <th>Name</th>
+      <th>Cname</th>
+      <th>Class</th>
+      <th>Subject</th>
+      <th>Description</th>
+      <th>Cdesc</th>
+      <th>Year</th>
+      <th>Semester</th>
+      <th>S1m</th>
+      <th>S2m</th>
+      <th>S3m</th>
+      <th>S1g</th>
+      <th>S2g</th>
+      <th>S3g</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for mark_sheet_temp <- @mark_sheet_temp do %>
+    <tr>
+      <td><%= mark_sheet_temp.institution_id %></td>
+      <td><%= mark_sheet_temp.stuid %></td>
+      <td><%= mark_sheet_temp.name %></td>
+      <td><%= mark_sheet_temp.cname %></td>
+      <td><%= mark_sheet_temp.class %></td>
+      <td><%= mark_sheet_temp.subject %></td>
+      <td><%= mark_sheet_temp.description %></td>
+      <td><%= mark_sheet_temp.cdesc %></td>
+      <td><%= mark_sheet_temp.year %></td>
+      <td><%= mark_sheet_temp.semester %></td>
+      <td><%= mark_sheet_temp.s1m %></td>
+      <td><%= mark_sheet_temp.s2m %></td>
+      <td><%= mark_sheet_temp.s3m %></td>
+      <td><%= mark_sheet_temp.s1g %></td>
+      <td><%= mark_sheet_temp.s2g %></td>
+      <td><%= mark_sheet_temp.s3g %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: mark_sheet_temp_path(@conn, :show, mark_sheet_temp), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: mark_sheet_temp_path(@conn, :edit, mark_sheet_temp), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: mark_sheet_temp_path(@conn, :delete, mark_sheet_temp), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Mark sheet temp", to: mark_sheet_temp_path(@conn, :new) %></span>

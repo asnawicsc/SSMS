@@ -5761,4 +5761,100 @@ defmodule School.Affairs do
   def change_mark_sheet_historys(%MarkSheetHistorys{} = mark_sheet_historys) do
     MarkSheetHistorys.changeset(mark_sheet_historys, %{})
   end
+
+  alias School.Affairs.MarkSheetTemp
+
+  @doc """
+  Returns the list of mark_sheet_temp.
+
+  ## Examples
+
+      iex> list_mark_sheet_temp()
+      [%MarkSheetTemp{}, ...]
+
+  """
+  def list_mark_sheet_temp do
+    Repo.all(MarkSheetTemp)
+  end
+
+  @doc """
+  Gets a single mark_sheet_temp.
+
+  Raises `Ecto.NoResultsError` if the Mark sheet temp does not exist.
+
+  ## Examples
+
+      iex> get_mark_sheet_temp!(123)
+      %MarkSheetTemp{}
+
+      iex> get_mark_sheet_temp!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_mark_sheet_temp!(id), do: Repo.get!(MarkSheetTemp, id)
+
+  @doc """
+  Creates a mark_sheet_temp.
+
+  ## Examples
+
+      iex> create_mark_sheet_temp(%{field: value})
+      {:ok, %MarkSheetTemp{}}
+
+      iex> create_mark_sheet_temp(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_mark_sheet_temp(attrs \\ %{}) do
+    %MarkSheetTemp{}
+    |> MarkSheetTemp.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a mark_sheet_temp.
+
+  ## Examples
+
+      iex> update_mark_sheet_temp(mark_sheet_temp, %{field: new_value})
+      {:ok, %MarkSheetTemp{}}
+
+      iex> update_mark_sheet_temp(mark_sheet_temp, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_mark_sheet_temp(%MarkSheetTemp{} = mark_sheet_temp, attrs) do
+    mark_sheet_temp
+    |> MarkSheetTemp.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a MarkSheetTemp.
+
+  ## Examples
+
+      iex> delete_mark_sheet_temp(mark_sheet_temp)
+      {:ok, %MarkSheetTemp{}}
+
+      iex> delete_mark_sheet_temp(mark_sheet_temp)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_mark_sheet_temp(%MarkSheetTemp{} = mark_sheet_temp) do
+    Repo.delete(mark_sheet_temp)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking mark_sheet_temp changes.
+
+  ## Examples
+
+      iex> change_mark_sheet_temp(mark_sheet_temp)
+      %Ecto.Changeset{source: %MarkSheetTemp{}}
+
+  """
+  def change_mark_sheet_temp(%MarkSheetTemp{} = mark_sheet_temp) do
+    MarkSheetTemp.changeset(mark_sheet_temp, %{})
+  end
 end

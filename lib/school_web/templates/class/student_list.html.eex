@@ -35,7 +35,7 @@
  <input type="hidden" name="class_id" value="<%= @class_id %>">
   <input type="hidden" name="semester_id" value="<%= @semester_id %>">
   <input type="hidden" name="_csrf_token" value="<%= @csrf %>">
-  <button class="mb-1 btn btn-pink" type="submit" name="" value="Generate">Excel</button>
+  <button class="mb-1 btn btn-primary" type="submit" name="" value="Generate">Excel</button>
 
 </form>
 &nbsp;
@@ -44,7 +44,7 @@
  <input type="hidden" name="class_id" value="<%= @class_id %>">
   <input type="hidden" name="semester_id" value="<%= @semester_id %>">
   <input type="hidden" name="_csrf_token" value="<%= @csrf %>">
-  <button class="mb-1 btn btn-pink" type="submit" name="" value="Generate">Excel(JPM)</button>
+  <button class="mb-1 btn btn-danger" type="submit" name="" value="Generate">Excel(JPM)</button>
 
 </form>
 &nbsp;
@@ -53,7 +53,7 @@
  <input type="hidden" name="class_id" value="<%= @class_id %>">
   <input type="hidden" name="semester_id" value="<%= @semester_id %>">
   <input type="hidden" name="_csrf_token" value="<%= @csrf %>">
-  <button class="mb-1 btn btn-pink" type="submit" name="" value="Generate">Excel(Parent)</button>
+  <button class="mb-1 btn btn-warning" type="submit" name="" value="Generate">Excel(Parent)</button>
 
 </form>
 &nbsp;

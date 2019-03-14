@@ -804,30 +804,6 @@ else
  end
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
    %>
 
 
@@ -853,7 +829,7 @@ else
  <tr align="center" >
   <td colspan="2" align="center" style="margin: 3px; padding: 3px;" ><b>科目名称 MATA PELAJARAN</b></td>
   <td align="center" style="margin: 3px; padding: 3px;">评审一 <BR>PKBS1</td>
-  <td align="center" style="margin: 3px; padding: 3px;">评审二 <BR>PKBS1</td>
+  <td align="center" style="margin: 3px; padding: 3px;">评审二 <BR>PKBS2</td>
   <td align="center" style="margin: 3px; padding: 3px;">评审三 <BR>PKBS3</td>
   <td align="center" style="margin: 3px; padding: 3px;">平均 <BR>Purata</td>
  </tr>
