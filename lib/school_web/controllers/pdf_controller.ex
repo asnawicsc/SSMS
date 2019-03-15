@@ -73,6 +73,292 @@ defmodule SchoolWeb.PdfController do
     |> resp(200, pdf_binary)
   end
 
+  def report_card_temp(conn, params) do
+    class_name = params["class"]
+    semester_id = params["semester"]
+
+    class_info = Repo.get_by(School.Affairs.Class, name: class_name)
+
+    semester = Repo.get_by(School.Affairs.Semester, id: semester_id)
+
+    subject =
+      Repo.all(
+        from(s in School.Affairs.Subject,
+          where: s.institution_id == ^conn.private.plug_session["institution_id"]
+        )
+      )
+
+    student_class =
+      Repo.all(
+        from(s in School.Affairs.Student,
+          left_join: g in School.Affairs.StudentClass,
+          on: s.id == g.sudent_id,
+          left_join: k in School.Affairs.Class,
+          on: k.id == g.class_id,
+          where:
+            s.institution_id == ^conn.private.plug_session["institution_id"] and
+              g.semester_id == ^conn.private.plug_session["semester_id"] and
+              g.class_id == ^class_info.id,
+          select: %{
+            student_id: s.id,
+            student_name: s.name,
+            chinese_name: s.chinese_name,
+            class_name: k.name
+          }
+        )
+      )
+
+    list_exam =
+      Repo.all(from(s in School.Affairs.ExamMaster, where: s.level_id == ^class_info.level_id))
+
+    result =
+      for stud_class <- student_class do
+        for item <- subject do
+          all =
+            Repo.all(
+              from(
+                em in School.Affairs.ExamMark,
+                left_join: z in School.Affairs.Exam,
+                on: em.exam_id == z.id,
+                left_join: e in School.Affairs.ExamMaster,
+                on: z.exam_master_id == e.id,
+                left_join: j in School.Affairs.Semester,
+                on: e.semester_id == j.id,
+                left_join: s in School.Affairs.Student,
+                on: em.student_id == s.id,
+                left_join: sc in School.Affairs.StudentClass,
+                on: sc.sudent_id == s.id,
+                left_join: c in School.Affairs.Class,
+                on: sc.class_id == c.id,
+                left_join: sb in School.Affairs.Subject,
+                on: em.subject_id == sb.id,
+                where:
+                  c.name == ^class_name and sc.semester_id == ^semester_id and
+                    em.subject_id == ^item.id and em.student_id == ^stud_class.student_id,
+                select: %{
+                  student_id: s.id,
+                  student_name: s.name,
+                  chinese_name: s.chinese_name,
+                  class_name: c.name,
+                  exam_master_id: e.id,
+                  exam_name: e.name,
+                  semester: j.id,
+                  semester_no: j.sem,
+                  year: j.year,
+                  subject_code: sb.code,
+                  subject_name: sb.description,
+                  subject_cname: sb.cdesc,
+                  mark: em.mark,
+                  standard_id: sc.level_id
+                }
+              )
+            )
+            |> Enum.sort()
+
+          mark =
+            for exam <- list_exam |> Enum.with_index() do
+              no = exam |> elem(1)
+              exam = exam |> elem(0)
+
+              fit = all |> Enum.filter(fn x -> x.exam_master_id == exam.id end)
+
+              fit =
+                if fit == [] do
+                  ""
+                else
+                  a = fit |> hd()
+
+                  a.mark |> Integer.to_string()
+                end
+
+              {no + 1, fit}
+            end
+
+          grade =
+            for exam <- list_exam |> Enum.with_index() do
+              no = exam |> elem(1)
+              exam = exam |> elem(0)
+
+              fit = all |> Enum.filter(fn x -> x.exam_master_id == exam.id end)
+
+              fit =
+                if fit == [] do
+                  ""
+                else
+                  a = fit |> hd()
+
+                  grades =
+                    Repo.all(
+                      from(
+                        g in School.Affairs.ExamGrade,
+                        where:
+                          g.institution_id == ^conn.private.plug_session["institution_id"] and
+                            g.exam_master_id == ^a.exam_master_id
+                      )
+                    )
+
+                  grade =
+                    for grade <- grades do
+                      if a.mark >= grade.min and a.mark <= grade.max do
+                        grade.name
+                      end
+                    end
+                    |> Enum.filter(fn x -> x != nil end)
+                    |> hd
+                end
+
+              {no + 1, fit}
+            end
+
+          finish =
+            if all != [] do
+              all = all |> hd
+
+              s1m = mark |> Enum.fetch!(0) |> elem(1)
+              s2m = mark |> Enum.fetch!(1) |> elem(1)
+              s3m = mark |> Enum.fetch!(2) |> elem(1)
+              s1g = grade |> Enum.fetch!(0) |> elem(1)
+              s2g = grade |> Enum.fetch!(1) |> elem(1)
+              s3g = grade |> Enum.fetch!(2) |> elem(1)
+
+              %{
+                institution_id: conn.private.plug_session["institution_id"],
+                stuid: all.student_id |> Integer.to_string(),
+                name: all.student_name,
+                cname: all.chinese_name,
+                class: all.class_name,
+                subject: all.subject_code,
+                description: all.subject_name,
+                year: all.year |> Integer.to_string(),
+                semester: all.semester_no |> Integer.to_string(),
+                s1m: s1m,
+                s2m: s2m,
+                s3m: s3m,
+                s1g: s1g,
+                s2g: s2g,
+                s3g: s3g
+              }
+            end
+
+          finish
+        end
+      end
+      |> List.flatten()
+      |> Enum.filter(fn x -> x != nil end)
+
+    exist =
+      Repo.all(
+        from(s in School.Affairs.MarkSheetTemp,
+          where:
+            s.institution_id == ^conn.private.plug_session["institution_id"] and
+              s.class == ^class_name and s.year == ^Integer.to_string(semester.year) and
+              s.semester == ^Integer.to_string(semester.sem)
+        )
+      )
+
+    if exist != [] do
+      Repo.delete_all(
+        from(s in School.Affairs.MarkSheetTemp,
+          where:
+            s.institution_id == ^conn.private.plug_session["institution_id"] and
+              s.class == ^class_name and s.year == ^Integer.to_string(semester.year) and
+              s.semester == ^Integer.to_string(semester.sem)
+        )
+      )
+
+      for item <- result do
+        case Affairs.create_mark_sheet_temp(item) do
+          {:ok, mark_sheet_temp} ->
+            conn
+            |> put_flash(:info, "Mark sheet temp created successfully.")
+            |> redirect(to: "/list_report")
+
+          {:error, %Ecto.Changeset{} = changeset} ->
+            IEx.pry()
+        end
+      end
+    else
+      for item <- result do
+        case Affairs.create_mark_sheet_temp(item) do
+          {:ok, mark_sheet_temp} ->
+            conn
+            |> put_flash(:info, "Mark sheet temp created successfully.")
+            |> redirect(to: "/list_report")
+
+          {:error, %Ecto.Changeset{} = changeset} ->
+            IEx.pry()
+        end
+      end
+    end
+
+    conn
+    |> put_flash(:info, "Mark sheet generated")
+    |> redirect(to: mark_sheet_temp_path(conn, :index))
+  end
+
+  def report_card_all(conn, params) do
+    class_name = params["class"]
+    semester_id = params["semester"]
+
+    semester = Repo.get_by(School.Affairs.Semester, id: semester_id)
+
+    class_info = Repo.get_by(School.Affairs.Class, name: class_name)
+
+    list_exam =
+      Repo.all(from(s in School.Affairs.ExamMaster, where: s.level_id == ^class_info.level_id))
+
+    data =
+      Repo.all(
+        from(s in School.Affairs.MarkSheetTemp,
+          where:
+            s.institution_id == ^conn.private.plug_session["institution_id"] and
+              s.class == ^class_name and s.year == ^Integer.to_string(semester.year) and
+              s.semester == ^Integer.to_string(semester.sem)
+        )
+      )
+
+    if data == [] do
+      conn
+      |> put_flash(:info, "No Data for this Selection")
+      |> redirect(to: "/list_report")
+    else
+      data = data |> Enum.group_by(fn x -> x.stuid end)
+
+      html =
+        Phoenix.View.render_to_string(
+          SchoolWeb.PdfView,
+          "report_cards.html",
+          a: data,
+          list_exam: list_exam
+        )
+
+      pdf_params = %{"html" => html}
+
+      pdf_binary =
+        PdfGenerator.generate_binary!(
+          pdf_params["html"],
+          size: "A4",
+          shell_params: [
+            "--margin-left",
+            "5",
+            "--margin-right",
+            "5",
+            "--margin-top",
+            "5",
+            "--margin-bottom",
+            "5",
+            "--encoding",
+            "utf-8"
+          ],
+          delete_temporary: true
+        )
+
+      conn
+      |> put_resp_header("Content-Type", "application/pdf")
+      |> resp(200, pdf_binary)
+    end
+  end
+
   def head_count_listing(conn, params) do
     class_id = params["class_id"]
     subject_id = params["subject_id"]

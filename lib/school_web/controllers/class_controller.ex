@@ -393,6 +393,22 @@ defmodule SchoolWeb.ClassController do
     render(conn, "mark_sheet_listing.html", semesters: semesters, classes: classes, exams: exams)
   end
 
+  def report_card_generator(conn, params) do
+    semesters =
+      Repo.all(from(s in Semester))
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
+    classes =
+      Repo.all(
+        from(c in Class,
+          where:
+            c.institution_id == ^conn.private.plug_session["institution_id"] and c.is_delete == 0
+        )
+      )
+
+    render(conn, "report_card_generator.html", semesters: semesters, classes: classes)
+  end
+
   def mark_analyse_by_grade(conn, params) do
     semesters =
       Repo.all(from(s in Semester))

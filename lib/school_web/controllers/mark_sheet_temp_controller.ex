@@ -3,9 +3,11 @@ defmodule SchoolWeb.MarkSheetTempController do
 
   alias School.Affairs
   alias School.Affairs.MarkSheetTemp
+  require IEx
 
   def index(conn, _params) do
     mark_sheet_temp = Affairs.list_mark_sheet_temp()
+
     render(conn, "index.html", mark_sheet_temp: mark_sheet_temp)
   end
 
@@ -20,6 +22,7 @@ defmodule SchoolWeb.MarkSheetTempController do
         conn
         |> put_flash(:info, "Mark sheet temp created successfully.")
         |> redirect(to: mark_sheet_temp_path(conn, :show, mark_sheet_temp))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
@@ -44,6 +47,7 @@ defmodule SchoolWeb.MarkSheetTempController do
         conn
         |> put_flash(:info, "Mark sheet temp updated successfully.")
         |> redirect(to: mark_sheet_temp_path(conn, :show, mark_sheet_temp))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", mark_sheet_temp: mark_sheet_temp, changeset: changeset)
     end

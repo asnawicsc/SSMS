@@ -8,6 +8,7 @@
       <th>Name</th>
       <th>Cname</th>
       <th>Class</th>
+       <th>Exam Name</th>
       <th>Subject</th>
       <th>Description</th>
       <th>Cdesc</th>
@@ -31,6 +32,7 @@
       <td><%= mark_sheet_temp.name %></td>
       <td><%= mark_sheet_temp.cname %></td>
       <td><%= mark_sheet_temp.class %></td>
+      <td><%= mark_sheet_temp.exam_name %></td>
       <td><%= mark_sheet_temp.subject %></td>
       <td><%= mark_sheet_temp.description %></td>
       <td><%= mark_sheet_temp.cdesc %></td>

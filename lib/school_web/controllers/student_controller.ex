@@ -1363,6 +1363,16 @@ defmodule SchoolWeb.StudentController do
     class_id = params["class_id"]
     semester_id = params["semester_id"]
 
+    if params["selection"] != nil do
+      params["selection"]
+    else
+      url = student_path(conn, :excel_selection_student_class)
+
+      conn
+      |> put_flash(:info, "Please Select Field Selection")
+      |> redirect(external: url)
+    end
+
     class =
       if params["class_id"] == "ALL" do
         %{name: "ALL"}

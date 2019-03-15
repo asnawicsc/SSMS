@@ -27,6 +27,11 @@
     <%= @mark_sheet_temp.class %>
   </li>
 
+    <li>
+    <strong>Class:</strong>
+    <%= @mark_sheet_temp.exam_name %>
+  </li>
+
   <li>
     <strong>Subject:</strong>
     <%= @mark_sheet_temp.subject %>
