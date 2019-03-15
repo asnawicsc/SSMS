@@ -57,8 +57,8 @@
     	{"","",""}
     else
    		 bm1=bml|>hd	
-    	
- 
+
+       IO.inspect(bm1)
 
 		 bml1=if bml.s1m != nil do
 		  bml.s1m
