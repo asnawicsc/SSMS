@@ -8,7 +8,7 @@ defmodule School.Affairs.MarkSheetTemp do
     field(:cname, :string)
     field(:description, :string)
     field(:institution_id, :integer)
-    field(:exam_name, :string)
+
     field(:name, :string)
     field(:s1g, :string)
     field(:s1m, :string)
@@ -28,7 +28,6 @@ defmodule School.Affairs.MarkSheetTemp do
   def changeset(mark_sheet_temp, attrs) do
     mark_sheet_temp
     |> cast(attrs, [
-      :exam_name,
       :institution_id,
       :stuid,
       :name,
