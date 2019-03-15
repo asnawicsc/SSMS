@@ -121,6 +121,7 @@ defmodule SchoolWeb.PdfController do
               s.semester_id == ^semester_id
         )
       )
+      |> Enum.sort()
 
     result =
       for stud_class <- student_class do
@@ -225,12 +226,41 @@ defmodule SchoolWeb.PdfController do
             if all != [] do
               all = all |> hd
 
-              s1m = mark |> Enum.fetch!(0) |> elem(1)
-              s2m = mark |> Enum.fetch!(1) |> elem(1)
-              s3m = mark |> Enum.fetch!(2) |> elem(1)
-              s1g = grade |> Enum.fetch!(0) |> elem(1)
-              s2g = grade |> Enum.fetch!(1) |> elem(1)
-              s3g = grade |> Enum.fetch!(2) |> elem(1)
+              count = mark |> Enum.count()
+
+              {s1m, s2m, s3m, s1g, s2g, s3g} =
+                if count == 1 do
+                  s1m = mark |> Enum.fetch!(0) |> elem(1)
+                  s2m = ""
+                  s3m = ""
+                  s1g = grade |> Enum.fetch!(0) |> elem(1)
+                  s2g = ""
+                  s3g = ""
+
+                  {s1m, s2m, s3m, s1g, s2g, s3g}
+                end
+
+              {s1m, s2m, s3m, s1g, s2g, s3g} =
+                if count == 2 do
+                  s1m = mark |> Enum.fetch!(0) |> elem(1)
+                  s2m = mark |> Enum.fetch!(1) |> elem(1)
+                  s3m = ""
+                  s1g = grade |> Enum.fetch!(0) |> elem(1)
+                  s2g = grade |> Enum.fetch!(1) |> elem(1)
+                  s3g = ""
+                  {s1m, s2m, s3m, s1g, s2g, s3g}
+                end
+
+              {s1m, s2m, s3m, s1g, s2g, s3g} =
+                if count == 3 do
+                  s1m = mark |> Enum.fetch!(0) |> elem(1)
+                  s2m = mark |> Enum.fetch!(1) |> elem(1)
+                  s3m = mark |> Enum.fetch!(2) |> elem(1)
+                  s1g = grade |> Enum.fetch!(0) |> elem(1)
+                  s2g = grade |> Enum.fetch!(1) |> elem(1)
+                  s3g = grade |> Enum.fetch!(2) |> elem(1)
+                  {s1m, s2m, s3m, s1g, s2g, s3g}
+                end
 
               %{
                 institution_id: conn.private.plug_session["institution_id"],

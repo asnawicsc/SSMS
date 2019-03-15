@@ -10,8 +10,8 @@
 
   <% profile=all_date|>hd() %>
 
- <%  year=case profile.year do
-     "2019" ->
+<b> <%  year=case profile.year do
+     "2019" -> 
           "二零一九"
         "2018" ->
           "二零一八"
@@ -40,7 +40,7 @@
            "2010" ->
           "二零一零"
 
-      end %>
+      end %> </b>
 
 
 <div  style="page-break-before: always;">
@@ -58,7 +58,7 @@
     else
    		 bml=bml|>hd	
 
-       IO.inspect(bm1)
+       IO.inspect(bml)
 
 		 bml1=if bml.s1m != nil do
 		  bml.s1m
@@ -941,11 +941,32 @@ else
 
  <tr align="center" >
   <td colspan="2" align="center" style="margin: 3px; padding: 3px;" ><b>科目名称 MATA PELAJARAN</b></td>
+  <% count=@list_exam|>Enum.count %>
+  <%= if count < 3 && count > 1 do %>
+    
+<%= for item <- @list_exam do %>
+  
 
-  <td align="center" style="margin: 3px; padding: 3px;">评审一 <BR>PKBS1</td>
-  <td align="center" style="margin: 3px; padding: 3px;">评审二 <BR>PKBS2</td>
-  <td align="center" style="margin: 3px; padding: 3px;">评审三 <BR>PKBS3</td>
-  <td align="center" style="margin: 3px; padding: 3px;">平均 <BR>Purata</td>
+  <% chinese =item.name|>String.split_at(5)|>elem(0) %>
+    <% malay =item.name|>String.split_at(5)|>elem(1) %>
+
+  <td align="center" style="margin: 3px; padding: 3px;"><%= chinese %><BR><%= malay %></td>
+ 
+  <% end %>
+  <td align="center" style="margin: 3px; padding: 3px;">评审一 <BR>PKBS3</td>
+
+  <% else %>
+  <%= for item <- @list_exam do %>
+
+    <% chinese =item.name|>String.split_at(5)|>elem(0) %>
+    <% malay =item.name|>String.split_at(5)|>elem(1) %>
+
+  <td align="center" style="margin: 3px; padding: 3px;"><%= chinese %><BR><%= malay %></td>
+
+  <% end %>
+
+  <% end %>
+    <td align="center" style="margin: 3px; padding: 3px;">平均 <BR>Purata</td>
  </tr>
 
  <tr  align="center">
