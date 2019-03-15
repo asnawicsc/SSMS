@@ -56,7 +56,7 @@
 
     	{"","",""}
     else
-   		 bm1=bml|>hd	
+   		 bml=bml|>hd	
 
        IO.inspect(bm1)
 
