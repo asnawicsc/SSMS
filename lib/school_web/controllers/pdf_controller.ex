@@ -77,7 +77,11 @@ defmodule SchoolWeb.PdfController do
     class_name = params["class"]
     semester_id = params["semester"]
 
-    class_info = Repo.get_by(School.Affairs.Class, name: class_name)
+    class_info =
+      Repo.get_by(School.Affairs.Class,
+        name: class_name,
+        institution_id: conn.private.plug_session["institution_id"]
+      )
 
     semester = Repo.get_by(School.Affairs.Semester, id: semester_id)
 
@@ -109,7 +113,14 @@ defmodule SchoolWeb.PdfController do
       )
 
     list_exam =
-      Repo.all(from(s in School.Affairs.ExamMaster, where: s.level_id == ^class_info.level_id))
+      Repo.all(
+        from(s in School.Affairs.ExamMaster,
+          where:
+            s.level_id == ^class_info.level_id and
+              s.institution_id == ^conn.private.plug_session["institution_id"] and
+              s.semester_id == ^semester_id
+        )
+      )
 
     result =
       for stud_class <- student_class do
@@ -302,7 +313,11 @@ defmodule SchoolWeb.PdfController do
 
     semester = Repo.get_by(School.Affairs.Semester, id: semester_id)
 
-    class_info = Repo.get_by(School.Affairs.Class, name: class_name)
+    class_info =
+      Repo.get_by(School.Affairs.Class,
+        name: class_name,
+        institution_id: conn.private.plug_session["institution_id"]
+      )
 
     list_exam =
       Repo.all(from(s in School.Affairs.ExamMaster, where: s.level_id == ^class_info.level_id))
