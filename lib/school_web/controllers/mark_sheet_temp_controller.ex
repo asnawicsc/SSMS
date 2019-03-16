@@ -6,7 +6,9 @@ defmodule SchoolWeb.MarkSheetTempController do
   require IEx
 
   def index(conn, _params) do
-    mark_sheet_temp = Affairs.list_mark_sheet_temp()
+    mark_sheet_temp =
+      Affairs.list_mark_sheet_temp()
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
 
     render(conn, "index.html", mark_sheet_temp: mark_sheet_temp)
   end

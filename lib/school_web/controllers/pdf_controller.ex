@@ -995,7 +995,9 @@ defmodule SchoolWeb.PdfController do
             |> redirect(to: "/list_report")
 
           {:error, %Ecto.Changeset{} = changeset} ->
-            IEx.pry()
+            conn
+            |> put_flash(:info, "Mark sheet temp unsucccessfully created")
+            |> redirect(to: "/list_report")
         end
       end
     else
@@ -1007,14 +1009,12 @@ defmodule SchoolWeb.PdfController do
             |> redirect(to: "/list_report")
 
           {:error, %Ecto.Changeset{} = changeset} ->
-            IEx.pry()
+            conn
+            |> put_flash(:info, "Mark sheet temp unsucccessfully created .")
+            |> redirect(to: "/list_report")
         end
       end
     end
-
-    conn
-    |> put_flash(:info, "Mark sheet generated")
-    |> redirect(to: mark_sheet_temp_path(conn, :index))
   end
 
   def report_card_all(conn, params) do
