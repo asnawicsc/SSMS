@@ -85,6 +85,9 @@ defmodule SchoolWeb.PdfController do
 
     semester = Repo.get_by(School.Affairs.Semester, id: semester_id)
 
+    institute =
+      Repo.get_by(School.Settings.Institution, id: conn.private.plug_session["institution_id"])
+
     subject =
       Repo.all(
         from(s in School.Affairs.Subject,
@@ -1039,6 +1042,9 @@ defmodule SchoolWeb.PdfController do
         )
       )
 
+    institute =
+      Repo.get_by(School.Settings.Institution, id: conn.private.plug_session["institution_id"])
+
     if data == [] do
       conn
       |> put_flash(:info, "No Data for this Selection")
@@ -1051,7 +1057,8 @@ defmodule SchoolWeb.PdfController do
           SchoolWeb.PdfView,
           "report_cards.html",
           a: data,
-          list_exam: list_exam
+          list_exam: list_exam,
+          institute: institute
         )
 
       pdf_params = %{"html" => html}

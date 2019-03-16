@@ -11,6 +11,18 @@
   <% profile=all_date|>hd() %>
 
   <%  year=case profile.year do
+     "2025" -> 
+        "二零二五"
+         "2024" -> 
+        "二零二四"
+         "2023" -> 
+        "二零二三"
+         "2022" -> 
+        "二零二二"
+         "2021" -> 
+        "二零二一"
+     "2020" -> 
+        "二零二零"
      "2019" -> 
         "二零一九"
         "2018" ->
@@ -925,16 +937,16 @@ else
   <table  class="table" >
 
     <tr align="center">
-  <td colspan="6" align="center" style="margin: 3px; padding: 3px; border-left: 0; border-right: 0; border-top: 0" ><h5>醒侨学校</h5><br>
+  <td colspan="6" align="center" style="margin: 3px; padding: 3px; border-left: 0; border-right: 0; border-top: 0" ><h5><b><%= @institute.name %></b></h5><br>
         <h5><b><%= year %> 成绩单</b></h5></td>
   
  </tr>
      <tr align="left">
-  <td colspan="5">学生姓名: <%= profile.cname %> <br>
-        Nama Murid: <%= profile.name %></font></td>
+  <td colspan="5"><b>学生姓名: <%= profile.cname %></b> <br>
+        <b>Nama Murid: <%= profile.name %></b></font></td>
   
-  <td>教室<br>
-        Darjah: <%= profile.class %></font></td>
+  <td><b>教室<br>
+        Darjah: <%= profile.class %></b></font></td>
  </tr>
 
 
