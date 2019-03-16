@@ -63,7 +63,7 @@
   
   <% 
 
-    bml= all_date|>Enum.filter(fn x -> x.subject =="MA04" end)
+    bml= all_date|>Enum.filter(fn x -> x.subject =="BML" end)
     {bml1,bml2,bml3}=	if bml == [] do
 
     	{"","",""}
@@ -93,7 +93,7 @@
 
     end
 
-        bmb= all_date|>Enum.filter(fn x -> x.subject =="MA03" end)
+        bmb= all_date|>Enum.filter(fn x -> x.subject =="BMB" end)
     {bmb1,bmb2,bmb3}=	if bmb == [] do
 
     	{"","",""}
@@ -124,7 +124,7 @@
 
     end
 
-            bmp= all_date|>Enum.filter(fn x -> x.subject =="MA01" end)
+            bmp= all_date|>Enum.filter(fn x -> x.subject =="BMT" end)
     {bmp1,bmp2,bmp3}=	if bmp == [] do
 
     	{"","",""}
@@ -155,7 +155,7 @@
 
     end
 
-                bmpm= all_date|>Enum.filter(fn x -> x.subject =="MA02" end)
+                bmpm= all_date|>Enum.filter(fn x -> x.subject =="BMF" end)
    {bmpm1,bmpm2,bmpm3}=	if bmpm == [] do
 
     	{"","",""}
@@ -187,7 +187,7 @@
     end
 
 
-                    ingl= all_date|>Enum.filter(fn x -> x.subject =="ING04" end)
+                    ingl= all_date|>Enum.filter(fn x -> x.subject =="BIL" end)
    {ingl1,ingl2,ingl3}=	if ingl == [] do
 
     	{"","",""}
@@ -218,7 +218,7 @@
 
     end
 
-    ingb= all_date|>Enum.filter(fn x -> x.subject =="ING03" end)
+    ingb= all_date|>Enum.filter(fn x -> x.subject =="BIR" end)
    {ingb1,ingb2,ingb3}=	if ingb == [] do
 
     	{"","",""}
@@ -249,7 +249,7 @@
 
     end
 
-        ingp= all_date|>Enum.filter(fn x -> x.subject =="ING01" end)
+        ingp= all_date|>Enum.filter(fn x -> x.subject =="BIT" end)
    {ingp1,ingp2,ingp3}=	if ingp == [] do
 
     	{"","",""}
@@ -281,7 +281,7 @@
     end
 
 
-            ingpm= all_date|>Enum.filter(fn x -> x.subject =="ING02" end)
+            ingpm= all_date|>Enum.filter(fn x -> x.subject =="BIF" end)
    {ingpm1,ingpm2,ingpm3}=	if ingpm == [] do
 
     	{"","",""}
@@ -312,7 +312,7 @@
 
     end
 
-                chl= all_date|>Enum.filter(fn x -> x.subject =="CH04" end)
+                chl= all_date|>Enum.filter(fn x -> x.subject =="BCL" end)
    {chl1,chl2,chl3}=	if chl == [] do
 
     	{"","",""}
@@ -344,7 +344,7 @@
     end
 
 
-                    chb= all_date|>Enum.filter(fn x -> x.subject =="CH03" end)
+                    chb= all_date|>Enum.filter(fn x -> x.subject =="BCB" end)
    {chb1,chb2,chb3}=	if chb == [] do
 
     	{"","",""}
@@ -375,7 +375,7 @@
 
     end
 
-                        chp= all_date|>Enum.filter(fn x -> x.subject =="CH01" end)
+                        chp= all_date|>Enum.filter(fn x -> x.subject =="BCT" end)
    {chp1,chp2,chp3}=	if chp == [] do
 
     	{"","",""}
@@ -406,7 +406,7 @@
 
     end
 
-                            chpm= all_date|>Enum.filter(fn x -> x.subject =="CH02" end)
+                            chpm= all_date|>Enum.filter(fn x -> x.subject =="BCF" end)
    {chpm1,chpm2,chpm3}=	if chpm == [] do
 
     	{"","",""}
@@ -437,7 +437,7 @@
 
     end
 
-                                math= all_date|>Enum.filter(fn x -> x.subject =="MAT" end)
+                                math= all_date|>Enum.filter(fn x -> x.subject =="Math" end)
    {math1,math2,math3}=	if math == [] do
 
     	{"","",""}
@@ -468,7 +468,7 @@
 
     end
 
-                                    sains= all_date|>Enum.filter(fn x -> x.subject =="SN" end)
+                                    sains= all_date|>Enum.filter(fn x -> x.subject =="Sains" end)
    {sains1,sains2,sains3}=	if sains == [] do
 
     	{"","",""}
@@ -532,7 +532,7 @@
     end
 
 
-        sej= all_date|>Enum.filter(fn x -> x.subject =="SEJ" end)
+        sej= all_date|>Enum.filter(fn x -> x.subject =="Sjr" end)
    {sej1,sej2,sej3}=	if sej == [] do
 
     	{"","",""}
@@ -564,7 +564,7 @@
     end
 
 
-        rbt= all_date|>Enum.filter(fn x -> x.subject =="RBT" end)
+        rbt= all_date|>Enum.filter(fn x -> x.subject =="RBT/TMK" end)
    {rbt1,rbt2,rbt3}=	if rbt == [] do
 
     	{"","",""}
@@ -628,7 +628,7 @@
     end
 
 
-            seni= all_date|>Enum.filter(fn x -> x.subject =="SENI" end)
+            seni= all_date|>Enum.filter(fn x -> x.subject =="P.Seni" end)
    {seni1,seni2,seni3}=	if seni == [] do
 
     	{"","",""}
@@ -950,7 +950,7 @@ else
  </tr>
 
 
- <tr align="center" >
+  <tr align="center" >
   <td colspan="2" align="center" style="margin: 3px; padding: 3px;" ><b>科目名称 MATA PELAJARAN</b></td>
   <% count=@list_exam|>Enum.count %>
   <%= if count < 3 && count > 1 do %>
@@ -996,6 +996,7 @@ else
   <% end %>
     <td align="center" style="margin: 3px; padding: 3px;">平均 <BR>Purata</td>
  </tr>
+
 
  <tr  align="center">
   <td rowspan="4"  style="margin: 3px; padding: 3px;" align="left"><BR> <b>国语 <br> Bahasa <br> Malaysia </b><BR></td>

@@ -1052,10 +1052,27 @@ defmodule SchoolWeb.PdfController do
     else
       data = data |> Enum.group_by(fn x -> x.stuid end)
 
+      id = institute.id
+
+      school =
+        case id do
+          10 ->
+            "report_cards_sl.html"
+
+          9 ->
+            "report_cards_kk.html"
+
+          3 ->
+            "report_cards_sk.html"
+
+          _ ->
+            "report_cards.html"
+        end
+
       html =
         Phoenix.View.render_to_string(
           SchoolWeb.PdfView,
-          "report_cards.html",
+          school,
           a: data,
           list_exam: list_exam,
           institute: institute
