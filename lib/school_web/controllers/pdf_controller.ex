@@ -238,28 +238,26 @@ defmodule SchoolWeb.PdfController do
                   s3g = ""
 
                   {s1m, s2m, s3m, s1g, s2g, s3g}
-                end
-
-              {s1m, s2m, s3m, s1g, s2g, s3g} =
-                if count == 2 do
-                  s1m = mark |> Enum.fetch!(0) |> elem(1)
-                  s2m = mark |> Enum.fetch!(1) |> elem(1)
-                  s3m = ""
-                  s1g = grade |> Enum.fetch!(0) |> elem(1)
-                  s2g = grade |> Enum.fetch!(1) |> elem(1)
-                  s3g = ""
-                  {s1m, s2m, s3m, s1g, s2g, s3g}
-                end
-
-              {s1m, s2m, s3m, s1g, s2g, s3g} =
-                if count == 3 do
-                  s1m = mark |> Enum.fetch!(0) |> elem(1)
-                  s2m = mark |> Enum.fetch!(1) |> elem(1)
-                  s3m = mark |> Enum.fetch!(2) |> elem(1)
-                  s1g = grade |> Enum.fetch!(0) |> elem(1)
-                  s2g = grade |> Enum.fetch!(1) |> elem(1)
-                  s3g = grade |> Enum.fetch!(2) |> elem(1)
-                  {s1m, s2m, s3m, s1g, s2g, s3g}
+                else
+                  if count == 2 do
+                    s1m = mark |> Enum.fetch!(0) |> elem(1)
+                    s2m = mark |> Enum.fetch!(1) |> elem(1)
+                    s3m = ""
+                    s1g = grade |> Enum.fetch!(0) |> elem(1)
+                    s2g = grade |> Enum.fetch!(1) |> elem(1)
+                    s3g = ""
+                    {s1m, s2m, s3m, s1g, s2g, s3g}
+                  else
+                    if count == 3 do
+                      s1m = mark |> Enum.fetch!(0) |> elem(1)
+                      s2m = mark |> Enum.fetch!(1) |> elem(1)
+                      s3m = mark |> Enum.fetch!(2) |> elem(1)
+                      s1g = grade |> Enum.fetch!(0) |> elem(1)
+                      s2g = grade |> Enum.fetch!(1) |> elem(1)
+                      s3g = grade |> Enum.fetch!(2) |> elem(1)
+                      {s1m, s2m, s3m, s1g, s2g, s3g}
+                    end
+                  end
                 end
 
               %{
@@ -286,6 +284,685 @@ defmodule SchoolWeb.PdfController do
       end
       |> List.flatten()
       |> Enum.filter(fn x -> x != nil end)
+
+    class_rank =
+      for stud_class <- student_class do
+        all =
+          Repo.all(
+            from(
+              em in School.Affairs.ExamMark,
+              left_join: z in School.Affairs.Exam,
+              on: em.exam_id == z.id,
+              left_join: e in School.Affairs.ExamMaster,
+              on: z.exam_master_id == e.id,
+              left_join: j in School.Affairs.Semester,
+              on: e.semester_id == j.id,
+              left_join: s in School.Affairs.Student,
+              on: em.student_id == s.id,
+              left_join: sc in School.Affairs.StudentClass,
+              on: sc.sudent_id == s.id,
+              left_join: c in School.Affairs.Class,
+              on: sc.class_id == c.id,
+              left_join: sb in School.Affairs.Subject,
+              on: em.subject_id == sb.id,
+              where:
+                c.name == ^class_name and em.student_id == ^stud_class.student_id and
+                  sc.semester_id == ^semester_id,
+              select: %{
+                student_id: s.id,
+                student_name: s.name,
+                chinese_name: s.chinese_name,
+                class_name: c.name,
+                exam_master_id: e.id,
+                exam_name: e.name,
+                semester: j.id,
+                semester_no: j.sem,
+                year: j.year,
+                subject_code: sb.code,
+                subject_name: sb.description,
+                subject_cname: sb.cdesc,
+                mark: em.mark,
+                standard_id: sc.level_id
+              }
+            )
+          )
+
+        all_result =
+          Repo.all(
+            from(
+              em in School.Affairs.ExamMark,
+              left_join: z in School.Affairs.Exam,
+              on: em.exam_id == z.id,
+              left_join: e in School.Affairs.ExamMaster,
+              on: z.exam_master_id == e.id,
+              left_join: j in School.Affairs.Semester,
+              on: e.semester_id == j.id,
+              left_join: s in School.Affairs.Student,
+              on: em.student_id == s.id,
+              left_join: sc in School.Affairs.StudentClass,
+              on: sc.sudent_id == s.id,
+              left_join: c in School.Affairs.Class,
+              on: sc.class_id == c.id,
+              left_join: sb in School.Affairs.Subject,
+              on: em.subject_id == sb.id,
+              where: c.name == ^class_name and sc.semester_id == ^semester_id,
+              select: %{
+                student_id: s.id,
+                student_name: s.name,
+                chinese_name: s.chinese_name,
+                class_name: c.name,
+                exam_master_id: e.id,
+                exam_name: e.name,
+                semester: j.id,
+                semester_no: j.sem,
+                year: j.year,
+                subject_code: sb.code,
+                subject_name: sb.description,
+                subject_cname: sb.cdesc,
+                mark: em.mark,
+                standard_id: sc.level_id
+              }
+            )
+          )
+
+        total_mark =
+          for exam <- list_exam |> Enum.with_index() do
+            no = exam |> elem(1)
+            exam = exam |> elem(0)
+
+            fit = all_result |> Enum.filter(fn x -> x.exam_master_id == exam.id end)
+
+            drg =
+              if fit == [] do
+                []
+              else
+                fit = fit |> Enum.group_by(fn x -> x.student_id end)
+
+                data =
+                  for items <- fit do
+                    student_id = items |> elem(0)
+                    items = items |> elem(1)
+                    sum = items |> Enum.map(fn x -> x.mark end) |> Enum.sum()
+
+                    if items != [] do
+                      item = items |> hd
+
+                      %{
+                        student_id: item.student_id,
+                        student_name: item.student_name,
+                        chinese_name: item.chinese_name,
+                        class_name: item.class_name,
+                        exam_master_id: item.exam_master_id,
+                        exam_name: item.exam_name,
+                        semester: item.semester,
+                        semester_no: item.semester_no,
+                        year: item.year,
+                        subject_code: "CRank",
+                        subject_name: "Class Rank",
+                        subject_cname: "Class Rank",
+                        total_mark: sum,
+                        standard_id: item.standard_id
+                      }
+                    end
+                  end
+                  |> Enum.sort_by(fn x -> x.total_mark end)
+                  |> Enum.reverse()
+                  |> Enum.with_index()
+              end
+
+            end_fit =
+              for item <- drg do
+                if item != [] do
+                  no = item |> elem(1)
+
+                  item = item |> elem(0)
+
+                  %{
+                    student_id: item.student_id,
+                    student_name: item.student_name,
+                    chinese_name: item.chinese_name,
+                    class_name: item.class_name,
+                    exam_master_id: item.exam_master_id,
+                    exam_name: item.exam_name,
+                    semester: item.semester,
+                    semester_no: item.semester_no,
+                    year: item.year,
+                    subject_code: "CRank",
+                    subject_name: "Class Rank",
+                    subject_cname: "Class Rank",
+                    rank: no + 1,
+                    standard_id: item.standard_id
+                  }
+                else
+                  []
+                end
+              end
+
+            defit = end_fit |> Enum.filter(fn x -> x.student_id == stud_class.student_id end)
+
+            desfit =
+              if defit == [] do
+                ""
+              else
+                a = defit |> hd
+
+                a.rank |> Integer.to_string()
+              end
+
+            {no + 1, desfit}
+          end
+
+        finish_rank =
+          if all != [] do
+            all = all |> hd
+
+            count = total_mark |> Enum.count()
+
+            {s1m, s2m, s3m} =
+              if count == 1 do
+                s1m = total_mark |> Enum.fetch!(0) |> elem(1)
+                s2m = ""
+                s3m = ""
+
+                {s1m, s2m, s3m}
+              else
+                if count == 2 do
+                  s1m = total_mark |> Enum.fetch!(0) |> elem(1)
+                  s2m = total_mark |> Enum.fetch!(1) |> elem(1)
+                  s3m = ""
+
+                  {s1m, s2m, s3m}
+                else
+                  if count == 3 do
+                    s1m = total_mark |> Enum.fetch!(0) |> elem(1)
+                    s2m = total_mark |> Enum.fetch!(1) |> elem(1)
+                    s3m = total_mark |> Enum.fetch!(2) |> elem(1)
+
+                    {s1m, s2m, s3m}
+                  end
+                end
+              end
+
+            %{
+              institution_id: conn.private.plug_session["institution_id"],
+              stuid: all.student_id |> Integer.to_string(),
+              name: all.student_name,
+              cname: all.chinese_name,
+              class: all.class_name,
+              subject: "CRANK",
+              description: "Class Rank",
+              year: all.year |> Integer.to_string(),
+              semester: all.semester_no |> Integer.to_string(),
+              s1m: s1m,
+              s2m: s2m,
+              s3m: s3m,
+              s1g: "",
+              s2g: "",
+              s3g: ""
+            }
+          end
+
+        finish_rank
+      end
+      |> List.flatten()
+      |> Enum.filter(fn x -> x != nil end)
+
+    standard_rank =
+      for stud_class <- student_class do
+        all =
+          Repo.all(
+            from(
+              em in School.Affairs.ExamMark,
+              left_join: z in School.Affairs.Exam,
+              on: em.exam_id == z.id,
+              left_join: e in School.Affairs.ExamMaster,
+              on: z.exam_master_id == e.id,
+              left_join: j in School.Affairs.Semester,
+              on: e.semester_id == j.id,
+              left_join: s in School.Affairs.Student,
+              on: em.student_id == s.id,
+              left_join: sc in School.Affairs.StudentClass,
+              on: sc.sudent_id == s.id,
+              left_join: c in School.Affairs.Class,
+              on: sc.class_id == c.id,
+              left_join: sb in School.Affairs.Subject,
+              on: em.subject_id == sb.id,
+              where:
+                c.name == ^class_name and em.student_id == ^stud_class.student_id and
+                  sc.semester_id == ^semester_id,
+              select: %{
+                student_id: s.id,
+                student_name: s.name,
+                chinese_name: s.chinese_name,
+                class_name: c.name,
+                exam_master_id: e.id,
+                exam_name: e.name,
+                semester: j.id,
+                semester_no: j.sem,
+                year: j.year,
+                subject_code: sb.code,
+                subject_name: sb.description,
+                subject_cname: sb.cdesc,
+                mark: em.mark,
+                standard_id: sc.level_id
+              }
+            )
+          )
+
+        all_result =
+          Repo.all(
+            from(
+              em in School.Affairs.ExamMark,
+              left_join: z in School.Affairs.Exam,
+              on: em.exam_id == z.id,
+              left_join: e in School.Affairs.ExamMaster,
+              on: z.exam_master_id == e.id,
+              left_join: j in School.Affairs.Semester,
+              on: e.semester_id == j.id,
+              left_join: s in School.Affairs.Student,
+              on: em.student_id == s.id,
+              left_join: sc in School.Affairs.StudentClass,
+              on: sc.sudent_id == s.id,
+              left_join: c in School.Affairs.Class,
+              on: sc.class_id == c.id,
+              left_join: sb in School.Affairs.Subject,
+              on: em.subject_id == sb.id,
+              where: e.level_id == ^class_info.level_id and sc.semester_id == ^semester_id,
+              select: %{
+                student_id: s.id,
+                student_name: s.name,
+                chinese_name: s.chinese_name,
+                class_name: c.name,
+                exam_master_id: e.id,
+                exam_name: e.name,
+                semester: j.id,
+                semester_no: j.sem,
+                year: j.year,
+                subject_code: sb.code,
+                subject_name: sb.description,
+                subject_cname: sb.cdesc,
+                mark: em.mark,
+                standard_id: sc.level_id
+              }
+            )
+          )
+
+        total_mark =
+          for exam <- list_exam |> Enum.with_index() do
+            no = exam |> elem(1)
+            exam = exam |> elem(0)
+
+            fit = all_result |> Enum.filter(fn x -> x.exam_master_id == exam.id end)
+
+            drg =
+              if fit == [] do
+                []
+              else
+                fit = fit |> Enum.group_by(fn x -> x.student_id end)
+
+                data =
+                  for items <- fit do
+                    student_id = items |> elem(0)
+                    items = items |> elem(1)
+                    sum = items |> Enum.map(fn x -> x.mark end) |> Enum.sum()
+
+                    if items != [] do
+                      item = items |> hd
+
+                      %{
+                        student_id: item.student_id,
+                        student_name: item.student_name,
+                        chinese_name: item.chinese_name,
+                        class_name: item.class_name,
+                        exam_master_id: item.exam_master_id,
+                        exam_name: item.exam_name,
+                        semester: item.semester,
+                        semester_no: item.semester_no,
+                        year: item.year,
+                        subject_code: "Standard",
+                        subject_name: "Standard Rank",
+                        subject_cname: "Standard Rank",
+                        total_mark: sum,
+                        standard_id: item.standard_id
+                      }
+                    end
+                  end
+                  |> Enum.sort_by(fn x -> x.total_mark end)
+                  |> Enum.reverse()
+                  |> Enum.with_index()
+              end
+
+            end_fit =
+              for item <- drg do
+                if item != [] do
+                  no = item |> elem(1)
+
+                  item = item |> elem(0)
+
+                  %{
+                    student_id: item.student_id,
+                    student_name: item.student_name,
+                    chinese_name: item.chinese_name,
+                    class_name: item.class_name,
+                    exam_master_id: item.exam_master_id,
+                    exam_name: item.exam_name,
+                    semester: item.semester,
+                    semester_no: item.semester_no,
+                    year: item.year,
+                    subject_code: "Standard",
+                    subject_name: "Standard Rank",
+                    subject_cname: "Standard Rank",
+                    rank: no + 1,
+                    standard_id: item.standard_id
+                  }
+                else
+                  []
+                end
+              end
+
+            defit = end_fit |> Enum.filter(fn x -> x.student_id == stud_class.student_id end)
+
+            desfit =
+              if defit == [] do
+                ""
+              else
+                a = defit |> hd
+
+                a.rank |> Integer.to_string()
+              end
+
+            {no + 1, desfit}
+          end
+
+        finish_rank =
+          if all != [] do
+            all = all |> hd
+
+            count = total_mark |> Enum.count()
+
+            {s1m, s2m, s3m} =
+              if count == 1 do
+                s1m = total_mark |> Enum.fetch!(0) |> elem(1)
+                s2m = ""
+                s3m = ""
+
+                {s1m, s2m, s3m}
+              else
+                if count == 2 do
+                  s1m = total_mark |> Enum.fetch!(0) |> elem(1)
+                  s2m = total_mark |> Enum.fetch!(1) |> elem(1)
+                  s3m = ""
+
+                  {s1m, s2m, s3m}
+                else
+                  if count == 3 do
+                    s1m = total_mark |> Enum.fetch!(0) |> elem(1)
+                    s2m = total_mark |> Enum.fetch!(1) |> elem(1)
+                    s3m = total_mark |> Enum.fetch!(2) |> elem(1)
+
+                    {s1m, s2m, s3m}
+                  end
+                end
+              end
+
+            %{
+              institution_id: conn.private.plug_session["institution_id"],
+              stuid: all.student_id |> Integer.to_string(),
+              name: all.student_name,
+              cname: all.chinese_name,
+              class: all.class_name,
+              subject: "SRANK",
+              description: "Standard Rank",
+              year: all.year |> Integer.to_string(),
+              semester: all.semester_no |> Integer.to_string(),
+              s1m: s1m,
+              s2m: s2m,
+              s3m: s3m,
+              s1g: "",
+              s2g: "",
+              s3g: ""
+            }
+          end
+
+        finish_rank
+      end
+      |> List.flatten()
+      |> Enum.filter(fn x -> x != nil end)
+
+    total_markfinish =
+      for stud_class <- student_class do
+        all =
+          Repo.all(
+            from(
+              em in School.Affairs.ExamMark,
+              left_join: z in School.Affairs.Exam,
+              on: em.exam_id == z.id,
+              left_join: e in School.Affairs.ExamMaster,
+              on: z.exam_master_id == e.id,
+              left_join: j in School.Affairs.Semester,
+              on: e.semester_id == j.id,
+              left_join: s in School.Affairs.Student,
+              on: em.student_id == s.id,
+              left_join: sc in School.Affairs.StudentClass,
+              on: sc.sudent_id == s.id,
+              left_join: c in School.Affairs.Class,
+              on: sc.class_id == c.id,
+              left_join: sb in School.Affairs.Subject,
+              on: em.subject_id == sb.id,
+              where:
+                c.name == ^class_name and em.student_id == ^stud_class.student_id and
+                  sc.semester_id == ^semester_id,
+              select: %{
+                student_id: s.id,
+                student_name: s.name,
+                chinese_name: s.chinese_name,
+                class_name: c.name,
+                exam_master_id: e.id,
+                exam_name: e.name,
+                semester: j.id,
+                semester_no: j.sem,
+                year: j.year,
+                subject_code: sb.code,
+                subject_name: sb.description,
+                subject_cname: sb.cdesc,
+                mark: em.mark,
+                standard_id: sc.level_id
+              }
+            )
+          )
+
+        total_mark =
+          for exam <- list_exam |> Enum.with_index() do
+            no = exam |> elem(1)
+            exam = exam |> elem(0)
+
+            fit = all |> Enum.filter(fn x -> x.exam_master_id == exam.id end)
+
+            fit =
+              if fit == [] do
+                ""
+              else
+                a = fit |> Enum.map(fn x -> x.mark end) |> Enum.sum() |> Integer.to_string()
+              end
+
+            {no + 1, fit}
+          end
+
+        finish_total_mark =
+          if all != [] do
+            all = all |> hd
+
+            count = total_mark |> Enum.count()
+
+            {s1m, s2m, s3m} =
+              if count == 1 do
+                s1m = total_mark |> Enum.fetch!(0) |> elem(1)
+                s2m = ""
+                s3m = ""
+
+                {s1m, s2m, s3m}
+              else
+                if count == 2 do
+                  s1m = total_mark |> Enum.fetch!(0) |> elem(1)
+                  s2m = total_mark |> Enum.fetch!(1) |> elem(1)
+                  s3m = ""
+
+                  {s1m, s2m, s3m}
+                else
+                  if count == 3 do
+                    s1m = total_mark |> Enum.fetch!(0) |> elem(1)
+                    s2m = total_mark |> Enum.fetch!(1) |> elem(1)
+                    s3m = total_mark |> Enum.fetch!(2) |> elem(1)
+
+                    {s1m, s2m, s3m}
+                  end
+                end
+              end
+
+            %{
+              institution_id: conn.private.plug_session["institution_id"],
+              stuid: all.student_id |> Integer.to_string(),
+              name: all.student_name,
+              cname: all.chinese_name,
+              class: all.class_name,
+              subject: "TOTAL",
+              description: "Total Mark Each Exam",
+              year: all.year |> Integer.to_string(),
+              semester: all.semester_no |> Integer.to_string(),
+              s1m: s1m,
+              s2m: s2m,
+              s3m: s3m,
+              s1g: "",
+              s2g: "",
+              s3g: ""
+            }
+          end
+
+        finish_total_mark
+      end
+      |> List.flatten()
+      |> Enum.filter(fn x -> x != nil end)
+
+    total_purata =
+      for stud_class <- student_class do
+        all =
+          Repo.all(
+            from(
+              em in School.Affairs.ExamMark,
+              left_join: z in School.Affairs.Exam,
+              on: em.exam_id == z.id,
+              left_join: e in School.Affairs.ExamMaster,
+              on: z.exam_master_id == e.id,
+              left_join: j in School.Affairs.Semester,
+              on: e.semester_id == j.id,
+              left_join: s in School.Affairs.Student,
+              on: em.student_id == s.id,
+              left_join: sc in School.Affairs.StudentClass,
+              on: sc.sudent_id == s.id,
+              left_join: c in School.Affairs.Class,
+              on: sc.class_id == c.id,
+              left_join: sb in School.Affairs.Subject,
+              on: em.subject_id == sb.id,
+              where:
+                c.name == ^class_name and em.student_id == ^stud_class.student_id and
+                  sc.semester_id == ^semester_id,
+              select: %{
+                student_id: s.id,
+                student_name: s.name,
+                chinese_name: s.chinese_name,
+                class_name: c.name,
+                exam_master_id: e.id,
+                exam_name: e.name,
+                semester: j.id,
+                semester_no: j.sem,
+                year: j.year,
+                subject_code: sb.code,
+                subject_name: sb.description,
+                subject_cname: sb.cdesc,
+                mark: em.mark,
+                standard_id: sc.level_id
+              }
+            )
+          )
+
+        total_average =
+          for exam <- list_exam |> Enum.with_index() do
+            no = exam |> elem(1)
+            exam = exam |> elem(0)
+
+            fit = all |> Enum.filter(fn x -> x.exam_master_id == exam.id end)
+
+            fit =
+              if fit == [] do
+                ""
+              else
+                a = fit |> Enum.map(fn x -> x.mark end) |> Enum.sum()
+
+                per = fit |> Enum.map(fn x -> x.mark end) |> Enum.count()
+                total_per = per * 100
+
+                total_average = (a / total_per * 100) |> Float.round(2) |> Float.to_string()
+              end
+
+            {no + 1, fit}
+          end
+
+        finish_total_mark =
+          if all != [] do
+            all = all |> hd
+
+            count = total_average |> Enum.count()
+
+            {s1m, s2m, s3m} =
+              if count == 1 do
+                s1m = total_average |> Enum.fetch!(0) |> elem(1)
+                s2m = ""
+                s3m = ""
+
+                {s1m, s2m, s3m}
+              else
+                if count == 2 do
+                  s1m = total_average |> Enum.fetch!(0) |> elem(1)
+                  s2m = total_average |> Enum.fetch!(1) |> elem(1)
+                  s3m = ""
+
+                  {s1m, s2m, s3m}
+                else
+                  if count == 3 do
+                    s1m = total_average |> Enum.fetch!(0) |> elem(1)
+                    s2m = total_average |> Enum.fetch!(1) |> elem(1)
+                    s3m = total_average |> Enum.fetch!(2) |> elem(1)
+
+                    {s1m, s2m, s3m}
+                  end
+                end
+              end
+
+            %{
+              institution_id: conn.private.plug_session["institution_id"],
+              stuid: all.student_id |> Integer.to_string(),
+              name: all.student_name,
+              cname: all.chinese_name,
+              class: all.class_name,
+              subject: "AVERG",
+              description: "Total Average Each Exam",
+              year: all.year |> Integer.to_string(),
+              semester: all.semester_no |> Integer.to_string(),
+              s1m: s1m,
+              s2m: s2m,
+              s3m: s3m,
+              s1g: "",
+              s2g: "",
+              s3g: ""
+            }
+          end
+
+        finish_total_mark
+      end
+      |> List.flatten()
+      |> Enum.filter(fn x -> x != nil end)
+
+    result = result ++ class_rank ++ standard_rank ++ total_markfinish ++ total_purata
 
     exist =
       Repo.all(

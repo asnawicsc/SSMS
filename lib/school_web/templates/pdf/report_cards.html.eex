@@ -10,9 +10,9 @@
 
   <% profile=all_date|>hd() %>
 
-<b> <%  year=case profile.year do
+  <%  year=case profile.year do
      "2019" -> 
-          "二零一九"
+        "二零一九"
         "2018" ->
           "二零一八"
 
@@ -40,7 +40,7 @@
            "2010" ->
           "二零一零"
 
-      end %> </b>
+      end %> 
 
 
 <div  style="page-break-before: always;">
@@ -58,7 +58,6 @@
     else
    		 bml=bml|>hd	
 
-       IO.inspect(bml)
 
 		 bml1=if bml.s1m != nil do
 		  bml.s1m
@@ -927,7 +926,7 @@ else
 
     <tr align="center">
   <td colspan="6" align="center" style="margin: 3px; padding: 3px; border-left: 0; border-right: 0; border-top: 0" ><h5>醒侨学校</h5><br>
-        <h5><%= year %> 成绩单</h5></td>
+        <h5><b><%= year %> 成绩单</b></h5></td>
   
  </tr>
      <tr align="left">
@@ -953,7 +952,7 @@ else
   <td align="center" style="margin: 3px; padding: 3px;"><%= chinese %><BR><%= malay %></td>
  
   <% end %>
-  <td align="center" style="margin: 3px; padding: 3px;">评审一 <BR>PKBS3</td>
+  <td align="center" style="margin: 3px; padding: 3px;">评审一 <BR>PKSR3</td>
 
   <% else %>
   <%= for item <- @list_exam do %>
@@ -1252,3 +1251,4 @@ else
         border:0;
     }
 </style>
+
