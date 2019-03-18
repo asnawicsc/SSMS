@@ -1014,6 +1014,10 @@ defmodule SchoolWeb.PdfController do
             |> redirect(to: "/list_report")
         end
       end
+
+      conn
+      |> put_flash(:info, "Mark sheet temp unsucccessfully created .")
+      |> redirect(to: "/list_report")
     end
   end
 

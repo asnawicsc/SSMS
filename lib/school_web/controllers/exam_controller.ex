@@ -356,15 +356,19 @@ defmodule SchoolWeb.ExamController do
           Repo.all(
             from(
               p in School.Affairs.Period,
-              left_join: tt in School.Affairs.Timetable,
-              on: p.timetable_id == tt.id,
+              left_join: f in School.Affairs.Timetable,
+              on: p.timetable_id == f.id,
               left_join: s in School.Affairs.Subject,
               on: s.id == p.subject_id,
               left_join: c in School.Affairs.Class,
               on: c.id == p.class_id,
               left_join: t in School.Affairs.Teacher,
               on: t.id == p.teacher_id,
-              where: tt.teacher_id == ^teacher.id,
+              where:
+                f.teacher_id == ^teacher.id and p.teacher_id == ^teacher.id and
+                  f.institution_id == ^conn.private.plug_session["institution_id"] and
+                  f.semester_id == ^conn.private.plug_session["semester_id"] and
+                  s.institution_id == ^conn.private.plug_session["institution_id"],
               select: %{
                 subject: s.timetable_description,
                 class: c.name,
