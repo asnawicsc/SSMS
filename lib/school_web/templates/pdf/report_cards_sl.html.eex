@@ -937,8 +937,8 @@ else
   <table  class="table" >
 
     <tr align="center">
-  <td colspan="6" align="center" style="margin: 3px; padding: 3px; border-left: 0; border-right: 0; border-top: 0" ><h3><b><%= @institute.name %></b></h3><br>
-        <h3><b><%= year %> 成绩单</b></h3></td>
+  <td colspan="6" align="center" style="margin: 3px; padding: 3px; border-left: 0; border-right: 0; border-top: 0" ><h4><b><%= @institute.name %></b></h4><br>
+        <h4><b><%= year %> 成绩单</b></h4></td>
   
  </tr>
      <tr align="left">
@@ -1089,14 +1089,14 @@ else
  </tr>
 <tr align="center">
   <td style="margin: 5px; padding: 5px; border-right: 0" align="left">数学</td>
-  <td  style="margin: 5px; padding: 5px; border-left: 0"" align="left">Matematik</td>
+  <td  style="margin: 5px; padding: 5px; border-left: 0" align="left">Matematik</td>
   <td style="margin: 3px; padding: 3px;"><%= math1 %></td>
   <td style="margin: 3px; padding: 3px;"><%= math2 %></td>
    <td style="margin: 3px; padding: 3px;"><%= math3 %></td>
     <td style="margin: 3px; padding: 3px;"></td>
  </tr>
  <tr align="center">
-    <td style="margin: 5px; padding: 5px; border-right: 0"" align="left">科学</td>
+    <td style="margin: 5px; padding: 5px; border-right: 0" align="left">科学</td>
   <td  style="margin: 5px; padding: 5px; border-left: 0"" align="left">Sains</td>
   <td style="margin: 3px; padding: 3px;"><%= sains1 %></td>
   <td style="margin: 3px; padding: 3px;"><%= sains2 %></td>
@@ -1104,7 +1104,7 @@ else
     <td style="margin: 3px; padding: 3px;"></td>
  </tr>
  <tr align="center">
-   <td style="margin: 5px; padding: 5px; border-right: 0"" align="left">道德教育</td>
+   <td style="margin: 5px; padding: 5px; border-right: 0" align="left">道德教育</td>
   <td style="margin: 5px; padding: 5px; border-left: 0" align="left">Pendidikan Moral</td>
   <td style="margin: 3px; padding: 3px;"></td>
   <td style="margin: 3px; padding: 3px;"></td>
@@ -1112,7 +1112,7 @@ else
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
  <tr align="center">
-  <td style="margin: 5px; padding: 5px; border-right: 0"" align="left">回教</td>
+  <td style="margin: 5px; padding: 5px; border-right: 0" align="left">回教</td>
   <td style="margin: 5px; padding: 5px; border-left: 0" align="left">Agama Islam</td>
  <td style="margin: 3px; padding: 3px;"><%= agama1 %></td>
   <td style="margin: 3px; padding: 3px;"><%= agama2 %></td>
@@ -1120,7 +1120,7 @@ else
     <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
-      <td style="margin: 5px; padding: 5px; border-right: 0"" align="left">历史</td>
+      <td style="margin: 5px; padding: 5px; border-right: 0" align="left">历史</td>
   <td style="margin: 5px; padding: 5px; border-left: 0" align="left">Sejarah</td>
  <td style="margin: 3px; padding: 3px;"><%= sej1 %></td>
   <td style="margin: 3px; padding: 3px;"><%= sej2 %></td>
@@ -1128,7 +1128,7 @@ else
     <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
-          <td style="margin: 5px; padding: 5px; border-right: 0"" align="left">设计和技术</td>
+          <td style="margin: 5px; padding: 5px; border-right: 0" align="left">设计和技术</td>
   <td style="margin: 5px; padding: 5px; border-left: 0" align="left">RBT</td>
  <td style="margin: 3px; padding: 3px;"><%= rbt1 %></td>
   <td style="margin: 3px; padding: 3px;"><%= rbt2 %></td>
@@ -1136,7 +1136,7 @@ else
     <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
-       <td style="margin: 5px; padding: 5px; border-right: 0"" align="left">通信信息技术</td>
+       <td style="margin: 5px; padding: 5px; border-right: 0" align="left">通信信息技术</td>
   <td style="margin: 5px; padding: 5px; border-left: 0" align="left">TMK</td>
   <td style="margin: 3px; padding: 3px;"><%= tmk1 %></td>
   <td style="margin: 3px; padding: 3px;"><%= tmk2 %></td>
@@ -1152,7 +1152,7 @@ else
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
-      <td style="margin: 5px; padding: 5px; border-right: 0"" align="left">体健</td>
+      <td style="margin: 5px; padding: 5px; border-right: 0" align="left">体健</td>
   <td style="margin: 5px; padding: 5px; border-left: 0" align="left">PJK</td>
     <td style="margin: 3px; padding: 3px;"><%= pj1 %></td>
   <td style="margin: 3px; padding: 3px;"><%= pj2 %></td>
@@ -1168,14 +1168,8 @@ else
  </tr>
  <tr align="center">
 
-  <td colspan="2" style="margin: 3px; padding: 3px;" align="left"></td>
-  <td style="margin: 3px; padding: 3px;">&nbsp;</td>
-  <td style="margin: 3px; padding: 3px;">&nbsp;</td>
-  <td style="margin: 3px; padding: 3px;">&nbsp;</td>
-   <td style="margin: 3px; padding: 3px;"></td>
- </tr>
   <tr align="center">
-     <td style="margin: 5px; padding: 5px; border-right: 0"" align="left">操行</td>
+     <td style="margin: 5px; padding: 5px; border-right: 0" align="left">操行</td>
   <td  style="margin: 5px; padding: 5px; border-left: 0" align="left">Kelakuan</td>
     <td style="margin: 3px; padding: 3px;"><%= laku1 %></td>
   <td style="margin: 3px; padding: 3px;"><%= laku2 %></td>
@@ -1183,7 +1177,7 @@ else
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
-    <td style="margin: 5px; padding: 5px; border-right: 0"" align="left">出席日数</td>
+    <td style="margin: 5px; padding: 5px; border-right: 0" align="left">出席日数</td>
   <td style="margin: 5px; padding: 5px; border-left: 0" align="left">Kedatangan</td>
     <td style="margin: 3px; padding: 3px;"><%= kedatangan1 %></td>
   <td style="margin: 3px; padding: 3px;"><%= kedatangan2 %></td>
@@ -1191,7 +1185,7 @@ else
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
-  <td style="margin: 5px; padding: 5px; border-right: 0"" align="left">总分</td>
+  <td style="margin: 5px; padding: 5px; border-right: 0" align="left">总分</td>
    <td  style="margin: 5px; padding: 5px; border-left: 0" align="left">Jumlah Markah</td>
       <td style="margin: 3px; padding: 3px;"><%= total1 %></td>
   <td style="margin: 3px; padding: 3px;"><%= total2 %></td>
@@ -1199,7 +1193,7 @@ else
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center" >
-  <td  style="margin: 5px; padding: 5px; border-right: 0"" align="left">平均 </td>
+  <td  style="margin: 5px; padding: 5px; border-right: 0" align="left">平均 </td>
   <td  style="margin: 5px; padding: 5px; border-left: 0" align="left">Purata</td>
         <td style="margin: 3px; padding: 3px;"><%= averg1 %></td>
   <td style="margin: 3px; padding: 3px;"><%= averg2 %></td>
@@ -1207,7 +1201,7 @@ else
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
-  <td style="margin: 5px; padding: 5px; border-right: 0""  align="left">本班名次</td>
+  <td style="margin: 5px; padding: 5px; border-right: 0"  align="left">本班名次</td>
    <td style="margin: 5px; padding: 5px; border-left: 0"  align="left">Kedudukan Dalam Kelas</td>
         <td style="margin: 3px; padding: 3px;"><%= crank1 %></td>
   <td style="margin: 3px; padding: 3px;"><%= crank2 %></td>
@@ -1215,13 +1209,22 @@ else
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
-  <td style="margin: 5px; padding: 5px; border-right: 0"" align="left" >全级名次</td>
+  <td style="margin: 5px; padding: 5px; border-right: 0" align="left" >全级名次</td>
   <td style="margin: 5px; padding: 5px; border-left: 0" align="left">Kedudukan Dalam Darjah</td>
         <td style="margin: 3px; padding: 3px;"><%= srank1 %></td>
   <td style="margin: 3px; padding: 3px;"><%= srank2 %></td>
   <td style="margin: 3px; padding: 3px;"><%= srank3 %></td>
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
+  <tr align="center">
+  <td style="margin: 5px; padding: 5px; border-right: 0" align="left">体高 & 体重</td>
+  <td style="margin: 5px; padding: 5px; border-left: 0" align="left">Tinggi & Berat</td>
+  <td style="margin: 3px; padding: 3px;"></td>
+  <td style="margin: 3px; padding: 3px;"></td>
+  <td style="margin: 3px; padding: 3px;"></td>
+   <td style="margin: 3px; padding: 3px;"></td>
+ </tr>
+ <tr>
   
    <td colspan="6" align="left" style="margin: 3px; padding: 3px;" height="100px;">评语 Komen:</td>
   
