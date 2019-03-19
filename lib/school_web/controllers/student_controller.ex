@@ -1944,7 +1944,7 @@ defmodule SchoolWeb.StudentController do
 
     conn
     |> put_flash(:info, "Height and weight updated successfully.")
-    |> redirect(to: "/classes")
+    |> redirect(to: "/index")
   end
 
   def student_lists(conn, params) do

@@ -30,6 +30,7 @@
                            <a class="list-group-item list-group-item-action" href="#tabSetting2" id="class_subject" data-toggle="tab">Class Subject</a>
                            <a class="list-group-item list-group-item-action" href="#tabSetting3" id="class_period" data-toggle="tab">Class Period</a>
                            <a class="list-group-item list-group-item-action" href="#tabSetting4" id="class_student_info" data-toggle="tab">Class Student Info</a>
+                            <a class="list-group-item list-group-item-action" href="#tabSetting5" id="class_student_info" data-toggle="tab">Class Student Height & Weight</a>
                         </div>
                      </div>
                   </div>
@@ -81,26 +82,26 @@
                               <div class="card-header bg-gray-lighter text-bold">Class Subject</div>
                               <div class="card-body">
                               <table class="table data">
-                          <thead>
-                              <tr>
-                                <th>Subject</th>
-                                 <th>Total Period</th>
-                          
-                              </tr>
-                          </thead>
-                          <tbody>
-                           <%= for subject <- @subject_class do %>
+                                      <thead>
+                                          <tr>
+                                            <th>Subject</th>
+                                             <th>Total Period</th>
+                                      
+                                          </tr>
+                                      </thead>
+                                      <tbody>
+                                       <%= for subject <- @subject_class do %>
 
-                           <% period = Repo.all(from s in School.Affairs.Period,where: s.subject_id ==^subject.s_id and s.class_id==^subject.c_id)|>Enum.count %>
-                                <tr>
-                                  <td><%= subject.s_name %></td>
-                                  <td><%= period %></td>
-                     
-                              
-                                </tr>
-                            <% end %>
-                          </tbody>
-                      </table>
+                                       <% period = Repo.all(from s in School.Affairs.Period,where: s.subject_id ==^subject.s_id and s.class_id==^subject.c_id)|>Enum.count %>
+                                            <tr>
+                                              <td><%= subject.s_name %></td>
+                                              <td><%= period %></td>
+                                 
+                                          
+                                            </tr>
+                                        <% end %>
+                                      </tbody>
+                                  </table>
                          
                               </div>
                            </div>
@@ -126,28 +127,30 @@
                                  <div class="card-body" >
                                 
                                    <table class="table" style="width:100%" id="datatable1">
-                          <thead>
-                              <tr>
-                                <td>Picture</td>
-                                <th>Name</th>
-                                 <th>Action</th>
-                          
-                              </tr>
-                          </thead>
-                          <tbody>
-                          <%= for student <- @students do %>
+                                      <thead>
+                                          <tr>
+                                            <td>Picture</td>
+                                            <th>Name</th>
+                                             <th>Action</th>
+                                      
+                                          </tr>
+                                      </thead>
+                                      <tbody>
+                                      <%= for student <- @students do %>
 
-                          
-                                <tr aria-label="student" student_id = "<%= student.id %>">
-                                   <td class="text-left"> <img id="preview6"  style='width:20px; height: 20px;' src='data:image/png;base64, <%= student.image_bin %>'></td>
-                                  <td><b><%= student.name %><%= student.chinese_name %></b></td>
-                                  <td> <a href="/show_student_info/<%= student.id %>">
-                                        <button class="btn btn-labeled btn-info btn-xs mb-2" type="button">
-                                        <span class="btn-label"><i class="fa fa-search"></i></span>Info</button></a></td>                         
-                                </tr>
-                            <% end %>
-                          </tbody>
-                      </table>
+                                      
+                                            <tr aria-label="student" student_id = "<%= student.id %>">
+                                               <td class="text-left"> <img id="preview6"  style='width:20px; height: 20px;' src='data:image/png;base64, <%= student.image_bin %>'></td>
+                                              <td><b><%= student.name %><%= student.chinese_name %></b></td>
+                                              <td> <a href="/show_student_info/<%= student.id %>">
+                                                    <button class="btn btn-labeled btn-info btn-xs mb-2" type="button">
+                                                    <span class="btn-label"><i class="fa fa-search"></i></span>Info</button></a></td> 
+
+                                    
+                                            </tr>
+                                        <% end %>
+                                      </tbody>
+                                  </table>
                                 
 
                                    
@@ -163,6 +166,73 @@
 
                                 
                               </form>
+
+                        </div>
+                        <div class="tab-pane" id="tabSetting5">
+                       
+                                          <div class="row">
+                                                <div class="col-lg-12" aria-label="student_table">
+                                                  <div class="card card-default d-none d-lg-block">
+                                                    <div class="card-body">
+                                                      <div class="table-responsive">
+                                                        <table class="table">
+                                                          <thead>
+                                                            <tr>
+                                                            <th>Name</th>
+                                                            <th>Height (cm)</th>
+                                                            <th>Weight (Kg)</th>
+                                                            <th>Action</th>
+                                                            </tr>
+                                                          </thead>
+                                                          <tbody>
+                                                          <%= if @students == nil do %> 
+                                                          <% else %>
+                                                          <%= for student <- @students do %>
+                                                              <tr>
+                                                                <td class="text-left">
+                                                             
+                                                             
+                                                                    <div><%= student.name %> <%= student.chinese_name %></div>
+
+
+                                             
+                                                              </td>
+                                                              <td class="text-left"> 
+                                                                  <%= if student.height == nil do %>
+                                                                    <div>Not set<div>
+                                                                  <% else %>
+                                                                    <div><%= student.height %></div>  
+                                                                  <% end %>               
+                                                              </td>
+                                                              <td class="text-left">              
+                                                                  <%= if student.weight == nil do %>
+                                                                    <div>Not set<div>
+                                                                  <% else %>
+                                                                    <div><%= student.weight %></div>  
+                                                                  <% end %>                   
+                                                              </td>
+                                                              <td>
+                                                                <a href="/edit_height_weight/<%= student.id %>/<%= @semester_id %>"><button class="btn btn-labeled btn-success btn-xs mb-2" type="button">
+                                                                     <span class="btn-label"><i class="fa fa-wrench"></i></span>Edit</button></a>
+                                                              </td>
+                                                            </tr>
+                                                          <% end %>
+                                                          <% end %>
+
+
+                                                          </tbody>
+                                                        </table>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                          </div>
+
+                                          <script type="text/javascript">
+                                            $(window).ready(function(){
+                                               $('.table').DataTable();
+                                            })
+                                          </script>
 
                         </div>
               

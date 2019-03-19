@@ -730,7 +730,9 @@ defmodule SchoolWeb.ClassController do
             id: st.sudent_id,
             name: s.name,
             chinese_name: s.chinese_name,
-            image_bin: s.image_bin
+            image_bin: s.image_bin,
+            height: s.height,
+            weight: s.weight
           },
           order_by: [asc: s.name]
         )
@@ -775,6 +777,8 @@ defmodule SchoolWeb.ClassController do
         )
       )
 
+    semester_id = conn.private.plug_session["semester_id"]
+
     render(
       conn,
       "chosen_class_setting.html",
@@ -785,7 +789,8 @@ defmodule SchoolWeb.ClassController do
       changeset: changeset,
       institution_id: institution_id,
       students: students,
-      subject_class: subject_class
+      subject_class: subject_class,
+      semester_id: semester_id
     )
   end
 
