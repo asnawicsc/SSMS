@@ -431,7 +431,8 @@ defmodule SchoolWeb.ExamController do
                       g.institution_id == ^conn.private.plug_session["institution_id"] and
                       q.institution_id == ^conn.private.plug_session["institution_id"] and
                       m.institution_id == ^conn.private.plug_session["institution_id"] and
-                      s.is_delete == 0 and g.timetable_description == ^period_subject.subject,
+                      s.is_delete == 0 and g.timetable_description == ^period_subject.subject and
+                      s.name == ^period_subject.class,
                   select: %{
                     id: p.id,
                     c_id: s.id,

@@ -953,7 +953,7 @@ else
  <tr align="center" >
   <td colspan="2" align="center" style="margin: 3px; padding: 3px;" ><b>科目名称 MATA PELAJARAN</b></td>
   <% count=@list_exam|>Enum.count %>
-  <%= if count < 3 && count > 1 do %>
+  <%= if count == 1 do %>
     
 <%= for item <- @list_exam do %>
   
@@ -964,8 +964,10 @@ else
   <td align="center" style="margin: 3px; padding: 3px;"><%= chinese %><BR><%= malay %></td>
  
   <% end %>
+    <td align="center" style="margin: 3px; padding: 3px;">评审一 <BR>PKSR2</td>
+  <td align="center" style="margin: 3px; padding: 3px;">评审一 <BR>PKSR3</td>
   <% end %>
-    <%= if count < 2 && count > 1 do %>
+    <%= if count == 2 do %>
     
 <%= for item <- @list_exam do %>
   
@@ -980,7 +982,6 @@ else
   <td align="center" style="margin: 3px; padding: 3px;"><%= chinese %><BR><%= malay %></td>
  
   <% end %>
-  <td align="center" style="margin: 3px; padding: 3px;">评审一 <BR>PKSR2</td>
   <td align="center" style="margin: 3px; padding: 3px;">评审一 <BR>PKSR3</td>
 <% end %>
    <%= if count == 3 do %>
