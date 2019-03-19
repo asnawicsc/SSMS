@@ -635,7 +635,8 @@ defmodule SchoolWeb.AttendanceController do
               select: %{
                 start: p.attendance_date,
                 title: s.name,
-                color: "yellow"
+                color: "yellow",
+                student_id: p.student_id
               }
             )
           )
@@ -643,7 +644,8 @@ defmodule SchoolWeb.AttendanceController do
 
         list_class_attendence =
           for item <- list_class_attendence do
-            count = item |> elem(1) |> Enum.count()
+            count = item |> elem(1) |> hd
+            count = count.student_id |> String.split(",") |> Enum.count()
             title = item |> elem(0) |> elem(0)
             date = item |> elem(0) |> elem(1)
             color = "green"
