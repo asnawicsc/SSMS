@@ -937,8 +937,8 @@ else
   <table  class="table" >
 
     <tr align="center">
-  <td colspan="6" align="center" style="margin: 3px; padding: 3px; border-left: 0; border-right: 0; border-top: 0" ><h5><b><%= @institute.name %></b></h5><br>
-        <h5><b><%= year %> 成绩单</b></h5></td>
+  <td colspan="6" align="center" style="margin: 3px; padding: 3px; border-left: 0; border-right: 0; border-top: 0" ><h3><b><%= @institute.name %></b></h3><br>
+        <h3><b><%= year %> 成绩单</b></h3></td>
   
  </tr>
      <tr align="left">
@@ -1030,7 +1030,7 @@ else
  </tr>
  <tr align="center">
  <td rowspan="4"  style="margin: 3px; padding: 3px;" align="left"><BR><b>英语 <br> Bahasa <br> Inggeris</b></td>
-  <td style="margin: 3px; padding: 3px;" align="left">口服 Lisan</td>
+  <td style="margin: 3px; padding: 3px;" align="left">会话 Lisan</td>
   <td style="margin: 3px; padding: 3px;"><%= ingl1 %></td>
   <td style="margin: 3px; padding: 3px;"><%= ingl2 %></td>
    <td style="margin: 3px; padding: 3px;"><%= ingl3 %></td>
