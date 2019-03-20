@@ -372,7 +372,7 @@ defmodule SchoolWeb.ExamController do
               select: %{
                 subject: s.timetable_description,
                 class: c.name,
-                teacher: t.name
+                teacher: t.id
               }
             )
           )
@@ -425,6 +425,7 @@ defmodule SchoolWeb.ExamController do
                   on: g.id == p.subject_id,
                   left_join: s in School.Affairs.Class,
                   on: s.level_id == m.level_id,
+                  left_join: k in School.Affairs.Teacher,
                   where:
                     m.semester_id == ^conn.private.plug_session["semester_id"] and
                       s.institution_id == ^conn.private.plug_session["institution_id"] and
@@ -432,14 +433,16 @@ defmodule SchoolWeb.ExamController do
                       q.institution_id == ^conn.private.plug_session["institution_id"] and
                       m.institution_id == ^conn.private.plug_session["institution_id"] and
                       s.is_delete == 0 and g.timetable_description == ^period_subject.subject and
-                      s.name == ^period_subject.class,
+                      s.name == ^period_subject.class and k.id == ^period_subject.teacher,
                   select: %{
                     id: p.id,
                     c_id: s.id,
                     s_id: g.id,
                     class: s.name,
                     exam: m.name,
-                    subject: g.description
+                    subject: g.description,
+                    teacher_name: k.name,
+                    cname: k.cname
                   }
                 )
               )
@@ -449,8 +452,6 @@ defmodule SchoolWeb.ExamController do
           |> List.flatten()
           |> Enum.uniq()
 
-        IO.inspect(a)
-
         {class, a}
       end
 
@@ -459,7 +460,11 @@ defmodule SchoolWeb.ExamController do
       |> put_flash(:info, "You Dont Teach Any Subject.")
       |> redirect(to: page_path(conn, :dashboard))
     else
-      render(conn, "mark_sheet.html", class: class, a: a)
+      if user.role == "Admin" or user.role == "Support" do
+        render(conn, "mark_sheet.html", class: class, a: a)
+      else
+        render(conn, "mark_sheet_teacher.html", class: class, a: a)
+      end
     end
   end
 

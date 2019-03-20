@@ -3533,7 +3533,7 @@ defmodule SchoolWeb.UserChannel do
 
       time_in = date_time
 
-      date = time_in |> String.split_at(8) |> elem(0)
+      date = time_in |> String.split(" ") |> hd
 
       attns =
         Repo.get_by(School.Affairs.TeacherAttendance,

@@ -16,10 +16,13 @@
                      <table class="table " id="datatable1">
                         <thead>
                            <tr>
-                      
                               <th data-column-id="sender">No</th>
-                                     <th data-column-id="received" data-order="desc">Exam</th>
-                                <th data-column-id="sender">Class</th>
+
+                              <th data-column-id="sender">Name</th>
+                              <th data-column-id="sender">Other Name</th>
+               
+                              <th data-column-id="received" data-order="desc">Exam</th>
+                                             <th data-column-id="sender">Class</th>
                               <th data-column-id="" data-order="desc">Subject</th>
                               <th data-column-id="commands" data-formatter="commands" data-sortable="false">
                                 Action</div>
@@ -33,9 +36,10 @@
                            <% as= as |>elem(0) %>
                            <tr>
                                <td><%= no + 1 %></td>
-                              
+                                <td><%= as.teacher_name %></td>
+                              <td><%= as.cname %></td>
                               <td><%= as.exam %></td>
-                              <td><%= as.class %></td>
+                               <td><%= as.class %></td>
                               <td><%= as.subject %></td>
                               <td>
                          <a href="/exam/marking/<%= as.id %>/<%= as.c_id %>/<%= as.s_id %>"><button class="btn btn-labeled btn-info" type="button">

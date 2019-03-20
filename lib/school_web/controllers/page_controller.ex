@@ -541,36 +541,58 @@ defmodule SchoolWeb.PageController do
         %{name: teacher.name, cname: teacher.cname, id: teacher.id}
       end
 
+    # teachers_attend_full =
+    #   for item <- teachers_attend do
+    #     teacher = Repo.get_by(Teacher, id: item.id)
+
+    #     teacher_attendance =
+    #       Repo.get_by(School.Affairs.TeacherAttendance, teacher_id: item.id, date: date)
+
+    #     teacher_attendance =
+    #       if teacher_attendance != nil do
+    #         %{
+    #           name: teacher.name,
+    #           cname: teacher.cname,
+    #           image_bin: teacher.image_bin,
+    #           id: teacher.id,
+    #           time_in: teacher_attendance.time_in,
+    #           time_out: teacher_attendance.time_out,
+    #           date: teacher_attendance.date
+    #         }
+    #       else
+    #         []
+    #       end
+
+    #     teacher_attendance
+    #   end
+    #   |> Enum.filter(fn x -> x != [] end)
+
+    # teachers_attend_full =
+    #   if teachers_attend_full != [] do
+    #     teachers_attend_full |> Enum.filter(fn x -> x.date == date end)
+    #   else
+    #     []
+    #   end
+
     teachers_attend_full =
-      for item <- teachers_attend do
-        teacher = Repo.get_by(Teacher, id: item.id)
-
-        teacher_attendance =
-          Repo.get_by(School.Affairs.TeacherAttendance, teacher_id: item.id, date: date)
-
-        teacher_attendance =
-          if teacher_attendance != nil do
-            %{
-              name: teacher.name,
-              cname: teacher.cname,
-              image_bin: teacher.image_bin,
-              id: teacher.id,
-              time_in: teacher_attendance.time_in,
-              time_out: teacher_attendance.time_out,
-              date: teacher_attendance.date
-            }
-          else
-          end
-
-        teacher_attendance
-      end
-
-    teachers_attend_full =
-      if teachers_attend_full != [nil] do
-        teachers_attend_full |> Enum.filter(fn x -> x.date == date end)
-      else
-        []
-      end
+      Repo.all(
+        from(s in School.Affairs.TeacherAttendance,
+          left_join: g in School.Affairs.Teacher,
+          on: s.teacher_id == g.id,
+          where:
+            s.date == ^date and s.institution_id == ^conn.private.plug_session["institution_id"] and
+              s.semester_id == ^conn.private.plug_session["semester_id"],
+          select: %{
+            name: g.name,
+            cname: g.cname,
+            image_bin: g.image_bin,
+            id: g.id,
+            time_in: s.time_in,
+            time_out: s.time_out,
+            date: s.date
+          }
+        )
+      )
 
     changeset = Settings.change_institution(%Institution{})
 
