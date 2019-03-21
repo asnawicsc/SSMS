@@ -1,0 +1,5 @@
+<h2>New Shift master</h2>
+
+<%= render "form.html", Map.put(assigns, :action, shift_master_path(@conn, :create)) %>
+
+<span><%= link "Back", to: shift_master_path(@conn, :index) %></span>

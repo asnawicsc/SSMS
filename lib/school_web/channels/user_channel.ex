@@ -3522,7 +3522,7 @@ defmodule SchoolWeb.UserChannel do
 
     teacher =
       Repo.get_by(School.Affairs.Teacher,
-        icno: term,
+        secondid: term,
         institution_id: institution_id
       )
 

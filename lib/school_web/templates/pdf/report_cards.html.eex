@@ -927,6 +927,46 @@ else
    
  end
 
+ 
+       hw= all_date|>Enum.filter(fn x -> x.subject =="H&W" end)
+
+ {hw1,hw2,hw3}=if srank != [] do
+
+  hw=hw|>hd
+
+
+ hw1=if hw.s1m != nil do
+  hw.s1m
+else
+   hw.s1g
+ end
+
+  hw2=if hw.s2m != nil do
+  hw.s2m
+else
+   srank.s2g
+ end
+
+  hw3=if hw.s3m != nil do
+  hw.s3m
+else
+   hw.s3g
+ end
+
+{hw1,hw2,hw3}
+
+ else
+
+  hw3=nil
+
+  hw2=nil
+
+  hw1=nil
+
+{hw1,hw2,hw3}
+   
+ end
+
 
    %>
 
@@ -1221,30 +1261,28 @@ else
   <td style="margin: 3px; padding: 3px;"><%= srank3 %></td>
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
-  <tr align="center">
-  <td colspan="2" style="margin: 3px; padding: 3px;" align="left">校长签名 <br>T.Tangan Guru Besar</td>
-  <td style="margin: 3px; padding: 3px;"></td>
-  <td style="margin: 3px; padding: 3px;"></td>
-  <td style="margin: 3px; padding: 3px;"></td>
+   <tr align="center">
+  <td style="margin: 5px; padding: 5px; border-right: 0" align="left">体高 & 体重</td>
+  <td style="margin: 5px; padding: 5px; border-left: 0" align="left">Tinggi & Berat</td>
+  <td style="margin: 3px; padding: 3px;"><%= hw1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= hw2 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= hw3 %></td>
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
- <tr align="center">
-   <td colspan="2" style="margin: 3px; padding: 3px;" align="left">级任签名 <br>T.Tangan Guru Darjah</td>
-  <td style="margin: 3px; padding: 3px;"></td>
-  <td style="margin: 3px; padding: 3px;"></td>
-  <td style="margin: 3px; padding: 3px;"></td>
-   <td style="margin: 3px; padding: 3px;"></td>
- </tr>
- <tr align="center">
-   <td colspan="2" style="margin: 3px; padding: 3px;" align="left">家长 <br>T.Tangan Ibubapa/Penjaga</td>
-   
-  <td style="margin: 3px; padding: 3px;"></td>
-  <td style="margin: 3px; padding: 3px;"></td>
-  <td style="margin: 3px; padding: 3px;"></td>
-   <td style="margin: 3px; padding: 3px;"></td>
- </tr>
+ <tr>
+  
    <td colspan="6" align="left" style="margin: 3px; padding: 3px;" height="100px;">评语 Komen:</td>
   
+ </tr>
+<tr align="center">
+  <td colspan="2" style="margin: 1px; padding: 1px;" align="center">T.Tangan Guru Besar<br>校长签名 </td>
+   <td colspan="2" style="margin: 1px; padding: 1px;" align="center">T.Tangan Guru Darjah<br>级任签名 </td>
+     <td colspan="2" style="margin: 1px; padding: 1px;" align="center">T.Tangan Ibubapa/Penjaga<br>家长</td>
+ </tr>
+ <tr align="center">
+  <td colspan="2" style="margin: 3px; padding: 3px;" align="center" height="100px;"></td>
+   <td colspan="2" style="margin: 3px; padding: 3px;" align="center" height="100px;"></td>
+     <td colspan="2" style="margin: 3px; padding: 3px;" align="center" height="100px;"></td>
  </tr>
 
 

@@ -1,0 +1,28 @@
+<h2>Listing Shift</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Teacher</th>
+      <th>Shift master</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for shift <- @shift do %>
+    <tr>
+      <td><%= shift.teacher_id %></td>
+      <td><%= shift.shift_master_id %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: shift_path(@conn, :show, shift), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: shift_path(@conn, :edit, shift), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: shift_path(@conn, :delete, shift), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Shift", to: shift_path(@conn, :new) %></span>

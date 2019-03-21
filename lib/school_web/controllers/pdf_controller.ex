@@ -965,7 +965,169 @@ defmodule SchoolWeb.PdfController do
       |> List.flatten()
       |> Enum.filter(fn x -> x != nil end)
 
-    result = result ++ class_rank ++ standard_rank ++ total_markfinish ++ total_purata
+    total_h_w =
+      for stud_class <- student_class do
+        all =
+          Repo.all(
+            from(
+              em in School.Affairs.ExamMark,
+              left_join: z in School.Affairs.Exam,
+              on: em.exam_id == z.id,
+              left_join: e in School.Affairs.ExamMaster,
+              on: z.exam_master_id == e.id,
+              left_join: j in School.Affairs.Semester,
+              on: e.semester_id == j.id,
+              left_join: s in School.Affairs.Student,
+              on: em.student_id == s.id,
+              left_join: sc in School.Affairs.StudentClass,
+              on: sc.sudent_id == s.id,
+              left_join: c in School.Affairs.Class,
+              on: sc.class_id == c.id,
+              left_join: sb in School.Affairs.Subject,
+              on: em.subject_id == sb.id,
+              where:
+                c.name == ^class_name and em.student_id == ^stud_class.student_id and
+                  sc.semester_id == ^semester_id,
+              select: %{
+                student_id: s.id,
+                student_name: s.name,
+                chinese_name: s.chinese_name,
+                class_name: c.name,
+                exam_master_id: e.id,
+                exam_name: e.name,
+                semester: j.id,
+                semester_no: j.sem,
+                year: j.year,
+                subject_code: sb.code,
+                subject_name: sb.description,
+                subject_cname: sb.cdesc,
+                mark: em.mark,
+                standard_id: sc.level_id,
+                student_heigt: s.height,
+                student_weight: s.weight
+              }
+            )
+          )
+
+        total_hei_wei =
+          for exam <- list_exam |> Enum.with_index() do
+            no = exam |> elem(1)
+            exam = exam |> elem(0)
+
+            fit = all |> Enum.filter(fn x -> x.semester_id == exam.semester end)
+
+            fit =
+              if fit == [] do
+                ""
+              else
+                a = fit |> hd
+
+                student = Repo.get_by(School.Affairs.Student, id: a.student_id)
+
+                data = student |> Enum.map(fn x -> x.height end)
+                data2 = student |> Enum.map(fn x -> x.height end)
+
+                heig =
+                  if data != nil do
+                    data = data |> String.split(",")
+
+                    hg =
+                      for item <- data do
+                        height = item |> elem(1)
+                        semester = item |> elem(0)
+
+                        {semester, height}
+                      end
+
+                    last = Enum.filter(fn x -> x |> elem(0) == exam.semester end) |> hd
+                  else
+                    ""
+                  end
+
+                last_hg = heig |> String.split("-") |> elem(1)
+
+                weig =
+                  if data2 != nil do
+                    data2 = data |> String.split(",")
+
+                    hg =
+                      for item2 <- data2 do
+                        weight = item2 |> elem(1)
+                        semester = item2 |> elem(0)
+
+                        {semester, weight}
+                      end
+
+                    last2 = Enum.filter(fn x -> x |> elem(0) == exam.semester end) |> hd
+                  else
+                    ""
+                  end
+
+                last_wg = weig |> String.split("-") |> elem(1)
+
+                last_hg ++ "CM" ++ " , " ++ last_wg ++ "KG"
+              end
+
+            {no + 1, fit}
+          end
+
+        total_height_weight =
+          if all != [] do
+            all = all |> hd
+
+            count = total_hei_wei |> Enum.count()
+
+            {s1m, s2m, s3m} =
+              if count == 1 do
+                s1m = total_hei_wei |> Enum.fetch!(0) |> elem(1)
+                s2m = ""
+                s3m = ""
+
+                {s1m, s2m, s3m}
+              else
+                if count == 2 do
+                  s1m = total_hei_wei |> Enum.fetch!(0) |> elem(1)
+                  s2m = total_hei_wei |> Enum.fetch!(1) |> elem(1)
+                  s3m = ""
+
+                  {s1m, s2m, s3m}
+                else
+                  if count == 3 do
+                    s1m = total_hei_wei |> Enum.fetch!(0) |> elem(1)
+                    s2m = total_hei_wei |> Enum.fetch!(1) |> elem(1)
+                    s3m = total_hei_wei |> Enum.fetch!(2) |> elem(1)
+
+                    {s1m, s2m, s3m}
+                  end
+                end
+              end
+
+            %{
+              institution_id: conn.private.plug_session["institution_id"],
+              stuid: all.student_id |> Integer.to_string(),
+              name: all.student_name,
+              cname: all.chinese_name,
+              class: all.class_name,
+              subject: "H&W",
+              description: "Height and Weight",
+              year: all.year |> Integer.to_string(),
+              semester: all.semester_no |> Integer.to_string(),
+              s1m: s1m,
+              s2m: s2m,
+              s3m: s3m,
+              s1g: "",
+              s2g: "",
+              s3g: ""
+            }
+          end
+
+        total_height_weight
+      end
+      |> List.flatten()
+      |> Enum.filter(fn x -> x != nil end)
+
+    result =
+      result ++ class_rank ++ standard_rank ++ total_markfinish ++ total_purata ++ total_h_w
 
     exist =
       Repo.all(

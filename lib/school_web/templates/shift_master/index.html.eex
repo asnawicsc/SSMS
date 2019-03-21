@@ -1,0 +1,36 @@
+<h2>Listing Shift master</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Start time</th>
+      <th>End time</th>
+      <th>Day</th>
+      <th>Semester</th>
+      <th>Institution</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for shift_master <- @shift_master do %>
+    <tr>
+      <td><%= shift_master.name %></td>
+      <td><%= shift_master.start_time %></td>
+      <td><%= shift_master.end_time %></td>
+      <td><%= shift_master.day %></td>
+      <td><%= shift_master.semester_id %></td>
+      <td><%= shift_master.institution_id %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: shift_master_path(@conn, :show, shift_master), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: shift_master_path(@conn, :edit, shift_master), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: shift_master_path(@conn, :delete, shift_master), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Shift master", to: shift_master_path(@conn, :new) %></span>

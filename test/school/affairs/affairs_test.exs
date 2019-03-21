@@ -4578,4 +4578,136 @@ defmodule School.AffairsTest do
       assert %Ecto.Changeset{} = Affairs.change_mark_sheet_temp(mark_sheet_temp)
     end
   end
+
+  describe "shift_master" do
+    alias School.Affairs.ShiftMaster
+
+    @valid_attrs %{day: "some day", end_time: ~T[14:00:00.000000], institution_id: 42, name: "some name", semester_id: 42, start_time: ~T[14:00:00.000000]}
+    @update_attrs %{day: "some updated day", end_time: ~T[15:01:01.000000], institution_id: 43, name: "some updated name", semester_id: 43, start_time: ~T[15:01:01.000000]}
+    @invalid_attrs %{day: nil, end_time: nil, institution_id: nil, name: nil, semester_id: nil, start_time: nil}
+
+    def shift_master_fixture(attrs \\ %{}) do
+      {:ok, shift_master} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_shift_master()
+
+      shift_master
+    end
+
+    test "list_shift_master/0 returns all shift_master" do
+      shift_master = shift_master_fixture()
+      assert Affairs.list_shift_master() == [shift_master]
+    end
+
+    test "get_shift_master!/1 returns the shift_master with given id" do
+      shift_master = shift_master_fixture()
+      assert Affairs.get_shift_master!(shift_master.id) == shift_master
+    end
+
+    test "create_shift_master/1 with valid data creates a shift_master" do
+      assert {:ok, %ShiftMaster{} = shift_master} = Affairs.create_shift_master(@valid_attrs)
+      assert shift_master.day == "some day"
+      assert shift_master.end_time == ~T[14:00:00.000000]
+      assert shift_master.institution_id == 42
+      assert shift_master.name == "some name"
+      assert shift_master.semester_id == 42
+      assert shift_master.start_time == ~T[14:00:00.000000]
+    end
+
+    test "create_shift_master/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_shift_master(@invalid_attrs)
+    end
+
+    test "update_shift_master/2 with valid data updates the shift_master" do
+      shift_master = shift_master_fixture()
+      assert {:ok, shift_master} = Affairs.update_shift_master(shift_master, @update_attrs)
+      assert %ShiftMaster{} = shift_master
+      assert shift_master.day == "some updated day"
+      assert shift_master.end_time == ~T[15:01:01.000000]
+      assert shift_master.institution_id == 43
+      assert shift_master.name == "some updated name"
+      assert shift_master.semester_id == 43
+      assert shift_master.start_time == ~T[15:01:01.000000]
+    end
+
+    test "update_shift_master/2 with invalid data returns error changeset" do
+      shift_master = shift_master_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_shift_master(shift_master, @invalid_attrs)
+      assert shift_master == Affairs.get_shift_master!(shift_master.id)
+    end
+
+    test "delete_shift_master/1 deletes the shift_master" do
+      shift_master = shift_master_fixture()
+      assert {:ok, %ShiftMaster{}} = Affairs.delete_shift_master(shift_master)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_shift_master!(shift_master.id) end
+    end
+
+    test "change_shift_master/1 returns a shift_master changeset" do
+      shift_master = shift_master_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_shift_master(shift_master)
+    end
+  end
+
+  describe "shift" do
+    alias School.Affairs.Shift
+
+    @valid_attrs %{shift_master_id: 42, teacher_id: 42}
+    @update_attrs %{shift_master_id: 43, teacher_id: 43}
+    @invalid_attrs %{shift_master_id: nil, teacher_id: nil}
+
+    def shift_fixture(attrs \\ %{}) do
+      {:ok, shift} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_shift()
+
+      shift
+    end
+
+    test "list_shift/0 returns all shift" do
+      shift = shift_fixture()
+      assert Affairs.list_shift() == [shift]
+    end
+
+    test "get_shift!/1 returns the shift with given id" do
+      shift = shift_fixture()
+      assert Affairs.get_shift!(shift.id) == shift
+    end
+
+    test "create_shift/1 with valid data creates a shift" do
+      assert {:ok, %Shift{} = shift} = Affairs.create_shift(@valid_attrs)
+      assert shift.shift_master_id == 42
+      assert shift.teacher_id == 42
+    end
+
+    test "create_shift/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_shift(@invalid_attrs)
+    end
+
+    test "update_shift/2 with valid data updates the shift" do
+      shift = shift_fixture()
+      assert {:ok, shift} = Affairs.update_shift(shift, @update_attrs)
+      assert %Shift{} = shift
+      assert shift.shift_master_id == 43
+      assert shift.teacher_id == 43
+    end
+
+    test "update_shift/2 with invalid data returns error changeset" do
+      shift = shift_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_shift(shift, @invalid_attrs)
+      assert shift == Affairs.get_shift!(shift.id)
+    end
+
+    test "delete_shift/1 deletes the shift" do
+      shift = shift_fixture()
+      assert {:ok, %Shift{}} = Affairs.delete_shift(shift)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_shift!(shift.id) end
+    end
+
+    test "change_shift/1 returns a shift changeset" do
+      shift = shift_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_shift(shift)
+    end
+  end
 end

@@ -161,7 +161,7 @@
           </div>
 
           <div class="form-group col-md-2">
-            <%= label f, (gettext "Secondid"),  class: "control-label" %>
+            <%= label f, (gettext "RFID"),  class: "control-label" %>
             <%= text_input f, :secondid, class: "form-control" %>
             <%= error_tag f, :secondid %>
           </div>

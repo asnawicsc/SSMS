@@ -1,0 +1,38 @@
+<h2>Show Shift master</h2>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @shift_master.name %>
+  </li>
+
+  <li>
+    <strong>Start time:</strong>
+    <%= @shift_master.start_time %>
+  </li>
+
+  <li>
+    <strong>End time:</strong>
+    <%= @shift_master.end_time %>
+  </li>
+
+  <li>
+    <strong>Day:</strong>
+    <%= @shift_master.day %>
+  </li>
+
+  <li>
+    <strong>Semester:</strong>
+    <%= @shift_master.semester_id %>
+  </li>
+
+  <li>
+    <strong>Institution:</strong>
+    <%= @shift_master.institution_id %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: shift_master_path(@conn, :edit, @shift_master) %></span>
+<span><%= link "Back", to: shift_master_path(@conn, :index) %></span>

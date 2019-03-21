@@ -5857,4 +5857,196 @@ defmodule School.Affairs do
   def change_mark_sheet_temp(%MarkSheetTemp{} = mark_sheet_temp) do
     MarkSheetTemp.changeset(mark_sheet_temp, %{})
   end
+
+  alias School.Affairs.ShiftMaster
+
+  @doc """
+  Returns the list of shift_master.
+
+  ## Examples
+
+      iex> list_shift_master()
+      [%ShiftMaster{}, ...]
+
+  """
+  def list_shift_master do
+    Repo.all(ShiftMaster)
+  end
+
+  @doc """
+  Gets a single shift_master.
+
+  Raises `Ecto.NoResultsError` if the Shift master does not exist.
+
+  ## Examples
+
+      iex> get_shift_master!(123)
+      %ShiftMaster{}
+
+      iex> get_shift_master!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_shift_master!(id), do: Repo.get!(ShiftMaster, id)
+
+  @doc """
+  Creates a shift_master.
+
+  ## Examples
+
+      iex> create_shift_master(%{field: value})
+      {:ok, %ShiftMaster{}}
+
+      iex> create_shift_master(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_shift_master(attrs \\ %{}) do
+    %ShiftMaster{}
+    |> ShiftMaster.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a shift_master.
+
+  ## Examples
+
+      iex> update_shift_master(shift_master, %{field: new_value})
+      {:ok, %ShiftMaster{}}
+
+      iex> update_shift_master(shift_master, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_shift_master(%ShiftMaster{} = shift_master, attrs) do
+    shift_master
+    |> ShiftMaster.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a ShiftMaster.
+
+  ## Examples
+
+      iex> delete_shift_master(shift_master)
+      {:ok, %ShiftMaster{}}
+
+      iex> delete_shift_master(shift_master)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_shift_master(%ShiftMaster{} = shift_master) do
+    Repo.delete(shift_master)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking shift_master changes.
+
+  ## Examples
+
+      iex> change_shift_master(shift_master)
+      %Ecto.Changeset{source: %ShiftMaster{}}
+
+  """
+  def change_shift_master(%ShiftMaster{} = shift_master) do
+    ShiftMaster.changeset(shift_master, %{})
+  end
+
+  alias School.Affairs.Shift
+
+  @doc """
+  Returns the list of shift.
+
+  ## Examples
+
+      iex> list_shift()
+      [%Shift{}, ...]
+
+  """
+  def list_shift do
+    Repo.all(Shift)
+  end
+
+  @doc """
+  Gets a single shift.
+
+  Raises `Ecto.NoResultsError` if the Shift does not exist.
+
+  ## Examples
+
+      iex> get_shift!(123)
+      %Shift{}
+
+      iex> get_shift!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_shift!(id), do: Repo.get!(Shift, id)
+
+  @doc """
+  Creates a shift.
+
+  ## Examples
+
+      iex> create_shift(%{field: value})
+      {:ok, %Shift{}}
+
+      iex> create_shift(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_shift(attrs \\ %{}) do
+    %Shift{}
+    |> Shift.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a shift.
+
+  ## Examples
+
+      iex> update_shift(shift, %{field: new_value})
+      {:ok, %Shift{}}
+
+      iex> update_shift(shift, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_shift(%Shift{} = shift, attrs) do
+    shift
+    |> Shift.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a Shift.
+
+  ## Examples
+
+      iex> delete_shift(shift)
+      {:ok, %Shift{}}
+
+      iex> delete_shift(shift)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_shift(%Shift{} = shift) do
+    Repo.delete(shift)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking shift changes.
+
+  ## Examples
+
+      iex> change_shift(shift)
+      %Ecto.Changeset{source: %Shift{}}
+
+  """
+  def change_shift(%Shift{} = shift) do
+    Shift.changeset(shift, %{})
+  end
 end

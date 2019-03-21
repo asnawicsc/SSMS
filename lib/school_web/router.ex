@@ -480,12 +480,15 @@ defmodule SchoolWeb.Router do
     post("/history_exam_report_class", HistoryExamController, :history_exam_report_class)
     resources("/absent_history", AbsentHistoryController)
     get("/history_absent", AbsentHistoryController, :history_absent)
+    resources("/shift", ShiftController)
 
     get(
       "/generate_history_exam/:exam_id/semester/:semester_id",
       HistoryExamController,
       :generate_history_exam
     )
+
+    resources("/shift_master", ShiftMasterController)
 
     post("/pre_upload_absent_history", AbsentHistoryController, :pre_upload_absent_history)
 
