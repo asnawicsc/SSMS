@@ -623,6 +623,16 @@ defmodule SchoolWeb.Router do
       :history_report_card_class
     )
 
+    post(
+      "/create_shift_master",
+      ShiftMasterController,
+      :create_shift_master
+    )
+
+    get("/assign_shift/:id", ShiftMasterController, :assign_shift)
+
+    get("/create_shift", ShiftMasterController, :create_shift)
+
     resources("/ehehomeworks", EhomeworkController)
     resources("/mark_sheet_temp", MarkSheetTempController)
 

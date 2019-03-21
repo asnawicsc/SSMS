@@ -1014,7 +1014,7 @@ defmodule SchoolWeb.PdfController do
             no = exam |> elem(1)
             exam = exam |> elem(0)
 
-            fit = all |> Enum.filter(fn x -> x.semester_id == exam.semester end)
+            fit = all |> Enum.filter(fn x -> x.semester == exam.semester_id end)
 
             fit =
               if fit == [] do
@@ -1024,8 +1024,8 @@ defmodule SchoolWeb.PdfController do
 
                 student = Repo.get_by(School.Affairs.Student, id: a.student_id)
 
-                data = student |> Enum.map(fn x -> x.height end)
-                data2 = student |> Enum.map(fn x -> x.height end)
+                data = student.height
+                data2 = student.weight
 
                 heig =
                   if data != nil do
@@ -1033,39 +1033,57 @@ defmodule SchoolWeb.PdfController do
 
                     hg =
                       for item <- data do
-                        height = item |> elem(1)
-                        semester = item |> elem(0)
+                        item = item |> String.split("-")
+
+                        height = item |> Enum.fetch!(1)
+
+                        semester = item |> Enum.fetch!(0)
 
                         {semester, height}
                       end
 
-                    last = Enum.filter(fn x -> x |> elem(0) == exam.semester end) |> hd
+                    last =
+                      hg
+                      |> Enum.filter(fn x ->
+                        x |> elem(0) == Integer.to_string(exam.semester_id)
+                      end)
+                      |> hd
+
+                    last = last |> elem(1)
                   else
                     ""
                   end
 
-                last_hg = heig |> String.split("-") |> elem(1)
+                last_hg = heig
 
                 weig =
                   if data2 != nil do
-                    data2 = data |> String.split(",")
+                    data2 = data2 |> String.split(",")
 
                     hg =
                       for item2 <- data2 do
-                        weight = item2 |> elem(1)
-                        semester = item2 |> elem(0)
+                        item2 = item2 |> String.split("-")
+                        weight = item2 |> Enum.fetch!(1)
+                        semester = item2 |> Enum.fetch!(0)
 
                         {semester, weight}
                       end
 
-                    last2 = Enum.filter(fn x -> x |> elem(0) == exam.semester end) |> hd
+                    last2 =
+                      hg
+                      |> Enum.filter(fn x ->
+                        x |> elem(0) == Integer.to_string(exam.semester_id)
+                      end)
+                      |> hd
+
+                    last2 = last2 |> elem(1)
                   else
                     ""
                   end
 
-                last_wg = weig |> String.split("-") |> elem(1)
+                last_wg = weig
 
-                last_hg ++ "CM" ++ " , " ++ last_wg ++ "KG"
+                last_hg <> "CM" <> " , " <> last_wg <> "KG"
               end
 
             {no + 1, fit}
