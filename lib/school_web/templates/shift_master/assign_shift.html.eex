@@ -1,12 +1,13 @@
 
 <div class="content-heading">
-    <div>Create Shift
+    <div>Create <%= @shift_master.name %> -(<%= @shift_master.shift_group %>)
     </div>
 </div>
 
 
 <form method="post" action="/create_teacher_shift" class="form-horizontal">
    <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+    <input type="hidden" name="shift_master_id" value="<%= @id %>">
  <div class="col-lg-12" aria-label="student_table">
         <div class="card card-default d-none d-lg-block">
           <div class="card-body">
@@ -28,39 +29,44 @@
     </tr>
   </thead>
   <tbody>
-<%= for teacher<- @teacher do %>
+<%= for teacher<- @teachers do %>
     <tr>
       <td><%= teacher.name %></td>
       <td><%= teacher.cname %></td>
       <td><%= teacher.code %></td>
+      <td>
+       <div class="form-group">
+                            <% tt= @teacher_assgin|>Enum.filter(fn x -> x.id==teacher.id end) %>
 
-    
-                     <td  > <select class="selectpicker" data-style="btn select-with-transition" name="shift[<%= teacher.id %>]"  >
-                               <option selected="selected"  >Choose Comment</option>
-                                 <%= for com <- @shifts do %>
-                                <%= if com.id == teacher.shift_id  do %>
+                            <%= if tt != [] do %>
 
-                                  <option value="<%= com.id %>" selected="<%= com.id %>" ><%= com.name %>
-                                            </option>
+                              <div class="col-sm-10">
+                              <label class="checkbox-inline c-checkbox">
+                                 <input id="inlineCheckbox10" type="checkbox" checked="checked" name="shift[<%= teacher.id %>]">
+                                 <span class="fa fa-check"></span></label>
+                              
+                           </div>
 
-                                             <%else %>
-                                            
-                                               
-                                         <option value="<%= com.id %>"  ><%= com.name %>
-                                            </option>
-                                          
+                            <% else  %>
+                              <div class="col-sm-10">
+                              <label class="checkbox-inline c-checkbox">
+                                 <input id="inlineCheckbox10" type="checkbox" name="shift[<%= teacher.id %>]">
+                                 <span class="fa fa-check"></span></label>
+                              
+                           </div>
+                         
+                              
+                             <% end %>
+                         
+                        </div>
+</td>
 
-                                           <% end %>
-
-                                          <% end %>
-                    </td>
 
     
     </tr>
 <% end %>
   </tbody>
 </table>
-
                   
                 </div>
                   <center><input class="btn btn-primary" name="" value="Submit" type="submit" style="margin-bottom: 10px"></center> 

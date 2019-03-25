@@ -1,9 +1,31 @@
 
 <% require IEx %>
 <link rel="stylesheet" href="<%= Application.app_dir(:school, "priv/static") %>/css/bootstrap.min.css">
-<style type="text/css">
-	
-</style>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+    html {
+      font-family: sans-serif;
+    }
+
+    table {
+      border-collapse: collapse;
+      border: 1px solid rgb(200, 200, 200);
+      letter-spacing: 0px;
+      font-size: 9px;
+        font-weight: bold;
+          white-space: nowrap;
+    }
+
+    td{ text-align: center; },
+    th {
+      border: 1px solid rgb(190, 190, 190);
+      padding: 1px 1px;
+    }
+
+
+  
+  </style>
 
 <%= for all_data <- @all do %>
 
@@ -14,10 +36,35 @@
 
 
 <div  style="page-break-before: always;">
-<h3 align="center"><b><%= @school.name %></b></h3><br>
-<h3 align="center"><b>Laporan Kehadiran Staf</b></h3><br>
-<h3 align="center"><b><%= profile.month %></b></h3><br>
-	<table class="table" border="1">
+<p align="center" style=""><b><%= @school.name %></b></p>
+<p align="center"><b>Laporan Kehadiran Staf</b></p>
+<p align="center" style="margin-top: -15px"><b>(<%= @start_month %> - <%= @end_month %>)</b></p>
+<table class="table" border="1" align="left" style=" border: 0px ; height: auto; margin-top: -15px  border-spacing:0;" >
+<thead></thead>
+  <tbody align="left">
+    <tr style=" border: 0px ;margin-top: -10px, height: auto; ce">
+      <td style=" border: 0px ; text-align: left; ">No Giliran: <%= profile.code %></td>
+      <td style=" border: 0px ; text-align: left;"></td>
+     <td style=" border: 0px ; text-align: left; ">No.K/P: <%= profile.icno %></td>
+
+    </tr>
+     <tr style=" border: 0px ;margin-top: -10px, height: auto;">
+      <td style=" border: 0px ; text-align: left; ">Nama Guru/Kakaitangan(E): <u><%= profile.name %></u></td>
+     <td style=" border: 0px ; text-align: left;"></td>
+    <td style=" border: 0px ; text-align: left; ">SESI: </td>
+
+    </tr>
+      <tr style=" border: 0px ;margin-top: -10px,height: auto;">
+      
+     <td style=" border: 0px ; text-align: left; ">Nama Guru/Kakaitangan(C):  <u><%= profile.name %></u></th>
+      <td style=" border: 0px ; text-align: left; "></th>
+     <td style=" border: 0px ; text-align: left; "></th>
+
+    </tr>
+    
+  </tbody>
+</table>
+	<table class="table" border="1" style="margin: 0px;">
   <thead>
     <tr>
       <th>No</th>
@@ -38,7 +85,7 @@
       <td><%= a.date %></td>
       <td><%= a.time_in %></td>
       <td><%= a.time_out %></td>
-      <td></td>
+      <td><%= a.remark %></td>
       <td></td>
    
     </tr>

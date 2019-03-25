@@ -644,6 +644,8 @@ defmodule SchoolWeb.Router do
 
     get("/assign_shift", ShiftMasterController, :assign_shift)
 
+    get("/assign_shift/:id", ShiftMasterController, :assign_shift_by)
+
     get("/create_shift", ShiftMasterController, :create_shift)
 
     resources("/ehehomeworks", EhomeworkController)

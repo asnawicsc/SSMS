@@ -1640,28 +1640,112 @@ defmodule SchoolWeb.PdfController do
   end
 
   def report_card_personal_summary(conn, params) do
-    all =
+    semester =
+      Repo.get_by(Semester,
+        id: params["semester"],
+        institution_id: conn.private.plug_session["institution_id"]
+      )
+
+    start_month = Timex.beginning_of_month(semester.year, params["month"] |> String.to_integer())
+
+    end_month = Timex.end_of_month(semester.year, params["month"] |> String.to_integer())
+
+    lists = Date.range(start_month, end_month) |> Enum.map(fn x -> x end)
+
+    teachers =
       Repo.all(
-        from(g in School.Affairs.TeacherAttendance,
-          left_join: k in School.Affairs.Teacher,
-          on: k.id == g.teacher_id,
+        from(
+          t in Teacher,
           where:
-            g.semester_id == ^params["semester"] and
-              k.institution_id == ^conn.private.plug_session["institution_id"] and
-              g.institution_id == ^conn.private.plug_session["institution_id"] and
-              g.month == ^params["month"],
-          select: %{
-            name: k.name,
-            cname: k.cname,
-            code: k.code,
-            teacher_id: k.id,
-            time_in: g.time_in,
-            time_out: g.time_out,
-            date: g.date,
-            month: g.month
-          }
+            t.institution_id == ^conn.private.plug_session["institution_id"] and t.is_delete != 1
         )
       )
+
+    all =
+      for teacher <- teachers do
+        for list <- lists do
+          all =
+            Repo.all(
+              from(g in School.Affairs.TeacherAttendance,
+                left_join: k in School.Affairs.Teacher,
+                on: k.id == g.teacher_id,
+                where:
+                  g.semester_id == ^params["semester"] and
+                    k.institution_id == ^conn.private.plug_session["institution_id"] and
+                    g.institution_id == ^conn.private.plug_session["institution_id"] and
+                    g.month == ^params["month"] and k.id == ^teacher.id,
+                select: %{
+                  name: k.name,
+                  cname: k.cname,
+                  code: k.code,
+                  icno: k.icno,
+                  teacher_id: k.id,
+                  time_in: g.time_in,
+                  time_out: g.time_out,
+                  date: g.date,
+                  month: g.month,
+                  remark: g.remark
+                }
+              )
+            )
+
+          new =
+            for item <- all do
+              no1 = item.date |> String.split("-") |> Enum.fetch!(0)
+              no2 = item.date |> String.split("-") |> Enum.fetch!(1)
+              no3 = item.date |> String.split("-") |> Enum.fetch!(2)
+
+              no2 =
+                if no2 |> String.to_integer() <= 9 do
+                  "0" <> no2
+                else
+                  no2
+                end
+
+              new_date = no3 <> "-" <> no2 <> "-" <> no1
+
+              new_date = new_date |> Date.from_iso8601!()
+
+              time_in = item.time_in |> String.split(" ") |> Enum.fetch!(1)
+
+              time_out = item.time_out |> String.split(" ") |> Enum.fetch!(1)
+
+              %{
+                name: item.name,
+                cname: item.cname,
+                code: item.code,
+                icno: item.icno,
+                teacher_id: item.teacher_id,
+                time_in: time_in,
+                time_out: time_out,
+                date: new_date,
+                month: item.month,
+                remark: item.remark
+              }
+            end
+            |> Enum.filter(fn x -> x.date == list end)
+
+          if new != [] do
+            new = new |> hd
+
+            new
+          else
+            %{
+              name: teacher.name,
+              cname: teacher.cname,
+              code: teacher.code,
+              teacher_id: teacher.id,
+              icno: teacher.icno,
+              time_in: "",
+              time_out: "",
+              date: list,
+              month: "",
+              remark: ""
+            }
+          end
+        end
+      end
+      |> List.flatten()
       |> Enum.group_by(fn x -> x.teacher_id end)
 
     school = Repo.get(Institution, conn.private.plug_session["institution_id"])
@@ -1671,7 +1755,9 @@ defmodule SchoolWeb.PdfController do
         SchoolWeb.PdfView,
         "personal_attendence_summary.html",
         all: all,
-        school: school
+        school: school,
+        start_month: start_month,
+        end_month: end_month
       )
 
     pdf_params = %{"html" => html}

@@ -3591,8 +3591,48 @@ defmodule SchoolWeb.UserChannel do
             else
               msg =
                 if attn.time_out == nil do
+                  c = attn.time_in |> String.split(" ") |> Enum.fetch(1)
+                  a = time_in |> String.split(" ") |> Enum.fetch(1)
+
+                  shift =
+                    Repo.all(
+                      from(s in School.Affairs.Shift,
+                        left_join: r in School.Affairs.ShiftMaster,
+                        on: s.shift_master_id == r.id,
+                        where: s.teacher_id == ^teacher_id,
+                        select: %{start_time: r.start_time, end_time: r.end_time}
+                      )
+                    )
+
+                  shift =
+                    if shift != [] do
+                      shift |> hd
+                    else
+                      %{start_time: "07:30:00", end_time: "13:20:00"}
+                    end
+
+                  remark =
+                    if a < shift.end_time do
+                      remark = "BALIK AWAL"
+                    else
+                      remark =
+                        if c > shift.start_time do
+                          remark = "LEWAT"
+                        else
+                          remark =
+                            if a > shift.end_time and c < shift.end_time do
+                              remark = "HADIR"
+                            end
+
+                          remark
+                        end
+
+                      remark
+                    end
+
                   params = %{
-                    time_out: time_in
+                    time_out: time_in,
+                    remark: remark
                   }
 
                   Affairs.update_teacher_attendance(attn, params)

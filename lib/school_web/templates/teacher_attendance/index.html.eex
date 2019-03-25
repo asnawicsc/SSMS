@@ -3,24 +3,25 @@
 <table class="table">
   <thead>
     <tr>
-      <th>Institution</th>
       <th>Teacher</th>
       <th>Semester</th>
       <th>Time</th>
       <th>Time out</th>
-
-      <th></th>
+      <th>Date</th>
+       <th>Remark</th>
+       <th>Action</th>
     </tr>
   </thead>
   <tbody>
 <%= for teacher_attendance <- @teacher_attendance do %>
     <tr>
-      <td><%= teacher_attendance.institution_id %></td>
+
       <td><%= teacher_attendance.teacher_id %></td>
       <td><%= teacher_attendance.semester_id %></td>
       <td><%= teacher_attendance.time_in %></td>
       <td><%= teacher_attendance.time_out %></td>
       <td><%= teacher_attendance.date %></td>
+           <td><%= teacher_attendance.remark %></td>
 
       <td class="text-right">
         <span><%= link "Show", to: teacher_attendance_path(@conn, :show, teacher_attendance), class: "btn btn-default btn-xs" %></span>

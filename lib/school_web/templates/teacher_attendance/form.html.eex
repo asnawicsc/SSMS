@@ -5,34 +5,25 @@
     </div>
   <% end %>
 
-  <div class="form-group">
-    <%= label f, :institution_id, class: "control-label" %>
-    <%= number_input f, :institution_id, class: "form-control" %>
-    <%= error_tag f, :institution_id %>
-  </div>
+
+
 
   <div class="form-group">
-    <%= label f, :teacher_id, class: "control-label" %>
-    <%= number_input f, :teacher_id, class: "form-control" %>
-    <%= error_tag f, :teacher_id %>
-  </div>
-
-  <div class="form-group">
-    <%= label f, :semester_id, class: "control-label" %>
-    <%= number_input f, :semester_id, class: "form-control" %>
-    <%= error_tag f, :semester_id %>
-  </div>
-
-  <div class="form-group">
-    <%= label f, :time_id, class: "control-label" %>
-    <%= text_input f, :time_id, class: "form-control" %>
-    <%= error_tag f, :time_id %>
+    <%= label f, :time_in, class: "control-label" %>
+    <%= text_input f, :time_in, class: "form-control" %>
+    <%= error_tag f, :time_in %>
   </div>
 
   <div class="form-group">
     <%= label f, :time_out, class: "control-label" %>
     <%= text_input f, :time_out, class: "form-control" %>
     <%= error_tag f, :time_out %>
+  </div>
+
+    <div class="form-group">
+    <%= label f, :remark, class: "control-label" %>
+    <%= text_input f, :remark, class: "form-control" %>
+    <%= error_tag f, :remark %>
   </div>
 
   <div class="form-group">

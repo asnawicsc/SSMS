@@ -6,6 +6,7 @@ defmodule SchoolWeb.ShiftController do
 
   def index(conn, _params) do
     shift = Affairs.list_shift()
+
     render(conn, "index.html", shift: shift)
   end
 
@@ -20,6 +21,7 @@ defmodule SchoolWeb.ShiftController do
         conn
         |> put_flash(:info, "Shift created successfully.")
         |> redirect(to: shift_path(conn, :show, shift))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
@@ -44,6 +46,7 @@ defmodule SchoolWeb.ShiftController do
         conn
         |> put_flash(:info, "Shift updated successfully.")
         |> redirect(to: shift_path(conn, :show, shift))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", shift: shift, changeset: changeset)
     end

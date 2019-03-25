@@ -4,7 +4,7 @@
     </div>
 </div>
 <div class="row">
-      <div class="col-lg-7" aria-label="student_table">
+      <div class="col-lg-6" aria-label="student_table">
         <div class="card card-default d-none d-lg-block">
           <div class="card-body">
         
@@ -17,6 +17,12 @@
                   <form class="form-horizontal" method="post" action="/create_shift_master">
                        <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
                       <label class="col-md-2 col-form-label">Shift Name</label>
+                      <div class="col-md-3">
+                        <div class="form-group has-default">
+                          <input type="text" class="form-control" name="name">
+                        </div>
+                      </div>
+                         <label class="col-md-2 col-form-label">Shift Group</label>
                       <div class="col-md-3">
                         <div class="form-group has-default">
                           <input type="text" class="form-control" name="name">
@@ -85,14 +91,14 @@
   </div>
 </div>
 
- <div class="col-lg-5" aria-label="student_table">
+ <div class="col-lg-6" aria-label="student_table">
         <div class="card card-default d-none d-lg-block">
           <div class="card-body">
         
               <div class="card ">
                 <div class="card-header card-header-rose card-header-icon">
               
-                  <div class=" row"><h4 class="card-title">List Shift</h4> &nbsp;  &nbsp;  &nbsp; <a href ="/assign_shift">  <button class="mb-1 btn-sm btn btn-outline-warning" type="button">Assign Shift</button></a>
+                  <div class=" row"><h4 class="card-title">List Shift</h4> 
                   </div>
                 </div>
                 <div class="card-body ">
@@ -101,9 +107,11 @@
   <thead>
     <tr>
       <th>Name</th>
+       <th>Group</th>
       <th>Start Date</th>
       <th>End Date</th>
       <th>Targeted Day</th>
+       <th>Action</th>
      
     </tr>
   </thead>
@@ -111,10 +119,11 @@
 <%= for shift<- @shift_master do %>
     <tr>
       <td><%= shift.name %></td>
+       <td><%= shift.shift_group %></td>
       <td><%= shift.start_time %></td>
       <td><%= shift.end_time %></td>
        <td><%= shift.day %></td>
-
+<td><a href ="/assign_shift/<%= shift.id %>">  <button class="mb-1 btn-sm btn btn-outline-warning" type="button">Assign Shift</button></a></td>
      
     </tr>
 <% end %>

@@ -63,13 +63,17 @@ defmodule SchoolWeb.ShiftMasterController do
     |> redirect(to: shift_master_path(conn, :create_shift))
   end
 
-  def assign_shift(conn, params) do
+  def assign_shift_by(conn, params) do
     teacher =
       Repo.all(
         from(s in School.Affairs.Teacher,
           left_join: r in School.Affairs.Shift,
           on: r.teacher_id == s.id,
-          where: s.institution_id == ^conn.private.plug_session["institution_id"],
+          left_join: k in School.Affairs.ShiftMaster,
+          on: r.shift_master_id == k.id,
+          where:
+            s.institution_id == ^conn.private.plug_session["institution_id"] and s.is_delete == 0 and
+              r.shift_master_id == ^params["id"],
           select: %{
             id: s.id,
             name: s.name,
@@ -81,22 +85,88 @@ defmodule SchoolWeb.ShiftMasterController do
       )
       |> Enum.uniq()
 
+    coms =
+      Repo.all(
+        from(s in School.Affairs.ShiftMaster,
+          where:
+            s.institution_id == ^conn.private.plug_session["institution_id"] and
+              s.id == ^params["id"],
+          select: %{
+            shift_id: s.id,
+            name: s.name
+          }
+        )
+      )
+      |> Enum.uniq()
+
+    teachers =
+      Repo.all(
+        from(s in School.Affairs.Teacher,
+          where:
+            s.institution_id == ^conn.private.plug_session["institution_id"] and s.is_delete == 0,
+          select: %{
+            id: s.id,
+            name: s.name,
+            cname: s.name,
+            code: s.code
+          }
+        )
+      )
+      |> Enum.uniq()
+
+    shift_master = Repo.get_by(ShiftMaster, id: params["id"])
+
     shifts = Affairs.list_shift_master()
 
-    render(conn, "assign_shift.html", teacher: teacher, shifts: shifts)
+    render(conn, "assign_shift.html",
+      coms: coms,
+      id: params["id"],
+      teachers: teachers,
+      teacher_assgin: teacher,
+      shifts: shifts,
+      shift_master: shift_master
+    )
   end
 
   def create_teacher_shift(conn, params) do
-    for item <- params["shift"] do
-      teacher_id = item |> elem(0)
-      shift_master_id = item |> elem(1)
+    shift_master = Repo.get_by(ShiftMaster, id: params["shift_master_id"])
 
-      exist = Repo.get_by(School.Affairs.Shift, teacher_id: teacher_id)
+    if params["shift"] == nil do
+      Repo.delete_all(
+        from(s in School.Affairs.Shift,
+          where: s.shift_master_id == ^params["shift_master_id"]
+        )
+      )
+    else
+      for item <- params["shift"] do
+        teacher_id = item |> elem(0)
+        shift_master_id = item |> elem(1)
 
-      if exist != nil do
-        Affairs.update_shift(exist, %{teacher_id: teacher_id, shift_master_id: shift_master_id})
-      else
-        Affairs.create_shift(%{teacher_id: teacher_id, shift_master_id: shift_master_id})
+        exist =
+          Repo.all(
+            from(s in School.Affairs.ShiftMaster,
+              left_join: k in School.Affairs.Shift,
+              on: s.id == k.shift_master_id,
+              where: k.teacher_id == ^teacher_id
+            )
+          )
+
+        if exist != [] do
+          exist = exist |> hd
+
+          if exist.shift_group != shift_master.shift_group do
+            Affairs.update_shift(exist, %{
+              teacher_id: teacher_id,
+              shift_master_id: params["shift_master_id"]
+            })
+          else
+          end
+        else
+          Affairs.create_shift(%{
+            teacher_id: teacher_id,
+            shift_master_id: params["shift_master_id"]
+          })
+        end
       end
     end
 

@@ -11,6 +11,13 @@
     <%= error_tag f, :name %>
   </div>
 
+    <div class="form-group">
+    <%= label f, :shift_group, class: "control-label" %>
+    <%= text_input f, :shift_group, class: "form-control" %>
+    <%= error_tag f, :shift_group %>
+  </div>
+
+
   <div class="form-group">
     <%= label f, :start_time, class: "control-label" %>
     <%= time_select f, :start_time, class: "form-control" %>
