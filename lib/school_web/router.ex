@@ -63,6 +63,7 @@ defmodule SchoolWeb.Router do
     post("/student_class_listing_parent", PdfController, :student_class_listing_parent)
     post("/teacher_listing", PdfController, :teacher_listing)
     post("/exam_result_analysis_class", PdfController, :exam_result_analysis_class)
+    post("/report_card_personal_summary", PdfController, :report_card_personal_summary)
 
     post("/report_card_temp", PdfController, :report_card_temp)
 
@@ -629,7 +630,19 @@ defmodule SchoolWeb.Router do
       :create_shift_master
     )
 
-    get("/assign_shift/:id", ShiftMasterController, :assign_shift)
+    post(
+      "/create_teacher_shift",
+      ShiftMasterController,
+      :create_teacher_shift
+    )
+
+    get(
+      "/teacher_attendence_report",
+      TeacherAttendanceController,
+      :teacher_attendence_report
+    )
+
+    get("/assign_shift", ShiftMasterController, :assign_shift)
 
     get("/create_shift", ShiftMasterController, :create_shift)
 

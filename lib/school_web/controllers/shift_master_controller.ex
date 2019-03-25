@@ -64,7 +64,45 @@ defmodule SchoolWeb.ShiftMasterController do
   end
 
   def assign_shift(conn, params) do
-    IEx.pry()
+    teacher =
+      Repo.all(
+        from(s in School.Affairs.Teacher,
+          left_join: r in School.Affairs.Shift,
+          on: r.teacher_id == s.id,
+          where: s.institution_id == ^conn.private.plug_session["institution_id"],
+          select: %{
+            id: s.id,
+            name: s.name,
+            cname: s.name,
+            code: s.code,
+            shift_id: r.shift_master_id
+          }
+        )
+      )
+      |> Enum.uniq()
+
+    shifts = Affairs.list_shift_master()
+
+    render(conn, "assign_shift.html", teacher: teacher, shifts: shifts)
+  end
+
+  def create_teacher_shift(conn, params) do
+    for item <- params["shift"] do
+      teacher_id = item |> elem(0)
+      shift_master_id = item |> elem(1)
+
+      exist = Repo.get_by(School.Affairs.Shift, teacher_id: teacher_id)
+
+      if exist != nil do
+        Affairs.update_shift(exist, %{teacher_id: teacher_id, shift_master_id: shift_master_id})
+      else
+        Affairs.create_shift(%{teacher_id: teacher_id, shift_master_id: shift_master_id})
+      end
+    end
+
+    conn
+    |> put_flash(:info, "Shift assign successfully.")
+    |> redirect(to: shift_master_path(conn, :create_shift))
   end
 
   def show(conn, %{"id" => id}) do

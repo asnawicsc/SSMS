@@ -3535,6 +3535,8 @@ defmodule SchoolWeb.UserChannel do
 
       date = time_in |> String.split(" ") |> hd
 
+      month = date |> String.split("-") |> Enum.fetch!(1)
+
       attns =
         Repo.get_by(School.Affairs.TeacherAttendance,
           teacher_id: teacher_id,
@@ -3553,7 +3555,8 @@ defmodule SchoolWeb.UserChannel do
                 semester_id: semester_id,
                 teacher_id: teacher_id,
                 time_in: time_in,
-                date: date
+                date: date,
+                month: month
               }
 
               Affairs.create_teacher_attendance(params)

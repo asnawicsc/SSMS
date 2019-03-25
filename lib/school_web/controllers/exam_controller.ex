@@ -674,7 +674,8 @@ defmodule SchoolWeb.ExamController do
         fi: fi,
         class: class,
         exam_id: exam_id,
-        subject: subject
+        subject: subject,
+        exam_master: exam_master
       )
     end
   end

@@ -1,0 +1,74 @@
+
+<div class="content-heading">
+    <div>Create Shift
+    </div>
+</div>
+
+
+<form method="post" action="/create_teacher_shift" class="form-horizontal">
+   <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+ <div class="col-lg-12" aria-label="student_table">
+        <div class="card card-default d-none d-lg-block">
+          <div class="card-body">
+        
+              <div class="card ">
+                <div class="card-header card-header-rose card-header-icon">
+              
+                  <h4 class="card-title">Assign Shift</h4>
+                </div>
+                <div class="card-body ">
+
+<table class="table" >
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Other Name</th>
+      <th>Teacher No</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for teacher<- @teacher do %>
+    <tr>
+      <td><%= teacher.name %></td>
+      <td><%= teacher.cname %></td>
+      <td><%= teacher.code %></td>
+
+    
+                     <td  > <select class="selectpicker" data-style="btn select-with-transition" name="shift[<%= teacher.id %>]"  >
+                               <option selected="selected"  >Choose Comment</option>
+                                 <%= for com <- @shifts do %>
+                                <%= if com.id == teacher.shift_id  do %>
+
+                                  <option value="<%= com.id %>" selected="<%= com.id %>" ><%= com.name %>
+                                            </option>
+
+                                             <%else %>
+                                            
+                                               
+                                         <option value="<%= com.id %>"  ><%= com.name %>
+                                            </option>
+                                          
+
+                                           <% end %>
+
+                                          <% end %>
+                    </td>
+
+    
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+                  
+                </div>
+                  <center><input class="btn btn-primary" name="" value="Submit" type="submit" style="margin-bottom: 10px"></center> 
+
+      </div>
+    </div>
+  </div>
+</div>
+</form>
+
+

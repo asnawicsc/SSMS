@@ -20,6 +20,7 @@ defmodule SchoolWeb.TeacherAttendanceController do
         conn
         |> put_flash(:info, "Teacher attendance created successfully.")
         |> redirect(to: teacher_attendance_path(conn, :show, teacher_attendance))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
@@ -36,6 +37,14 @@ defmodule SchoolWeb.TeacherAttendanceController do
     render(conn, "edit.html", teacher_attendance: teacher_attendance, changeset: changeset)
   end
 
+  def teacher_attendence_report(conn, params) do
+    semesters =
+      Repo.all(from(s in Semester))
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
+    render(conn, "teacher_attendence_report.html", semesters: semesters)
+  end
+
   def update(conn, %{"id" => id, "teacher_attendance" => teacher_attendance_params}) do
     teacher_attendance = Affairs.get_teacher_attendance!(id)
 
@@ -44,6 +53,7 @@ defmodule SchoolWeb.TeacherAttendanceController do
         conn
         |> put_flash(:info, "Teacher attendance updated successfully.")
         |> redirect(to: teacher_attendance_path(conn, :show, teacher_attendance))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", teacher_attendance: teacher_attendance, changeset: changeset)
     end

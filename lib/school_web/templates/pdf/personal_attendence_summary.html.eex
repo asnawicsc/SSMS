@@ -1,0 +1,63 @@
+
+<% require IEx %>
+<link rel="stylesheet" href="<%= Application.app_dir(:school, "priv/static") %>/css/bootstrap.min.css">
+<style type="text/css">
+	
+</style>
+
+<%= for all_data <- @all do %>
+
+	<% all_date=all_data|>elem(1) %>
+
+  <% profile=all_date|>hd() %>
+
+
+
+<div  style="page-break-before: always;">
+<h3 align="center"><b><%= @school.name %></b></h3><br>
+<h3 align="center"><b>Laporan Kehadiran Staf</b></h3><br>
+<h3 align="center"><b><%= profile.month %></b></h3><br>
+	<table class="table" border="1">
+  <thead>
+    <tr>
+      <th>No</th>
+      <th>Tarikh</th>
+      <th>Waktu Masuk</th>
+      <th>Waktu Keluar</th>
+      <th>Status Kehadiran</th>
+      <th>Alasan</th>
+
+    </tr>
+  </thead>
+  <tbody>
+<%= for a <- all_data|>elem(1)|>Enum.with_index do %>
+<% no = a|>elem(1) %>
+<% a=a|>elem(0) %>
+    <tr>
+      <td><%= no + 1 %></td>
+      <td><%= a.date %></td>
+      <td><%= a.time_in %></td>
+      <td><%= a.time_out %></td>
+      <td></td>
+      <td></td>
+   
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+
+
+  </div>
+  
+  
+<body>
+
+   
+</body>
+
+
+</div>
+<% end %>
+
+

@@ -36,14 +36,15 @@
         <col col span="2" >
       </colgroup>
       <tr>
-
+          <th style="background-color:#97DB9A;"><%= gettext "No" %></th>
          <th style="background-color:#97DB9A;"><%= gettext "Student Name" %></th>
         <th style="background-color:#97DB9A;"><%= gettext "Mark" %></th>
       </tr>
-       <%= for item <- @all do %>
-
+       <%= for item <- @all|>Enum.with_index do %>
+       <% no = item|>elem(1) %>
+           <% item = item|>elem(0) %>
       <tr>
-
+         <th ><%= no + 1 %></th>
        <th ><%= item.student_id %></th>
         <th  ><input type="number" min="0" max="100" name="mark[<%=item.id %>]"></th>
 

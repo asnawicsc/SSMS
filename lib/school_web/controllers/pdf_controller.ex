@@ -1639,6 +1639,67 @@ defmodule SchoolWeb.PdfController do
     IEx.pry()
   end
 
+  def report_card_personal_summary(conn, params) do
+    all =
+      Repo.all(
+        from(g in School.Affairs.TeacherAttendance,
+          left_join: k in School.Affairs.Teacher,
+          on: k.id == g.teacher_id,
+          where:
+            g.semester_id == ^params["semester"] and
+              k.institution_id == ^conn.private.plug_session["institution_id"] and
+              g.institution_id == ^conn.private.plug_session["institution_id"] and
+              g.month == ^params["month"],
+          select: %{
+            name: k.name,
+            cname: k.cname,
+            code: k.code,
+            teacher_id: k.id,
+            time_in: g.time_in,
+            time_out: g.time_out,
+            date: g.date,
+            month: g.month
+          }
+        )
+      )
+      |> Enum.group_by(fn x -> x.teacher_id end)
+
+    school = Repo.get(Institution, conn.private.plug_session["institution_id"])
+
+    html =
+      Phoenix.View.render_to_string(
+        SchoolWeb.PdfView,
+        "personal_attendence_summary.html",
+        all: all,
+        school: school
+      )
+
+    pdf_params = %{"html" => html}
+
+    pdf_binary =
+      PdfGenerator.generate_binary!(
+        pdf_params["html"],
+        size: "A4",
+        shell_params: [
+          "--margin-left",
+          "5",
+          "--margin-right",
+          "5",
+          "--margin-top",
+          "5",
+          "--margin-bottom",
+          "5",
+          "--encoding",
+          "utf-8"
+        ],
+        delete_temporary: true
+      )
+
+    conn
+    |> put_resp_header("Content-Type", "application/pdf")
+    |> resp(200, pdf_binary)
+  end
+
   def parent_listing(conn, params) do
     school = Repo.get(Institution, conn.private.plug_session["institution_id"])
 

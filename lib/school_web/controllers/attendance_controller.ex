@@ -558,6 +558,7 @@ defmodule SchoolWeb.AttendanceController do
               }
             )
           )
+          |> Enum.filter(fn x -> x.student_id != "" end)
           |> Enum.group_by(fn x -> {x.start, x.title} end)
 
         list_class_attendence =
