@@ -1843,6 +1843,154 @@ defmodule SchoolWeb.PdfController do
     |> resp(200, pdf_binary)
   end
 
+  def report_card_summary(conn, params) do
+    semester =
+      Repo.get_by(Semester,
+        id: params["semester"],
+        institution_id: conn.private.plug_session["institution_id"]
+      )
+
+    start_month = Timex.beginning_of_month(semester.year, params["month"] |> String.to_integer())
+
+    end_month = Timex.end_of_month(semester.year, params["month"] |> String.to_integer())
+
+    lists = Date.range(start_month, end_month) |> Enum.map(fn x -> x end)
+
+    teachers =
+      Repo.all(
+        from(
+          t in Teacher,
+          where:
+            t.institution_id == ^conn.private.plug_session["institution_id"] and t.is_delete != 1
+        )
+      )
+
+    all =
+      for teacher <- teachers do
+        all =
+          Repo.all(
+            from(g in School.Affairs.TeacherAttendance,
+              left_join: k in School.Affairs.Teacher,
+              on: k.id == g.teacher_id,
+              where:
+                g.semester_id == ^params["semester"] and
+                  k.institution_id == ^conn.private.plug_session["institution_id"] and
+                  g.institution_id == ^conn.private.plug_session["institution_id"] and
+                  g.month == ^params["month"] and k.id == ^teacher.id,
+              select: %{
+                name: k.name,
+                cname: k.cname,
+                teacher_id: k.id,
+                remark: g.remark,
+                alasan: g.alasan
+              }
+            )
+          )
+
+        submit =
+          if all != [] do
+            hadir = all |> Enum.filter(fn x -> x.remark == "HADIR" end) |> Enum.count()
+            lewat = all |> Enum.filter(fn x -> x.remark == "LEWAT" end) |> Enum.count()
+            balik_awl = all |> Enum.filter(fn x -> x.remark == "BALIK AWAL" end) |> Enum.count()
+
+            teacher_absent_reason =
+              Repo.all(
+                from(s in School.Affairs.TeacherAbsentReason,
+                  where: s.institution_id == ^conn.private.plug_session["institution_id"],
+                  select: s.absent_reason
+                )
+              )
+
+            rem =
+              for item <- teacher_absent_reason do
+                calc = all |> Enum.filter(fn x -> x.alasan == item end) |> Enum.count()
+
+                {item <> "=" <> (calc |> Integer.to_string()), calc}
+              end
+              |> Enum.filter(fn x -> x |> elem(1) != 0 end)
+
+            tidak_hadir_dengan_alasan = rem |> Enum.count()
+
+            jumlah2 = rem |> Enum.count()
+
+            alasan = rem |> Enum.map(fn x -> x |> elem(0) end) |> Enum.join(",")
+
+            total = hadir + lewat + balik_awl
+
+            profile = all |> hd
+
+            %{
+              name: profile.name,
+              cname: profile.cname,
+              hadir: hadir,
+              lewat: lewat,
+              balik_awl: balik_awl,
+              total: total,
+              sakit: "",
+              tidak_hadir_dengan_alasan: tidak_hadir_dengan_alasan,
+              tidak_hadir_tampa_alasan: "",
+              jumlah2: jumlah2,
+              alasan: alasan
+            }
+          else
+            %{
+              name: teacher.name,
+              cname: teacher.cname,
+              hadir: "",
+              lewat: "",
+              balik_awl: "",
+              total: 0,
+              sakit: "",
+              tidak_hadir_dengan_alasan: "",
+              tidak_hadir_tampa_alasan: "",
+              jumlah2: 0,
+              alasan: ""
+            }
+          end
+
+        submit
+      end
+
+    school = Repo.get(Institution, conn.private.plug_session["institution_id"])
+
+    html =
+      Phoenix.View.render_to_string(
+        SchoolWeb.PdfView,
+        "report_card_summary.html",
+        all: all,
+        school: school,
+        start_month: start_month,
+        end_month: end_month
+      )
+
+    pdf_params = %{"html" => html}
+
+    pdf_binary =
+      PdfGenerator.generate_binary!(
+        pdf_params["html"],
+        size: "A4",
+        shell_params: [
+          "--margin-left",
+          "5",
+          "--margin-right",
+          "5",
+          "--margin-top",
+          "5",
+          "--margin-bottom",
+          "5",
+          "--encoding",
+          "utf-8",
+          "--orientation",
+          "Landscape"
+        ],
+        delete_temporary: true
+      )
+
+    conn
+    |> put_resp_header("Content-Type", "application/pdf")
+    |> resp(200, pdf_binary)
+  end
+
   def parent_listing(conn, params) do
     school = Repo.get(Institution, conn.private.plug_session["institution_id"])
 

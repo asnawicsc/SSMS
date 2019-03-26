@@ -1,0 +1,79 @@
+
+
+<% require IEx %>
+<link rel="stylesheet" href="<%= Application.app_dir(:school, "priv/static") %>/css/bootstrap.min.css">
+    <meta charset="utf-8">
+    <title></title>
+
+
+
+<p align="center" style=""><b><%= @school.name %></b></p>
+<p align="center"><b>Laporan Kehadiran Staf</b></p>
+<p align="left"><b>YEAR: <%= @start_month.year %></b></p>
+<p align="left"><b>MONTH: <%= @start_month.month %></b></p>
+
+	<table class="block" border="1" style="border-collapse: collapse; border-spacing: 0px; font-size: 16px; white-space: nowrap; font-style: bold;" width="100%" >
+  <thead>
+<tr align="center">
+      <th colspan="2" style="border-left-color: white;"></th>
+
+      <th width="70px;" colspan="5">HADIR</th>
+     
+
+      <th width="70px;" colspan="5">TIDAK HADIR</th>
+       <th colspan="1"></th>
+
+    </tr>
+    <tr align="center">
+      <th width="30px;">No</th>
+      <th width="250px;">Name</th>
+      <th width="70px;">HADIR</th>
+      <th width="70px;">LEWAT</th>
+      <th width="70px;">BALIK<br> AWAL</th>
+      <th width="70px;">LEWAT,<br>BALIK<br> AWAL</th>
+       <th width="70px;" style="background-color: grey">JUMLAH</th>
+      <th width="70px;">SAKIT</th>
+      <th width="70px;">TIDAK<br> HADIR<br> DENGAN<br> ALASAN</th>
+      <th width="70px;">TIDAK<br> HADIR<br> TAMPA<br> ALASAN</th>
+      <th width="70px;"></th>
+       <th width="70px;" style="background-color: grey">JUMLAH</th>
+       <th >Remark</th>
+
+    </tr>
+  </thead>
+  <tbody>
+
+<%= for all_data <- @all|>Enum.with_index do %>
+
+	<% no = all_data|>elem(1) %>
+<% all_data=all_data|>elem(0) %>
+
+
+    <tr align="center">
+      <td><%= no + 1 %></td>
+      <td align="left" style="padding-left: 5px;"><%= all_data.name %> <div style="float:right;"><%= all_data.cname %></div></td>
+      <td><%= all_data.hadir %></td>
+      <td><%= all_data.lewat %></td>
+      <td><%= all_data.balik_awl %></td>
+      <td></td>
+      <td  style="background-color: grey"><%= all_data.total %></td>
+       <td><%= all_data.sakit %></td>
+      <td><%= all_data.tidak_hadir_dengan_alasan %></td>
+      <td><%= all_data.tidak_hadir_tampa_alasan %></td>
+      <td></td>
+      <td  style="background-color: grey"><%= all_data.jumlah2 %></td>
+      <td align="left" style="padding-left: 5px;"><%= all_data.alasan %></td>
+   
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+
+  
+<body>
+
+   
+</body>
+
+

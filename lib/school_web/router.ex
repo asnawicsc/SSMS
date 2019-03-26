@@ -65,6 +65,8 @@ defmodule SchoolWeb.Router do
     post("/exam_result_analysis_class", PdfController, :exam_result_analysis_class)
     post("/report_card_personal_summary", PdfController, :report_card_personal_summary)
 
+    post("/report_card_summary", PdfController, :report_card_summary)
+
     post("/report_card_temp", PdfController, :report_card_temp)
 
     post("/report_card_all", PdfController, :report_card_all)

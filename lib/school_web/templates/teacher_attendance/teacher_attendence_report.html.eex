@@ -66,7 +66,7 @@
                     <div class="form-row">
  
                         <div class="form-group col-md-4">
-                            <form action="/pdf/report_card_all" method="POST">
+                            <form action="/pdf/report_card_summary" method="POST">
                                 <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
                                 <select class="custom-select -custom-select-sm" name="month" required="required">
                                  <option value="1">January</option>
