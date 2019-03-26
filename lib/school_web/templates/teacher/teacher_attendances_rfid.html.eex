@@ -69,11 +69,23 @@
                                     <%= gettext("Chinese Name") %>
                                 </th>
                                 <th>
+                                    <%= gettext("Date") %>
+                                </th>
+                                <th>
                                     <%= gettext("Time In") %>
                                 </th>
                                
                                 <th>
                                     <%= gettext("Time Out") %>
+                                </th>
+                                 <th>
+                                    <%= gettext("Status Kehadiran") %>
+                                </th>
+                                 <th>
+                                    <%= gettext("Alasan") %>
+                                </th>
+                                <th>
+                                    
                                 </th>
                             </tr>
                         </thead>
@@ -83,8 +95,12 @@
                               <td class="text-left"> <img id="preview6"  style='width:20px; height: 20px;' src='data:image/png;base64, <%= ta.image_bin %>'></td>
                               <td><%= ta.name %></td>
                                 <td><%= ta.cname %></td>
+                                <td><%= ta.date %></td>
                                  <td><%= ta.time_in %></td>
                                   <td><%= ta.time_out %></td>
+                                  <td><%= ta.remark %></td>
+                                  <td><%= ta.alasan %></td>
+                                   <td><a href ="/teacher_attendance/<%= ta.ta_id %>/edit">  <button class="mb-1 btn-sm btn btn-outline-warning" type="button">Assign Remark</button></a></td>
                           </tr>
                           <% end %>
                         </tbody>

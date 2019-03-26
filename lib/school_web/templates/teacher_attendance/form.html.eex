@@ -6,24 +6,10 @@
   <% end %>
 
 
-
-
-  <div class="form-group">
-    <%= label f, :time_in, class: "control-label" %>
-    <%= text_input f, :time_in, class: "form-control" %>
-    <%= error_tag f, :time_in %>
-  </div>
-
-  <div class="form-group">
-    <%= label f, :time_out, class: "control-label" %>
-    <%= text_input f, :time_out, class: "form-control" %>
-    <%= error_tag f, :time_out %>
-  </div>
-
     <div class="form-group">
-    <%= label f, :remark, class: "control-label" %>
-    <%= text_input f, :remark, class: "form-control" %>
-    <%= error_tag f, :remark %>
+    <%= label f, :alasan, class: "control-label" %>
+    <%= select f, :alasan,@teacher_absent_reason, class: "form-control" %>
+    <%= error_tag f, :alasan %>
   </div>
 
   <div class="form-group">

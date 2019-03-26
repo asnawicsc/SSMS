@@ -19,7 +19,7 @@
 
   <li>
     <strong>Time:</strong>
-    <%= @teacher_attendance.time_id %>
+    <%= @teacher_attendance.time_in %>
   </li>
 
   <li>

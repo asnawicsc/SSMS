@@ -3,9 +3,13 @@ defmodule SchoolWeb.TeacherAbsentReasonController do
 
   alias School.Affairs
   alias School.Affairs.TeacherAbsentReason
+  require IEx
 
   def index(conn, _params) do
-    teacher_absent_reason = Affairs.list_teacher_absent_reason()
+    teacher_absent_reason =
+      Affairs.list_teacher_absent_reason()
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
     render(conn, "index.html", teacher_absent_reason: teacher_absent_reason)
   end
 
@@ -15,11 +19,19 @@ defmodule SchoolWeb.TeacherAbsentReasonController do
   end
 
   def create(conn, %{"teacher_absent_reason" => teacher_absent_reason_params}) do
+    teacher_absent_reason_params =
+      Map.put(
+        teacher_absent_reason_params,
+        "institution_id",
+        conn.private.plug_session["institution_id"]
+      )
+
     case Affairs.create_teacher_absent_reason(teacher_absent_reason_params) do
       {:ok, teacher_absent_reason} ->
         conn
         |> put_flash(:info, "Teacher absent reason created successfully.")
         |> redirect(to: teacher_absent_reason_path(conn, :show, teacher_absent_reason))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
@@ -44,8 +56,12 @@ defmodule SchoolWeb.TeacherAbsentReasonController do
         conn
         |> put_flash(:info, "Teacher absent reason updated successfully.")
         |> redirect(to: teacher_absent_reason_path(conn, :show, teacher_absent_reason))
+
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html", teacher_absent_reason: teacher_absent_reason, changeset: changeset)
+        render(conn, "edit.html",
+          teacher_absent_reason: teacher_absent_reason,
+          changeset: changeset
+        )
     end
   end
 

@@ -244,6 +244,7 @@
                       teacher = Repo.get_by(Affairs.Teacher,email: user.email)  %>
                       <%= if teacher != nil do %>
           <a href ="/teacher/<%= teacher.id %>"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Teacher Information</button></a>
+          <a href ="/teacher_attendence_mark/<%= teacher.id %>"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Teacher Attendence</button></a>
           <% end %>
     
 

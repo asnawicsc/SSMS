@@ -2,19 +2,10 @@
 
 <ul>
 
-  <li>
-    <strong>Teacher:</strong>
-    <%= @teacher_absent_reason.teacher_id %>
-  </li>
 
   <li>
     <strong>Absent reason:</strong>
-    <%= @teacher_absent_reason.absent_reason_id %>
-  </li>
-
-  <li>
-    <strong>Semester:</strong>
-    <%= @teacher_absent_reason.semester_id %>
+    <%= @teacher_absent_reason.absent_reason %>
   </li>
 
 </ul>

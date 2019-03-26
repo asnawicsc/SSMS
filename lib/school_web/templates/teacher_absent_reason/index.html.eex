@@ -1,11 +1,16 @@
-<h2>Listing Teacher absent reason</h2>
 
-<table class="table">
+<div class="content-heading">
+    <div>Listing Teacher absent reason
+    </div>
+</div>
+ <div class="card">
+ 
+               <div class="card-body">
+<table class="table" id="datatable1">
   <thead>
     <tr>
-      <th>Teacher</th>
+
       <th>Absent reason</th>
-      <th>Semester</th>
 
       <th></th>
     </tr>
@@ -13,9 +18,8 @@
   <tbody>
 <%= for teacher_absent_reason <- @teacher_absent_reason do %>
     <tr>
-      <td><%= teacher_absent_reason.teacher_id %></td>
-      <td><%= teacher_absent_reason.absent_reason_id %></td>
-      <td><%= teacher_absent_reason.semester_id %></td>
+      <td><%= teacher_absent_reason.absent_reason %></td>
+
 
       <td class="text-right">
         <span><%= link "Show", to: teacher_absent_reason_path(@conn, :show, teacher_absent_reason), class: "btn btn-default btn-xs" %></span>
@@ -27,4 +31,6 @@
   </tbody>
 </table>
 
+</div>
+</div>
 <span><%= link "New Teacher absent reason", to: teacher_absent_reason_path(@conn, :new) %></span>

@@ -587,9 +587,12 @@ defmodule SchoolWeb.PageController do
             cname: g.cname,
             image_bin: g.image_bin,
             id: g.id,
+            ta_id: s.id,
             time_in: s.time_in,
             time_out: s.time_out,
-            date: s.date
+            date: s.date,
+            alasan: s.alasan,
+            remark: s.remark
           }
         )
       )

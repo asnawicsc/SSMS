@@ -1684,7 +1684,8 @@ defmodule SchoolWeb.PdfController do
                   time_out: g.time_out,
                   date: g.date,
                   month: g.month,
-                  remark: g.remark
+                  remark: g.remark,
+                  alasan: g.alasan
                 }
               )
             )
@@ -1706,9 +1707,63 @@ defmodule SchoolWeb.PdfController do
 
               new_date = new_date |> Date.from_iso8601!()
 
-              time_in = item.time_in |> String.split(" ") |> Enum.fetch!(1)
+              time_in = item.time_in |> String.split(" ") |> Enum.fetch!(1) |> String.split(":")
 
-              time_out = item.time_out |> String.split(" ") |> Enum.fetch!(1)
+              ti1 = time_in |> Enum.fetch!(0)
+              ti2 = time_in |> Enum.fetch!(1)
+              ti3 = time_in |> Enum.fetch!(2)
+
+              ti1 =
+                if ti1 |> String.to_integer() <= 9 do
+                  "0" <> ti1
+                else
+                  ti1
+                end
+
+              ti2 =
+                if ti2 |> String.to_integer() <= 9 do
+                  "0" <> ti2
+                else
+                  ti2
+                end
+
+              ti3 =
+                if ti3 |> String.to_integer() <= 9 do
+                  "0" <> ti3
+                else
+                  ti3
+                end
+
+              new_time_in = ti1 <> ":" <> ti2 <> ":" <> ti3
+
+              time_out = item.time_out |> String.split(" ") |> Enum.fetch!(1) |> String.split(":")
+
+              to1 = time_out |> Enum.fetch!(0)
+              to2 = time_out |> Enum.fetch!(1)
+              to3 = time_out |> Enum.fetch!(2)
+
+              to1 =
+                if to1 |> String.to_integer() <= 9 do
+                  "0" <> to1
+                else
+                  to1
+                end
+
+              to2 =
+                if to2 |> String.to_integer() <= 9 do
+                  "0" <> to2
+                else
+                  to2
+                end
+
+              to3 =
+                if to3 |> String.to_integer() <= 9 do
+                  "0" <> to3
+                else
+                  to3
+                end
+
+              new_time_out = to1 <> ":" <> to2 <> ":" <> to3
 
               %{
                 name: item.name,
@@ -1716,11 +1771,12 @@ defmodule SchoolWeb.PdfController do
                 code: item.code,
                 icno: item.icno,
                 teacher_id: item.teacher_id,
-                time_in: time_in,
-                time_out: time_out,
+                time_in: new_time_in,
+                time_out: new_time_out,
                 date: new_date,
                 month: item.month,
-                remark: item.remark
+                remark: item.remark,
+                alasan: item.alasan
               }
             end
             |> Enum.filter(fn x -> x.date == list end)
@@ -1740,7 +1796,8 @@ defmodule SchoolWeb.PdfController do
               time_out: "",
               date: list,
               month: "",
-              remark: ""
+              remark: "",
+              alasan: ""
             }
           end
         end

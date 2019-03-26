@@ -3,29 +3,7 @@
 <link rel="stylesheet" href="<%= Application.app_dir(:school, "priv/static") %>/css/bootstrap.min.css">
     <meta charset="utf-8">
     <title></title>
-    <style>
-    html {
-      font-family: sans-serif;
-    }
 
-    table {
-      border-collapse: collapse;
-      border: 1px solid rgb(200, 200, 200);
-      letter-spacing: 0px;
-      font-size: 9px;
-        font-weight: bold;
-          white-space: nowrap;
-    }
-
-    td{ text-align: center; },
-    th {
-      border: 1px solid rgb(190, 190, 190);
-      padding: 1px 1px;
-    }
-
-
-  
-  </style>
 
 <%= for all_data <- @all do %>
 
@@ -38,14 +16,14 @@
 <div  style="page-break-before: always;">
 <p align="center" style=""><b><%= @school.name %></b></p>
 <p align="center"><b>Laporan Kehadiran Staf</b></p>
-<p align="center" style="margin-top: -15px"><b>(<%= @start_month %> - <%= @end_month %>)</b></p>
+<p align="center" ><b>(<%= @start_month %> - <%= @end_month %>)</b></p>
 <table class="table" border="1" align="left" style=" border: 0px ; height: auto; margin-top: -15px  border-spacing:0;" >
 <thead></thead>
   <tbody align="left">
     <tr style=" border: 0px ;margin-top: -10px, height: auto; ce">
-      <td style=" border: 0px ; text-align: left; ">No Giliran: <%= profile.code %></td>
+      <td style=" border: 0px ; text-align: left; ">No Giliran: <u><%= profile.code %></u></td>
       <td style=" border: 0px ; text-align: left;"></td>
-     <td style=" border: 0px ; text-align: left; ">No.K/P: <%= profile.icno %></td>
+     <td style=" border: 0px ; text-align: left; ">No.K/P: <u><%= profile.icno %></u></td>
 
     </tr>
      <tr style=" border: 0px ;margin-top: -10px, height: auto;">
@@ -64,14 +42,14 @@
     
   </tbody>
 </table>
-	<table class="table" border="1" style="margin: 0px;">
+	<table class="block" border="1" style="border-collapse: collapse; border-spacing: 0px; font-size: 16px; white-space: nowrap; font-style: bold;" width="100%" >
   <thead>
-    <tr>
-      <th>No</th>
-      <th>Tarikh</th>
-      <th>Waktu Masuk</th>
-      <th>Waktu Keluar</th>
-      <th>Status Kehadiran</th>
+    <tr align="center">
+      <th width="50px;">No</th>
+      <th width="130px;">Tarikh</th>
+      <th width="130px;">Waktu Masuk</th>
+      <th width="130px;">Waktu Keluar</th>
+      <th width="160px;">Status Kehadiran</th>
       <th>Alasan</th>
 
     </tr>
@@ -80,13 +58,13 @@
 <%= for a <- all_data|>elem(1)|>Enum.with_index do %>
 <% no = a|>elem(1) %>
 <% a=a|>elem(0) %>
-    <tr>
+    <tr align="center">
       <td><%= no + 1 %></td>
       <td><%= a.date %></td>
       <td><%= a.time_in %></td>
       <td><%= a.time_out %></td>
       <td><%= a.remark %></td>
-      <td></td>
+      <td><%= a.alasan %></td>
    
     </tr>
 <% end %>

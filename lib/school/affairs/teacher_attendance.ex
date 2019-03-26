@@ -11,6 +11,7 @@ defmodule School.Affairs.TeacherAttendance do
     field(:date, :string)
     field(:remark, :string)
     field(:month, :string)
+    field(:alasan, :string)
 
     timestamps()
   end
@@ -26,7 +27,8 @@ defmodule School.Affairs.TeacherAttendance do
       :semester_id,
       :time_in,
       :time_out,
-      :date
+      :date,
+      :alasan
     ])
     |> validate_required([:institution_id, :teacher_id, :semester_id])
   end

@@ -642,6 +642,12 @@ defmodule SchoolWeb.Router do
       :teacher_attendence_report
     )
 
+    get(
+      "/teacher_attendence_mark/:id",
+      TeacherAttendanceController,
+      :teacher_attendence_mark
+    )
+
     get("/assign_shift", ShiftMasterController, :assign_shift)
 
     get("/assign_shift/:id", ShiftMasterController, :assign_shift_by)
