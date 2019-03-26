@@ -61,8 +61,6 @@ defmodule SchoolWeb.AttendanceController do
       end
       |> Poison.encode!()
 
-    IEx.pry()
-
     conn
     |> put_resp_content_type("application/json")
     |> send_resp(200, events)
@@ -641,21 +639,43 @@ defmodule SchoolWeb.AttendanceController do
               }
             )
           )
-          |> Enum.group_by(fn x -> {x.title, x.start} end)
+          |> Enum.filter(fn x -> x.student_id != "" end)
+          |> Enum.group_by(fn x -> {x.start, x.title} end)
 
         list_class_attendence =
           for item <- list_class_attendence do
-            count = item |> elem(1) |> hd
-            count = count.student_id |> String.split(",") |> Enum.count()
-            title = item |> elem(0) |> elem(0)
-            date = item |> elem(0) |> elem(1)
-            color = "green"
+            for ar <- item |> elem(1) do
+              count = ar.student_id |> String.split(",") |> Enum.count() |> Integer.to_string()
 
-            a = count |> Integer.to_string()
-            b = title <> "  Total Attend: " <> a
+              title = ar.title
 
-            %{start: date, title: b, color: "yellow"}
+              class =
+                Repo.get_by(School.Affairs.Class,
+                  name: title,
+                  institution_id: conn.private.plug_session["institution_id"]
+                )
+
+              student_class =
+                Repo.all(
+                  from(s in School.Affairs.StudentClass,
+                    where:
+                      s.institute_id == ^conn.private.plug_session["institution_id"] and
+                        s.semester_id == ^conn.private.plug_session["semester_id"] and
+                        s.class_id == ^class.id
+                  )
+                )
+                |> Enum.count()
+                |> Integer.to_string()
+
+              b = title <> "-" <> count <> "/" <> student_class
+
+              date = ar.start
+              color = ar.color
+
+              %{start: date, title: b, color: color}
+            end
           end
+          |> List.flatten()
 
         list =
           (list_class_attendence ++ list_class_holiday)
