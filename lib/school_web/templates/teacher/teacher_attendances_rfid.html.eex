@@ -32,7 +32,7 @@
                 <form>
                     <div class="form-group">
                         <label>Single Mark Attendance</label>
-                        <input class="form-control" id="qt" placeholder="Enter query" name="dad" type="text">
+                        <input class="form-control" id="qt" placeholder="Enter query" name="dad" type="password">
                     </div>
                 </form>
     

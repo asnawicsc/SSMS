@@ -35,6 +35,8 @@
   </thead>
   <tbody>
 
+    <% percent=@all|>hd %>
+
 <%= for all_data <- @all|>Enum.with_index do %>
 
 	<% no = all_data|>elem(1) %>
@@ -58,7 +60,16 @@
    
     </tr>
 <% end %>
+
+
   </tbody>
 </table>
 
+<BR>
+PERATUS KEHADIRAN:
+
+<table class="block" border="1" style="border-collapse: collapse; border-spacing: 0px; font-size: 16px; white-space: nowrap; font-style: bold;" width="100%" >
+  <tr><td>BULAN</td><td><%= @start_month.month %></td></tr>
+    <tr><td>PERATUS</td><td><%= @percentage %></td></tr>
+</table>
 

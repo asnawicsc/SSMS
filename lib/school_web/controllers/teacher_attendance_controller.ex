@@ -5,7 +5,10 @@ defmodule SchoolWeb.TeacherAttendanceController do
   alias School.Affairs.TeacherAttendance
 
   def index(conn, _params) do
-    teacher_attendance = Affairs.list_teacher_attendance()
+    teacher_attendance =
+      Affairs.list_teacher_attendance()
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
     render(conn, "index.html", teacher_attendance: teacher_attendance)
   end
 

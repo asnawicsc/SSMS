@@ -2004,6 +2004,48 @@ defmodule SchoolWeb.PdfController do
         submit
       end
 
+    total_attende =
+      Repo.all(
+        from(g in School.Affairs.TeacherAttendance,
+          left_join: k in School.Affairs.Teacher,
+          on: k.id == g.teacher_id,
+          where:
+            g.semester_id == ^params["semester"] and
+              k.institution_id == ^conn.private.plug_session["institution_id"] and
+              g.institution_id == ^conn.private.plug_session["institution_id"] and
+              g.month == ^params["month"],
+          select: %{
+            name: k.name,
+            cname: k.cname,
+            teacher_id: k.id,
+            remark: g.remark,
+            alasan: g.alasan
+          }
+        )
+      )
+      |> Enum.count()
+
+    total_absent =
+      Repo.all(
+        from(g in School.Affairs.TeacherAbsent,
+          left_join: k in School.Affairs.Teacher,
+          on: k.id == g.teacher_id,
+          where:
+            g.institution_id == ^conn.private.plug_session["institution_id"] and
+              g.month == ^params["month"],
+          select: %{
+            name: k.name,
+            cname: k.cname,
+            teacher_id: k.id,
+            remark: g.remark,
+            alasan: g.alasan
+          }
+        )
+      )
+      |> Enum.count()
+
+    percentage = (total_attende / (total_attende + total_absent) * 100) |> Float.round(2)
+
     school = Repo.get(Institution, conn.private.plug_session["institution_id"])
 
     html =
@@ -2013,7 +2055,8 @@ defmodule SchoolWeb.PdfController do
         all: all,
         school: school,
         start_month: start_month,
-        end_month: end_month
+        end_month: end_month,
+        percentage: percentage
       )
 
     pdf_params = %{"html" => html}

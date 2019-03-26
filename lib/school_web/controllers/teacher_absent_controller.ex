@@ -6,7 +6,10 @@ defmodule SchoolWeb.TeacherAbsentController do
   require IEx
 
   def index(conn, _params) do
-    teacher_absent = Affairs.list_teacher_absent()
+    teacher_absent =
+      Affairs.list_teacher_absent()
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
     render(conn, "index.html", teacher_absent: teacher_absent)
   end
 
