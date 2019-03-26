@@ -3648,9 +3648,13 @@ defmodule SchoolWeb.UserChannel do
           msg
         end
 
-      {:reply, {:ok, %{msg: msg}}, socket}
+      broadcast(socket, "rep", %{msg: smsg})
+      {:noreply, socket}
+
+      # {:reply, {:ok, %{msg: msg}}, socket}
     else
-      {:reply, {:error, %{}}, socket}
+      broadcast(socket, "rep", %{msg: "Wrong RFID"})
+      {:noreply, socket}
     end
   end
 
