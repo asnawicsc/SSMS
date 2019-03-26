@@ -364,6 +364,7 @@
                 <a href ="/login_teacher"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Teacher Login</button></a>
                 <a href ="/create_shift"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Teacher Attendance Shift</button></a>
                     <a href ="/teacher_absent_reason"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Teacher Absent Reason</button></a>
+                    <a href ="/teacher_absent"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Teacher Absent Leave</button></a>
              </div>
           </div>
         </div>

@@ -6049,4 +6049,100 @@ defmodule School.Affairs do
   def change_shift(%Shift{} = shift) do
     Shift.changeset(shift, %{})
   end
+
+  alias School.Affairs.TeacherAbsent
+
+  @doc """
+  Returns the list of teacher_absent.
+
+  ## Examples
+
+      iex> list_teacher_absent()
+      [%TeacherAbsent{}, ...]
+
+  """
+  def list_teacher_absent do
+    Repo.all(TeacherAbsent)
+  end
+
+  @doc """
+  Gets a single teacher_absent.
+
+  Raises `Ecto.NoResultsError` if the Teacher absent does not exist.
+
+  ## Examples
+
+      iex> get_teacher_absent!(123)
+      %TeacherAbsent{}
+
+      iex> get_teacher_absent!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_teacher_absent!(id), do: Repo.get!(TeacherAbsent, id)
+
+  @doc """
+  Creates a teacher_absent.
+
+  ## Examples
+
+      iex> create_teacher_absent(%{field: value})
+      {:ok, %TeacherAbsent{}}
+
+      iex> create_teacher_absent(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_teacher_absent(attrs \\ %{}) do
+    %TeacherAbsent{}
+    |> TeacherAbsent.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a teacher_absent.
+
+  ## Examples
+
+      iex> update_teacher_absent(teacher_absent, %{field: new_value})
+      {:ok, %TeacherAbsent{}}
+
+      iex> update_teacher_absent(teacher_absent, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_teacher_absent(%TeacherAbsent{} = teacher_absent, attrs) do
+    teacher_absent
+    |> TeacherAbsent.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a TeacherAbsent.
+
+  ## Examples
+
+      iex> delete_teacher_absent(teacher_absent)
+      {:ok, %TeacherAbsent{}}
+
+      iex> delete_teacher_absent(teacher_absent)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_teacher_absent(%TeacherAbsent{} = teacher_absent) do
+    Repo.delete(teacher_absent)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking teacher_absent changes.
+
+  ## Examples
+
+      iex> change_teacher_absent(teacher_absent)
+      %Ecto.Changeset{source: %TeacherAbsent{}}
+
+  """
+  def change_teacher_absent(%TeacherAbsent{} = teacher_absent) do
+    TeacherAbsent.changeset(teacher_absent, %{})
+  end
 end

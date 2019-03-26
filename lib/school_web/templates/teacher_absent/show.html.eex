@@ -1,0 +1,43 @@
+<h2>Show Teacher absent</h2>
+
+<ul>
+
+  <li>
+    <strong>Institution:</strong>
+    <%= @teacher_absent.institution_id %>
+  </li>
+
+  <li>
+    <strong>Semester:</strong>
+    <%= @teacher_absent.semester_id %>
+  </li>
+
+  <li>
+    <strong>Teacher:</strong>
+    <%= @teacher_absent.teacher_id %>
+  </li>
+
+  <li>
+    <strong>Date:</strong>
+    <%= @teacher_absent.date %>
+  </li>
+
+  <li>
+    <strong>Remark:</strong>
+    <%= @teacher_absent.remark %>
+  </li>
+
+  <li>
+    <strong>Month:</strong>
+    <%= @teacher_absent.month %>
+  </li>
+
+  <li>
+    <strong>Alasan:</strong>
+    <%= @teacher_absent.alasan %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: teacher_absent_path(@conn, :edit, @teacher_absent) %></span>
+<span><%= link "Back", to: teacher_absent_path(@conn, :index) %></span>

@@ -1781,6 +1781,35 @@ defmodule SchoolWeb.PdfController do
             end
             |> Enum.filter(fn x -> x.date == list end)
 
+          all2 =
+            Repo.all(
+              from(g in School.Affairs.TeacherAbsent,
+                left_join: k in School.Affairs.Teacher,
+                on: k.id == g.teacher_id,
+                where:
+                  g.semester_id == ^params["semester"] and
+                    k.institution_id == ^conn.private.plug_session["institution_id"] and
+                    g.institution_id == ^conn.private.plug_session["institution_id"] and
+                    g.month == ^params["month"] and k.id == ^teacher.id,
+                select: %{
+                  name: k.name,
+                  cname: k.cname,
+                  code: k.code,
+                  icno: k.icno,
+                  teacher_id: k.id,
+                  time_in: "",
+                  time_out: "",
+                  date: g.date,
+                  month: g.month,
+                  remark: g.remark,
+                  alasan: g.alasan
+                }
+              )
+            )
+            |> Enum.filter(fn x -> x.date == list end)
+
+          new = new ++ all2
+
           if new != [] do
             new = new |> hd
 
@@ -1887,33 +1916,57 @@ defmodule SchoolWeb.PdfController do
             )
           )
 
+        all2 =
+          Repo.all(
+            from(g in School.Affairs.TeacherAbsent,
+              left_join: k in School.Affairs.Teacher,
+              on: k.id == g.teacher_id,
+              where:
+                g.institution_id == ^conn.private.plug_session["institution_id"] and
+                  g.teacher_id == ^teacher.id and g.month == ^params["month"],
+              select: %{
+                name: k.name,
+                cname: k.cname,
+                teacher_id: k.id,
+                remark: g.remark,
+                alasan: g.alasan
+              }
+            )
+          )
+
+        all = all ++ all2
+
         submit =
           if all != [] do
             hadir = all |> Enum.filter(fn x -> x.remark == "HADIR" end) |> Enum.count()
             lewat = all |> Enum.filter(fn x -> x.remark == "LEWAT" end) |> Enum.count()
             balik_awl = all |> Enum.filter(fn x -> x.remark == "BALIK AWAL" end) |> Enum.count()
 
-            teacher_absent_reason =
-              Repo.all(
-                from(s in School.Affairs.TeacherAbsentReason,
-                  where: s.institution_id == ^conn.private.plug_session["institution_id"],
-                  select: s.absent_reason
-                )
-              )
+            cuti_dengan_alasan =
+              all
+              |> Enum.filter(fn x -> x.remark == "CUTI DENGAN ALASAN" end)
+              |> Enum.map(fn x -> x.alasan end)
 
             rem =
-              for item <- teacher_absent_reason do
+              for item <- cuti_dengan_alasan do
                 calc = all |> Enum.filter(fn x -> x.alasan == item end) |> Enum.count()
 
                 {item <> "=" <> (calc |> Integer.to_string()), calc}
               end
               |> Enum.filter(fn x -> x |> elem(1) != 0 end)
 
-            tidak_hadir_dengan_alasan = rem |> Enum.count()
+            tidak_hadir_dengan_alasan = cuti_dengan_alasan |> Enum.count()
 
             jumlah2 = rem |> Enum.count()
 
-            alasan = rem |> Enum.map(fn x -> x |> elem(0) end) |> Enum.join(",")
+            alasan = rem |> Enum.map(fn x -> x |> elem(0) end)
+
+            alasan =
+              if alasan != [] do
+                alasan = alasan |> hd
+              else
+                ""
+              end
 
             total = hadir + lewat + balik_awl
 

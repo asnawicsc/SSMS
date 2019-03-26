@@ -164,7 +164,17 @@ defmodule SchoolWeb.Router do
       :add_exam_grade
     )
 
+    post(
+      "/create_teacher_leave",
+      TeacherAbsentController,
+      :create_teacher_leave
+    )
+
+    resources("/teacher_absent", TeacherAbsentController)
+
     get("/submit_exam_period", ExamPeriodController, :submit_exam_period)
+
+    get("/create_teacher_absent_leave", TeacherAbsentController, :create_teacher_absent_leave)
 
     resources("/parameters", ParameterController)
     get("/parameters_view/:institution_id", ParameterController, :parameters_view)

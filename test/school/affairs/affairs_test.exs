@@ -4710,4 +4710,76 @@ defmodule School.AffairsTest do
       assert %Ecto.Changeset{} = Affairs.change_shift(shift)
     end
   end
+
+  describe "teacher_absent" do
+    alias School.Affairs.TeacherAbsent
+
+    @valid_attrs %{alasan: "some alasan", date: ~D[2010-04-17], institution_id: 42, month: "some month", remark: "some remark", semester_id: 42, teacher_id: 42}
+    @update_attrs %{alasan: "some updated alasan", date: ~D[2011-05-18], institution_id: 43, month: "some updated month", remark: "some updated remark", semester_id: 43, teacher_id: 43}
+    @invalid_attrs %{alasan: nil, date: nil, institution_id: nil, month: nil, remark: nil, semester_id: nil, teacher_id: nil}
+
+    def teacher_absent_fixture(attrs \\ %{}) do
+      {:ok, teacher_absent} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_teacher_absent()
+
+      teacher_absent
+    end
+
+    test "list_teacher_absent/0 returns all teacher_absent" do
+      teacher_absent = teacher_absent_fixture()
+      assert Affairs.list_teacher_absent() == [teacher_absent]
+    end
+
+    test "get_teacher_absent!/1 returns the teacher_absent with given id" do
+      teacher_absent = teacher_absent_fixture()
+      assert Affairs.get_teacher_absent!(teacher_absent.id) == teacher_absent
+    end
+
+    test "create_teacher_absent/1 with valid data creates a teacher_absent" do
+      assert {:ok, %TeacherAbsent{} = teacher_absent} = Affairs.create_teacher_absent(@valid_attrs)
+      assert teacher_absent.alasan == "some alasan"
+      assert teacher_absent.date == ~D[2010-04-17]
+      assert teacher_absent.institution_id == 42
+      assert teacher_absent.month == "some month"
+      assert teacher_absent.remark == "some remark"
+      assert teacher_absent.semester_id == 42
+      assert teacher_absent.teacher_id == 42
+    end
+
+    test "create_teacher_absent/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_teacher_absent(@invalid_attrs)
+    end
+
+    test "update_teacher_absent/2 with valid data updates the teacher_absent" do
+      teacher_absent = teacher_absent_fixture()
+      assert {:ok, teacher_absent} = Affairs.update_teacher_absent(teacher_absent, @update_attrs)
+      assert %TeacherAbsent{} = teacher_absent
+      assert teacher_absent.alasan == "some updated alasan"
+      assert teacher_absent.date == ~D[2011-05-18]
+      assert teacher_absent.institution_id == 43
+      assert teacher_absent.month == "some updated month"
+      assert teacher_absent.remark == "some updated remark"
+      assert teacher_absent.semester_id == 43
+      assert teacher_absent.teacher_id == 43
+    end
+
+    test "update_teacher_absent/2 with invalid data returns error changeset" do
+      teacher_absent = teacher_absent_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_teacher_absent(teacher_absent, @invalid_attrs)
+      assert teacher_absent == Affairs.get_teacher_absent!(teacher_absent.id)
+    end
+
+    test "delete_teacher_absent/1 deletes the teacher_absent" do
+      teacher_absent = teacher_absent_fixture()
+      assert {:ok, %TeacherAbsent{}} = Affairs.delete_teacher_absent(teacher_absent)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_teacher_absent!(teacher_absent.id) end
+    end
+
+    test "change_teacher_absent/1 returns a teacher_absent changeset" do
+      teacher_absent = teacher_absent_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_teacher_absent(teacher_absent)
+    end
+  end
 end

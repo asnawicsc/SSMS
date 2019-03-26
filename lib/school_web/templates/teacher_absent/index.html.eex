@@ -1,0 +1,40 @@
+
+<div class="content-heading">
+   <div>Listing Teacher absent
+   </div>
+</div>
+<div class="card">
+<table class="table" id="datatable1">
+  <thead>
+    <tr>
+
+      <th>Teacher</th>
+      <th>Date</th>
+      <th>Remark</th>
+      <th>Month</th>
+      <th>Alasan</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for teacher_absent <- @teacher_absent do %>
+    <tr>
+
+      <td><%= teacher_absent.teacher_id %></td>
+      <td><%= teacher_absent.date %></td>
+      <td><%= teacher_absent.remark %></td>
+      <td><%= teacher_absent.month %></td>
+      <td><%= teacher_absent.alasan %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: teacher_absent_path(@conn, :show, teacher_absent), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: teacher_absent_path(@conn, :edit, teacher_absent), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: teacher_absent_path(@conn, :delete, teacher_absent), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+</div>
+  <a href ="/create_teacher_absent_leave"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Create Teacher Absent Leave</button></a>

@@ -1,0 +1,86 @@
+<div class="content-heading">
+   <div>Create Teacher Absent Leave
+   </div>
+</div>
+
+<form action="/create_teacher_leave" method="post"> 
+    <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+
+<div class="row">
+
+
+   <div class="col-4">
+    <div class="card">
+      <div class="card-body">
+        <h4>Alasan:</h4>
+        <div class="input-group " >
+           <select class="form-control"  name="teacher_id" required="" >
+                           <%= for a <- @teacher|>Enum.uniq |> Enum.sort do %>
+                                            <option value="<%= a.id %>" ><%= a.name %>
+                                            </option>
+                                          <% end %>
+                                        </select>
+         </div>
+     </div>
+   </div>
+ </div>
+
+    <div class="col-4">
+    <div class="card">
+      <div class="card-body">
+        <h4>Alasan:</h4>
+        <div class="input-group " >
+           <select class="form-control"  name="alasan" required="" >
+                           <%= for a <- @teacher_absent_reason|>Enum.uniq |> Enum.sort do %>
+                                            <option value="<%= a %>" ><%= a %>
+                                            </option>
+                                          <% end %>
+                                        </select>
+         </div>
+     </div>
+   </div>
+ </div>
+
+  
+</div>
+
+<div class="row">
+  <div class="col-4">
+    <div class="card">
+      <div class="card-body">
+        <h4>Start date: </h4>
+        <div class="input-group date" id="datetimepicker">
+            <input class="form-control date" type="text" name="start_date" value="<%= Date.utc_today() %>">
+            <span class="input-group-append input-group-addon">
+               <span class="input-group-text fas fa-calendar-alt"></span>
+            </span>
+         </div>
+     </div>
+   </div>
+ </div>
+
+   <div class="col-4">
+    <div class="card">
+      <div class="card-body">
+        <h4>End date: </h4>
+        <div class="input-group date" id="datetimepicker">
+            <input class="form-control date" type="text" name="end_date" value="<%= Date.utc_today() %>">
+            <span class="input-group-append input-group-addon">
+               <span class="input-group-text fas fa-calendar-alt"></span>
+            </span>
+         </div>
+     </div>
+   </div>
+ </div>
+
+</div>
+
+
+
+ <input class="btn btn-primary" name="" value="Submit" type="submit">
+</form>
+
+<script type="text/javascript">
+  $("input.date").datetimepicker({timepicker:false,format:'Y-m-d'})
+
+</script>
