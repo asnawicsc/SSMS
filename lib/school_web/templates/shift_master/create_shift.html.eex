@@ -19,13 +19,13 @@
                       <label class="col-md-2 col-form-label">Shift Name</label>
                       <div class="col-md-3">
                         <div class="form-group has-default">
-                          <input type="text" class="form-control" name="name">
+                          <input type="text" required="required" class="form-control" name="name">
                         </div>
                       </div>
                          <label class="col-md-2 col-form-label">Shift Group</label>
                       <div class="col-md-3">
                         <div class="form-group has-default">
-                          <input type="text" class="form-control" name="name">
+                          <input type="text" required="required" class="form-control" name="name">
                         </div>
                       </div>
                            <label class="col-md-2 col-form-label">Start Time :</label>
