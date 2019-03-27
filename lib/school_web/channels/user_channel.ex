@@ -3648,7 +3648,7 @@ defmodule SchoolWeb.UserChannel do
           msg
         end
 
-      broadcast(socket, "rep", %{msg: smsg})
+      broadcast(socket, "rep", %{msg: msg})
       {:noreply, socket}
 
       # {:reply, {:ok, %{msg: msg}}, socket}

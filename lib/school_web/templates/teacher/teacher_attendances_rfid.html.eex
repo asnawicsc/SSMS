@@ -134,46 +134,92 @@ if (ds == 'time_in')
 
  }
 
-                  if(document.getElementById('check_time_in_mode').checked) {
-
-                    var mode ="time_in"
-                      localStorage.setItem('mode', mode);
-                  }
-
-                     if(document.getElementById('check_time_out_mode').checked) {
-
-                    var mode ="time_out"
-                     localStorage.setItem('mode', mode);
-                  }
 
        $('#check_time_in_mode').click(function() {
-   alert("Alert: You Switch you mode to Time In")
-    location.reload();
+
 
    
+
+   swal({
+    title: "Are you sure?",
+    text: "Alert: You Switch you mode to Time In!",
+    type: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#DD6B55",
+    confirmButtonText: "Yes, Switch it!",
+    cancelButtonText: "No, Dont Switch it!",
+    closeOnConfirm: false,
+    closeOnCancel: false
+    },
+    function (isConfirm) {
+        if (isConfirm) {
+           swal({
+              title: "Switched!",
+              text: "Your switch succesfull.",
+              type: "success",
+              timer: 3000
+           });
+          
+
+    var mode ="time_in"
+              localStorage.setItem('mode', mode);
+          location.reload(true);   
+         
+        }
+        else {
+            swal("Cancelled", "Your still in Time Out Mode");
+            var mode ="time_out"
+                     localStorage.setItem('mode', mode);
+     location.reload();
+        }
+    });
+
 
  })
 
           $('#check_time_out_mode').click(function() {
-   alert("Alert: You Switch you mode to Time Out")
-      location.reload();
-   
+
+        
+
+    
+   swal({
+    title: "Are you sure?",
+    text: "Alert: You Switch you mode to Time Out!",
+    type: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#DD6B55",
+    confirmButtonText: "Yes, Switch it!",
+    cancelButtonText: "No, Dont Switch it!",
+    closeOnConfirm: false,
+    closeOnCancel: false
+    },
+    function (isConfirm) {
+        if (isConfirm) {
+           swal({
+              title: "Switched!",
+              text: "Your switch succesfull.",
+              type: "success",
+              timer: 3000
+           });
+          
+
+    var mode ="time_out"
+              localStorage.setItem('mode', mode);
+          location.reload(true);   
+         
+        }
+        else {
+            swal("Cancelled", "Your still in Time In Mode");
+            var mode ="time_in"
+                     localStorage.setItem('mode', mode);
+     location.reload();
+        }
+    });
 });
 
 
 
 
-// function runScript(e) {
-//     //See notes about 'which' and 'key'
-//     if (e.keyCode == 13) {
-//         var term = $("input#qt").val()
-
-//           console.log(term)
-
-        
-       
-//     }
-// }
 
 
 
@@ -200,23 +246,23 @@ var date_time= d.getDate()+"-"+(d.getMonth()+1)+"-"+d.getFullYear()+" "+d.getHou
 
         channel.on("rep", payload => {
 
+swal({
+     title: "Alert!",
+     text: payload.msg,
+     type: "success",
+     timer: 5000
+     });
+    
 
- $.notify({message: payload.msg});
+ // $.notify({message: payload.msg},{
+ //          // settings
+ //          type: 'info',
+         
+ //        });
 
   })
 
 
-
-
-       // .receive(
-       //               "ok", payload => {
-       //                    $.notify({
-
-       //    message: payload.msg
-       //  });
-
-
-       //               });
     }
   });
 
