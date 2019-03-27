@@ -138,6 +138,12 @@ defmodule SchoolWeb.ShiftMasterController do
         )
       )
     else
+      Repo.delete_all(
+        from(s in School.Affairs.Shift,
+          where: s.shift_master_id == ^params["shift_master_id"]
+        )
+      )
+
       for item <- params["shift"] do
         teacher_id = item |> elem(0)
         shift_master_id = item |> elem(1)
@@ -147,25 +153,29 @@ defmodule SchoolWeb.ShiftMasterController do
             from(s in School.Affairs.ShiftMaster,
               left_join: k in School.Affairs.Shift,
               on: s.id == k.shift_master_id,
-              where: k.teacher_id == ^teacher_id
+              where: k.teacher_id == ^teacher_id,
+              select: %{shift_group: s.shift_group, id: s.id}
             )
           )
+          |> Enum.filter(fn x ->
+            x.shift_group != shift_master.shift_group && x.id != shift_master.id
+          end)
 
-        if exist != [] do
+        if exist == [] do
+          Affairs.create_shift(%{
+            teacher_id: teacher_id,
+            shift_master_id: params["shift_master_id"]
+          })
+        else
           exist = exist |> hd
 
-          if exist.shift_group != shift_master.shift_group do
-            Affairs.update_shift(exist, %{
+          if exist.shift_group == shift_master.shift_group do
+            Affairs.create_shift(%{
               teacher_id: teacher_id,
               shift_master_id: params["shift_master_id"]
             })
           else
           end
-        else
-          Affairs.create_shift(%{
-            teacher_id: teacher_id,
-            shift_master_id: params["shift_master_id"]
-          })
         end
       end
     end
