@@ -151,9 +151,6 @@ defmodule SchoolWeb.ShiftMasterController do
             )
           )
 
-        teacher_shift =
-          Repo.get_by(Shift, shift_master_id: params["shift_master_id"], teacher_id: teacher_id)
-
         if exist != [] do
           exist = exist |> hd
 
