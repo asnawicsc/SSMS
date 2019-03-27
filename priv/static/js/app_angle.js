@@ -3831,7 +3831,7 @@
             'paging': true, // Table pagination
             'ordering': true, // Column ordering
             'info': true, // Bottom left status text
-              "pageLength": 100,
+             'pageLength': 100,
             responsive: true,
             // Text translation options
             // Note the required keywords between underscores (e.g _MENU_)
