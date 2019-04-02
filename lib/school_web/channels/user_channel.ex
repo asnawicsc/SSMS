@@ -3548,7 +3548,17 @@ defmodule SchoolWeb.UserChannel do
         if attns == nil do
           msg =
             if mode == "time_out" do
-              msg = "Plese Switch to Time In Mode"
+              params = %{
+                institution_id: institution_id,
+                semester_id: semester_id,
+                teacher_id: teacher_id,
+                time_out: time_in,
+                date: date,
+                month: month
+              }
+
+              Affairs.create_teacher_attendance(params)
+              msg = "Created Succesfully"
             else
               params = %{
                 institution_id: institution_id,
