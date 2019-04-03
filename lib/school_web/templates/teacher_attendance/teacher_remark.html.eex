@@ -1,0 +1,37 @@
+
+<div class="content-heading">
+   <div>Choose Date
+   </div>
+</div>
+
+<form action="/find_attandence" method="post"> 
+    <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+
+<div class="row">
+  <div class="col-4">
+    <div class="card">
+      <div class="card-body">
+        <h4>Start date: </h4>
+        <div class="input-group date" id="datetimepicker">
+            <input class="form-control date" type="text" name="start_date" required="required">
+            <span class="input-group-append input-group-addon">
+               <span class="input-group-text fas fa-calendar-alt"></span>
+            </span>
+         </div>
+     </div>
+   </div>
+ </div>
+
+
+</div>
+
+
+
+ <input class="btn btn-primary" name="" value="Submit" type="submit">
+</form>
+
+<script type="text/javascript">
+  $("input.date").datetimepicker({timepicker:false,format:'d-m-Y'})
+
+
+</script>

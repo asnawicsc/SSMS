@@ -589,13 +589,38 @@ defmodule SchoolWeb.PageController do
             id: g.id,
             ta_id: s.id,
             time_in: s.time_in,
+            date: s.date,
+            alasan: s.alasan,
+            remark: s.remark
+          },
+          order_by: [desc: s.time_in]
+        )
+      )
+      |> Enum.filter(fn x -> x.time_in != nil end)
+
+    teachers_attend_full2 =
+      Repo.all(
+        from(s in School.Affairs.TeacherAttendance,
+          left_join: g in School.Affairs.Teacher,
+          on: s.teacher_id == g.id,
+          where:
+            s.date == ^date and s.institution_id == ^conn.private.plug_session["institution_id"] and
+              s.semester_id == ^conn.private.plug_session["semester_id"],
+          select: %{
+            name: g.name,
+            cname: g.cname,
+            image_bin: g.image_bin,
+            id: g.id,
+            ta_id: s.id,
             time_out: s.time_out,
             date: s.date,
             alasan: s.alasan,
             remark: s.remark
-          }
+          },
+          order_by: [desc: s.time_out]
         )
       )
+      |> Enum.filter(fn x -> x.time_out != nil end)
 
     changeset = Settings.change_institution(%Institution{})
 
@@ -618,7 +643,8 @@ defmodule SchoolWeb.PageController do
       users: users,
       changeset: changeset,
       not_yet: not_yet_full,
-      teachers_attend: teachers_attend_full
+      teachers_attend: teachers_attend_full,
+      teachers_attend2: teachers_attend_full2
     )
   end
 

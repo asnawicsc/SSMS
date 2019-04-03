@@ -636,6 +636,12 @@ defmodule SchoolWeb.Router do
       :history_report_card_class
     )
 
+    get(
+      "/teacher_attendance/:id/edit_remark",
+      TeacherAttendanceController,
+      :edit_remark
+    )
+
     post(
       "/create_shift_master",
       ShiftMasterController,
@@ -652,6 +658,24 @@ defmodule SchoolWeb.Router do
       "/teacher_attendence_report",
       TeacherAttendanceController,
       :teacher_attendence_report
+    )
+
+    post(
+      "/find_attandence",
+      TeacherAttendanceController,
+      :find_attandence
+    )
+
+    post(
+      "/update_teacher_remark",
+      TeacherAttendanceController,
+      :update_teacher_remark
+    )
+
+    get(
+      "/teacher_remark",
+      TeacherAttendanceController,
+      :teacher_remark
     )
 
     get(

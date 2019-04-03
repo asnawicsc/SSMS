@@ -1,0 +1,254 @@
+<div class="content-heading">
+   <div>Teacher Attandence (<%= @new_start_date %>)
+   </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+        <!-- START card-->
+
+        <div class="card card-default">
+            <div class="card-body" id="">
+                <form>
+                    <div class="form-group">
+                        <label>Attended Not Complete (Time In)</label>
+                     
+                    </div>
+                </form>
+                <div class="table-responsive">
+                            <table class="table" id="datatable6">
+                        <thead>
+                            <tr>
+                                <th>Picture</th>
+                                <th>
+                                    <%= gettext("Name") %>
+                                </th>
+                                <th>
+                                    <%= gettext("Chinese Name") %>
+                                </th>
+                                <th>
+                                    <%= gettext("Date") %>
+                                </th>
+                                <th>
+                                    <%= gettext("Time In") %>
+                                </th>
+
+                         
+                                  <th>
+                                    <%= gettext("Action") %>
+                                </th>
+                               
+                              
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <%= for ta <- @not_finish do %>
+                          <tr>
+                              <td class="text-left"> <img id="preview6"  style='width:20px; height: 20px;' src='data:image/png;base64, <%= ta.image_bin %>'></td>
+                              <td><%= ta.name %></td>
+                                <td><%= ta.cname %></td>
+                                <td><%= ta.date %></td>
+                                 <td><%= ta.time_in %></td>
+      
+                                <td><a href ="/teacher_attendance/<%= ta.ta_id %>/edit_remark">  <button class="mb-1 btn-sm btn btn-outline-warning" type="button">Assign Remark</button></a></td>
+                                
+                                  
+                          </tr>
+                          <% end %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- END card-->
+    </div>
+      <div class="col-md-6">
+        <!-- START card-->
+
+        <div class="card card-default">
+            <div class="card-body" id="">
+                <form>
+                    <div class="form-group">
+                        <label>Attended Not Complete (Time Out)</label>
+                     
+                    </div>
+                </form>
+                <div class="table-responsive">
+                            <table class="table" id="datatable5">
+                        <thead>
+                            <tr>
+                                <th>Picture</th>
+                                <th>
+                                    <%= gettext("Name") %>
+                                </th>
+                                <th>
+                                    <%= gettext("Chinese Name") %>
+                                </th>
+                                <th>
+                                    <%= gettext("Date") %>
+                                </th>
+                           
+                                <th>
+                                    <%= gettext("Time Out") %>
+                                </th>
+                                  <th>
+                                    <%= gettext("Action") %>
+                                </th>
+                               
+                              
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <%= for ta <- @not_finish2 do %>
+                          <tr>
+                              <td class="text-left"> <img id="preview6"  style='width:20px; height: 20px;' src='data:image/png;base64, <%= ta.image_bin %>'></td>
+                              <td><%= ta.name %></td>
+                                <td><%= ta.cname %></td>
+                                <td><%= ta.date %></td>
+                                 <td><%= ta.time_out %></td>
+                                <td><a href ="/teacher_attendance/<%= ta.ta_id %>/edit_remark">  <button class="mb-1 btn-sm btn btn-outline-warning" type="button">Assign Remark</button></a></td>
+                                
+                                  
+                          </tr>
+                          <% end %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- END card-->
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <!-- START card-->
+
+        <div class="card card-default">
+            <div class="card-body" id="">
+                <form>
+                    <div class="form-group">
+                        <label>Attended Teacher Complete</label>
+                     
+                    </div>
+                </form>
+                <div class="table-responsive">
+                            <table class="table" id="datatable4">
+                        <thead>
+                            <tr>
+                                <th>Picture</th>
+                                <th>
+                                    <%= gettext("Name") %>
+                                </th>
+                                <th>
+                                    <%= gettext("Chinese Name") %>
+                                </th>
+                                <th>
+                                    <%= gettext("Date") %>
+                                </th>
+                                  <th>
+                                    <%= gettext("Time In") %>
+                                </th>
+                                 
+    
+                                <th>
+                                    <%= gettext("Time Out") %>
+                                </th>
+                                 <th>
+                                    <%= gettext("Alasan") %>
+                                </th>
+                                  <th>
+                                    <%= gettext("Action") %>
+                                </th>
+                                 
+                                
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <%= for ta <- @teachers_attend_full do %>
+                          <tr>
+                              <td class="text-left"> <img id="preview6"  style='width:20px; height: 20px;' src='data:image/png;base64, <%= ta.image_bin %>'></td>
+                              <td><%= ta.name %></td>
+                                <td><%= ta.cname %></td>
+                                <td><%= ta.date %></td>
+                                 <td><%= ta.time_in %></td>
+                                  <td><%= ta.time_out %></td>
+                                  <td><%= ta.alasan %></td>
+                                  <td><a href ="/teacher_attendance/<%= ta.ta_id %>/edit_remark">  <button class="mb-1 btn-sm btn btn-outline-warning" type="button">Assign Remark</button></a></td>
+                                   
+                          </tr>
+                          <% end %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- END card-->
+    </div>
+</div>
+<script type="text/javascript">
+  
+               $('#datatable4').DataTable({
+            'paging': true, // Table pagination
+            'ordering': true, // Column ordering
+            'info': true, // Bottom left status text
+            responsive: true,
+            // Text translation options
+            // Note the required keywords between underscores (e.g _MENU_)
+            oLanguage: {
+                sSearch: '<em class="fas fa-search"></em>',
+                sLengthMenu: '_MENU_ records per page',
+                info: 'Showing page _PAGE_ of _PAGES_',
+                zeroRecords: 'Nothing found - sorry',
+                infoEmpty: 'No records available',
+                infoFiltered: '(filtered from _MAX_ total records)',
+                oPaginate: {
+                    sNext: '<em class="fa fa-caret-right"></em>',
+                    sPrevious: '<em class="fa fa-caret-left"></em>'
+                }
+            }
+        });
+
+                              $('#datatable5').DataTable({
+            'paging': true, // Table pagination
+            'ordering': true, // Column ordering
+            'info': true, // Bottom left status text
+            responsive: true,
+            // Text translation options
+            // Note the required keywords between underscores (e.g _MENU_)
+            oLanguage: {
+                sSearch: '<em class="fas fa-search"></em>',
+                sLengthMenu: '_MENU_ records per page',
+                info: 'Showing page _PAGE_ of _PAGES_',
+                zeroRecords: 'Nothing found - sorry',
+                infoEmpty: 'No records available',
+                infoFiltered: '(filtered from _MAX_ total records)',
+                oPaginate: {
+                    sNext: '<em class="fa fa-caret-right"></em>',
+                    sPrevious: '<em class="fa fa-caret-left"></em>'
+                }
+            }
+        });
+
+                                             $('#datatable6').DataTable({
+            'paging': true, // Table pagination
+            'ordering': true, // Column ordering
+            'info': true, // Bottom left status text
+            responsive: true,
+            // Text translation options
+            // Note the required keywords between underscores (e.g _MENU_)
+            oLanguage: {
+                sSearch: '<em class="fas fa-search"></em>',
+                sLengthMenu: '_MENU_ records per page',
+                info: 'Showing page _PAGE_ of _PAGES_',
+                zeroRecords: 'Nothing found - sorry',
+                infoEmpty: 'No records available',
+                infoFiltered: '(filtered from _MAX_ total records)',
+                oPaginate: {
+                    sNext: '<em class="fa fa-caret-right"></em>',
+                    sPrevious: '<em class="fa fa-caret-left"></em>'
+                }
+            }
+        });
+
+</script>

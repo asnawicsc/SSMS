@@ -123,7 +123,8 @@
       <td><%= shift.start_time %></td>
       <td><%= shift.end_time %></td>
        <td><%= shift.day %></td>
-<td><a href ="/assign_shift/<%= shift.id %>">  <button class="mb-1 btn-sm btn btn-outline-warning" type="button">Assign Shift</button></a></td>
+<td><a href ="/assign_shift/<%= shift.id %>">  <button class="mb-1 btn-sm btn btn-outline-warning" type="button">Assign Shift</button></a> 
+<a href ="/shift_master/<%= shift.id %>/edit">  <button class="mb-1 btn-sm btn btn-outline-primary" type="button">Manage Shift</button></a> </td>
      
     </tr>
 <% end %>

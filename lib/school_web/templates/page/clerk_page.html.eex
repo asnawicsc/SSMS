@@ -38,7 +38,7 @@
       
        
 
-        <%= render( SchoolWeb.TeacherView ,"teacher_attendances_rfid.html",conn: @conn,not_yet: @not_yet,teachers_attend: @teachers_attend) %>
+        <%= render( SchoolWeb.TeacherView ,"teacher_attendances_rfid.html",conn: @conn,not_yet: @not_yet,teachers_attend2: @teachers_attend2,teachers_attend: @teachers_attend) %>
 
     </div>
 

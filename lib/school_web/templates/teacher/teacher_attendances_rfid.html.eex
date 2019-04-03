@@ -46,14 +46,66 @@
 <div class="row">
    
 
-  <div class="col-md-12">
+  <div class="col-md-6">
         <!-- START card-->
 
         <div class="card card-default">
             <div class="card-body" id="">
                 <form>
                     <div class="form-group">
-                        <label>Attended Teacher</label>
+                        <label>Attended Teacher Time In</label>
+                     
+                    </div>
+                </form>
+                <div class="table-responsive">
+                            <table class="table" id="datatable1">
+                        <thead>
+                            <tr>
+                                <th>Picture</th>
+                                <th>
+                                    <%= gettext("Name") %>
+                                </th>
+                                <th>
+                                    <%= gettext("Chinese Name") %>
+                                </th>
+                                <th>
+                                    <%= gettext("Date") %>
+                                </th>
+                                <th>
+                                    <%= gettext("Time In") %>
+                                </th>
+                               
+                              
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <%= for ta <- @teachers_attend do %>
+                          <tr>
+                              <td class="text-left"> <img id="preview6"  style='width:20px; height: 20px;' src='data:image/png;base64, <%= ta.image_bin %>'></td>
+                              <td><%= ta.name %></td>
+                                <td><%= ta.cname %></td>
+                                <td><%= ta.date %></td>
+                                 <td><%= ta.time_in %></td>
+                               
+                                
+                                  
+                          </tr>
+                          <% end %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- END card-->
+    </div>
+    <div class="col-md-6">
+        <!-- START card-->
+
+        <div class="card card-default">
+            <div class="card-body" id="">
+                <form>
+                    <div class="form-group">
+                        <label>Attended Teacher Time Out</label>
                      
                     </div>
                 </form>
@@ -71,36 +123,24 @@
                                 <th>
                                     <%= gettext("Date") %>
                                 </th>
-                                <th>
-                                    <%= gettext("Time In") %>
-                                </th>
-                               
+    
                                 <th>
                                     <%= gettext("Time Out") %>
                                 </th>
-                                 <th>
-                                    <%= gettext("Status Kehadiran") %>
-                                </th>
-                                 <th>
-                                    <%= gettext("Alasan") %>
-                                </th>
-                                <th>
-                                    
-                                </th>
+                                 
+                                
+
                             </tr>
                         </thead>
                         <tbody>
-                        <%= for ta <- @teachers_attend do %>
+                        <%= for ta <- @teachers_attend2 do %>
                           <tr>
                               <td class="text-left"> <img id="preview6"  style='width:20px; height: 20px;' src='data:image/png;base64, <%= ta.image_bin %>'></td>
                               <td><%= ta.name %></td>
                                 <td><%= ta.cname %></td>
                                 <td><%= ta.date %></td>
-                                 <td><%= ta.time_in %></td>
                                   <td><%= ta.time_out %></td>
-                                  <td><%= ta.remark %></td>
-                                  <td><%= ta.alasan %></td>
-                                   <td><a href ="/teacher_attendance/<%= ta.ta_id %>/edit">  <button class="mb-1 btn-sm btn btn-outline-warning" type="button">Assign Remark</button></a></td>
+                                  
                           </tr>
                           <% end %>
                         </tbody>

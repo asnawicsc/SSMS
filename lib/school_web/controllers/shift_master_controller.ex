@@ -77,7 +77,7 @@ defmodule SchoolWeb.ShiftMasterController do
           select: %{
             id: s.id,
             name: s.name,
-            cname: s.name,
+            cname: s.cname,
             code: s.code,
             shift_id: r.shift_master_id
           }
@@ -107,7 +107,7 @@ defmodule SchoolWeb.ShiftMasterController do
           select: %{
             id: s.id,
             name: s.name,
-            cname: s.name,
+            cname: s.cname,
             code: s.code
           }
         )
@@ -203,7 +203,7 @@ defmodule SchoolWeb.ShiftMasterController do
       {:ok, shift_master} ->
         conn
         |> put_flash(:info, "Shift master updated successfully.")
-        |> redirect(to: shift_master_path(conn, :show, shift_master))
+        |> redirect(to: shift_master_path(conn, :create_shift))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", shift_master: shift_master, changeset: changeset)

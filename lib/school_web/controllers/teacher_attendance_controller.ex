@@ -3,6 +3,7 @@ defmodule SchoolWeb.TeacherAttendanceController do
 
   alias School.Affairs
   alias School.Affairs.TeacherAttendance
+  require IEx
 
   def index(conn, _params) do
     teacher_attendance =
@@ -32,6 +33,106 @@ defmodule SchoolWeb.TeacherAttendanceController do
   def show(conn, %{"id" => id}) do
     teacher_attendance = Affairs.get_teacher_attendance!(id)
     render(conn, "show.html", teacher_attendance: teacher_attendance)
+  end
+
+  def teacher_remark(conn, params) do
+    render(conn, "teacher_remark.html")
+  end
+
+  def find_attandence(conn, params) do
+    start_date = params["start_date"] |> String.split("-")
+
+    s1 = start_date |> Enum.fetch!(0) |> String.to_integer() |> Integer.to_string()
+    s2 = start_date |> Enum.fetch!(1) |> String.to_integer() |> Integer.to_string()
+    s3 = start_date |> Enum.fetch!(2) |> String.to_integer() |> Integer.to_string()
+
+    new_start_date = s1 <> "-" <> s2 <> "-" <> s3
+
+    teachers_attend_full =
+      Repo.all(
+        from(s in School.Affairs.TeacherAttendance,
+          left_join: g in School.Affairs.Teacher,
+          on: s.teacher_id == g.id,
+          where:
+            s.institution_id == ^conn.private.plug_session["institution_id"] and
+              s.semester_id == ^conn.private.plug_session["semester_id"] and
+              s.date == ^new_start_date,
+          select: %{
+            name: g.name,
+            cname: g.cname,
+            image_bin: g.image_bin,
+            id: g.id,
+            ta_id: s.id,
+            time_in: s.time_in,
+            time_out: s.time_out,
+            date: s.date,
+            alasan: s.alasan,
+            remark: s.remark
+          }
+        )
+      )
+      |> Enum.filter(fn x -> x.time_in != nil end)
+      |> Enum.filter(fn x -> x.time_out != nil end)
+
+    teachers_attend =
+      Repo.all(
+        from(s in School.Affairs.TeacherAttendance,
+          left_join: g in School.Affairs.Teacher,
+          on: s.teacher_id == g.id,
+          where:
+            s.institution_id == ^conn.private.plug_session["institution_id"] and
+              s.semester_id == ^conn.private.plug_session["semester_id"] and
+              s.date == ^new_start_date,
+          select: %{
+            name: g.name,
+            cname: g.cname,
+            image_bin: g.image_bin,
+            id: g.id,
+            ta_id: s.id,
+            time_in: s.time_in,
+            time_out: s.time_out,
+            date: s.date,
+            alasan: s.alasan,
+            remark: s.remark
+          }
+        )
+      )
+      |> Enum.filter(fn x -> x.time_in == nil end)
+
+    teachers_attend2 =
+      Repo.all(
+        from(s in School.Affairs.TeacherAttendance,
+          left_join: g in School.Affairs.Teacher,
+          on: s.teacher_id == g.id,
+          where:
+            s.institution_id == ^conn.private.plug_session["institution_id"] and
+              s.semester_id == ^conn.private.plug_session["semester_id"] and
+              s.date == ^new_start_date,
+          select: %{
+            name: g.name,
+            cname: g.cname,
+            image_bin: g.image_bin,
+            id: g.id,
+            ta_id: s.id,
+            time_in: s.time_in,
+            time_out: s.time_out,
+            date: s.date,
+            alasan: s.alasan,
+            remark: s.remark
+          }
+        )
+      )
+      |> Enum.filter(fn x -> x.time_out == nil end)
+
+    not_finish = teachers_attend -- teachers_attend_full
+    not_finish2 = teachers_attend2 -- teachers_attend_full
+
+    render(conn, "find_attandence.html",
+      teachers_attend_full: teachers_attend_full,
+      not_finish: not_finish,
+      not_finish2: not_finish2,
+      new_start_date: new_start_date
+    )
   end
 
   def teacher_attendence_mark(conn, params) do
@@ -169,6 +270,138 @@ defmodule SchoolWeb.TeacherAttendanceController do
       not_yet: not_yet_full,
       teachers_attend: teachers_attend_full
     )
+  end
+
+  def edit_remark(conn, %{"id" => id}) do
+    teacher_attendance = Affairs.get_teacher_attendance!(id)
+
+    new_time_in =
+      if teacher_attendance.time_in != nil do
+        time_in =
+          teacher_attendance.time_in
+          |> String.split(" ")
+          |> Enum.fetch!(1)
+          |> String.split(":")
+
+        ti1 = time_in |> Enum.fetch!(0)
+        ti2 = time_in |> Enum.fetch!(1)
+        ti3 = time_in |> Enum.fetch!(2)
+
+        ti1 =
+          if ti1 |> String.to_integer() <= 9 do
+            "0" <> ti1
+          else
+            ti1
+          end
+
+        ti2 =
+          if ti2 |> String.to_integer() <= 9 do
+            "0" <> ti2
+          else
+            ti2
+          end
+
+        ti3 =
+          if ti3 |> String.to_integer() <= 9 do
+            "0" <> ti3
+          else
+            ti3
+          end
+
+        new_time_in = ti1 <> ":" <> ti2 <> ":" <> ti3
+        new_time_in = new_time_in |> Time.from_iso8601!()
+      else
+        new_time_in = nil
+      end
+
+    new_time_out =
+      if teacher_attendance.time_out != nil do
+        time_out =
+          teacher_attendance.time_out
+          |> String.split(" ")
+          |> Enum.fetch!(1)
+          |> String.split(":")
+
+        to1 = time_out |> Enum.fetch!(0)
+        to2 = time_out |> Enum.fetch!(1)
+        to3 = time_out |> Enum.fetch!(2)
+
+        to1 =
+          if to1 |> String.to_integer() <= 9 do
+            "0" <> to1
+          else
+            to1
+          end
+
+        to2 =
+          if to2 |> String.to_integer() <= 9 do
+            "0" <> to2
+          else
+            to2
+          end
+
+        to3 =
+          if to3 |> String.to_integer() <= 9 do
+            "0" <> to3
+          else
+            to3
+          end
+
+        new_time_out = to3 <> ":" <> to2 <> ":" <> to1
+        new_time_out = new_time_out |> Time.from_iso8601!()
+      else
+        new_time_out = nil
+      end
+
+    teacher_absent_reason =
+      Repo.all(
+        from(s in School.Affairs.TeacherAbsentReason,
+          where: s.institution_id == ^conn.private.plug_session["institution_id"],
+          select: s.absent_reason
+        )
+      )
+
+    render(conn, "edit_remark.html",
+      teacher_attendance: teacher_attendance,
+      teacher_absent_reason: teacher_absent_reason,
+      new_time_out: new_time_out,
+      new_time_in: new_time_in,
+      id: id
+    )
+  end
+
+  def update_teacher_remark(conn, params) do
+    id = params["id"]
+
+    teacher_attendance = Affairs.get_teacher_attendance!(id)
+
+    date = teacher_attendance.date
+
+    time_in =
+      if params["time_in"] != "" do
+        date <> " " <> params["time_in"]
+      else
+      end
+
+    time_out =
+      if params["time_out"] != "" do
+        date <> " " <> params["time_out"]
+      else
+      end
+
+    alasan =
+      if params["remark"] != "Choose a Remark" do
+        params["remark"]
+      else
+      end
+
+    teacher_attendance_params = %{time_in: time_in, time_out: time_out, alasan: alasan}
+
+    Affairs.update_teacher_attendance(teacher_attendance, teacher_attendance_params)
+
+    conn
+    |> put_flash(:info, "Teacher attendance updated successfully.")
+    |> redirect(to: teacher_attendance_path(conn, :teacher_remark))
   end
 
   def edit(conn, %{"id" => id}) do

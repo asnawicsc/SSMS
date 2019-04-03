@@ -5,6 +5,22 @@
     </div>
   <% end %>
 
+      <div class="form-group">
+    <%= label f, :time_in, class: "control-label" %>
+    <%= text_input f, :time_in, class: "form-control" %>
+    <%= error_tag f, :time_in %>
+    Example: 3-4-2019 6:55:24
+  </div>
+
+       <div class="form-group">
+    <%= label f, :time_out, class: "control-label" %>
+    <%= text_input f, :time_out, class: "form-control" %>
+    <%= error_tag f, :time_out %>
+
+    Example: 3-4-2019 15:31:46
+  </div>
+
+
 
     <div class="form-group">
     <%= label f, :alasan, class: "control-label" %>

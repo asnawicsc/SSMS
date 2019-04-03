@@ -582,7 +582,8 @@ defmodule SchoolWeb.ExamController do
               s.class_id == ^class.id and
                 p.institution_id == ^conn.private.plug_session["institution_id"] and
                 s.semester_id == ^exam_master.semester_id,
-            select: %{id: p.id, chinese_name: p.chinese_name, student_name: p.name}
+            select: %{id: p.id, chinese_name: p.chinese_name, student_name: p.name},
+            order_by: [asc: p.name]
           )
         )
 
@@ -633,7 +634,8 @@ defmodule SchoolWeb.ExamController do
               s.class_id == ^class.id and
                 p.institution_id == ^conn.private.plug_session["institution_id"] and
                 s.semester_id == ^exam_master.semester_id,
-            select: %{id: p.id, student_name: p.name}
+            select: %{id: p.id, student_name: p.name},
+            order_by: [asc: p.name]
           )
         )
 
