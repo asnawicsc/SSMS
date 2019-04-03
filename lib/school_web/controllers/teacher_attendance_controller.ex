@@ -276,7 +276,7 @@ defmodule SchoolWeb.TeacherAttendanceController do
     teacher_attendance = Affairs.get_teacher_attendance!(id)
 
     new_time_in =
-      if teacher_attendance.time_in != nil do
+      if teacher_attendance.time_in != nil or teacher_attendance.time_in != "" do
         time_in =
           teacher_attendance.time_in
           |> String.split(" ")
@@ -315,7 +315,7 @@ defmodule SchoolWeb.TeacherAttendanceController do
       end
 
     new_time_out =
-      if teacher_attendance.time_out != nil do
+      if teacher_attendance.time_out != nil or teacher_attendance.time_out != "" do
         time_out =
           teacher_attendance.time_out
           |> String.split(" ")
@@ -347,7 +347,7 @@ defmodule SchoolWeb.TeacherAttendanceController do
             to3
           end
 
-        new_time_out = to3 <> ":" <> to2 <> ":" <> to1
+        new_time_out = to1 <> ":" <> to2 <> ":" <> to3
         new_time_out = new_time_out |> Time.from_iso8601!()
       else
         new_time_out = nil

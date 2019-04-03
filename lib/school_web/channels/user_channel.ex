@@ -3604,22 +3604,69 @@ defmodule SchoolWeb.UserChannel do
                   c = attn.time_in |> String.split(" ") |> Enum.fetch(1)
                   a = time_in |> String.split(" ") |> Enum.fetch(1)
 
+                  day_name = Timex.now().day |> Timex.day_name()
+
                   shift =
                     Repo.all(
                       from(s in School.Affairs.Shift,
                         left_join: r in School.Affairs.ShiftMaster,
                         on: s.shift_master_id == r.id,
                         where: s.teacher_id == ^teacher_id,
-                        select: %{start_time: r.start_time, end_time: r.end_time}
+                        select: %{start_time: r.start_time, end_time: r.end_time, day: r.day}
                       )
                     )
 
                   shift =
                     if shift != [] do
-                      shift |> hd
+                      shiftss =
+                        shift |> Enum.filter(fn x -> x.day |> String.split(",") == day_name end)
+
+                      shifts =
+                        if shiftss != [] do
+                          shift |> hd
+                          %{start_time: shift.start_time, end_time: shift.end_time}
+                        else
+                          %{start_time: "07:30:00", end_time: "13:20:00"}
+                        end
+
+                      shifts
                     else
                       %{start_time: "07:30:00", end_time: "13:20:00"}
                     end
+
+                  tf =
+                    time_in
+                    |> String.split(" ")
+                    |> Enum.fetch!(1)
+                    |> String.split(":")
+
+                  ti1 = tf |> Enum.fetch!(0)
+                  ti2 = tf |> Enum.fetch!(1)
+                  ti3 = tf |> Enum.fetch!(2)
+
+                  ti1 =
+                    if ti1 |> String.to_integer() <= 9 do
+                      "0" <> ti1
+                    else
+                      ti1
+                    end
+
+                  ti2 =
+                    if ti2 |> String.to_integer() <= 9 do
+                      "0" <> ti2
+                    else
+                      ti2
+                    end
+
+                  ti3 =
+                    if ti3 |> String.to_integer() <= 9 do
+                      "0" <> ti3
+                    else
+                      ti3
+                    end
+
+                  new_time_in = ti1 <> ":" <> ti2 <> ":" <> ti3
+                  a = new_time_in
 
                   remark =
                     if a < shift.end_time do
