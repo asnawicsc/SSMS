@@ -538,6 +538,8 @@ defmodule SchoolWeb.ExamController do
       Repo.all(
         from(
           s in School.Affairs.ExamMark,
+          left_join: p in Student,
+          on: p.id == s.student_id,
           where:
             s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
           select: %{
@@ -545,8 +547,10 @@ defmodule SchoolWeb.ExamController do
             subject_id: s.subject_id,
             exam_id: s.exam_id,
             student_id: s.student_id,
+            student_name: p.name,
             mark: s.mark
-          }
+          },
+          order_by: [asc: p.name]
         )
       )
 
@@ -728,7 +732,8 @@ defmodule SchoolWeb.ExamController do
             left_join: p in Student,
             on: p.id == s.sudent_id,
             where: s.class_id == ^class_id,
-            select: %{id: p.id, student_name: p.name}
+            select: %{id: p.id, student_name: p.name},
+            order_by: [asc: p.name]
           )
         )
 
@@ -761,7 +766,8 @@ defmodule SchoolWeb.ExamController do
             left_join: s in Student,
             on: s.id == i.sudent_id,
             where: i.class_id == ^class.id,
-            select: %{name: s.name, student_id: s.id}
+            select: %{name: s.name, student_id: s.id},
+            order_by: [asc: s.name]
           )
         )
 

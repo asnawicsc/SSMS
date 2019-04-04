@@ -201,14 +201,14 @@
                                                                   <%= if student.height == nil do %>
                                                                     <div>Not set<div>
                                                                   <% else %>
-                                                                    <div><%= student.height %></div>  
+                                                                    <div><%= student.height |> String.split("-") |> Enum.fetch!(1) %></div>  
                                                                   <% end %>               
                                                               </td>
                                                               <td class="text-left">              
                                                                   <%= if student.weight == nil do %>
                                                                     <div>Not set<div>
                                                                   <% else %>
-                                                                    <div><%= student.weight %></div>  
+                                                                    <div><%= student.weight |> String.split("-") |> Enum.fetch!(1) %></div>  
                                                                   <% end %>                   
                                                               </td>
                                                               <td>
