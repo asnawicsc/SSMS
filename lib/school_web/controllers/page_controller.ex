@@ -576,7 +576,8 @@ defmodule SchoolWeb.PageController do
 
     teachers_attend_full =
       Repo.all(
-        from(s in School.Affairs.TeacherAttendance,
+        from(
+          s in School.Affairs.TeacherAttendance,
           left_join: g in School.Affairs.Teacher,
           on: s.teacher_id == g.id,
           where:
@@ -600,7 +601,8 @@ defmodule SchoolWeb.PageController do
 
     teachers_attend_full2 =
       Repo.all(
-        from(s in School.Affairs.TeacherAttendance,
+        from(
+          s in School.Affairs.TeacherAttendance,
           left_join: g in School.Affairs.Teacher,
           on: s.teacher_id == g.id,
           where:
@@ -1031,7 +1033,11 @@ defmodule SchoolWeb.PageController do
                 chinese_name: s.chinese_name,
                 class: c.name,
                 ic: s.ic,
-                student_no: s.student_no
+                student_no: s.student_no,
+                image_bin: s.image_bin,
+                dob: s.dob,
+                b_cert: s.b_cert,
+                sex: s.sex
               }
             )
           )
@@ -1062,7 +1068,31 @@ defmodule SchoolWeb.PageController do
           f_bin =
             f_bin |> String.replace("_ic_no_", if(student.ic == nil, do: "", else: student.ic))
 
+          f_bin =
+            f_bin
+            |> String.replace(
+              "_dob_",
+              if(student.dob == nil, do: "", else: hd(String.split(student.dob, " ")))
+            )
+
+          f_bin =
+            f_bin
+            |> String.replace("_b_cert_", if(student.b_cert == nil, do: "", else: student.b_cert))
+
+          f_bin =
+            f_bin
+            |> String.replace("_sex_", if(student.sex == nil, do: "", else: student.sex))
+
           f_bin = f_bin |> String.replace("_membership_code_", student.student_no)
+          IO.inspect(student.name)
+          IO.inspect(student.image_bin)
+
+          if student.image_bin != nil do
+            image_str2 =
+              "<img style='width: 100%;' src='data:image/png;base64, #{student.image_bin}'>"
+
+            f_bin = f_bin |> String.replace("_profilepic_", image_str2)
+          end
 
           if b_bin != nil do
             # back bin
