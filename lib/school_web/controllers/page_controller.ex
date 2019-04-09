@@ -1012,6 +1012,7 @@ defmodule SchoolWeb.PageController do
         response |> Poison.decode!() |> hd()
       end
 
+    IO.inspect(template)
     lib_id = inst.library_organization_id
     student_ids = params["ids"] |> String.split(",")
 
@@ -1044,7 +1045,7 @@ defmodule SchoolWeb.PageController do
 
         if students != [] do
           student = hd(students)
-
+          IO.inspect(student)
           f_bin = template["front_bin"]
           b_bin = template["back_bin"]
 
@@ -1072,7 +1073,7 @@ defmodule SchoolWeb.PageController do
             f_bin
             |> String.replace(
               "_dob_",
-              if(student.dob == nil, do: "", else: hd(String.split(student.dob, " ")))
+              if(student.dob == nil, do: "", else: student.dob)
             )
 
           f_bin =
@@ -1126,7 +1127,15 @@ defmodule SchoolWeb.PageController do
           {:ok, bin} = File.read(image_path <> "/#{student.student_no}.png")
 
           image_bin = Base.encode64(bin)
-          image_str = "<img style='width: 80%;' src='data:image/png;base64, #{image_bin}'>"
+
+          size =
+            if String.length(student.student_no) > 4 do
+              "80"
+            else
+              "40"
+            end
+
+          image_str = "<img style='width: #{size}%;' src='data:image/png;base64, #{image_bin}'>"
 
           File.rm!(image_path <> "/#{student.student_no}.png")
 
