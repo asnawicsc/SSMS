@@ -9,13 +9,21 @@ defmodule SchoolWeb.LevelController do
     levels =
       Affairs.list_levels()
       |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
-      |> Enum.map(fn x -> %{id: x.id, name: x.name, student_ids: add_student_ids(x.id)} end)
+      |> Enum.map(fn x -> %{id: x.id, name: x.name, student_ids: add_student_ids(x.id, conn)} end)
 
     render(conn, "index.html", levels: levels)
   end
 
-  def add_student_ids(level_id) do
-    Repo.all(from(sc in StudentClass, where: sc.level_id == ^level_id, select: sc.sudent_id))
+  def add_student_ids(level_id, conn) do
+    Repo.all(
+      from(sc in StudentClass,
+        where:
+          sc.level_id == ^level_id and
+            sc.institute_id == ^conn.private.plug_session["institution_id"] and
+            sc.semester_id == ^conn.private.plug_session["semester_id"],
+        select: sc.sudent_id
+      )
+    )
     |> Enum.join(",")
   end
 

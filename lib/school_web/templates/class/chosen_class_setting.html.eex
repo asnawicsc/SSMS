@@ -169,7 +169,8 @@
 
                         </div>
                         <div class="tab-pane" id="tabSetting5">
-                       
+                        <a href="/edit_height_weight_all/class_id/<%=@class.id %>/semester_id/<%= @semester_id %>">    <button class="btn btn-labeled btn-info btn-xs mb-2" type="button">
+                                                                 <span class="btn-label"><i class="fa fa-wrench"></i></span>Edit All Student Hight & Weight</button></a>
                                           <div class="row">
                                                 <div class="col-lg-12" aria-label="student_table">
                                                   <div class="card card-default d-none d-lg-block">

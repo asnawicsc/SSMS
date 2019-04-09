@@ -696,6 +696,7 @@ defmodule SchoolWeb.ClassController do
           select: %{
             name: c.name,
             level: l.name,
+            id: c.id,
             teacher_id: c.teacher_id,
             remark: c.remarks,
             institution: i.name

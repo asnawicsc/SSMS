@@ -1827,6 +1827,39 @@ defmodule SchoolWeb.StudentController do
     render(conn, "height_weight_semester.html", students: students, semester_id: semester_id)
   end
 
+  def edit_height_weight_all(conn, params) do
+    semester_id = conn.private.plug_session["semester_id"] |> Integer.to_string()
+
+    students =
+      Repo.all(
+        from(
+          st in StudentClass,
+          left_join: s in Student,
+          on:
+            s.id == st.sudent_id and
+              s.institution_id == ^conn.private.plug_session["institution_id"],
+          where:
+            st.class_id == ^params["class_id"] and
+              st.semester_id == ^conn.private.plug_session["semester_id"],
+          select: %{
+            id: st.sudent_id,
+            name: s.name,
+            chinese_name: s.chinese_name,
+            image_bin: s.image_bin,
+            height: s.height,
+            weight: s.weight
+          },
+          order_by: [asc: s.name]
+        )
+      )
+
+    render(conn, "edit_height_weight_all.html",
+      students: students,
+      semester_id: semester_id,
+      class_id: params["class_id"]
+    )
+  end
+
   def edit_height_weight(conn, params) do
     student = Repo.get(Student, params["student_id"])
 
@@ -1880,6 +1913,83 @@ defmodule SchoolWeb.StudentController do
     student = Map.put(student, :weight, weight)
 
     render(conn, "edit_height_weight.html", student: student, semester_id: params["semester_id"])
+  end
+
+  def submit_height_weight_all(conn, params) do
+    student = params["student"]
+    semester_id = params["semester_id"]
+    class_id = params["class_id"]
+
+    for item <- student do
+      student_id = item |> elem(0)
+
+      student = Repo.get(Student, student_id)
+
+      heg = item |> elem(1) |> Enum.fetch!(0) |> elem(1)
+      weg = item |> elem(1) |> Enum.fetch!(1) |> elem(1)
+
+      height =
+        if heg == "0" do
+          height = Enum.join([params["semester_id"], heg], "-")
+          # weight = Enum.join([payload["lvl_id"], map["weight"]], "-")
+        else
+          cur_height = Enum.join([params["semester_id"], heg], "-")
+          ex_height = String.split(student.height, ",")
+
+          lists =
+            for ex <- ex_height do
+              l_id = String.split(ex, "-") |> List.to_tuple() |> elem(0)
+
+              if l_id != semester_id do
+                ex
+              end
+            end
+            |> Enum.reject(fn x -> x == nil end)
+
+          if lists != [] do
+            lists = Enum.join(lists, ",")
+            Enum.join([lists, cur_height], ",")
+          else
+            Enum.join([params["semester_id"], heg], "-")
+          end
+        end
+
+      weight =
+        if weg == "0" do
+          weight = Enum.join([params["semester_id"], weg], "-")
+          # weight = Enum.join([payload["lvl_id"], map["weight"]], "-")
+        else
+          cur_weight = Enum.join([params["semester_id"], weg], "-")
+          ex_weight = String.split(student.weight, ",")
+
+          lists =
+            for ex <- ex_weight do
+              l_id = String.split(ex, "-") |> List.to_tuple() |> elem(0)
+
+              if l_id != semester_id do
+                ex
+              end
+            end
+            |> Enum.reject(fn x -> x == nil end)
+
+          if lists != [] do
+            lists = Enum.join(lists, ",")
+            Enum.join([lists, cur_weight], ",")
+          else
+            Enum.join([params["semester_id"], weg], "-")
+          end
+        end
+
+      Student.changeset(student, %{
+        height: height,
+        weight: weight
+      })
+      |> Repo.update()
+    end
+
+    conn
+    |> put_flash(:info, "Height and weight updated successfully.")
+    |> redirect(to: "/class_setting/#{class_id}")
   end
 
   def submit_height_weight(conn, params) do

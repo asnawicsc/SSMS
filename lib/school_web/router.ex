@@ -236,7 +236,15 @@ defmodule SchoolWeb.Router do
     get("/student_lists/:user_id", StudentController, :student_lists)
     get("/height_weight_semester/:class_id", StudentController, :height_weight_semester)
     get("/edit_height_weight/:student_id/:semester_id", StudentController, :edit_height_weight)
+
+    get(
+      "/edit_height_weight_all/class_id/:class_id/semester_id/:semester_id",
+      StudentController,
+      :edit_height_weight_all
+    )
+
     get("/submit_height_weight", StudentController, :submit_height_weight)
+    get("/submit_height_weight_all", StudentController, :submit_height_weight_all)
 
     resources("/levels", LevelController)
     resources("/semesters", SemesterController)
