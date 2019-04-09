@@ -57,6 +57,44 @@ defmodule SchoolWeb.ExamPeriodController do
     )
   end
 
+  def edit_exam_list(conn, params) do
+    level =
+      Repo.get_by(Level,
+        name: params["level"],
+        institution_id: conn.private.plug_session["institution_id"]
+      )
+
+    exam_details =
+      Repo.all(
+        from(
+          e in Exam,
+          left_join: em in ExamMaster,
+          on: em.id == e.exam_master_id,
+          left_join: s in Subject,
+          on: e.subject_id == s.id,
+          left_join: sm in Semester,
+          on: em.semester_id == sm.id,
+          left_join: l in Level,
+          on: em.level_id == l.id,
+          where:
+            em.institution_id == ^conn.private.plug_session["institution_id"] and
+              sm.id == ^params["semester_id"] and em.id == ^params["exam_name"] and
+              em.level_id == ^params["level"],
+          select: %{
+            exam_name: em.name,
+            subject: s.description,
+            exam_id: e.id
+          }
+        )
+      )
+
+    render(
+      conn,
+      "edit_exam_list.html",
+      exam_details: exam_details
+    )
+  end
+
   def submit_exam_period(conn, params) do
     exams = Map.keys(params)
 

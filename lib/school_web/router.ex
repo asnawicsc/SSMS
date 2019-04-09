@@ -135,9 +135,15 @@ defmodule SchoolWeb.Router do
     resources("/examperiod", ExamPeriodController)
 
     get(
-      "/show_exam_period/:exam_name/semester/:semester_id",
+      "/show_exam_period/:exam_name/semester/:semester_id/standard/:level",
       ExamPeriodController,
       :show_exam_period
+    )
+
+    get(
+      "/edit_exam_list/:exam_name/semester/:semester_id/standard/:level",
+      ExamPeriodController,
+      :edit_exam_list
     )
 
     get(
