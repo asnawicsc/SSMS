@@ -1892,6 +1892,7 @@ defmodule SchoolWeb.UserChannel do
             student_id: s.id,
             student_name: s.name,
             student_mark: e.mark,
+            student_grade: e.grade,
             chinese_name: s.chinese_name,
             sex: s.sex,
             level_id: g.level_id
@@ -1981,32 +1982,58 @@ defmodule SchoolWeb.UserChannel do
       for item <- all_mark do
         subject_code = item |> elem(0)
 
-        datas = item |> elem(1)
+        subject =
+          Repo.get_by(School.Affairs.Subject,
+            code: subject_code,
+            institution_id: inst_id
+          )
 
-        for data <- datas do
-          student_mark = data.student_mark
+        if subject.with_mark != 1 do
+          datas = item |> elem(1)
 
-          grades =
-            Repo.all(
-              from(
-                g in School.Affairs.ExamGrade,
-                where:
-                  g.institution_id == ^inst_id and g.exam_master_id == ^exam_master.exam_master_id
+          for data <- datas do
+            student_mark = data.student_mark
+
+            %{
+              student_id: data.student_id,
+              student_name: data.student_name,
+              grade: data.student_grade,
+              gpa: 0,
+              subject_code: data.subject_code,
+              student_mark: 0,
+              chinese_name: data.chinese_name,
+              sex: data.sex
+            }
+          end
+        else
+          datas = item |> elem(1)
+
+          for data <- datas do
+            student_mark = data.student_mark
+
+            grades =
+              Repo.all(
+                from(
+                  g in School.Affairs.ExamGrade,
+                  where:
+                    g.institution_id == ^inst_id and
+                      g.exam_master_id == ^exam_master.exam_master_id
+                )
               )
-            )
 
-          for grade <- grades do
-            if student_mark >= grade.min and student_mark <= grade.max and student_mark != -1 do
-              %{
-                student_id: data.student_id,
-                student_name: data.student_name,
-                grade: grade.name,
-                gpa: grade.gpa,
-                subject_code: data.subject_code,
-                student_mark: data.student_mark,
-                chinese_name: data.chinese_name,
-                sex: data.sex
-              }
+            for grade <- grades do
+              if student_mark >= grade.min and student_mark <= grade.max and student_mark != -1 do
+                %{
+                  student_id: data.student_id,
+                  student_name: data.student_name,
+                  grade: grade.name,
+                  gpa: grade.gpa,
+                  subject_code: data.subject_code,
+                  student_mark: data.student_mark,
+                  chinese_name: data.chinese_name,
+                  sex: data.sex
+                }
+              end
             end
           end
         end
@@ -2016,11 +2043,20 @@ defmodule SchoolWeb.UserChannel do
 
     news = mark1 |> Enum.group_by(fn x -> x.student_id end)
 
+    subject_all =
+      Repo.all(
+        from(s in School.Affairs.Subject,
+          where: s.institution_id == ^inst_id and s.with_mark == 1,
+          select: s.code
+        )
+      )
+
     z =
       for new <- news do
         total =
           new
           |> elem(1)
+          |> Enum.filter(fn x -> x.subject_code in subject_all end)
           |> Enum.map(fn x -> x.student_mark end)
           |> Enum.filter(fn x -> x != -1 end)
           |> Enum.sum()
@@ -2028,6 +2064,7 @@ defmodule SchoolWeb.UserChannel do
         per =
           new
           |> elem(1)
+          |> Enum.filter(fn x -> x.subject_code in subject_all end)
           |> Enum.map(fn x -> x.student_mark end)
           |> Enum.filter(fn x -> x != -1 end)
           |> Enum.count()
@@ -2050,7 +2087,12 @@ defmodule SchoolWeb.UserChannel do
         f = new |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "F" end)
         g = new |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "G" end)
 
-        total_gpa = new |> elem(1) |> Enum.map(fn x -> Decimal.to_float(x.gpa) end) |> Enum.sum()
+        total_gpa =
+          new
+          |> elem(1)
+          |> Enum.filter(fn x -> x.subject_code in subject_all end)
+          |> Enum.map(fn x -> Decimal.to_float(x.gpa) end)
+          |> Enum.sum()
 
         cgpa = (total_gpa / per) |> Float.round(2)
         total_average = (total / total_per * 100) |> Float.round(2)
@@ -2112,6 +2154,11 @@ defmodule SchoolWeb.UserChannel do
 
     total_student = news |> Map.keys() |> Enum.count()
 
+    institution =
+      Repo.get_by(School.Settings.Institution, %{
+        id: inst_id
+      })
+
     html =
       if exam_mark != [] do
         html =
@@ -2126,7 +2173,8 @@ defmodule SchoolWeb.UserChannel do
             total_student: total_student,
             class_id: payload["class_id"],
             exam_id: exam_master.exam_master_id,
-            csrf: payload["csrf"]
+            csrf: payload["csrf"],
+            institution: institution
           )
       else
         html = "No Data Inside"
@@ -2177,6 +2225,7 @@ defmodule SchoolWeb.UserChannel do
             student_id: s.id,
             student_name: s.name,
             student_mark: e.mark,
+            student_grade: e.grade,
             chinese_name: s.chinese_name,
             sex: s.sex,
             level_id: g.level_id
@@ -2286,36 +2335,68 @@ defmodule SchoolWeb.UserChannel do
 
         datas = item |> elem(1)
 
-        for data <- datas do
-          student_mark = data.student_mark
+        subject =
+          Repo.get_by(School.Affairs.Subject,
+            code: subject_code,
+            institution_id: inst_id
+          )
 
-          student_class =
-            Repo.get_by(School.Affairs.StudentClass, %{
-              sudent_id: data.student_id,
-              semester_id: exam_master.semester_id
-            })
+        if subject.with_mark != 1 do
+          datas = item |> elem(1)
 
-          grades =
-            Repo.all(
-              from(
-                g in School.Affairs.ExamGrade,
-                where: g.institution_id == ^inst_id and g.exam_master_id == ^exam_master.id
+          for data <- datas do
+            student_mark = data.student_mark
+
+            student_class =
+              Repo.get_by(School.Affairs.StudentClass, %{
+                sudent_id: data.student_id,
+                semester_id: exam_master.semester_id
+              })
+
+            %{
+              student_id: data.student_id,
+              student_name: data.student_name,
+              grade: data.student_grade,
+              gpa: 0,
+              subject_code: subject_code,
+              student_mark: 0,
+              class_id: student_class.class_id,
+              chinese_name: data.chinese_name,
+              sex: data.sex
+            }
+          end
+        else
+          for data <- datas do
+            student_mark = data.student_mark
+
+            student_class =
+              Repo.get_by(School.Affairs.StudentClass, %{
+                sudent_id: data.student_id,
+                semester_id: exam_master.semester_id
+              })
+
+            grades =
+              Repo.all(
+                from(
+                  g in School.Affairs.ExamGrade,
+                  where: g.institution_id == ^inst_id and g.exam_master_id == ^exam_master.id
+                )
               )
-            )
 
-          for grade <- grades do
-            if student_mark >= grade.min and student_mark <= grade.max do
-              %{
-                student_id: data.student_id,
-                student_name: data.student_name,
-                grade: grade.name,
-                gpa: grade.gpa,
-                subject_code: subject_code,
-                student_mark: student_mark,
-                class_id: student_class.class_id,
-                chinese_name: data.chinese_name,
-                sex: data.sex
-              }
+            for grade <- grades do
+              if student_mark >= grade.min and student_mark <= grade.max do
+                %{
+                  student_id: data.student_id,
+                  student_name: data.student_name,
+                  grade: grade.name,
+                  gpa: grade.gpa,
+                  subject_code: subject_code,
+                  student_mark: student_mark,
+                  class_id: student_class.class_id,
+                  chinese_name: data.chinese_name,
+                  sex: data.sex
+                }
+              end
             end
           end
         end
@@ -2325,11 +2406,20 @@ defmodule SchoolWeb.UserChannel do
 
     news = mark1 |> Enum.group_by(fn x -> x.student_id end)
 
+    subject_all =
+      Repo.all(
+        from(s in School.Affairs.Subject,
+          where: s.institution_id == ^inst_id and s.with_mark == 1,
+          select: s.code
+        )
+      )
+
     z =
       for new <- news do
         total =
           new
           |> elem(1)
+          |> Enum.filter(fn x -> x.subject_code in subject_all end)
           |> Enum.map(fn x -> x.student_mark end)
           |> Enum.filter(fn x -> x != -1 end)
           |> Enum.sum()
@@ -2337,6 +2427,7 @@ defmodule SchoolWeb.UserChannel do
         per =
           new
           |> elem(1)
+          |> Enum.filter(fn x -> x.subject_code in subject_all end)
           |> Enum.map(fn x -> x.student_mark end)
           |> Enum.filter(fn x -> x != -1 end)
           |> Enum.count()
@@ -2361,7 +2452,12 @@ defmodule SchoolWeb.UserChannel do
         f = new |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "F" end)
         g = new |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "G" end)
 
-        total_gpa = new |> elem(1) |> Enum.map(fn x -> Decimal.to_float(x.gpa) end) |> Enum.sum()
+        total_gpa =
+          new
+          |> elem(1)
+          |> Enum.filter(fn x -> x.subject_code in subject_all end)
+          |> Enum.map(fn x -> Decimal.to_float(x.gpa) end)
+          |> Enum.sum()
 
         cgpa = (total_gpa / per) |> Float.round(2)
 
@@ -2466,6 +2562,11 @@ defmodule SchoolWeb.UserChannel do
 
     total_student = t |> Enum.count()
 
+    institution =
+      Repo.get_by(School.Settings.Institution, %{
+        id: inst_id
+      })
+
     html =
       Phoenix.View.render_to_string(
         SchoolWeb.ExamView,
@@ -2478,7 +2579,9 @@ defmodule SchoolWeb.UserChannel do
         level_id: payload["standard_id"],
         csrf: payload["csrf"],
         total_student_in_class: total_stud_in_class,
-        total_student: total_student
+        total_student: total_student,
+        level: standard,
+        institution: institution
       )
 
     {:reply, {:ok, %{html: html}}, socket}

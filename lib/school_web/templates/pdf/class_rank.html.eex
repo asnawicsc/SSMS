@@ -1,58 +1,33 @@
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-    <style>
-    html {
-      font-family: sans-serif;
-    }
-    table {
-      border-collapse: collapse;
-      border: 2px solid rgb(200,200,200);
-      letter-spacing: 1px;
-      font-size: 0.8rem;
-    }
-    td, th {
-      border: 1px solid rgb(190,190,190);
-      padding: 2px 4px;
-    }
-    td {
-      text-align: center;
-    }
-    caption {
-      padding: 2px;
-    }
-    </style>
-  </head>
 
-  <body>
 
-    <div class="row" >
+<table class="table" border="1" width="100%">
   
-     <h3>KELAS :<%= @class.name %></h3>
-     <h3>BIL MURID  :<%= @total_student %></h3>
-     <h3>EXAM  :<%= @exam_name %></h3>
- </div>
+  <tbody>
+<td >
+<b  style="font-size: 25px;"><%= @institution.name %></b></br>
+班级<b> Class: <%= @class.name %></b> <br>
+老师<b> Nama GURU : ________________________________________________________________ </b><br>
+事项<b> PERKARA &nbsp;&nbsp;&nbsp;: <%= @exam_name %></b><b style="margin-left: 10px;"> 日期 Tarikh:<%= SchoolWeb.LayoutView.my_time(DateTime.utc_now) %></b> 
+
+</td>
+    </tbody>
+</table>
     <table class="display" align="center" style="border-collapse: collapse;" border="1" width="100%">
       <colgroup>
         <col col span="2" >
       </colgroup>
+     
       <tr align="center">
-        <th style="background-color:#97DB9A;" colspan="3">MAKLUMAT MURID</th>
-  
-        <th style="background-color:#97DB9A;" colspan="<%=@mark|>Enum.count()%>">MATA PELAJARAN</th>
-        <th style="background-color:#97DB9A;" colspan="3">KEPUTUSAN</th>
-      </tr>
-      <tr align="center">
-        <th style="background-color:#97DB9A;">No</th>
-        <th style="background-color:#97DB9A;">Name</th>
-        <th style="background-color:#97DB9A;">Jan</th>
+        <th>No</th>
+        <th >Name</th>
+        <th >Jan</th>
         <%= for item <- @mark|>Enum.sort_by(fn x -> x end) do %>    
          
-        <th style="background-color:#97DB9A;"  align="center"><%= item|>elem(0) %></th>
+        <th  align="center" colspan="2"><%= item|>elem(0) %></th>
         <% end %>
-        <th style="background-color:#97DB9A;">Jumlah</th>
-           <th style="background-color:#97DB9A;">Purata</th>
-         <th style="background-color:#97DB9A;">Class</th>
+        <th >Jumlah</th>
+           <th >Purata</th>
+         <th>Class</th>
       </tr>
      
 
@@ -69,7 +44,9 @@
          <%= if  subject.student_mark != -1 do %>
            
      
-         <th><%= subject.student_mark %></th>
+              <th><%= subject.student_mark %></th>
+          <th><%= subject.grade %></th>
+
 
          <% else %>
 
@@ -82,6 +59,7 @@
         <%= if  subject.student_mark != -1 do %>
 
          <th ><font color="red">*<%= subject.student_mark %></font></th>
+          <th ><font color="red"><%= subject.grade %></font></th>
 
                <% else %>
 

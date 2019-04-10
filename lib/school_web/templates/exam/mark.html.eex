@@ -34,8 +34,13 @@
                                      <td><%= item.chinese_name %></td>
                                      <td><%= @exam_master.name %></td>
                                      <td><%= @subject.description %></td>
-                                    <td><input type="number" min="0" max="100" name="mark[<%=item.id %>]"></td>
-                                
+                                    <td><%= if @subject.with_mark == 1 do %>
+
+                                      <input type="number" min="0" max="100" name="mark[<%=item.id %>]"></td>
+                                      <% else %>
+                                      <input type="text" name="grade[<%=item.id %>]" placeholder="A,B,C,D,E,F">
+                                      <% end %></td>
+                                    
                                  </tr>
                                     <% end %>
                               </tbody>

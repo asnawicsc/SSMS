@@ -11,6 +11,7 @@ defmodule School.Affairs.Subject do
     field(:sysdef, :integer)
     field(:institution_id, :integer)
     field(:color, :string)
+    field(:with_mark, :integer, default: 0)
     has_many(:period, School.Affairs.Period)
     timestamps()
   end
@@ -19,6 +20,7 @@ defmodule School.Affairs.Subject do
   def changeset(subject, attrs) do
     subject
     |> cast(attrs, [
+      :with_mark,
       :timetable_description,
       :timetable_code,
       :color,

@@ -1842,7 +1842,7 @@ defmodule SchoolWeb.StudentController do
             st.class_id == ^params["class_id"] and
               st.semester_id == ^conn.private.plug_session["semester_id"],
           select: %{
-            id: st.sudent_id,
+            id: s.id,
             name: s.name,
             chinese_name: s.chinese_name,
             image_bin: s.image_bin,
@@ -1923,13 +1923,17 @@ defmodule SchoolWeb.StudentController do
     for item <- student do
       student_id = item |> elem(0)
 
-      student = Repo.get(Student, student_id)
+      student =
+        Repo.get_by(Student, %{
+          id: String.to_integer(student_id),
+          institution_id: conn.private.plug_session["institution_id"]
+        })
 
       heg = item |> elem(1) |> Enum.fetch!(0) |> elem(1)
       weg = item |> elem(1) |> Enum.fetch!(1) |> elem(1)
 
       height =
-        if heg == "0" do
+        if student.height == nil do
           height = Enum.join([params["semester_id"], heg], "-")
           # weight = Enum.join([payload["lvl_id"], map["weight"]], "-")
         else
@@ -1955,7 +1959,7 @@ defmodule SchoolWeb.StudentController do
         end
 
       weight =
-        if weg == "0" do
+        if student.weight == nil do
           weight = Enum.join([params["semester_id"], weg], "-")
           # weight = Enum.join([payload["lvl_id"], map["weight"]], "-")
         else

@@ -61,7 +61,7 @@
                  <div class="row">
                   <span><%= link "Edit", to: user_path(@conn, :edit, @user), class: "btn btn-primary" %></span>
                   &nbsp;
-                <span><%= link "Back", to: user_path(@conn, :index), class: "btn btn-info" %></span>
+           
 
               </div>
                 </div>

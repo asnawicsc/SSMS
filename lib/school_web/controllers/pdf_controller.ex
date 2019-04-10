@@ -164,65 +164,118 @@ defmodule SchoolWeb.PdfController do
                   subject_name: sb.description,
                   subject_cname: sb.cdesc,
                   mark: em.mark,
+                  grade: em.grade,
                   standard_id: sc.level_id
                 }
               )
             )
             |> Enum.sort()
 
-          mark =
-            for exam <- list_exam |> Enum.with_index() do
-              no = exam |> elem(1)
-              exam = exam |> elem(0)
+          {mark, grade} =
+            if item.with_mark == 1 do
+              mark =
+                for exam <- list_exam |> Enum.with_index() do
+                  no = exam |> elem(1)
+                  exam = exam |> elem(0)
 
-              fit = all |> Enum.filter(fn x -> x.exam_master_id == exam.id end)
+                  fit = all |> Enum.filter(fn x -> x.exam_master_id == exam.id end)
 
-              fit =
-                if fit == [] do
-                  ""
-                else
-                  a = fit |> hd()
+                  fit =
+                    if fit == [] do
+                      ""
+                    else
+                      a = fit |> hd()
 
-                  a.mark |> Integer.to_string()
-                end
-
-              {no + 1, fit}
-            end
-
-          grade =
-            for exam <- list_exam |> Enum.with_index() do
-              no = exam |> elem(1)
-              exam = exam |> elem(0)
-
-              fit = all |> Enum.filter(fn x -> x.exam_master_id == exam.id end)
-
-              fit =
-                if fit == [] do
-                  ""
-                else
-                  a = fit |> hd()
-
-                  grades =
-                    Repo.all(
-                      from(
-                        g in School.Affairs.ExamGrade,
-                        where:
-                          g.institution_id == ^conn.private.plug_session["institution_id"] and
-                            g.exam_master_id == ^a.exam_master_id
-                      )
-                    )
-
-                  grade =
-                    for grade <- grades do
-                      if a.mark >= grade.min and a.mark <= grade.max do
-                        grade.name
-                      end
+                      a.mark |> Integer.to_string()
                     end
-                    |> Enum.filter(fn x -> x != nil end)
-                    |> hd
+
+                  {no + 1, fit}
                 end
 
-              {no + 1, fit}
+              grade =
+                for exam <- list_exam |> Enum.with_index() do
+                  no = exam |> elem(1)
+                  exam = exam |> elem(0)
+
+                  fit = all |> Enum.filter(fn x -> x.exam_master_id == exam.id end)
+
+                  fit =
+                    if fit == [] do
+                      ""
+                    else
+                      a = fit |> hd()
+
+                      grades =
+                        Repo.all(
+                          from(
+                            g in School.Affairs.ExamGrade,
+                            where:
+                              g.institution_id == ^conn.private.plug_session["institution_id"] and
+                                g.exam_master_id == ^a.exam_master_id
+                          )
+                        )
+
+                      grade =
+                        for grade <- grades do
+                          if a.mark >= grade.min and a.mark <= grade.max do
+                            grade.name
+                          end
+                        end
+                        |> Enum.filter(fn x -> x != nil end)
+                        |> hd
+                    end
+
+                  {no + 1, fit}
+                end
+
+              {mark, grade}
+            else
+              mark =
+                for exam <- list_exam |> Enum.with_index() do
+                  no = exam |> elem(1)
+                  exam = exam |> elem(0)
+
+                  fit = all |> Enum.filter(fn x -> x.exam_master_id == exam.id end)
+
+                  fit =
+                    if fit == [] do
+                      ""
+                    else
+                      a = fit |> hd()
+
+                      "0"
+                    end
+
+                  {no + 1, fit}
+                end
+
+              grade =
+                for exam <- list_exam |> Enum.with_index() do
+                  no = exam |> elem(1)
+                  exam = exam |> elem(0)
+
+                  fit = all |> Enum.filter(fn x -> x.exam_master_id == exam.id end)
+
+                  fit =
+                    if fit == [] do
+                      ""
+                    else
+                      a = fit |> hd()
+
+                      grade =
+                        if a.grade == nil do
+                          ""
+                        else
+                          a.grade
+                        end
+
+                      grades = grade
+                    end
+
+                  {no + 1, fit}
+                end
+
+              {mark, grade}
             end
 
           finish =
@@ -348,7 +401,8 @@ defmodule SchoolWeb.PdfController do
               on: sc.class_id == c.id,
               left_join: sb in School.Affairs.Subject,
               on: em.subject_id == sb.id,
-              where: c.name == ^class_name and sc.semester_id == ^semester_id,
+              where:
+                c.name == ^class_name and sc.semester_id == ^semester_id and sb.with_mark == 1,
               select: %{
                 student_id: s.id,
                 student_name: s.name,
@@ -570,7 +624,9 @@ defmodule SchoolWeb.PdfController do
               on: sc.class_id == c.id,
               left_join: sb in School.Affairs.Subject,
               on: em.subject_id == sb.id,
-              where: e.level_id == ^class_info.level_id and sc.semester_id == ^semester_id,
+              where:
+                e.level_id == ^class_info.level_id and sc.semester_id == ^semester_id and
+                  sb.with_mark == 1,
               select: %{
                 student_id: s.id,
                 student_name: s.name,
@@ -754,7 +810,7 @@ defmodule SchoolWeb.PdfController do
               on: em.subject_id == sb.id,
               where:
                 c.name == ^class_name and em.student_id == ^stud_class.student_id and
-                  sc.semester_id == ^semester_id,
+                  sc.semester_id == ^semester_id and sb.with_mark == 1,
               select: %{
                 student_id: s.id,
                 student_name: s.name,
@@ -868,7 +924,7 @@ defmodule SchoolWeb.PdfController do
               on: em.subject_id == sb.id,
               where:
                 c.name == ^class_name and em.student_id == ^stud_class.student_id and
-                  sc.semester_id == ^semester_id,
+                  sc.semester_id == ^semester_id and sb.with_mark == 1,
               select: %{
                 student_id: s.id,
                 student_name: s.name,
@@ -1168,35 +1224,19 @@ defmodule SchoolWeb.PdfController do
       )
 
       for item <- result do
-        case Affairs.create_mark_sheet_temp(item) do
-          {:ok, mark_sheet_temp} ->
-            conn
-            |> put_flash(:info, "Mark sheet temp created successfully.")
-            |> redirect(to: "/list_report")
-
-          {:error, %Ecto.Changeset{} = changeset} ->
-            conn
-            |> put_flash(:info, "Mark sheet temp unsucccessfully created")
-            |> redirect(to: "/list_report")
-        end
-      end
-    else
-      for item <- result do
-        case Affairs.create_mark_sheet_temp(item) do
-          {:ok, mark_sheet_temp} ->
-            conn
-            |> put_flash(:info, "Mark sheet temp created successfully.")
-            |> redirect(to: "/list_report")
-
-          {:error, %Ecto.Changeset{} = changeset} ->
-            conn
-            |> put_flash(:info, "Mark sheet temp unsucccessfully created .")
-            |> redirect(to: "/list_report")
-        end
+        Affairs.create_mark_sheet_temp(item)
       end
 
       conn
-      |> put_flash(:info, "Mark sheet temp unsucccessfully created .")
+      |> put_flash(:info, "Mark sheet temp created successfully.")
+      |> redirect(to: "/list_report")
+    else
+      for item <- result do
+        Affairs.create_mark_sheet_temp(item)
+      end
+
+      conn
+      |> put_flash(:info, "Mark sheet temp created successfully.")
       |> redirect(to: "/list_report")
     end
   end
@@ -2941,6 +2981,7 @@ defmodule SchoolWeb.PdfController do
             student_id: s.id,
             student_name: s.name,
             student_mark: e.mark,
+            student_grade: e.grade,
             chinese_name: s.chinese_name,
             sex: s.sex,
             standard_id: k.level_id
@@ -3016,33 +3057,58 @@ defmodule SchoolWeb.PdfController do
       for item <- all_mark do
         subject_code = item |> elem(0)
 
-        datas = item |> elem(1)
+        subject =
+          Repo.get_by(School.Affairs.Subject,
+            code: subject_code,
+            institution_id: conn.private.plug_session["institution_id"]
+          )
 
-        for data <- datas do
-          student_mark = data.student_mark
+        if subject.with_mark != 1 do
+          datas = item |> elem(1)
 
-          grades =
-            Repo.all(
-              from(
-                g in School.Affairs.ExamGrade,
-                where:
-                  g.institution_id == ^conn.private.plug_session["institution_id"] and
-                    g.exam_master_id == ^exam.id
+          for data <- datas do
+            student_mark = data.student_mark
+
+            %{
+              student_id: data.student_id,
+              student_name: data.student_name,
+              grade: data.student_grade,
+              gpa: 0,
+              subject_code: data.subject_code,
+              student_mark: 0,
+              chinese_name: data.chinese_name,
+              sex: data.sex
+            }
+          end
+        else
+          datas = item |> elem(1)
+
+          for data <- datas do
+            student_mark = data.student_mark
+
+            grades =
+              Repo.all(
+                from(
+                  g in School.Affairs.ExamGrade,
+                  where:
+                    g.institution_id == ^conn.private.plug_session["institution_id"] and
+                      g.exam_master_id == ^exam_id
+                )
               )
-            )
 
-          for grade <- grades do
-            if student_mark >= grade.min and student_mark <= grade.max do
-              %{
-                student_id: data.student_id,
-                student_name: data.student_name,
-                grade: grade.name,
-                gpa: grade.gpa,
-                subject_code: subject_code,
-                student_mark: student_mark,
-                chinese_name: data.chinese_name,
-                sex: data.sex
-              }
+            for grade <- grades do
+              if student_mark >= grade.min and student_mark <= grade.max and student_mark != -1 do
+                %{
+                  student_id: data.student_id,
+                  student_name: data.student_name,
+                  grade: grade.name,
+                  gpa: grade.gpa,
+                  subject_code: data.subject_code,
+                  student_mark: data.student_mark,
+                  chinese_name: data.chinese_name,
+                  sex: data.sex
+                }
+              end
             end
           end
         end
@@ -3052,11 +3118,21 @@ defmodule SchoolWeb.PdfController do
 
     news = mark1 |> Enum.group_by(fn x -> x.student_id end)
 
+    subject_all =
+      Repo.all(
+        from(s in School.Affairs.Subject,
+          where:
+            s.institution_id == ^conn.private.plug_session["institution_id"] and s.with_mark == 1,
+          select: s.code
+        )
+      )
+
     z =
       for new <- news do
         total =
           new
           |> elem(1)
+          |> Enum.filter(fn x -> x.subject_code in subject_all end)
           |> Enum.map(fn x -> x.student_mark end)
           |> Enum.filter(fn x -> x != -1 end)
           |> Enum.sum()
@@ -3064,6 +3140,7 @@ defmodule SchoolWeb.PdfController do
         per =
           new
           |> elem(1)
+          |> Enum.filter(fn x -> x.subject_code in subject_all end)
           |> Enum.map(fn x -> x.student_mark end)
           |> Enum.filter(fn x -> x != -1 end)
           |> Enum.count()
@@ -3071,8 +3148,11 @@ defmodule SchoolWeb.PdfController do
         total_per = per * 100
 
         student_id = new |> elem(1) |> Enum.map(fn x -> x.student_id end) |> Enum.uniq() |> hd
+
         chinese_name = new |> elem(1) |> Enum.map(fn x -> x.chinese_name end) |> Enum.uniq() |> hd
+
         name = new |> elem(1) |> Enum.map(fn x -> x.student_name end) |> Enum.uniq() |> hd
+
         sex = new |> elem(1) |> Enum.map(fn x -> x.sex end) |> Enum.uniq() |> hd
 
         a = new |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "A" end)
@@ -3083,7 +3163,12 @@ defmodule SchoolWeb.PdfController do
         f = new |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "F" end)
         g = new |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "G" end)
 
-        total_gpa = new |> elem(1) |> Enum.map(fn x -> Decimal.to_float(x.gpa) end) |> Enum.sum()
+        total_gpa =
+          new
+          |> elem(1)
+          |> Enum.filter(fn x -> x.subject_code in subject_all end)
+          |> Enum.map(fn x -> Decimal.to_float(x.gpa) end)
+          |> Enum.sum()
 
         cgpa = (total_gpa / per) |> Float.round(2)
         total_average = (total / total_per * 100) |> Float.round(2)
@@ -3145,6 +3230,11 @@ defmodule SchoolWeb.PdfController do
 
     total_student = news |> Map.keys() |> Enum.count()
 
+    institution =
+      Repo.get_by(School.Settings.Institution, %{
+        id: conn.private.plug_session["institution_id"]
+      })
+
     html =
       Phoenix.View.render_to_string(
         SchoolWeb.PdfView,
@@ -3156,7 +3246,8 @@ defmodule SchoolWeb.PdfController do
         mark1: mark1,
         total_student: total_student,
         class_id: params["class_id"],
-        exam_id: params["exam_id"]
+        exam_id: params["exam_id"],
+        institution: institution
       )
 
     pdf_params = %{"html" => html}
@@ -3227,6 +3318,7 @@ defmodule SchoolWeb.PdfController do
             student_id: s.id,
             student_name: s.name,
             student_mark: e.mark,
+            student_grade: e.grade,
             class_id: e.class_id,
             chinese_name: s.chinese_name,
             sex: s.sex
@@ -3306,32 +3398,58 @@ defmodule SchoolWeb.PdfController do
 
         datas = item |> elem(1)
 
-        for data <- datas do
-          student_mark = data.student_mark
+        subject =
+          Repo.get_by(School.Affairs.Subject,
+            code: subject_code,
+            institution_id: conn.private.plug_session["institution_id"]
+          )
 
-          grades =
-            Repo.all(
-              from(
-                g in School.Affairs.ExamGrade,
-                where:
-                  g.institution_id == ^conn.private.plug_session["institution_id"] and
-                    g.exam_master_id == ^exam_id.id
+        if subject.with_mark != 1 do
+          datas = item |> elem(1)
+
+          for data <- datas do
+            student_mark = data.student_mark
+
+            %{
+              student_id: data.student_id,
+              student_name: data.student_name,
+              grade: data.student_grade,
+              gpa: 0,
+              subject_code: subject_code,
+              student_mark: 0,
+              class_id: data.class_id,
+              chinese_name: data.chinese_name,
+              sex: data.sex
+            }
+          end
+        else
+          for data <- datas do
+            student_mark = data.student_mark
+
+            grades =
+              Repo.all(
+                from(
+                  g in School.Affairs.ExamGrade,
+                  where:
+                    g.institution_id == ^conn.private.plug_session["institution_id"] and
+                      g.exam_master_id == ^exam_id.id
+                )
               )
-            )
 
-          for grade <- grades do
-            if student_mark >= grade.min and student_mark <= grade.max do
-              %{
-                student_id: data.student_id,
-                student_name: data.student_name,
-                grade: grade.name,
-                gpa: grade.gpa,
-                subject_code: subject_code,
-                student_mark: student_mark,
-                class_id: data.class_id,
-                chinese_name: data.chinese_name,
-                sex: data.sex
-              }
+            for grade <- grades do
+              if student_mark >= grade.min and student_mark <= grade.max do
+                %{
+                  student_id: data.student_id,
+                  student_name: data.student_name,
+                  grade: grade.name,
+                  gpa: grade.gpa,
+                  subject_code: subject_code,
+                  student_mark: student_mark,
+                  class_id: data.class_id,
+                  chinese_name: data.chinese_name,
+                  sex: data.sex
+                }
+              end
             end
           end
         end
@@ -3341,11 +3459,21 @@ defmodule SchoolWeb.PdfController do
 
     news = mark1 |> Enum.group_by(fn x -> x.student_id end)
 
+    subject_all =
+      Repo.all(
+        from(s in School.Affairs.Subject,
+          where:
+            s.institution_id == ^conn.private.plug_session["institution_id"] and s.with_mark == 1,
+          select: s.code
+        )
+      )
+
     z =
       for new <- news do
         total =
           new
           |> elem(1)
+          |> Enum.filter(fn x -> x.subject_code in subject_all end)
           |> Enum.map(fn x -> x.student_mark end)
           |> Enum.filter(fn x -> x != -1 end)
           |> Enum.sum()
@@ -3353,6 +3481,7 @@ defmodule SchoolWeb.PdfController do
         per =
           new
           |> elem(1)
+          |> Enum.filter(fn x -> x.subject_code in subject_all end)
           |> Enum.map(fn x -> x.student_mark end)
           |> Enum.filter(fn x -> x != -1 end)
           |> Enum.count()
@@ -3375,7 +3504,12 @@ defmodule SchoolWeb.PdfController do
         f = new |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "F" end)
         g = new |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "G" end)
 
-        total_gpa = new |> elem(1) |> Enum.map(fn x -> Decimal.to_float(x.gpa) end) |> Enum.sum()
+        total_gpa =
+          new
+          |> elem(1)
+          |> Enum.filter(fn x -> x.subject_code in subject_all end)
+          |> Enum.map(fn x -> Decimal.to_float(x.gpa) end)
+          |> Enum.sum()
 
         cgpa = (total_gpa / per) |> Float.round(2)
 
@@ -3478,6 +3612,11 @@ defmodule SchoolWeb.PdfController do
 
     mark = mark1 |> Enum.group_by(fn x -> x.subject_code end)
 
+    institution =
+      Repo.get_by(School.Settings.Institution, %{
+        id: conn.private.plug_session["institution_id"]
+      })
+
     html =
       Phoenix.View.render_to_string(
         SchoolWeb.PdfView,
@@ -3489,7 +3628,8 @@ defmodule SchoolWeb.PdfController do
         exam_id: params["exam_standard_result_id"],
         level_id: params["standard_id"],
         csrf: params["csrf"],
-        level: level
+        level: level,
+        institution: institution
       )
 
     pdf_params = %{"html" => html}

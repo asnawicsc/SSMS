@@ -19,6 +19,19 @@
 </div>
 
 <Br>
+
+<table class="table"  width="100%">
+  
+  <tbody>
+<td >
+<b  style="font-size: 25px;"><%= @institution.name %></b></br>
+班级<b> Standard: <%= @level.name %></b> <br>
+老师<b> Nama GURU : ________________________________________________________________ </b><br>
+事项<b> PERKARA &nbsp;&nbsp;&nbsp;: <%= @exam_name %></b><b style="margin-left: 10px;"> 日期 Tarikh:<%= SchoolWeb.LayoutView.my_time(DateTime.utc_now) %></b> 
+
+</td>
+    </tbody>
+</table>
  <div class="table-responsive table-bordered">
     <table class="table" id="table_rank">
       <colgroup>
@@ -31,7 +44,7 @@
          <th ><%= gettext "Jan" %></th>
         <%= for item <- @mark|>Enum.sort_by(fn x -> x end) do %>    
          
-        <th  ><%= item|>elem(0) %></th>
+        <th  colspan="2"><%= item|>elem(0) %></th>
         <% end %>
         <th ><%= gettext "Jumlah" %></th>
         <th ><%= gettext "Purata" %></th>
@@ -59,7 +72,8 @@
          <%= if  subject.student_mark != -1 do %>
            
      
-         <th><%= subject.student_mark %></th>
+        <th><%= subject.student_mark %></th>
+          <th><%= subject.grade %></th>
 
          <% else %>
 
@@ -72,6 +86,7 @@
         <%= if  subject.student_mark != -1 do %>
 
          <th ><font color="red">*<%= subject.student_mark %></font></th>
+          <th ><font color="red"><%= subject.grade %></font></th>
 
                <% else %>
 

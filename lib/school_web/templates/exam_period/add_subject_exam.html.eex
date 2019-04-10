@@ -1,0 +1,42 @@
+
+<div class="content-heading">
+    <div>Add Subject To Exam
+    </div>
+</div>
+
+ <form method="post" action="/create_subject_exam" class="form-horizontal">
+  <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+   <div class="row">
+
+ <input type="hidden" name="semester_id" value="<%= @semester_id %>">
+ <input type="hidden" name="level" value="<%= @level %>">
+                                                    <div id="gne" class="form-group col-md-3">
+                                                      <label class="bmd-label-floating"><%= gettext "Subject" %></label>
+                                                        <select class="custom-select -custom-select-sm"  required="required" name="subject_id">
+                                                              <option selected="">Choose a subject</option>
+                           <%= for a <- @subject |> Enum.sort do %>
+                                            <option value="<%= a.id %>" ><%= a.description %>
+                                            </option>
+                                          <% end %>
+                                        </select>
+
+                                                    </div>
+
+                                                                                                        <div id="gne" class="form-group col-md-3">
+                                                      <label class="bmd-label-floating"><%= gettext "Exam Name" %></label>
+                                                        <select class="custom-select -custom-select-sm"  required="required" name="exam_master_id">
+                                                              <option selected="">Choose a Exam</option>
+                           <%= for a <- @exam_master |> Enum.sort do %>
+                                            <option value="<%= a.id %>" ><%= a.name %>
+                                            </option>
+                                          <% end %>
+                                        </select>
+
+                                                    </div>
+              
+
+           
+ </div>
+
+                <input class="btn btn-primary" name="" value="Create" type="submit" style="margin-top: 27px;">     
+

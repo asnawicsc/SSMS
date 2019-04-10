@@ -60,7 +60,7 @@ defmodule SchoolWeb.ExamPeriodController do
   def edit_exam_list(conn, params) do
     level =
       Repo.get_by(Level,
-        name: params["level"],
+        id: params["level"],
         institution_id: conn.private.plug_session["institution_id"]
       )
 
@@ -91,7 +91,42 @@ defmodule SchoolWeb.ExamPeriodController do
     render(
       conn,
       "edit_exam_list.html",
-      exam_details: exam_details
+      exam_details: exam_details,
+      level: level.id,
+      exam_master_id: params["exam_name"],
+      semester_id: params["semester_id"]
+    )
+  end
+
+  def add_subject_exam(conn, params) do
+    subject =
+      Repo.all(
+        from(
+          g in School.Affairs.Subject,
+          where: g.institution_id == ^conn.private.plug_session["institution_id"],
+          select: %{description: g.description, id: g.id}
+        )
+      )
+
+    exam_master =
+      Repo.all(
+        from(
+          g in School.Affairs.ExamMaster,
+          where:
+            g.institution_id == ^conn.private.plug_session["institution_id"] and
+              g.id == ^params["exam_name"] and g.semester_id == ^params["semester_id"],
+          select: %{name: g.name, id: g.id}
+        )
+      )
+
+    render(
+      conn,
+      "add_subject_exam.html",
+      subject: subject,
+      level: params["level"],
+      exam_master: exam_master,
+      exam_master_id: params["exam_name"],
+      semester_id: params["semester_id"]
     )
   end
 

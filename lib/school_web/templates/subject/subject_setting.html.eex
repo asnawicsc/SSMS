@@ -1,0 +1,55 @@
+              <div class="content-heading">
+    <div>List Assign Mark
+    </div>
+</div>
+ <div class="card ">
+                 <div class="card-body">
+                 	           
+<form method="post" action="/create_subject_setting" class="form-horizontal">
+   <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+                         <table class="table" id="datatable3">
+                            <thead>
+                                <tr>
+                              <th>Code</th>
+                              <th>Name</th>
+                              <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                             <%= for subject <- @subjects do %>
+                                <tr>
+                              <td><%= subject.code %></td>
+                              <td><%= subject.name %></td>
+                              <td>  <div class="form-group">
+                      
+
+                            <%= if subject.with_mark == nil or subject.with_mark == 0 do %>
+
+                              <div class="col-sm-10">
+                              <label class="checkbox-inline c-checkbox">
+                                 <input id="inlineCheckbox10" type="checkbox" name="subject[<%= subject.id %>]">
+                                 <span class="fa fa-check"></span></label>
+                              
+                           </div>
+
+                            <% else  %>
+                              <div class="col-sm-10">
+                              <label class="checkbox-inline c-checkbox">
+                                 <input id="inlineCheckbox10" type="checkbox"  checked="checked" name="subject[<%= subject.id %>]">
+                                 <span class="fa fa-check"></span></label>
+                              
+                           </div>
+                         
+                              
+                             <% end %>
+                         
+                        </div></td>
+            
+                            </tr>
+                              <% end %>
+                            </tbody>
+                        </table>
+   <center><input class="btn btn-primary" name="" value="Submit" type="submit" style="margin-bottom: 10px"></center> 
+</form>
+</div>
+                 </div>

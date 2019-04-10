@@ -49,6 +49,37 @@ defmodule SchoolWeb.SubjectController do
     render(conn, "index.html", subjects: subjects, semester: semester, level: level)
   end
 
+  def subject_setting(conn, params) do
+    subjects =
+      Repo.all(
+        from(
+          s in School.Affairs.Subject,
+          select: %{
+            id: s.id,
+            code: s.code,
+            name: s.description,
+            with_mark: s.with_mark,
+            institution_id: s.institution_id
+          }
+        )
+      )
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
+    render(conn, "subject_setting.html", subjects: subjects)
+  end
+
+  def create_subject_setting(conn, params) do
+    for item <- params["subject"] do
+      subject_id = item |> elem(0)
+      subject = Affairs.get_subject!(subject_id)
+      Affairs.update_subject(subject, %{with_mark: 1})
+    end
+
+    conn
+    |> put_flash(:info, "Subject setting updated successfully.")
+    |> redirect(to: subject_path(conn, :subject_setting))
+  end
+
   def create_new_test(conn, _params) do
     subjects =
       Repo.all(

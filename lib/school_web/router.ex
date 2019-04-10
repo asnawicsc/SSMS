@@ -115,7 +115,8 @@ defmodule SchoolWeb.Router do
     get("/library/books", PageController, :books)
     get("/library/lib_access", PageController, :lib_access)
     get("/library/lib_register", PageController, :lib_register)
-
+    get("/subject_setting", SubjectController, :subject_setting)
+    post("/create_subject_setting", SubjectController, :create_subject_setting)
     post("/library/books/uploads", PageController, :upload_books)
     post("/library/book/update_book", PageController, :update_book)
     get("/library/book/student_cards", PageController, :student_cards)
@@ -134,6 +135,12 @@ defmodule SchoolWeb.Router do
     post("/pre_upload_timetable", ClassController, :pre_upload_timetable)
     resources("/examperiod", ExamPeriodController)
 
+    post(
+      "/create_subject_exam",
+      ExamController,
+      :create_subject_exam
+    )
+
     get(
       "/show_exam_period/:exam_name/semester/:semester_id/standard/:level",
       ExamPeriodController,
@@ -144,6 +151,12 @@ defmodule SchoolWeb.Router do
       "/edit_exam_list/:exam_name/semester/:semester_id/standard/:level",
       ExamPeriodController,
       :edit_exam_list
+    )
+
+    get(
+      "/add_subject_exam/:exam_name/semester/:semester_id/standard/:level",
+      ExamPeriodController,
+      :add_subject_exam
     )
 
     get(

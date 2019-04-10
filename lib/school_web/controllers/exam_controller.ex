@@ -49,7 +49,45 @@ defmodule SchoolWeb.ExamController do
 
   def new(conn, _params) do
     changeset = Affairs.change_exam(%Exam{})
-    render(conn, "new.html", changeset: changeset)
+
+    subject =
+      Repo.all(
+        from(
+          g in School.Affairs.Subject,
+          where: g.institution_id == ^conn.private.plug_session["institution_id"],
+          select: g.description
+        )
+      )
+
+    exam_master =
+      Repo.all(
+        from(
+          g in School.Affairs.ExamMaster,
+          where: g.institution_id == ^conn.private.plug_session["institution_id"],
+          select: g.name
+        )
+      )
+
+    render(conn, "new.html", changeset: changeset, subject: subject, exam_master: exam_master)
+  end
+
+  def create_subject_exam(conn, params) do
+    exam =
+      Repo.get_by(Exam, subject_id: params["subject_id"], exam_master_id: params["exam_master_id"])
+
+    if exam == nil do
+      params = %{subject_id: params["subject_id"], exam_master_id: params["exam_master_id"]}
+      Affairs.create_exam(params)
+    end
+
+    conn
+    |> put_flash(:info, "Subject created successfully.")
+    |> redirect(
+      to:
+        "/edit_exam_list/#{params["exam_master_id"]}/semester/#{params["semester_id"]}/standard/#{
+          params["level"]
+        }"
+    )
   end
 
   def new_exam(conn, params) do
@@ -548,7 +586,8 @@ defmodule SchoolWeb.ExamController do
             exam_id: s.exam_id,
             student_id: s.student_id,
             student_name: p.name,
-            mark: s.mark
+            mark: s.mark,
+            grade: s.grade
           },
           order_by: [asc: p.name]
         )
@@ -654,7 +693,8 @@ defmodule SchoolWeb.ExamController do
               student_id: item.id,
               subject_id: subject_id,
               student_name: item.student_name,
-              mark: 0
+              mark: 0,
+              grade: "F"
             }
           else
           end
@@ -1162,7 +1202,7 @@ defmodule SchoolWeb.ExamController do
 
   def update_mark(conn, params) do
     class_id = params["class_id"]
-    mark = params["mark"]
+
     subject_id = params["subject_id"]
     exam_id = params["exam_id"]
 
@@ -1180,39 +1220,76 @@ defmodule SchoolWeb.ExamController do
 
     exam_name = a.name
 
-    for item <- mark do
-      student_id = item |> elem(0)
-      mark = item |> elem(1)
+    mark =
+      if params["mark"] != nil do
+        for item <- params["mark"] do
+          student_id = item |> elem(0)
+          mark = item |> elem(1)
 
-      exam_mark =
-        Repo.get_by(School.Affairs.ExamMark, %{
-          exam_id: exam_id,
-          subject_id: subject_id,
-          student_id: student_id
-        })
+          exam_mark =
+            Repo.get_by(School.Affairs.ExamMark, %{
+              exam_id: exam_id,
+              subject_id: subject_id,
+              student_id: student_id
+            })
 
-      exam_mark_params = %{
-        class_id: class_id,
-        exam_id: exam_id,
-        mark: mark,
-        subject_id: subject_id,
-        student_id: student_id
-      }
+          exam_mark_params = %{
+            class_id: class_id,
+            exam_id: exam_id,
+            mark: mark,
+            subject_id: subject_id,
+            student_id: student_id
+          }
 
-      if exam_mark == nil do
-        Affairs.create_exam_mark(exam_mark_params)
+          if exam_mark == nil do
+            Affairs.create_exam_mark(exam_mark_params)
+          else
+            exam_mark_params = %{
+              class_id: class_id,
+              exam_id: exam_id,
+              mark: mark,
+              subject_id: subject_id,
+              student_id: student_id
+            }
+
+            Affairs.update_exam_mark(exam_mark, exam_mark_params)
+          end
+        end
       else
-        exam_mark_params = %{
-          class_id: class_id,
-          exam_id: exam_id,
-          mark: mark,
-          subject_id: subject_id,
-          student_id: student_id
-        }
+        for item <- params["grade"] do
+          student_id = item |> elem(0)
+          grade = item |> elem(1)
 
-        Affairs.update_exam_mark(exam_mark, exam_mark_params)
+          exam_mark =
+            Repo.get_by(School.Affairs.ExamMark, %{
+              exam_id: exam_id,
+              subject_id: subject_id,
+              student_id: student_id
+            })
+
+          exam_mark_params = %{
+            class_id: class_id,
+            exam_id: exam_id,
+            grade: grade,
+            subject_id: subject_id,
+            student_id: student_id
+          }
+
+          if exam_mark == nil do
+            Affairs.create_exam_mark(exam_mark_params)
+          else
+            exam_mark_params = %{
+              class_id: class_id,
+              exam_id: exam_id,
+              grade: grade,
+              subject_id: subject_id,
+              student_id: student_id
+            }
+
+            Affairs.update_exam_mark(exam_mark, exam_mark_params)
+          end
+        end
       end
-    end
 
     conn
     |> put_flash(:info, "Exam mark updated successfully.")
