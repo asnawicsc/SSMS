@@ -1,12 +1,12 @@
 <% require IEx %>
 <link rel="stylesheet" href="<%= Application.app_dir(:school, "priv/static") %>/css/bootstrap.min.css">
 <style type="text/css">
-	
+  
 </style>
 
 <%= for all_data <- @a do %>
 
-	<% all_date=all_data|>elem(1) %>
+  <% all_date=all_data|>elem(1) %>
 
   <% profile=all_date|>hd() %>
 
@@ -64,661 +64,1211 @@
   <% 
 
     bml= all_date|>Enum.filter(fn x -> x.subject =="MA04" end)
-    {bml1,bml2,bml3}=	if bml == [] do
+    {bml1,bml2,bml3}= if bml == [] do
 
-    	{"","",""}
+      {"","",""}
     else
-   		 bml=bml|>hd	
+       bml=bml|>hd  
 
 
-		 bml1=if bml.s1m != nil do
-		  bml.s1m
-		else
-		   bml.s1g
-		 end
+     bml1_s1m=if bml.s1m != nil do
+      bml.s1m
+    else
+      "" 
+     end
 
-		  bml2=if bml.s2m != nil do
-		  bml.s2m
-		else
-		   bml.s2g
-		 end
+         bml1_s1g=if bml.s1g != nil do
+      bml.s1m
+    else
+      "" 
+     end
 
-   			bml3=if bml.s3m != nil do
-		  bml.s3m
-		else
-		   bml.s3g
-		 end
+     bml1={bml1_s1m,bml1_s1g}
 
-		 {bml1,bml2,bml3}
+
+
+     bml2_s2m=if bml.s2m != nil do
+      bml.s2m
+    else
+      "" 
+     end
+
+         bml2_s2g=if bml.s2g != nil do
+      bml.s2m
+    else
+      "" 
+     end
+
+     bml2={bml2_s2m,bml2_s2g}
+
+
+
+     bml3_s3m=if bml.s3m != nil do
+      bml.s3m
+    else
+      "" 
+     end
+
+         bml3_s3g=if bml.s3g != nil do
+      bml.s3m
+    else
+      "" 
+     end
+
+     bml3={bml3_s3m,bml3_s3g}
+
+     {bml1,bml2,bml3}
 
     end
 
         bmb= all_date|>Enum.filter(fn x -> x.subject =="MA03" end)
-    {bmb1,bmb2,bmb3}=	if bmb == [] do
+    {bmb1,bmb2,bmb3}= if bmb == [] do
 
-    	{"","",""}
+      {"","",""}
     else
-   		 bmb=bmb|>hd	
-    	
+       bmb=bmb|>hd  
+      
  
 
-		 bmb1=if bmb.s1m != nil do
-		  bmb.s1m
-		else
-		   bmb.s1g
-		 end
+     bmb_s1m=if bmb.s1m != nil do
+      bmb.s1m
+    else
+       bmb.s1m
+     end
 
-		  bmb2=if bmb.s2m != nil do
-		  bmb.s2m
-		else
-		   bmb.s2g
-		 end
+         bmb_s1g=if bmb.s1g != nil do
+      bmb.s1g
+    else
+      "" 
+     end
 
-   			bmb3=if bmb.s3m != nil do
-		  bmb.s3m
-		else
-		   bmb.s3g
-		 end
+        bmb1={bmb_s1m,bmb_s1g}
 
-		  {bmb1,bmb2,bmb3}
+      bmb_s2m=if bmb.s2m != nil do
+      bmb.s2m
+    else
+       ""
+     end
+
+       bmb_s2g=if bmb.s2g != nil do
+      bmb.s2g
+    else
+      ""
+     end
+
+
+        bmb2={bmb_s2m,bmb_s2g}
+
+
+
+        bmb_s3m=if bmb.s3m != nil do
+      bmb.s3m
+    else
+       ""
+     end
+
+       bmb_s3g=if bmb.s3g != nil do
+      bmb.s3g
+    else
+      ""
+     end
+
+
+        bmb3={bmb_s3m,bmb_s3g}
+
+      {bmb1,bmb2,bmb3}
 
     end
 
-            bmp= all_date|>Enum.filter(fn x -> x.subject =="MA01" end)
-    {bmp1,bmp2,bmp3}=	if bmp == [] do
 
-    	{"","",""}
+            bmp= all_date|>Enum.filter(fn x -> x.subject =="MA01" end)
+    {bmp1,bmp2,bmp3}= if bmp == [] do
+
+      {"","",""}
     else
-   		 bmp=bmp|>hd	
-    	
+       bmp=bmp|>hd  
+      
  
 
-		 bmp1=if bmp.s1m != nil do
-		  bmp.s1m
-		else
-		   bmp.s1g
-		 end
+    
+         bmp_s1m=if bmp.s1m != nil do
+      bmp.s1m
+    else
+      ""
+     end
 
-		  bmp2=if bmp.s2m != nil do
-		  bmp.s2m
-		else
-		   bmp.s2g
-		 end
+         bmp_s1g=if bmp.s1g != nil do
+      bmp.s1g
+    else
+      "" 
+     end
 
-   			bmp3=if bmp.s3m != nil do
-		  bmp.s3m
-		else
-		   bmp.s3g
-		 end
 
-		 {bmp1,bmp2,bmp3}
+      bmp1={bmp_s1m,bmp_s1g}
+
+
+
+              bmp_s2m=if bmp.s2m != nil do
+      bmp.s2m
+    else
+       ""
+     end
+
+         bmp_s2g=if bmp.s2g != nil do
+      bmp.s2g
+    else
+      "" 
+     end
+
+
+      bmp2={bmp_s2m,bmp_s2g}
+
+        bmp3=if bmp.s3m != nil do
+      bmp.s3m
+    else
+       bmp.s3g
+     end
+
+                   bmp_s3m=if bmp.s3m != nil do
+      bmp.s3m
+    else
+       ""
+     end
+
+         bmp_s3g=if bmp.s3g != nil do
+      bmp.s3g
+    else
+      "" 
+     end
+
+
+      bmp3={bmp_s3m,bmp_s3g}
+
+     {bmp1,bmp2,bmp3}
 
     end
 
                 bmpm= all_date|>Enum.filter(fn x -> x.subject =="MA02" end)
-   {bmpm1,bmpm2,bmpm3}=	if bmpm == [] do
+   {bmpm1,bmpm2,bmpm3}= if bmpm == [] do
 
-    	{"","",""}
+      {"","",""}
     else
-   		 bmpm=bmpm|>hd	
-    	
- 
+       bmpm=bmpm|>hd  
+      
+  bmpm_s1m=if bmpm.s1m != nil do
+      bmpm.s1m
+    else
+       bmpm.s1m
+     end
 
-		 bmpm1=if bmpm.s1m != nil do
-		  bmpm.s1m
-		else
-		   bmpm.s1g
-		 end
+         bmpm_s1g=if bmpm.s1g != nil do
+      bmpm.s1g
+    else
+      "" 
+     end
 
-		  bmpm2=if bmpm.s2m != nil do
-		  bmpm.s2m
-		else
-		   bmpm.s2g
-		 end
+        bmpm1={bmpm_s1m,bmpm_s1g}
 
-   			bmpm3=if bmpm.s3m != nil do
-		  bmpm.s3m
-		else
-		   bmpm.s3g
-		 end
 
-		 {bmpm1,bmpm2,bmpm3}
+
+       bmpm_s2m=if bmpm.s2m != nil do
+      bmpm.s2m
+    else
+      ""
+     end
+
+         bmpm_s2g=if bmpm.s2g != nil do
+      bmpm.s2g
+    else
+      "" 
+     end
+
+        bmpm2={bmpm_s2m,bmpm_s2g}
+
+
+
+    bmpm_s3m=if bmpm.s3m != nil do
+      bmpm.s3m
+    else
+      ""
+     end
+
+         bmpm_s3g=if bmpm.s3g != nil do
+      bmpm.s3g
+    else
+      "" 
+     end
+
+        bmpm3={bmpm_s3m,bmpm_s3g}
+
+
+     {bmpm1,bmpm2,bmpm3}
 
     end
 
 
                     ingl= all_date|>Enum.filter(fn x -> x.subject =="ING04" end)
-   {ingl1,ingl2,ingl3}=	if ingl == [] do
+   {ingl1,ingl2,ingl3}= if ingl == [] do
 
-    	{"","",""}
+      {"","",""}
     else
-   		 ingl=ingl|>hd	
-    	
- 
+       ingl=ingl|>hd  
 
-		 ingl1=if ingl.s1m != nil do
-		  ingl.s1m
-		else
-		   ingl.s1g
-		 end
 
-		  ingl2=if ingl.s2m != nil do
-		  ingl.s2m
-		else
-		   ingl.s2g
-		 end
+  ingl_s1m=if ingl.s1m != nil do
+      ingl.s1m
+    else
+       ingl.s1m
+     end
 
-   			ingl3=if ingl.s3m != nil do
-		  ingl.s3m
-		else
-		   ingl.s3g
-		 end
+         ingl_s1g=if ingl.s1g != nil do
+      ingl.s1g
+    else
+      "" 
+     end
 
-		 {ingl1,ingl2,ingl3}
+        ingl1={ingl_s1m,ingl_s1g}
+
+
+
+       ingl_s2m=if ingl.s2m != nil do
+      ingl.s2m
+    else
+       ""
+     end
+
+         ingl_s2g=if ingl.s2g != nil do
+      ingl.s2g
+    else
+      "" 
+     end
+
+        ingl2={ingl_s2m,ingl_s2g}
+
+
+
+       ingl_s3m=if ingl.s3m != nil do
+      ingl.s3m
+    else
+       ""
+     end
+
+         ingl_s3g=if ingl.s3g != nil do
+      ingl.s3g
+    else
+      "" 
+     end
+
+        ingl3={ingl_s3m,ingl_s3g}
+
+
+
+     {ingl1,ingl2,ingl3}
 
     end
 
     ingb= all_date|>Enum.filter(fn x -> x.subject =="ING03" end)
-   {ingb1,ingb2,ingb3}=	if ingb == [] do
+   {ingb1,ingb2,ingb3}= if ingb == [] do
 
-    	{"","",""}
+      {"","",""}
     else
-   		 ingb=ingb|>hd	
-    	
- 
+       ingb=ingb|>hd  
 
-		 ingb1=if ingb.s1m != nil do
-		  ingb.s1m
-		else
-		   ingb.s1g
-		 end
 
-		  ingb2=if ingb.s2m != nil do
-		  ingb.s2m
-		else
-		   ingb.s2g
-		 end
+       ingb_s1m=if ingb.s1m != nil do
+      ingb.s1m
+    else
+      ""
+     end
 
-   			ingb3=if ingb.s3m != nil do
-		  ingb.s3m
-		else
-		   ingb.s3g
-		 end
+      ingb_s1g=if ingb.s1g != nil do
+      ingb.s1g
+    else
+      "" 
+     end
 
-		 {ingb1,ingb2,ingb3}
+        ingb1={ingb_s1m,ingb_s1g}
+
+            ingb_s2m=if ingb.s2m != nil do
+      ingb.s2m
+    else
+      ""
+     end
+
+      ingb_s2g=if ingb.s2g != nil do
+      ingb.s2g
+    else
+      "" 
+     end
+
+        ingb2={ingb_s1m,ingb_s1g}
+
+
+    ingb_s3m=if ingb.s3m != nil do
+      ingb.s3m
+    else
+      ""
+     end
+
+      ingb_s3g=if ingb.s3g != nil do
+      ingb.s3g
+    else
+      "" 
+     end
+
+        ingb3={ingb_s3m,ingb_s3g}
+
+     {ingb1,ingb2,ingb3}
 
     end
 
         ingp= all_date|>Enum.filter(fn x -> x.subject =="ING01" end)
-   {ingp1,ingp2,ingp3}=	if ingp == [] do
+   {ingp1,ingp2,ingp3}= if ingp == [] do
 
-    	{"","",""}
+      {"","",""}
     else
-   		 ingp=ingp|>hd	
-    	
- 
+       ingp=ingp|>hd  
+      
 
-		 ingp1=if ingp.s1m != nil do
-		  ingp.s1m
-		else
-		   ingp.s1g
-		 end
+       ingp_s1m=if ingp.s1m != nil do
+      ingp.s1m
+    else
+      ""
+     end
 
-		  ingp2=if ingp.s2m != nil do
-		  ingp.s2m
-		else
-		   ingp.s2g
-		 end
+      ingp_s1g=if ingp.s1g != nil do
+      ingp.s1g
+    else
+      "" 
+     end
 
-   			ingp3=if ingp.s3m != nil do
-		  ingp.s3m
-		else
-		   ingp.s3g
-		 end
+        ingp1={ingp_s1m,ingp_s1g}
 
-		 {ingp1,ingp2,ingp3}
+
+               ingp_s2m=if ingp.s2m != nil do
+      ingp.s2m
+    else
+      ""
+     end
+
+      ingp_s2g=if ingp.s2g != nil do
+      ingp.s2g
+    else
+      "" 
+     end
+
+        ingp2={ingp_s2m,ingp_s2g}
+
+
+
+               ingp_s3m=if ingp.s3m != nil do
+      ingp.s3m
+    else
+      ""
+     end
+
+      ingp_s3g=if ingp.s3g != nil do
+      ingp.s3g
+    else
+      "" 
+     end
+
+        ingp3={ingp_s3m,ingp_s3g}
+
+
+     {ingp1,ingp2,ingp3}
 
     end
 
 
             ingpm= all_date|>Enum.filter(fn x -> x.subject =="ING02" end)
-   {ingpm1,ingpm2,ingpm3}=	if ingpm == [] do
+   {ingpm1,ingpm2,ingpm3}=  if ingpm == [] do
 
-    	{"","",""}
+      {"","",""}
     else
-   		 ingpm=ingpm|>hd	
-    	
- 
+       ingpm=ingpm|>hd  
 
-		 ingpm1=if ingpm.s1m != nil do
-		  ingpm.s1m
-		else
-		   ingpm.s1g
-		 end
 
-		  ingpm2=if ingpm.s2m != nil do
-		  ingpm.s2m
-		else
-		   ingpm.s2g
-		 end
+     ingpm_s1m=if ingpm.s1m != nil do
+      ingpm.s1m
+    else
+      ""
+     end
 
-   			ingpm3=if ingpm.s3m != nil do
-		  ingpm.s3m
-		else
-		   ingpm.s3g
-		 end
+      ingpm_s1g=if ingpm.s1g != nil do
+      ingpm.s1g
+    else
+      "" 
+     end
 
-		 {ingpm1,ingpm2,ingpm3}
+        ingpm1={ingpm_s1m,ingpm_s1g}
+
+
+     ingpm_s2m=if ingpm.s2m != nil do
+      ingpm.s2m
+    else
+      ""
+     end
+
+      ingpm_s2g=if ingpm.s2g != nil do
+      ingpm.s2g
+    else
+      "" 
+     end
+
+        ingpm2={ingpm_s2m,ingpm_s2g}
+
+
+
+         ingpm_s3m=if ingpm.s3m != nil do
+      ingpm.s3m
+    else
+      ""
+     end
+
+      ingpm_s3g=if ingpm.s3g != nil do
+      ingpm.s3g
+    else
+      "" 
+     end
+
+        ingpm3={ingpm_s3m,ingpm_s3g}  
+
+
+
+     {ingpm1,ingpm2,ingpm3}
 
     end
 
                 chl= all_date|>Enum.filter(fn x -> x.subject =="CH04" end)
-   {chl1,chl2,chl3}=	if chl == [] do
+   {chl1,chl2,chl3}=  if chl == [] do
 
-    	{"","",""}
+      {"","",""}
     else
-   		 chl=chl|>hd	
-    	
+       chl=chl|>hd  
+
+
+
+
+     chl_s1m=if chl.s1m != nil do
+      chl.s1m
+    else
+      ""
+     end
+
+      chl_s1g=if chl.s1g != nil do
+      chl.s1g
+    else
+      "" 
+     end
+
+        chl1={chl_s1m,chl_s1g}
+      
  
+     chl_s2m=if chl.s2m != nil do
+      chl.s2m
+    else
+      ""
+     end
 
-		 chl1=if chl.s1m != nil do
-		  chl.s1m
-		else
-		   chl.s1g
-		 end
+      chl_s2g=if chl.s2g != nil do
+      chl.s2g
+    else
+      "" 
+     end
 
-		  chl2=if chl.s2m != nil do
-		  chl.s2m
-		else
-		   chl.s2g
-		 end
+     chl2={chl_s2m,chl_s2g}
 
-   			chl3=if chl.s3m != nil do
-		  chl.s3m
-		else
-		   chl.s3g
-		 end
 
-		 {chl1,chl2,chl3}
+
+     chl_s3m=if chl.s3m != nil do
+      chl.s3m
+    else
+      ""
+     end
+
+      chl_s3g=if chl.s3g != nil do
+      chl.s3g
+    else
+      "" 
+     end
+
+     chl3={chl_s3m,chl_s3g}    
+
+
+
+     {chl1,chl2,chl3}
 
     end
 
 
                     chb= all_date|>Enum.filter(fn x -> x.subject =="CH03" end)
-   {chb1,chb2,chb3}=	if chb == [] do
+   {chb1,chb2,chb3}=  if chb == [] do
 
-    	{"","",""}
+      {"","",""}
     else
-   		 chb=chb|>hd	
-    	
- 
+       chb=chb|>hd  
+      
 
-		 chb1=if chb.s1m != nil do
-		  chb.s1m
-		else
-		   chb.s1g
-		 end
 
-		  chb2=if chb.s2m != nil do
-		  chb.s2m
-		else
-		   chb.s2g
-		 end
+     chb_s1m=if chb.s1m != nil do
+      chb.s1m
+    else
+      ""
+     end
 
-   			chb3=if chb.s3m != nil do
-		  chb.s3m
-		else
-		   chb.s3g
-		 end
+      chb_s1g=if chb.s1g != nil do
+      chb.s1g
+    else
+      "" 
+     end
 
-		 {chb1,chb2,chb3}
+    chb1={chb_s1m,chb_s1g}
+
+
+    chb_s2m=if chb.s2m != nil do
+      chb.s2m
+    else
+      ""
+     end
+
+      chb_s2g=if chb.s2g != nil do
+      chb.s2g
+    else
+      "" 
+     end
+
+     chb2={chb_s2m,chb_s2g}
+
+    
+    chb_s3m=if chb.s3m != nil do
+      chb.s3m
+    else
+      ""
+     end
+
+      chb_s3g=if chb.s3g != nil do
+      chb.s3g
+    else
+      "" 
+     end
+
+     chb3={chb_s3m,chb_s3g}
+
+     {chb1,chb2,chb3}
 
     end
 
                         chp= all_date|>Enum.filter(fn x -> x.subject =="CH01" end)
-   {chp1,chp2,chp3}=	if chp == [] do
+   {chp1,chp2,chp3}=  if chp == [] do
 
-    	{"","",""}
+      {"","",""}
     else
-   		 chp=chp|>hd	
-    	
- 
+       chp=chp|>hd  
 
-		 chp1=if chp.s1m != nil do
-		  chp.s1m
-		else
-		   chp.s1g
-		 end
 
-		  chp2=if chp.s2m != nil do
-		  chp.s2m
-		else
-		   chp.s2g
-		 end
 
-   			chp3=if chp.s3m != nil do
-		  chp.s3m
-		else
-		   chp.s3g
-		 end
+     chp_s1m=if chp.s1m != nil do
+      chp.s1m
+    else
+      ""
+     end
 
-		 {chp1,chp2,chp3}
+      chp_s1g=if chp.s1g != nil do
+      chp.s1g
+    else
+      "" 
+     end
+
+    chp1={chp_s1m,chp_s1g}
+
+
+         chp_s2m=if chp.s2m != nil do
+      chp.s2m
+    else
+      ""
+     end
+
+      chp_s2g=if chp.s2g != nil do
+      chp.s2g
+    else
+      "" 
+     end
+
+    chp2={chp_s2m,chp_s2g}
+
+
+   chp_s3m=if chp.s3m != nil do
+      chp.s3m
+    else
+      ""
+     end
+
+      chp_s3g=if chp.s3g != nil do
+      chp.s3g
+    else
+      "" 
+     end
+
+    chp3={chp_s3m,chp_s3g}
+
+
+     {chp1,chp2,chp3}
 
     end
 
-                            chpm= all_date|>Enum.filter(fn x -> x.subject =="CH02" end)
-   {chpm1,chpm2,chpm3}=	if chpm == [] do
+   chpm= all_date|>Enum.filter(fn x -> x.subject =="CH02" end)
+   {chpm1,chpm2,chpm3}= if chpm == [] do
 
-    	{"","",""}
+      {"","",""}
     else
-   		 chpm=chpm|>hd	
-    	
- 
+       chpm=chpm|>hd
 
-		 chpm1=if chpm.s1m != nil do
-		  chpm.s1m
-		else
-		   chpm.s1g
-		 end
+     chpm_s1m=if chpm.s1m != nil do
+      chpm.s1m
+    else
+      ""
+     end
 
-		  chpm2=if chpm.s2m != nil do
-		  chpm.s2m
-		else
-		   chpm.s2g
-		 end
+     chpm_s1g=if chpm.s1g != nil do
+      chpm.s1g
+    else
+      "" 
+     end  
+      
+      chpm1={chpm_s1m,chpm_s1g}
 
-   			chpm3=if chpm.s3m != nil do
-		  chpm.s3m
-		else
-		   chpm.s3g
-		 end
 
-		 {chpm1,chpm2,chpm3}
+           chpm_s2m=if chpm.s2m != nil do
+      chpm.s2m
+    else
+      ""
+     end
+
+     chpm_s2g=if chpm.s2g != nil do
+      chpm.s2g
+    else
+      "" 
+     end  
+      
+      chpm2={chpm_s2m,chpm_s2g}
+
+
+     chpm_s3m=if chpm.s3m != nil do
+      chpm.s3m
+    else
+      ""
+     end
+
+     chpm_s3g=if chpm.s3g != nil do
+      chpm.s3g
+    else
+      "" 
+     end  
+      
+      chpm3={chpm_s3m,chpm_s3g}
+    
+
+        chpm3=if chpm.s3m != nil do
+      chpm.s3m
+    else
+       chpm.s3g
+     end
+
+     {chpm1,chpm2,chpm3}
 
     end
 
-                                math= all_date|>Enum.filter(fn x -> x.subject =="MAT" end)
-   {math1,math2,math3}=	if math == [] do
+    math= all_date|>Enum.filter(fn x -> x.subject =="MAT" end)
+   {math1,math2,math3}= if math == [] do
 
-    	{"","",""}
+      {"","",""}
     else
-   		 math=math|>hd	
-    	
+       math=math|>hd  
+
+
+
+     math_s1m=if math.s1m != nil do
+      math.s1m
+    else
+      ""
+     end
+
+     math_s1g=if math.s1g != nil do
+      math.s1g
+    else
+      "" 
+     end  
+      
+      math1={math_s1m,math_s1g}
+      
  
+     math_s2m=if math.s2m != nil do
+      math.s2m
+    else
+      ""
+     end
 
-		 math1=if math.s1m != nil do
-		  math.s1m
-		else
-		   math.s1g
-		 end
+     math_s2g=if math.s2g != nil do
+      math.s2g
+    else
+      "" 
+     end  
+      
+      math2={math_s2m,math_s2g}
 
-		  math2=if math.s2m != nil do
-		  math.s2m
-		else
-		   math.s2g
-		 end
 
-   			math3=if math.s3m != nil do
-		  math.s3m
-		else
-		   math.s3g
-		 end
+    math_s3m=if math.s3m != nil do
+      math.s3m
+    else
+      ""
+     end
 
-		 {math1,math2,math3}
+     math_s3g=if math.s3g != nil do
+      math.s3g
+    else
+      "" 
+     end  
+      
+      math3={math_s3m,math_s3g}
+
+    
+
+
+     {math1,math2,math3}
 
     end
 
-                                    sains= all_date|>Enum.filter(fn x -> x.subject =="SN" end)
-   {sains1,sains2,sains3}=	if sains == [] do
+    sains= all_date|>Enum.filter(fn x -> x.subject =="SN" end)
+   {sains1,sains2,sains3}=  if sains == [] do
 
-    	{"","",""}
+      {"","",""}
     else
-   		 sains=sains|>hd	
-    	
- 
+       sains=sains|>hd  
+      
+      sains_s1m=if sains.s1m != nil do
+      sains.s1m
+    else
+      ""
+     end
 
-		 sains1=if sains.s1m != nil do
-		  sains.s1m
-		else
-		   sains.s1g
-		 end
+     sains_s1g=if sains.s1g != nil do
+      sains.s1g
+    else
+      "" 
+     end  
+      
+      sains1={sains_s1m,sains_s1g}
 
-		  sains2=if sains.s2m != nil do
-		  sains.s2m
-		else
-		   sains.s2g
-		 end
 
-   			sains3=if sains.s3m != nil do
-		  sains.s3m
-		else
-		   sains.s3g
-		 end
+            sains_s2m=if sains.s2m != nil do
+      sains.s2m
+    else
+      ""
+     end
 
-		 {sains1,sains2,sains3}
+     sains_s2g=if sains.s2g != nil do
+      sains.s2g
+    else
+      "" 
+     end  
+      
+      sains2={sains_s2m,sains_s2g}
+
+   sains_s3m=if sains.s3m != nil do
+      sains.s3m
+    else
+      ""
+     end
+
+     sains_s3g=if sains.s3g != nil do
+      sains.s3g
+    else
+      "" 
+     end  
+      
+      sains3={sains_s3m,sains_s3g}
+
+     {sains1,sains2,sains3}
 
     end
 
 
     agama= all_date|>Enum.filter(fn x -> x.subject =="AGAMA" end)
-   {agama1,agama2,agama3}=	if agama == [] do
+   {agama1,agama2,agama3}=  if agama == [] do
 
-    	{"","",""}
+      {"","",""}
     else
-   		 agama=agama|>hd	
-    	
+       agama=agama|>hd  
+      
  
+      agama_s1m=if agama.s1m != nil do
+      agama.s1m
+    else
+      ""
+     end
 
-		 agama1=if agama.s1m != nil do
-		  agama.s1m
-		else
-		   agama.s1g
-		 end
+     agama_s1g=if agama.s1g != nil do
+      agama.s1g
+    else
+      "" 
+     end  
+      
+      agama1={agama_s1m,agama_s1g}
 
-		  agama2=if agama.s2m != nil do
-		  agama.s2m
-		else
-		   agama.s2g
-		 end
 
-   			agama3=if agama.s3m != nil do
-		  agama.s3m
-		else
-		   agama.s3g
-		 end
+   agama_s2m=if agama.s2m != nil do
+      agama.s2m
+    else
+      ""
+     end
 
-		 {agama1,agama2,agama3}
+     agama_s2g=if agama.s2g != nil do
+      agama.s2g
+    else
+      "" 
+     end  
+      
+      agama2={agama_s2m,agama_s2g}
+
+   agama_s3m=if agama.s3m != nil do
+      agama.s3m
+    else
+      ""
+     end
+
+     agama_s3g=if agama.s3g != nil do
+      agama.s3g
+    else
+      "" 
+     end  
+      
+      agama3={agama_s3m,agama_s3g}
+
+
+     {agama1,agama2,agama3}
 
     end
 
 
         sej= all_date|>Enum.filter(fn x -> x.subject =="SEJ" end)
-   {sej1,sej2,sej3}=	if sej == [] do
+   {sej1,sej2,sej3}=  if sej == [] do
 
-    	{"","",""}
+      {"","",""}
     else
-   		 sej=sej|>hd	
-    	
+       sej=sej|>hd  
+      
  
 
-		 sej1=if sej.s1m != nil do
-		  sej.s1m
-		else
-		   sej.s1g
-		 end
 
-		  sej2=if sej.s2m != nil do
-		  sej.s2m
-		else
-		   sej.s2g
-		 end
+ 
+     sej_s1m=if sej.s1m != nil do
+      sej.s1m
+    else
+      ""
+     end
 
-   			sej3=if sej.s3m != nil do
-		  sej.s3m
-		else
-		   sej.s3g
-		 end
+     sej_s1g=if sej.s1g != nil do
+      sej.s1g
+    else
+      "" 
+     end  
+      
+     sej1={sej_s1m,sej_s1g}
 
-		 {sej1,sej2,sej3}
+
+      sej_s2m=if sej.s2m != nil do
+      sej.s2m
+    else
+      ""
+     end
+
+     sej_s2g=if sej.s2g != nil do
+      sej.s2g
+    else
+      "" 
+     end  
+      
+     sej2={sej_s2m,sej_s2g}
+
+
+    sej_s3m=if sej.s3m != nil do
+      sej.s3m
+    else
+      ""
+     end
+
+     sej_s3g=if sej.s3g != nil do
+      sej.s3g
+    else
+      "" 
+     end  
+      
+     sej3={sej_s3m,sej_s3g}
+
+     {sej1,sej2,sej3}
 
     end
 
 
         rbt= all_date|>Enum.filter(fn x -> x.subject =="RBT" end)
-   {rbt1,rbt2,rbt3}=	if rbt == [] do
+   {rbt1,rbt2,rbt3}=  if rbt == [] do
 
-    	{"","",""}
+      {"","",""}
     else
-   		 rbt=rbt|>hd	
-    	
+       rbt=rbt|>hd  
+      
+
  
+     rbt_s1m=if rbt.s1m != nil do
+      rbt.s1m
+    else
+      ""
+     end
 
-		 rbt1=if rbt.s1m != nil do
-		  rbt.s1m
-		else
-		   rbt.s1g
-		 end
+     rbt_s1g=if rbt.s1g != nil do
+      rbt.s1g
+    else
+      "" 
+     end  
+      
+     rbt1={rbt_s1m,rbt_s1g} 
 
-		  rbt2=if rbt.s2m != nil do
-		  rbt.s2m
-		else
-		   rbt.s2g
-		 end
 
-   			rbt3=if rbt.s3m != nil do
-		  rbt.s3m
-		else
-		   rbt.s3g
-		 end
+     rbt_s2m=if rbt.s2m != nil do
+      rbt.s2m
+    else
+      ""
+     end
 
-		 {rbt1,rbt2,rbt3}
+     rbt_s2g=if rbt.s2g != nil do
+      rbt.s2g
+    else
+      "" 
+     end  
+      
+     rbt2={rbt_s2m,rbt_s2g} 
+
+     rbt_s3m=if rbt.s3m != nil do
+      rbt.s3m
+    else
+      ""
+     end
+
+     rbt_s3g=if rbt.s3g != nil do
+      rbt.s3g
+    else
+      "" 
+     end  
+      
+     rbt3={rbt_s3m,rbt_s3g}            
+
+
+     {rbt1,rbt2,rbt3}
 
     end
 
 
         tmk= all_date|>Enum.filter(fn x -> x.subject =="TMK" end)
-   {tmk1,tmk2,tmk3}=	if tmk == [] do
+   {tmk1,tmk2,tmk3}=  if tmk == [] do
 
-    	{"","",""}
+      {"","",""}
     else
-   		 tmk=tmk|>hd	
-    	
- 
+       tmk=tmk|>hd  
+      
 
-		 tmk1=if tmk.s1m != nil do
-		  tmk.s1m
-		else
-		   tmk.s1g
-		 end
+     tmk_s1m=if tmk.s1m != nil do
+      tmk.s1m
+    else
+      ""
+     end
 
-		  tmk2=if tmk.s2m != nil do
-		  tmk.s2m
-		else
-		   tmk.s2g
-		 end
+     tmk_s1g=if tmk.s1g != nil do
+      tmk.s1g
+    else
+      "" 
+     end  
+      
+     tmk1={tmk_s1m,tmk_s1g}  
 
-   			tmk3=if tmk.s3m != nil do
-		  tmk.s3m
-		else
-		   tmk.s3g
-		 end
+     tmk_s2m=if tmk.s2m != nil do
+      tmk.s2m
+    else
+      ""
+     end
 
-		 {tmk1,tmk2,tmk3}
+     tmk_s2g=if tmk.s2g != nil do
+      tmk.s2g
+    else
+      "" 
+     end  
+      
+     tmk2={tmk_s2m,tmk_s2g} 
+
+     tmk_s3m=if tmk.s3m != nil do
+      tmk.s3m
+    else
+      ""
+     end
+
+     tmk_s3g=if tmk.s3g != nil do
+      tmk.s3g
+    else
+      "" 
+     end  
+      
+     tmk3={tmk_s3m,tmk_s3g}  
+
+
+
+     {tmk1,tmk2,tmk3}
 
     end
 
 
             seni= all_date|>Enum.filter(fn x -> x.subject =="SENI" end)
-   {seni1,seni2,seni3}=	if seni == [] do
+   {seni1,seni2,seni3}= if seni == [] do
 
-    	{"","",""}
+      {"","",""}
     else
-   		 seni=seni|>hd	
-    	
- 
+       seni=seni|>hd  
+      
 
-		 seni1=if seni.s1m != nil do
-		  seni.s1m
-		else
-		   seni.s1g
-		 end
+     seni_s1m=if seni.s1m != nil do
+      seni.s1m
+    else
+      ""
+     end
 
-		  seni2=if seni.s2m != nil do
-		  seni.s2m
-		else
-		   seni.s2g
-		 end
+     seni_s1g=if seni.s1g != nil do
+      seni.s1g
+    else
+      "" 
+     end  
+      
+     seni1={seni_s1m,seni_s1g}  
 
-   			seni3=if seni.s3m != nil do
-		  seni.s3m
-		else
-		   seni.s3g
-		 end
+     seni_s2m=if seni.s2m != nil do
+      seni.s2m
+    else
+      ""
+     end
 
-		 {seni1,seni2,seni3}
+     seni_s2g=if seni.s2g != nil do
+      seni.s2g
+    else
+      "" 
+     end  
+      
+     seni2={seni_s2m,seni_s2g}  
+
+
+     seni_s3m=if seni.s3m != nil do
+      seni.s3m
+    else
+      ""
+     end
+
+     seni_s3g=if seni.s3g != nil do
+      seni.s3g
+    else
+      "" 
+     end  
+      
+     seni3={seni_s3m,seni_s3g}        
+
+
+     {seni1,seni2,seni3}
 
     end
 
 
             pj= all_date|>Enum.filter(fn x -> x.subject =="PJ" end)
-   {pj1,pj2,pj3}=	if pj == [] do
+   {pj1,pj2,pj3}= if pj == [] do
 
-    	{"","",""}
+      {"","",""}
     else
-   		 pj=pj|>hd	
-    	
- 
+       pj=pj|>hd  
+      
 
-		 pj1=if pj.s1m != nil do
-		  pj.s1m
-		else
-		   pj.s1g
-		 end
+     pj_s1m=if pj.s1m != nil do
+      pj.s1m
+    else
+      ""
+     end
 
-		  pj2=if pj.s2m != nil do
-		  pj.s2m
-		else
-		   pj.s2g
-		 end
+     pj_s1g=if pj.s1g != nil do
+      pj.s1g
+    else
+      "" 
+     end  
 
-   			pj3=if pj.s3m != nil do
-		  pj.s3m
-		else
-		   pj.s3g
-		 end
+     pj1={pj_s1m,pj_s1g}  
 
-		 {pj1,pj2,pj3}
+
+          pj_s2m=if pj.s2m != nil do
+      pj.s2m
+    else
+      ""
+     end
+
+     pj_s2g=if pj.s2g != nil do
+      pj.s2g
+    else
+      "" 
+     end  
+
+     pj2={pj_s2m,pj_s2g}  
+
+
+     pj_s3m=if pj.s3m != nil do
+      pj.s2m
+    else
+      ""
+     end
+
+     pj_s3g=if pj.s3g != nil do
+      pj.s3g
+    else
+      "" 
+     end  
+
+     pj3={pj_s3m,pj_s3g}  
+
+
+
+     {pj1,pj2,pj3}
 
     end
 
                 laku= all_date|>Enum.filter(fn x -> x.subject =="LAKU" end)
-   {laku1,laku2,laku3}=	if laku == [] do
+   {laku1,laku2,laku3}= if laku == [] do
 
-    	{"","",""}
+      {"","",""}
     else
-   		 laku=laku|>hd	
-    	
+       laku=laku|>hd  
+      
  
 
-		 laku1=if laku.s1m != nil do
-		  laku.s1m
-		else
-		   laku.s1g
-		 end
+     laku1=if laku.s1m != nil do
+      laku.s1m
+    else
+       laku.s1g
+     end
 
-		  laku2=if laku.s2m != nil do
-		  laku.s2m
-		else
-		   laku.s2g
-		 end
+      laku2=if laku.s2m != nil do
+      laku.s2m
+    else
+       laku.s2g
+     end
 
-   			laku3=if laku.s3m != nil do
-		  laku.s3m
-		else
-		   laku.s3g
-		 end
+        laku3=if laku.s3m != nil do
+      laku.s3m
+    else
+       laku.s3g
+     end
 
-		 {laku1,laku2,laku3}
+     {laku1,laku2,laku3}
 
     end
 
@@ -1038,113 +1588,112 @@ else
     <td align="center" style="margin: 3px; padding: 3px;">平均 <BR>Purata</td>
  </tr>
 
-
  <tr  align="center">
   <td rowspan="4"  style="margin: 3px; padding: 3px;" align="left"><BR> <b>国语 <br> Bahasa <br> Malaysia </b><BR></td>
   <td style="margin: 3px; padding: 3px;" align="left">会话 Lisan</td>
-  <td style="margin: 3px; padding: 3px;"><%= bml1 %></td>
-  <td style="margin: 3px; padding: 3px;"><%= bml2 %></td>
-   <td style="margin: 3px; padding: 3px;"><%= bml3 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if bml1 != "" do bml1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if bml1 != "" do bml1|>elem(1) else "" end %></div></td>
+  <td style="margin: 3px; padding: 3px;"><%= if bml2 != "" do bml1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if bml2 != "" do bml2|>elem(1) else "" end %></td>
+   <td style="margin: 3px; padding: 3px;"><%= if bml3 != "" do bml1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if bml3 != "" do bml3|>elem(1) else "" end %></td>
     <td style="margin: 3px; padding: 3px;"></td>
   
  </tr>
  <tr align="center">
   <td style="margin: 3px; padding: 3px;" align="left">阅读 Bacaan</td>
-  <td style="margin: 3px; padding: 3px;"><%= bmb1 %></td>
-  <td style="margin: 3px; padding: 3px;"><%= bmb2 %></td>
-   <td style="margin: 3px; padding: 3px;"><%= bmb3 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if bmb1 != "" do bmb1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if bmb1 != "" do bmb1|>elem(1) else "" end %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if bmb2 != "" do bmb2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if bmb2 != "" do bmb2|>elem(1) else "" end %></td>
+   <td style="margin: 3px; padding: 3px;"><%= if bmb3 != "" do bmb3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if bmb3 != "" do bmb3|>elem(1) else "" end %></td>
     <td style="margin: 3px; padding: 3px;"></td>
  </tr>
  <tr align="center">
   <td style="margin: 3px; padding: 3px;" align="left">写作 Penulisan</td>
-  <td style="margin: 3px; padding: 3px;"><%= bmp1 %></td>
-  <td style="margin: 3px; padding: 3px;"><%= bmp2 %></td>
-  <td style="margin: 3px; padding: 3px;"><%= bmp3 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if bmp1 != "" do bmp1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if bmp1 != "" do bmp1|>elem(1) else "" end %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if bmp2 != "" do bmp2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if bmp2 != "" do bmp2|>elem(1) else "" end %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if bmp3 != "" do bmp3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if bmp3 != "" do bmp3|>elem(1) else "" end %></td>
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
  <tr align="center">
   <td style="margin: 3px; padding: 3px;" align="left">理解 Pemahaman</td>
-  <td style="margin: 3px; padding: 3px;"><%= bmpm1 %></td>
-  <td style="margin: 3px; padding: 3px;"><%= bmpm2 %></td>
-  <td style="margin: 3px; padding: 3px;"><%= bmpm3 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if bmpm1 != "" do bmpm1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if bmpm1 != "" do bmpm1|>elem(1) else "" end %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if bmpm2 != "" do bmpm2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if bmpm2 != "" do bmpm2|>elem(1) else "" end %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if bmpm3 != "" do bmpm3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if bmpm3 != "" do bmpm3|>elem(1) else "" end %></td>
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
  <tr align="center">
  <td rowspan="4"  style="margin: 3px; padding: 3px;" align="left"><BR><b>英语 <br> Bahasa <br> Inggeris</b></td>
   <td style="margin: 3px; padding: 3px;" align="left">会话 Lisan</td>
-  <td style="margin: 3px; padding: 3px;"><%= ingl1 %></td>
-  <td style="margin: 3px; padding: 3px;"><%= ingl2 %></td>
-   <td style="margin: 3px; padding: 3px;"><%= ingl3 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if ingl1 != "" do ingl1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if ingl1 != "" do ingl1|>elem(1) else "" end %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if ingl2 != "" do ingl2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if ingl2 != "" do ingl2|>elem(1) else "" end %></td>
+   <td style="margin: 3px; padding: 3px;"><%= if ingl3 != "" do ingl3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if ingl3 != "" do ingl3|>elem(1) else "" end %></td>
     <td style="margin: 3px; padding: 3px;"></td>
  </tr>
  <tr align="center">
   <td style="margin: 3px; padding: 3px;" align="left">阅读 Bacaan</td>
-  <td style="margin: 3px; padding: 3px;"><%= ingb1 %></td>
-  <td style="margin: 3px; padding: 3px;"><%= ingb2 %></td>
-   <td style="margin: 3px; padding: 3px;"><%= ingb3 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if ingb1 != "" do ingb1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if ingb1 != "" do ingb1|>elem(1) else "" end %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if ingb2 != "" do ingb2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if ingb2 != "" do ingb2|>elem(1) else "" end %></td>
+   <td style="margin: 3px; padding: 3px;"><%= if ingb3 != "" do ingb3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if ingb3 != "" do ingb3|>elem(1) else "" end %></td>
     <td style="margin: 3px; padding: 3px;"></td>
  </tr>
  <tr align="center">
   <td style="margin: 3px; padding: 3px;" align="left">写作 Penulisan</td>
-<td style="margin: 3px; padding: 3px;"><%= ingp1 %></td>
-  <td style="margin: 3px; padding: 3px;"><%= ingp2 %></td>
-   <td style="margin: 3px; padding: 3px;"><%= ingp3 %></td>
+<td style="margin: 3px; padding: 3px;"><%= if ingp1 != "" do ingp1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if ingp1 != "" do ingp1|>elem(1) else "" end %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if ingp2 != "" do ingp2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if ingp2 != "" do ingp2|>elem(1) else "" end %></td>
+   <td style="margin: 3px; padding: 3px;"><%= if ingp3 != "" do ingp3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if ingp3 != "" do ingp3|>elem(1) else "" end %></td>
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
  <tr align="center">
   <td style="margin: 3px; padding: 3px;" align="left">理解 Pemahaman</td>
-  <td style="margin: 3px; padding: 3px;"><%= ingpm1 %></td>
-  <td style="margin: 3px; padding: 3px;"><%= ingpm2 %></td>
-  <td style="margin: 3px; padding: 3px;"><%= ingpm3 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if ingpm1 != "" do ingpm1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if ingpm1 != "" do ingpm1|>elem(1) else "" end %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if ingpm2 != "" do ingpm2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if ingpm2 != "" do ingpm2|>elem(1) else "" end %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if ingpm3 != "" do ingpm3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if ingpm3 != "" do ingpm3|>elem(1) else "" end %></td>
    <td style="margin: 3px; padding: 3px;"></td>
  </tr align="center">
  <tr align="center">
  <td rowspan="4"  style="margin: 3px; padding: 3px;" align="left"><b><BR>华语 <br> Bahasa <br> Cina</b></td>
   <td style="margin: 3px; padding: 3px;" align="left">会话 Lisan</td>
-  <td style="margin: 3px; padding: 3px;"><%= chl1 %></td>
-  <td style="margin: 3px; padding: 3px;"><%= chl2 %></td>
-   <td style="margin: 3px; padding: 3px;"><%= chl3 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if chl1 != "" do chl1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if chl1 != "" do chl1|>elem(1) else "" end %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if chl2 != "" do chl1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if chl2 != "" do chl2|>elem(1) else "" end %></td>
+   <td style="margin: 3px; padding: 3px;"><%= if chl3 != "" do chl3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if chl3 != "" do chl3|>elem(1) else "" end %></td>
     <td style="margin: 3px; padding: 3px;"></td>
  </tr>
  <tr align="center">
   <td style="margin: 3px; padding: 3px;" align="left">阅读 Bacaan</td>
-  <td style="margin: 3px; padding: 3px;"><%= chb1 %></td>
-  <td style="margin: 3px; padding: 3px;"><%= chb2 %></td>
-   <td style="margin: 3px; padding: 3px;"><%= chb3 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if chb1 != "" do chb1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if chb1 != "" do chb1|>elem(1) else "" end %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if chb2 != "" do chb2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if chb2 != "" do chb2|>elem(1) else "" end %></td>
+   <td style="margin: 3px; padding: 3px;"><%= if chb3 != "" do chb3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if chb3 != "" do chb3|>elem(1) else "" end %></td>
     <td style="margin: 3px; padding: 3px;"></td>
  </tr>
  <tr align="center">
   <td style="margin: 3px; padding: 3px;" align="left">写作 Penulisan</td>
- <td style="margin: 3px; padding: 3px;"><%= chp1 %></td>
-  <td style="margin: 3px; padding: 3px;"><%= chp2 %></td>
-   <td style="margin: 3px; padding: 3px;"><%= chp3 %></td>
+ <td style="margin: 3px; padding: 3px;"><%= if chp1 != "" do chp1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if chp1 != "" do chp1|>elem(1) else "" end %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if chp2 != "" do chp2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if chp2 != "" do chp2|>elem(1) else "" end %></td>
+   <td style="margin: 3px; padding: 3px;"><%= if chp3 != "" do chp3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if chp3 != "" do chp3|>elem(1) else "" end %></td>
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
  <tr align="center">
   <td style="margin: 5px; padding: 5px; " align="left">理解 Pemahaman</td>
- <td style="margin: 3px; padding: 3px;"><%= chpm1 %></td>
-  <td style="margin: 3px; padding: 3px;"><%= chpm2 %></td>
-   <td style="margin: 3px; padding: 3px;"><%= chpm3 %></td>
+ <td style="margin: 3px; padding: 3px;"><%= if chpm1 != "" do chpm1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if chpm1 != "" do chpm1|>elem(1) else "" end %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if chpm2 != "" do chpm2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if chpm2 != "" do chpm2|>elem(1) else "" end %></td>
+   <td style="margin: 3px; padding: 3px;"><%= if chpm3 != "" do chpm3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if chpm3 != "" do chpm3|>elem(1) else "" end %></td>
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
 <tr align="center">
   <td style="margin: 5px; padding: 5px; border-right: 0" align="left">数学</td>
-  <td  style="margin: 5px; padding: 5px; border-left: 0"" align="left">Matematik</td>
-  <td style="margin: 3px; padding: 3px;"><%= math1 %></td>
-  <td style="margin: 3px; padding: 3px;"><%= math2 %></td>
-   <td style="margin: 3px; padding: 3px;"><%= math3 %></td>
+  <td  style="margin: 5px; padding: 5px; border-left: 0" align="left">Matematik</td>
+  <td style="margin: 3px; padding: 3px;"><%= if math1 != "" do math1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if math1 != "" do math1|>elem(1) else "" end %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if math2 != "" do math2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if math2 != "" do math2|>elem(1) else "" end %></td>
+   <td style="margin: 3px; padding: 3px;"><%= if math3 != "" do math3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if math3 != "" do math3|>elem(1) else "" end %></td>
     <td style="margin: 3px; padding: 3px;"></td>
  </tr>
  <tr align="center">
-    <td style="margin: 5px; padding: 5px; border-right: 0"" align="left">科学</td>
-  <td  style="margin: 5px; padding: 5px; border-left: 0"" align="left">Sains</td>
-  <td style="margin: 3px; padding: 3px;"><%= sains1 %></td>
-  <td style="margin: 3px; padding: 3px;"><%= sains2 %></td>
-   <td style="margin: 3px; padding: 3px;"><%= sains3 %></td>
+    <td style="margin: 5px; padding: 5px; border-right: 0" align="left">科学</td>
+  <td  style="margin: 5px; padding: 5px; border-left: 0" align="left">Sains</td>
+  <td style="margin: 3px; padding: 3px;"><%= if sains1 != "" do sains1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if sains1 != "" do sains1|>elem(1) else "" end %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if sains2 != "" do sains2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if sains2 != "" do sains2|>elem(1) else "" end %></td>
+   <td style="margin: 3px; padding: 3px;"><%= if sains3 != "" do sains3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if sains3 != "" do sains3|>elem(1) else "" end %></td>
     <td style="margin: 3px; padding: 3px;"></td>
  </tr>
  <tr align="center">
-   <td style="margin: 5px; padding: 5px; border-right: 0"" align="left">道德教育</td>
+   <td style="margin: 5px; padding: 5px; border-right: 0" align="left">道德教育</td>
   <td style="margin: 5px; padding: 5px; border-left: 0" align="left">Pendidikan Moral</td>
   <td style="margin: 3px; padding: 3px;"></td>
   <td style="margin: 3px; padding: 3px;"></td>
@@ -1152,55 +1701,70 @@ else
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
  <tr align="center">
-  <td style="margin: 5px; padding: 5px; border-right: 0"" align="left">回教</td>
+  <td style="margin: 5px; padding: 5px; border-right: 0" align="left">回教</td>
   <td style="margin: 5px; padding: 5px; border-left: 0" align="left">Agama Islam</td>
- <td style="margin: 3px; padding: 3px;"><%= agama1 %></td>
-  <td style="margin: 3px; padding: 3px;"><%= agama2 %></td>
-   <td style="margin: 3px; padding: 3px;"><%= agama3 %></td>
+ <td style="margin: 3px; padding: 3px;"><%= if agama1 != "" do agama1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if agama1 != "" do agama1|>elem(1) else "" end %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if agama2 != "" do agama2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if agama2 != "" do agama2|>elem(1) else "" end %></td>
+   <td style="margin: 3px; padding: 3px;"><%= if agama3 != "" do agama3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if agama3 != "" do agama3|>elem(1) else "" end %></td>
     <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
-      <td style="margin: 5px; padding: 5px; border-right: 0"" align="left">历史</td>
+      <td style="margin: 5px; padding: 5px; border-right: 0" align="left">历史</td>
   <td style="margin: 5px; padding: 5px; border-left: 0" align="left">Sejarah</td>
- <td style="margin: 3px; padding: 3px;"><%= sej1 %></td>
-  <td style="margin: 3px; padding: 3px;"><%= sej2 %></td>
-   <td style="margin: 3px; padding: 3px;"><%= sej3 %></td>
+ <td style="margin: 3px; padding: 3px;"><%= if sej1 != "" do sej1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if sej1 != "" do sej1|>elem(1) else "" end %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if sej2 != "" do sej2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if sej2 != "" do sej2|>elem(1) else "" end %></td>
+   <td style="margin: 3px; padding: 3px;"><%= if sej3 != "" do sej3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if sej3 != "" do sej3|>elem(1) else "" end %></td>
     <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
-          <td style="margin: 5px; padding: 5px; border-right: 0"" align="left">设计和技术</td>
+          <td style="margin: 5px; padding: 5px; border-right: 0" align="left">设计和技术</td>
   <td style="margin: 5px; padding: 5px; border-left: 0" align="left">RBT</td>
- <td style="margin: 3px; padding: 3px;"><%= rbt1 %></td>
-  <td style="margin: 3px; padding: 3px;"><%= rbt2 %></td>
-   <td style="margin: 3px; padding: 3px;"><%= rbt3 %></td>
+ <td style="margin: 3px; padding: 3px;"><%= if rbt1 != "" do rbt1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if rbt1 != "" do rbt1|>elem(1) else "" end %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if rbt2 != "" do rbt2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if rbt2 != "" do rbt2|>elem(1) else "" end %></td>
+   <td style="margin: 3px; padding: 3px;"><%= if rbt3 != "" do rbt3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if rbt3 != "" do rbt3|>elem(1) else "" end %></td>
     <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
-       <td style="margin: 5px; padding: 5px; border-right: 0"" align="left">通信信息技术</td>
+       <td style="margin: 5px; padding: 5px; border-right: 0" align="left">通信信息技术</td>
   <td style="margin: 5px; padding: 5px; border-left: 0" align="left">TMK</td>
-  <td style="margin: 3px; padding: 3px;"><%= tmk1 %></td>
-  <td style="margin: 3px; padding: 3px;"><%= tmk2 %></td>
-   <td style="margin: 3px; padding: 3px;"><%= tmk3 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if tmk1 != "" do tmk1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if tmk1 != "" do tmk1|>elem(1) else "" end %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if tmk2 != "" do tmk2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if tmk2 != "" do tmk2|>elem(1) else "" end %></td>
+   <td style="margin: 3px; padding: 3px;"><%= if tmk3 != "" do tmk3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if tmk3 != "" do tmk3|>elem(1) else "" end %></td>
     <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center"  >
   <td style="margin: 5px; padding: 5px; border-right: 0"  align="left">艺术教育</td>
   <td style="margin: 5px; padding: 5px; border-left: 0"  align="left">Pendidikan Kesenian</td>
-  <td style="margin: 3px; padding: 3px;"><%= seni1 %></td>
-  <td style="margin: 3px; padding: 3px;"><%= seni2 %></td>
-  <td style="margin: 3px; padding: 3px;"><%= seni3 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if seni1 != "" do seni1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if seni1 != "" do seni1|>elem(1) else "" end %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if seni2 != "" do seni2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if seni2 != "" do seni2|>elem(1) else "" end %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if seni3 != "" do seni3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if seni3 != "" do seni3|>elem(1) else "" end %></td>
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
-      <td style="margin: 5px; padding: 5px; border-right: 0"" align="left">体健</td>
+      <td style="margin: 5px; padding: 5px; border-right: 0" align="left">体健</td>
   <td style="margin: 5px; padding: 5px; border-left: 0" align="left">PJK</td>
-    <td style="margin: 3px; padding: 3px;"><%= pj1 %></td>
-  <td style="margin: 3px; padding: 3px;"><%= pj2 %></td>
-  <td style="margin: 3px; padding: 3px;"><%= pj3 %></td>
+    <td style="margin: 3px; padding: 3px;"><%= if pj1 != "" do pj1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if pj1 != "" do pj1|>elem(1) else "" end %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if pj2 != "" do pj2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if pj2 != "" do pj2|>elem(1) else "" end %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if pj3 != "" do pj3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if pj3 != "" do pj3|>elem(1) else "" end %></td>
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
-     <td style="margin: 5px; padding: 5px; border-right: 0"" align="left">操行</td>
+  <td colspan="2" style="margin: 3px; padding: 3px;" align="left"></td>
+  <td style="margin: 3px; padding: 3px;">&nbsp;</td>
+  <td style="margin: 3px; padding: 3px;">&nbsp;</td>
+  <td style="margin: 3px; padding: 3px;">&nbsp;</td>
+   <td style="margin: 3px; padding: 3px;"></td>
+ </tr>
+ <tr align="center">
+
+  <td colspan="2" style="margin: 3px; padding: 3px;" align="left"></td>
+  <td style="margin: 3px; padding: 3px;">&nbsp;</td>
+  <td style="margin: 3px; padding: 3px;">&nbsp;</td>
+  <td style="margin: 3px; padding: 3px;">&nbsp;</td>
+   <td style="margin: 3px; padding: 3px;"></td>
+ </tr>
+  <tr align="center">
+     <td style="margin: 5px; padding: 5px; border-right: 0" align="left">操行</td>
   <td  style="margin: 5px; padding: 5px; border-left: 0" align="left">Kelakuan</td>
     <td style="margin: 3px; padding: 3px;"><%= laku1 %></td>
   <td style="margin: 3px; padding: 3px;"><%= laku2 %></td>
@@ -1208,7 +1772,7 @@ else
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
-    <td style="margin: 5px; padding: 5px; border-right: 0"" align="left">出席日数</td>
+    <td style="margin: 5px; padding: 5px; border-right: 0" align="left">出席日数</td>
   <td style="margin: 5px; padding: 5px; border-left: 0" align="left">Kedatangan</td>
     <td style="margin: 3px; padding: 3px;"><%= kedatangan1 %></td>
   <td style="margin: 3px; padding: 3px;"><%= kedatangan2 %></td>
@@ -1216,7 +1780,7 @@ else
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
-  <td style="margin: 5px; padding: 5px; border-right: 0"" align="left">总分</td>
+  <td style="margin: 5px; padding: 5px; border-right: 0" align="left">总分</td>
    <td  style="margin: 5px; padding: 5px; border-left: 0" align="left">Jumlah Markah</td>
       <td style="margin: 3px; padding: 3px;"><%= total1 %></td>
   <td style="margin: 3px; padding: 3px;"><%= total2 %></td>
@@ -1224,7 +1788,7 @@ else
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center" >
-  <td  style="margin: 5px; padding: 5px; border-right: 0"" align="left">平均 </td>
+  <td  style="margin: 5px; padding: 5px; border-right: 0" align="left">平均 </td>
   <td  style="margin: 5px; padding: 5px; border-left: 0" align="left">Purata</td>
         <td style="margin: 3px; padding: 3px;"><%= averg1 %></td>
   <td style="margin: 3px; padding: 3px;"><%= averg2 %></td>
@@ -1232,7 +1796,7 @@ else
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
-  <td style="margin: 5px; padding: 5px; border-right: 0""  align="left">本班名次</td>
+  <td style="margin: 5px; padding: 5px; border-right: 0"  align="left">本班名次</td>
    <td style="margin: 5px; padding: 5px; border-left: 0"  align="left">Kedudukan Dalam Kelas</td>
         <td style="margin: 3px; padding: 3px;"><%= crank1 %></td>
   <td style="margin: 3px; padding: 3px;"><%= crank2 %></td>
@@ -1240,7 +1804,7 @@ else
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
-  <td style="margin: 5px; padding: 5px; border-right: 0"" align="left" >全级名次</td>
+  <td style="margin: 5px; padding: 5px; border-right: 0" align="left" >全级名次</td>
   <td style="margin: 5px; padding: 5px; border-left: 0" align="left">Kedudukan Dalam Darjah</td>
         <td style="margin: 3px; padding: 3px;"><%= srank1 %></td>
   <td style="margin: 3px; padding: 3px;"><%= srank2 %></td>
@@ -1255,7 +1819,6 @@ else
   <td style="margin: 3px; padding: 3px;"><%= hw3 %></td>
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
-  
  <tr>
   
    <td colspan="6" align="left" style="margin: 3px; padding: 3px;" height="100px;">评语 Komen:</td>
