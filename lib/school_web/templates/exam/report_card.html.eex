@@ -90,6 +90,8 @@
       <tr>
         <td colspan="2" class="footer">Comment</td>
         <td colspan="5">
+
+          
           <%=  if @student_comment != nil  do %>
             
      

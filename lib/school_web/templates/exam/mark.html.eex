@@ -40,7 +40,7 @@
 
                                       <input type="number" min="0" max="100" name="mark[<%=item.id %>]"></td>
                                       <% else %>
-                                      <input type="text" name="grade[<%=item.id %>]" placeholder="A,B,C,D,E,F">
+                                      <input type="text" name="grade[<%=item.id %>]" placeholder="A,B,C,D,E">
                                       <% end %></td>
                                     
                                  </tr>

@@ -56,10 +56,9 @@
 
                                       <input type="number" min="0" max="100" value="<%= item.mark %>" name="mark[<%=item.id %>]"></td>
                                       <% else %>
-                                      <input type="text" name="grade[<%=item.id %>]" value="<%= item.grade %>" placeholder="A,B,C,D,E,F">
+                                      <input type="text" name="grade[<%=item.id %>]" value="<%= item.grade %>" placeholder="A,B,C,D,E">
                                       <% end %></td>
                                      
-                                
                                  </tr>
                                     <% end %>
                               </tbody>
@@ -71,6 +70,7 @@
 
                   </div>
                   <!-- END card-->
+
 
                       <%= if  @fi != [] do %>
                              <!-- START card-->
@@ -96,9 +96,9 @@
 
                                       <input type="number" min="0" max="100" value="<%= item.mark %>" name="mark[<%=item.student_id %>]"></td>
                                       <% else %>
-                                      <input type="text" name="grade[<%=item.student_id %>]" value="<%= item.grade %>" placeholder="A,B,C,D,E,F">
+                                      <input type="text" name="grade[<%=item.student_id %>]" value="<%= item.grade %>" placeholder="A,B,C,D,E">
                                       <% end %></td>
-                                
+
                                  </tr>
                                     <% end %>
                               </tbody>
