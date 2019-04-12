@@ -4782,4 +4782,76 @@ defmodule School.AffairsTest do
       assert %Ecto.Changeset{} = Affairs.change_teacher_absent(teacher_absent)
     end
   end
+
+  describe "exam_attendance" do
+    alias School.Affairs.ExamAttendance
+
+    @valid_attrs %{class_id: 42, exam_id: 42, exam_master_id: 42, institution_id: 42, semester_id: 42, student_id: 42, subject_id: 42}
+    @update_attrs %{class_id: 43, exam_id: 43, exam_master_id: 43, institution_id: 43, semester_id: 43, student_id: 43, subject_id: 43}
+    @invalid_attrs %{class_id: nil, exam_id: nil, exam_master_id: nil, institution_id: nil, semester_id: nil, student_id: nil, subject_id: nil}
+
+    def exam_attendance_fixture(attrs \\ %{}) do
+      {:ok, exam_attendance} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_exam_attendance()
+
+      exam_attendance
+    end
+
+    test "list_exam_attendance/0 returns all exam_attendance" do
+      exam_attendance = exam_attendance_fixture()
+      assert Affairs.list_exam_attendance() == [exam_attendance]
+    end
+
+    test "get_exam_attendance!/1 returns the exam_attendance with given id" do
+      exam_attendance = exam_attendance_fixture()
+      assert Affairs.get_exam_attendance!(exam_attendance.id) == exam_attendance
+    end
+
+    test "create_exam_attendance/1 with valid data creates a exam_attendance" do
+      assert {:ok, %ExamAttendance{} = exam_attendance} = Affairs.create_exam_attendance(@valid_attrs)
+      assert exam_attendance.class_id == 42
+      assert exam_attendance.exam_id == 42
+      assert exam_attendance.exam_master_id == 42
+      assert exam_attendance.institution_id == 42
+      assert exam_attendance.semester_id == 42
+      assert exam_attendance.student_id == 42
+      assert exam_attendance.subject_id == 42
+    end
+
+    test "create_exam_attendance/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_exam_attendance(@invalid_attrs)
+    end
+
+    test "update_exam_attendance/2 with valid data updates the exam_attendance" do
+      exam_attendance = exam_attendance_fixture()
+      assert {:ok, exam_attendance} = Affairs.update_exam_attendance(exam_attendance, @update_attrs)
+      assert %ExamAttendance{} = exam_attendance
+      assert exam_attendance.class_id == 43
+      assert exam_attendance.exam_id == 43
+      assert exam_attendance.exam_master_id == 43
+      assert exam_attendance.institution_id == 43
+      assert exam_attendance.semester_id == 43
+      assert exam_attendance.student_id == 43
+      assert exam_attendance.subject_id == 43
+    end
+
+    test "update_exam_attendance/2 with invalid data returns error changeset" do
+      exam_attendance = exam_attendance_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_exam_attendance(exam_attendance, @invalid_attrs)
+      assert exam_attendance == Affairs.get_exam_attendance!(exam_attendance.id)
+    end
+
+    test "delete_exam_attendance/1 deletes the exam_attendance" do
+      exam_attendance = exam_attendance_fixture()
+      assert {:ok, %ExamAttendance{}} = Affairs.delete_exam_attendance(exam_attendance)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_exam_attendance!(exam_attendance.id) end
+    end
+
+    test "change_exam_attendance/1 returns a exam_attendance changeset" do
+      exam_attendance = exam_attendance_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_exam_attendance(exam_attendance)
+    end
+  end
 end

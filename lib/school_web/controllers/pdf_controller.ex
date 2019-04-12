@@ -169,6 +169,7 @@ defmodule SchoolWeb.PdfController do
                 }
               )
             )
+            |> Enum.filter(fn x -> x != nil end)
             |> Enum.sort()
 
           {mark, grade} =
@@ -186,7 +187,11 @@ defmodule SchoolWeb.PdfController do
                     else
                       a = fit |> hd()
 
-                      a.mark |> Integer.to_string()
+                      if a.mark != nil do
+                        a.mark |> Integer.to_string()
+                      else
+                        "0"
+                      end
                     end
 
                   {no + 1, fit}
@@ -205,6 +210,13 @@ defmodule SchoolWeb.PdfController do
                     else
                       a = fit |> hd()
 
+                      mark =
+                        if a.mark != nil do
+                          a.mark
+                        else
+                          0
+                        end
+
                       grades =
                         Repo.all(
                           from(
@@ -217,7 +229,7 @@ defmodule SchoolWeb.PdfController do
 
                       grade =
                         for grade <- grades do
-                          if a.mark >= grade.min and a.mark <= grade.max do
+                          if mark >= grade.min and mark <= grade.max do
                             grade.name
                           end
                         end
@@ -439,7 +451,13 @@ defmodule SchoolWeb.PdfController do
                   for items <- fit do
                     student_id = items |> elem(0)
                     items = items |> elem(1)
-                    sum = items |> Enum.map(fn x -> x.mark end) |> Enum.sum()
+
+                    sum =
+                      items
+                      |> Enum.filter(fn x -> x.mark != 0 end)
+                      |> Enum.filter(fn x -> x.mark != nil end)
+                      |> Enum.map(fn x -> x.mark end)
+                      |> Enum.sum()
 
                     if items != [] do
                       item = items |> hd
@@ -663,7 +681,13 @@ defmodule SchoolWeb.PdfController do
                   for items <- fit do
                     student_id = items |> elem(0)
                     items = items |> elem(1)
-                    sum = items |> Enum.map(fn x -> x.mark end) |> Enum.sum()
+
+                    sum =
+                      items
+                      |> Enum.filter(fn x -> x.mark != nil end)
+                      |> Enum.filter(fn x -> x.mark != 0 end)
+                      |> Enum.map(fn x -> x.mark end)
+                      |> Enum.sum()
 
                     if items != [] do
                       item = items |> hd
@@ -841,7 +865,13 @@ defmodule SchoolWeb.PdfController do
               if fit == [] do
                 ""
               else
-                a = fit |> Enum.map(fn x -> x.mark end) |> Enum.sum() |> Integer.to_string()
+                a =
+                  fit
+                  |> Enum.filter(fn x -> x.mark != 0 end)
+                  |> Enum.filter(fn x -> x.mark != nil end)
+                  |> Enum.map(fn x -> x.mark end)
+                  |> Enum.sum()
+                  |> Integer.to_string()
               end
 
             {no + 1, fit}
@@ -955,7 +985,12 @@ defmodule SchoolWeb.PdfController do
               if fit == [] do
                 ""
               else
-                a = fit |> Enum.map(fn x -> x.mark end) |> Enum.sum()
+                a =
+                  fit
+                  |> Enum.filter(fn x -> x.mark != 0 end)
+                  |> Enum.filter(fn x -> x.mark != nil end)
+                  |> Enum.map(fn x -> x.mark end)
+                  |> Enum.sum()
 
                 per = fit |> Enum.map(fn x -> x.mark end) |> Enum.count()
                 total_per = per * 100
@@ -3041,6 +3076,7 @@ defmodule SchoolWeb.PdfController do
                   student_name: item,
                   student_id: student.id,
                   student_mark: -1,
+                  student_grade: "F",
                   exam_name: exam_name,
                   subject_code: subject_code
                 }
@@ -3379,6 +3415,7 @@ defmodule SchoolWeb.PdfController do
                   student_name: student.name,
                   student_id: student.id,
                   student_mark: -1,
+                  student_grade: "F",
                   exam_name: exam_name,
                   subject_code: subject_code,
                   class_id: student_class.class_id

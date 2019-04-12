@@ -772,12 +772,7 @@
       chpm3={chpm_s3m,chpm_s3g}
     
 
-        chpm3=if chpm.s3m != nil do
-      chpm.s3m
-    else
-       chpm.s3g
-     end
-
+    
      {chpm1,chpm2,chpm3}
 
     end
@@ -1242,34 +1237,62 @@
 
     end
 
-                laku= all_date|>Enum.filter(fn x -> x.subject =="LAKU" end)
-   {laku1,laku2,laku3}=	if laku == [] do
 
-    	{"","",""}
+                laku= all_date|>Enum.filter(fn x -> x.subject =="LAKU" end)
+   {laku1,laku2,laku3}= if laku == [] do
+
+      {"","",""}
     else
-   		 laku=laku|>hd	
-    	
+       laku=laku|>hd  
+      
  
 
-		 laku1=if laku.s1m != nil do
-		  laku.s1m
-		else
-		   laku.s1g
-		 end
+     laku_s1m=if laku.s1m != nil do
+      laku.s1m
+    else
+      ""
+     end
 
-		  laku2=if laku.s2m != nil do
-		  laku.s2m
-		else
-		   laku.s2g
-		 end
+     laku_s1g=if laku.s1g != nil do
+      laku.s1g
+    else
+      "" 
+     end  
 
-   			laku3=if laku.s3m != nil do
-		  laku.s3m
-		else
-		   laku.s3g
-		 end
+     laku1={laku_s1m,laku_s1g}  
 
-		 {laku1,laku2,laku3}
+
+         laku_s2m=if laku.s2m != nil do
+      laku.s2m
+    else
+      ""
+     end
+
+     laku_s2g=if laku.s2g != nil do
+      laku.s2g
+    else
+      "" 
+     end  
+
+     laku2={laku_s2m,laku_s2g}  
+
+
+     laku_s3m=if laku.s3m != nil do
+      laku.s2m
+    else
+      ""
+     end
+
+     laku_s3g=if laku.s3g != nil do
+      laku.s3g
+    else
+      "" 
+     end  
+
+     laku3={laku_s3m,laku_s3g}  
+
+
+     {laku1,laku2,laku3}
 
     end
 
@@ -1495,7 +1518,7 @@ else
   hw2=if hw.s2m != nil do
   hw.s2m
 else
-   srank.s2g
+   hw.s2g
  end
 
   hw3=if hw.s3m != nil do
@@ -1769,9 +1792,9 @@ else
   <tr align="center">
      <td style="margin: 5px; padding: 5px; border-right: 0" align="left">操行</td>
   <td  style="margin: 5px; padding: 5px; border-left: 0" align="left">Kelakuan</td>
-    <td style="margin: 3px; padding: 3px;"><%= laku1 %></td>
-  <td style="margin: 3px; padding: 3px;"><%= laku2 %></td>
-  <td style="margin: 3px; padding: 3px;"><%= laku3 %></td>
+    <td style="margin: 3px; padding: 3px;"><%= if laku1 != "" do laku1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if laku1 != "" do laku1|>elem(1) else "" end %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if laku2 != "" do laku2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if laku2 != "" do laku2|>elem(1) else "" end %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if laku3 != "" do laku3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if laku3 != "" do laku3|>elem(1) else "" end %></td>
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">

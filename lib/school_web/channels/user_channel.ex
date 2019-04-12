@@ -1959,6 +1959,7 @@ defmodule SchoolWeb.UserChannel do
                   student_name: student.name,
                   student_id: student.id,
                   student_mark: -1,
+                  student_grade: "F",
                   exam_name: exam_name,
                   subject_code: subject_code
                 }
@@ -2316,6 +2317,7 @@ defmodule SchoolWeb.UserChannel do
                   student_name: student.name,
                   student_id: student.id,
                   student_mark: -1,
+                  student_grade: "F",
                   exam_name: exam_name,
                   subject_code: subject_code,
                   class_id: student_class.class_id
@@ -2637,7 +2639,7 @@ defmodule SchoolWeb.UserChannel do
           where: s.class_id == ^class_id and t.id == ^exam.id,
           select: %{
             class_name: r.name,
-            subject_code: p.code,
+            subject_code: p.description,
             exam_name: t.name,
             student_id: s.student_id,
             mark: s.mark

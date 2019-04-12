@@ -204,10 +204,14 @@
                   <span style="font-weight: bolder;font-size: 17px;"><%= gettext("Exam Management")%></span>                
 
                   <ol style="padding-left: 15px;">
-       
+        <li><p class="card-text"><%= gettext("Exam Attandance  according to semesters.")%></p></li>
                      <li><p class="card-text"><%= gettext("Mark an exam paper  according to semesters.")%></p></li>
                   </ol>
+
+                    <a href="/exam_attendance"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Exam Attandance</button></a>
           <a href="/mark_sheet"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Mark</button></a>
+            <a href="/list_class_comment"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Student Comment</button></a>
+
 
 
          

@@ -6145,4 +6145,100 @@ defmodule School.Affairs do
   def change_teacher_absent(%TeacherAbsent{} = teacher_absent) do
     TeacherAbsent.changeset(teacher_absent, %{})
   end
+
+  alias School.Affairs.ExamAttendance
+
+  @doc """
+  Returns the list of exam_attendance.
+
+  ## Examples
+
+      iex> list_exam_attendance()
+      [%ExamAttendance{}, ...]
+
+  """
+  def list_exam_attendance do
+    Repo.all(ExamAttendance)
+  end
+
+  @doc """
+  Gets a single exam_attendance.
+
+  Raises `Ecto.NoResultsError` if the Exam attendance does not exist.
+
+  ## Examples
+
+      iex> get_exam_attendance!(123)
+      %ExamAttendance{}
+
+      iex> get_exam_attendance!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_exam_attendance!(id), do: Repo.get!(ExamAttendance, id)
+
+  @doc """
+  Creates a exam_attendance.
+
+  ## Examples
+
+      iex> create_exam_attendance(%{field: value})
+      {:ok, %ExamAttendance{}}
+
+      iex> create_exam_attendance(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_exam_attendance(attrs \\ %{}) do
+    %ExamAttendance{}
+    |> ExamAttendance.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a exam_attendance.
+
+  ## Examples
+
+      iex> update_exam_attendance(exam_attendance, %{field: new_value})
+      {:ok, %ExamAttendance{}}
+
+      iex> update_exam_attendance(exam_attendance, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_exam_attendance(%ExamAttendance{} = exam_attendance, attrs) do
+    exam_attendance
+    |> ExamAttendance.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a ExamAttendance.
+
+  ## Examples
+
+      iex> delete_exam_attendance(exam_attendance)
+      {:ok, %ExamAttendance{}}
+
+      iex> delete_exam_attendance(exam_attendance)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_exam_attendance(%ExamAttendance{} = exam_attendance) do
+    Repo.delete(exam_attendance)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking exam_attendance changes.
+
+  ## Examples
+
+      iex> change_exam_attendance(exam_attendance)
+      %Ecto.Changeset{source: %ExamAttendance{}}
+
+  """
+  def change_exam_attendance(%ExamAttendance{} = exam_attendance) do
+    ExamAttendance.changeset(exam_attendance, %{})
+  end
 end

@@ -490,6 +490,71 @@ defmodule SchoolWeb.ExamController do
           |> List.flatten()
           |> Enum.uniq()
 
+        teacher_id = Repo.all(from(s in School.Affairs.Class, where: s.teacher_id == ^teacher.id))
+
+        full =
+          if teacher_id != [] do
+            kelakuan =
+              for item <- teacher_id do
+                b =
+                  Repo.all(
+                    from(
+                      p in School.Affairs.Exam,
+                      left_join: m in School.Affairs.ExamMaster,
+                      on: m.id == p.exam_master_id,
+                      left_join: q in School.Affairs.Level,
+                      on: q.id == m.level_id,
+                      left_join: g in School.Affairs.Subject,
+                      on: g.id == p.subject_id,
+                      left_join: s in School.Affairs.Class,
+                      on: s.level_id == m.level_id,
+                      left_join: k in School.Affairs.Teacher,
+                      where:
+                        m.semester_id == ^conn.private.plug_session["semester_id"] and
+                          s.institution_id == ^conn.private.plug_session["institution_id"] and
+                          g.institution_id == ^conn.private.plug_session["institution_id"] and
+                          q.institution_id == ^conn.private.plug_session["institution_id"] and
+                          m.institution_id == ^conn.private.plug_session["institution_id"] and
+                          s.is_delete == 0 and s.id == ^item.id and g.code == "LAKU",
+                      select: %{
+                        id: p.id,
+                        c_id: s.id,
+                        s_id: g.id,
+                        class: s.name,
+                        exam: m.name,
+                        subject: g.description
+                      }
+                    )
+                  )
+              end
+              |> List.flatten()
+              |> Enum.uniq()
+
+            if kelakuan != [] do
+              a =
+                for item <- kelakuan do
+                  %{
+                    id: item.id,
+                    c_id: item.c_id,
+                    s_id: item.s_id,
+                    class: item.class,
+                    exam: item.exam,
+                    subject: item.subject,
+                    teacher_name: teacher.name,
+                    cname: teacher.cname
+                  }
+                end
+
+              a
+            else
+              []
+            end
+          else
+            []
+          end
+
+        a = a ++ full
+
         {class, a}
       end
 
@@ -502,6 +567,261 @@ defmodule SchoolWeb.ExamController do
         render(conn, "mark_sheet.html", class: class, a: a)
       else
         render(conn, "mark_sheet_teacher.html", class: class, a: a)
+      end
+    end
+  end
+
+  def exam_attendance(conn, params) do
+    user = Repo.get_by(School.Settings.User, %{id: conn.private.plug_session["user_id"]})
+
+    {class, a} =
+      if user.role == "Admin" or user.role == "Support" do
+        class =
+          Repo.all(
+            from(
+              s in School.Affairs.Class,
+              where: s.institution_id == ^conn.private.plug_session["institution_id"],
+              select: %{id: s.id, name: s.name}
+            )
+          )
+
+        a =
+          Repo.all(
+            from(
+              p in School.Affairs.Exam,
+              left_join: m in School.Affairs.ExamMaster,
+              on: m.id == p.exam_master_id,
+              left_join: q in School.Affairs.Level,
+              on: q.id == m.level_id,
+              left_join: g in School.Affairs.Subject,
+              on: g.id == p.subject_id,
+              left_join: s in School.Affairs.Class,
+              on: s.level_id == m.level_id,
+              where:
+                m.semester_id == ^conn.private.plug_session["semester_id"] and
+                  s.institution_id == ^conn.private.plug_session["institution_id"] and
+                  g.institution_id == ^conn.private.plug_session["institution_id"] and
+                  q.institution_id == ^conn.private.plug_session["institution_id"] and
+                  m.institution_id == ^conn.private.plug_session["institution_id"] and
+                  s.is_delete == 0,
+              select: %{
+                id: p.id,
+                c_id: s.id,
+                s_id: g.id,
+                class: s.name,
+                exam: m.name,
+                subject: g.description
+              }
+            )
+          )
+
+        IO.inspect(a)
+
+        {class, a}
+      else
+        teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email})
+
+        class =
+          Repo.all(
+            from(
+              p in School.Affairs.Period,
+              left_join: f in School.Affairs.Timetable,
+              on: p.timetable_id == f.id,
+              left_join: s in School.Affairs.Class,
+              on: s.id == p.class_id,
+              where:
+                f.institution_id == ^conn.private.plug_session["institution_id"] and
+                  f.semester_id == ^conn.private.plug_session["semester_id"] and
+                  s.institution_id == ^conn.private.plug_session["institution_id"] and
+                  p.teacher_id == ^teacher.id,
+              select: %{id: s.id, name: s.name}
+            )
+          )
+
+        class =
+          if class != [] do
+            class |> Enum.uniq()
+          else
+            class
+          end
+
+        period_subjects =
+          Repo.all(
+            from(
+              p in School.Affairs.Period,
+              left_join: f in School.Affairs.Timetable,
+              on: p.timetable_id == f.id,
+              left_join: s in School.Affairs.Subject,
+              on: s.id == p.subject_id,
+              left_join: c in School.Affairs.Class,
+              on: c.id == p.class_id,
+              left_join: t in School.Affairs.Teacher,
+              on: t.id == p.teacher_id,
+              where:
+                f.teacher_id == ^teacher.id and p.teacher_id == ^teacher.id and
+                  f.institution_id == ^conn.private.plug_session["institution_id"] and
+                  f.semester_id == ^conn.private.plug_session["semester_id"] and
+                  s.institution_id == ^conn.private.plug_session["institution_id"],
+              select: %{
+                subject: s.timetable_description,
+                class: c.name,
+                teacher: t.id
+              }
+            )
+          )
+          |> Enum.uniq()
+
+        # new =
+        #   Repo.all(
+        #     from(
+        #       p in School.Affairs.Exam,
+        #       left_join: m in School.Affairs.ExamMaster,
+        #       on: m.id == p.exam_master_id,
+        #       left_join: q in School.Affairs.Level,
+        #       on: q.id == m.level_id,
+        #       left_join: g in School.Affairs.Subject,
+        #       on: g.id == p.subject_id,
+        #       left_join: s in School.Affairs.Class,
+        #       on: s.level_id == m.level_id,
+        #       where:
+        #         m.semester_id == ^conn.private.plug_session["semester_id"] and
+        #           s.institution_id == ^conn.private.plug_session["institution_id"] and
+        #           g.institution_id == ^conn.private.plug_session["institution_id"] and
+        #           q.institution_id == ^conn.private.plug_session["institution_id"] and
+        #           m.institution_id == ^conn.private.plug_session["institution_id"] and
+        #           s.is_delete == 0,
+        #       select: %{
+        #         id: p.id,
+        #         c_id: s.id,
+        #         s_id: g.id,
+        #         class: s.name,
+        #         exam: m.name,
+        #         subject: g.description,
+        #         subject_timetable: g.timetable_description
+        #       }
+        #     )
+        #   )
+
+        # a = new
+
+        a =
+          for period_subject <- period_subjects do
+            b =
+              Repo.all(
+                from(
+                  p in School.Affairs.Exam,
+                  left_join: m in School.Affairs.ExamMaster,
+                  on: m.id == p.exam_master_id,
+                  left_join: q in School.Affairs.Level,
+                  on: q.id == m.level_id,
+                  left_join: g in School.Affairs.Subject,
+                  on: g.id == p.subject_id,
+                  left_join: s in School.Affairs.Class,
+                  on: s.level_id == m.level_id,
+                  left_join: k in School.Affairs.Teacher,
+                  where:
+                    m.semester_id == ^conn.private.plug_session["semester_id"] and
+                      s.institution_id == ^conn.private.plug_session["institution_id"] and
+                      g.institution_id == ^conn.private.plug_session["institution_id"] and
+                      q.institution_id == ^conn.private.plug_session["institution_id"] and
+                      m.institution_id == ^conn.private.plug_session["institution_id"] and
+                      s.is_delete == 0 and g.timetable_description == ^period_subject.subject and
+                      s.name == ^period_subject.class and k.id == ^period_subject.teacher,
+                  select: %{
+                    id: p.id,
+                    c_id: s.id,
+                    s_id: g.id,
+                    class: s.name,
+                    exam: m.name,
+                    subject: g.description,
+                    teacher_name: k.name,
+                    cname: k.cname
+                  }
+                )
+              )
+
+            b
+          end
+          |> List.flatten()
+          |> Enum.uniq()
+
+        teacher_id = Repo.all(from(s in School.Affairs.Class, where: s.teacher_id == ^teacher.id))
+
+        full =
+          if teacher_id != [] do
+            kelakuan =
+              for item <- teacher_id do
+                b =
+                  Repo.all(
+                    from(
+                      p in School.Affairs.Exam,
+                      left_join: m in School.Affairs.ExamMaster,
+                      on: m.id == p.exam_master_id,
+                      left_join: q in School.Affairs.Level,
+                      on: q.id == m.level_id,
+                      left_join: g in School.Affairs.Subject,
+                      on: g.id == p.subject_id,
+                      left_join: s in School.Affairs.Class,
+                      on: s.level_id == m.level_id,
+                      left_join: k in School.Affairs.Teacher,
+                      where:
+                        m.semester_id == ^conn.private.plug_session["semester_id"] and
+                          s.institution_id == ^conn.private.plug_session["institution_id"] and
+                          g.institution_id == ^conn.private.plug_session["institution_id"] and
+                          q.institution_id == ^conn.private.plug_session["institution_id"] and
+                          m.institution_id == ^conn.private.plug_session["institution_id"] and
+                          s.is_delete == 0 and s.id == ^item.id and g.code == "LAKU",
+                      select: %{
+                        id: p.id,
+                        c_id: s.id,
+                        s_id: g.id,
+                        class: s.name,
+                        exam: m.name,
+                        subject: g.description
+                      }
+                    )
+                  )
+              end
+              |> List.flatten()
+              |> Enum.uniq()
+
+            if kelakuan != [] do
+              a =
+                for item <- kelakuan do
+                  %{
+                    id: item.id,
+                    c_id: item.c_id,
+                    s_id: item.s_id,
+                    class: item.class,
+                    exam: item.exam,
+                    subject: item.subject,
+                    teacher_name: teacher.name,
+                    cname: teacher.cname
+                  }
+                end
+
+              a
+            else
+              []
+            end
+          else
+            []
+          end
+
+        a = a ++ full
+
+        {class, a}
+      end
+
+    if class == [] do
+      conn
+      |> put_flash(:info, "You Dont Teach Any Subject.")
+      |> redirect(to: page_path(conn, :dashboard))
+    else
+      if user.role == "Admin" or user.role == "Support" do
+        render(conn, "exam_attendance.html", class: class, a: a)
+      else
+        render(conn, "exam_attendance_teacher.html", class: class, a: a)
       end
     end
   end
@@ -564,6 +884,83 @@ defmodule SchoolWeb.ExamController do
     render(conn, "generate_exam.html", class: class, all: all, exam: exam)
   end
 
+  def exam_student_attendance(conn, params) do
+    subject_id = params["s_id"]
+    class_id = params["c_id"]
+    exam_id = params["id"]
+
+    exam = Repo.get_by(School.Affairs.Exam, %{id: exam_id, subject_id: subject_id})
+    exam_master = Repo.get_by(School.Affairs.ExamMaster, id: exam.exam_master_id)
+
+    class =
+      Repo.get_by(School.Affairs.Class, %{
+        id: class_id,
+        institution_id: conn.private.plug_session["institution_id"]
+      })
+
+    subject =
+      Repo.get_by(School.Affairs.Subject, %{
+        id: subject_id,
+        institution_id: conn.private.plug_session["institution_id"]
+      })
+
+    verify =
+      Repo.all(
+        from(
+          s in School.Affairs.Period,
+          where: s.class_id == ^class.id and s.subject_id == ^subject.id,
+          select: %{teacher_id: s.teacher_id}
+        )
+      )
+
+    student =
+      Repo.all(
+        from(
+          s in School.Affairs.StudentClass,
+          left_join: p in Student,
+          on: p.id == s.sudent_id,
+          where:
+            s.class_id == ^class.id and
+              p.institution_id == ^conn.private.plug_session["institution_id"] and
+              s.semester_id == ^exam_master.semester_id,
+          select: %{id: p.id, chinese_name: p.chinese_name, student_name: p.name},
+          order_by: [asc: p.name]
+        )
+      )
+
+    not_attend =
+      Repo.all(
+        from(
+          s in School.Affairs.ExamAttendance,
+          left_join: p in Student,
+          on: p.id == s.student_id,
+          where:
+            s.class_id == ^class.id and
+              p.institution_id == ^conn.private.plug_session["institution_id"] and
+              s.semester_id == ^exam_master.semester_id,
+          select: %{id: p.id, chinese_name: p.chinese_name, student_name: p.name},
+          order_by: [asc: p.name]
+        )
+      )
+
+    if student == [] do
+      conn
+      |> put_flash(:info, "No Student in the Class,Please Enroll Student to Class first.")
+      |> redirect(to: exam_path(conn, :mark_sheet))
+    else
+      render(
+        conn,
+        "exam_student_attendance.html",
+        student: student,
+        class: class,
+        subject: subject,
+        exam_id: exam_id,
+        not_attend: not_attend,
+        exam_master: exam_master
+      )
+    end
+  end
+
   def marking(conn, params) do
     subject_id = params["s_id"]
     class_id = params["c_id"]
@@ -584,7 +981,7 @@ defmodule SchoolWeb.ExamController do
             class_id: s.class_id,
             subject_id: s.subject_id,
             exam_id: s.exam_id,
-            student_id: s.student_id,
+            id: s.student_id,
             student_name: p.name,
             mark: s.mark,
             grade: s.grade
@@ -684,7 +1081,7 @@ defmodule SchoolWeb.ExamController do
 
       fi =
         for item <- t do
-          a = Enum.filter(all, fn x -> x.student_id == item.id end)
+          a = Enum.filter(all, fn x -> x.id == item.id end)
 
           if a == [] do
             %{
@@ -1160,6 +1557,59 @@ defmodule SchoolWeb.ExamController do
     )
   end
 
+  def create_exam_attendance(conn, params) do
+    class_id = params["class_id"]
+    mark = params["mark"]
+    subject_id = params["subject_id"]
+    exam_id = params["exam_id"]
+
+    exam =
+      Repo.get_by(School.Affairs.Exam, %{
+        id: exam_id,
+        subject_id: subject_id
+      })
+
+    a =
+      Repo.get_by(School.Affairs.ExamMaster, %{
+        id: exam.exam_master_id,
+        institution_id: conn.private.plug_session["institution_id"]
+      })
+
+    att_all =
+      Repo.delete_all(
+        from(s in School.Affairs.ExamAttendance,
+          where:
+            s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id and
+              s.exam_master_id == ^a.id
+        )
+      )
+
+    exam_name = a.name
+
+    if params["student"] != nil do
+      for item <- params["student"] do
+        student_id = item |> elem(0)
+        mark = item |> elem(1)
+
+        exam_attendance_params = %{
+          class_id: class_id,
+          exam_id: exam_id,
+          exam_master_id: a.id,
+          subject_id: subject_id,
+          student_id: student_id,
+          institution_id: conn.private.plug_session["institution_id"],
+          semester_id: conn.private.plug_session["semester_id"]
+        }
+
+        Affairs.create_exam_attendance(exam_attendance_params)
+      end
+    end
+
+    conn
+    |> put_flash(:info, "Exam attendance created successfully.")
+    |> redirect(to: exam_path(conn, :exam_attendance))
+  end
+
   def create_mark(conn, params) do
     class_id = params["class_id"]
     mark = params["mark"]
@@ -1180,19 +1630,36 @@ defmodule SchoolWeb.ExamController do
 
     exam_name = a.name
 
-    for item <- mark do
-      student_id = item |> elem(0)
-      mark = item |> elem(1)
+    if params["mark"] != nil do
+      for item <- params["mark"] do
+        student_id = item |> elem(0)
+        mark = item |> elem(1)
 
-      exam_mark_params = %{
-        class_id: class_id,
-        exam_id: exam_id,
-        mark: mark,
-        subject_id: subject_id,
-        student_id: student_id
-      }
+        exam_mark_params = %{
+          class_id: class_id,
+          exam_id: exam_id,
+          mark: mark,
+          subject_id: subject_id,
+          student_id: student_id
+        }
 
-      Affairs.create_exam_mark(exam_mark_params)
+        Affairs.create_exam_mark(exam_mark_params)
+      end
+    else
+      for item <- params["grade"] do
+        student_id = item |> elem(0)
+        mark = item |> elem(1)
+
+        exam_mark_params = %{
+          class_id: class_id,
+          exam_id: exam_id,
+          grade: mark,
+          subject_id: subject_id,
+          student_id: student_id
+        }
+
+        Affairs.create_exam_mark(exam_mark_params)
+      end
     end
 
     conn

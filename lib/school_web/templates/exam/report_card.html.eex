@@ -31,7 +31,7 @@
       <tr>
         <td><%= item.subject_code %></td>
         <td colspan="2"><%= item.subject_name %></td>
-        <td align="center"> <%= item.semester %></td>
+        <td align="center"> <%= @semester.sem %></td>
         <td align="center"><%= item.grade %></td>
         <td><%= item.student_mark %></td>
       

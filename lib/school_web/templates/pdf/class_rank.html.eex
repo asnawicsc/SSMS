@@ -37,7 +37,8 @@
         <tr>
        <th ><%= no+1 %></th>
           <th align="left" ><%=item.name %> <%=item.chinese_name %></th>
-      <th><%= item.sex %></th>
+       <th><%= if item.sex == "M" or item.sex == "LELAKI" do "L" end %>
+        <%= if item.sex == "F" or item.sex == "PEREMPUAN" do "P" end %></th>
         <%= for subject <- item.subject do %>
          <%= if subject.grade != "G" and subject.grade != "E" and subject.grade != "F" do %>
 

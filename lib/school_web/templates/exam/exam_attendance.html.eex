@@ -1,0 +1,51 @@
+<div class="content-heading">
+   <div>Exam List
+      <small><%= gettext("welcome")%>!</small>
+   </div>
+   <!-- START Language list-->
+   <div class="ml-auto">
+
+   </div>
+   <!-- END Language list-->
+</div>
+
+ <div class="card">
+
+               <div class="card-body">
+                  <div class="table-responsive bootgrid">
+                     <table class="table " id="datatable1">
+                        <thead>
+                           <tr>
+                      
+                              <th data-column-id="sender">No</th>
+                                     <th data-column-id="received" data-order="desc">Exam</th>
+                                <th data-column-id="sender">Class</th>
+                              <th data-column-id="" data-order="desc">Subject</th>
+                              <th data-column-id="commands" data-formatter="commands" data-sortable="false">
+                                Action</div>
+                              </th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <%= for as <- @a |> Enum.sort|>Enum.with_index do %>
+
+                           <% no= as|>elem(1) %>
+                           <% as= as |>elem(0) %>
+                           <tr>
+                               <td><%= no + 1 %></td>
+                              
+                              <td><%= as.exam %></td>
+                              <td><%= as.class %></td>
+                              <td><%= as.subject %></td>
+                              <td>
+                         <a href="/exam/exam_student_attendance/<%= as.id %>/<%= as.c_id %>/<%= as.s_id %>"><button class="btn btn-labeled btn-success" type="button">
+                           <span class="btn-label"><i class="fas fa fa-arrow-right"></i></span>>Mark Attendance</button></a>
+                           </tr>
+                          <% end %>
+                      
+                        </tbody>
+                     </table>
+                  </div>
+               </div>
+</div>  
+               

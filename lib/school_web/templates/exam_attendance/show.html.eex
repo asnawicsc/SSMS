@@ -1,0 +1,43 @@
+<h2>Show Exam attendance</h2>
+
+<ul>
+
+  <li>
+    <strong>Student:</strong>
+    <%= @exam_attendance.student_id %>
+  </li>
+
+  <li>
+    <strong>Class:</strong>
+    <%= @exam_attendance.class_id %>
+  </li>
+
+  <li>
+    <strong>Exam:</strong>
+    <%= @exam_attendance.exam_id %>
+  </li>
+
+  <li>
+    <strong>Exam master:</strong>
+    <%= @exam_attendance.exam_master_id %>
+  </li>
+
+  <li>
+    <strong>Subject:</strong>
+    <%= @exam_attendance.subject_id %>
+  </li>
+
+  <li>
+    <strong>Semester:</strong>
+    <%= @exam_attendance.semester_id %>
+  </li>
+
+  <li>
+    <strong>Institution:</strong>
+    <%= @exam_attendance.institution_id %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: exam_attendance_path(@conn, :edit, @exam_attendance) %></span>
+<span><%= link "Back", to: exam_attendance_path(@conn, :index) %></span>

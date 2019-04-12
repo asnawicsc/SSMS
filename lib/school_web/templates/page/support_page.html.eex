@@ -572,7 +572,23 @@
           </div>
         </div>
         <div class="col-lg-6">
+                 <div class="card card-default mb-3">
          
+           <div class="card-body">
+                 <em class="fa-2x mr-2 mb-3 fas fa-chalkboard-teacher"></em>
+                  <span style="font-weight: bolder;font-size: 17px;"><%= gettext("Comment Management")%></span>
+                 <ol style="padding-left: 15px;">
+                    <li><p class="card-text"><%= gettext("List  Comment")%></p></li>
+                    <li><p class="card-text"><%= gettext("Generate Class Comment")%></p></li>
+
+                   
+                  </ol>
+          
+               <a href ="/comment"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">List  Comment</button></a>
+               <a href ="/list_class_comment"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Generate Class Comment</button></a>
+
+           </div>
+        </div>
         </div>
     </div>
    

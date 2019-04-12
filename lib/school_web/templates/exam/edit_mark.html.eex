@@ -44,19 +44,19 @@
                                    <% no = item|>elem(1) %>
                                   <% item = item|>elem(0) %>
 
-                                  <% student=Affairs.get_student!(item.student_id)%>
+                                  <% student=Affairs.get_student!(item.id)%>
                                  <tr>
                                   <td><%= no + 1 %></td>
                                     <td><%= student.name %></td>
                                      <td><%= student.chinese_name %></td>
-                                       <td><%= item.student_id %></td>
+                                       <td><%= item.id %></td>
                                      <td><%= @exam_master.name %></td>
                                      <td><%= @subject.description %></td>
                                     <td>    <%= if @subject.with_mark == 1 do %>
 
-                                      <input type="number" min="0" max="100" value="<%= item.mark %>" name="mark[<%=item.student_id %>]"></td>
+                                      <input type="number" min="0" max="100" value="<%= item.mark %>" name="mark[<%=item.id %>]"></td>
                                       <% else %>
-                                      <input type="text" name="grade[<%=item.student_id %>]" value="<%= item.grade %>" placeholder="A,B,C,D,E,F">
+                                      <input type="text" name="grade[<%=item.id %>]" value="<%= item.grade %>" placeholder="A,B,C,D,E,F">
                                       <% end %></td>
                                      
                                 

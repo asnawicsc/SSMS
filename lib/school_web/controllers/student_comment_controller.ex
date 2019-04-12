@@ -124,7 +124,7 @@ defmodule SchoolWeb.StudentCommentController do
 
     conn
     |> put_flash(:info, "Student comment created successfully.")
-    |> redirect(to: student_comment_path(conn, :mark_comment))
+    |> redirect(to: student_comment_path(conn, :list_class_comment))
   end
 
   def mark_comments(conn, params) do
@@ -178,7 +178,15 @@ defmodule SchoolWeb.StudentCommentController do
         |> redirect(to: student_comment_path(conn, :list_class_comment))
       else
         teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email})
-        class = Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
+
+        class =
+          Repo.all(
+            from(c in Class,
+              where:
+                c.institution_id == ^conn.private.plug_session["institution_id"] and
+                  c.teacher_id == ^teacher.id
+            )
+          )
 
         students =
           Repo.all(
@@ -218,10 +226,28 @@ defmodule SchoolWeb.StudentCommentController do
   end
 
   def list_class_comment(conn, params) do
+    user = Repo.get_by(School.Settings.User, %{id: conn.private.plug_session["user_id"]})
+
     class =
-      Repo.all(
-        from(c in Class, where: c.institution_id == ^conn.private.plug_session["institution_id"])
-      )
+      if user.role == "Admin" or user.role == "Support" do
+        class =
+          Repo.all(
+            from(c in Class,
+              where: c.institution_id == ^conn.private.plug_session["institution_id"]
+            )
+          )
+      else
+        teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email})
+
+        class =
+          Repo.all(
+            from(c in Class,
+              where:
+                c.institution_id == ^conn.private.plug_session["institution_id"] and
+                  c.teacher_id == ^teacher.id
+            )
+          )
+      end
 
     render(conn, "list_class_comment.html", class: class)
   end

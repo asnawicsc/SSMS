@@ -65,7 +65,8 @@
          <% total= @total_student_in_class|>hd %>
           <th><a href="/report_card/<%= @exam_name %>/<%= @exam_id %>/<%= item.student_id %>/<%= item.class_rank %>-<%= total.total_student %>-<%= item.all_rank %>-<%= @total_student%>"><%=item.name %> (<%=item.chinese_name %>)</a></th>
 
-        <th ><%=item.sex %></th>
+        <th ><%= if item.sex == "M" or item.sex == "LELAKI" do "L" end %>
+        <%= if item.sex == "F" or item.sex == "PEREMPUAN" do "P" end %></th>
         <%= for subject <- item.subject do %>
          <%= if subject.grade != "G" and subject.grade != "E" and subject.grade != "F" do %>
 

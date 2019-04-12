@@ -324,6 +324,7 @@ defmodule SchoolWeb.Router do
     get("/print_timetable/:panel", PdfController, :print_timetable)
 
     get("/exam/marking/:id/:c_id/:s_id", ExamController, :marking)
+    get("/exam/exam_student_attendance/:id/:c_id/:s_id", ExamController, :exam_student_attendance)
     get("/cocurriculum/marking/:id/:semester_id", CoCurriculumController, :marking)
     post("/generate_student_image", StudentController, :generate_student_image)
 
@@ -332,6 +333,8 @@ defmodule SchoolWeb.Router do
     get("/generate_exam", ExamController, :generate_exam)
     post("/mark", ExamController, :mark)
     post("/create_mark", ExamController, :create_mark)
+    post("/create_exam_attendance", ExamController, :create_exam_attendance)
+
     post("/update_mark", ExamController, :update_mark)
     get("/new_exam", ExamController, :new_exam)
     post("/create_exam", ExamController, :create_exam)
@@ -451,6 +454,7 @@ defmodule SchoolWeb.Router do
     post("/create_class_period", ClassController, :create_class_period)
 
     get("/mark_sheet", ExamController, :mark_sheet)
+    get("/exam_attendance", ExamController, :exam_attendance)
     get("/exam_result_class", ExamController, :exam_result_class)
     get("/exam_result_standard", ExamController, :exam_result_standard)
     get("/exam_result_analysis_standard", ExamController, :exam_result_analysis_standard)
@@ -719,6 +723,7 @@ defmodule SchoolWeb.Router do
 
     resources("/ehehomeworks", EhomeworkController)
     resources("/mark_sheet_temp", MarkSheetTempController)
+    resources("/exam_attendance", ExamAttendanceController)
 
     get("/ehomework/:class_id", EhomeworkController, :ehomework)
     get("/show_ehomework_calendar/class/:class_id", EhomeworkController, :show_ehomework_calendar)
