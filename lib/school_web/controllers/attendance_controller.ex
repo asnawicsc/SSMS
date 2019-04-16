@@ -169,13 +169,14 @@ defmodule SchoolWeb.AttendanceController do
       students =
         Repo.all(
           from(
-            s in Student,
-            left_join: sc in StudentClass,
+            sc in StudentClass,
+            left_join: s in Student,
             on: sc.sudent_id == s.id,
             where:
               sc.institute_id == ^Affairs.inst_id(conn) and
                 sc.semester_id == ^conn.private.plug_session["semester_id"] and
                 s.institution_id == ^conn.private.plug_session["institution_id"] and
+                sc.institution_id == ^conn.private.plug_session["institution_id"] and
                 sc.class_id == ^params["class_id"],
             order_by: [s.name]
           )
