@@ -38,7 +38,7 @@
                                      <td><%= @subject.description %></td>
                                     <td><%= if @subject.with_mark == 1 do %>
 
-                                      <input type="number" min="0" max="100" name="mark[<%=item.id %>]"></td>
+                                      <input type="number" min="0" max="100" step="0.1" name="mark[<%=item.id %>]"></td>
                                       <% else %>
                                       <input type="text" name="grade[<%=item.id %>]" placeholder="A,B,C,D,E">
                                       <% end %></td>

@@ -3697,6 +3697,78 @@ defmodule SchoolWeb.PdfController do
     |> resp(200, pdf_binary)
   end
 
+  def sorting(conn, male) do
+    all =
+      if conn.private.plug_session["institution_id"] == 3 do
+        m =
+          male
+          |> Enum.group_by(fn x -> x.sex end)
+          |> Enum.filter(fn x -> x |> elem(0) == "M" end)
+          |> Enum.map(fn x -> x |> elem(1) end)
+          |> List.flatten()
+
+        a =
+          for item <- m do
+            ori_name = item.name
+
+            sort_name = item.name |> String.replace("'", "A")
+
+            %{
+              id: item.id,
+              id_no: item.id_no,
+              chinese_name: item.chinese_name,
+              name: ori_name,
+              sort_name: sort_name,
+              sex: item.sex
+            }
+          end
+          |> Enum.sort_by(fn x -> x.sort_name end)
+
+        f =
+          male
+          |> Enum.group_by(fn x -> x.sex end)
+          |> Enum.filter(fn x -> x |> elem(0) == "F" end)
+          |> Enum.map(fn x -> x |> elem(1) end)
+          |> List.flatten()
+
+        b =
+          for item <- f do
+            ori_name = item.name
+
+            sort_name = item.name |> String.replace("'", "A")
+
+            %{
+              id: item.id,
+              id_no: item.id_no,
+              chinese_name: item.chinese_name,
+              name: ori_name,
+              sort_name: sort_name,
+              sex: item.sex
+            }
+          end
+          |> Enum.sort_by(fn x -> x.sort_name end)
+
+        all = a ++ b
+      else
+        a =
+          for item <- male do
+            ori_name = item.name
+
+            sort_name = item.name |> String.replace("'", "A")
+
+            %{
+              id: item.id,
+              id_no: item.id_no,
+              chinese_name: item.chinese_name,
+              name: ori_name,
+              sort_name: sort_name,
+              sex: item.sex
+            }
+          end
+          |> Enum.sort_by(fn x -> x.sort_name end)
+      end
+  end
+
   def student_class_listing(conn, params) do
     class_id = params["class_id"]
     semester_id = params["semester_id"]
@@ -3754,6 +3826,8 @@ defmodule SchoolWeb.PdfController do
         end
 
       all = male
+
+      all = sorting(conn, all)
 
       number = 40
 
@@ -3932,6 +4006,8 @@ defmodule SchoolWeb.PdfController do
 
       all = male ++ female
 
+      all = sorting(conn, all)
+
       number = 40
 
       add = number - (all |> Enum.count())
@@ -4006,6 +4082,93 @@ defmodule SchoolWeb.PdfController do
       |> put_resp_header("Content-Type", "application/pdf")
       |> resp(200, pdf_binary)
     end
+  end
+
+  def sorting_jpn(conn, male) do
+    all =
+      if conn.private.plug_session["institution_id"] == 3 do
+        m =
+          male
+          |> Enum.group_by(fn x -> x.sex end)
+          |> Enum.filter(fn x -> x |> elem(0) == "M" end)
+          |> Enum.map(fn x -> x |> elem(1) end)
+          |> List.flatten()
+
+        a =
+          for item <- m do
+            ori_name = item.name
+
+            sort_name = item.name |> String.replace("'", "A")
+
+            %{
+              id: item.id,
+              id_no: item.id_no,
+              chinese_name: item.chinese_name,
+              name: ori_name,
+              sort_name: sort_name,
+              sex: item.sex,
+              dob: item.dob,
+              pob: item.pob,
+              race: item.race,
+              b_cert: item.b_cert,
+              register_date: item.register_date
+            }
+          end
+          |> Enum.sort_by(fn x -> x.sort_name end)
+
+        f =
+          male
+          |> Enum.group_by(fn x -> x.sex end)
+          |> Enum.filter(fn x -> x |> elem(0) == "F" end)
+          |> Enum.map(fn x -> x |> elem(1) end)
+          |> List.flatten()
+
+        b =
+          for item <- f do
+            ori_name = item.name
+
+            sort_name = item.name |> String.replace("'", "A")
+
+            %{
+              id: item.id,
+              id_no: item.id_no,
+              chinese_name: item.chinese_name,
+              name: ori_name,
+              sort_name: sort_name,
+              sex: item.sex,
+              dob: item.dob,
+              pob: item.pob,
+              race: item.race,
+              b_cert: item.b_cert,
+              register_date: item.register_date
+            }
+          end
+          |> Enum.sort_by(fn x -> x.sort_name end)
+
+        all = a ++ b
+      else
+        a =
+          for item <- male do
+            ori_name = item.name
+
+            sort_name = item.name |> String.replace("'", "A")
+
+            %{
+              id: item.id,
+              id_no: item.id_no,
+              chinese_name: item.chinese_name,
+              name: ori_name,
+              sort_name: sort_name,
+              sex: item.sex,
+              dob: item.dob,
+              pob: item.pob,
+              race: item.race,
+              b_cert: item.b_cert,
+              register_date: item.register_date
+            }
+          end
+          |> Enum.sort_by(fn x -> x.sort_name end)
+      end
   end
 
   def student_class_listing_jpn(conn, params) do
@@ -4134,6 +4297,8 @@ defmodule SchoolWeb.PdfController do
       end
 
     all = male ++ female
+
+    all = sorting_jpn(conn, all)
 
     if conn.private.plug_session["institution_id"] == 9 do
       new_all =
@@ -4436,6 +4601,99 @@ defmodule SchoolWeb.PdfController do
     end
   end
 
+  def sorting_parent(conn, male) do
+    all =
+      if conn.private.plug_session["institution_id"] == 3 do
+        m =
+          male
+          |> Enum.group_by(fn x -> x.sex end)
+          |> Enum.filter(fn x -> x |> elem(0) == "M" end)
+          |> Enum.map(fn x -> x |> elem(1) end)
+          |> List.flatten()
+
+        a =
+          for item <- m do
+            ori_name = item.name
+
+            sort_name = item.name |> String.replace("'", "A")
+
+            %{
+              chinese_name: item.chinese_name,
+              name: ori_name,
+              sort_name: sort_name,
+              icno: item.ic,
+              b_cert: item.b_cert,
+              line1: item.line1,
+              line2: item.line2,
+              postcode: item.postcode,
+              town: item.town,
+              state: item.state,
+              country: item.country,
+              ficno: item.ficno,
+              micno: item.micno
+            }
+          end
+          |> Enum.sort_by(fn x -> x.sort_name end)
+
+        f =
+          male
+          |> Enum.group_by(fn x -> x.sex end)
+          |> Enum.filter(fn x -> x |> elem(0) == "F" end)
+          |> Enum.map(fn x -> x |> elem(1) end)
+          |> List.flatten()
+
+        b =
+          for item <- f do
+            ori_name = item.name
+
+            sort_name = item.name |> String.replace("'", "A")
+
+            %{
+              chinese_name: item.chinese_name,
+              name: ori_name,
+              sort_name: sort_name,
+              icno: item.ic,
+              b_cert: item.b_cert,
+              line1: item.line1,
+              line2: item.line2,
+              postcode: item.postcode,
+              town: item.town,
+              state: item.state,
+              country: item.country,
+              ficno: item.ficno,
+              micno: item.micno
+            }
+          end
+          |> Enum.sort_by(fn x -> x.sort_name end)
+
+        all = a ++ b
+      else
+        a =
+          for item <- male do
+            ori_name = item.name
+
+            sort_name = item.name |> String.replace("'", "A")
+
+            %{
+              chinese_name: item.chinese_name,
+              name: ori_name,
+              sort_name: sort_name,
+              icno: item.icno,
+              b_cert: item.b_cert,
+              line1: item.line1,
+              line2: item.line2,
+              postcode: item.postcode,
+              town: item.town,
+              state: item.state,
+              country: item.country,
+              ficno: item.ficno,
+              micno: item.micno
+            }
+          end
+          |> Enum.sort_by(fn x -> x.sort_name end)
+      end
+  end
+
   def student_class_listing_parent(conn, params) do
     class_id = params["class_id"]
     semester_id = params["semester_id"]
@@ -4570,6 +4828,8 @@ defmodule SchoolWeb.PdfController do
       end
 
     all = male ++ female
+
+    all = sorting_parent(conn, all)
 
     all =
       for item <- all do

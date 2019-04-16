@@ -54,7 +54,7 @@
                                      <td><%= @subject.description %></td>
                                     <td>    <%= if @subject.with_mark == 1 do %>
 
-                                      <input type="number" min="0" max="100" value="<%= item.mark %>" name="mark[<%=item.id %>]"></td>
+                                      <input type="number" min="0" max="100" step="0.1" value="<%= item.mark %>" name="mark[<%=item.id %>]"></td>
                                       <% else %>
                                       <input type="text" name="grade[<%=item.id %>]" value="<%= item.grade %>" placeholder="A,B,C,D,E">
                                       <% end %></td>
@@ -94,7 +94,7 @@
                                     <td><%= item.student_name %></td>
                                      <td>     <td><%= if @subject.with_mark == 1 do %>
 
-                                      <input type="number" min="0" max="100" value="<%= item.mark %>" name="mark[<%=item.student_id %>]"></td>
+                                      <input type="number" min="0" max="100" step="0.1" value="<%= item.mark %>" name="mark[<%=item.student_id %>]"></td>
                                       <% else %>
                                       <input type="text" name="grade[<%=item.student_id %>]" value="<%= item.grade %>" placeholder="A,B,C,D,E">
                                       <% end %></td>

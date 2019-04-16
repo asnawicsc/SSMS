@@ -5,7 +5,7 @@ defmodule School.Affairs.ExamMark do
   schema "exam_mark" do
     field(:class_id, :integer)
     field(:exam_id, :integer)
-    field(:mark, :integer)
+    field(:mark, :decimal)
     field(:grade, :string)
     field(:student_id, :integer)
     field(:subject_id, :integer)

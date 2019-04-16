@@ -5,7 +5,10 @@ defmodule SchoolWeb.ShiftMasterController do
   alias School.Affairs.ShiftMaster
 
   def index(conn, _params) do
-    shift_master = Affairs.list_shift_master()
+    shift_master =
+      Affairs.list_shift_master()
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
     render(conn, "index.html", shift_master: shift_master)
   end
 

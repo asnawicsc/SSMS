@@ -46,7 +46,7 @@
       <tr>
          <th ><%= no + 1 %></th>
        <th ><%= item.student_id %></th>
-        <th  ><input type="number" min="0" max="100" name="mark[<%=item.id %>]"></th>
+        <th  ><input type="number" min="0" max="100" step="0.1" name="mark[<%=item.id %>]"></th>
 
       </tr>
          <% end %>
