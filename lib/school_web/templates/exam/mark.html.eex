@@ -22,7 +22,7 @@
                                       <th style="background-color:#97DB9A;" width="200px;"><%= gettext "Exam Name" %></th>
                                       <th style="background-color:#97DB9A;" width="200px;"><%= gettext "Subject" %></th>
                                     <th style="background-color:#97DB9A;" width="200px;"><%= gettext "Mark" %></th>
-                              
+                                 <th style="background-color:#97DB9A;" width="200px;"><%= gettext "Not Attend" %></th>
                                  </tr>
                               </thead>
                               <tbody>
@@ -42,9 +42,35 @@
                                       <% else %>
                                       <input type="text" name="grade[<%=item.id %>]" placeholder="A,B,C,D,E">
                                       <% end %></td>
-                                    
+                                          <td>
+                      <div class="form-group">
+                            <% tt= @not_attend|>Enum.filter(fn x -> x.id==item.id end) %>
+
+                            <%= if tt != [] do %>
+
+                              <div class="col-sm-10">
+                              <label class="checkbox-inline c-checkbox">
+                                 <input id="inlineCheckbox10" type="checkbox" checked="checked" name="student[<%=  item.id %>]">
+                                 <span class="fa fa-check"></span></label>
+                              
+                           </div>
+
+                            <% else  %>
+                              <div class="col-sm-10">
+                              <label class="checkbox-inline c-checkbox">
+                                 <input id="inlineCheckbox10" type="checkbox" name="student[<%=  item.id %>]">
+                                 <span class="fa fa-check"></span></label>
+                              
+                           </div>
+                         
+                              
+                             <% end %>
+                         
+                        </div>
+</td>
                                  </tr>
                                     <% end %>
+                                    
                               </tbody>
                            </table>
                         </div>

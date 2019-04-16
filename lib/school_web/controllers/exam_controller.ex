@@ -1027,6 +1027,21 @@ defmodule SchoolWeb.ExamController do
           )
         )
 
+      not_attend =
+        Repo.all(
+          from(
+            s in School.Affairs.ExamAttendance,
+            left_join: p in Student,
+            on: p.id == s.student_id,
+            where:
+              s.class_id == ^class.id and
+                p.institution_id == ^conn.private.plug_session["institution_id"] and
+                s.semester_id == ^exam_master.semester_id,
+            select: %{id: p.id, chinese_name: p.chinese_name, student_name: p.name},
+            order_by: [asc: p.name]
+          )
+        )
+
       if student == [] do
         conn
         |> put_flash(:info, "No Student in the Class,Please Enroll Student to Class first.")
@@ -1038,6 +1053,7 @@ defmodule SchoolWeb.ExamController do
           all: all,
           student: student,
           class: class,
+          not_attend: not_attend,
           subject: subject,
           exam_id: exam_id,
           exam_master: exam_master
@@ -1111,12 +1127,28 @@ defmodule SchoolWeb.ExamController do
 
       #  )}
 
+      not_attend =
+        Repo.all(
+          from(
+            s in School.Affairs.ExamAttendance,
+            left_join: p in Student,
+            on: p.id == s.student_id,
+            where:
+              s.class_id == ^class.id and
+                p.institution_id == ^conn.private.plug_session["institution_id"] and
+                s.semester_id == ^exam_master.semester_id,
+            select: %{id: p.id, chinese_name: p.chinese_name, student_name: p.name},
+            order_by: [asc: p.name]
+          )
+        )
+
       render(
         conn,
         "edit_mark.html",
         all: all,
         fi: fi,
         class: class,
+        not_attend: not_attend,
         exam_id: exam_id,
         subject: subject,
         exam_master: exam_master
@@ -1662,6 +1694,36 @@ defmodule SchoolWeb.ExamController do
       end
     end
 
+    att_all =
+      Repo.delete_all(
+        from(s in School.Affairs.ExamAttendance,
+          where:
+            s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id and
+              s.exam_master_id == ^a.id
+        )
+      )
+
+    exam_name = a.name
+
+    if params["student"] != nil do
+      for item <- params["student"] do
+        student_id = item |> elem(0)
+        mark = item |> elem(1)
+
+        exam_attendance_params = %{
+          class_id: class_id,
+          exam_id: exam_id,
+          exam_master_id: a.id,
+          subject_id: subject_id,
+          student_id: student_id,
+          institution_id: conn.private.plug_session["institution_id"],
+          semester_id: conn.private.plug_session["semester_id"]
+        }
+
+        Affairs.create_exam_attendance(exam_attendance_params)
+      end
+    end
+
     conn
     |> put_flash(:info, "Exam mark created successfully.")
     |> redirect(to: exam_path(conn, :mark_sheet))
@@ -1757,6 +1819,36 @@ defmodule SchoolWeb.ExamController do
           end
         end
       end
+
+    att_all =
+      Repo.delete_all(
+        from(s in School.Affairs.ExamAttendance,
+          where:
+            s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id and
+              s.exam_master_id == ^a.id
+        )
+      )
+
+    exam_name = a.name
+
+    if params["student"] != nil do
+      for item <- params["student"] do
+        student_id = item |> elem(0)
+        mark = item |> elem(1)
+
+        exam_attendance_params = %{
+          class_id: class_id,
+          exam_id: exam_id,
+          exam_master_id: a.id,
+          subject_id: subject_id,
+          student_id: student_id,
+          institution_id: conn.private.plug_session["institution_id"],
+          semester_id: conn.private.plug_session["semester_id"]
+        }
+
+        Affairs.create_exam_attendance(exam_attendance_params)
+      end
+    end
 
     conn
     |> put_flash(:info, "Exam mark updated successfully.")
