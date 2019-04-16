@@ -1004,7 +1004,52 @@ defmodule SchoolWeb.ClassController do
 
   def enroll_students(conn, params) do
     inst_id = Affairs.get_inst_id(conn)
-    classes = Affairs.list_classes(inst_id)
+
+    user = Repo.get(Settings.User, conn.private.plug_session["user_id"])
+
+    classes =
+      case user.role do
+        "Admin" ->
+          Repo.all(
+            from(c in Affairs.Class,
+              where: c.institution_id == ^@conn.private.plug_session["institution_id"]
+            )
+          )
+
+        "Support" ->
+          Repo.all(
+            from(c in Affairs.Class,
+              where: c.institution_id == ^@conn.private.plug_session["institution_id"]
+            )
+          )
+
+        "Monitor" ->
+          Repo.all(
+            from(c in Affairs.Class,
+              where: c.institution_id == ^@conn.private.plug_session["institution_id"]
+            )
+          )
+
+        "Teacher" ->
+          teacher = Repo.get_by(Affairs.Teacher, email: user.email)
+
+          if teacher == nil do
+            []
+          else
+            Repo.all(from(c in Affairs.Class, where: c.teacher_id == ^teacher.id))
+          end
+
+        "Clerk" ->
+          Repo.all(
+            from(c in Affairs.Class,
+              where: c.institution_id == ^@conn.private.plug_session["institution_id"]
+            )
+          )
+
+        _ ->
+          []
+      end
+
     semesters = Affairs.list_semesters(inst_id)
     render(conn, "enroll_students.html", classes: classes, semesters: semesters)
   end
