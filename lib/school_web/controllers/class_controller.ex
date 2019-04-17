@@ -1012,21 +1012,21 @@ defmodule SchoolWeb.ClassController do
         "Admin" ->
           Repo.all(
             from(c in Affairs.Class,
-              where: c.institution_id == ^@conn.private.plug_session["institution_id"]
+              where: c.institution_id == ^conn.private.plug_session["institution_id"]
             )
           )
 
         "Support" ->
           Repo.all(
             from(c in Affairs.Class,
-              where: c.institution_id == ^@conn.private.plug_session["institution_id"]
+              where: c.institution_id == ^conn.private.plug_session["institution_id"]
             )
           )
 
         "Monitor" ->
           Repo.all(
             from(c in Affairs.Class,
-              where: c.institution_id == ^@conn.private.plug_session["institution_id"]
+              where: c.institution_id == ^conn.private.plug_session["institution_id"]
             )
           )
 
@@ -1042,7 +1042,7 @@ defmodule SchoolWeb.ClassController do
         "Clerk" ->
           Repo.all(
             from(c in Affairs.Class,
-              where: c.institution_id == ^@conn.private.plug_session["institution_id"]
+              where: c.institution_id == ^conn.private.plug_session["institution_id"]
             )
           )
 

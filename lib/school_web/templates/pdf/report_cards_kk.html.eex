@@ -1847,8 +1847,8 @@ else
  </tr>
  <tr>
   
-   <td colspan="6" align="left" style="margin: 3px; padding: 3px;" height="100px;">评语 Komen:
-    <br>
+   <td colspan="6" align="left" style="margin: 3px; padding: 3px;" height="100px;">评语 Komen: <br> 
+
     <% student_comment = Repo.get_by(School.Affairs.StudentComment, student_id: profile.stuid) %>
           <%=  if student_comment != nil  do %>
             
@@ -1856,18 +1856,47 @@ else
 
           <%= if student_comment.comment1 != nil do
 
+      Repo.get_by(School.Affairs.Comment,
+        id: student_comment.comment1
+      ).c_chinese
 
-             student_comment =
+          end %>
+<%= if student_comment.comment1 != nil do
+           
       Repo.get_by(School.Affairs.Comment,
         id: student_comment.comment1
       ).c_malay
-          end %>,<br>
+          end %>
+          ,<br>
           <%= if student_comment.comment2 != nil do
+
+          
+      Repo.get_by(School.Affairs.Comment,
+        id: student_comment.comment2
+      ).c_chinese
+
+          end %>
+
+          <%= if student_comment.comment2 != nil do
+
+
               Repo.get_by(School.Affairs.Comment,
         id: student_comment.comment2
       ).c_malay
-          end %>,<br>
+          end %>
+
+          ,<br>
           <%= if student_comment.comment3 != nil do
+
+         Repo.get_by(School.Affairs.Comment,
+        id: student_comment.comment3
+      ).c_chinese
+
+          end %>
+
+           <%= if student_comment.comment3 != nil do
+
+
               Repo.get_by(School.Affairs.Comment,
         id: student_comment.comment3
       ).c_malay

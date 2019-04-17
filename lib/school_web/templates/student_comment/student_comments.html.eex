@@ -37,11 +37,11 @@
 
                                 <%  comment= Repo.get_by(School.Affairs.Comment, id: item.coment1, institution_id: @conn.private.plug_session["institution_id"]) %>
                            
-                               <option value="<%= item.coment1 %>">(<%= comment.code %>) <%= comment.c_malay %></option>
+                               <option value="<%= item.coment1 %>">(<%= comment.code %>) <%= comment.c_chinese %></option>
                                <% else %>
                                     <%= for com <- @comment do %>
                                      <option value="" selected disabled hidden>Choose Comment</option>
-                                    <option value="<%= com.id %>">(<%= com.code %>) <%= com.c_malay %></option>
+                                    <option value="<%= com.id %>">(<%= com.code %>) <%= com.c_chinese %></option>
                                     <%end %>
 
                                 <% end %>
@@ -53,11 +53,11 @@
 
                                 <%  comment= Repo.get_by(School.Affairs.Comment, id: item.coment2, institution_id: @conn.private.plug_session["institution_id"]) %>
                            
-                               <option value="<%= item.coment2 %>">(<%= comment.code %>) <%= comment.c_malay %></option>
+                               <option value="<%= item.coment2 %>">(<%= comment.code %>) <%= comment.c_chinese %></option>
                                <% else %>
                                     <%= for com <- @comment do %>
                                      <option value="" selected disabled hidden>Choose Comment</option>
-                                    <option value="<%= com.id %>">(<%= com.code %>) <%= com.c_malay %></option>
+                                    <option value="<%= com.id %>">(<%= com.code %>) <%= com.c_chinese %></option>
                                     <%end %>
 
                                 <% end %>
@@ -69,11 +69,11 @@
 
                                    <%  comment= Repo.get_by(School.Affairs.Comment, id: item.coment3, institution_id: @conn.private.plug_session["institution_id"]) %>
                            
-                               <option value="<%= item.coment3 %>">(<%= comment.code %>) <%= comment.c_malay %></option>
+                               <option value="<%= item.coment3 %>">(<%= comment.code %>) <%= comment.c_chinese %></option>
                                <% else %>
                                     <%= for com <- @comment do %>
                                      <option value="" selected disabled hidden>Choose Comment</option>
-                                    <option value="<%= com.id %>">(<%= com.code %>) <%= com.c_malay %></option>
+                                    <option value="<%= com.id %>">(<%= com.code %>) <%= com.c_chinese %></option>
                                     <%end %>
 
                                 <% end %>

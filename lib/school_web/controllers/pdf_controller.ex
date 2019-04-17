@@ -188,7 +188,7 @@ defmodule SchoolWeb.PdfController do
                       a = fit |> hd()
 
                       if a.mark != nil do
-                        a.mark |> Integer.to_string()
+                        a.mark |> Decimal.to_string()
                       else
                         "0"
                       end
@@ -212,15 +212,14 @@ defmodule SchoolWeb.PdfController do
 
                       mark =
                         if a.mark != nil do
-                          a.mark
+                          a.mark |> Decimal.to_float()
                         else
                           0
                         end
 
                       grades =
                         Repo.all(
-                          from(
-                            g in School.Affairs.ExamGrade,
+                          from(g in School.Affairs.ExamGrade,
                             where:
                               g.institution_id == ^conn.private.plug_session["institution_id"] and
                                 g.exam_master_id == ^a.exam_master_id
@@ -353,6 +352,21 @@ defmodule SchoolWeb.PdfController do
       |> List.flatten()
       |> Enum.filter(fn x -> x != nil end)
 
+    location =
+      case conn.private.plug_session["institution_id"] do
+        9 ->
+          IEx.pry()
+
+        10 ->
+          IEx.pry()
+
+        3 ->
+          IEx.pry()
+
+        _ ->
+          IEx.pry()
+      end
+
     class_rank =
       for stud_class <- student_class do
         all =
@@ -456,7 +470,7 @@ defmodule SchoolWeb.PdfController do
                       items
                       |> Enum.filter(fn x -> x.mark != 0 end)
                       |> Enum.filter(fn x -> x.mark != nil end)
-                      |> Enum.map(fn x -> x.mark end)
+                      |> Enum.map(fn x -> Decimal.to_float(x.mark) end)
                       |> Enum.sum()
 
                     if items != [] do
@@ -686,7 +700,7 @@ defmodule SchoolWeb.PdfController do
                       items
                       |> Enum.filter(fn x -> x.mark != nil end)
                       |> Enum.filter(fn x -> x.mark != 0 end)
-                      |> Enum.map(fn x -> x.mark end)
+                      |> Enum.map(fn x -> Decimal.to_float(x.mark) end)
                       |> Enum.sum()
 
                     if items != [] do
@@ -869,9 +883,15 @@ defmodule SchoolWeb.PdfController do
                   fit
                   |> Enum.filter(fn x -> x.mark != 0 end)
                   |> Enum.filter(fn x -> x.mark != nil end)
-                  |> Enum.map(fn x -> x.mark end)
+                  |> Enum.map(fn x -> Decimal.to_float(x.mark) end)
                   |> Enum.sum()
-                  |> Integer.to_string()
+
+                a =
+                  if a == 0 do
+                    0
+                  else
+                    a |> Float.to_string()
+                  end
               end
 
             {no + 1, fit}
@@ -989,7 +1009,7 @@ defmodule SchoolWeb.PdfController do
                   fit
                   |> Enum.filter(fn x -> x.mark != 0 end)
                   |> Enum.filter(fn x -> x.mark != nil end)
-                  |> Enum.map(fn x -> x.mark end)
+                  |> Enum.map(fn x -> Decimal.to_float(x.mark) end)
                   |> Enum.sum()
 
                 per = fit |> Enum.map(fn x -> x.mark end) |> Enum.count()
