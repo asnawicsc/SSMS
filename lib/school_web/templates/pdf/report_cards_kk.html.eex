@@ -79,7 +79,7 @@
      end
 
          bml1_s1g=if bml.s1g != nil do
-      bml.s1m
+      bml.s1g
     else
       "" 
      end
@@ -95,7 +95,7 @@
      end
 
          bml2_s2g=if bml.s2g != nil do
-      bml.s2m
+      bml.s2g
     else
       "" 
      end
@@ -111,7 +111,7 @@
      end
 
          bml3_s3g=if bml.s3g != nil do
-      bml.s3m
+      bml.s3g
     else
       "" 
      end
@@ -890,6 +890,61 @@
 
     end
 
+    pm= all_date|>Enum.filter(fn x -> x.subject =="PM" end)
+   {pm1,pm2,pm3}=  if pm == [] do
+
+      {"","",""}
+    else
+       pm=pm|>hd  
+      
+      pm_s1m=if pm.s1m != nil do
+      pm.s1m
+    else
+      ""
+     end
+
+     pm_s1g=if pm.s1g != nil do
+      pm.s1g
+    else
+      "" 
+     end  
+      
+      pm1={pm_s1m,pm_s1g}
+
+
+            pm_s2m=if pm.s2m != nil do
+      pm.s2m
+    else
+      ""
+     end
+
+     pm_s2g=if pm.s2g != nil do
+      pm.s2g
+    else
+      "" 
+     end  
+      
+      pm2={pm_s2m,pm_s2g}
+
+   pm_s3m=if pm.s3m != nil do
+      pm.s3m
+    else
+      ""
+     end
+
+     pm_s3g=if pm.s3g != nil do
+      pm.s3g
+    else
+      "" 
+     end  
+      
+      pm3={pm_s3m,pm_s3g}
+
+     {pm1,pm2,pm3}
+
+    end
+
+
 
     agama= all_date|>Enum.filter(fn x -> x.subject =="AGM" end)
    {agama1,agama2,agama3}=	if agama == [] do
@@ -1618,8 +1673,8 @@ else
   <td rowspan="4"  style="margin: 3px; padding: 3px;" align="left"><BR> <b>国语 <br> Bahasa <br> Malaysia </b><BR></td>
   <td style="margin: 3px; padding: 3px;" align="left">会话 Lisan</td>
   <td style="margin: 3px; padding: 3px;"><%= if bml1 != "" do bml1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if bml1 != "" do bml1|>elem(1) else "" end %></div></td>
-  <td style="margin: 3px; padding: 3px;"><%= if bml2 != "" do bml1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if bml2 != "" do bml2|>elem(1) else "" end %></td>
-   <td style="margin: 3px; padding: 3px;"><%= if bml3 != "" do bml1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if bml3 != "" do bml3|>elem(1) else "" end %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if bml2 != "" do bml2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if bml2 != "" do bml2|>elem(1) else "" end %></td>
+   <td style="margin: 3px; padding: 3px;"><%= if bml3 != "" do bml2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if bml3 != "" do bml3|>elem(1) else "" end %></td>
     <td style="margin: 3px; padding: 3px;"></td>
   
  </tr>
@@ -1677,7 +1732,7 @@ else
  <td rowspan="4"  style="margin: 3px; padding: 3px;" align="left"><b><BR>华语 <br> Bahasa <br> Cina</b></td>
   <td style="margin: 3px; padding: 3px;" align="left">会话 Lisan</td>
   <td style="margin: 3px; padding: 3px;"><%= if chl1 != "" do chl1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if chl1 != "" do chl1|>elem(1) else "" end %></td>
-  <td style="margin: 3px; padding: 3px;"><%= if chl2 != "" do chl1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if chl2 != "" do chl2|>elem(1) else "" end %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if chl2 != "" do chl2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if chl2 != "" do chl2|>elem(1) else "" end %></td>
    <td style="margin: 3px; padding: 3px;"><%= if chl3 != "" do chl3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if chl3 != "" do chl3|>elem(1) else "" end %></td>
     <td style="margin: 3px; padding: 3px;"></td>
  </tr>
@@ -1721,9 +1776,9 @@ else
  <tr align="center">
    <td style="margin: 5px; padding: 5px; border-right: 0" align="left">道德教育</td>
   <td style="margin: 5px; padding: 5px; border-left: 0" align="left">Pendidikan Moral</td>
-  <td style="margin: 3px; padding: 3px;"></td>
-  <td style="margin: 3px; padding: 3px;"></td>
-  <td style="margin: 3px; padding: 3px;"></td>
+  <td style="margin: 3px; padding: 3px;"><%= if pm1 != "" do pm1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if pm1 != "" do pm1|>elem(1) else "" end %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if pm2 != "" do pm2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if pm2 != "" do pm2|>elem(1) else "" end %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if pm3 != "" do pm3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if pm3 != "" do pm3|>elem(1) else "" end %></td>
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
  <tr align="center">
@@ -1774,21 +1829,7 @@ else
   <td style="margin: 3px; padding: 3px;"><%= if pj3 != "" do pj3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if pj3 != "" do pj3|>elem(1) else "" end %></td>
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
-  <tr align="center">
-  <td colspan="2" style="margin: 3px; padding: 3px;" align="left"></td>
-  <td style="margin: 3px; padding: 3px;">&nbsp;</td>
-  <td style="margin: 3px; padding: 3px;">&nbsp;</td>
-  <td style="margin: 3px; padding: 3px;">&nbsp;</td>
-   <td style="margin: 3px; padding: 3px;"></td>
- </tr>
- <tr align="center">
 
-  <td colspan="2" style="margin: 3px; padding: 3px;" align="left"></td>
-  <td style="margin: 3px; padding: 3px;">&nbsp;</td>
-  <td style="margin: 3px; padding: 3px;">&nbsp;</td>
-  <td style="margin: 3px; padding: 3px;">&nbsp;</td>
-   <td style="margin: 3px; padding: 3px;"></td>
- </tr>
   <tr align="center">
      <td style="margin: 5px; padding: 5px; border-right: 0" align="left">操行</td>
   <td  style="margin: 5px; padding: 5px; border-left: 0" align="left">Kelakuan</td>
@@ -1816,7 +1857,7 @@ else
   <tr align="center" >
   <td  style="margin: 5px; padding: 5px; border-right: 0" align="left">平均 </td>
   <td  style="margin: 5px; padding: 5px; border-left: 0" align="left">Purata</td>
-        <td style="margin: 3px; padding: 3px;"><%= averg1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= averg1 %></td>
   <td style="margin: 3px; padding: 3px;"><%= averg2 %></td>
   <td style="margin: 3px; padding: 3px;"><%= averg3 %></td>
    <td style="margin: 3px; padding: 3px;"></td>

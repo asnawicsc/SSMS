@@ -227,13 +227,17 @@ defmodule SchoolWeb.PdfController do
                         )
 
                       grade =
-                        for grade <- grades do
-                          if mark >= grade.min and mark <= grade.max do
-                            grade.name
+                        if mark != 0 do
+                          for grade <- grades do
+                            if mark >= grade.min and mark <= grade.max do
+                              grade.name
+                            end
                           end
+                          |> Enum.filter(fn x -> x != nil end)
+                          |> hd
+                        else
+                          "E"
                         end
-                        |> Enum.filter(fn x -> x != nil end)
-                        |> hd
                     end
 
                   {no + 1, fit}
@@ -3714,8 +3718,8 @@ defmodule SchoolWeb.PdfController do
                   sex: student.sex,
                   student_name: item,
                   student_id: student.id,
-                  student_mark: -1,
-                  student_grade: "F",
+                  student_mark: 0,
+                  student_grade: "E",
                   exam_name: exam_name,
                   subject_code: subject_code
                 }
@@ -3772,19 +3776,22 @@ defmodule SchoolWeb.PdfController do
               )
 
             for grade <- grades do
-              if student_mark >= grade.min and student_mark <= grade.max and student_mark != -1 do
+              if Decimal.to_float(student_mark) >= grade.min and
+                   Decimal.to_float(student_mark) <= grade.max do
                 %{
                   student_id: data.student_id,
                   student_name: data.student_name,
                   grade: grade.name,
                   gpa: grade.gpa,
                   subject_code: data.subject_code,
-                  student_mark: data.student_mark,
+                  student_mark: Decimal.to_float(data.student_mark),
                   chinese_name: data.chinese_name,
                   sex: data.sex
                 }
               end
             end
+            |> Enum.filter(fn x -> x != nil end)
+            |> hd
           end
         end
       end
@@ -4064,8 +4071,8 @@ defmodule SchoolWeb.PdfController do
                   sex: student.sex,
                   student_name: student.name,
                   student_id: student.id,
-                  student_mark: -1,
-                  student_grade: "F",
+                  student_mark: 0,
+                  student_grade: "E",
                   exam_name: exam_name,
                   subject_code: subject_code,
                   class_id: student_class.class_id
@@ -4113,31 +4120,50 @@ defmodule SchoolWeb.PdfController do
           for data <- datas do
             student_mark = data.student_mark
 
-            grades =
-              Repo.all(
-                from(
-                  g in School.Affairs.ExamGrade,
-                  where:
-                    g.institution_id == ^conn.private.plug_session["institution_id"] and
-                      g.exam_master_id == ^exam_id.id
-                )
-              )
+            total_grade =
+              if student_mark != nil do
+                grades =
+                  Repo.all(
+                    from(
+                      g in School.Affairs.ExamGrade,
+                      where:
+                        g.institution_id == ^conn.private.plug_session["institution_id"] and
+                          g.exam_master_id == ^exam_id.id
+                    )
+                  )
 
-            for grade <- grades do
-              if student_mark >= grade.min and student_mark <= grade.max do
+                total_grade =
+                  for grade <- grades do
+                    if Decimal.to_float(student_mark) >= grade.min and
+                         Decimal.to_float(student_mark) <= grade.max do
+                      %{
+                        student_id: data.student_id,
+                        student_name: data.student_name,
+                        grade: grade.name,
+                        gpa: grade.gpa,
+                        subject_code: subject_code,
+                        student_mark: Decimal.to_float(student_mark),
+                        class_id: data.class_id,
+                        chinese_name: data.chinese_name,
+                        sex: data.sex
+                      }
+                    end
+                  end
+                  |> Enum.filter(fn x -> x != nil end)
+                  |> hd
+              else
                 %{
                   student_id: data.student_id,
                   student_name: data.student_name,
-                  grade: grade.name,
-                  gpa: grade.gpa,
+                  grade: "E",
+                  gpa: nil,
                   subject_code: subject_code,
-                  student_mark: student_mark,
+                  student_mark: 0.0,
                   class_id: data.class_id,
                   chinese_name: data.chinese_name,
                   sex: data.sex
                 }
               end
-            end
           end
         end
       end
@@ -4193,6 +4219,7 @@ defmodule SchoolWeb.PdfController do
           new
           |> elem(1)
           |> Enum.filter(fn x -> x.subject_code in subject_all end)
+          |> Enum.filter(fn x -> x.gpa != nil end)
           |> Enum.map(fn x -> Decimal.to_float(x.gpa) end)
           |> Enum.sum()
 

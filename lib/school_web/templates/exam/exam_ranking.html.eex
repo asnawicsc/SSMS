@@ -48,8 +48,8 @@
         <% end %>
         <th ><%= gettext "Jumlah" %></th>
         <th ><%= gettext "Purata" %></th>
-                <th ><%= gettext "Ked" %></th>
-         <th ><%= gettext "KMT" %></th>
+                <th ><%= gettext "KDD" %></th>
+         <th ><%= gettext "KDK" %></th>
       </tr>
      
 

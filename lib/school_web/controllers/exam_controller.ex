@@ -2112,7 +2112,8 @@ defmodule SchoolWeb.ExamController do
             )
 
           for grade <- grades do
-            if data.mark >= grade.min and data.mark <= grade.max do
+            if Decimal.to_float(data.mark) >= grade.min and
+                 Decimal.to_float(data.mark) <= grade.max do
               %{
                 class_name: data.class_name,
                 semester: data.semester,
@@ -2123,7 +2124,7 @@ defmodule SchoolWeb.ExamController do
                 subject_code: data.subject_code,
                 subject_name: data.subject_name,
                 subject_cname: data.subject_cname,
-                student_mark: data.mark
+                student_mark: Decimal.to_float(data.mark)
               }
             end
           end
