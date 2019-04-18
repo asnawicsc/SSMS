@@ -2095,8 +2095,19 @@ defmodule SchoolWeb.UserChannel do
           |> Enum.map(fn x -> Decimal.to_float(x.gpa) end)
           |> Enum.sum()
 
-        cgpa = (total_gpa / per) |> Float.round(2)
-        total_average = (total / total_per * 100) |> Float.round(2)
+        cgpa =
+          if total_gpa != 0 do
+            (total_gpa / per) |> Float.round(2)
+          else
+            0
+          end
+
+        total_average =
+          if total != 0 do
+            (total / total_per * 100) |> Float.round(2)
+          else
+            0
+          end
 
         %{
           subject: new |> elem(1) |> Enum.sort_by(fn x -> x.subject_code end),
@@ -2436,8 +2447,6 @@ defmodule SchoolWeb.UserChannel do
 
         total_per = per * 100
 
-        total_average = (total / total_per * 100) |> Float.round(2)
-
         class_id = new |> elem(1) |> Enum.map(fn x -> x.class_id end) |> Enum.uniq() |> hd
         student_id = new |> elem(1) |> Enum.map(fn x -> x.student_id end) |> Enum.uniq() |> hd
 
@@ -2461,7 +2470,19 @@ defmodule SchoolWeb.UserChannel do
           |> Enum.map(fn x -> Decimal.to_float(x.gpa) end)
           |> Enum.sum()
 
-        cgpa = (total_gpa / per) |> Float.round(2)
+        cgpa =
+          if total_gpa != 0 do
+            (total_gpa / per) |> Float.round(2)
+          else
+            0
+          end
+
+        total_average =
+          if total != 0 do
+            (total / total_per * 100) |> Float.round(2)
+          else
+            0
+          end
 
         %{
           subject: new |> elem(1) |> Enum.sort_by(fn x -> x.subject_code end),

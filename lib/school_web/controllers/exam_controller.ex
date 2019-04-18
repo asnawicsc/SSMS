@@ -2074,7 +2074,8 @@ defmodule SchoolWeb.ExamController do
             em.student_id == ^student.id and e.name == ^exam_name and
               c.institution_id == ^institution.id and e.institution_id == ^institution.id and
               j.institution_id == ^institution.id and s.institution_id == ^institution.id and
-              sb.institution_id == ^institution.id and sc.institute_id == ^institution.id,
+              sb.institution_id == ^institution.id and sc.institute_id == ^institution.id and
+              sb.with_mark == ^1,
           select: %{
             student_name: s.name,
             chinese_name: s.chinese_name,
@@ -2084,6 +2085,7 @@ defmodule SchoolWeb.ExamController do
             subject_name: sb.description,
             subject_cname: sb.cdesc,
             mark: em.mark,
+            grade: em.grade,
             standard_id: e.level_id
           }
         )
@@ -2098,31 +2100,46 @@ defmodule SchoolWeb.ExamController do
 
     all_data =
       for data <- all do
-        grades =
-          Repo.all(
-            from(
-              g in School.Affairs.ExamGrade,
-              where:
-                g.institution_id == ^conn.private.plug_session["institution_id"] and
-                  g.exam_master_id == ^exam.id
+        if data.mark != nil do
+          grades =
+            Repo.all(
+              from(
+                g in School.Affairs.ExamGrade,
+                where:
+                  g.institution_id == ^conn.private.plug_session["institution_id"] and
+                    g.exam_master_id == ^exam.id
+              )
             )
-          )
 
-        for grade <- grades do
-          if data.mark >= grade.min and data.mark <= grade.max do
-            %{
-              class_name: data.class_name,
-              semester: data.semester,
-              student_name: data.student_name,
-              chinese_name: data.chinese_name,
-              grade: grade.name,
-              gpa: grade.gpa,
-              subject_code: data.subject_code,
-              subject_name: data.subject_name,
-              subject_cname: data.subject_cname,
-              student_mark: data.mark
-            }
+          for grade <- grades do
+            if data.mark >= grade.min and data.mark <= grade.max do
+              %{
+                class_name: data.class_name,
+                semester: data.semester,
+                student_name: data.student_name,
+                chinese_name: data.chinese_name,
+                grade: grade.name,
+                gpa: grade.gpa,
+                subject_code: data.subject_code,
+                subject_name: data.subject_name,
+                subject_cname: data.subject_cname,
+                student_mark: data.mark
+              }
+            end
           end
+        else
+          %{
+            class_name: data.class_name,
+            semester: data.semester,
+            student_name: data.student_name,
+            chinese_name: data.chinese_name,
+            grade: "E",
+            gpa: 0,
+            subject_code: data.subject_code,
+            subject_name: data.subject_name,
+            subject_cname: data.subject_cname,
+            student_mark: 0
+          }
         end
       end
       |> List.flatten()
@@ -2142,8 +2159,19 @@ defmodule SchoolWeb.ExamController do
     g = all_data |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "G" end)
 
     per = all_data |> Enum.map(fn x -> x.student_mark end) |> Enum.count()
-    total_mark = all_data |> Enum.map(fn x -> x.student_mark end) |> Enum.sum()
-    total_gpa = all_data |> Enum.map(fn x -> Decimal.to_float(x.gpa) end) |> Enum.sum()
+
+    total_mark =
+      all_data
+      |> Enum.filter(fn x -> x.student_mark != 0 end)
+      |> Enum.map(fn x -> x.student_mark end)
+      |> Enum.sum()
+
+    total_gpa =
+      all_data
+      |> Enum.filter(fn x -> x.gpa != 0 end)
+      |> Enum.map(fn x -> Decimal.to_float(x.gpa) end)
+      |> Enum.sum()
+
     cgpa = (total_gpa / per) |> Float.round(2)
 
     total_per = per * 100
@@ -2332,31 +2360,46 @@ defmodule SchoolWeb.ExamController do
 
         all_data =
           for data <- all do
-            grades =
-              Repo.all(
-                from(
-                  g in School.Affairs.ExamGrade,
-                  where:
-                    g.institution_id == ^conn.private.plug_session["institution_id"] and
-                      g.exam_master_id == ^exam.id
+            if data.mark != nil do
+              grades =
+                Repo.all(
+                  from(
+                    g in School.Affairs.ExamGrade,
+                    where:
+                      g.institution_id == ^conn.private.plug_session["institution_id"] and
+                        g.exam_master_id == ^exam.id
+                  )
                 )
-              )
 
-            for grade <- grades do
-              if data.mark >= grade.min and data.mark <= grade.max do
-                %{
-                  class_name: data.class_name,
-                  semester: data.semester,
-                  student_name: data.student_name,
-                  chinese_name: data.chinese_name,
-                  grade: grade.name,
-                  gpa: grade.gpa,
-                  subject_code: data.subject_code,
-                  subject_name: data.subject_name,
-                  subject_cname: data.subject_cname,
-                  student_mark: data.mark
-                }
+              for grade <- grades do
+                if data.mark >= grade.min and data.mark <= grade.max do
+                  %{
+                    class_name: data.class_name,
+                    semester: data.semester,
+                    student_name: data.student_name,
+                    chinese_name: data.chinese_name,
+                    grade: grade.name,
+                    gpa: grade.gpa,
+                    subject_code: data.subject_code,
+                    subject_name: data.subject_name,
+                    subject_cname: data.subject_cname,
+                    student_mark: data.mark
+                  }
+                end
               end
+            else
+              %{
+                class_name: data.class_name,
+                semester: data.semester,
+                student_name: data.student_name,
+                chinese_name: data.chinese_name,
+                grade: "E",
+                gpa: 0,
+                subject_code: data.subject_code,
+                subject_name: data.subject_name,
+                subject_cname: data.subject_cname,
+                student_mark: 0
+              }
             end
           end
           |> List.flatten()
@@ -2375,9 +2418,23 @@ defmodule SchoolWeb.ExamController do
         f = all_data |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "F" end)
         g = all_data |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "G" end)
 
-        per = all_data |> Enum.map(fn x -> x.student_mark end) |> Enum.count()
-        total_mark = all_data |> Enum.map(fn x -> x.student_mark end) |> Enum.sum()
-        total_gpa = all_data |> Enum.map(fn x -> Decimal.to_float(x.gpa) end) |> Enum.sum()
+        per =
+          all_data
+          |> Enum.map(fn x -> x.student_mark end)
+          |> Enum.count()
+
+        total_mark =
+          all_data
+          |> Enum.filter(fn x -> x.student_mark != 0 end)
+          |> Enum.map(fn x -> x.student_mark end)
+          |> Enum.sum()
+
+        total_gpa =
+          all_data
+          |> Enum.filter(fn x -> x.student_mark != 0 end)
+          |> Enum.map(fn x -> Decimal.to_float(x.gpa) end)
+          |> Enum.sum()
+
         cgpa = (total_gpa / per) |> Float.round(2)
 
         total_per = per * 100

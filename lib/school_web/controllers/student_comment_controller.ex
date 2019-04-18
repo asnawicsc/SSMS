@@ -129,7 +129,12 @@ defmodule SchoolWeb.StudentCommentController do
 
   def mark_comments(conn, params) do
     class = Repo.get_by(School.Affairs.Class, %{id: params["id"]})
-    comment = Affairs.list_comment()
+
+    comment =
+      Affairs.list_comment()
+      |> Enum.filter(fn x ->
+        x.institution_id == conn.private.plug_session["institution_id"]
+      end)
 
     students =
       Repo.all(
@@ -142,7 +147,10 @@ defmodule SchoolWeb.StudentCommentController do
           left_join: c in School.Affairs.Class,
           on: s.class_id == c.id,
           where:
-            s.class_id == ^class.id and s.semester_id == ^conn.private.plug_session["semester_id"],
+            s.class_id == ^class.id and s.semester_id == ^conn.private.plug_session["semester_id"] and
+              s.institute_id == ^conn.private.plug_session["institution_id"] and
+              a.institution_id == ^conn.private.plug_session["institution_id"] and
+              c.institution_id == ^conn.private.plug_session["institution_id"],
           select: %{
             student_id: a.id,
             chinese_name: a.chinese_name,
@@ -200,7 +208,10 @@ defmodule SchoolWeb.StudentCommentController do
               on: s.class_id == c.id,
               where:
                 s.class_id == ^class.id and
-                  s.semester_id == ^conn.private.plug_session["semester_id"],
+                  s.semester_id == ^conn.private.plug_session["semester_id"] and
+                  s.institute_id == ^conn.private.plug_session["institution_id"] and
+                  a.institution_id == ^conn.private.plug_session["institution_id"] and
+                  c.institution_id == ^conn.private.plug_session["institution_id"],
               select: %{
                 student_id: a.id,
                 chinese_name: a.chinese_name,
@@ -213,7 +224,11 @@ defmodule SchoolWeb.StudentCommentController do
             )
           )
 
-        comment = Affairs.list_comment()
+        comment =
+          Affairs.list_comment()
+          |> Enum.filter(fn x ->
+            x.institution_id == conn.private.plug_session["institution_id"]
+          end)
 
         if students != [] do
           render(conn, "student_comments.html", class: class, comment: comment, students: students)

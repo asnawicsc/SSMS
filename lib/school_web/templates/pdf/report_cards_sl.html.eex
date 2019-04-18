@@ -887,7 +887,7 @@
     end
 
 
-    agama= all_date|>Enum.filter(fn x -> x.subject =="AGAMA" end)
+    agama= all_date|>Enum.filter(fn x -> x.subject =="AGM" end)
    {agama1,agama2,agama3}=  if agama == [] do
 
       {"","",""}
