@@ -2318,7 +2318,13 @@ defmodule SchoolWeb.UserChannel do
     all =
       for item <- exam_standard do
         exam_name = exam_mark |> Enum.map(fn x -> x.exam_name end) |> Enum.uniq() |> hd
-        student_list = exam_mark |> Enum.map(fn x -> x.student_id end) |> Enum.uniq()
+
+        student_list =
+          exam_mark
+          |> Enum.map(fn x -> x.student_id end)
+          |> Enum.filter(fn x -> x != nil end)
+          |> Enum.uniq()
+
         all_mark = exam_mark |> Enum.filter(fn x -> x.subject_code == item.subject_code end)
 
         subject_code = item.subject_code
@@ -2337,29 +2343,37 @@ defmodule SchoolWeb.UserChannel do
                 semester_id: exam_master.semester_id
               })
 
-            s_mark = all_mark |> Enum.filter(fn x -> x.student_id == item end)
-
             a =
-              if s_mark != [] do
-                s_mark
-              else
-                %{
-                  chinese_name: student.chinese_name,
-                  sex: student.sex,
-                  student_name: student.name,
-                  student_id: student.id,
-                  student_mark: 0,
-                  student_grade: "E",
-                  exam_name: exam_name,
-                  subject_code: subject_code,
-                  class_id: student_class.class_id
-                }
+              if student_class != nil do
+                s_mark = all_mark |> Enum.filter(fn x -> x.student_id == item end)
+
+                a =
+                  if s_mark != [] do
+                    s_mark
+                  else
+                    %{
+                      chinese_name: student.chinese_name,
+                      sex: student.sex,
+                      student_name: student.name,
+                      student_id: student.id,
+                      student_mark: 0,
+                      student_grade: "E",
+                      exam_name: exam_name,
+                      subject_code: subject_code,
+                      class_id: student_class.class_id
+                    }
+                  end
+
+                a
               end
+
+            a
           end
       end
       |> List.flatten()
+      |> Enum.filter(fn x -> x != nil end)
 
-    exam_name = all |> Enum.map(fn x -> x.exam_name end) |> Enum.uniq() |> hd
+    exam_name = exam_master.name
 
     all_mark = all |> Enum.group_by(fn x -> x.subject_code end)
 
@@ -2410,7 +2424,7 @@ defmodule SchoolWeb.UserChannel do
               })
 
             total_grade =
-              if student_mark != nil do
+              if student_mark != nil or student_mark != 0 do
                 grades =
                   Repo.all(
                     from(
