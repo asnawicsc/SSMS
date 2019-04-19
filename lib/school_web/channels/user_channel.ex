@@ -1958,7 +1958,7 @@ defmodule SchoolWeb.UserChannel do
                   sex: student.sex,
                   student_name: student.name,
                   student_id: student.id,
-                  student_mark: 0,
+                  student_mark: nil,
                   student_grade: "E",
                   exam_name: exam_name,
                   subject_code: subject_code
@@ -2013,6 +2013,8 @@ defmodule SchoolWeb.UserChannel do
             for data <- datas do
               student_mark = data.student_mark
 
+              IO.inspect(data)
+
               if student_mark != nil do
                 grades =
                   Repo.all(
@@ -2026,8 +2028,8 @@ defmodule SchoolWeb.UserChannel do
 
                 a =
                   for grade <- grades do
-                    if Decimal.to_float(student_mark) >= grade.min and
-                         Decimal.to_float(student_mark) <= grade.max do
+                    if Decimal.to_float(student_mark) >= Decimal.to_float(grade.min) and
+                         Decimal.to_float(student_mark) <= Decimal.to_float(grade.max) do
                       %{
                         student_id: data.student_id,
                         student_name: data.student_name,
@@ -2356,7 +2358,7 @@ defmodule SchoolWeb.UserChannel do
                       sex: student.sex,
                       student_name: student.name,
                       student_id: student.id,
-                      student_mark: 0,
+                      student_mark: nil,
                       student_grade: "E",
                       exam_name: exam_name,
                       subject_code: subject_code,
@@ -2438,8 +2440,8 @@ defmodule SchoolWeb.UserChannel do
 
                     total_grade =
                       for grade <- grades do
-                        if Decimal.to_float(student_mark) >= grade.min and
-                             Decimal.to_float(student_mark) <= grade.max do
+                        if Decimal.to_float(student_mark) >= Decimal.to_float(grade.min) and
+                             Decimal.to_float(student_mark) <= Decimal.to_float(grade.max) do
                           %{
                             student_id: data.student_id,
                             student_name: data.student_name,
@@ -2764,7 +2766,8 @@ defmodule SchoolWeb.UserChannel do
             )
 
           for grade <- grades do
-            if student_mark >= grade.min and student_mark <= grade.max do
+            if Decimal.to_float(student_mark) >= Decimal.to_float(grade.min) and
+                 Decimal.to_float(student_mark) <= Decimal.to_float(grade.max) do
               %{
                 student_id: data.student_id,
                 grade: grade.name,
@@ -2931,7 +2934,8 @@ defmodule SchoolWeb.UserChannel do
             )
 
           for grade <- grades do
-            if student_mark >= grade.min and student_mark <= grade.max do
+            if Decimal.to_float(student_mark) >= Decimal.to_float(grade.min) and
+                 Decimal.to_float(student_mark) <= Decimal.to_float(grade.max) do
               %{
                 student_id: data.student_id,
                 grade: grade.name,

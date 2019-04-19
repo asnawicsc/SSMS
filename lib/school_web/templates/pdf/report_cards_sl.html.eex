@@ -772,7 +772,7 @@
 
     end
 
-    math= all_date|>Enum.filter(fn x -> x.subject =="MAT" end)
+    math= all_date|>Enum.filter(fn x -> x.subject =="MATH" end)
    {math1,math2,math3}= if math == [] do
 
       {"","",""}
@@ -832,7 +832,7 @@
 
     end
 
-    sains= all_date|>Enum.filter(fn x -> x.subject =="SN" end)
+    sains= all_date|>Enum.filter(fn x -> x.subject =="SAINS" end)
    {sains1,sains2,sains3}=  if sains == [] do
 
       {"","",""}
@@ -1665,7 +1665,7 @@ else
  <tr  align="center">
   <td rowspan="4"  style="margin: 3px; padding: 3px;" align="left"><BR> <b>国语 <br> Bahasa <br> Malaysia </b><BR></td>
   <td style="margin: 3px; padding: 3px;" align="left">会话 Lisan</td>
-  <td style="margin: 3px; padding: 3px;"><%= if bml1 != "" do bml1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if bml1 != "" do bml1|>elem(1) else "" end %></div></td>
+  <td style="margin: 3px; padding: 3px;"><%= if bml1 != "" do bml1|>elem(0)  else "" end %><div style="float:right;width:50%;"><%= if bml1 != "" do bml1|>elem(1) else "" end %></div></td>
   <td style="margin: 3px; padding: 3px;"><%= if bml2 != "" do bml2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if bml2 != "" do bml2|>elem(1) else "" end %></td>
    <td style="margin: 3px; padding: 3px;"><%= if bml3 != "" do bml3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if bml3 != "" do bml3|>elem(1) else "" end %></td>
     <td style="margin: 3px; padding: 3px;"></td>

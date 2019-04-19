@@ -224,7 +224,8 @@ defmodule SchoolWeb.ExamController do
           #   )
 
           for grade <- grades do
-            if student_mark >= grade.mix and student_mark <= grade.max do
+            if Decimal.to_float(student_mark) >= Decimal.to_float(grade.min) and
+                 Decimal.to_float(student_mark) <= Decimal.to_float(grade.max) do
               %{
                 student_id: data.student_id,
                 grade: grade.name,
@@ -1408,7 +1409,8 @@ defmodule SchoolWeb.ExamController do
               )
 
             for grade <- grades do
-              if student_mark >= grade.mix and student_mark <= grade.max and student_mark != -1 do
+              if Decimal.to_float(student_mark) >= Decimal.to_float(grade.min) and
+                   Decimal.to_float(student_mark) <= Decimal.to_float(grade.max) do
                 %{
                   student_id: data.student_id,
                   student_name: data.student_name,
@@ -1922,7 +1924,8 @@ defmodule SchoolWeb.ExamController do
               )
 
             for grade <- grades do
-              if student_mark >= grade.mix and student_mark <= grade.max do
+              if Decimal.to_float(student_mark) >= Decimal.to_float(grade.min) and
+                   Decimal.to_float(student_mark) <= Decimal.to_float(grade.max) do
                 %{
                   student_id: data.student_id,
                   student_name: data.student_name,
@@ -2112,8 +2115,8 @@ defmodule SchoolWeb.ExamController do
             )
 
           for grade <- grades do
-            if Decimal.to_float(data.mark) >= grade.min and
-                 Decimal.to_float(data.mark) <= grade.max do
+            if Decimal.to_float(data.mark) >= Decimal.to_float(grade.min) and
+                 Decimal.to_float(data.mark) <= Decimal.to_float(grade.max) do
               %{
                 class_name: data.class_name,
                 semester: data.semester,
@@ -2373,7 +2376,8 @@ defmodule SchoolWeb.ExamController do
                 )
 
               for grade <- grades do
-                if data.mark >= grade.min and data.mark <= grade.max do
+                if Decimal.to_float(data.mark) >= Decimal.to_float(grade.min) and
+                     Decimal.to_float(data.mark) <= Decimal.to_float(grade.max) do
                   %{
                     class_name: data.class_name,
                     semester: data.semester,
@@ -2593,7 +2597,8 @@ defmodule SchoolWeb.ExamController do
 
             a =
               for grade <- grades do
-                if item.mark >= grade.min and item.mark <= grade.max do
+                if Decimal.to_float(item.mark) >= Decimal.to_float(grade.min) and
+                     Decimal.to_float(item.mark) <= Decimal.to_float(grade.max) do
                   %{
                     exam_master_id: item.exam_master_id,
                     exam_name: item.exam_name,
@@ -2878,7 +2883,8 @@ defmodule SchoolWeb.ExamController do
               )
 
             for grade <- grades do
-              if student_mark >= grade.mix and student_mark <= grade.max do
+              if Decimal.to_float(student_mark) >= Decimal.to_float(grade.min) and
+                   Decimal.to_float(student_mark) <= Decimal.to_float(grade.max) do
                 %{
                   student_id: data.student_id,
                   student_name: data.student_name,

@@ -229,7 +229,8 @@ defmodule SchoolWeb.PdfController do
                       grade =
                         if mark != 0 do
                           for grade <- grades do
-                            if mark >= grade.min and mark <= grade.max do
+                            if mark >= Decimal.to_float(grade.min) and
+                                 mark <= Decimal.to_float(grade.max) do
                               grade.name
                             end
                           end
@@ -517,16 +518,19 @@ defmodule SchoolWeb.PdfController do
                           coming = items |> hd
 
                           absent =
-                            Repo.get_by(
-                              School.Affairs.ExamAttendance,
-                              student_id: coming.student_id,
-                              semester_id: coming.semester,
-                              institution_id: conn.private.plug_session["institution_id"],
-                              exam_master_id: coming.exam_master_id
+                            Repo.all(
+                              from(s in School.Affairs.ExamAttendance,
+                                where:
+                                  s.student_id == ^coming.student_id and
+                                    s.semester_id == ^coming.semester and
+                                    s.institution_id ==
+                                      ^conn.private.plug_session["institution_id"] and
+                                    s.exam_master_id == ^coming.exam_master_id
+                              )
                             )
 
                           a =
-                            if absent == nil do
+                            if absent == [] do
                               grade_rank =
                                 for total_grade <- items do
                                   grades =
@@ -542,8 +546,10 @@ defmodule SchoolWeb.PdfController do
                                   grade =
                                     if total_grade.mark != 0 and total_grade.mark != nil do
                                       for grade <- grades do
-                                        if Decimal.to_float(total_grade.mark) >= grade.min and
-                                             Decimal.to_float(total_grade.mark) <= grade.max do
+                                        if Decimal.to_float(items.mark) >=
+                                             Decimal.to_float(grade.min) and
+                                             Decimal.to_float(items.mark) <=
+                                               Decimal.to_float(grade.max) do
                                           grade.name
                                         end
                                       end
@@ -606,16 +612,19 @@ defmodule SchoolWeb.PdfController do
                           coming = items |> hd
 
                           absent =
-                            Repo.get_by(
-                              School.Affairs.ExamAttendance,
-                              student_id: coming.student_id,
-                              semester_id: coming.semester,
-                              institution_id: conn.private.plug_session["institution_id"],
-                              exam_master_id: coming.exam_master_id
+                            Repo.all(
+                              from(s in School.Affairs.ExamAttendance,
+                                where:
+                                  s.student_id == ^coming.student_id and
+                                    s.semester_id == ^coming.semester and
+                                    s.institution_id ==
+                                      ^conn.private.plug_session["institution_id"] and
+                                    s.exam_master_id == ^coming.exam_master_id
+                              )
                             )
 
                           a =
-                            if absent == nil do
+                            if absent == [] do
                               sum =
                                 items
                                 |> Enum.filter(fn x -> x.mark != 0 end)
@@ -938,16 +947,19 @@ defmodule SchoolWeb.PdfController do
                           coming = items |> hd
 
                           absent =
-                            Repo.get_by(
-                              School.Affairs.ExamAttendance,
-                              student_id: coming.student_id,
-                              semester_id: coming.semester,
-                              institution_id: conn.private.plug_session["institution_id"],
-                              exam_master_id: coming.exam_master_id
+                            Repo.all(
+                              from(s in School.Affairs.ExamAttendance,
+                                where:
+                                  s.student_id == ^coming.student_id and
+                                    s.semester_id == ^coming.semester and
+                                    s.institution_id ==
+                                      ^conn.private.plug_session["institution_id"] and
+                                    s.exam_master_id == ^coming.exam_master_id
+                              )
                             )
 
                           a =
-                            if absent == nil do
+                            if absent == [] do
                               grade_rank =
                                 for total_grade <- items do
                                   grades =
@@ -963,8 +975,10 @@ defmodule SchoolWeb.PdfController do
                                   grade =
                                     if total_grade.mark != 0 and total_grade.mark != nil do
                                       for grade <- grades do
-                                        if Decimal.to_float(total_grade.mark) >= grade.min and
-                                             Decimal.to_float(total_grade.mark) <= grade.max do
+                                        if Decimal.to_float(items.mark) >=
+                                             Decimal.to_float(grade.min) and
+                                             Decimal.to_float(items.mark) <=
+                                               Decimal.to_float(grade.max) do
                                           grade.name
                                         end
                                       end
@@ -1026,16 +1040,19 @@ defmodule SchoolWeb.PdfController do
                           coming = items |> hd
 
                           absent =
-                            Repo.get_by(
-                              School.Affairs.ExamAttendance,
-                              student_id: coming.student_id,
-                              semester_id: coming.semester,
-                              institution_id: conn.private.plug_session["institution_id"],
-                              exam_master_id: coming.exam_master_id
+                            Repo.all(
+                              from(s in School.Affairs.ExamAttendance,
+                                where:
+                                  s.student_id == ^coming.student_id and
+                                    s.semester_id == ^coming.semester and
+                                    s.institution_id ==
+                                      ^conn.private.plug_session["institution_id"] and
+                                    s.exam_master_id == ^coming.exam_master_id
+                              )
                             )
 
                           a =
-                            if absent == nil do
+                            if absent == [] do
                               sum =
                                 items
                                 |> Enum.filter(fn x -> x.mark != nil end)
@@ -1327,33 +1344,36 @@ defmodule SchoolWeb.PdfController do
                             )
 
                           absent =
-                            Repo.get_by(
-                              School.Affairs.ExamAttendance,
-                              student_id: item.student_id,
-                              semester_id: item.semester,
-                              institution_id: conn.private.plug_session["institution_id"],
-                              exam_master_id: item.exam_master_id,
-                              subject_id: subject.id
+                            Repo.all(
+                              from(s in School.Affairs.ExamAttendance,
+                                where:
+                                  s.student_id == ^item.student_id and
+                                    s.semester_id == ^item.semester and
+                                    s.institution_id ==
+                                      ^conn.private.plug_session["institution_id"] and
+                                    s.exam_master_id == ^item.exam_master_id
+                              )
                             )
 
-                          if absent == nil do
-                            %{
-                              student_id: item.student_id,
-                              student_name: item.student_name,
-                              chinese_name: item.chinese_name,
-                              class_name: item.class_name,
-                              exam_master_id: item.exam_master_id,
-                              exam_name: item.exam_name,
-                              semester: item.semester,
-                              semester_no: item.semester_no,
-                              year: item.year,
-                              subject_code: item.subject_code,
-                              subject_name: item.subject_name,
-                              subject_cname: item.subject_cname,
-                              mark: item.mark,
-                              standard_id: item.standard_id
-                            }
-                          end
+                          a =
+                            if absent == [] do
+                              %{
+                                student_id: item.student_id,
+                                student_name: item.student_name,
+                                chinese_name: item.chinese_name,
+                                class_name: item.class_name,
+                                exam_master_id: item.exam_master_id,
+                                exam_name: item.exam_name,
+                                semester: item.semester,
+                                semester_no: item.semester_no,
+                                year: item.year,
+                                subject_code: item.subject_code,
+                                subject_name: item.subject_name,
+                                subject_cname: item.subject_cname,
+                                mark: item.mark,
+                                standard_id: item.standard_id
+                              }
+                            end
                         end
                         |> Enum.filter(fn x -> x != nil end)
 
@@ -1368,33 +1388,36 @@ defmodule SchoolWeb.PdfController do
                             )
 
                           absent =
-                            Repo.get_by(
-                              School.Affairs.ExamAttendance,
-                              student_id: item.student_id,
-                              semester_id: item.semester,
-                              institution_id: conn.private.plug_session["institution_id"],
-                              exam_master_id: item.exam_master_id,
-                              subject_id: subject.id
+                            Repo.all(
+                              from(s in School.Affairs.ExamAttendance,
+                                where:
+                                  s.student_id == ^item.student_id and
+                                    s.semester_id == ^item.semester and
+                                    s.institution_id ==
+                                      ^conn.private.plug_session["institution_id"] and
+                                    s.exam_master_id == ^item.exam_master_id
+                              )
                             )
 
-                          if absent == nil do
-                            %{
-                              student_id: item.student_id,
-                              student_name: item.student_name,
-                              chinese_name: item.chinese_name,
-                              class_name: item.class_name,
-                              exam_master_id: item.exam_master_id,
-                              exam_name: item.exam_name,
-                              semester: item.semester,
-                              semester_no: item.semester_no,
-                              year: item.year,
-                              subject_code: item.subject_code,
-                              subject_name: item.subject_name,
-                              subject_cname: item.subject_cname,
-                              mark: item.mark,
-                              standard_id: item.standard_id
-                            }
-                          end
+                          a =
+                            if absent == [] do
+                              %{
+                                student_id: item.student_id,
+                                student_name: item.student_name,
+                                chinese_name: item.chinese_name,
+                                class_name: item.class_name,
+                                exam_master_id: item.exam_master_id,
+                                exam_name: item.exam_name,
+                                semester: item.semester,
+                                semester_no: item.semester_no,
+                                year: item.year,
+                                subject_code: item.subject_code,
+                                subject_name: item.subject_name,
+                                subject_cname: item.subject_cname,
+                                mark: item.mark,
+                                standard_id: item.standard_id
+                              }
+                            end
                         end
                         |> Enum.filter(fn x -> x != nil end)
 
@@ -1550,33 +1573,36 @@ defmodule SchoolWeb.PdfController do
                             )
 
                           absent =
-                            Repo.get_by(
-                              School.Affairs.ExamAttendance,
-                              student_id: item.student_id,
-                              semester_id: item.semester,
-                              institution_id: conn.private.plug_session["institution_id"],
-                              exam_master_id: item.exam_master_id,
-                              subject_id: subject.id
+                            Repo.all(
+                              from(s in School.Affairs.ExamAttendance,
+                                where:
+                                  s.student_id == ^item.student_id and
+                                    s.semester_id == ^item.semester and
+                                    s.institution_id ==
+                                      ^conn.private.plug_session["institution_id"] and
+                                    s.exam_master_id == ^item.exam_master_id
+                              )
                             )
 
-                          if absent == nil do
-                            %{
-                              student_id: item.student_id,
-                              student_name: item.student_name,
-                              chinese_name: item.chinese_name,
-                              class_name: item.class_name,
-                              exam_master_id: item.exam_master_id,
-                              exam_name: item.exam_name,
-                              semester: item.semester,
-                              semester_no: item.semester_no,
-                              year: item.year,
-                              subject_code: item.subject_code,
-                              subject_name: item.subject_name,
-                              subject_cname: item.subject_cname,
-                              mark: item.mark,
-                              standard_id: item.standard_id
-                            }
-                          end
+                          a =
+                            if absent == [] do
+                              %{
+                                student_id: item.student_id,
+                                student_name: item.student_name,
+                                chinese_name: item.chinese_name,
+                                class_name: item.class_name,
+                                exam_master_id: item.exam_master_id,
+                                exam_name: item.exam_name,
+                                semester: item.semester,
+                                semester_no: item.semester_no,
+                                year: item.year,
+                                subject_code: item.subject_code,
+                                subject_name: item.subject_name,
+                                subject_cname: item.subject_cname,
+                                mark: item.mark,
+                                standard_id: item.standard_id
+                              }
+                            end
                         end
                         |> Enum.filter(fn x -> x != nil end)
 
@@ -1591,33 +1617,36 @@ defmodule SchoolWeb.PdfController do
                             )
 
                           absent =
-                            Repo.get_by(
-                              School.Affairs.ExamAttendance,
-                              student_id: item.student_id,
-                              semester_id: item.semester,
-                              institution_id: conn.private.plug_session["institution_id"],
-                              exam_master_id: item.exam_master_id,
-                              subject_id: subject.id
+                            Repo.all(
+                              from(s in School.Affairs.ExamAttendance,
+                                where:
+                                  s.student_id == ^item.student_id and
+                                    s.semester_id == ^item.semester and
+                                    s.institution_id ==
+                                      ^conn.private.plug_session["institution_id"] and
+                                    s.exam_master_id == ^item.exam_master_id
+                              )
                             )
 
-                          if absent == nil do
-                            %{
-                              student_id: item.student_id,
-                              student_name: item.student_name,
-                              chinese_name: item.chinese_name,
-                              class_name: item.class_name,
-                              exam_master_id: item.exam_master_id,
-                              exam_name: item.exam_name,
-                              semester: item.semester,
-                              semester_no: item.semester_no,
-                              year: item.year,
-                              subject_code: item.subject_code,
-                              subject_name: item.subject_name,
-                              subject_cname: item.subject_cname,
-                              mark: item.mark,
-                              standard_id: item.standard_id
-                            }
-                          end
+                          a =
+                            if absent == [] do
+                              %{
+                                student_id: item.student_id,
+                                student_name: item.student_name,
+                                chinese_name: item.chinese_name,
+                                class_name: item.class_name,
+                                exam_master_id: item.exam_master_id,
+                                exam_name: item.exam_name,
+                                semester: item.semester,
+                                semester_no: item.semester_no,
+                                year: item.year,
+                                subject_code: item.subject_code,
+                                subject_name: item.subject_name,
+                                subject_cname: item.subject_cname,
+                                mark: item.mark,
+                                standard_id: item.standard_id
+                              }
+                            end
                         end
                         |> Enum.filter(fn x -> x != nil end)
 
@@ -3718,7 +3747,7 @@ defmodule SchoolWeb.PdfController do
                   sex: student.sex,
                   student_name: item,
                   student_id: student.id,
-                  student_mark: 0,
+                  student_mark: nil,
                   student_grade: "E",
                   exam_name: exam_name,
                   subject_code: subject_code
@@ -3778,8 +3807,8 @@ defmodule SchoolWeb.PdfController do
                   )
 
                 for grade <- grades do
-                  if Decimal.to_float(student_mark) >= grade.min and
-                       Decimal.to_float(student_mark) <= grade.max do
+                  if Decimal.to_float(student_mark) >= Decimal.to_float(grade.min) and
+                       Decimal.to_float(student_mark) <= Decimal.to_float(grade.max) do
                     %{
                       student_id: data.student_id,
                       student_name: data.student_name,
@@ -3802,7 +3831,6 @@ defmodule SchoolWeb.PdfController do
                   gpa: nil,
                   subject_code: subject_code,
                   student_mark: 0.0,
-                  class_id: data.class_id,
                   chinese_name: data.chinese_name,
                   sex: data.sex
                 }
@@ -4087,7 +4115,7 @@ defmodule SchoolWeb.PdfController do
                   sex: student.sex,
                   student_name: student.name,
                   student_id: student.id,
-                  student_mark: 0,
+                  student_mark: nil,
                   student_grade: "E",
                   exam_name: exam_name,
                   subject_code: subject_code,
@@ -4150,8 +4178,8 @@ defmodule SchoolWeb.PdfController do
 
                 total_grade =
                   for grade <- grades do
-                    if Decimal.to_float(student_mark) >= grade.min and
-                         Decimal.to_float(student_mark) <= grade.max do
+                    if Decimal.to_float(student_mark) >= Decimal.to_float(grade.min) and
+                         Decimal.to_float(student_mark) <= Decimal.to_float(grade.max) do
                       %{
                         student_id: data.student_id,
                         student_name: data.student_name,
@@ -5907,7 +5935,8 @@ defmodule SchoolWeb.PdfController do
             )
 
           for grade <- grades do
-            if student_mark >= grade.min and student_mark <= grade.max do
+            if Decimal.to_float(student_mark) >= Decimal.to_float(grade.min) and
+                 Decimal.to_float(student_mark) <= Decimal.to_float(grade.max) do
               %{
                 student_id: data.student_id,
                 grade: grade.name,
@@ -6080,7 +6109,8 @@ defmodule SchoolWeb.PdfController do
             )
 
           for grade <- grades do
-            if student_mark >= grade.min and student_mark <= grade.max do
+            if Decimal.to_float(student_mark) >= Decimal.to_float(grade.min) and
+                 Decimal.to_float(student_mark) <= Decimal.to_float(grade.max) do
               %{
                 student_id: data.student_id,
                 grade: grade.name,

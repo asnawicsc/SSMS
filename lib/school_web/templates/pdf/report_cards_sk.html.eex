@@ -401,7 +401,7 @@
       "" 
      end
 
-        ingb2={ingb_s1m,ingb_s1g}
+        ingb2={ingb_s2m,ingb_s2g}
 
 
     ingb_s3m=if ingb.s3m != nil do
@@ -1820,21 +1820,6 @@ else
     <td style="margin: 3px; padding: 3px;"><%= if pj1 != "" do pj1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if pj1 != "" do pj1|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if pj2 != "" do pj2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if pj2 != "" do pj2|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if pj3 != "" do pj3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if pj3 != "" do pj3|>elem(1) else "" end %></td>
-   <td style="margin: 3px; padding: 3px;"></td>
- </tr>
-  <tr align="center">
-  <td colspan="2" style="margin: 3px; padding: 3px;" align="left"></td>
-  <td style="margin: 3px; padding: 3px;">&nbsp;</td>
-  <td style="margin: 3px; padding: 3px;">&nbsp;</td>
-  <td style="margin: 3px; padding: 3px;">&nbsp;</td>
-   <td style="margin: 3px; padding: 3px;"></td>
- </tr>
- <tr align="center">
-
-  <td colspan="2" style="margin: 3px; padding: 3px;" align="left"></td>
-  <td style="margin: 3px; padding: 3px;">&nbsp;</td>
-  <td style="margin: 3px; padding: 3px;">&nbsp;</td>
-  <td style="margin: 3px; padding: 3px;">&nbsp;</td>
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">

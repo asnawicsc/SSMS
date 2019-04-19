@@ -5,8 +5,8 @@ defmodule School.Affairs.ExamGrade do
   schema "exam_grade" do
     field(:gpa, :decimal)
     field(:institution_id, :integer)
-    field(:max, :integer)
-    field(:min, :integer)
+    field(:max, :decimal)
+    field(:min, :decimal)
     field(:name, :string)
     field(:exam_master_id, :integer)
 
