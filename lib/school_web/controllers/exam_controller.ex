@@ -1131,7 +1131,7 @@ defmodule SchoolWeb.ExamController do
             %{
               id: item.id,
               chinese_name: item.chinese_name,
-              student_name: item.name,
+              student_name: item.student_name,
               sex: item.sex
             }
           end
@@ -1153,7 +1153,7 @@ defmodule SchoolWeb.ExamController do
             %{
               id: item.id,
               chinese_name: item.chinese_name,
-              student_name: item.name,
+              student_name: item.student_name,
               sex: item.sex
             }
           end
@@ -1170,7 +1170,7 @@ defmodule SchoolWeb.ExamController do
             %{
               id: item.id,
               chinese_name: item.chinese_name,
-              student_name: item.name,
+              student_name: item.student_name,
               sex: item.sex
             }
           end
