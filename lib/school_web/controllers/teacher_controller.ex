@@ -81,7 +81,9 @@ defmodule SchoolWeb.TeacherController do
         }
       end
 
-    render(conn, "teacher_attendances.html",
+    render(
+      conn,
+      "teacher_attendances.html",
       not_yet: not_yet_full,
       teachers_attend: teachers_attend_full
     )
@@ -394,7 +396,8 @@ defmodule SchoolWeb.TeacherController do
 
     teacher =
       Repo.all(
-        from(s in School.Affairs.Teacher,
+        from(
+          s in School.Affairs.Teacher,
           where:
             s.institution_id == ^conn.private.plug_session["institution_id"] and s.is_delete != 1,
           order_by: [asc: s.rank, asc: s.name]
@@ -491,7 +494,8 @@ defmodule SchoolWeb.TeacherController do
       teacher_name = teacher.filename |> String.split(".") |> hd
 
       teacher =
-        Repo.get_by(Teacher,
+        Repo.get_by(
+          Teacher,
           name: teacher_name,
           institution_id: conn.private.plug_session["institution_id"]
         )
@@ -571,10 +575,23 @@ defmodule SchoolWeb.TeacherController do
         teacher_params
       end
 
+    if teacher == nil do
+      teacher = Repo.get(Teacher, id)
+    end
+
     teacherss = Teacher.changeset(teacher, teacher_params)
+    user_result = Repo.all(from(u in User, where: u.email == ^teacher.email))
 
     case Repo.update(teacherss) do
       {:ok, teacher} ->
+        # update the user... 
+
+        if user_result != [] do
+          u = hd(user_result)
+
+          res = User.changeset(u, %{email: teacher.email}) |> Repo.update()
+        end
+
         url = teacher_path(conn, :index, focus: teacher.code)
         referer = conn.req_headers |> Enum.filter(fn x -> elem(x, 0) == "referer" end)
 
@@ -590,6 +607,11 @@ defmodule SchoolWeb.TeacherController do
           |> put_flash(:info, "#{teacher.name} updated successfully.")
           |> redirect(to: url)
         end
+
+      {:error, changeset} ->
+        conn
+        |> put_flash(:info, "Some details are missing.")
+        |> redirect(to: page_path(conn, :dashboard))
     end
   end
 

@@ -217,7 +217,7 @@
           </div>
           
        
-
+<%= if user.role == "Support" do %>
           <div  class="form-group col-md-2" style="margin-top: 30px;">
             <%= label f, (gettext "is_delete?"),  class: "control-label"%>
 
@@ -226,7 +226,7 @@
 
            <%= error_tag f, :is_delete %>
           </div>
-
+<% end %>
 
           <div class="form-group col-md-2">
             <%= label f, (gettext "Tranfer In Date"),  class: "control-label" %>
