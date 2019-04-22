@@ -52,7 +52,8 @@ defmodule SchoolWeb.UserController do
   def assign_lib_access(conn, params) do
     users =
       Repo.all(
-        from(s in User,
+        from(
+          s in User,
           left_join: g in Settings.UserAccess,
           on: s.id == g.user_id,
           where: g.institution_id == ^conn.private.plug_session["institution_id"]
@@ -267,7 +268,8 @@ defmodule SchoolWeb.UserController do
   def create_clerk(conn, _params) do
     users =
       Repo.all(
-        from(s in User,
+        from(
+          s in User,
           left_join: g in Settings.UserAccess,
           on: s.id == g.user_id,
           where:
@@ -326,7 +328,58 @@ defmodule SchoolWeb.UserController do
     user_params = Map.put(user_params, "crypted_password", crypted_password)
 
     case Settings.update_user(user, user_params) do
-      {:ok, user} ->
+      {:ok, new_user} ->
+        if is_librarian do
+          bin = Plug.Crypto.KeyGenerator.generate("resertech", "damien")
+          uri = Application.get_env(:school, :api)[:url]
+
+          lib_id = School.Affairs.inst_id(conn)
+          # access library
+          path = "?scope=get_lib&inst_id=sa_#{lib_id}"
+
+          response =
+            HTTPoison.get!(
+              uri <> path,
+              [{"Content-Type", "application/json"}],
+              timeout: 50_000,
+              recv_timeout: 50_000
+            ).body
+
+          library = response |> Poison.decode!()
+
+          library_organization_id = library["org_id"]
+          inst = Repo.get(Institution, School.Affairs.inst_id(conn))
+
+          Institution.changeset(inst, %{library_organization_id: library_organization_id})
+          |> Repo.update()
+
+          # create user
+
+          name = user.name |> String.split(" ") |> Enum.join("_")
+          email = user.email
+
+          encrypted_password =
+            Plug.Crypto.MessageEncryptor.encrypt(user.crypted_password, bin, bin)
+
+          encrypted_password2 =
+            Plug.Crypto.MessageEncryptor.encrypt(new_user.crypted_password, bin, bin)
+
+          path2 =
+            "?scope=create_user&inst_id=sa_#{lib_id}&name=#{name}&email=#{email}&password=#{
+              encrypted_password
+            }&new_name=#{new_user.name}&new_email=#{new_user.email}&new_password=#{
+              encrypted_password2
+            }"
+
+          response2 =
+            HTTPoison.get!(
+              uri <> path2,
+              [{"Content-Type", "application/json"}],
+              timeout: 50_000,
+              recv_timeout: 50_000
+            ).body
+        end
+
         conn
         |> put_flash(:info, "User updated successfully.")
         |> redirect(to: user_path(conn, :show, user))
