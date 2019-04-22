@@ -962,6 +962,222 @@ defmodule SchoolWeb.ExamController do
     end
   end
 
+  def sorting_marking(conn, male) do
+    all =
+      if conn.private.plug_session["institution_id"] == 3 do
+        m =
+          male
+          |> Enum.group_by(fn x -> x.sex end)
+          |> Enum.filter(fn x -> x |> elem(0) == "M" end)
+          |> Enum.map(fn x -> x |> elem(1) end)
+          |> List.flatten()
+
+        a =
+          for item <- m do
+            ori_name = item.student_name
+
+            sort_name = item.student_name |> String.replace("'", "A")
+
+            %{
+              class_id: item.class_id,
+              subject_id: item.subject_id,
+              exam_id: item.exam_id,
+              id: item.id,
+              student_name: item.student_name,
+              mark: item.mark,
+              grade: item.grade
+            }
+          end
+          |> Enum.sort_by(fn x -> x.student_name end)
+
+        f =
+          male
+          |> Enum.group_by(fn x -> x.sex end)
+          |> Enum.filter(fn x -> x |> elem(0) == "F" end)
+          |> Enum.map(fn x -> x |> elem(1) end)
+          |> List.flatten()
+
+        b =
+          for item <- f do
+            ori_name = item.student_name
+
+            sort_name = item.student_name |> String.replace("'", "A")
+
+            %{
+              class_id: item.class_id,
+              subject_id: item.subject_id,
+              exam_id: item.exam_id,
+              id: item.id,
+              student_name: item.student_name,
+              mark: item.mark,
+              grade: item.grade
+            }
+          end
+          |> Enum.sort_by(fn x -> x.student_name end)
+
+        all = a ++ b
+      else
+        a =
+          for item <- male do
+            ori_name = item.student_name
+
+            sort_name = item.student_name |> String.replace("'", "A")
+
+            %{
+              class_id: item.class_id,
+              subject_id: item.subject_id,
+              exam_id: item.exam_id,
+              id: item.id,
+              student_name: item.student_name,
+              mark: item.mark,
+              grade: item.grade
+            }
+          end
+          |> Enum.sort_by(fn x -> x.student_name end)
+      end
+  end
+
+  def sorting_marking2(conn, male) do
+    all =
+      if conn.private.plug_session["institution_id"] == 3 do
+        m =
+          male
+          |> Enum.group_by(fn x -> x.sex end)
+          |> Enum.filter(fn x -> x |> elem(0) == "M" end)
+          |> Enum.map(fn x -> x |> elem(1) end)
+          |> List.flatten()
+
+        a =
+          for item <- m do
+            ori_name = item.student_name
+
+            sort_name = item.student_name |> String.replace("'", "A")
+
+            %{
+              class_id: item.class_id,
+              subject_id: item.subject_id,
+              exam_id: item.exam_id,
+              student_id: item.student_id,
+              student_name: item.student_name,
+              mark: item.mark,
+              grade: item.grade
+            }
+          end
+          |> Enum.sort_by(fn x -> x.student_name end)
+
+        f =
+          male
+          |> Enum.group_by(fn x -> x.sex end)
+          |> Enum.filter(fn x -> x |> elem(0) == "F" end)
+          |> Enum.map(fn x -> x |> elem(1) end)
+          |> List.flatten()
+
+        b =
+          for item <- f do
+            ori_name = item.student_name
+
+            sort_name = item.student_name |> String.replace("'", "A")
+
+            %{
+              class_id: item.class_id,
+              subject_id: item.subject_id,
+              exam_id: item.exam_id,
+              student_id: item.student_id,
+              student_name: item.student_name,
+              mark: item.mark,
+              grade: item.grade
+            }
+          end
+          |> Enum.sort_by(fn x -> x.student_name end)
+
+        all = a ++ b
+      else
+        a =
+          for item <- male do
+            ori_name = item.student_name
+
+            sort_name = item.student_name |> String.replace("'", "A")
+
+            %{
+              class_id: item.class_id,
+              subject_id: item.subject_id,
+              exam_id: item.exam_id,
+              student_id: item.student_id,
+              student_name: item.student_name,
+              mark: item.mark,
+              grade: item.grade
+            }
+          end
+          |> Enum.sort_by(fn x -> x.student_name end)
+      end
+  end
+
+  def sorting_student(conn, male) do
+    all =
+      if conn.private.plug_session["institution_id"] == 3 do
+        m =
+          male
+          |> Enum.group_by(fn x -> x.sex end)
+          |> Enum.filter(fn x -> x |> elem(0) == "M" end)
+          |> Enum.map(fn x -> x |> elem(1) end)
+          |> List.flatten()
+
+        a =
+          for item <- m do
+            ori_name = item.student_name
+
+            sort_name = item.student_name |> String.replace("'", "A")
+
+            %{
+              id: item.id,
+              chinese_name: item.chinese_name,
+              student_name: item.name,
+              sex: item.sex
+            }
+          end
+          |> Enum.sort_by(fn x -> x.student_name end)
+
+        f =
+          male
+          |> Enum.group_by(fn x -> x.sex end)
+          |> Enum.filter(fn x -> x |> elem(0) == "F" end)
+          |> Enum.map(fn x -> x |> elem(1) end)
+          |> List.flatten()
+
+        b =
+          for item <- f do
+            ori_name = item.student_name
+
+            sort_name = item.student_name |> String.replace("'", "A")
+
+            %{
+              id: item.id,
+              chinese_name: item.chinese_name,
+              student_name: item.name,
+              sex: item.sex
+            }
+          end
+          |> Enum.sort_by(fn x -> x.student_name end)
+
+        all = a ++ b
+      else
+        a =
+          for item <- male do
+            ori_name = item.student_name
+
+            sort_name = item.student_name |> String.replace("'", "A")
+
+            %{
+              id: item.id,
+              chinese_name: item.chinese_name,
+              student_name: item.name,
+              sex: item.sex
+            }
+          end
+          |> Enum.sort_by(fn x -> x.student_name end)
+      end
+  end
+
   def marking(conn, params) do
     subject_id = params["s_id"]
     class_id = params["c_id"]
@@ -985,11 +1201,14 @@ defmodule SchoolWeb.ExamController do
             id: s.student_id,
             student_name: p.name,
             mark: s.mark,
-            grade: s.grade
+            grade: s.grade,
+            sex: p.sex
           },
           order_by: [asc: p.name]
         )
       )
+
+    all = sorting_marking(conn, all)
 
     if all == [] do
       class =
@@ -1023,10 +1242,12 @@ defmodule SchoolWeb.ExamController do
               s.class_id == ^class.id and
                 p.institution_id == ^conn.private.plug_session["institution_id"] and
                 s.semester_id == ^exam_master.semester_id,
-            select: %{id: p.id, chinese_name: p.chinese_name, student_name: p.name},
+            select: %{id: p.id, chinese_name: p.chinese_name, student_name: p.name, sex: p.sex},
             order_by: [asc: p.name]
           )
         )
+
+      student = sorting_student(conn, student)
 
       not_attend =
         Repo.all(
@@ -1093,7 +1314,7 @@ defmodule SchoolWeb.ExamController do
               s.class_id == ^class.id and
                 p.institution_id == ^conn.private.plug_session["institution_id"] and
                 s.semester_id == ^exam_master.semester_id,
-            select: %{id: p.id, student_name: p.name},
+            select: %{id: p.id, chinese_name: p.chinese_name, student_name: p.name, sex: p.sex},
             order_by: [asc: p.name]
           )
         )
@@ -1110,12 +1331,15 @@ defmodule SchoolWeb.ExamController do
               subject_id: subject_id,
               student_name: item.student_name,
               mark: 0,
-              grade: "F"
+              grade: "F",
+              sex: item.sex
             }
           else
           end
         end
         |> Enum.filter(fn x -> x != nil end)
+
+      fi = sorting_marking2(conn, fi)
 
       # csrf = Phoenix.Controller.get_csrf_token()
 

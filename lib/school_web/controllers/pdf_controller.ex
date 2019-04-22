@@ -544,11 +544,11 @@ defmodule SchoolWeb.PdfController do
                                     )
 
                                   grade =
-                                    if total_grade.mark != 0 and total_grade.mark != nil do
+                                    if total_grade.mark != nil do
                                       for grade <- grades do
-                                        if Decimal.to_float(items.mark) >=
+                                        if Decimal.to_float(total_grade.mark) >=
                                              Decimal.to_float(grade.min) and
-                                             Decimal.to_float(items.mark) <=
+                                             Decimal.to_float(total_grade.mark) <=
                                                Decimal.to_float(grade.max) do
                                           grade.name
                                         end
@@ -568,11 +568,11 @@ defmodule SchoolWeb.PdfController do
                               t_d = grade_rank |> Enum.count(fn x -> x == "D" end)
                               t_e = grade_rank |> Enum.count(fn x -> x == "E" end)
 
-                              t_a = t_a * 5
-                              t_b = t_b * 4
-                              t_c = t_c * 3
-                              t_d = t_d * 2
-                              t_e = t_e * 1
+                              t_a = t_a * 7
+                              t_b = t_b * 6
+                              t_c = t_c * 5
+                              t_d = t_d * 0
+                              t_e = t_e * 0
 
                               t_grade = t_a + t_b + t_c + t_d + t_e
 
@@ -586,6 +586,9 @@ defmodule SchoolWeb.PdfController do
 
                               if items != [] do
                                 item = items |> hd
+
+                                IO.inspect(item.student_name)
+                                IO.inspect(t_grade)
 
                                 %{
                                   student_id: item.student_id,
@@ -973,11 +976,11 @@ defmodule SchoolWeb.PdfController do
                                     )
 
                                   grade =
-                                    if total_grade.mark != 0 and total_grade.mark != nil do
+                                    if total_grade.mark != nil do
                                       for grade <- grades do
-                                        if Decimal.to_float(items.mark) >=
+                                        if Decimal.to_float(total_grade.mark) >=
                                              Decimal.to_float(grade.min) and
-                                             Decimal.to_float(items.mark) <=
+                                             Decimal.to_float(total_grade.mark) <=
                                                Decimal.to_float(grade.max) do
                                           grade.name
                                         end
@@ -997,11 +1000,11 @@ defmodule SchoolWeb.PdfController do
                               t_d = grade_rank |> Enum.count(fn x -> x == "D" end)
                               t_e = grade_rank |> Enum.count(fn x -> x == "E" end)
 
-                              t_a = t_a * 5
-                              t_b = t_b * 4
-                              t_c = t_c * 3
-                              t_d = t_d * 2
-                              t_e = t_e * 1
+                              t_a = t_a * 7
+                              t_b = t_b * 6
+                              t_c = t_c * 5
+                              t_d = t_d * 0
+                              t_e = t_e * 0
 
                               t_grade = t_a + t_b + t_c + t_d + t_e
 
@@ -1395,7 +1398,8 @@ defmodule SchoolWeb.PdfController do
                                     s.semester_id == ^item.semester and
                                     s.institution_id ==
                                       ^conn.private.plug_session["institution_id"] and
-                                    s.exam_master_id == ^item.exam_master_id
+                                    s.exam_master_id == ^item.exam_master_id and
+                                    s.subject_id == ^subject.id
                               )
                             )
 
@@ -1443,7 +1447,7 @@ defmodule SchoolWeb.PdfController do
                   if a == 0.0 do
                     "0" <> "/" <> total_per
                   else
-                    a = a |> Float.to_string()
+                    a = a |> Float.round(2) |> Float.to_string()
 
                     a <> "/" <> total_per
                   end
@@ -1667,7 +1671,22 @@ defmodule SchoolWeb.PdfController do
                 per = list |> Enum.map(fn x -> x.mark end) |> Enum.count()
                 total_per = per * 100
 
-                total_average = (a / total_per * 100) |> Float.round(2) |> Float.to_string()
+                IO.inspect(a)
+                IO.inspect(total_per)
+
+                total_average =
+                  if total_per != 0 do
+                    a / total_per * 100
+                  else
+                    0
+                  end
+
+                total_average =
+                  if total_average != 0 do
+                    total_average |> Float.round(2) |> Float.to_string()
+                  else
+                    0
+                  end
               end
 
             {no + 1, fit}
@@ -3861,6 +3880,7 @@ defmodule SchoolWeb.PdfController do
           |> Enum.map(fn x -> x.student_mark end)
           |> Enum.filter(fn x -> x != -1 end)
           |> Enum.sum()
+          |> Float.rount(2)
 
         per =
           new
@@ -4234,6 +4254,7 @@ defmodule SchoolWeb.PdfController do
           |> Enum.map(fn x -> x.student_mark end)
           |> Enum.filter(fn x -> x != -1 end)
           |> Enum.sum()
+          |> Float.round(2)
 
         per =
           new

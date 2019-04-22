@@ -71,7 +71,7 @@
    		 bml=bml|>hd	
 
 
-		 bml1_s1m=if bml.s1m != nil do
+		 bml1_s1m=if bml.s1m != nil and bml.s1m != "0" do
 		  bml.s1m
 		else
 		  "" 
@@ -87,7 +87,7 @@
 
 
 
-     bml2_s2m=if bml.s2m != nil do
+     bml2_s2m=if bml.s2m != nil and bml.s2m != "0" do
       bml.s2m
     else
       "" 
@@ -103,7 +103,7 @@
 
 
 
-     bml3_s3m=if bml.s3m != nil do
+     bml3_s3m=if bml.s3m != nil and bml.s3m != "0" do
       bml.s3m
     else
       "" 
@@ -130,7 +130,7 @@
     	
  
 
-		 bmb_s1m=if bmb.s1m != nil do
+		 bmb_s1m=if bmb.s1m != nil and bmb.s1m != "0" do
 		  bmb.s1m
 		else
 		   bmb.s1m
@@ -144,7 +144,7 @@
 
         bmb1={bmb_s1m,bmb_s1g}
 
-		  bmb_s2m=if bmb.s2m != nil do
+		  bmb_s2m=if bmb.s2m != nil and bmb.s2m != "0" do
 		  bmb.s2m
 		else
 		   ""
@@ -161,7 +161,7 @@
 
 
 
-        bmb_s3m=if bmb.s3m != nil do
+        bmb_s3m=if bmb.s3m != nil  and bmb.s3m != "0" do
       bmb.s3m
     else
        ""
@@ -191,7 +191,7 @@
  
 
 		
-         bmp_s1m=if bmp.s1m != nil do
+         bmp_s1m=if bmp.s1m != nil and bmp.s1m != "0" do
       bmp.s1m
     else
       ""
@@ -208,7 +208,7 @@
 
 
 
-              bmp_s2m=if bmp.s2m != nil do
+              bmp_s2m=if bmp.s2m != nil and bmp.s2m != "0" do
       bmp.s2m
     else
        ""
@@ -223,13 +223,9 @@
 
       bmp2={bmp_s2m,bmp_s2g}
 
-   			bmp3=if bmp.s3m != nil do
-		  bmp.s3m
-		else
-		   bmp.s3g
-		 end
 
-                   bmp_s3m=if bmp.s3m != nil do
+
+                   bmp_s3m=if bmp.s3m != nil and bmp.s3m != "0" do
       bmp.s3m
     else
        ""
@@ -255,7 +251,7 @@
     else
    		 bmpm=bmpm|>hd	
     	
-  bmpm_s1m=if bmpm.s1m != nil do
+  bmpm_s1m=if bmpm.s1m != nil and bmpm.s1m != "0" do
       bmpm.s1m
     else
        bmpm.s1m
@@ -271,7 +267,7 @@
 
 
 
-       bmpm_s2m=if bmpm.s2m != nil do
+       bmpm_s2m=if bmpm.s2m != nil and bmpm.s2m != "0" do
       bmpm.s2m
     else
       ""
@@ -287,7 +283,7 @@
 
 
 
-    bmpm_s3m=if bmpm.s3m != nil do
+    bmpm_s3m=if bmpm.s3m != nil and bmpm.s3m != "0" do
       bmpm.s3m
     else
       ""
@@ -315,7 +311,7 @@
    		 ingl=ingl|>hd	
 
 
-  ingl_s1m=if ingl.s1m != nil do
+  ingl_s1m=if ingl.s1m != nil and ingl.s1m != "0" do
       ingl.s1m
     else
        ingl.s1m
@@ -331,7 +327,7 @@
 
 
 
-       ingl_s2m=if ingl.s2m != nil do
+       ingl_s2m=if ingl.s2m != nil and ingl.s2m != "0" do
       ingl.s2m
     else
        ""
@@ -347,7 +343,7 @@
 
 
 
-       ingl_s3m=if ingl.s3m != nil do
+       ingl_s3m=if ingl.s3m != nil and ingl.s3m != "0" do
       ingl.s3m
     else
        ""
@@ -375,7 +371,7 @@
    		 ingb=ingb|>hd	
 
 
-       ingb_s1m=if ingb.s1m != nil do
+       ingb_s1m=if ingb.s1m != nil and ingb.s1m != "0" do
       ingb.s1m
     else
       ""
@@ -389,7 +385,7 @@
 
         ingb1={ingb_s1m,ingb_s1g}
 
-            ingb_s2m=if ingb.s2m != nil do
+            ingb_s2m=if ingb.s2m != nil and ingb.s2m != "0" do
       ingb.s2m
     else
       ""
@@ -404,7 +400,7 @@
         ingb2={ingb_s1m,ingb_s1g}
 
 
-    ingb_s3m=if ingb.s3m != nil do
+    ingb_s3m=if ingb.s3m != nil and ingb.s3m != "0" do
       ingb.s3m
     else
       ""
@@ -430,7 +426,7 @@
    		 ingp=ingp|>hd	
     	
 
-       ingp_s1m=if ingp.s1m != nil do
+       ingp_s1m=if ingp.s1m != nil and ingp.s1m != "0"  do
       ingp.s1m
     else
       ""
@@ -445,7 +441,7 @@
         ingp1={ingp_s1m,ingp_s1g}
 
 
-               ingp_s2m=if ingp.s2m != nil do
+               ingp_s2m=if ingp.s2m != nil  and ingp.s2m != "0" do
       ingp.s2m
     else
       ""
@@ -461,7 +457,7 @@
 
 
 
-               ingp_s3m=if ingp.s3m != nil do
+               ingp_s3m=if ingp.s3m != nil  and ingp.s3m != "0" do
       ingp.s3m
     else
       ""
@@ -489,7 +485,7 @@
    		 ingpm=ingpm|>hd	
 
 
-     ingpm_s1m=if ingpm.s1m != nil do
+     ingpm_s1m=if ingpm.s1m != nil and ingpm.s1m != "0" do
       ingpm.s1m
     else
       ""
@@ -504,7 +500,7 @@
         ingpm1={ingpm_s1m,ingpm_s1g}
 
 
-     ingpm_s2m=if ingpm.s2m != nil do
+     ingpm_s2m=if ingpm.s2m != nil  and ingpm.s2m != "0" do
       ingpm.s2m
     else
       ""
@@ -520,7 +516,7 @@
 
 
 
-         ingpm_s3m=if ingpm.s3m != nil do
+         ingpm_s3m=if ingpm.s3m != nil  and ingpm.s3m != "0" do
       ingpm.s3m
     else
       ""
@@ -550,7 +546,7 @@
 
 
 
-     chl_s1m=if chl.s1m != nil do
+     chl_s1m=if chl.s1m != nil  and chl.s1m != "0" do
       chl.s1m
     else
       ""
@@ -565,7 +561,7 @@
         chl1={chl_s1m,chl_s1g}
     	
  
-     chl_s2m=if chl.s2m != nil do
+     chl_s2m=if chl.s2m != nil and chl.s2m != "0" do
       chl.s2m
     else
       ""
@@ -581,7 +577,7 @@
 
 
 
-     chl_s3m=if chl.s3m != nil do
+     chl_s3m=if chl.s3m != nil and chl.s3m != "0" do
       chl.s3m
     else
       ""
@@ -611,7 +607,7 @@
     	
 
 
-     chb_s1m=if chb.s1m != nil do
+     chb_s1m=if chb.s1m != nil and chb.s1m != "0" do
       chb.s1m
     else
       ""
@@ -626,7 +622,7 @@
     chb1={chb_s1m,chb_s1g}
 
 
-    chb_s2m=if chb.s2m != nil do
+    chb_s2m=if chb.s2m != nil and chb.s2m != "0" do
       chb.s2m
     else
       ""
@@ -641,7 +637,7 @@
      chb2={chb_s2m,chb_s2g}
 
 		
-    chb_s3m=if chb.s3m != nil do
+    chb_s3m=if chb.s3m != nil and chb.s3m != "0" do
       chb.s3m
     else
       ""
@@ -668,7 +664,7 @@
 
 
 
-     chp_s1m=if chp.s1m != nil do
+     chp_s1m=if chp.s1m != nil and chb.s1m != "0" do
       chp.s1m
     else
       ""
@@ -683,7 +679,7 @@
     chp1={chp_s1m,chp_s1g}
 
 
-         chp_s2m=if chp.s2m != nil do
+         chp_s2m=if chp.s2m != nil and chb.s2m != "0" do
       chp.s2m
     else
       ""
@@ -698,7 +694,7 @@
     chp2={chp_s2m,chp_s2g}
 
 
-   chp_s3m=if chp.s3m != nil do
+   chp_s3m=if chp.s3m != nil and chb.s3m != "0" do
       chp.s3m
     else
       ""
@@ -724,7 +720,7 @@
     else
    		 chpm=chpm|>hd
 
-     chpm_s1m=if chpm.s1m != nil do
+     chpm_s1m=if chpm.s1m != nil and chpm.s1m != "0" do
       chpm.s1m
     else
       ""
@@ -739,7 +735,7 @@
       chpm1={chpm_s1m,chpm_s1g}
 
 
-           chpm_s2m=if chpm.s2m != nil do
+           chpm_s2m=if chpm.s2m != nil and chpm.s2m != "0" do
       chpm.s2m
     else
       ""
@@ -754,7 +750,7 @@
       chpm2={chpm_s2m,chpm_s2g}
 
 
-     chpm_s3m=if chpm.s3m != nil do
+     chpm_s3m=if chpm.s3m != nil and chpm.s3m != "0" do
       chpm.s3m
     else
       ""
@@ -783,7 +779,7 @@
 
 
 
-     math_s1m=if math.s1m != nil do
+     math_s1m=if math.s1m != nil and math.s1m != "0" do
       math.s1m
     else
       ""
@@ -798,7 +794,7 @@
       math1={math_s1m,math_s1g}
     	
  
-     math_s2m=if math.s2m != nil do
+     math_s2m=if math.s2m != nil and math.s2m != "0"  do
       math.s2m
     else
       ""
@@ -813,7 +809,7 @@
       math2={math_s2m,math_s2g}
 
 
-    math_s3m=if math.s3m != nil do
+    math_s3m=if math.s3m != nil and math.s3m != "0"  do
       math.s3m
     else
       ""
@@ -841,7 +837,7 @@
     else
    		 sains=sains|>hd	
     	
-      sains_s1m=if sains.s1m != nil do
+      sains_s1m=if sains.s1m != nil and sains.s1m != "0" do
       sains.s1m
     else
       ""
@@ -856,7 +852,7 @@
       sains1={sains_s1m,sains_s1g}
 
 
-            sains_s2m=if sains.s2m != nil do
+            sains_s2m=if sains.s2m != nil and sains.s2m != "0" do
       sains.s2m
     else
       ""
@@ -870,7 +866,7 @@
       
       sains2={sains_s2m,sains_s2g}
 
-   sains_s3m=if sains.s3m != nil do
+   sains_s3m=if sains.s3m != nil  and sains.s3m != "0" do
       sains.s3m
     else
       ""
@@ -895,7 +891,7 @@
     else
        pm=pm|>hd  
       
-      pm_s1m=if pm.s1m != nil do
+      pm_s1m=if pm.s1m != nil  and pm.s1m != "0" do
       pm.s1m
     else
       ""
@@ -910,7 +906,7 @@
       pm1={pm_s1m,pm_s1g}
 
 
-            pm_s2m=if pm.s2m != nil do
+            pm_s2m=if pm.s2m != nil and pm.s2m != "0" do
       pm.s2m
     else
       ""
@@ -924,7 +920,7 @@
       
       pm2={pm_s2m,pm_s2g}
 
-   pm_s3m=if pm.s3m != nil do
+   pm_s3m=if pm.s3m != nil and pm.s3m != "0" do
       pm.s3m
     else
       ""
@@ -951,7 +947,7 @@
    		 agama=agama|>hd	
     	
  
-      agama_s1m=if agama.s1m != nil do
+      agama_s1m=if agama.s1m != nil and agama.s1m != "0" do
       agama.s1m
     else
       ""
@@ -966,7 +962,7 @@
       agama1={agama_s1m,agama_s1g}
 
 
-   agama_s2m=if agama.s2m != nil do
+   agama_s2m=if agama.s2m != nil  and agama.s2m != "0" do
       agama.s2m
     else
       ""
@@ -980,7 +976,7 @@
       
       agama2={agama_s2m,agama_s2g}
 
-   agama_s3m=if agama.s3m != nil do
+   agama_s3m=if agama.s3m != nil and agama.s3m != "0" do
       agama.s3m
     else
       ""
@@ -1011,7 +1007,7 @@
 
 
  
-     sej_s1m=if sej.s1m != nil do
+     sej_s1m=if sej.s1m != nil and sej.s1m != "0" do
       sej.s1m
     else
       ""
@@ -1026,7 +1022,7 @@
      sej1={sej_s1m,sej_s1g}
 
 
-      sej_s2m=if sej.s2m != nil do
+      sej_s2m=if sej.s2m != nil and sej.s2m != "0" do
       sej.s2m
     else
       ""
@@ -1041,7 +1037,7 @@
      sej2={sej_s2m,sej_s2g}
 
 
-    sej_s3m=if sej.s3m != nil do
+    sej_s3m=if sej.s3m != nil and sej.s3m != "0" do
       sej.s3m
     else
       ""
@@ -1069,7 +1065,7 @@
     	
 
  
-     rbt_s1m=if rbt.s1m != nil do
+     rbt_s1m=if rbt.s1m != nil and rbt.s1m != "0" do
       rbt.s1m
     else
       ""
@@ -1084,7 +1080,7 @@
      rbt1={rbt_s1m,rbt_s1g} 
 
 
-     rbt_s2m=if rbt.s2m != nil do
+     rbt_s2m=if rbt.s2m != nil and rbt.s2m != "0" do
       rbt.s2m
     else
       ""
@@ -1098,7 +1094,7 @@
       
      rbt2={rbt_s2m,rbt_s2g} 
 
-     rbt_s3m=if rbt.s3m != nil do
+     rbt_s3m=if rbt.s3m != nil  and rbt.s3m != "0" do
       rbt.s3m
     else
       ""
@@ -1126,7 +1122,7 @@
    		 tmk=tmk|>hd	
     	
 
-     tmk_s1m=if tmk.s1m != nil do
+     tmk_s1m=if tmk.s1m != nil  and tmk.s1m != "0" do
       tmk.s1m
     else
       ""
@@ -1140,7 +1136,7 @@
       
      tmk1={tmk_s1m,tmk_s1g}  
 
-     tmk_s2m=if tmk.s2m != nil do
+     tmk_s2m=if tmk.s2m != nil  and tmk.s2m != "0" do
       tmk.s2m
     else
       ""
@@ -1154,7 +1150,7 @@
       
      tmk2={tmk_s2m,tmk_s2g} 
 
-     tmk_s3m=if tmk.s3m != nil do
+     tmk_s3m=if tmk.s3m != nil and tmk.s3m != "0" do
       tmk.s3m
     else
       ""
@@ -1183,7 +1179,7 @@
    		 seni=seni|>hd	
     	
 
-     seni_s1m=if seni.s1m != nil do
+     seni_s1m=if seni.s1m != nil  and seni.s1m != "0" do
       seni.s1m
     else
       ""
@@ -1197,7 +1193,7 @@
       
      seni1={seni_s1m,seni_s1g}  
 
-     seni_s2m=if seni.s2m != nil do
+     seni_s2m=if seni.s2m != nil  and seni.s2m != "0" do
       seni.s2m
     else
       ""
@@ -1212,7 +1208,7 @@
      seni2={seni_s2m,seni_s2g}  
 
 
-     seni_s3m=if seni.s3m != nil do
+     seni_s3m=if seni.s3m != nil  and seni.s3m != "0" do
       seni.s3m
     else
       ""
@@ -1240,7 +1236,7 @@
    		 pj=pj|>hd	
     	
 
-     pj_s1m=if pj.s1m != nil do
+     pj_s1m=if pj.s1m != nil  and pj.s1m != "0" do
       pj.s1m
     else
       ""
@@ -1255,7 +1251,7 @@
      pj1={pj_s1m,pj_s1g}  
 
 
-          pj_s2m=if pj.s2m != nil do
+          pj_s2m=if pj.s2m != nil and pj.s2m != "0" do
       pj.s2m
     else
       ""
@@ -1270,7 +1266,7 @@
      pj2={pj_s2m,pj_s2g}  
 
 
-     pj_s3m=if pj.s3m != nil do
+     pj_s3m=if pj.s3m != nil and pj.s3m != "0" do
       pj.s2m
     else
       ""
@@ -1299,7 +1295,7 @@
     	
  
 
-     laku_s1m=if laku.s1m != nil do
+     laku_s1m=if laku.s1m != nil and laku.s1m != "0" do
       laku.s1m
     else
       ""
@@ -1314,7 +1310,7 @@
      laku1={laku_s1m,laku_s1g}  
 
 
-         laku_s2m=if laku.s2m != nil do
+         laku_s2m=if laku.s2m != nil and laku.s2m != "0" do
       laku.s2m
     else
       ""
@@ -1329,7 +1325,7 @@
      laku2={laku_s2m,laku_s2g}  
 
 
-     laku_s3m=if laku.s3m != nil do
+     laku_s3m=if laku.s3m != nil and laku.s3m != "0" do
       laku.s2m
     else
       ""
@@ -1358,19 +1354,19 @@
   kedatangan=kedatangan|>hd
 
 
- kedatangan1=if kedatangan.s1m != nil do
+ kedatangan1=if kedatangan.s1m != nil and kedatangan.s1m != "0" do
   kedatangan.s1m
 else
    kedatangan.s1g
  end
 
-  kedatangan2=if kedatangan.s2m != nil do
+  kedatangan2=if kedatangan.s2m != nil  do
   kedatangan.s2m
 else
    kedatangan.s2g
  end
 
-  kedatangan3=if kedatangan.s3m != nil do
+  kedatangan3=if kedatangan.s3m != nil and kedatangan.s1m != "0" do
   kedatangan.s3m
 else
    kedatangan.s3g
@@ -1667,7 +1663,7 @@ else
  <tr  align="center">
   <td rowspan="4"  style="margin: 3px; padding: 3px;" align="left"><BR> <b>国语 <br> Bahasa <br> Malaysia </b><BR></td>
   <td style="margin: 3px; padding: 3px;" align="left">会话 Lisan</td>
-  <td style="margin: 3px; padding: 3px;"><%= if bml1 != "" do bml1|>elem(0)  else "" end %><div style="float:right;width:50%;"><%= if bml1 != "" do bml1|>elem(1) else "" end %></div></td>
+  <td style="margin: 3px; padding: 3px;"><%= if bml1 != "" do   bml1|>elem(0)  else "" end %><div style="float:right;width:50%;"><%= if bml1 != "" do bml1|>elem(1) else "" end %></div></td>
   <td style="margin: 3px; padding: 3px;"><%= if bml2 != "" do bml2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if bml2 != "" do bml2|>elem(1) else "" end %></td>
    <td style="margin: 3px; padding: 3px;"><%= if bml3 != "" do bml3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if bml3 != "" do bml3|>elem(1) else "" end %></td>
     <td style="margin: 3px; padding: 3px;"></td>
