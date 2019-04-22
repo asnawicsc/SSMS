@@ -314,7 +314,7 @@
   ingl_s1m=if ingl.s1m != nil and ingl.s1m != "0" do
       ingl.s1m
     else
-       ingl.s1m
+       ""
      end
 
          ingl_s1g=if ingl.s1g != nil do
@@ -667,7 +667,7 @@
     	
  
 
-     chp_s1m=if chp.s1m != nil and chb.s1m != "0" do
+     chp_s1m=if chp.s1m != nil and chp.s1m != "0" do
       chp.s1m
     else
       ""
@@ -682,7 +682,7 @@
     chp1={chp_s1m,chp_s1g}
 
 
-         chp_s2m=if chp.s2m != nil and chb.s2m != "0" do
+         chp_s2m=if chp.s2m != nil and chp.s2m != "0" do
       chp.s2m
     else
       ""
@@ -697,7 +697,7 @@
     chp2={chp_s2m,chp_s2g}
 
 
-    chp_s3m=if chp.s3m != nil and chb.s3m != "0" do
+    chp_s3m=if chp.s3m != nil and chp.s3m != "0" do
       chp.s3m
     else
       ""
@@ -1601,15 +1601,14 @@ else
 <body>
 
 
-  <table  class="table" >
+  <table  class="display" style="white-space: nowrap;" width="100%">
 
-    <tr align="center">
+    <tr align="center" style="height: auto; ">
    
-      <td  align="center" style="margin: 3px; padding: 3px; border-right: 0;  "><img  src='data:image/png;base64, <%= @institute.logo_bin %>' height="100px"></td>
+      <td  align="center" style="margin: 3px; padding: 3px; border-right: 0;  "><img  src='data:image/png;base64, <%= @institute.logo_bin %>' height="80px"></td>
   <td colspan="4" align="left" style="margin: 3px; padding: 3px; border-right: 0 ; border-left: 0; " ><h5><b><%= @institute.name %></b></h5>
-    <h5><b><%= @institute.line1 %>,<%= @institute.line2 %>,<%= @institute.town %>,<%= @institute.postcode %>,<%= @institute.state %>,<%= @institute.country %></b></h5><br>
-        </td>
-    <td align="center" style="margin: 3px; padding: 3px;  border-left: 0; " ><h3><b><%= @institute.phone %></b></h3></td>
+    <h5><b><%= @institute.line1 %>,<%= @institute.line2 %>,<%= @institute.town %></h5></td>
+    <td align="left" style=" border-left: 0; " ><h5><b><%= @institute.phone %></b></h5></td>
 
 
   
@@ -1892,7 +1891,7 @@ else
  </tr>
  <tr>
    <td style="margin: 5px; padding: 5px; " align="left">评语 Komen: </td>
-   <td colspan="5" align="left" style="margin: 3px; padding: 3px;" height="70px;">
+   <td colspan="5" align="left" style="margin: 3px; padding: 3px;" height="50px;">
 
     <% student_comment = Repo.get_by(School.Affairs.StudentComment, student_id: profile.stuid) %>
           <%=  if student_comment != nil  do %>
@@ -1952,7 +1951,7 @@ else
  </tr>
   <tr>
    <td style="margin: 5px; padding: 5px; " align="left">成就 Pencapaian: </td>
-   <td colspan="5" align="left" style="margin: 3px; padding: 3px;" height="70px;">
+   <td colspan="5" align="left" style="margin: 3px; padding: 3px;" height="50px;">
 
   </td>
   
@@ -1967,7 +1966,7 @@ else
  </tr>
   <tr>
    <td style="margin: 5px; padding: 5px; " align="left">团结 </td>
-    <td style="margin: 5px; padding: 5px; " align="left">persatuan</td>
+    <td style="margin: 5px; padding: 5px; " align="left">Persatuan</td>
    <td colspan="4" align="left" style="margin: 3px; padding: 3px; ">
 
   </td>
@@ -1987,9 +1986,9 @@ else
      <td colspan="2" style="margin: 1px; padding: 1px;" align="center">T.Tangan Ibubapa/Penjaga<br>家长</td>
  </tr>
  <tr align="center">
-  <td colspan="2" style="margin: 3px; padding: 3px;" align="center" height="90px;"></td>
-   <td colspan="2" style="margin: 3px; padding: 3px;" align="center" height="90px;"></td>
-     <td colspan="2" style="margin: 3px; padding: 3px;" align="center" height="90px;"></td>
+  <td colspan="2" style="margin: 3px; padding: 3px;" align="center" height="70px;"></td>
+   <td colspan="2" style="margin: 3px; padding: 3px;" align="center" height="70px;"></td>
+     <td colspan="2" style="margin: 3px; padding: 3px;" align="center" height="70px;"></td>
  </tr>
 
 
@@ -2008,12 +2007,11 @@ else
   
    table {
         border-collapse: collapse;
-               font-size: :8px;
+           
     }
     
     td {
-        margin: 0px;
-        padding: 2px;
+       
 
     
         border:1px solid #080808;
@@ -2023,8 +2021,6 @@ else
         border: 1px solid #080808;
     }
 
-    .noborders td {
-        border:0;
-    }
+   
 </style>
 

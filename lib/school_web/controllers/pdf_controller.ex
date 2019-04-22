@@ -571,8 +571,8 @@ defmodule SchoolWeb.PdfController do
                               t_a = t_a * 7
                               t_b = t_b * 6
                               t_c = t_c * 5
-                              t_d = t_d * 0
-                              t_e = t_e * 0
+                              t_d = t_d * 2
+                              t_e = t_e * 1
 
                               t_grade = t_a + t_b + t_c + t_d + t_e
 
@@ -1003,8 +1003,8 @@ defmodule SchoolWeb.PdfController do
                               t_a = t_a * 7
                               t_b = t_b * 6
                               t_c = t_c * 5
-                              t_d = t_d * 0
-                              t_e = t_e * 0
+                              t_d = t_d * 2
+                              t_e = t_e * 1
 
                               t_grade = t_a + t_b + t_c + t_d + t_e
 
@@ -1184,8 +1184,107 @@ defmodule SchoolWeb.PdfController do
                 if item != [] do
                   no = item |> elem(1)
 
-                  total = drg |> Enum.count() |> Integer.to_string()
+                  total =
+                    case conn.private.plug_session["institution_id"] do
+                      9 ->
+                        all_student =
+                          Repo.all(
+                            from(
+                              sc in School.Affairs.StudentClass,
+                              left_join: s in School.Affairs.Student,
+                              on: s.id == sc.sudent_id,
+                              where:
+                                sc.level_id == ^class_info.level_id and
+                                  sc.semester_id == ^conn.private.plug_session["semester_id"] and
+                                  sc.institution_id ==
+                                    ^conn.private.plug_session["institution_id"]
+                            )
+                          )
+                          |> Enum.count()
 
+                        absent =
+                          Repo.all(
+                            from(s in School.Affairs.ExamAttendance,
+                              left_join: k in School.Affairs.StudentClass,
+                              on: s.student_id == k.sudent_id,
+                              where:
+                                k.level_id == ^class_info.level_id and
+                                  s.semester_id == ^conn.private.plug_session["semester_id"] and
+                                  k.institute_id == ^conn.private.plug_session["institution_id"] and
+                                  s.exam_master_id == ^item.exam_master_id
+                            )
+                          )
+                          |> Enum.count()
+
+                        total = all_student - absent
+
+                      10 ->
+                        all_student =
+                          Repo.all(
+                            from(
+                              sc in School.Affairs.StudentClass,
+                              left_join: s in School.Affairs.Student,
+                              on: s.id == sc.sudent_id,
+                              where:
+                                sc.level_id == ^class_info.level_id and
+                                  sc.semester_id == ^conn.private.plug_session["semester_id"] and
+                                  sc.institute_id == ^conn.private.plug_session["institution_id"]
+                            )
+                          )
+                          |> Enum.count()
+
+                        absent =
+                          Repo.all(
+                            from(s in School.Affairs.ExamAttendance,
+                              left_join: k in School.Affairs.StudentClass,
+                              on: s.student_id == k.sudent_id,
+                              where:
+                                k.level_id == ^class_info.level_id and
+                                  s.semester_id == ^conn.private.plug_session["semester_id"] and
+                                  k.institute_id == ^conn.private.plug_session["institution_id"] and
+                                  s.exam_master_id == ^item.exam_master_id
+                            )
+                          )
+                          |> Enum.count()
+
+                        total = all_student - absent
+
+                      3 ->
+                        all_student =
+                          Repo.all(
+                            from(
+                              sc in School.Affairs.StudentClass,
+                              left_join: s in School.Affairs.Student,
+                              on: s.id == sc.sudent_id,
+                              where:
+                                sc.level_id == ^class_info.level_id and
+                                  sc.semester_id == ^conn.private.plug_session["semester_id"] and
+                                  sc.institute_id == ^conn.private.plug_session["institution_id"]
+                            )
+                          )
+                          |> Enum.count()
+
+                        total = all_student
+
+                      _ ->
+                        all_student =
+                          Repo.all(
+                            from(
+                              sc in School.Affairs.StudentClass,
+                              left_join: s in School.Affairs.Student,
+                              on: s.id == sc.sudent_id,
+                              where:
+                                sc.level_id == ^class_info.level_id and
+                                  sc.semester_id == ^conn.private.plug_session["semester_id"] and
+                                  sc.institute_id == ^conn.private.plug_session["institution_id"]
+                            )
+                          )
+                          |> Enum.count()
+
+                        total = all_student
+                    end
+
+                  total = total |> Integer.to_string()
                   rank = no + 1
                   rank = rank |> Integer.to_string()
 
