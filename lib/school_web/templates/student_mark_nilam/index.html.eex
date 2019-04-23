@@ -1,0 +1,32 @@
+<h2>Listing Student mark nilam</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Student</th>
+      <th>Institution</th>
+      <th>Total book</th>
+      <th>Year</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for student_mark_nilam <- @student_mark_nilam do %>
+    <tr>
+      <td><%= student_mark_nilam.student_id %></td>
+      <td><%= student_mark_nilam.institution_id %></td>
+      <td><%= student_mark_nilam.total_book %></td>
+      <td><%= student_mark_nilam.year %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: student_mark_nilam_path(@conn, :show, student_mark_nilam), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: student_mark_nilam_path(@conn, :edit, student_mark_nilam), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: student_mark_nilam_path(@conn, :delete, student_mark_nilam), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Student mark nilam", to: student_mark_nilam_path(@conn, :new) %></span>

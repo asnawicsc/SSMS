@@ -54,6 +54,7 @@
 
       end %> 
 
+<% year= profile.year %>
 
 <div  style="page-break-before: always;">
 
@@ -1617,7 +1618,7 @@ else
   <td colspan="2" style=" border-right: 0; "><b>学生姓名: <%= profile.cname %></b> <br>
         <b>Nama Murid: <%= profile.name %></b></font></td>
         <td colspan="3" style=" border-right: 0 ; border-left: 0; "><b>Tahun : <%= year %></b> <br>
-        <b> Guru DJH: </b></font></td>
+        <b> Guru Djh: <%= @class_teacher.name %></b></font></td>
   
   <td style=" border-left: 0; "><b>教室<br>
         Darjah: <%= profile.class %></b></font></td>
@@ -1638,8 +1639,8 @@ else
   <td align="center" style="margin: 3px; padding: 3px;"><%= chinese %><BR><%= malay %></td>
  
   <% end %>
-    <td align="center" style="margin: 3px; padding: 3px;">评审一 <BR>PKSR2</td>
-  <td align="center" style="margin: 3px; padding: 3px;">评审一 <BR>PKSR3</td>
+    <td align="center" style="margin: 3px; padding: 3px;">评审二 <BR>PKSR2</td>
+  <td align="center" style="margin: 3px; padding: 3px;">评审三 <BR>PKSR3</td>
   <% end %>
     <%= if count == 2 do %>
     
@@ -1656,7 +1657,7 @@ else
   <td align="center" style="margin: 3px; padding: 3px;"><%= chinese %><BR><%= malay %></td>
  
   <% end %>
-  <td align="center" style="margin: 3px; padding: 3px;">评审一 <BR>PKSR3</td>
+  <td align="center" style="margin: 3px; padding: 3px;">评审三 <BR>PKSR3</td>
 <% end %>
    <%= if count == 3 do %>
   <%= for item <- @list_exam do %>

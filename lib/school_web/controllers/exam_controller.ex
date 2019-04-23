@@ -40,7 +40,8 @@ defmodule SchoolWeb.ExamController do
   end
 
   def list_report(conn, params) do
-    render(conn, "list_report.html")
+    user = Repo.get_by(School.Settings.User, %{id: conn.private.plug_session["user_id"]})
+    render(conn, "list_report.html", user: user)
   end
 
   def list_report_history(conn, params) do

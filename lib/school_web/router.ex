@@ -256,6 +256,13 @@ defmodule SchoolWeb.Router do
       :edit_height_weight_all
     )
 
+    get(
+      "/edit_nilam/class_id/:class_id/semester_id/:semester_id",
+      StudentController,
+      :edit_nilam
+    )
+
+    get("/submit_nilam_all", StudentController, :submit_nilam_all)
     get("/submit_height_weight", StudentController, :submit_height_weight)
     get("/submit_height_weight_all", StudentController, :submit_height_weight_all)
 
@@ -586,6 +593,7 @@ defmodule SchoolWeb.Router do
     )
 
     resources("/mark_sheet_history", MarkSheetHistoryController)
+    resources("/student_mark_nilam", StudentMarkNilamController)
 
     get(
       "/history_report_card",

@@ -4854,4 +4854,70 @@ defmodule School.AffairsTest do
       assert %Ecto.Changeset{} = Affairs.change_exam_attendance(exam_attendance)
     end
   end
+
+  describe "student_mark_nilam" do
+    alias School.Affairs.StudentMarkNilam
+
+    @valid_attrs %{institution_id: 42, student_id: 42, total_book_integer: "some total_book_integer", year: 42}
+    @update_attrs %{institution_id: 43, student_id: 43, total_book_integer: "some updated total_book_integer", year: 43}
+    @invalid_attrs %{institution_id: nil, student_id: nil, total_book_integer: nil, year: nil}
+
+    def student_mark_nilam_fixture(attrs \\ %{}) do
+      {:ok, student_mark_nilam} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_student_mark_nilam()
+
+      student_mark_nilam
+    end
+
+    test "list_student_mark_nilam/0 returns all student_mark_nilam" do
+      student_mark_nilam = student_mark_nilam_fixture()
+      assert Affairs.list_student_mark_nilam() == [student_mark_nilam]
+    end
+
+    test "get_student_mark_nilam!/1 returns the student_mark_nilam with given id" do
+      student_mark_nilam = student_mark_nilam_fixture()
+      assert Affairs.get_student_mark_nilam!(student_mark_nilam.id) == student_mark_nilam
+    end
+
+    test "create_student_mark_nilam/1 with valid data creates a student_mark_nilam" do
+      assert {:ok, %StudentMarkNilam{} = student_mark_nilam} = Affairs.create_student_mark_nilam(@valid_attrs)
+      assert student_mark_nilam.institution_id == 42
+      assert student_mark_nilam.student_id == 42
+      assert student_mark_nilam.total_book_integer == "some total_book_integer"
+      assert student_mark_nilam.year == 42
+    end
+
+    test "create_student_mark_nilam/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_student_mark_nilam(@invalid_attrs)
+    end
+
+    test "update_student_mark_nilam/2 with valid data updates the student_mark_nilam" do
+      student_mark_nilam = student_mark_nilam_fixture()
+      assert {:ok, student_mark_nilam} = Affairs.update_student_mark_nilam(student_mark_nilam, @update_attrs)
+      assert %StudentMarkNilam{} = student_mark_nilam
+      assert student_mark_nilam.institution_id == 43
+      assert student_mark_nilam.student_id == 43
+      assert student_mark_nilam.total_book_integer == "some updated total_book_integer"
+      assert student_mark_nilam.year == 43
+    end
+
+    test "update_student_mark_nilam/2 with invalid data returns error changeset" do
+      student_mark_nilam = student_mark_nilam_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_student_mark_nilam(student_mark_nilam, @invalid_attrs)
+      assert student_mark_nilam == Affairs.get_student_mark_nilam!(student_mark_nilam.id)
+    end
+
+    test "delete_student_mark_nilam/1 deletes the student_mark_nilam" do
+      student_mark_nilam = student_mark_nilam_fixture()
+      assert {:ok, %StudentMarkNilam{}} = Affairs.delete_student_mark_nilam(student_mark_nilam)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_student_mark_nilam!(student_mark_nilam.id) end
+    end
+
+    test "change_student_mark_nilam/1 returns a student_mark_nilam changeset" do
+      student_mark_nilam = student_mark_nilam_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_student_mark_nilam(student_mark_nilam)
+    end
+  end
 end

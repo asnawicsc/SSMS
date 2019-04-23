@@ -1626,8 +1626,8 @@ else
   <td align="center" style="margin: 3px; padding: 3px;"><%= chinese %><BR><%= malay %></td>
  
   <% end %>
-    <td align="center" style="margin: 3px; padding: 3px;">评审一 <BR>PKSR2</td>
-  <td align="center" style="margin: 3px; padding: 3px;">评审一 <BR>PKSR3</td>
+    <td align="center" style="margin: 3px; padding: 3px;">评审二 <BR>PKSR2</td>
+  <td align="center" style="margin: 3px; padding: 3px;">评审三 <BR>PKSR3</td>
   <% end %>
     <%= if count == 2 do %>
     
@@ -1644,7 +1644,7 @@ else
   <td align="center" style="margin: 3px; padding: 3px;"><%= chinese %><BR><%= malay %></td>
  
   <% end %>
-  <td align="center" style="margin: 3px; padding: 3px;">评审一 <BR>PKSR3</td>
+  <td align="center" style="margin: 3px; padding: 3px;">评审三 <BR>PKSR3</td>
 <% end %>
    <%= if count == 3 do %>
   <%= for item <- @list_exam do %>

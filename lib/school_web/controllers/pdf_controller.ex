@@ -83,6 +83,61 @@ defmodule SchoolWeb.PdfController do
         institution_id: conn.private.plug_session["institution_id"]
       )
 
+    list_class =
+      Repo.all(
+        from(s in School.Affairs.Class,
+          where:
+            s.level_id == ^class_info.level_id and
+              s.institution_id == ^conn.private.plug_session["institution_id"]
+        )
+      )
+
+    all_student =
+      for item <- list_class do
+        student_class =
+          Repo.all(
+            from(s in School.Affairs.Student,
+              left_join: g in School.Affairs.StudentClass,
+              on: s.id == g.sudent_id,
+              left_join: k in School.Affairs.Class,
+              on: k.id == g.class_id,
+              where:
+                s.institution_id == ^conn.private.plug_session["institution_id"] and
+                  g.semester_id == ^conn.private.plug_session["semester_id"] and
+                  g.class_id == ^item.id,
+              select: %{
+                student_id: s.id,
+                student_name: s.name,
+                chinese_name: s.chinese_name,
+                class_name: k.name
+              }
+            )
+          )
+      end
+      |> List.flatten()
+      |> Enum.uniq()
+      |> Enum.count()
+
+    student_class =
+      Repo.all(
+        from(s in School.Affairs.Student,
+          left_join: g in School.Affairs.StudentClass,
+          on: s.id == g.sudent_id,
+          left_join: k in School.Affairs.Class,
+          on: k.id == g.class_id,
+          where:
+            s.institution_id == ^conn.private.plug_session["institution_id"] and
+              g.semester_id == ^conn.private.plug_session["semester_id"] and
+              g.class_id == ^class_info.id,
+          select: %{
+            student_id: s.id,
+            student_name: s.name,
+            chinese_name: s.chinese_name,
+            class_name: k.name
+          }
+        )
+      )
+
     semester = Repo.get_by(School.Affairs.Semester, id: semester_id)
 
     institute =
@@ -586,9 +641,6 @@ defmodule SchoolWeb.PdfController do
 
                               if items != [] do
                                 item = items |> hd
-
-                                IO.inspect(item.student_name)
-                                IO.inspect(t_grade)
 
                                 %{
                                   student_id: item.student_id,
@@ -1183,25 +1235,11 @@ defmodule SchoolWeb.PdfController do
               for item <- drg do
                 if item != [] do
                   no = item |> elem(1)
+                  item = item |> elem(0)
 
                   total =
                     case conn.private.plug_session["institution_id"] do
                       9 ->
-                        all_student =
-                          Repo.all(
-                            from(
-                              sc in School.Affairs.StudentClass,
-                              left_join: s in School.Affairs.Student,
-                              on: s.id == sc.sudent_id,
-                              where:
-                                sc.level_id == ^class_info.level_id and
-                                  sc.semester_id == ^conn.private.plug_session["semester_id"] and
-                                  sc.institution_id ==
-                                    ^conn.private.plug_session["institution_id"]
-                            )
-                          )
-                          |> Enum.count()
-
                         absent =
                           Repo.all(
                             from(s in School.Affairs.ExamAttendance,
@@ -1214,25 +1252,12 @@ defmodule SchoolWeb.PdfController do
                                   s.exam_master_id == ^item.exam_master_id
                             )
                           )
+                          |> Enum.uniq()
                           |> Enum.count()
 
                         total = all_student - absent
 
                       10 ->
-                        all_student =
-                          Repo.all(
-                            from(
-                              sc in School.Affairs.StudentClass,
-                              left_join: s in School.Affairs.Student,
-                              on: s.id == sc.sudent_id,
-                              where:
-                                sc.level_id == ^class_info.level_id and
-                                  sc.semester_id == ^conn.private.plug_session["semester_id"] and
-                                  sc.institute_id == ^conn.private.plug_session["institution_id"]
-                            )
-                          )
-                          |> Enum.count()
-
                         absent =
                           Repo.all(
                             from(s in School.Affairs.ExamAttendance,
@@ -1245,25 +1270,12 @@ defmodule SchoolWeb.PdfController do
                                   s.exam_master_id == ^item.exam_master_id
                             )
                           )
+                          |> Enum.uniq()
                           |> Enum.count()
 
                         total = all_student - absent
 
                       3 ->
-                        all_student =
-                          Repo.all(
-                            from(
-                              sc in School.Affairs.StudentClass,
-                              left_join: s in School.Affairs.Student,
-                              on: s.id == sc.sudent_id,
-                              where:
-                                sc.level_id == ^class_info.level_id and
-                                  sc.semester_id == ^conn.private.plug_session["semester_id"] and
-                                  sc.institute_id == ^conn.private.plug_session["institution_id"]
-                            )
-                          )
-                          |> Enum.count()
-
                         total = all_student
 
                       _ ->
@@ -1271,14 +1283,13 @@ defmodule SchoolWeb.PdfController do
                           Repo.all(
                             from(
                               sc in School.Affairs.StudentClass,
-                              left_join: s in School.Affairs.Student,
-                              on: s.id == sc.sudent_id,
                               where:
                                 sc.level_id == ^class_info.level_id and
                                   sc.semester_id == ^conn.private.plug_session["semester_id"] and
                                   sc.institute_id == ^conn.private.plug_session["institution_id"]
                             )
                           )
+                          |> Enum.uniq()
                           |> Enum.count()
 
                         total = all_student
@@ -1288,7 +1299,7 @@ defmodule SchoolWeb.PdfController do
                   rank = no + 1
                   rank = rank |> Integer.to_string()
 
-                  item = item |> elem(0)
+                  item = item
 
                   %{
                     student_id: item.student_id,
@@ -1770,9 +1781,6 @@ defmodule SchoolWeb.PdfController do
                 per = list |> Enum.map(fn x -> x.mark end) |> Enum.count()
                 total_per = per * 100
 
-                IO.inspect(a)
-                IO.inspect(total_per)
-
                 total_average =
                   if total_per != 0 do
                     a / total_per * 100
@@ -2078,6 +2086,12 @@ defmodule SchoolWeb.PdfController do
         institution_id: conn.private.plug_session["institution_id"]
       )
 
+    class_teacher =
+      Repo.get_by(School.Affairs.Teacher,
+        id: class_info.teacher_id,
+        institution_id: conn.private.plug_session["institution_id"]
+      )
+
     list_exam =
       Repo.all(from(s in School.Affairs.ExamMaster, where: s.level_id == ^class_info.level_id))
 
@@ -2115,7 +2129,7 @@ defmodule SchoolWeb.PdfController do
             "report_cards_sk.html"
 
           _ ->
-            "report_cards_kk.html"
+            "report_cards_sl.html"
         end
 
       html =
@@ -2124,7 +2138,8 @@ defmodule SchoolWeb.PdfController do
           school,
           a: data,
           list_exam: list_exam,
-          institute: institute
+          institute: institute,
+          class_teacher: class_teacher
         )
 
       pdf_params = %{"html" => html}
