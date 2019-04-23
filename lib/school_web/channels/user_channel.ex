@@ -2083,6 +2083,7 @@ defmodule SchoolWeb.UserChannel do
           |> Enum.map(fn x -> x.student_mark end)
           |> Enum.filter(fn x -> x != -1 end)
           |> Enum.sum()
+          |> Float.round(2)
 
         per =
           new
@@ -2512,6 +2513,7 @@ defmodule SchoolWeb.UserChannel do
           |> Enum.map(fn x -> x.student_mark end)
           |> Enum.filter(fn x -> x != -1 end)
           |> Enum.sum()
+          |> Float.round(2)
 
         per =
           new
