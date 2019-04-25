@@ -2129,7 +2129,7 @@ defmodule SchoolWeb.PdfController do
             "report_cards_sk.html"
 
           _ ->
-            "report_cards_sl.html"
+            "report_cards_kk.html"
         end
 
       html =
