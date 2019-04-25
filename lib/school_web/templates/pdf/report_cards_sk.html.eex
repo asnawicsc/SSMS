@@ -1227,7 +1227,63 @@
 
     end
 
+         pjk= all_date|>Enum.filter(fn x -> x.subject =="PJK" end)
+   {pjk1,pjk2,pjk3}= if pj == [] do
 
+      {"","",""}
+    else
+       pjk=pjk|>hd  
+      
+
+     pjk_s1m=if pjk.s1m != nil  and pjk.s1m != "0" do
+      pjk.s1m
+    else
+      ""
+     end
+
+     pjk_s1g=if pjk.s1g != nil do
+      pjk.s1g
+    else
+      "" 
+     end  
+
+     pjk1={pjk_s1m,pjk_s1g}  
+
+
+          pjk_s2m=if pjk.s2m != nil and pjk.s2m != "0" do
+      pjk.s2m
+    else
+      ""
+     end
+
+     pjk_s2g=if pjk.s2g != nil do
+      pjk.s2g
+    else
+      "" 
+     end  
+
+     pjk2={pjk_s2m,pjk_s2g}  
+
+
+     pjk_s3m=if pjk.s3m != nil and pjk.s3m != "0" do
+      pjk.s2m
+    else
+      ""
+     end
+
+     pjk_s3g=if pjk.s3g != nil do
+      pjk.s3g
+    else
+      "" 
+     end  
+
+     pjk3={pjk_s3m,pjk_s3g}  
+
+
+
+     {pjk1,pjk2,pjk3}
+
+    end
             pj= all_date|>Enum.filter(fn x -> x.subject =="PJ" end)
    {pj1,pj2,pj3}= if pj == [] do
 
@@ -1607,7 +1663,7 @@ else
   <td colspan="5"><b>学生姓名: <%= profile.cname %></b> <br>
         <b>Nama Murid: <%= profile.name %></b></font></td>
   
-  <td><b>教室<br>
+  <td><b>班级<br>
         Darjah: <%= profile.class %></b></font></td>
  </tr>
 
@@ -1805,19 +1861,28 @@ else
     <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center"  >
-  <td style="margin: 5px; padding: 5px; border-right: 0"  align="left">艺术教育</td>
-  <td style="margin: 5px; padding: 5px; border-left: 0"  align="left">Pendidikan Kesenian</td>
+  <td style="margin: 5px; padding: 5px; border-right: 0"  align="left">美术教育</td>
+  <td style="margin: 5px; padding: 5px; border-left: 0"  align="left">Pendidikan Seni Visual</td>
   <td style="margin: 3px; padding: 3px;"><%= if seni1 != "" do seni1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if seni1 != "" do seni1|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if seni2 != "" do seni2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if seni2 != "" do seni2|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if seni3 != "" do seni3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if seni3 != "" do seni3|>elem(1) else "" end %></td>
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
-      <td style="margin: 5px; padding: 5px; border-right: 0" align="left">体健</td>
-  <td style="margin: 5px; padding: 5px; border-left: 0" align="left">PJK</td>
+      <td style="margin: 5px; padding: 5px; border-right: 0" align="left">体育</td>
+  <td style="margin: 5px; padding: 5px; border-left: 0" align="left">Pendidikan Jasmani</td>
     <td style="margin: 3px; padding: 3px;"><%= if pj1 != "" do pj1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if pj1 != "" do pj1|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if pj2 != "" do pj2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if pj2 != "" do pj2|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if pj3 != "" do pj3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if pj3 != "" do pj3|>elem(1) else "" end %></td>
+   <td style="margin: 3px; padding: 3px;"></td>
+ </tr>
+  <tr align="center">
+      <td style="margin: 5px; padding: 5px; border-right: 0" align="left">健康教育</td>
+  <td style="margin: 5px; padding: 5px; border-left: 0" align="left">Pendidikan Kesihatan</td>
+    <td style="margin: 3px; padding: 3px;"><%= if pjk1 != "" do pjk1|>elem(0) else "" end %><div style="float:right;width:50%;">
+      <%= if pjk1 != "" do pjk1|>elem(1) else "" end %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if pjk2 != "" do pjk2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if pjk2 != "" do pjk2|>elem(1) else "" end %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if pjk3 != "" do pjk3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if pjk3 != "" do pjk3|>elem(1) else "" end %></td>
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
@@ -1868,14 +1933,7 @@ else
   <td style="margin: 3px; padding: 3px;"><%= srank3 %></td>
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
-   <tr align="center">
-  <td style="margin: 5px; padding: 5px; border-right: 0" align="left">体高 & 体重</td>
-  <td style="margin: 5px; padding: 5px; border-left: 0" align="left">Tinggi & Berat</td>
-  <td style="margin: 3px; padding: 3px;"><%= hw1 %></td>
-  <td style="margin: 3px; padding: 3px;"><%= hw2 %></td>
-  <td style="margin: 3px; padding: 3px;"><%= hw3 %></td>
-   <td style="margin: 3px; padding: 3px;"></td>
- </tr>
+  
  <tr>
   
    <td colspan="6" align="left" style="margin: 3px; padding: 3px;" height="100px;">评语 Komen: <br> 
