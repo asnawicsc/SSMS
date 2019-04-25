@@ -1,16 +1,37 @@
 <% require IEx %>
-<link rel="stylesheet" href="<%= Application.app_dir(:school, "priv/static") %>/css/bootstrap.min.css">
-<style type="text/css">
-  
-</style>
+<% require Integer %>
 
-<%= for all_data <- @a do %>
+  <link rel="stylesheet" href="<%= Application.app_dir(:school, "priv/static") %>/css/bootstrap.min.css">
+  <style type="text/css">
+    table {
+                  border-collapse: collapse;
 
-  <% all_date=all_data|>elem(1) %>
+                }
 
-  <% profile=all_date|>hd() %>
+                td {
+                  margin: 0px;
+                  padding: 5px;
 
-  <%  year=case profile.year do
+                  border: 1px solid #080808;
+                }
+
+                .border {
+                  border: 1px solid #080808;
+                }
+
+                .noborders td {
+                  border: 0;
+                }
+  </style>
+     <body >
+
+  <%= for all_datar <- @a |> Enum.with_index do %>
+    <% all_data = all_datar |> elem(0) %>
+    <% all_date=all_data|>elem(1) %>
+
+      <% profile=all_date|>hd() %>
+
+        <%  year=case profile.year do
      "2025" -> 
         "二零二五"
          "2024" -> 
@@ -52,16 +73,11 @@
            "2010" ->
           "二零一零"
 
-      end %> 
-
-
-<div  style="page-break-before: always;">
-
-
-
-  </div>
-  
-  <% 
+      end %>
+<%= if all_datar |> elem(1) |> Integer.is_even do %>
+         <div class="row" >
+<% end %>
+          <% 
 
     bml= all_date|>Enum.filter(fn x -> x.subject =="MA04" end)
     {bml1,bml2,bml3}= if bml == [] do
@@ -1228,7 +1244,7 @@
     end
 
          pjk= all_date|>Enum.filter(fn x -> x.subject =="PJK" end)
-   {pjk1,pjk2,pjk3}= if pj == [] do
+   {pjk1,pjk2,pjk3}= if pjk == [] do
 
       {"","",""}
     else
@@ -1647,317 +1663,669 @@ else
 
 
    %>
+                  <%= if all_datar |> elem(1) |> Integer.is_odd do %>
+                    <div class="col-md-6" style="position: relative; ">
+                      <% else %>
+                       <div class="col-md-6" style="position: absolute; left: 1010px;">
+                  <% end %>
+         
 
 
-<body>
 
-
-  <table  class="table" >
-
-    <tr align="center">
-  <td colspan="6" align="center" style="margin: 3px; padding: 3px; border-left: 0; border-right: 0; border-top: 0" ><h3><b><%= @institute.name %></b></h3><br>
-        <h3><b><%= year %> 成绩单</b></h3></td>
-  
- </tr>
-     <tr align="left">
-  <td colspan="5"><b>学生姓名: <%= profile.cname %></b> <br>
-        <b>Nama Murid: <%= profile.name %></b></font></td>
-  
-  <td><b>班级<br>
-        Darjah: <%= profile.class %></b></font></td>
- </tr>
-
-
- <tr align="center" >
-  <td colspan="2" align="center" style="margin: 3px; padding: 3px;" ><b>科目名称 MATA PELAJARAN</b></td>
-  <% count=@list_exam|>Enum.count %>
-  <%= if count == 1 do %>
-    
-<%= for item <- @list_exam do %>
-  
-
-    <% chinese =item.name|>String.split_at(5)|>elem(0) %>
-    <% malay =item.name|>String.split_at(5)|>elem(1) %>
-
-  <td align="center" style="margin: 3px; padding: 3px;"><%= chinese %><BR><%= malay %></td>
  
-  <% end %>
-    <td align="center" style="margin: 3px; padding: 3px;">评审二 <BR>PKSR2</td>
-  <td align="center" style="margin: 3px; padding: 3px;">评审三 <BR>PKSR3</td>
-  <% end %>
-    <%= if count == 2 do %>
-    
-<%= for item <- @list_exam do %>
-  
+              <table class="display" style="white-space: nowrap; font-size: 26px;" width="45%">
 
+                <tr align="center">
+                  <td colspan="6" align="center" style="margin: 3px; padding: 3px; border-left: 0; border-right: 0; border-top: 0">
+                    <b><%= @institute.name %></b><br>
+                    <b><%= year %> 成绩单</b>
+                  </td>
 
+                </tr>
+                <tr align="left">
+                  <td colspan="5"><b>学生姓名: <%= profile.cname %></b> <br>
+                    <b>Nama Murid: <%= profile.name %></b></font>
+                  </td>
 
-  
+                  <td><b>班级<br>
+        Darjah: <%= profile.class %></b></font>
+                  </td>
+                </tr>
 
-  <% chinese =item.name|>String.split_at(5)|>elem(0) %>
-    <% malay =item.name|>String.split_at(5)|>elem(1) %>
+                <tr align="center">
+                  <td colspan="2" align="center" style="margin: 0px; padding: 0px;"><b>科目名称 MATA PELAJARAN</b></td>
+                  <% count=@list_exam|>Enum.count %>
+                    <%= if count == 1 do %>
 
-  <td align="center" style="margin: 3px; padding: 3px;"><%= chinese %><BR><%= malay %></td>
- 
-  <% end %>
-  <td align="center" style="margin: 3px; padding: 3px;">评审三 <BR>PKSR3</td>
-<% end %>
-   <%= if count == 3 do %>
-  <%= for item <- @list_exam do %>
+                      <%= for item <- @list_exam do %>
 
-    <% chinese =item.name|>String.split_at(5)|>elem(0) %>
-    <% malay =item.name|>String.split_at(5)|>elem(1) %>
+                        <% chinese =item.name|>String.split_at(5)|>elem(0) %>
+                          <% malay =item.name|>String.split_at(5)|>elem(1) %>
 
-  <td align="center" style="margin: 3px; padding: 3px;"><%= chinese %><BR><%= malay %></td>
+                            <td align="center" style="margin: 0px; padding: 0px;">
+                              <%= chinese %>
+                                <BR>
+                                <%= malay %>
+                            </td>
 
-  <% end %>
+                            <% end %>
+                              <td align="center" style="margin: 0px; padding: 0px;">评审二
+                                <BR>PKSR2</td>
+                              <td align="center" style="margin: 0px; padding: 0px;">评审三
+                                <BR>PKSR3</td>
+                              <% end %>
+                                <%= if count == 2 do %>
 
-  <% end %>
-    <td align="center" style="margin: 3px; padding: 3px;">平均 <BR>Purata</td>
- </tr>
+                                  <%= for item <- @list_exam do %>
 
- <tr  align="center">
-  <td rowspan="4"  style="margin: 3px; padding: 3px;" align="left"><BR> <b>国语 <br> Bahasa <br> Malaysia </b><BR></td>
-  <td style="margin: 3px; padding: 3px;" align="left">会话 Lisan</td>
-  <td style="margin: 3px; padding: 3px;"><%= if bml1 != "" do   bml1|>elem(0)  else "" end %><div style="float:right;width:50%;"><%= if bml1 != "" do bml1|>elem(1) else "" end %></div></td>
-  <td style="margin: 3px; padding: 3px;"><%= if bml2 != "" do bml2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if bml2 != "" do bml2|>elem(1) else "" end %></td>
-   <td style="margin: 3px; padding: 3px;"><%= if bml3 != "" do bml3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if bml3 != "" do bml3|>elem(1) else "" end %></td>
-    <td style="margin: 3px; padding: 3px;"></td>
-  
- </tr>
- <tr align="center">
-  <td style="margin: 3px; padding: 3px;" align="left">阅读 Bacaan</td>
-  <td style="margin: 3px; padding: 3px;"><%= if bmb1 != "" do bmb1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if bmb1 != "" do bmb1|>elem(1) else "" end %></td>
-  <td style="margin: 3px; padding: 3px;"><%= if bmb2 != "" do bmb2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if bmb2 != "" do bmb2|>elem(1) else "" end %></td>
-   <td style="margin: 3px; padding: 3px;"><%= if bmb3 != "" do bmb3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if bmb3 != "" do bmb3|>elem(1) else "" end %></td>
-    <td style="margin: 3px; padding: 3px;"></td>
- </tr>
- <tr align="center">
-  <td style="margin: 3px; padding: 3px;" align="left">写作 Penulisan</td>
-  <td style="margin: 3px; padding: 3px;"><%= if bmp1 != "" do bmp1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if bmp1 != "" do bmp1|>elem(1) else "" end %></td>
-  <td style="margin: 3px; padding: 3px;"><%= if bmp2 != "" do bmp2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if bmp2 != "" do bmp2|>elem(1) else "" end %></td>
-  <td style="margin: 3px; padding: 3px;"><%= if bmp3 != "" do bmp3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if bmp3 != "" do bmp3|>elem(1) else "" end %></td>
-   <td style="margin: 3px; padding: 3px;"></td>
- </tr>
- <tr align="center">
-  <td style="margin: 3px; padding: 3px;" align="left">理解 Pemahaman</td>
-  <td style="margin: 3px; padding: 3px;"><%= if bmpm1 != "" do bmpm1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if bmpm1 != "" do bmpm1|>elem(1) else "" end %></td>
-  <td style="margin: 3px; padding: 3px;"><%= if bmpm2 != "" do bmpm2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if bmpm2 != "" do bmpm2|>elem(1) else "" end %></td>
-  <td style="margin: 3px; padding: 3px;"><%= if bmpm3 != "" do bmpm3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if bmpm3 != "" do bmpm3|>elem(1) else "" end %></td>
-   <td style="margin: 3px; padding: 3px;"></td>
- </tr>
- <tr align="center">
- <td rowspan="4"  style="margin: 3px; padding: 3px;" align="left"><BR><b>英语 <br> Bahasa <br> Inggeris</b></td>
-  <td style="margin: 3px; padding: 3px;" align="left">会话 Lisan</td>
-  <td style="margin: 3px; padding: 3px;"><%= if ingl1 != "" do ingl1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if ingl1 != "" do ingl1|>elem(1) else "" end %></td>
-  <td style="margin: 3px; padding: 3px;"><%= if ingl2 != "" do ingl2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if ingl2 != "" do ingl2|>elem(1) else "" end %></td>
-   <td style="margin: 3px; padding: 3px;"><%= if ingl3 != "" do ingl3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if ingl3 != "" do ingl3|>elem(1) else "" end %></td>
-    <td style="margin: 3px; padding: 3px;"></td>
- </tr>
- <tr align="center">
-  <td style="margin: 3px; padding: 3px;" align="left">阅读 Bacaan</td>
-  <td style="margin: 3px; padding: 3px;"><%= if ingb1 != "" do ingb1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if ingb1 != "" do ingb1|>elem(1) else "" end %></td>
-  <td style="margin: 3px; padding: 3px;"><%= if ingb2 != "" do ingb2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if ingb2 != "" do ingb2|>elem(1) else "" end %></td>
-   <td style="margin: 3px; padding: 3px;"><%= if ingb3 != "" do ingb3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if ingb3 != "" do ingb3|>elem(1) else "" end %></td>
-    <td style="margin: 3px; padding: 3px;"></td>
- </tr>
- <tr align="center">
-  <td style="margin: 3px; padding: 3px;" align="left">写作 Penulisan</td>
-<td style="margin: 3px; padding: 3px;"><%= if ingp1 != "" do ingp1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if ingp1 != "" do ingp1|>elem(1) else "" end %></td>
-  <td style="margin: 3px; padding: 3px;"><%= if ingp2 != "" do ingp2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if ingp2 != "" do ingp2|>elem(1) else "" end %></td>
-   <td style="margin: 3px; padding: 3px;"><%= if ingp3 != "" do ingp3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if ingp3 != "" do ingp3|>elem(1) else "" end %></td>
-   <td style="margin: 3px; padding: 3px;"></td>
- </tr>
- <tr align="center">
-  <td style="margin: 3px; padding: 3px;" align="left">理解 Pemahaman</td>
-  <td style="margin: 3px; padding: 3px;"><%= if ingpm1 != "" do ingpm1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if ingpm1 != "" do ingpm1|>elem(1) else "" end %></td>
-  <td style="margin: 3px; padding: 3px;"><%= if ingpm2 != "" do ingpm2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if ingpm2 != "" do ingpm2|>elem(1) else "" end %></td>
-  <td style="margin: 3px; padding: 3px;"><%= if ingpm3 != "" do ingpm3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if ingpm3 != "" do ingpm3|>elem(1) else "" end %></td>
-   <td style="margin: 3px; padding: 3px;"></td>
- </tr align="center">
- <tr align="center">
- <td rowspan="4"  style="margin: 3px; padding: 3px;" align="left"><b><BR>华语 <br> Bahasa <br> Cina</b></td>
-  <td style="margin: 3px; padding: 3px;" align="left">会话 Lisan</td>
-  <td style="margin: 3px; padding: 3px;"><%= if chl1 != "" do chl1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if chl1 != "" do chl1|>elem(1) else "" end %></td>
-  <td style="margin: 3px; padding: 3px;"><%= if chl2 != "" do chl2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if chl2 != "" do chl2|>elem(1) else "" end %></td>
-   <td style="margin: 3px; padding: 3px;"><%= if chl3 != "" do chl3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if chl3 != "" do chl3|>elem(1) else "" end %></td>
-    <td style="margin: 3px; padding: 3px;"></td>
- </tr>
- <tr align="center">
-  <td style="margin: 3px; padding: 3px;" align="left">阅读 Bacaan</td>
-  <td style="margin: 3px; padding: 3px;"><%= if chb1 != "" do chb1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if chb1 != "" do chb1|>elem(1) else "" end %></td>
-  <td style="margin: 3px; padding: 3px;"><%= if chb2 != "" do chb2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if chb2 != "" do chb2|>elem(1) else "" end %></td>
-   <td style="margin: 3px; padding: 3px;"><%= if chb3 != "" do chb3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if chb3 != "" do chb3|>elem(1) else "" end %></td>
-    <td style="margin: 3px; padding: 3px;"></td>
- </tr>
- <tr align="center">
-  <td style="margin: 3px; padding: 3px;" align="left">写作 Penulisan</td>
- <td style="margin: 3px; padding: 3px;"><%= if chp1 != "" do chp1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if chp1 != "" do chp1|>elem(1) else "" end %></td>
-  <td style="margin: 3px; padding: 3px;"><%= if chp2 != "" do chp2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if chp2 != "" do chp2|>elem(1) else "" end %></td>
-   <td style="margin: 3px; padding: 3px;"><%= if chp3 != "" do chp3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if chp3 != "" do chp3|>elem(1) else "" end %></td>
-   <td style="margin: 3px; padding: 3px;"></td>
- </tr>
- <tr align="center">
-  <td style="margin: 5px; padding: 5px; " align="left">理解 Pemahaman</td>
- <td style="margin: 3px; padding: 3px;"><%= if chpm1 != "" do chpm1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if chpm1 != "" do chpm1|>elem(1) else "" end %></td>
-  <td style="margin: 3px; padding: 3px;"><%= if chpm2 != "" do chpm2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if chpm2 != "" do chpm2|>elem(1) else "" end %></td>
-   <td style="margin: 3px; padding: 3px;"><%= if chpm3 != "" do chpm3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if chpm3 != "" do chpm3|>elem(1) else "" end %></td>
-   <td style="margin: 3px; padding: 3px;"></td>
- </tr>
-<tr align="center">
-  <td style="margin: 5px; padding: 5px; border-right: 0" align="left">数学</td>
-  <td  style="margin: 5px; padding: 5px; border-left: 0" align="left">Matematik</td>
-  <td style="margin: 3px; padding: 3px;"><%= if math1 != "" do math1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if math1 != "" do math1|>elem(1) else "" end %></td>
-  <td style="margin: 3px; padding: 3px;"><%= if math2 != "" do math2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if math2 != "" do math2|>elem(1) else "" end %></td>
-   <td style="margin: 3px; padding: 3px;"><%= if math3 != "" do math3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if math3 != "" do math3|>elem(1) else "" end %></td>
-    <td style="margin: 3px; padding: 3px;"></td>
- </tr>
- <tr align="center">
-    <td style="margin: 5px; padding: 5px; border-right: 0" align="left">科学</td>
-  <td  style="margin: 5px; padding: 5px; border-left: 0" align="left">Sains</td>
-  <td style="margin: 3px; padding: 3px;"><%= if sains1 != "" do sains1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if sains1 != "" do sains1|>elem(1) else "" end %></td>
-  <td style="margin: 3px; padding: 3px;"><%= if sains2 != "" do sains2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if sains2 != "" do sains2|>elem(1) else "" end %></td>
-   <td style="margin: 3px; padding: 3px;"><%= if sains3 != "" do sains3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if sains3 != "" do sains3|>elem(1) else "" end %></td>
-    <td style="margin: 3px; padding: 3px;"></td>
- </tr>
- <tr align="center">
-   <td style="margin: 5px; padding: 5px; border-right: 0" align="left">道德教育</td>
-  <td style="margin: 5px; padding: 5px; border-left: 0" align="left">Pendidikan Moral</td>
-  <td style="margin: 3px; padding: 3px;"><%= if pm1 != "" do pm1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if pm1 != "" do pm1|>elem(1) else "" end %></td>
-  <td style="margin: 3px; padding: 3px;"><%= if pm2 != "" do pm2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if pm2 != "" do pm2|>elem(1) else "" end %></td>
-  <td style="margin: 3px; padding: 3px;"><%= if pm3 != "" do pm3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if pm3 != "" do pm3|>elem(1) else "" end %></td>
-   <td style="margin: 3px; padding: 3px;"></td>
- </tr>
- <tr align="center">
-  <td style="margin: 5px; padding: 5px; border-right: 0" align="left">回教</td>
-  <td style="margin: 5px; padding: 5px; border-left: 0" align="left">Agama Islam</td>
- <td style="margin: 3px; padding: 3px;"><%= if agama1 != "" do agama1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if agama1 != "" do agama1|>elem(1) else "" end %></td>
-  <td style="margin: 3px; padding: 3px;"><%= if agama2 != "" do agama2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if agama2 != "" do agama2|>elem(1) else "" end %></td>
-   <td style="margin: 3px; padding: 3px;"><%= if agama3 != "" do agama3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if agama3 != "" do agama3|>elem(1) else "" end %></td>
-    <td style="margin: 3px; padding: 3px;"></td>
- </tr>
-  <tr align="center">
-      <td style="margin: 5px; padding: 5px; border-right: 0" align="left">历史</td>
-  <td style="margin: 5px; padding: 5px; border-left: 0" align="left">Sejarah</td>
- <td style="margin: 3px; padding: 3px;"><%= if sej1 != "" do sej1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if sej1 != "" do sej1|>elem(1) else "" end %></td>
-  <td style="margin: 3px; padding: 3px;"><%= if sej2 != "" do sej2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if sej2 != "" do sej2|>elem(1) else "" end %></td>
-   <td style="margin: 3px; padding: 3px;"><%= if sej3 != "" do sej3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if sej3 != "" do sej3|>elem(1) else "" end %></td>
-    <td style="margin: 3px; padding: 3px;"></td>
- </tr>
-  <tr align="center">
-          <td style="margin: 5px; padding: 5px; border-right: 0" align="left">设计和技术</td>
-  <td style="margin: 5px; padding: 5px; border-left: 0" align="left">RBT</td>
- <td style="margin: 3px; padding: 3px;"><%= if rbt1 != "" do rbt1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if rbt1 != "" do rbt1|>elem(1) else "" end %></td>
-  <td style="margin: 3px; padding: 3px;"><%= if rbt2 != "" do rbt2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if rbt2 != "" do rbt2|>elem(1) else "" end %></td>
-   <td style="margin: 3px; padding: 3px;"><%= if rbt3 != "" do rbt3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if rbt3 != "" do rbt3|>elem(1) else "" end %></td>
-    <td style="margin: 3px; padding: 3px;"></td>
- </tr>
-  <tr align="center">
-       <td style="margin: 5px; padding: 5px; border-right: 0" align="left">通信信息技术</td>
-  <td style="margin: 5px; padding: 5px; border-left: 0" align="left">TMK</td>
-  <td style="margin: 3px; padding: 3px;"><%= if tmk1 != "" do tmk1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if tmk1 != "" do tmk1|>elem(1) else "" end %></td>
-  <td style="margin: 3px; padding: 3px;"><%= if tmk2 != "" do tmk2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if tmk2 != "" do tmk2|>elem(1) else "" end %></td>
-   <td style="margin: 3px; padding: 3px;"><%= if tmk3 != "" do tmk3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if tmk3 != "" do tmk3|>elem(1) else "" end %></td>
-    <td style="margin: 3px; padding: 3px;"></td>
- </tr>
-  <tr align="center"  >
-  <td style="margin: 5px; padding: 5px; border-right: 0"  align="left">美术教育</td>
-  <td style="margin: 5px; padding: 5px; border-left: 0"  align="left">Pendidikan Seni Visual</td>
-  <td style="margin: 3px; padding: 3px;"><%= if seni1 != "" do seni1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if seni1 != "" do seni1|>elem(1) else "" end %></td>
-  <td style="margin: 3px; padding: 3px;"><%= if seni2 != "" do seni2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if seni2 != "" do seni2|>elem(1) else "" end %></td>
-  <td style="margin: 3px; padding: 3px;"><%= if seni3 != "" do seni3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if seni3 != "" do seni3|>elem(1) else "" end %></td>
-   <td style="margin: 3px; padding: 3px;"></td>
- </tr>
-  <tr align="center">
-      <td style="margin: 5px; padding: 5px; border-right: 0" align="left">体育</td>
-  <td style="margin: 5px; padding: 5px; border-left: 0" align="left">Pendidikan Jasmani</td>
-    <td style="margin: 3px; padding: 3px;"><%= if pj1 != "" do pj1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if pj1 != "" do pj1|>elem(1) else "" end %></td>
-  <td style="margin: 3px; padding: 3px;"><%= if pj2 != "" do pj2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if pj2 != "" do pj2|>elem(1) else "" end %></td>
-  <td style="margin: 3px; padding: 3px;"><%= if pj3 != "" do pj3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if pj3 != "" do pj3|>elem(1) else "" end %></td>
-   <td style="margin: 3px; padding: 3px;"></td>
- </tr>
-  <tr align="center">
-      <td style="margin: 5px; padding: 5px; border-right: 0" align="left">健康教育</td>
-  <td style="margin: 5px; padding: 5px; border-left: 0" align="left">Pendidikan Kesihatan</td>
-    <td style="margin: 3px; padding: 3px;"><%= if pjk1 != "" do pjk1|>elem(0) else "" end %><div style="float:right;width:50%;">
-      <%= if pjk1 != "" do pjk1|>elem(1) else "" end %></td>
-  <td style="margin: 3px; padding: 3px;"><%= if pjk2 != "" do pjk2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if pjk2 != "" do pjk2|>elem(1) else "" end %></td>
-  <td style="margin: 3px; padding: 3px;"><%= if pjk3 != "" do pjk3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if pjk3 != "" do pjk3|>elem(1) else "" end %></td>
-   <td style="margin: 3px; padding: 3px;"></td>
- </tr>
-  <tr align="center">
-     <td style="margin: 5px; padding: 5px; border-right: 0" align="left">操行</td>
-  <td  style="margin: 5px; padding: 5px; border-left: 0" align="left">Kelakuan</td>
-    <td style="margin: 3px; padding: 3px;"><%= if laku1 != "" do laku1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if laku1 != "" do laku1|>elem(1) else "" end %></td>
-  <td style="margin: 3px; padding: 3px;"><%= if laku2 != "" do laku2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if laku2 != "" do laku2|>elem(1) else "" end %></td>
-  <td style="margin: 3px; padding: 3px;"><%= if laku3 != "" do laku3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if laku3 != "" do laku3|>elem(1) else "" end %></td>
-   <td style="margin: 3px; padding: 3px;"></td>
- </tr>
-  <tr align="center">
-    <td style="margin: 5px; padding: 5px; border-right: 0" align="left">出席日数</td>
-  <td style="margin: 5px; padding: 5px; border-left: 0" align="left">Kedatangan</td>
-    <td style="margin: 3px; padding: 3px;"><%= kedatangan1 %></td>
-  <td style="margin: 3px; padding: 3px;"><%= kedatangan2 %></td>
-  <td style="margin: 3px; padding: 3px;"><%= kedatangan3 %></td>
-   <td style="margin: 3px; padding: 3px;"></td>
- </tr>
-  <tr align="center">
-  <td style="margin: 5px; padding: 5px; border-right: 0" align="left">总分</td>
-   <td  style="margin: 5px; padding: 5px; border-left: 0" align="left">Jumlah Markah</td>
-      <td style="margin: 3px; padding: 3px;"><%= total1 %></td>
-  <td style="margin: 3px; padding: 3px;"><%= total2 %></td>
-  <td style="margin: 3px; padding: 3px;"><%= total3 %></td>
-   <td style="margin: 3px; padding: 3px;"></td>
- </tr>
-  <tr align="center" >
-  <td  style="margin: 5px; padding: 5px; border-right: 0" align="left">平均 </td>
-  <td  style="margin: 5px; padding: 5px; border-left: 0" align="left">Purata</td>
-        <td style="margin: 3px; padding: 3px;"><%= averg1 %></td>
-  <td style="margin: 3px; padding: 3px;"><%= averg2 %></td>
-  <td style="margin: 3px; padding: 3px;"><%= averg3 %></td>
-   <td style="margin: 3px; padding: 3px;"></td>
- </tr>
-  <tr align="center">
-  <td style="margin: 5px; padding: 5px; border-right: 0"  align="left">本班名次</td>
-   <td style="margin: 5px; padding: 5px; border-left: 0"  align="left">Kedudukan Dalam Kelas</td>
-        <td style="margin: 3px; padding: 3px;"><%= crank1 %></td>
-  <td style="margin: 3px; padding: 3px;"><%= crank2 %></td>
-  <td style="margin: 3px; padding: 3px;"><%= crank3 %></td>
-   <td style="margin: 3px; padding: 3px;"></td>
- </tr>
-  <tr align="center">
-  <td style="margin: 5px; padding: 5px; border-right: 0" align="left" >全级名次</td>
-  <td style="margin: 5px; padding: 5px; border-left: 0" align="left">Kedudukan Dalam Darjah</td>
-        <td style="margin: 3px; padding: 3px;"><%= srank1 %></td>
-  <td style="margin: 3px; padding: 3px;"><%= srank2 %></td>
-  <td style="margin: 3px; padding: 3px;"><%= srank3 %></td>
-   <td style="margin: 3px; padding: 3px;"></td>
- </tr>
-  
- <tr>
-  
-   <td colspan="6" align="left" style="margin: 3px; padding: 3px;" height="100px;">评语 Komen: <br> 
+                                    <% chinese =item.name|>String.split_at(5)|>elem(0) %>
+                                      <% malay =item.name|>String.split_at(5)|>elem(1) %>
 
-    <% student_comment = Repo.get_by(School.Affairs.StudentComment, student_id: profile.stuid) %>
-          <%=  if student_comment != nil  do %>
-            
-     
+                                        <td align="center" style="margin: 0px; padding: 0px;">
+                                          <%= chinese %>
+                                            <BR>
+                                            <%= malay %>
+                                        </td>
 
-          <%= if student_comment.comment1 != nil do
+                                        <% end %>
+                                          <td align="center" style="margin: 0px; padding: 0px;">评审三
+                                            <BR>PKSR3</td>
+                                          <% end %>
+                                            <%= if count == 3 do %>
+                                              <%= for item <- @list_exam do %>
+
+                                                <% chinese =item.name|>String.split_at(5)|>elem(0) %>
+                                                  <% malay =item.name|>String.split_at(5)|>elem(1) %>
+
+                                                    <td align="center" style="margin: 0px; padding: 0px;">
+                                                      <%= chinese %>
+                                                        <BR>
+                                                        <%= malay %>
+                                                    </td>
+
+                                                    <% end %>
+
+                                                      <% end %>
+                                                        <td align="center" style="margin: 0px; padding: 0px;">平均
+                                                          <BR>Purata</td>
+                </tr>
+
+                <tr align="center">
+                  <td rowspan="4" style="margin: 0px; padding: 0px;" align="left">
+                    <BR> <b>国语 <br> Bahasa <br> Malaysia </b>
+                    <BR>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;" align="left">会话 Lisan</td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if bml1 != "" do   bml1|>elem(0)  else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if bml1 != "" do bml1|>elem(1) else "" end %>
+                      </div>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if bml2 != "" do bml2|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if bml2 != "" do bml2|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if bml3 != "" do bml3|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if bml3 != "" do bml3|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;"></td>
+
+                </tr>
+                <tr align="center">
+                  <td style="margin: 0px; padding: 0px;" align="left">阅读 Bacaan</td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if bmb1 != "" do bmb1|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if bmb1 != "" do bmb1|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if bmb2 != "" do bmb2|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if bmb2 != "" do bmb2|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if bmb3 != "" do bmb3|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if bmb3 != "" do bmb3|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;"></td>
+                </tr>
+                <tr align="center">
+                  <td style="margin: 0px; padding: 0px;" align="left">写作 Penulisan</td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if bmp1 != "" do bmp1|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if bmp1 != "" do bmp1|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if bmp2 != "" do bmp2|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if bmp2 != "" do bmp2|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if bmp3 != "" do bmp3|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if bmp3 != "" do bmp3|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;"></td>
+                </tr>
+                <tr align="center">
+                  <td style="margin: 0px; padding: 0px;" align="left">理解 Pemahaman</td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if bmpm1 != "" do bmpm1|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if bmpm1 != "" do bmpm1|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if bmpm2 != "" do bmpm2|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if bmpm2 != "" do bmpm2|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if bmpm3 != "" do bmpm3|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if bmpm3 != "" do bmpm3|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;"></td>
+                </tr>
+                <tr align="center">
+                  <td rowspan="4" style="margin: 0px; padding: 0px;" align="left">
+                    <BR><b>英语 <br> Bahasa <br> Inggeris</b></td>
+                  <td style="margin: 0px; padding: 0px;" align="left">会话 Lisan</td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if ingl1 != "" do ingl1|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if ingl1 != "" do ingl1|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if ingl2 != "" do ingl2|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if ingl2 != "" do ingl2|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if ingl3 != "" do ingl3|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if ingl3 != "" do ingl3|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;"></td>
+                </tr>
+                <tr align="center">
+                  <td style="margin: 0px; padding: 0px;" align="left">阅读 Bacaan</td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if ingb1 != "" do ingb1|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if ingb1 != "" do ingb1|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if ingb2 != "" do ingb2|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if ingb2 != "" do ingb2|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if ingb3 != "" do ingb3|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if ingb3 != "" do ingb3|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;"></td>
+                </tr>
+                <tr align="center">
+                  <td style="margin: 0px; padding: 0px;" align="left">写作 Penulisan</td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if ingp1 != "" do ingp1|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if ingp1 != "" do ingp1|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if ingp2 != "" do ingp2|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if ingp2 != "" do ingp2|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if ingp3 != "" do ingp3|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if ingp3 != "" do ingp3|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;"></td>
+                </tr>
+                <tr align="center">
+                  <td style="margin: 0px; padding: 0px;" align="left">理解 Pemahaman</td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if ingpm1 != "" do ingpm1|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if ingpm1 != "" do ingpm1|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if ingpm2 != "" do ingpm2|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if ingpm2 != "" do ingpm2|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if ingpm3 != "" do ingpm3|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if ingpm3 != "" do ingpm3|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;"></td>
+                </tr align="center">
+                <tr align="center">
+                  <td rowspan="4" style="margin: 0px; padding: 0px;" align="left"><b><BR>华语 <br> Bahasa <br> Cina</b></td>
+                  <td style="margin: 0px; padding: 0px;" align="left">会话 Lisan</td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if chl1 != "" do chl1|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if chl1 != "" do chl1|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if chl2 != "" do chl2|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if chl2 != "" do chl2|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if chl3 != "" do chl3|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if chl3 != "" do chl3|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;"></td>
+                </tr>
+                <tr align="center">
+                  <td style="margin: 0px; padding: 0px;" align="left">阅读 Bacaan</td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if chb1 != "" do chb1|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if chb1 != "" do chb1|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if chb2 != "" do chb2|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if chb2 != "" do chb2|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if chb3 != "" do chb3|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if chb3 != "" do chb3|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;"></td>
+                </tr>
+                <tr align="center">
+                  <td style="margin: 0px; padding: 0px;" align="left">写作 Penulisan</td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if chp1 != "" do chp1|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if chp1 != "" do chp1|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if chp2 != "" do chp2|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if chp2 != "" do chp2|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if chp3 != "" do chp3|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if chp3 != "" do chp3|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;"></td>
+                </tr>
+                <tr align="center">
+                  <td style="margin: 0px; padding: 0px; " align="left">理解 Pemahaman</td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if chpm1 != "" do chpm1|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if chpm1 != "" do chpm1|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if chpm2 != "" do chpm2|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if chpm2 != "" do chpm2|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if chpm3 != "" do chpm3|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if chpm3 != "" do chpm3|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;"></td>
+                </tr>
+                <tr align="center">
+                  <td style="margin: 0px; padding: 0px; border-right: 0" align="left">数学</td>
+                  <td style="margin: 0px; padding: 0px; border-left: 0" align="left">Matematik</td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if math1 != "" do math1|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if math1 != "" do math1|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if math2 != "" do math2|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if math2 != "" do math2|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if math3 != "" do math3|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if math3 != "" do math3|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;"></td>
+                </tr>
+                <tr align="center">
+                  <td style="margin: 0px; padding: 0px; border-right: 0" align="left">科学</td>
+                  <td style="margin: 0px; padding: 0px; border-left: 0" align="left">Sains</td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if sains1 != "" do sains1|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if sains1 != "" do sains1|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if sains2 != "" do sains2|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if sains2 != "" do sains2|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if sains3 != "" do sains3|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if sains3 != "" do sains3|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;"></td>
+                </tr>
+                <tr align="center">
+                  <td style="margin: 0px; padding: 0px; border-right: 0" align="left">道德教育</td>
+                  <td style="margin: 0px; padding: 0px; border-left: 0" align="left">Pendidikan Moral</td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if pm1 != "" do pm1|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if pm1 != "" do pm1|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if pm2 != "" do pm2|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if pm2 != "" do pm2|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if pm3 != "" do pm3|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if pm3 != "" do pm3|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;"></td>
+                </tr>
+                <tr align="center">
+                  <td style="margin: 0px; padding: 0px; border-right: 0" align="left">回教</td>
+                  <td style="margin: 0px; padding: 0px; border-left: 0" align="left">Agama Islam</td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if agama1 != "" do agama1|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if agama1 != "" do agama1|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if agama2 != "" do agama2|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if agama2 != "" do agama2|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if agama3 != "" do agama3|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if agama3 != "" do agama3|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;"></td>
+                </tr>
+                <tr align="center">
+                  <td style="margin: 0px; padding: 0px; border-right: 0" align="left">历史</td>
+                  <td style="margin: 0px; padding: 0px; border-left: 0" align="left">Sejarah</td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if sej1 != "" do sej1|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if sej1 != "" do sej1|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if sej2 != "" do sej2|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if sej2 != "" do sej2|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if sej3 != "" do sej3|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if sej3 != "" do sej3|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;"></td>
+                </tr>
+                <tr align="center">
+                  <td style="margin: 0px; padding: 0px; border-right: 0" align="left">设计和技术</td>
+                  <td style="margin: 0px; padding: 0px; border-left: 0" align="left">RBT</td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if rbt1 != "" do rbt1|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if rbt1 != "" do rbt1|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if rbt2 != "" do rbt2|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if rbt2 != "" do rbt2|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if rbt3 != "" do rbt3|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if rbt3 != "" do rbt3|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;"></td>
+                </tr>
+                <tr align="center">
+                  <td style="margin: 0px; padding: 0px; border-right: 0" align="left">通信信息技术</td>
+                  <td style="margin: 0px; padding: 0px; border-left: 0" align="left">TMK</td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if tmk1 != "" do tmk1|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if tmk1 != "" do tmk1|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if tmk2 != "" do tmk2|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if tmk2 != "" do tmk2|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if tmk3 != "" do tmk3|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if tmk3 != "" do tmk3|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;"></td>
+                </tr>
+                <tr align="center">
+                  <td style="margin: 0px; padding: 0px; border-right: 0" align="left">美术教育</td>
+                  <td style="margin: 0px; padding: 0px; border-left: 0" align="left">Pendidikan Seni Visual</td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if seni1 != "" do seni1|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if seni1 != "" do seni1|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if seni2 != "" do seni2|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if seni2 != "" do seni2|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if seni3 != "" do seni3|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if seni3 != "" do seni3|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;"></td>
+                </tr>
+                <tr align="center">
+                  <td style="margin: 0px; padding: 0px; border-right: 0" align="left">体育</td>
+                  <td style="margin: 0px; padding: 0px; border-left: 0" align="left">Pendidikan Jasmani</td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if pj1 != "" do pj1|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if pj1 != "" do pj1|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if pj2 != "" do pj2|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if pj2 != "" do pj2|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if pj3 != "" do pj3|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if pj3 != "" do pj3|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;"></td>
+                </tr>
+                <tr align="center">
+                  <td style="margin: 0px; padding: 0px; border-right: 0" align="left">健康教育</td>
+                  <td style="margin: 0px; padding: 0px; border-left: 0" align="left">Pendidikan Kesihatan</td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if pjk1 != "" do pjk1|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if pjk1 != "" do pjk1|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if pjk2 != "" do pjk2|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if pjk2 != "" do pjk2|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if pjk3 != "" do pjk3|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if pjk3 != "" do pjk3|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;"></td>
+                </tr>
+                <tr align="center">
+                  <td style="margin: 0px; padding: 0px; border-right: 0" align="left">操行</td>
+                  <td style="margin: 0px; padding: 0px; border-left: 0" align="left">Kelakuan</td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if laku1 != "" do laku1|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if laku1 != "" do laku1|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if laku2 != "" do laku2|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if laku2 != "" do laku2|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if laku3 != "" do laku3|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if laku3 != "" do laku3|>elem(1) else "" end %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;"></td>
+                </tr>
+                <tr align="center">
+                  <td style="margin: 0px; padding: 0px; border-right: 0" align="left">出席日数</td>
+                  <td style="margin: 0px; padding: 0px; border-left: 0" align="left">Kedatangan</td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= kedatangan1 %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= kedatangan2 %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= kedatangan3 %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;"></td>
+                </tr>
+                <tr align="center">
+                  <td style="margin: 0px; padding: 0px; border-right: 0" align="left">总分</td>
+                  <td style="margin: 0px; padding: 0px; border-left: 0" align="left">Jumlah Markah</td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= total1 %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= total2 %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= total3 %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;"></td>
+                </tr>
+                <tr align="center">
+                  <td style="margin: 0px; padding: 0px; border-right: 0" align="left">平均 </td>
+                  <td style="margin: 0px; padding: 0px; border-left: 0" align="left">Purata</td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= averg1 %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= averg2 %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= averg3 %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;"></td>
+                </tr>
+                <tr align="center">
+                  <td style="margin: 0px; padding: 0px; border-right: 0" align="left">本班名次</td>
+                  <td style="margin: 0px; padding: 0px; border-left: 0" align="left">Kedudukan Dalam Kelas</td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= crank1 %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= crank2 %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= crank3 %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;"></td>
+                </tr>
+                <tr align="center">
+                  <td style="margin: 0px; padding: 0px; border-right: 0" align="left">全级名次</td>
+                  <td style="margin: 0px; padding: 0px; border-left: 0" align="left">Kedudukan Dalam Darjah</td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= srank1 %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= srank2 %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= srank3 %>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;"></td>
+                </tr>
+                <tr align="center">
+                  <td style="margin: 1px; padding: 1px; border-right: 0" align="left">校长签名 </td>
+                   <td style="margin: 1px; padding: 1px; border-left: 0" align="left"> T.Tangan Guru Besar </td>
+                  <td style="margin: 0px; padding: 0px;"></td>
+                  <td style="margin: 0px; padding: 0px;"></td>
+                  <td style="margin: 0px; padding: 0px;"></td>
+                   <td style="margin: 0px; padding: 0px;"></td>
+                </tr>
+                <tr align="center">
+                 <td  style="margin: 1px; padding: 1px; border-right: 0" align="left">级任签名 </td>
+                 <td  style="margin: 1px; padding: 1px; border-left: 0" align="left">T.Tangan Guru Darjah </td>
+               <td style="margin: 0px; padding: 0px;"></td>
+                  <td style="margin: 0px; padding: 0px;"></td>
+                  <td style="margin: 0px; padding: 0px;"></td>
+                   <td style="margin: 0px; padding: 0px;"></td>
+               </tr>
+                <tr align="center">
+                 
+                  <td style="margin: 1px; padding: 1px; border-right: 0" align="left">家长/监护人 签名</td>
+                   <td style="margin: 1px; padding: 1px; border-left: 0" align="left">T.Tangan Ibubapa/Penjaga</td>
+                  <td style="margin: 0px; padding: 0px;"></td>
+                  <td style="margin: 0px; padding: 0px;"></td>
+                  <td style="margin: 0px; padding: 0px;"></td>
+                   <td style="margin: 0px; padding: 0px;"></td>
+                </tr>
+                
+
+                <tr>
+
+                  <td colspan="6" align="left" style="margin: 0px; padding: 0px;" height="50px;">评语 Komen: <br>
+
+                    <% student_comment = Repo.get_by(School.Affairs.StudentComment, student_id: profile.stuid) %>
+                      <%=  if student_comment != nil  do %>
+
+                        <%= if student_comment.comment1 != nil do
 
       Repo.get_by(School.Affairs.Comment,
         id: student_comment.comment1
       ).c_chinese
 
           end %>
-<%= if student_comment.comment1 != nil do
+                          <%= if student_comment.comment1 != nil do
            
       Repo.get_by(School.Affairs.Comment,
         id: student_comment.comment1
       ).c_malay
           end %>
-          ,<br>
-          <%= if student_comment.comment2 != nil do
+                            ,<br>
+                            <%= if student_comment.comment2 != nil do
 
           
       Repo.get_by(School.Affairs.Comment,
@@ -1966,7 +2334,7 @@ else
 
           end %>
 
-          <%= if student_comment.comment2 != nil do
+                              <%= if student_comment.comment2 != nil do
 
 
               Repo.get_by(School.Affairs.Comment,
@@ -1974,8 +2342,8 @@ else
       ).c_malay
           end %>
 
-          ,<br>
-          <%= if student_comment.comment3 != nil do
+                                ,<br>
+                                <%= if student_comment.comment3 != nil do
 
          Repo.get_by(School.Affairs.Comment,
         id: student_comment.comment3
@@ -1983,7 +2351,7 @@ else
 
           end %>
 
-           <%= if student_comment.comment3 != nil do
+                                  <%= if student_comment.comment3 != nil do
 
 
               Repo.get_by(School.Affairs.Comment,
@@ -1991,52 +2359,21 @@ else
       ).c_malay
           end %>
 
-           <% end %></td>
-  
- </tr>
-<tr align="center">
-  <td colspan="2" style="margin: 1px; padding: 1px;" align="center">T.Tangan Guru Besar<br>校长签名 </td>
-   <td colspan="2" style="margin: 1px; padding: 1px;" align="center">T.Tangan Guru Darjah<br>级任签名 </td>
-     <td colspan="2" style="margin: 1px; padding: 1px;" align="center">T.Tangan Ibubapa/Penjaga<br>家长</td>
- </tr>
- <tr align="center">
-  <td colspan="2" style="margin: 3px; padding: 3px;" align="center" height="100px;"></td>
-   <td colspan="2" style="margin: 3px; padding: 3px;" align="center" height="100px;"></td>
-     <td colspan="2" style="margin: 3px; padding: 3px;" align="center" height="100px;"></td>
- </tr>
+                                    <% end %>
+                  </td>
 
+                </tr>
+              
 
-</table>
+              </table>
+            </div>
 
+                  <%= if all_datar |> elem(1) |> Integer.is_odd do %>
+                    </div>
+                  <div style="page-break-before: always;"></div>
+                  <% end %>
+            <% end %>
 
+            </body>
 
-   
-</body>
-
-
-</div>
-<% end %>
-
-<style type="text/css">
-  
-   table {
-        border-collapse: collapse;
-       
-    }
-    
-    td {
-        margin: 0px;
-        padding: 5px;
-    
-        border:1px solid #080808;
-    }
-    
-    .border {
-        border: 1px solid #080808;
-    }
-
-    .noborders td {
-        border:0;
-    }
-</style>
-
+          

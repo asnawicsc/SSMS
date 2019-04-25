@@ -78,14 +78,16 @@ defmodule SchoolWeb.PdfController do
     semester_id = params["semester"]
 
     class_info =
-      Repo.get_by(School.Affairs.Class,
+      Repo.get_by(
+        School.Affairs.Class,
         name: class_name,
         institution_id: conn.private.plug_session["institution_id"]
       )
 
     list_class =
       Repo.all(
-        from(s in School.Affairs.Class,
+        from(
+          s in School.Affairs.Class,
           where:
             s.level_id == ^class_info.level_id and
               s.institution_id == ^conn.private.plug_session["institution_id"]
@@ -96,7 +98,8 @@ defmodule SchoolWeb.PdfController do
       for item <- list_class do
         student_class =
           Repo.all(
-            from(s in School.Affairs.Student,
+            from(
+              s in School.Affairs.Student,
               left_join: g in School.Affairs.StudentClass,
               on: s.id == g.sudent_id,
               left_join: k in School.Affairs.Class,
@@ -120,7 +123,8 @@ defmodule SchoolWeb.PdfController do
 
     student_class =
       Repo.all(
-        from(s in School.Affairs.Student,
+        from(
+          s in School.Affairs.Student,
           left_join: g in School.Affairs.StudentClass,
           on: s.id == g.sudent_id,
           left_join: k in School.Affairs.Class,
@@ -145,14 +149,16 @@ defmodule SchoolWeb.PdfController do
 
     subject =
       Repo.all(
-        from(s in School.Affairs.Subject,
+        from(
+          s in School.Affairs.Subject,
           where: s.institution_id == ^conn.private.plug_session["institution_id"]
         )
       )
 
     student_class =
       Repo.all(
-        from(s in School.Affairs.Student,
+        from(
+          s in School.Affairs.Student,
           left_join: g in School.Affairs.StudentClass,
           on: s.id == g.sudent_id,
           left_join: k in School.Affairs.Class,
@@ -172,7 +178,8 @@ defmodule SchoolWeb.PdfController do
 
     list_exam =
       Repo.all(
-        from(s in School.Affairs.ExamMaster,
+        from(
+          s in School.Affairs.ExamMaster,
           where:
             s.level_id == ^class_info.level_id and
               s.institution_id == ^conn.private.plug_session["institution_id"] and
@@ -274,7 +281,8 @@ defmodule SchoolWeb.PdfController do
 
                       grades =
                         Repo.all(
-                          from(g in School.Affairs.ExamGrade,
+                          from(
+                            g in School.Affairs.ExamGrade,
                             where:
                               g.institution_id == ^conn.private.plug_session["institution_id"] and
                                 g.exam_master_id == ^a.exam_master_id
@@ -574,7 +582,8 @@ defmodule SchoolWeb.PdfController do
 
                           absent =
                             Repo.all(
-                              from(s in School.Affairs.ExamAttendance,
+                              from(
+                                s in School.Affairs.ExamAttendance,
                                 where:
                                   s.student_id == ^coming.student_id and
                                     s.semester_id == ^coming.semester and
@@ -590,7 +599,8 @@ defmodule SchoolWeb.PdfController do
                                 for total_grade <- items do
                                   grades =
                                     Repo.all(
-                                      from(g in School.Affairs.ExamGrade,
+                                      from(
+                                        g in School.Affairs.ExamGrade,
                                         where:
                                           g.institution_id ==
                                             ^conn.private.plug_session["institution_id"] and
@@ -668,7 +678,8 @@ defmodule SchoolWeb.PdfController do
 
                           absent =
                             Repo.all(
-                              from(s in School.Affairs.ExamAttendance,
+                              from(
+                                s in School.Affairs.ExamAttendance,
                                 where:
                                   s.student_id == ^coming.student_id and
                                     s.semester_id == ^coming.semester and
@@ -1003,7 +1014,8 @@ defmodule SchoolWeb.PdfController do
 
                           absent =
                             Repo.all(
-                              from(s in School.Affairs.ExamAttendance,
+                              from(
+                                s in School.Affairs.ExamAttendance,
                                 where:
                                   s.student_id == ^coming.student_id and
                                     s.semester_id == ^coming.semester and
@@ -1019,7 +1031,8 @@ defmodule SchoolWeb.PdfController do
                                 for total_grade <- items do
                                   grades =
                                     Repo.all(
-                                      from(g in School.Affairs.ExamGrade,
+                                      from(
+                                        g in School.Affairs.ExamGrade,
                                         where:
                                           g.institution_id ==
                                             ^conn.private.plug_session["institution_id"] and
@@ -1096,7 +1109,8 @@ defmodule SchoolWeb.PdfController do
 
                           absent =
                             Repo.all(
-                              from(s in School.Affairs.ExamAttendance,
+                              from(
+                                s in School.Affairs.ExamAttendance,
                                 where:
                                   s.student_id == ^coming.student_id and
                                     s.semester_id == ^coming.semester and
@@ -1242,7 +1256,8 @@ defmodule SchoolWeb.PdfController do
                       9 ->
                         absent =
                           Repo.all(
-                            from(s in School.Affairs.ExamAttendance,
+                            from(
+                              s in School.Affairs.ExamAttendance,
                               left_join: k in School.Affairs.StudentClass,
                               on: s.student_id == k.sudent_id,
                               where:
@@ -1260,7 +1275,8 @@ defmodule SchoolWeb.PdfController do
                       10 ->
                         absent =
                           Repo.all(
-                            from(s in School.Affairs.ExamAttendance,
+                            from(
+                              s in School.Affairs.ExamAttendance,
                               left_join: k in School.Affairs.StudentClass,
                               on: s.student_id == k.sudent_id,
                               where:
@@ -1458,7 +1474,8 @@ defmodule SchoolWeb.PdfController do
 
                           absent =
                             Repo.all(
-                              from(s in School.Affairs.ExamAttendance,
+                              from(
+                                s in School.Affairs.ExamAttendance,
                                 where:
                                   s.student_id == ^item.student_id and
                                     s.semester_id == ^item.semester and
@@ -1502,7 +1519,8 @@ defmodule SchoolWeb.PdfController do
 
                           absent =
                             Repo.all(
-                              from(s in School.Affairs.ExamAttendance,
+                              from(
+                                s in School.Affairs.ExamAttendance,
                                 where:
                                   s.student_id == ^item.student_id and
                                     s.semester_id == ^item.semester and
@@ -1688,7 +1706,8 @@ defmodule SchoolWeb.PdfController do
 
                           absent =
                             Repo.all(
-                              from(s in School.Affairs.ExamAttendance,
+                              from(
+                                s in School.Affairs.ExamAttendance,
                                 where:
                                   s.student_id == ^item.student_id and
                                     s.semester_id == ^item.semester and
@@ -1732,7 +1751,8 @@ defmodule SchoolWeb.PdfController do
 
                           absent =
                             Repo.all(
-                              from(s in School.Affairs.ExamAttendance,
+                              from(
+                                s in School.Affairs.ExamAttendance,
                                 where:
                                   s.student_id == ^item.student_id and
                                     s.semester_id == ^item.semester and
@@ -2038,7 +2058,8 @@ defmodule SchoolWeb.PdfController do
 
     exist =
       Repo.all(
-        from(s in School.Affairs.MarkSheetTemp,
+        from(
+          s in School.Affairs.MarkSheetTemp,
           where:
             s.institution_id == ^conn.private.plug_session["institution_id"] and
               s.class == ^class_name and s.year == ^Integer.to_string(semester.year) and
@@ -2048,7 +2069,8 @@ defmodule SchoolWeb.PdfController do
 
     if exist != [] do
       Repo.delete_all(
-        from(s in School.Affairs.MarkSheetTemp,
+        from(
+          s in School.Affairs.MarkSheetTemp,
           where:
             s.institution_id == ^conn.private.plug_session["institution_id"] and
               s.class == ^class_name and s.year == ^Integer.to_string(semester.year) and
@@ -2081,13 +2103,15 @@ defmodule SchoolWeb.PdfController do
     semester = Repo.get_by(School.Affairs.Semester, id: semester_id)
 
     class_info =
-      Repo.get_by(School.Affairs.Class,
+      Repo.get_by(
+        School.Affairs.Class,
         name: class_name,
         institution_id: conn.private.plug_session["institution_id"]
       )
 
     class_teacher =
-      Repo.get_by(School.Affairs.Teacher,
+      Repo.get_by(
+        School.Affairs.Teacher,
         id: class_info.teacher_id,
         institution_id: conn.private.plug_session["institution_id"]
       )
@@ -2097,7 +2121,8 @@ defmodule SchoolWeb.PdfController do
 
     data =
       Repo.all(
-        from(s in School.Affairs.MarkSheetTemp,
+        from(
+          s in School.Affairs.MarkSheetTemp,
           where:
             s.institution_id == ^conn.private.plug_session["institution_id"] and
               s.class == ^class_name and s.year == ^Integer.to_string(semester.year) and
@@ -2147,8 +2172,10 @@ defmodule SchoolWeb.PdfController do
       pdf_binary =
         PdfGenerator.generate_binary!(
           pdf_params["html"],
-          size: "A4",
+          size: "B5",
           shell_params: [
+            "--orientation",
+            "Landscape",
             "--margin-left",
             "5",
             "--margin-right",
@@ -2163,9 +2190,23 @@ defmodule SchoolWeb.PdfController do
           delete_temporary: true
         )
 
+      # put filename... 
       conn
       |> put_resp_header("Content-Type", "application/pdf")
+      |> put_resp_header(
+        "content-disposition",
+        "attachment; filename=\"#{institute.name}_ReportCard_#{class_name}_sem_#{semester.sem}.pdf\""
+      )
       |> resp(200, pdf_binary)
+
+      # render(
+      #   conn,
+      #   school,
+      #   a: data,
+      #   list_exam: list_exam,
+      #   institute: institute,
+      #   class_teacher: class_teacher
+      # )
     end
   end
 
@@ -2471,7 +2512,8 @@ defmodule SchoolWeb.PdfController do
   def user_login_report(conn, params) do
     users =
       Repo.all(
-        from(s in User,
+        from(
+          s in User,
           left_join: g in Settings.UserAccess,
           on: s.id == g.user_id,
           where: g.institution_id == ^conn.private.plug_session["institution_id"]
@@ -2521,7 +2563,8 @@ defmodule SchoolWeb.PdfController do
 
   def report_card_personal_summary(conn, params) do
     semester =
-      Repo.get_by(Semester,
+      Repo.get_by(
+        Semester,
         id: params["semester"],
         institution_id: conn.private.plug_session["institution_id"]
       )
@@ -2546,7 +2589,8 @@ defmodule SchoolWeb.PdfController do
         for list <- lists do
           all =
             Repo.all(
-              from(g in School.Affairs.TeacherAttendance,
+              from(
+                g in School.Affairs.TeacherAttendance,
                 left_join: k in School.Affairs.Teacher,
                 on: k.id == g.teacher_id,
                 where:
@@ -2689,7 +2733,8 @@ defmodule SchoolWeb.PdfController do
 
           all2 =
             Repo.all(
-              from(g in School.Affairs.TeacherAbsent,
+              from(
+                g in School.Affairs.TeacherAbsent,
                 left_join: k in School.Affairs.Teacher,
                 on: k.id == g.teacher_id,
                 where:
@@ -2780,7 +2825,8 @@ defmodule SchoolWeb.PdfController do
 
   def report_card_summary(conn, params) do
     semester =
-      Repo.get_by(Semester,
+      Repo.get_by(
+        Semester,
         id: params["semester"],
         institution_id: conn.private.plug_session["institution_id"]
       )
@@ -2804,7 +2850,8 @@ defmodule SchoolWeb.PdfController do
       for teacher <- teachers do
         all =
           Repo.all(
-            from(g in School.Affairs.TeacherAttendance,
+            from(
+              g in School.Affairs.TeacherAttendance,
               left_join: k in School.Affairs.Teacher,
               on: k.id == g.teacher_id,
               where:
@@ -2824,7 +2871,8 @@ defmodule SchoolWeb.PdfController do
 
         all2 =
           Repo.all(
-            from(g in School.Affairs.TeacherAbsent,
+            from(
+              g in School.Affairs.TeacherAbsent,
               left_join: k in School.Affairs.Teacher,
               on: k.id == g.teacher_id,
               where:
@@ -2912,7 +2960,8 @@ defmodule SchoolWeb.PdfController do
 
     total_attende =
       Repo.all(
-        from(g in School.Affairs.TeacherAttendance,
+        from(
+          g in School.Affairs.TeacherAttendance,
           left_join: k in School.Affairs.Teacher,
           on: k.id == g.teacher_id,
           where:
@@ -2933,7 +2982,8 @@ defmodule SchoolWeb.PdfController do
 
     total_absent =
       Repo.all(
-        from(g in School.Affairs.TeacherAbsent,
+        from(
+          g in School.Affairs.TeacherAbsent,
           left_join: k in School.Affairs.Teacher,
           on: k.id == g.teacher_id,
           where:
@@ -3899,7 +3949,8 @@ defmodule SchoolWeb.PdfController do
         subject_code = item |> elem(0)
 
         subject =
-          Repo.get_by(School.Affairs.Subject,
+          Repo.get_by(
+            School.Affairs.Subject,
             code: subject_code,
             institution_id: conn.private.plug_session["institution_id"]
           )
@@ -3978,7 +4029,8 @@ defmodule SchoolWeb.PdfController do
 
     subject_all =
       Repo.all(
-        from(s in School.Affairs.Subject,
+        from(
+          s in School.Affairs.Subject,
           where:
             s.institution_id == ^conn.private.plug_session["institution_id"] and s.with_mark == 1,
           select: s.code
@@ -4271,7 +4323,8 @@ defmodule SchoolWeb.PdfController do
         datas = item |> elem(1)
 
         subject =
-          Repo.get_by(School.Affairs.Subject,
+          Repo.get_by(
+            School.Affairs.Subject,
             code: subject_code,
             institution_id: conn.private.plug_session["institution_id"]
           )
@@ -4352,7 +4405,8 @@ defmodule SchoolWeb.PdfController do
 
     subject_all =
       Repo.all(
-        from(s in School.Affairs.Subject,
+        from(
+          s in School.Affairs.Subject,
           where:
             s.institution_id == ^conn.private.plug_session["institution_id"] and s.with_mark == 1,
           select: s.code
@@ -5264,7 +5318,8 @@ defmodule SchoolWeb.PdfController do
         Repo.get_by(School.Settings.Institution, id: conn.private.plug_session["institution_id"])
 
       semester =
-        Repo.get_by(School.Affairs.Semester,
+        Repo.get_by(
+          School.Affairs.Semester,
           id: semester_id,
           institution_id: conn.private.plug_session["institution_id"]
         )
@@ -5415,7 +5470,8 @@ defmodule SchoolWeb.PdfController do
         Repo.get_by(School.Settings.Institution, id: conn.private.plug_session["institution_id"])
 
       semester =
-        Repo.get_by(School.Affairs.Semester,
+        Repo.get_by(
+          School.Affairs.Semester,
           id: semester_id,
           institution_id: conn.private.plug_session["institution_id"]
         )
@@ -5889,7 +5945,8 @@ defmodule SchoolWeb.PdfController do
 
     mark =
       Repo.all(
-        from(s in School.Affairs.AssessmentMark,
+        from(
+          s in School.Affairs.AssessmentMark,
           where:
             s.institution_id == ^inst_id and s.class_id == ^params["class"] and
               s.semester_id == ^params["semester"]
@@ -5898,7 +5955,8 @@ defmodule SchoolWeb.PdfController do
       |> Enum.group_by(fn x -> x.student_id end)
 
     semester =
-      Repo.get_by(School.Affairs.Semester,
+      Repo.get_by(
+        School.Affairs.Semester,
         id: params["semester"],
         institution_id: conn.private.plug_session["institution_id"]
       )
@@ -5948,7 +6006,8 @@ defmodule SchoolWeb.PdfController do
 
     teacher =
       Repo.all(
-        from(s in School.Affairs.Teacher,
+        from(
+          s in School.Affairs.Teacher,
           where: s.institution_id == ^inst_id and s.is_delete != 1,
           select: %{name: s.name, cname: s.cname},
           order_by: [asc: s.rank, asc: s.name]
