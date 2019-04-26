@@ -1663,25 +1663,17 @@ else
 
 
    %>
-
-         
-<p><%= all_datar |> elem(1) %></p>
-
-                                <%= if all_datar |> elem(1) |> Integer.is_even do %>
-                                 <div class="col-md-6" style="position: absolute;">
-               
+                  <%= if all_datar |> elem(1) |> Integer.is_odd do %>
+                    <div class="col-md-6" style="position: relative;">
                       <% else %>
-                           <div class="col-md-6" style="position: relative;  left: 1070px">
+                       <div class="col-md-6" style="position: relative">
                   <% end %>
          
 
 
 
-
-
-
  
-                <table class="display"  style="font-size: 22px" width="45%">
+              <table >
 
                 <tr align="center">
                 
@@ -2627,17 +2619,13 @@ else
               </table>
             </div>
 
-         
-             
-                           <%= if all_datar |> elem(1) |> Integer.is_odd do %>
-                           </div>
-                     <div style="page-break-before: always;"></div>
-                     
-                     <%else %>
-                   </div>
+                  <%= if all_datar |> elem(1) |> Integer.is_odd do %>
+                    </div>
+               
+                  <div style="page-break-before: always;"></div>
+                
                   <% end %>
-         
-                  
+                   </div>
             <% end %>
 
             </body>

@@ -2109,6 +2109,13 @@ defmodule SchoolWeb.PdfController do
         institution_id: conn.private.plug_session["institution_id"]
       )
 
+    level =
+      Repo.get_by(
+        School.Affairs.Level,
+        id: class_info.level_id,
+        institution_id: conn.private.plug_session["institution_id"]
+      )
+
     class_teacher =
       Repo.get_by(
         School.Affairs.Teacher,
@@ -2126,7 +2133,8 @@ defmodule SchoolWeb.PdfController do
           where:
             s.institution_id == ^conn.private.plug_session["institution_id"] and
               s.class == ^class_name and s.year == ^Integer.to_string(semester.year) and
-              s.semester == ^Integer.to_string(semester.sem)
+              s.semester == ^Integer.to_string(semester.sem),
+          order_by: [asc: s.name]
         )
       )
 
@@ -2162,6 +2170,7 @@ defmodule SchoolWeb.PdfController do
           SchoolWeb.PdfView,
           school,
           a: data,
+          level: level,
           list_exam: list_exam,
           institute: institute,
           class_teacher: class_teacher
@@ -2170,25 +2179,45 @@ defmodule SchoolWeb.PdfController do
       pdf_params = %{"html" => html}
 
       pdf_binary =
-        PdfGenerator.generate_binary!(
-          pdf_params["html"],
-          size: "B5",
-          shell_params: [
-            "--orientation",
-            "Landscape",
-            "--margin-left",
-            "5",
-            "--margin-right",
-            "5",
-            "--margin-top",
-            "5",
-            "--margin-bottom",
-            "5",
-            "--encoding",
-            "utf-8"
-          ],
-          delete_temporary: true
-        )
+        if id == 2 do
+          PdfGenerator.generate_binary!(
+            pdf_params["html"],
+            size: "B5",
+            shell_params: [
+              "--orientation",
+              "Landscape",
+              "--margin-left",
+              "5",
+              "--margin-right",
+              "5",
+              "--margin-top",
+              "5",
+              "--margin-bottom",
+              "5",
+              "--encoding",
+              "utf-8"
+            ],
+            delete_temporary: true
+          )
+        else
+          PdfGenerator.generate_binary!(
+            pdf_params["html"],
+            size: "A4",
+            shell_params: [
+              "--margin-left",
+              "5",
+              "--margin-right",
+              "5",
+              "--margin-top",
+              "5",
+              "--margin-bottom",
+              "5",
+              "--encoding",
+              "utf-8"
+            ],
+            delete_temporary: true
+          )
+        end
 
       # put filename... 
       conn
@@ -2201,11 +2230,13 @@ defmodule SchoolWeb.PdfController do
 
       # render(
       #   conn,
-      #   school,
+      #   "report_cards_sk.html",
       #   a: data,
+      #   level: level,
       #   list_exam: list_exam,
       #   institute: institute,
-      #   class_teacher: class_teacher
+      #   class_teacher: class_teacher,
+      #   layout: {SchoolWeb.LayoutView, "blank.html"}
       # )
     end
   end

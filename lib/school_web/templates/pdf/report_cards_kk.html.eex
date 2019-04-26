@@ -1602,7 +1602,7 @@ else
 <body>
 
 
-  <table  class="display" style="white-space: nowrap;" width="100%">
+  <table  class="table" style="white-space: nowrap;" width="100%">
 
     <tr align="center" style="height: auto; ">
    
@@ -1891,24 +1891,25 @@ else
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
  <tr>
-  <td rowspan="2"  style="margin: 3px; padding: 3px;" align="left"><BR> <b>评语 <br> Komen</b><BR></td>
-   <td style="margin: 3px; padding: 3px;">第一学期</td>
-  <td colspan="4" align="left" style="margin: 3px; padding: 3px;" >
+  <td rowspan="2"  style="margin: 3px; padding: 3px;" align="left"><b>评语 <br> Komen</b></td>
+   <td >第一学期</td>
+  <td colspan="4" align="left" style="white-space: nowrap;" >
 
     <% semester = Repo.all(from s in School.Affairs.Semester,where: s.year==^profile.year and s.institution_id==^@institute.id) %>
+    <% no= semester|>Enum.count %>
+    <% {semester1,semester2}=if no == 1 do
 
-    <% {semester1,semester2}=if semester|>Enum.count == 1 do
+      semester1= semester|>Enum.fetch!(0)
+      semester2=""
 
-      semester= semester|>Enum.fetch!(0)
-
-      {semester, ""}
+      {semester1, semester2}
 
     else
 
- semester= semester|>Enum.fetch!(0)
+ semester1= semester|>Enum.fetch!(0)
   semester2= semester|>Enum.fetch!(1)
 
-      {semester,semester2}
+      {semester1,semester2}
 
       
     end %>
@@ -1978,8 +1979,8 @@ else
   
  </tr>
  <tr>
-   <td style="margin: 3px; padding: 3px;">第二学期</td>
-  <td colspan="5" align="left" style="margin: 3px; padding: 3px;" >
+   <td>第二学期</td>
+   <td colspan="4" align="left" style="white-space: nowrap;" >
  <%= if semester2 != ""  do %>
 
       <% student_comment = Repo.get_by(School.Affairs.StudentComment, student_id: profile.stuid,semester_id: semester2.id) %>

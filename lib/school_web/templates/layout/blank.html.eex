@@ -1,0 +1,186 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+   <meta name="description" content="Bootstrap Admin App + jQuery">
+   <meta name="keywords" content="app, responsive, jquery, bootstrap, dashboard, admin">
+
+   <link rel="icon" type="image/a-icon" href="/img/outside2.png" >
+
+   <title>SSMS</title>
+   <!-- =============== VENDOR STYLES ===============-->
+   <!-- FONT AWESOME-->
+      <link rel="stylesheet" href="/vendor/datatables-colvis/css/dataTables.colVis.css">
+   <link rel="stylesheet" href="/vendor/@fortawesome/fontawesome-free-webfonts/css/fa-brands.css">
+   <link rel="stylesheet" href="/vendor/@fortawesome/fontawesome-free-webfonts/css/fa-regular.css">
+   <link rel="stylesheet" href="/vendor/@fortawesome/fontawesome-free-webfonts/css/fa-solid.css">
+   <link rel="stylesheet" href="/vendor/@fortawesome/fontawesome-free-webfonts/css/fontawesome.css">
+   <!-- SIMPLE LINE ICONS-->
+   <link rel="stylesheet" href="/vendor/simple-line-icons/css/simple-line-icons.css">
+   <!-- ANIMATE.CSS-->
+   <link rel="stylesheet" href="/vendor/animate.css/animate.css">
+   <!-- WHIRL (spinners)-->
+   <link rel="stylesheet" href="/vendor/whirl/dist/whirl.css">
+   <!-- =============== PAGE VENDOR STYLES ===============-->
+
+
+      <link rel="stylesheet" href="/vendor/jquery-bootgrid/dist/jquery.bootgrid.css">
+      <!-- DATETIMEPICKER-->
+   <link rel="stylesheet" href="/vendor/bootstrap-datepicker/dist/css/bootstrap-datepicker.css">
+   <link rel="stylesheet" href="/vendor/datetimepicker/css/jquery.timepicker.css">
+    <link rel="stylesheet" href="/vendor/sweetalert/dist/sweetalert.css">
+   <!-- =============== BOOTSTRAP STYLES ===============-->
+   <link rel="stylesheet" href="/css/bootstrap.css" id="bscss">
+
+   <!-- =============== APP STYLES ===============-->
+   <link rel="stylesheet" href="/css/app_angle.css" id="maincss">
+       <script type="text/javascript">
+      
+      window.userToken = "<%= assigns[:user_token] %>";
+      <%= if @conn.private.plug_session["user_id"] == nil do %>
+        window.currentUser = "lobby"
+      <% else %>
+        window.currentUser = "<%= @conn.private.plug_session["user_id"] %>";
+        window.currentInstitute = "<%= @conn.private.plug_session["institution_id"] %>";
+        window.currentSemester = "<%= @conn.private.plug_session["semester_id"] %>";
+      <% end %>
+    </script>
+
+
+
+   <!-- =============== VENDOR SCRIPTS ===============-->
+   <!-- MODERNIZR-->
+   <script src="/vendor/modernizr/modernizr.custom.js"></script>
+   <!-- JQUERY-->
+   <script src="/vendor/jquery/dist/jquery.js"></script>
+   <!-- BOOTSTRAP-->
+   <script src="/vendor/popper.js/dist/umd/popper.js"></script>
+   <script src="/vendor/bootstrap/dist/js/bootstrap.js"></script>
+   <!-- STORAGE API-->
+   <script src="/vendor/js-storage/js.storage.js"></script>
+   <!-- JQUERY EASING-->
+   <script src="/vendor/jquery.easing/jquery.easing.js"></script>
+   <!-- ANIMO-->
+   <script src="/vendor/animo/animo.js"></script>
+     <script src="/vendor/slimScroll/jquery.slimscroll.min.js"></script>
+   <!-- SCREENFULL-->
+   <script src="/vendor/screenfull/dist/screenfull.js"></script>
+   <!-- LOCALIZE-->
+   <script src="/vendor/jquery-localize/dist/jquery.localize.js"></script>
+
+   <script src="/vendor/demo/demo-rtl.js"></script>
+   <!-- =============== PAGE VENDOR SCRIPTS ===============-->
+   <script src="/vendor/demo/demo-panels.js"></script>
+
+  <script src="/vendor/sweetalert/dist/sweetalert.min.js"></script>
+   <link rel="stylesheet" href="/vendor/datatables.net-bs4/css/dataTables.bootstrap4.css">
+   <link rel="stylesheet" href="/vendor/datatables.net-keytable-bs/css/keyTable.bootstrap.css">
+   <link rel="stylesheet" href="/vendor/datatables.net-responsive-bs/css/responsive.bootstrap.css">
+
+  <script src="/vendor/datatables-colvis/js/dataTables.colVis.js"></script>
+   <script src="/vendor/datatables-responsive/js/dataTables.responsive.js"></script>
+     
+   <!-- =============== PAGE VENDOR SCRIPTS ===============-->
+            <script src="/vendor/jquery-bootgrid/dist/jquery.bootgrid.js"></script>
+   <script src="/vendor/jquery-bootgrid/dist/jquery.bootgrid.fa.js"></script>
+
+
+    <script src="/vendor/components-jqueryui/jquery-ui.js"></script>
+    <script src="/vendor/jqueryui-touch-punch/jquery.ui.touch-punch.js"></script>
+   <!-- =============== APP SCRIPTS ===============-->
+   <script src="/js/app_angle.js"></script>
+    <script type="text/javascript">
+
+    $(document).ready(function(){
+  
+    <%= cond do %>
+    <% get_flash(@conn, :info) != nil -> %>
+        $.notify({message: '<%= get_flash(@conn, :info) %>'},{type: 'success'});
+    <% get_flash(@conn, :error) != nil -> %>
+        $.notify({message: '<%= get_flash(@conn, :error) %>'},{type: 'danger'});
+    <% true -> %>
+
+    <% end %>
+      
+    })
+    </script>
+    <script src="<%= static_path(@conn, "/js/phoenix.js") %>"></script>
+    <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
+    <script src="<%= static_path(@conn, "/js/library.js") %>"></script>
+    <link rel="stylesheet" href="/css/richtext.min.css">
+    <script src="/js/jquery.richtext.min.js"></script>
+<script src="/js/jquery.thooClock.js"></script>
+<script src="/js/jspdf.min.js"></script>
+<script src="/vendor/datatables.net-bs4/jquery.dataTables.js"></script>
+<script src="/vendor/datatables.net-bs4/dataTables.bootstrap4.js"></script>
+<script src="/vendor/datatables.net-bs4/dataTables.buttons.js"></script>
+<script src="/vendor/datatables.net-bs4/buttons.bootstrap.js"></script>
+<script src="/vendor/datatables.net-bs4/buttons.colVis.js"></script>
+<script src="/vendor/datatables.net-bs4/buttons.flash.js"></script>
+<script src="/vendor/datatables.net-bs4/buttons.html5.js"></script>
+<script src="/vendor/datatables.net-bs4/buttons.print.js"></script>
+<script src="/vendor/datatables.net-bs4/dataTables.keyTable.js"></script>
+<script src="/vendor/datatables.net-bs4/dataTables.responsive.js"></script>
+<script src="/vendor/datatables.net-bs4/responsive.bootstrap.js"></script>    
+<!-- SPARKLINE-->
+   <script src="/vendor/jquery-sparkline/jquery.sparkline.js"></script>
+ <script src="/vendor/easy-pie-chart/dist/jquery.easypiechart.js"></script>
+<link rel="stylesheet" type="text/css" href="/vendor/jquery_datetimepicker/jquery.datetimepicker.min.css"/ >
+<script src="/vendor/jquery_datetimepicker/jquery.datetimepicker.full.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/vendor/introjs.css"/ >
+<script src="/vendor/intro.js"></script>
+      <%= if @conn.private.plug_session["style"] == nil do %>
+        <link id="autoloaded-stylesheet" rel="stylesheet" href="/css/theme-a.css">
+      <% else %>
+<link id="autoloaded-stylesheet" rel="stylesheet" href="<%= @conn.private.plug_session["style"]%>">
+      <% end %>
+
+</head>
+
+<body>
+<script>
+  window.fbMessengerPlugins = window.fbMessengerPlugins || {
+    init: function () {
+      FB.init({
+        appId            : '1678638095724206',
+        autoLogAppEvents : true,
+        xfbml            : true,
+        version          : 'v3.0'
+      });
+    }, callable: []
+  };
+  window.fbAsyncInit = window.fbAsyncInit || function () {
+    window.fbMessengerPlugins.callable.forEach(function (item) { item(); });
+    window.fbMessengerPlugins.init();
+  };
+  setTimeout(function () {
+    (function (d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) { return; }
+      js = d.createElement(s);
+      js.id = id;
+      js.src = "//connect.facebook.net/en_US/sdk/xfbml.customerchat.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+  }, 0);
+</script>
+
+<div
+  class="fb-customerchat"
+  page_id="340744706488937"
+  ref="">
+</div>
+   <div class="wrapper">
+
+ <%= render @view_module, @view_template, assigns %>
+ 
+      
+   </div>
+
+
+</body>
+
+</html>
