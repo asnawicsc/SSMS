@@ -511,6 +511,7 @@ defmodule SchoolWeb.ExamController do
                       left_join: s in School.Affairs.Class,
                       on: s.level_id == m.level_id,
                       left_join: k in School.Affairs.Teacher,
+                      on: k.id == s.teacher_id,
                       where:
                         m.semester_id == ^conn.private.plug_session["semester_id"] and
                           s.institution_id == ^conn.private.plug_session["institution_id"] and

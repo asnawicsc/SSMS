@@ -1666,7 +1666,7 @@ else
                   <%= if all_datar |> elem(1) |> Integer.is_odd do %>
                     <div class="col-md-6" style="position: relative; ">
                       <% else %>
-                       <div class="col-md-6" style="position: absolute; left: 1010px;">
+                       <div class="col-md-6" style="position: absolute; left: 1100px;">
                   <% end %>
          
 
