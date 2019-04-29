@@ -3032,11 +3032,17 @@ defmodule SchoolWeb.UserChannel do
     {:noreply, socket}
   end
 
-  def handle_in("report_cocurriculum", payload, socket) do
+  def handle_in("all_report_cocurriculum", payload, socket) do
     cocurriculum = payload["cocurriculum"]
-
     co_level = payload["co_level"]
+    class = payload["class"]
     co_semester = payload["co_semester"]
+    sort_by = payload["sort_id"]
+    sort_by = String.to_integer(sort_by)
+    type = payload["type"]
+    type = String.to_integer(type)
+
+    # IO.inspect(sort_by)
 
     sem = Repo.get(Semester, co_semester)
 
@@ -3054,27 +3060,55 @@ defmodule SchoolWeb.UserChannel do
             student_id: s.student_id,
             chinese_name: a.chinese_name,
             name: a.name,
-            mark: s.mark
+            mark: s.mark,
+            gender: a.sex,
+            race: a.race
           }
         )
       )
 
     sc =
-      Repo.all(
-        from(
-          s in Student,
-          left_join: sc in StudentClass,
-          on: sc.sudent_id == s.id,
-          left_join: c in Class,
-          on: c.id == sc.class_id,
-          where: sc.institute_id == ^sem.institution_id and sc.semester_id == ^co_semester,
-          select: %{
-            student_id: s.id,
-            class: c.name,
-            level_id: sc.level_id
-          }
-        )
-      )
+      if class == [] do
+        sc =
+          Repo.all(
+            from(
+              s in Student,
+              left_join: sc in StudentClass,
+              on: sc.sudent_id == s.id,
+              left_join: c in Class,
+              on: c.id == sc.class_id,
+              where:
+                sc.institute_id == ^sem.institution_id and
+                  sc.semester_id == ^co_semester,
+              select: %{
+                student_id: s.id,
+                class: c.name,
+                class_id: c.id,
+                level_id: sc.level_id
+              }
+            )
+          )
+      else
+        sc =
+          Repo.all(
+            from(
+              s in Student,
+              left_join: sc in StudentClass,
+              on: sc.sudent_id == s.id,
+              left_join: c in Class,
+              on: c.id == sc.class_id,
+              where:
+                c.id in ^class and sc.institute_id == ^sem.institution_id and
+                  sc.semester_id == ^co_semester,
+              select: %{
+                student_id: s.id,
+                class: c.name,
+                class_id: c.id,
+                level_id: sc.level_id
+              }
+            )
+          )
+      end
 
     students =
       for student <- students1 do
@@ -3082,6 +3116,7 @@ defmodule SchoolWeb.UserChannel do
           b = sc |> Enum.filter(fn x -> x.student_id == student.student_id end) |> hd()
 
           student = Map.put(student, :class_name, b.class)
+          student = Map.put(student, :class_id, b.class_id)
           student = Map.put(student, :level_id, b.level_id)
           student
         else
@@ -3091,6 +3126,8 @@ defmodule SchoolWeb.UserChannel do
         end
       end
 
+    students = students |> Enum.filter(fn x -> x.class_name != "no class assigned" end)
+
     students =
       if co_level != "Choose a level" do
         students |> Enum.filter(fn x -> x.level_id == String.to_integer(co_level) end)
@@ -3098,18 +3135,105 @@ defmodule SchoolWeb.UserChannel do
         students
       end
 
-    html =
-      if students != [] do
-        Phoenix.View.render_to_string(
-          SchoolWeb.CoCurriculumView,
-          "report_student_co.html",
-          students: students,
-          cocurriculum: cocurriculum,
-          co_semester: co_semester,
-          co_level: co_level
-        )
+    # IO.inspect(students)
+    students =
+      if sort_by == 3 do
+        students |> Enum.sort_by(fn d -> d.name end)
       else
-        "No Data inside..Please choose other."
+        students
+      end
+
+    students =
+      if sort_by == 2 do
+        students |> Enum.sort_by(fn d -> {d.class_name, d.name} end)
+      else
+        students
+      end
+
+    students =
+      if sort_by == 1 do
+        students |> Enum.sort_by(fn d -> {d.class_name, d.id} end)
+      else
+        students
+      end
+
+    summary = %{}
+
+    summary =
+      if type == 1 do
+        male = Enum.filter(students, fn x -> x.gender == "Male" end)
+        male_chinese = Enum.count(male, fn x -> x.race == "Chinese" end)
+        male_malay = Enum.count(male, fn x -> x.race == "Malay" end)
+        male_indian = Enum.count(male, fn x -> x.race == "Indian" end)
+        #  male_other = Enum.count(male, fn x -> x.race == "other" end)
+
+        female = Enum.filter(students, fn x -> x.gender == "Female" end)
+        female_chinese = Enum.count(female, fn x -> x.race == "Chinese" end)
+        female_malay = Enum.count(female, fn x -> x.race == "Malay" end)
+        female_indian = Enum.count(female, fn x -> x.race == "Indian" end)
+        # female_other = Enum.count(female, fn x -> x.race == "other" end)
+        tot_chinese = male_chinese + female_chinese
+        tot_indian = male_indian + female_indian
+        tot_malay = male_malay + female_malay
+        tot_std = tot_chinese + tot_malay + tot_indian
+
+        # summary = Map.put(summary, :male, male)
+        summary = Map.put(summary, :male_chinese, male_chinese)
+        summary = Map.put(summary, :male_malay, male_malay)
+        summary = Map.put(summary, :male_indian, male_indian)
+        # Map.put(summary, :male_other, male_other)
+
+        # summary = Map.put(summary, :female, female)
+        summary = Map.put(summary, :female_chinese, female_chinese)
+        summary = Map.put(summary, :female_malay, female_malay)
+        summary = Map.put(summary, :female_indian, female_indian)
+
+        summary = Map.put(summary, :tot_chinese, tot_chinese)
+        summary = Map.put(summary, :tot_indian, tot_indian)
+        summary = Map.put(summary, :tot_malay, tot_malay)
+        summary = Map.put(summary, :tot_std, tot_std)
+
+        # Map.put(summary, :female_other, female_other)
+        summary
+      else
+        summary
+      end
+
+    html =
+      if type == 1 do
+        if students != [] do
+          Phoenix.View.render_to_string(
+            SchoolWeb.CoCurriculumView,
+            "report_student_co.html",
+            students: students,
+            class: class,
+            sort_by: sort_by,
+            cocurriculum: cocurriculum,
+            co_semester: co_semester,
+            co_level: co_level,
+            type: type,
+            summary: summary
+          )
+        else
+          "No Data inside..Please choose other."
+        end
+      else
+        if students != [] do
+          Phoenix.View.render_to_string(
+            SchoolWeb.CoCurriculumView,
+            "report2_student_co.html",
+            students: students,
+            class: class,
+            sort_by: sort_by,
+            cocurriculum: cocurriculum,
+            co_semester: co_semester,
+            co_level: co_level,
+            type: type,
+            summary: summary
+          )
+        else
+          "No Data inside..Please choose other."
+        end
       end
 
     {:reply, {:ok, %{html: html}}, socket}
@@ -4085,7 +4209,9 @@ defmodule SchoolWeb.UserChannel do
           "semester_id" => semester_id,
           "coco_id" => coco_id,
           "user_id" => user_id,
-          "institution_id" => institution_id
+          "institution_id" => institution_id,
+          "category" => category,
+          "sub_category" => sub_category
         },
         socket
       ) do
@@ -4095,7 +4221,9 @@ defmodule SchoolWeb.UserChannel do
     case Affairs.create_student_cocurriculum(%{
            cocurriculum_id: coco_id,
            semester_id: semester_id,
-           student_id: student_id
+           student_id: student_id,
+           category: category,
+           sub_category: sub_category
          }) do
       {:ok, sc} ->
         students = Affairs.list_student_cocurriculum(coco_id, semester_id)
@@ -4111,12 +4239,13 @@ defmodule SchoolWeb.UserChannel do
             Repo.get_by(
               School.Affairs.StudentCocurriculum,
               student_id: student_id,
-              semester_id: semester_id
+              semester_id: semester_id,
+              category: category
             ).cocurriculum_id
           )
 
         {:reply,
-         {:error, %{name: student.name, coco: coco.description, ex_coco: ex_coco.description}},
+         {:error, %{name: student.name, coco: coco.sub_category, ex_coco: ex_coco.sub_category}},
          socket}
     end
   end

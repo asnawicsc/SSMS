@@ -546,6 +546,7 @@ defmodule SchoolWeb.Router do
     )
 
     resources("/teacher_attendance", TeacherAttendanceController)
+    resources("/student_class", StudentClassController)
 
     resources("/announcements", AnnouncementController)
     get("/announcements/:id/broadcast", AnnouncementController, :broadcast)

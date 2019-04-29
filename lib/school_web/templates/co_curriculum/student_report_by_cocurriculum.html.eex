@@ -1,7 +1,7 @@
 
 
 <div class="content-heading">
-   <div>Co Curriculum Report
+   <div>Co Curriculum Student Listing
       <small><%= gettext("welcome")%>!</small>
    </div>
    <!-- START Language list-->
@@ -23,16 +23,32 @@
                            <div class="card ">
                               <div class="card-header ">
                                  <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+                                 <form>
+                                   
+                                 
                                  <div class="row">
                                     <div class="col-sm-2">
                                        <label class="bmd-label-floating">
-                                       <%= gettext "Co Class" %>
+                                       <%= gettext "Category" %>
                                        </label>
                                        <br>
-                                       <select class="custom-select -custom-select-sm" onchange="getval(this);" required="required" name="cocurriculum">
-                                          <option selected="">Choose a coco</option>
-                                          <%= for a <- @cocurriculum |> Enum.sort do %>
-                                          <option value="<%= a.id %>" ><%= a.description %>
+                                       <select id="show_ctg" class="custom-select -custom-select-sm" required name="cocurriculum">
+                                          <option selected="">Choose a category</option>
+                                          <%= for a <- @cocurriculum|>Enum.uniq(fn x -> x.category end) do %>
+                                          <option value="<%= a.category %>" ><%= a.category %>
+                                          </option>
+                                          <% end %>
+                                       </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                       <label class="bmd-label-floating">
+                                       <%= gettext "Sub-Category" %>
+                                       </label>
+                                       <br>
+                                       <select id="show_sub_ctg" class="custom-select -custom-select-sm" required="required" name="category">
+                                          <option selected="">Choose a sub-category</option>
+                                          <%= for a <- @cocurriculum|>Enum.sort_by(fn x -> x.sub_category end) do %>
+                                          <option style = "display:none"aria-label="<%=a.category%>"value="<%= a.id %>" ><%= a.sub_category %>
                                           </option>
                                           <% end %>
                                        </select>
@@ -43,7 +59,7 @@
                                        <%= gettext "Semester" %>
                                        </label>
                                        <br>
-                                       <select class="custom-select -custom-select-sm" onchange="getvalb(this);" required="required" name="co_semester">
+                                       <select class="custom-select -custom-select-sm" required="required" name="co_semester">
                                              <option selected="">Choose a semester</option>
                                           <%= for a <- semester |> Enum.sort do %>
                                           <option value="<%= a.id %>">
@@ -53,12 +69,12 @@
                                        </select>
                                     </div>
                                     <% level = Repo.all(from(s in School.Affairs.Level, select: %{institution_id: s.institution_id,id: s.id, name: s.name}))|>Enum.filter(fn x-> x.institution_id ==@conn.private.plug_session["institution_id"] end) %>
-                                    <div class="col-sm-2">
+                                    <div style= "display: none"class="col-sm-2">
                                        <label class="bmd-label-floating">
                                        <%= gettext "Level" %>
                                        </label>
                                        <br>
-                                       <select class="custom-select -custom-select-sm" onchange="getvalc(this);" required="required" name="co_level">
+                                       <select class="custom-select -custom-select-sm" required="required" name="co_level">
                                              <option selected="">Choose a level</option>
                                           <%= for a <- level |> Enum.sort do %>
                                           <option value="<%= a.id %>">
@@ -67,7 +83,37 @@
                                           <% end %>
                                        </select>
                                     </div>
+
+                                    <% class = Repo.all(from(s in School.Affairs.Class, select: %{institution_id: s.institution_id,id: s.id, name: s.name}))|>Enum.filter(fn x-> x.institution_id ==@conn.private.plug_session["institution_id"] end) %>
+                                
+                                    <div id = "show_class"class="col-sm-2">
+                                       <label class="bmd-label-floating">
+                                       <%= gettext "Classes" %>
+                                       </label>
+                                       <br>
+                                       <%= for a <- class do %>
+                                       <input type="checkbox" name="class" value ="<%=a.id%>"> <%=a.name%><br>
+                                       <% end %>
+                                    </div>
+                                    <div id = "sort_by" class="col-sm-3">
+                                      <label>
+                                        <%= gettext "Listing Sort By"%>
+                                      </label>
+                                      <br>
+                                      <input type="radio" name="sort" value="1"> Class,Student No<br>
+                                      <input type="radio" name="sort" value="2"> Class, Student Name<br>
+                                      <input type="radio" name="sort" value="3"> Student Name
+                                    </div>
+                                    <div id = "summary" class="col-sm-3">
+                                      <label>
+                                        <%= gettext "Report Type"%>
+                                      </label>
+                                      <br>
+                                      <input type="radio" name="sum" value="1"> Summary<br>
+                                      <input type="radio" name="sum" value="2"> Without Summary<br>
+                                    </div>
                                     <div class="btn btn-primary" id="gen_report">Generate!</div>
+                                    </form>
                                  </div>
                               </div>
                            </div>
@@ -89,27 +135,107 @@
 
     $("div#gen_report").click(function(){
 
-      var c_id = $('select[name="cocurriculum"]').val();
+      var classes = []
+      classes = getClassValues()
+      var cat_id = $("#show_ctg").val();
+      var c_id = $("#show_sub_ctg").val();
       var semester_id = $('select[name="co_semester"]').val();
       var level_id = $('select[name="co_level"]').val();
-       
+      var sort_id = $("input[name='sort']:checked").val();
+      var type = $("input[name='sum']:checked").val();
 
-       channel.push("report_cocurriculum", {
+      console.log(semester_id)
+
+      if (cat_id == "Choose a category") {
+      alert("Please choose a category!");
+      return false;
+       }
+
+       if (c_id == "Choose a sub-category") {
+      alert("Please choose a sub_category!");
+      return false;
+       }
+       
+       if (semester_id == "Choose a semester") {
+      alert("Please choose a semester!");
+      return false;
+       }
+        if (sort_id == undefined) {
+      alert("Please choose a sorting format!");
+      return false;
+       }
+       if (type == undefined) {
+      alert("Please choose a Report Type!");
+      return false;
+       }
+
+      
+      
+        channel.push("all_report_cocurriculum", {
           
            suser_id: window.currentUser,
           
            co_semester: semester_id,
            co_level: level_id,
-           cocurriculum: c_id
+           cocurriculum: c_id,
+           class: classes,
+           sort_id: sort_id,
+           type: type
+
        })
        
       .receive("ok", payload => {
        
            $("div#report_cocurriculum").html(payload.html)
-       })
-      
+       })  
     })
+  })
+
+
+
+  $("#show_ctg").change(function(){
+    var val = $(this).val()
+    if(val == "Unit Beruniform"){
+        $('option[aria-label="Unit Beruniform"]').show()
+        $('option[aria-label="Kelab&Persatuan"]').hide()
+        $('option[aria-label="Sukan & Permainan"]').hide()
+        $('option[aria-label="Rumah Sukan"]').hide()
+      }
+      else if(val == "Kelab&Persatuan"){
+        $('option[aria-label="Kelab&Persatuan"]').show()
+        $('option[aria-label="Unit Beruniform"]').hide()
+        $('option[aria-label="Sukan & Permainan"]').hide()
+        $('option[aria-label="Rumah Sukan"]').hide()
+      }
+      else if(val == "Sukan & Permainan"){
+        $('option[aria-label="Sukan & Permainan"]').show()
+        $('option[aria-label="Unit Beruniform"]').hide()
+        $('option[aria-label="Kelab&Persatuan"]').hide()
+        $('option[aria-label="Rumah Sukan"]').hide()
+      }
+      else if(val == "Rumah Sukan"){
+        $('option[aria-label="Rumah Sukan"]').show()
+        $('option[aria-label="Unit Beruniform"]').hide()
+        $('option[aria-label="Kelab&Persatuan"]').hide()
+        $('option[aria-label="Sukan & Permainan"]').hide()
+      }
+      else{
+        $('option[aria-label]').hide()
+      }
+      
+      console.log(val)
 
   })
+
+  function getClassValues(){
+  var chkArray = [];
+  
+  /* look for all checkboes that have a parent id called 'checkboxlist' attached to it and check if it was checked */
+  $("#show_class input:checked").each(function() {
+    chkArray.push($(this).val());
+  });
+
+  return(chkArray);
+}
 </script>
 

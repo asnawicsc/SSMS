@@ -3336,7 +3336,14 @@ defmodule School.Affairs do
         left_join: t in Teacher,
         on: t.id == c.teacher_id,
         where: c.institution_id == ^inst_id,
-        select: %{id: c.id, code: c.code, description: c.description, teacher_id: t.name}
+        select: %{
+          id: c.id,
+          code: c.code,
+          description: c.description,
+          teacher_id: t.name,
+          category: c.category,
+          sub_category: c.sub_category
+        }
       )
     )
   end

@@ -140,4 +140,134 @@ defmodule School.SchoolTest do
       assert %Ecto.Changeset{} = School.change_teacher(teacher)
     end
   end
+
+  describe "uniformed_bodies" do
+    alias School.School.Uniformed_Body
+
+    @valid_attrs %{id: 42, student_name: "some student_name", unit_name: "some unit_name"}
+    @update_attrs %{id: 43, student_name: "some updated student_name", unit_name: "some updated unit_name"}
+    @invalid_attrs %{id: nil, student_name: nil, unit_name: nil}
+
+    def uniformed__body_fixture(attrs \\ %{}) do
+      {:ok, uniformed__body} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> School.create_uniformed__body()
+
+      uniformed__body
+    end
+
+    test "list_uniformed_bodies/0 returns all uniformed_bodies" do
+      uniformed__body = uniformed__body_fixture()
+      assert School.list_uniformed_bodies() == [uniformed__body]
+    end
+
+    test "get_uniformed__body!/1 returns the uniformed__body with given id" do
+      uniformed__body = uniformed__body_fixture()
+      assert School.get_uniformed__body!(uniformed__body.id) == uniformed__body
+    end
+
+    test "create_uniformed__body/1 with valid data creates a uniformed__body" do
+      assert {:ok, %Uniformed_Body{} = uniformed__body} = School.create_uniformed__body(@valid_attrs)
+      assert uniformed__body.id == 42
+      assert uniformed__body.student_name == "some student_name"
+      assert uniformed__body.unit_name == "some unit_name"
+    end
+
+    test "create_uniformed__body/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = School.create_uniformed__body(@invalid_attrs)
+    end
+
+    test "update_uniformed__body/2 with valid data updates the uniformed__body" do
+      uniformed__body = uniformed__body_fixture()
+      assert {:ok, uniformed__body} = School.update_uniformed__body(uniformed__body, @update_attrs)
+      assert %Uniformed_Body{} = uniformed__body
+      assert uniformed__body.id == 43
+      assert uniformed__body.student_name == "some updated student_name"
+      assert uniformed__body.unit_name == "some updated unit_name"
+    end
+
+    test "update_uniformed__body/2 with invalid data returns error changeset" do
+      uniformed__body = uniformed__body_fixture()
+      assert {:error, %Ecto.Changeset{}} = School.update_uniformed__body(uniformed__body, @invalid_attrs)
+      assert uniformed__body == School.get_uniformed__body!(uniformed__body.id)
+    end
+
+    test "delete_uniformed__body/1 deletes the uniformed__body" do
+      uniformed__body = uniformed__body_fixture()
+      assert {:ok, %Uniformed_Body{}} = School.delete_uniformed__body(uniformed__body)
+      assert_raise Ecto.NoResultsError, fn -> School.get_uniformed__body!(uniformed__body.id) end
+    end
+
+    test "change_uniformed__body/1 returns a uniformed__body changeset" do
+      uniformed__body = uniformed__body_fixture()
+      assert %Ecto.Changeset{} = School.change_uniformed__body(uniformed__body)
+    end
+  end
+
+  describe "uniformed_units" do
+    alias School.School.Uniformed_uni
+
+    @valid_attrs %{student_id: 42, student_name: "some student_name", unit_code: "some unit_code", unit_name: "some unit_name"}
+    @update_attrs %{student_id: 43, student_name: "some updated student_name", unit_code: "some updated unit_code", unit_name: "some updated unit_name"}
+    @invalid_attrs %{student_id: nil, student_name: nil, unit_code: nil, unit_name: nil}
+
+    def uniformed_uni_fixture(attrs \\ %{}) do
+      {:ok, uniformed_uni} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> School.create_uniformed_uni()
+
+      uniformed_uni
+    end
+
+    test "list_uniformed_units/0 returns all uniformed_units" do
+      uniformed_uni = uniformed_uni_fixture()
+      assert School.list_uniformed_units() == [uniformed_uni]
+    end
+
+    test "get_uniformed_uni!/1 returns the uniformed_uni with given id" do
+      uniformed_uni = uniformed_uni_fixture()
+      assert School.get_uniformed_uni!(uniformed_uni.id) == uniformed_uni
+    end
+
+    test "create_uniformed_uni/1 with valid data creates a uniformed_uni" do
+      assert {:ok, %Uniformed_uni{} = uniformed_uni} = School.create_uniformed_uni(@valid_attrs)
+      assert uniformed_uni.student_id == 42
+      assert uniformed_uni.student_name == "some student_name"
+      assert uniformed_uni.unit_code == "some unit_code"
+      assert uniformed_uni.unit_name == "some unit_name"
+    end
+
+    test "create_uniformed_uni/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = School.create_uniformed_uni(@invalid_attrs)
+    end
+
+    test "update_uniformed_uni/2 with valid data updates the uniformed_uni" do
+      uniformed_uni = uniformed_uni_fixture()
+      assert {:ok, uniformed_uni} = School.update_uniformed_uni(uniformed_uni, @update_attrs)
+      assert %Uniformed_uni{} = uniformed_uni
+      assert uniformed_uni.student_id == 43
+      assert uniformed_uni.student_name == "some updated student_name"
+      assert uniformed_uni.unit_code == "some updated unit_code"
+      assert uniformed_uni.unit_name == "some updated unit_name"
+    end
+
+    test "update_uniformed_uni/2 with invalid data returns error changeset" do
+      uniformed_uni = uniformed_uni_fixture()
+      assert {:error, %Ecto.Changeset{}} = School.update_uniformed_uni(uniformed_uni, @invalid_attrs)
+      assert uniformed_uni == School.get_uniformed_uni!(uniformed_uni.id)
+    end
+
+    test "delete_uniformed_uni/1 deletes the uniformed_uni" do
+      uniformed_uni = uniformed_uni_fixture()
+      assert {:ok, %Uniformed_uni{}} = School.delete_uniformed_uni(uniformed_uni)
+      assert_raise Ecto.NoResultsError, fn -> School.get_uniformed_uni!(uniformed_uni.id) end
+    end
+
+    test "change_uniformed_uni/1 returns a uniformed_uni changeset" do
+      uniformed_uni = uniformed_uni_fixture()
+      assert %Ecto.Changeset{} = School.change_uniformed_uni(uniformed_uni)
+    end
+  end
 end

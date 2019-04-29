@@ -3,6 +3,8 @@
     </div>
 </div>
 
+<%require IEx%>
+
 
 <%  institutes = Repo.all(from i in School.Settings.Institution,where: i.id ==^@conn.private.plug_session["institution_id"], select: {i.name, i.id})%>
 

@@ -11,6 +11,8 @@ defmodule School.Affairs.StudentCocurriculum do
     field(:year, :string)
     field(:semester_id, :integer)
     field(:rank, :string)
+    field(:category, :string)
+    field(:sub_category, :string)
 
     timestamps()
   end
@@ -26,8 +28,11 @@ defmodule School.Affairs.StudentCocurriculum do
       :mark,
       :year,
       :semester_id,
-      :rank
+      :rank,
+      :category,
+      :sub_category
     ])
     |> unique_constraint(:student_id, name: :index_all_coco)
+    |> unique_constraint(:student_id, name: :student_semester_index)
   end
 end

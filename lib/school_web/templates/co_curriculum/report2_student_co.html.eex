@@ -51,32 +51,6 @@
     </table>
     
 </div>
-<div class="table-responsive table-bordered">
-    <table class = "table">
-      <tr> 
-        <th>Chinese</th>
-        <td>Male: <%= @summary.male_chinese %></td>
-        <td>Female: <%= @summary.female_chinese %></td>
-        <td> <%= @summary.tot_chinese %></td>
-      </tr>
-      <tr> 
-        <th>Malay</th>
-        <td>Male: <%= @summary.male_malay %></td>
-        <td>Female: <%= @summary.female_malay %></td>
-        <td> <%= @summary.tot_malay %></td>
-      </tr>
-      <tr> 
-        <th>Indian</th>
-        <td>Male: <%= @summary.male_indian %></td>
-        <td>Female: <%= @summary.female_indian %></td>
-        <td> <%= @summary.tot_indian %></td>
-      </tr>
-      <tr> 
-        <th>Total=</th>
-        <td><%= @summary.tot_std %></td>
-      </tr>
-    </table>
-</div>
 
   </body>
 </html>
