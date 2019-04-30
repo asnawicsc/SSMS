@@ -1942,7 +1942,7 @@ else
      <td colspan="2" style="margin: 1px; padding: 1px;" align="center">T.Tangan Ibubapa/Penjaga<br>家长</td>
  </tr>
  <tr align="center">
-  <td colspan="2" style="margin: 3px; padding: 3px;" align="center" height="100px;"></td>
+  <td colspan="2" style="margin: 3px; padding: 3px;" align="center" height="100px;"><%= @institute.hm_bin %></td>
    <td colspan="2" style="margin: 3px; padding: 3px;" align="center" height="100px;"></td>
      <td colspan="2" style="margin: 3px; padding: 3px;" align="center" height="100px;"></td>
  </tr>

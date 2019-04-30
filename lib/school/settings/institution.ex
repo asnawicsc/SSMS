@@ -19,6 +19,8 @@ defmodule School.Settings.Institution do
     field(:town, :string)
     field(:maintained_by, :string)
     field(:library_organization_id, :integer)
+    field(:hm_bin, :binary)
+    field(:hm_filename, :string)
 
     timestamps()
   end
@@ -42,7 +44,9 @@ defmodule School.Settings.Institution do
       :fax,
       :logo_bin,
       :logo_filename,
-      :maintained_by
+      :maintained_by,
+      :hm_bin,
+      :hm_filename
     ])
     |> validate_required([:name])
   end

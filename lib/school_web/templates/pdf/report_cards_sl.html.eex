@@ -1607,7 +1607,7 @@ else
   <td colspan="5"><b>学生姓名: <%= profile.cname %></b> <br>
         <b>Nama Murid: <%= profile.name %></b></font></td>
   
-  <td><b>教室<br>
+  <td><b>班级<br>
         Darjah: <%= profile.class %></b></font></td>
  </tr>
 
@@ -1960,7 +1960,7 @@ else
      <td colspan="2" style="margin: 1px; padding: 1px;" align="center">T.Tangan Ibubapa/Penjaga<br>家长</td>
  </tr>
  <tr align="center">
-  <td colspan="2" style="margin: 3px; padding: 3px;" align="center" height="70px;"></td>
+  <td colspan="2" style="margin: 3px; padding: 3px;" align="center" height="70px;"> <img id="preview1" alt="Click here to change school logo" style='width:auto; height: 50px;' src='data:image/png;base64, <%= @institute.hm_bin %>'></td>
    <td colspan="2" style="margin: 3px; padding: 3px;" align="center" height="70px;"></td>
      <td colspan="2" style="margin: 3px; padding: 3px;" align="center" height="70px;"></td>
  </tr>

@@ -102,15 +102,24 @@
 
 
 </div>
-
-  <div class="form-group">
-    <center>
+<div class="form-row" align="center">
+   <div class="form-group col-md-3">
+  
       <label>School Logo</label><br>
       <img id="preview1" alt="Click here to change school logo" style='width:auto; height: 200px;' src='data:image/png;base64, <%= @bin%>'>
        <%= file_input f, :image1, accept: ".png, .jpg, .jpeg"  ,id: "imgInp1", style: "display: none;"%>
-    </center>
+  
   </div>
 
+
+     <div class="form-group col-md-3">
+  
+      <label>HM Signiture</label><br>
+      <img id="preview1" alt="Click here to change school logo" style='width:auto; height: 200px;' src='data:image/png;base64, <%= @hm_bin%>'>
+       <%= file_input f, :image1, accept: ".png, .jpg, .jpeg"  ,id: "imgInp1", style: "display: none;"%>
+  
+  </div>
+</div>
   <div class="form-group col-md-6">
     <%= submit "Submit", class: "btn btn-primary" %>
   </div>

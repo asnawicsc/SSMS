@@ -2179,7 +2179,7 @@ defmodule SchoolWeb.PdfController do
       pdf_params = %{"html" => html}
 
       pdf_binary =
-        if id == 2 do
+        if id == 3 do
           PdfGenerator.generate_binary!(
             pdf_params["html"],
             size: "B5",
@@ -4077,7 +4077,7 @@ defmodule SchoolWeb.PdfController do
           |> Enum.map(fn x -> x.student_mark end)
           |> Enum.filter(fn x -> x != -1 end)
           |> Enum.sum()
-          |> Float.rount(2)
+          |> Float.round(2)
 
         per =
           new

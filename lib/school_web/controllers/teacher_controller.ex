@@ -308,7 +308,34 @@ defmodule SchoolWeb.TeacherController do
   end
 
   def upload_signiture(conn, params) do
-    IEx.pry()
+    image_params = params["item"]["file"]
+
+    institution = Settings.get_institution!(conn.private.plug_session["institution_id"])
+    institution_params = %{}
+
+    institution_params =
+      if image_params != nil do
+        result = upload_image(image_params, conn)
+
+        institution_params = Map.put(institution_params, :hm_bin, result.bin)
+      else
+        institution
+      end
+
+    institution_params =
+      if image_params != nil do
+        result = upload_image(image_params, conn)
+
+        institution_params = Map.put(institution_params, :hm_filename, result.filename)
+      else
+        institution
+      end
+
+    Settings.update_institution(institution, institution_params)
+
+    conn
+    |> put_flash(:info, "Upload HM succesfully.")
+    |> redirect(to: page_path(conn, :index))
   end
 
   def create_teacher_login(conn, params) do
@@ -458,11 +485,11 @@ defmodule SchoolWeb.TeacherController do
 
     institute = Repo.get(Institution, conn.private.plug_session["institution_id"])
 
-    path = File.cwd!() <> "/media/" <> institute.name <> "/teacher"
+    path = File.cwd!() <> "/media/" <> institute.name
     image_path = Application.app_dir(:school, "priv/static/images")
 
     if File.exists?(path) == false do
-      File.mkdir(File.cwd!() <> "/media/" <> institute.name <> "/teacher")
+      File.mkdir(File.cwd!() <> "/media/" <> institute.name)
     end
 
     fl = param.filename |> String.replace(" ", "_")

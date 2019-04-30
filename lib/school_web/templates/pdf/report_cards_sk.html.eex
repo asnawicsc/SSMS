@@ -1243,6 +1243,62 @@
 
     end
 
+                mz= all_date|>Enum.filter(fn x -> x.subject =="MZ" end)
+   {mz1,mz2,mz3}= if mz == [] do
+
+      {"","",""}
+    else
+       mz=mz|>hd  
+      
+
+     mz_s1m=if mz.s1m != nil  and mz.s1m != "0" do
+      mz.s1m
+    else
+      ""
+     end
+
+     mz_s1g=if mz.s1g != nil do
+      mz.s1g
+    else
+      "" 
+     end  
+      
+     mz1={mz_s1m,mz_s1g}  
+
+     mz_s2m=if mz.s2m != nil  and mz.s2m != "0" do
+      mz.s2m
+    else
+      ""
+     end
+
+     mz_s2g=if mz.s2g != nil do
+      mz.s2g
+    else
+      "" 
+     end  
+      
+    mz2={mz_s2m,mz_s2g}  
+
+
+     mz_s3m=if mz.s3m != nil  and mz.s3m != "0" do
+      mz.s3m
+    else
+      ""
+     end
+
+     mz_s3g=if mz.s3g != nil do
+      mz.s3g
+    else
+      "" 
+     end  
+      
+     mz3={mz_s3m,mz_s3g}        
+
+
+       {mz1,mz2,mz3}
+
+    end
+
          pjk= all_date|>Enum.filter(fn x -> x.subject =="PJK" end)
    {pjk1,pjk2,pjk3}= if pjk == [] do
 
@@ -1664,14 +1720,13 @@ else
 
    %>
 
-         
-<p><%= all_datar |> elem(1) %></p>
+
 
                                 <%= if all_datar |> elem(1) |> Integer.is_even do %>
-                                 <div class="col-md-6" style="position: absolute;">
+                                 <div class="col-md-7" style="position: absolute;  left: 60px">
                
                       <% else %>
-                           <div class="col-md-6" style="position: relative;  left: 1070px">
+                           <div class="col-md-7" style="position: relative;  left: 1100px">
                   <% end %>
          
 
@@ -1681,7 +1736,7 @@ else
 
 
  
-                <table class="display"  style="font-size: 22px" width="45%">
+                <table cellspacing="0" style="font-size: 22px; white-space: nowrap; " width="45%">
 
                 <tr align="center">
                 
@@ -1785,7 +1840,7 @@ else
                     <BR> <b>国语 <br> Bahasa <br> Malaysia </b>
                     <BR>
                   </td>
-                  <td style="margin: 0px; padding: 0px;" align="left">会话 Lisan</td>
+                  <td style="margin: 0px; padding: 0px;" align="left">国语 Lisan</td>
                   <td style="margin: 0px; padding: 0px;">
                     <%= if bml1 != "" do   bml1|>elem(0)  else "" end %>
                       <div style="float:right;width:50%;">
@@ -1841,7 +1896,7 @@ else
                   <td style="margin: 0px; padding: 0px;"></td>
                 </tr>
                 <tr align="center">
-                  <td style="margin: 0px; padding: 0px;" align="left">写作 Penulisan</td>
+                  <td style="margin: 0px; padding: 0px;" align="left">作文 Penulisan</td>
                   <td style="margin: 0px; padding: 0px;">
                     <%= if bmp1 != "" do bmp1|>elem(0) else "" end %>
                       <div style="float:right;width:50%;">
@@ -1951,7 +2006,7 @@ else
                   <td style="margin: 0px; padding: 0px;"></td>
                 </tr>
                 <tr align="center">
-                  <td style="margin: 0px; padding: 0px;" align="left">写作 Penulisan</td>
+                  <td style="margin: 0px; padding: 0px;" align="left">作文 Penulisan</td>
                   <td style="margin: 0px; padding: 0px;">
                     <%= if ingp1 != "" do ingp1|>elem(0) else "" end %>
                       <div style="float:right;width:50%;">
@@ -2060,7 +2115,7 @@ else
                   <td style="margin: 0px; padding: 0px;"></td>
                 </tr>
                 <tr align="center">
-                  <td style="margin: 0px; padding: 0px;" align="left">写作 Penulisan</td>
+                  <td style="margin: 0px; padding: 0px;" align="left">作文 Penulisan</td>
                   <td style="margin: 0px; padding: 0px;">
                     <%= if chp1 != "" do chp1|>elem(0) else "" end %>
                       <div style="float:right;width:50%;">
@@ -2170,7 +2225,7 @@ else
                   <td style="margin: 0px; padding: 0px;"></td>
                 </tr>
                 <tr align="center">
-                  <td style="margin: 0px; padding: 0px; border-right: 0" align="left">道德教育</td>
+                  <td style="margin: 0px; padding: 0px; border-right: 0" align="left">道德</td>
                   <td style="margin: 0px; padding: 0px; border-left: 0" align="left">Pendidikan Moral</td>
                   <td style="margin: 0px; padding: 0px;">
                     <%= if pm1 != "" do pm1|>elem(0) else "" end %>
@@ -2254,7 +2309,7 @@ else
                   <td style="margin: 0px; padding: 0px;"></td>
                 </tr>
                 <tr align="center">
-                  <td style="margin: 0px; padding: 0px; border-right: 0" align="left">设计和技术</td>
+                  <td style="margin: 0px; padding: 0px; border-right: 0" align="left">设计与工艺</td>
                   <td style="margin: 0px; padding: 0px; border-left: 0" align="left">RBT</td>
                   <td style="margin: 0px; padding: 0px;">
                     <%= if rbt1 != "" do rbt1|>elem(0) else "" end %>
@@ -2281,7 +2336,7 @@ else
                   <td style="margin: 0px; padding: 0px;"></td>
                 </tr>
                 <tr align="center">
-                  <td style="margin: 0px; padding: 0px; border-right: 0" align="left">通信信息技术</td>
+                  <td style="margin: 0px; padding: 0px; border-right: 0" align="left">通信与信息</td>
                   <td style="margin: 0px; padding: 0px; border-left: 0" align="left">TMK</td>
                   <td style="margin: 0px; padding: 0px;">
                     <%= if tmk1 != "" do tmk1|>elem(0) else "" end %>
@@ -2327,6 +2382,34 @@ else
                     <%= if seni3 != "" do seni3|>elem(0) else "" end %>
                       <div style="float:right;width:50%;">
                         <%= if seni3 != "" do seni3|>elem(1) else "" end %>
+                          </div>
+                  </td>
+                     <%= if @level.name =="Standard 6" do %>
+                       <td style="margin: 0px; padding: 0px;"></td>
+                       <% else %>
+
+                    <% end %>
+                  <td style="margin: 0px; padding: 0px;"></td>
+                </tr>
+                                <tr align="center">
+                  <td style="margin: 0px; padding: 0px; border-right: 0" align="left">音乐教育</td>
+                  <td style="margin: 0px; padding: 0px; border-left: 0" align="left">Pendidikan Muzik</td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if mz1 != "" do mz1|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if mz1 != "" do mz1|>elem(1) else "" end %>
+                          </div>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if mz2 != "" do mz2|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if mz2 != "" do mz2|>elem(1) else "" end %>
+                          </div>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if mz3 != "" do mz3|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if mz3 != "" do mz3|>elem(1) else "" end %>
                           </div>
                   </td>
                      <%= if @level.name =="Standard 6" do %>
@@ -2518,7 +2601,7 @@ else
                 <tr align="center">
                   <td colspan="2" style="margin: 1px; padding: 1px; border-right: 0" align="left">校长签名 <br>
                   T.Tangan Guru Besar </td>
-                  <td style="margin: 0px; padding: 0px;"></td>
+                  <td style="margin: 0px; padding: 0px;">   <img id="preview1" alt="Click here to change school logo" style='width:auto; height: 50px;' src='data:image/png;base64, <%= @institute.hm_bin %>'></td>
                   <td style="margin: 0px; padding: 0px;"></td>
                   <td style="margin: 0px; padding: 0px;"></td>
                     <%= if @level.name =="Standard 6" do %>
