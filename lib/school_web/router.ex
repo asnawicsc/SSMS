@@ -89,6 +89,12 @@ defmodule SchoolWeb.Router do
       :head_count_listing
     )
 
+    post(
+      "/head_count_listing_excel",
+      PdfController,
+      :head_count_listing_excel
+    )
+
     get("/student_list_by_co", PdfController, :student_list_by_co)
 
     post("/height_weight_report_show", PdfController, :height_weight_report_show)

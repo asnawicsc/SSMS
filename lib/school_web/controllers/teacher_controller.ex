@@ -335,7 +335,7 @@ defmodule SchoolWeb.TeacherController do
 
     conn
     |> put_flash(:info, "Upload HM succesfully.")
-    |> redirect(to: page_path(conn, :index))
+    |> redirect(to: page_path(conn, :support_dashboard))
   end
 
   def create_teacher_login(conn, params) do
