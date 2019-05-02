@@ -2707,7 +2707,10 @@ defmodule SchoolWeb.PdfController do
           s in User,
           left_join: g in Settings.UserAccess,
           on: s.id == g.user_id,
-          where: g.institution_id == ^conn.private.plug_session["institution_id"]
+          left_join: k in Affairs.Teacher,
+          on: s.email == k.email,
+          where:
+            g.institution_id == ^conn.private.plug_session["institution_id"] and k.is_delete != 1
         )
       )
       |> Enum.group_by(fn x -> x.role end)
