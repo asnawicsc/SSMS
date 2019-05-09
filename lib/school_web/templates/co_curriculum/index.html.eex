@@ -17,6 +17,7 @@
                   <th>Code</th>
                   <th>Category</th>
                   <th>Sub Category</th>
+                  <th>Description</th>>
                   <th>Teacher</th>
                   <th></th>
                   </tr>
@@ -27,6 +28,7 @@
                        <td><%= co_curriculum.code %></td>
                        <td><%= co_curriculum.category %></td>
                       <td><%= co_curriculum.sub_category %></td>
+                      <td><%= co_curriculum.description %></td>
                       <td><%= co_curriculum.teacher_id %></td>
                         
                    

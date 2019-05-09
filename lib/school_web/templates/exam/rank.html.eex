@@ -53,6 +53,7 @@
         <th >No</th>
         <th >Name</th>
         <th >Jan</th>
+        
         <%= for item <- @mark|>Enum.sort_by(fn x -> x end) do %>    
          
         <th   align="center" colspan="2"><%= item|>elem(0) %></th>

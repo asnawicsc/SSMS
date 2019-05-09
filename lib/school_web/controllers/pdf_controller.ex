@@ -5384,7 +5384,7 @@ defmodule SchoolWeb.PdfController do
         datas = item |> elem(1)
 
         for data <- datas do
-          student_mark = data.mark
+          student_mark = data.mark |> Decimal.to_integer()
 
           grades =
             Repo.all(

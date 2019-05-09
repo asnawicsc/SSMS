@@ -17,6 +17,7 @@
       <th>Standard</th>
       <th>Subject</th>
       <th>Class</th>
+      <th>Teacher</th>
       <th>Total Period</th>
       <th></th>
     </tr>
@@ -31,6 +32,8 @@
 
 <% standard = School.Repo.get_by(School.Affairs.Level,institution_id: @conn.private.plug_session["institution_id"],id: subject_teach_class.standard_id) %>
 
+<% teacher = School.Repo.get_by(School.Affairs.Teacher,institution_id: @conn.private.plug_session["institution_id"],id: subject_teach_class.teacher_id)  %>
+
     <tr>
       <td>  <%= if standard != nil , do: standard.name , else: "Unknown Standard" %></td>
       <td>
@@ -38,6 +41,7 @@
         <%= if subject != nil , do: subject.description , else: "Unknown Subject" %></td>
 
       <td><%= if class != nil , do: class.name , else: "Unknown Class" %></td>
+      <td><%= if class != nil , do: teacher.name , else: "Unknown Teacher" %></td>
        <td><%= period %></td>
 
       <td class="text-right">

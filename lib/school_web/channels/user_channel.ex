@@ -1806,6 +1806,217 @@ defmodule SchoolWeb.UserChannel do
     {:noreply, socket}
   end
 
+  def handle_in("show_studentByClass", payload, socket) do
+    class = payload["class_id"]
+    semester_id = payload["semester_id"]
+
+    all =
+      if class != "Choose a class" do
+        Repo.all(
+          from(
+            s in School.Affairs.StudentClass,
+            left_join: g in School.Affairs.Class,
+            on: s.class_id == g.id,
+            left_join: r in School.Affairs.Student,
+            on: r.id == s.sudent_id,
+            where: s.class_id == ^class and s.semester_id == ^semester_id,
+            select: %{
+              id: r.id,
+              chinese_name: r.chinese_name,
+              name: r.name
+            },
+            order_by: [asc: r.name]
+          )
+        )
+      else
+        Repo.all(
+          from(
+            s in School.Affairs.StudentClass,
+            left_join: g in School.Affairs.Class,
+            on: s.class_id == g.id,
+            left_join: r in School.Affairs.Student,
+            on: r.id == s.sudent_id,
+            where: s.semester_id == ^semester_id,
+            select: %{
+              id: r.id,
+              chinese_name: r.chinese_name,
+              name: r.name
+            },
+            order_by: [asc: r.name]
+          )
+        )
+      end
+
+    IO.inspect(all)
+
+    {:reply, {:ok, %{all: all}}, socket}
+  end
+
+  def handle_in("filter_events", payload, socket) do
+    sub_category = payload["sub_category"]
+
+    all =
+      if(sub_category != "Choose a Sub Category") do
+        all =
+          Repo.all(
+            from(
+              s in School.Affairs.CoCurriculum,
+              where: s.sub_category == ^sub_category,
+              select: %{events: s.description}
+            )
+          )
+      else
+        all =
+          Repo.all(
+            from(
+              s in School.Affairs.CoCurriculum,
+              select: %{events: s.description}
+            )
+          )
+      end
+
+    {:reply, {:ok, %{all: all}}, socket}
+  end
+
+  def handle_in("filter_ranks", payload, socket) do
+    sub_category = payload["sub_category"]
+
+    all =
+      if(sub_category != "Choose a Sub Category") do
+        all =
+          Repo.all(
+            from(
+              s in School.Affairs.Coco_Rank,
+              where: s.sub_category == ^sub_category,
+              select: %{rank: s.rank}
+            )
+          )
+      else
+        all =
+          Repo.all(
+            from(
+              s in School.Affairs.Coco_Rank,
+              select: %{rank: s.rank}
+            )
+          )
+      end
+
+    IO.inspect(all)
+
+    {:reply, {:ok, %{all: all}}, socket}
+  end
+
+  def handle_in(
+        "add_coco_students",
+        %{
+          "student_id" => student_id,
+          "semester_id" => semester_id,
+          "coco_id" => coco_id,
+          "user_id" => user_id,
+          "institution_id" => institution_id,
+          "category" => category,
+          "sub_category" => sub_category
+        },
+        socket
+      ) do
+    coco = Affairs.get_co_curriculum!(coco_id)
+    student = Affairs.get_student!(student_id)
+
+    case Affairs.create_student_cocurriculum(%{
+           cocurriculum_id: coco_id,
+           semester_id: semester_id,
+           student_id: student_id,
+           category: category,
+           sub_category: sub_category
+         }) do
+      {:ok, sc} ->
+        students = Affairs.list_student_cocurriculum(coco_id, semester_id)
+
+        {:reply, {:ok, %{students: students}}, socket}
+
+      {:error, changeset} ->
+        Process.sleep(500)
+
+        ex_coco =
+          Repo.get(
+            School.Affairs.CoCurriculum,
+            Repo.get_by(
+              School.Affairs.StudentCocurriculum,
+              student_id: student_id,
+              semester_id: semester_id,
+              category: category
+            ).cocurriculum_id
+          )
+
+        {:reply,
+         {:error, %{name: student.name, coco: coco.sub_category, ex_coco: ex_coco.sub_category}},
+         socket}
+    end
+  end
+
+  def handle_in("add_coco_achievement", payload, socket) do
+    date = payload["date"]
+    student_id = payload["student_id"]
+    category = payload["category"]
+    sub_category = payload["sub_category"]
+    event_name = payload["event_name"]
+    participant = payload["participant"]
+    peringkat = payload["peringkat"]
+    rank = payload["rank"]
+
+    Affairs.create_student_coco_achievement(%{
+      date: date,
+      student_id: student_id,
+      category: category,
+      sub_category: sub_category,
+      competition_name: event_name,
+      participant_type: participant,
+      peringkat: peringkat,
+      rank: rank
+    })
+
+    students =
+      Repo.all(
+        from(
+          m in School.Affairs.Student_coco_achievement,
+          left_join: s in School.Affairs.Student,
+          on: s.id == m.student_id,
+          left_join: c in StudentClass,
+          on: m.student_id == c.sudent_id,
+          left_join: t in Class,
+          on: t.id == c.class_id,
+          select: %{
+            name: s.name,
+            class_name: t.name,
+            ic: s.ic,
+            event_name: m.competition_name,
+            peringkat: m.peringkat,
+            rank: m.rank,
+            date: m.date
+          }
+        )
+      )
+
+    html =
+      Phoenix.View.render_to_string(
+        SchoolWeb.Student_coco_achievementView,
+        "report_std_coco.html",
+        students: students,
+        date: date,
+        student_id: student_id,
+        category: category,
+        sub_category: sub_category,
+        competition_name: event_name,
+        participant_type: participant,
+        peringkat: peringkat,
+        rank: rank
+      )
+
+    IO.inspect(students)
+
+    {:reply, {:ok, %{html: html}}, socket}
+  end
+
   def handle_in("sub_teach_class", payload, socket) do
     standard_id = payload["level_id"]
 
@@ -1824,6 +2035,8 @@ defmodule SchoolWeb.UserChannel do
         )
       )
       |> Enum.uniq()
+
+    IO.inspect(subject)
 
     {:reply, {:ok, %{subject: subject}}, socket}
   end
@@ -1852,6 +2065,27 @@ defmodule SchoolWeb.UserChannel do
       )
 
     {:reply, {:ok, %{html: html}}, socket}
+  end
+
+  def handle_in("filter_class", payload, socket) do
+    lvl_id = payload["lvl_id"]
+
+    class =
+      if lvl_id != "ALL LEVEL" do
+        class =
+          Repo.all(
+            from(c in Affairs.Class,
+              where: c.level_id == ^lvl_id,
+              select: %{class_name: c.name, class_id: c.id}
+            )
+          )
+      else
+        class = "ALL CLASS"
+      end
+
+    IO.inspect(class)
+
+    {:reply, {:ok, %{class: class}}, socket}
   end
 
   def handle_in("exam_result_record", payload, socket) do
@@ -2776,6 +3010,7 @@ defmodule SchoolWeb.UserChannel do
   def handle_in("exam_result_analysis_standard2", payload, socket) do
     standard_id = payload["standard_id"]
     exam_id = payload["exam_id"]
+    IO.inspect(exam_id)
 
     standard =
       Repo.get_by(School.Affairs.Level, %{
@@ -2816,6 +3051,14 @@ defmodule SchoolWeb.UserChannel do
 
     all_mark = all |> Enum.group_by(fn x -> x.subject_code end)
 
+    grades =
+      Repo.all(
+        from(
+          g in School.Affairs.ExamGrade,
+          where: g.institution_id == ^payload["institution_id"] and g.exam_master_id == ^exam.id
+        )
+      )
+
     mark1 =
       for item <- all_mark do
         subject_code = item |> elem(0)
@@ -2823,19 +3066,10 @@ defmodule SchoolWeb.UserChannel do
         datas = item |> elem(1)
 
         for data <- datas do
-          student_mark = data.mark
-
-          grades =
-            Repo.all(
-              from(
-                g in School.Affairs.ExamGrade,
-                where:
-                  g.institution_id == ^payload["institution_id"] and g.exam_master_id == ^exam.id
-              )
-            )
+          student_mark = data.mark |> Decimal.to_integer()
 
           for grade <- grades do
-            if student_mark >= grade.min and student_mark <= grade.max do
+            if student_mark >= grade.min && student_mark <= grade.max do
               %{
                 student_id: data.student_id,
                 grade: grade.name,
@@ -2853,6 +3087,7 @@ defmodule SchoolWeb.UserChannel do
       |> Enum.filter(fn x -> x != nil end)
 
     group = mark1 |> Enum.group_by(fn x -> x.subject_code end)
+    IO.inspect(group)
 
     group_subject =
       for item <- group do
@@ -2866,6 +3101,7 @@ defmodule SchoolWeb.UserChannel do
         e = item |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "E" end)
         f = item |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "F" end)
         g = item |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "G" end)
+        kelas = item |> elem(1) |> Enum.map(fn x -> x.class_name end) |> Enum.uniq()
 
         lulus = a + b + c + d
         fail = e + f + g
@@ -2881,7 +3117,8 @@ defmodule SchoolWeb.UserChannel do
           f: f,
           g: g,
           lulus: lulus,
-          tak_lulus: fail
+          tak_lulus: fail,
+          kelas: kelas
         }
       end
 
@@ -3032,6 +3269,139 @@ defmodule SchoolWeb.UserChannel do
     {:noreply, socket}
   end
 
+  def handle_in("gen_std_achievement", payload, socket) do
+    date_from = payload["date_from"]
+    date_to = payload["date_to"]
+    class_id = payload["class_id"]
+    level_id = payload["level_id"]
+    sort_id = payload["sort_id"]
+    peringkat = payload["peringkat"]
+
+    selection =
+      cond do
+        level_id != "ALL LEVEL" and class_id != "ALL CLASS" ->
+          selection =
+            Repo.all(
+              from(
+                sa in Affairs.Student_coco_achievement,
+                left_join: c in Affairs.StudentClass,
+                on: c.sudent_id == sa.student_id,
+                left_join: t in Affairs.Class,
+                on: t.id == c.class_id,
+                left_join: s in Affairs.Student,
+                on: s.id == sa.student_id,
+                where:
+                  sa.peringkat in ^peringkat and t.level_id == ^level_id and
+                    c.class_id == ^class_id and
+                    sa.date >= ^date_from and sa.date <= ^date_to,
+                select: %{
+                  desc: sa.competition_name,
+                  student_name: s.name,
+                  chinese_name: s.chinese_name,
+                  date: sa.date,
+                  peringkat: sa.peringkat,
+                  class_name: t.name
+                },
+                order_by: [asc: sa.date]
+              )
+            )
+
+        level_id != "ALL LEVEL" and class_id == "ALL CLASS" ->
+          selection =
+            Repo.all(
+              from(
+                sa in Affairs.Student_coco_achievement,
+                left_join: c in Affairs.StudentClass,
+                on: c.sudent_id == sa.student_id,
+                left_join: t in Affairs.Class,
+                on: t.id == c.class_id,
+                left_join: s in Affairs.Student,
+                on: s.id == sa.student_id,
+                where:
+                  sa.peringkat in ^peringkat and t.level_id == ^level_id and
+                    sa.date >= ^date_from and sa.date <= ^date_to,
+                select: %{
+                  desc: sa.competition_name,
+                  student_name: s.name,
+                  chinese_name: s.chinese_name,
+                  date: sa.date,
+                  peringkat: sa.peringkat,
+                  class_name: t.name
+                },
+                order_by: [asc: sa.date]
+              )
+            )
+
+        level_id == "ALL LEVEL" ->
+          selection =
+            Repo.all(
+              from(
+                sa in Affairs.Student_coco_achievement,
+                left_join: c in Affairs.StudentClass,
+                on: c.sudent_id == sa.student_id,
+                left_join: t in Affairs.Class,
+                on: t.id == c.class_id,
+                left_join: s in Affairs.Student,
+                on: s.id == sa.student_id,
+                where:
+                  sa.peringkat in ^peringkat and
+                    sa.date >= ^date_from and sa.date <= ^date_to,
+                select: %{
+                  desc: sa.competition_name,
+                  student_name: s.name,
+                  chinese_name: s.chinese_name,
+                  date: sa.date,
+                  peringkat: sa.peringkat,
+                  class_name: t.name
+                },
+                order_by: [asc: sa.date]
+              )
+            )
+      end
+
+    sekolah =
+      selection
+      |> Enum.filter(fn x -> x.peringkat == "Sekolah" end)
+
+    zon =
+      selection
+      |> Enum.filter(fn x -> x.peringkat == "Zon" end)
+
+    negeri =
+      selection
+      |> Enum.filter(fn x -> x.peringkat == "Negeri" end)
+
+    kebangsaan =
+      selection
+      |> Enum.filter(fn x -> x.peringkat == "Kebangsaan" end)
+
+    antarabangsa =
+      selection
+      |> Enum.filter(fn x -> x.peringkat == "Antarabangsa" end)
+
+    html =
+      if selection != [] do
+        Phoenix.View.render_to_string(
+          SchoolWeb.Student_coco_achievementView,
+          "student_achievement_report.html",
+          selection: selection,
+          sekolah: sekolah,
+          zon: zon,
+          negeri: negeri,
+          kebangsaan: kebangsaan,
+          antarabangsa: antarabangsa,
+          date_to: date_to,
+          date_from: date_from,
+          class_id: class_id,
+          level_id: level_id,
+          sort_id: sort_id,
+          peringkat: peringkat
+        )
+      end
+
+    {:reply, {:ok, %{html: html, selection: selection}}, socket}
+  end
+
   def handle_in("all_report_cocurriculum", payload, socket) do
     cocurriculum = payload["cocurriculum"]
     co_level = payload["co_level"]
@@ -3041,8 +3411,6 @@ defmodule SchoolWeb.UserChannel do
     sort_by = String.to_integer(sort_by)
     type = payload["type"]
     type = String.to_integer(type)
-
-    # IO.inspect(sort_by)
 
     sem = Repo.get(Semester, co_semester)
 
@@ -4200,54 +4568,6 @@ defmodule SchoolWeb.UserChannel do
     students = Affairs.get_student_list(payload["class_id"], payload["semester_id"])
 
     {:reply, {:error, %{students: students, name: student.name, student_id: student.id}}, socket}
-  end
-
-  def handle_in(
-        "add_coco_students",
-        %{
-          "student_id" => student_id,
-          "semester_id" => semester_id,
-          "coco_id" => coco_id,
-          "user_id" => user_id,
-          "institution_id" => institution_id,
-          "category" => category,
-          "sub_category" => sub_category
-        },
-        socket
-      ) do
-    coco = Affairs.get_co_curriculum!(coco_id)
-    student = Affairs.get_student!(student_id)
-
-    case Affairs.create_student_cocurriculum(%{
-           cocurriculum_id: coco_id,
-           semester_id: semester_id,
-           student_id: student_id,
-           category: category,
-           sub_category: sub_category
-         }) do
-      {:ok, sc} ->
-        students = Affairs.list_student_cocurriculum(coco_id, semester_id)
-
-        {:reply, {:ok, %{students: students}}, socket}
-
-      {:error, changeset} ->
-        Process.sleep(500)
-
-        ex_coco =
-          Repo.get(
-            School.Affairs.CoCurriculum,
-            Repo.get_by(
-              School.Affairs.StudentCocurriculum,
-              student_id: student_id,
-              semester_id: semester_id,
-              category: category
-            ).cocurriculum_id
-          )
-
-        {:reply,
-         {:error, %{name: student.name, coco: coco.sub_category, ex_coco: ex_coco.sub_category}},
-         socket}
-    end
   end
 
   def handle_in("change_semester", payload, socket) do

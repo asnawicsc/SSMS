@@ -1,0 +1,42 @@
+<h2>Listing Student coco achievements</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Stud_ID</th>
+      <th>Date</th>
+      <th>Category</th>
+      <th>Participant type</th>
+      <th>Peringkat</th>
+      <th>Sub category</th>
+      <th>Competition name</th>
+      <th>Rank</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for student_coco_achievement <- @student_coco_achievements do %>
+    <tr>
+      <td><%= student_coco_achievement.student_id %></td>
+      <td><%= student_coco_achievement.date %></td>
+      <td><%= student_coco_achievement.category %></td>
+      <td><%= student_coco_achievement.participant_type %></td>
+      <td><%= student_coco_achievement.peringkat %></td>
+      <td><%= student_coco_achievement.sub_category %></td>
+      <td><%= student_coco_achievement.competition_name %></td>
+      <td><%= student_coco_achievement.rank %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: student_coco_achievement_path(@conn, :show, student_coco_achievement), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: student_coco_achievement_path(@conn, :edit, student_coco_achievement), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: student_coco_achievement_path(@conn, :delete, student_coco_achievement), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Student coco achievement", to: student_coco_achievement_path(@conn, :new) %></span><br>
+<span><%= link "Add Records", to: student_coco_achievement_path(@conn, :add_achievement) %></span><br>
+<span><%= link "Generate Report", to: student_coco_achievement_path(@conn, :gen_report) %></span>

@@ -4854,4 +4854,140 @@ defmodule School.AffairsTest do
       assert %Ecto.Changeset{} = Affairs.change_exam_attendance(exam_attendance)
     end
   end
+
+  describe "student_coco_achievements" do
+    alias School.Affairs.Student_coco_achievement
+
+    @valid_attrs %{category: "some category", competition_name: "some competition_name", date: ~D[2010-04-17], participant_type: "some participant_type", peringkat: "some peringkat", rank: "some rank", student_id: 42, sub_category: "some sub_category"}
+    @update_attrs %{category: "some updated category", competition_name: "some updated competition_name", date: ~D[2011-05-18], participant_type: "some updated participant_type", peringkat: "some updated peringkat", rank: "some updated rank", student_id: 43, sub_category: "some updated sub_category"}
+    @invalid_attrs %{category: nil, competition_name: nil, date: nil, participant_type: nil, peringkat: nil, rank: nil, student_id: nil, sub_category: nil}
+
+    def student_coco_achievement_fixture(attrs \\ %{}) do
+      {:ok, student_coco_achievement} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_student_coco_achievement()
+
+      student_coco_achievement
+    end
+
+    test "list_student_coco_achievements/0 returns all student_coco_achievements" do
+      student_coco_achievement = student_coco_achievement_fixture()
+      assert Affairs.list_student_coco_achievements() == [student_coco_achievement]
+    end
+
+    test "get_student_coco_achievement!/1 returns the student_coco_achievement with given id" do
+      student_coco_achievement = student_coco_achievement_fixture()
+      assert Affairs.get_student_coco_achievement!(student_coco_achievement.id) == student_coco_achievement
+    end
+
+    test "create_student_coco_achievement/1 with valid data creates a student_coco_achievement" do
+      assert {:ok, %Student_coco_achievement{} = student_coco_achievement} = Affairs.create_student_coco_achievement(@valid_attrs)
+      assert student_coco_achievement.category == "some category"
+      assert student_coco_achievement.competition_name == "some competition_name"
+      assert student_coco_achievement.date == ~D[2010-04-17]
+      assert student_coco_achievement.participant_type == "some participant_type"
+      assert student_coco_achievement.peringkat == "some peringkat"
+      assert student_coco_achievement.rank == "some rank"
+      assert student_coco_achievement.student_id == 42
+      assert student_coco_achievement.sub_category == "some sub_category"
+    end
+
+    test "create_student_coco_achievement/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_student_coco_achievement(@invalid_attrs)
+    end
+
+    test "update_student_coco_achievement/2 with valid data updates the student_coco_achievement" do
+      student_coco_achievement = student_coco_achievement_fixture()
+      assert {:ok, student_coco_achievement} = Affairs.update_student_coco_achievement(student_coco_achievement, @update_attrs)
+      assert %Student_coco_achievement{} = student_coco_achievement
+      assert student_coco_achievement.category == "some updated category"
+      assert student_coco_achievement.competition_name == "some updated competition_name"
+      assert student_coco_achievement.date == ~D[2011-05-18]
+      assert student_coco_achievement.participant_type == "some updated participant_type"
+      assert student_coco_achievement.peringkat == "some updated peringkat"
+      assert student_coco_achievement.rank == "some updated rank"
+      assert student_coco_achievement.student_id == 43
+      assert student_coco_achievement.sub_category == "some updated sub_category"
+    end
+
+    test "update_student_coco_achievement/2 with invalid data returns error changeset" do
+      student_coco_achievement = student_coco_achievement_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_student_coco_achievement(student_coco_achievement, @invalid_attrs)
+      assert student_coco_achievement == Affairs.get_student_coco_achievement!(student_coco_achievement.id)
+    end
+
+    test "delete_student_coco_achievement/1 deletes the student_coco_achievement" do
+      student_coco_achievement = student_coco_achievement_fixture()
+      assert {:ok, %Student_coco_achievement{}} = Affairs.delete_student_coco_achievement(student_coco_achievement)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_student_coco_achievement!(student_coco_achievement.id) end
+    end
+
+    test "change_student_coco_achievement/1 returns a student_coco_achievement changeset" do
+      student_coco_achievement = student_coco_achievement_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_student_coco_achievement(student_coco_achievement)
+    end
+  end
+
+  describe "coco_ranks" do
+    alias School.Affairs.Coco_Rank
+
+    @valid_attrs %{rank: "some rank", sub_category: "some sub_category"}
+    @update_attrs %{rank: "some updated rank", sub_category: "some updated sub_category"}
+    @invalid_attrs %{rank: nil, sub_category: nil}
+
+    def coco__rank_fixture(attrs \\ %{}) do
+      {:ok, coco__rank} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Affairs.create_coco__rank()
+
+      coco__rank
+    end
+
+    test "list_coco_ranks/0 returns all coco_ranks" do
+      coco__rank = coco__rank_fixture()
+      assert Affairs.list_coco_ranks() == [coco__rank]
+    end
+
+    test "get_coco__rank!/1 returns the coco__rank with given id" do
+      coco__rank = coco__rank_fixture()
+      assert Affairs.get_coco__rank!(coco__rank.id) == coco__rank
+    end
+
+    test "create_coco__rank/1 with valid data creates a coco__rank" do
+      assert {:ok, %Coco_Rank{} = coco__rank} = Affairs.create_coco__rank(@valid_attrs)
+      assert coco__rank.rank == "some rank"
+      assert coco__rank.sub_category == "some sub_category"
+    end
+
+    test "create_coco__rank/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Affairs.create_coco__rank(@invalid_attrs)
+    end
+
+    test "update_coco__rank/2 with valid data updates the coco__rank" do
+      coco__rank = coco__rank_fixture()
+      assert {:ok, coco__rank} = Affairs.update_coco__rank(coco__rank, @update_attrs)
+      assert %Coco_Rank{} = coco__rank
+      assert coco__rank.rank == "some updated rank"
+      assert coco__rank.sub_category == "some updated sub_category"
+    end
+
+    test "update_coco__rank/2 with invalid data returns error changeset" do
+      coco__rank = coco__rank_fixture()
+      assert {:error, %Ecto.Changeset{}} = Affairs.update_coco__rank(coco__rank, @invalid_attrs)
+      assert coco__rank == Affairs.get_coco__rank!(coco__rank.id)
+    end
+
+    test "delete_coco__rank/1 deletes the coco__rank" do
+      coco__rank = coco__rank_fixture()
+      assert {:ok, %Coco_Rank{}} = Affairs.delete_coco__rank(coco__rank)
+      assert_raise Ecto.NoResultsError, fn -> Affairs.get_coco__rank!(coco__rank.id) end
+    end
+
+    test "change_coco__rank/1 returns a coco__rank changeset" do
+      coco__rank = coco__rank_fixture()
+      assert %Ecto.Changeset{} = Affairs.change_coco__rank(coco__rank)
+    end
+  end
 end

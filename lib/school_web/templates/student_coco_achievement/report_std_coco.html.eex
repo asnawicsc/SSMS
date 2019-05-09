@@ -1,0 +1,44 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>CoCurriculum Achievement</title>
+
+  </head>
+  <body>
+
+
+</div>
+<br>
+
+<div class="table-responsive table-bordered">
+    <table class="table">
+
+      <tr>
+        <th><%= gettext "Student Name" %></th>
+        <th ><%= gettext "No KP" %></th>
+        <th><%=gettext "Kelas" %></th>
+        <th ><%= gettext "Tarikh" %></th>
+        <th ><%= gettext "Pertandingan" %></th>
+        <th ><%= gettext "Peringkat" %></th>
+        <th ><%= gettext "Kedudukan" %></th>
+      </tr>
+       <%= for item <- @students do %>
+
+      <tr>
+       <th ><%= item.name %></th>
+       <th ><%= item.ic %></th>
+       <th><%= item.class_name %></th>
+       <th ><%= item.date %></th>
+       <th  ><%=item.event_name %></th>
+       <th  ><%=item.peringkat %></th>
+       <th  ><%=item.rank %></th>
+      </tr>
+         <% end %>
+
+    </table>
+    
+</div>
+  </body>
+</html>

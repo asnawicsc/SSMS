@@ -360,11 +360,12 @@ defmodule SchoolWeb.ExamController do
             )
           )
 
-        IO.inspect(a)
+        # IO.inspect(a)
 
         {class, a}
       else
         teacher = Repo.get_by(School.Affairs.Teacher, %{email: user.email})
+        IO.inspect(teacher)
 
         class =
           Repo.all(
@@ -382,6 +383,8 @@ defmodule SchoolWeb.ExamController do
               select: %{id: s.id, name: s.name}
             )
           )
+
+        IO.inspect(class)
 
         class =
           if class != [] do

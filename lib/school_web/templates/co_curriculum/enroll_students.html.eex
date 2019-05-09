@@ -30,7 +30,7 @@
 
                         <select id="show_sub_ctg" class="custom-select custom-select-sm">
                            <option selected="">Choose a Sub Category</option>
-                           <%= for coco <- @cocos|>Enum.sort_by(fn x -> x.sub_category end) do %>
+                           <%= for coco <- @cocos|>Enum.uniq(fn x -> x.sub_category end) do %>
                            <option data-type="<%= coco.sub_category %>"style = "display: none" value="<%= coco.id %>" aria-label="<%= coco.category %>"><%= coco.sub_category %></option>
                            <% end %>
                     

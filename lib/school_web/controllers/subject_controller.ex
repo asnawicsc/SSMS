@@ -21,7 +21,9 @@ defmodule SchoolWeb.SubjectController do
           select: %{
             id: s.id,
             code: s.code,
+            timetable_code: s.timetable_code,
             name: s.description,
+            timetable_description: s.timetable_description,
             institution_id: s.institution_ids
           }
         )
@@ -57,7 +59,9 @@ defmodule SchoolWeb.SubjectController do
           select: %{
             id: s.id,
             code: s.code,
+            timetable_code: s.timetable_code,
             name: s.description,
+            timetable_description: s.timetable_description,
             with_mark: s.with_mark,
             institution_id: s.institution_id
           }
@@ -128,7 +132,9 @@ defmodule SchoolWeb.SubjectController do
             institution_id: s.institution_id,
             id: s.id,
             code: s.code,
+            timetable_code: s.timetable_code,
             name: s.description,
+            timetable_description: s.timetable_description,
             description: s.description,
             cdesc: s.cdesc
           }
