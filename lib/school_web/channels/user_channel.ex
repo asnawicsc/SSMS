@@ -1871,6 +1871,8 @@ defmodule SchoolWeb.UserChannel do
       )
       |> hd()
 
+    em = Repo.get_by(School.Affairs.ExamMaster, id: exam_master.exam_master_id)
+
     exam_mark =
       Repo.all(
         from(
@@ -1881,11 +1883,14 @@ defmodule SchoolWeb.UserChannel do
           on: g.id == k.exam_master_id,
           left_join: s in School.Affairs.Student,
           on: s.id == e.student_id,
+          left_join: sc in School.Affairs.StudentClass,
+          on: sc.sudent_id == s.id,
           left_join: p in School.Affairs.Subject,
           on: p.id == e.subject_id,
           where:
             e.class_id == ^class_id and g.id == ^exam_id and g.institution_id == ^inst_id and
-              s.institution_id == ^inst_id and p.institution_id == ^inst_id,
+              s.institution_id == ^inst_id and p.institution_id == ^inst_id and
+              sc.semester_id == ^em.semester_id,
           select: %{
             subject_code: p.code,
             exam_name: g.name,

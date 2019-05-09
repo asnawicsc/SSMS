@@ -1636,11 +1636,16 @@ else
     <% chinese =item.name|>String.split_at(5)|>elem(0) %>
     <% malay =item.name|>String.split_at(5)|>elem(1) %>
 
-  <td align="center" style="margin: 3px; padding: 3px;"><%= chinese %><BR><%= malay %></td>
+  <td align="center" style="margin: 3px; padding: 3px; width: 100px;"><%= chinese %><BR><%= malay %></td>
  
   <% end %>
-    <td align="center" style="margin: 3px; padding: 3px;">评审二 <BR>PKSR2</td>
-  <td align="center" style="margin: 3px; padding: 3px;">评审三 <BR>PKSR3</td>
+    <%= if @level.name =="Standard 6" do %>
+    <td align="center" style="margin: 3px; padding: 3px; width: 100px;" >评审二 <BR>PKSR2</td>
+  <td align="center" style="margin: 3px; padding: 3px; width: 100px;">评审三 <BR>PKSR3</td>
+  <% else %>
+   <td align="center" style="margin: 3px; padding: 3px; width: 100px;">评审二 <BR>PKSR2</td>
+  <td align="center" style="margin: 3px; padding: 3px; width: 100px;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>
+  <% end %>
   <% end %>
     <%= if count == 2 do %>
     
@@ -1654,10 +1659,14 @@ else
   <% chinese =item.name|>String.split_at(5)|>elem(0) %>
     <% malay =item.name|>String.split_at(5)|>elem(1) %>
 
-  <td align="center" style="margin: 3px; padding: 3px;"><%= chinese %><BR><%= malay %></td>
+  <td align="center" style="margin: 3px; padding: 3px; width: 100px;"><%= chinese %><BR><%= malay %></td>
  
   <% end %>
-  <td align="center" style="margin: 3px; padding: 3px;">评审三 <BR>PKSR3</td>
+  <%= if @level.name =="Standard 6" do %>
+  <td align="center" style="margin: 3px; padding: 3px; width: 100px;">评审三 <BR>PKSR3</td>
+  <% else %>
+  <td align="center" style="margin: 3px; padding: 3px; width: 100px;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>
+  <% end %>
 <% end %>
    <%= if count == 3 do %>
   <%= for item <- @list_exam do %>
@@ -1665,12 +1674,12 @@ else
     <% chinese =item.name|>String.split_at(5)|>elem(0) %>
     <% malay =item.name|>String.split_at(5)|>elem(1) %>
 
-  <td align="center" style="margin: 3px; padding: 3px;"><%= chinese %><BR><%= malay %></td>
+  <td align="center" style="margin: 3px; padding: 3px; width: 100px;"><%= chinese %><BR><%= malay %></td>
 
   <% end %>
 
   <% end %>
-    <td align="center" style="margin: 3px; padding: 3px;">平均 <BR>Purata</td>
+    <td align="center" style="margin: 3px; padding: 3px; width: 100px;">平均 <BR>Purata</td>
  </tr>
 
  <tr  align="center">

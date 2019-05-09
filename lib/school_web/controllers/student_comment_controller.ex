@@ -159,7 +159,8 @@ defmodule SchoolWeb.StudentCommentController do
             coment1: b.comment1,
             coment2: b.comment2,
             coment3: b.comment3
-          }
+          },
+          order_by: [asc: a.name]
         )
       )
 

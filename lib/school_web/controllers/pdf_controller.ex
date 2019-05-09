@@ -2167,6 +2167,9 @@ defmodule SchoolWeb.PdfController do
           3 ->
             "report_cards_sk.html"
 
+          2 ->
+            "report_cards_test.html"
+
           _ ->
             "report_cards_sk.html"
         end
@@ -2185,7 +2188,7 @@ defmodule SchoolWeb.PdfController do
       pdf_params = %{"html" => html}
 
       pdf_binary =
-        if id == 3 do
+        if id == 2 do
           PdfGenerator.generate_binary!(
             pdf_params["html"],
             size: "B5",
@@ -4052,13 +4055,16 @@ defmodule SchoolWeb.PdfController do
           on: k.id == d.exam_master_id,
           left_join: s in School.Affairs.Student,
           on: s.id == e.student_id,
+          left_join: sc in School.Affairs.StudentClass,
+          on: sc.sudent_id == s.id,
           left_join: p in School.Affairs.Subject,
           on: p.id == e.subject_id,
           where:
             e.class_id == ^class_id and k.id == ^exam_id and
               k.institution_id == ^conn.private.plug_session["institution_id"] and
               s.institution_id == ^conn.private.plug_session["institution_id"] and
-              p.institution_id == ^conn.private.plug_session["institution_id"],
+              p.institution_id == ^conn.private.plug_session["institution_id"] and
+              sc.semester_id == ^exam.semester_id,
           select: %{
             subject_code: p.code,
             exam_name: k.name,

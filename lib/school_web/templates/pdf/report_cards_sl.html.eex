@@ -1596,7 +1596,7 @@ else
 <body>
 
 
-  <table  class="table" >
+  <table  class="table" style="font-size: 14px;">
 
     <tr align="center">
   <td colspan="6" align="center" style="margin: 3px; padding: 3px; border-left: 0; border-right: 0; border-top: 0" ><h3><b><%= @institute.name %></b></h3><br>
@@ -1604,11 +1604,11 @@ else
   
  </tr>
      <tr align="left">
-  <td colspan="5"><b>学生姓名: <%= profile.cname %></b> <br>
-        <b>Nama Murid: <%= profile.name %></b></font></td>
+  <td colspan="5"><b><h4>学生姓名: <%= profile.cname %></h4> <br>
+        <h4>Nama Murid: <%= profile.name %></h4></b></td>
   
-  <td><b>班级<br>
-        Darjah: <%= profile.class %></b></font></td>
+  <td><b><h4>班级</h4><br>
+       <h4> Darjah: <%= profile.class %></h4></b></font></td>
  </tr>
 
 
@@ -1623,11 +1623,11 @@ else
     <% chinese =item.name|>String.split_at(5)|>elem(0) %>
     <% malay =item.name|>String.split_at(5)|>elem(1) %>
 
-  <td align="center" style="margin: 3px; padding: 3px;"><%= chinese %><BR><%= malay %></td>
+  <td align="center" style="margin: 3px; padding: 3px; width: 100px;"><%= chinese %><BR><%= malay %></td>
  
   <% end %>
-    <td align="center" style="margin: 3px; padding: 3px;">评审二 <BR>PKSR2</td>
-  <td align="center" style="margin: 3px; padding: 3px;">评审三 <BR>PKSR3</td>
+    <td align="center" style="margin: 3px; padding: 3px; width: 100px;">评审二 <BR>PKSR2</td>
+  <td align="center" style="margin: 3px; padding: 3px; width: 100px;">评审三 <BR>PKSR3</td>
   <% end %>
     <%= if count == 2 do %>
     
@@ -1641,10 +1641,10 @@ else
   <% chinese =item.name|>String.split_at(5)|>elem(0) %>
     <% malay =item.name|>String.split_at(5)|>elem(1) %>
 
-  <td align="center" style="margin: 3px; padding: 3px;"><%= chinese %><BR><%= malay %></td>
+  <td align="center" style="margin: 3px; padding: 3px; width: 100px;"><%= chinese %><BR><%= malay %></td>
  
   <% end %>
-  <td align="center" style="margin: 3px; padding: 3px;">评审三 <BR>PKSR3</td>
+  <td align="center" style="margin: 3px; padding: 3px; width: 100px;">评审三 <BR>PKSR3</td>
 <% end %>
    <%= if count == 3 do %>
   <%= for item <- @list_exam do %>
@@ -1652,12 +1652,12 @@ else
     <% chinese =item.name|>String.split_at(5)|>elem(0) %>
     <% malay =item.name|>String.split_at(5)|>elem(1) %>
 
-  <td align="center" style="margin: 3px; padding: 3px;"><%= chinese %><BR><%= malay %></td>
+  <td align="center" style="margin: 3px; padding: 3px; width: 100px;"><%= chinese %><BR><%= malay %></td>
 
   <% end %>
 
   <% end %>
-    <td align="center" style="margin: 3px; padding: 3px;">平均 <BR>Purata</td>
+    <td align="center" style="margin: 3px; padding: 3px; width: 100px;">平均 <BR>Purata</td>
  </tr>
 
  <tr  align="center">
@@ -1829,7 +1829,7 @@ else
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
    <tr align="center">
-     <td style="margin: 5px; padding: 5px; border-right: 0" align="left">广藿香</td>
+     <td style="margin: 5px; padding: 5px; border-right: 0" align="left">阅读报告</td>
   <td  style="margin: 5px; padding: 5px; border-left: 0" align="left">Nilam</td>
     <td style="margin: 3px; padding: 3px;"> <% student_comment = Repo.get_by(School.Affairs.StudentMarkNilam, student_id: profile.stuid,year: profile.year) %>
      
