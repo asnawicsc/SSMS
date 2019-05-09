@@ -15,7 +15,9 @@
                 <thead>
                   <tr>
                   <th>Code</th>
-                  <th>Description</th>
+                  <th>Category</th>
+                  <th>Sub Category</th>
+                  <th>Description</th>>
                   <th>Teacher</th>
                   <th></th>
                   </tr>
@@ -24,6 +26,8 @@
             <%= for co_curriculum <- @cocurriculum do %>
                     <tr>
                        <td><%= co_curriculum.code %></td>
+                       <td><%= co_curriculum.category %></td>
+                      <td><%= co_curriculum.sub_category %></td>
                       <td><%= co_curriculum.description %></td>
                       <td><%= co_curriculum.teacher_id %></td>
                         
@@ -33,7 +37,7 @@
 
             
 
-         <span><%= link "Enroll Students", to: co_curriculum_path(@conn, :enroll_students, id: co_curriculum.id), class: "mb-1 btn-sm btn btn-outline-primary" %></span>
+         
      
         <span><%= link "Edit", to: co_curriculum_path(@conn, :edit, co_curriculum.id), class: "mb-1 btn-sm btn btn-outline-primary" %></span>
         <span><%= link "Delete", to: co_curriculum_path(@conn, :delete, co_curriculum.id), method: :delete, data: [confirm: "Are you sure?"], class: "mb-1 btn-sm btn btn-outline-danger" %></span>
@@ -51,4 +55,6 @@
       </div>
      
 </div>
-<span><%= link "New Co curriculum", to: co_curriculum_path(@conn, :new) %></span>
+<span><%= link "New Co curriculum", to: co_curriculum_path(@conn, :new) %></span><br>
+
+<%= link "Enroll Students", to: co_curriculum_path(@conn, :enroll_students)%>

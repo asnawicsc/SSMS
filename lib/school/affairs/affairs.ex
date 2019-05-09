@@ -3336,7 +3336,14 @@ defmodule School.Affairs do
         left_join: t in Teacher,
         on: t.id == c.teacher_id,
         where: c.institution_id == ^inst_id,
-        select: %{id: c.id, code: c.code, description: c.description, teacher_id: t.name}
+        select: %{
+          id: c.id,
+          code: c.code,
+          description: c.description,
+          teacher_id: t.name,
+          category: c.category,
+          sub_category: c.sub_category
+        }
       )
     )
   end
@@ -6242,6 +6249,64 @@ defmodule School.Affairs do
     ExamAttendance.changeset(exam_attendance, %{})
   end
 
+  alias School.Affairs.Student_coco_achievement
+
+  @doc """
+  Returns the list of student_coco_achievements.
+
+  ## Examples
+
+      iex> list_student_coco_achievements()
+      [%Student_coco_achievement{}, ...]
+
+  """
+  def list_student_coco_achievements do
+    Repo.all(Student_coco_achievement)
+  end
+
+  @doc """
+  Gets a single student_coco_achievement.
+
+  Raises `Ecto.NoResultsError` if the Student coco achievement does not exist.
+
+  ## Examples
+
+      iex> get_student_coco_achievement!(123)
+      %Student_coco_achievement{}
+
+      iex> get_student_coco_achievement!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_student_coco_achievement!(id), do: Repo.get!(Student_coco_achievement, id)
+
+  @doc """
+  Creates a student_coco_achievement.
+
+  ## Examples
+
+      iex> create_student_coco_achievement(%{field: value})
+      {:ok, %Student_coco_achievement{}}
+
+      iex> create_student_coco_achievement(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_student_coco_achievement(attrs \\ %{}) do
+    %Student_coco_achievement{}
+    |> Student_coco_achievement.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def update_student_coco_achievement(
+        %Student_coco_achievement{} = student_coco_achievement,
+        attrs
+      ) do
+    student_coco_achievement
+    |> Student_coco_achievement.changeset(attrs)
+    |> Repo.update()
+  end
+
   alias School.Affairs.StudentMarkNilam
 
   @doc """
@@ -6292,17 +6357,18 @@ defmodule School.Affairs do
   end
 
   @doc """
-  Updates a student_mark_nilam.
+  Updates a student_coco_achievement.
 
   ## Examples
 
-      iex> update_student_mark_nilam(student_mark_nilam, %{field: new_value})
-      {:ok, %StudentMarkNilam{}}
+      iex> update_student_coco_achievement(student_coco_achievement, %{field: new_value})
+      {:ok, %Student_coco_achievement{}}
 
-      iex> update_student_mark_nilam(student_mark_nilam, %{field: bad_value})
+      iex> update_student_coco_achievement(student_coco_achievement, %{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """
+
   def update_student_mark_nilam(%StudentMarkNilam{} = student_mark_nilam, attrs) do
     student_mark_nilam
     |> StudentMarkNilam.changeset(attrs)
@@ -6310,17 +6376,132 @@ defmodule School.Affairs do
   end
 
   @doc """
-  Deletes a StudentMarkNilam.
+
+  Deletes a Student_coco_achievement.
 
   ## Examples
 
-      iex> delete_student_mark_nilam(student_mark_nilam)
-      {:ok, %StudentMarkNilam{}}
+      iex> delete_student_coco_achievement(student_coco_achievement)
+      {:ok, %Student_coco_achievement{}}
 
-      iex> delete_student_mark_nilam(student_mark_nilam)
+      iex> delete_student_coco_achievement(student_coco_achievement)
       {:error, %Ecto.Changeset{}}
 
   """
+  def delete_student_coco_achievement(%Student_coco_achievement{} = student_coco_achievement) do
+    Repo.delete(student_coco_achievement)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking student_coco_achievement changes.
+
+  ## Examples
+
+      iex> change_student_coco_achievement(student_coco_achievement)
+      %Ecto.Changeset{source: %Student_coco_achievement{}}
+
+  """
+  def change_student_coco_achievement(%Student_coco_achievement{} = student_coco_achievement) do
+    Student_coco_achievement.changeset(student_coco_achievement, %{})
+  end
+
+  alias School.Affairs.Coco_Rank
+
+  def change_coco__rank(%Coco_Rank{} = coco__rank) do
+    Coco_Rank.changeset(coco__rank, %{})
+  end
+
+  @doc """
+  Returns the list of coco_ranks.
+
+  ## Examples
+
+      iex> list_coco_ranks()
+      [%Coco_Rank{}, ...]
+
+  """
+  def list_coco_ranks do
+    Repo.all(Coco_Rank)
+  end
+
+  @doc """
+  Gets a single coco__rank.
+
+  Raises `Ecto.NoResultsError` if the Coco  rank does not exist.
+
+  ## Examples
+
+      iex> get_coco__rank!(123)
+      %Coco_Rank{}
+
+      iex> get_coco__rank!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_coco__rank!(id), do: Repo.get!(Coco_Rank, id)
+
+  @doc """
+  Creates a coco__rank.
+
+  ## Examples
+
+      iex> create_coco__rank(%{field: value})
+      {:ok, %Coco_Rank{}}
+
+      iex> create_coco__rank(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_coco__rank(attrs \\ %{}) do
+    %Coco_Rank{}
+    |> Coco_Rank.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a coco__rank.
+
+  ## Examples
+
+      iex> update_coco__rank(coco__rank, %{field: new_value})
+      {:ok, %Coco_Rank{}}
+
+      iex> update_coco__rank(coco__rank, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_coco__rank(%Coco_Rank{} = coco__rank, attrs) do
+    coco__rank
+    |> Coco_Rank.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a Coco_Rank.
+
+  ## Examples
+
+      iex> delete_coco__rank(coco__rank)
+      {:ok, %Coco_Rank{}}
+
+      iex> delete_coco__rank(coco__rank)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_coco__rank(%Coco_Rank{} = coco__rank) do
+    Repo.delete(coco__rank)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking coco__rank changes.
+
+  ## Examples
+
+      iex> change_coco__rank(coco__rank)
+      %Ecto.Changeset{source: %Coco_Rank{}}
+
+  """
+
   def delete_student_mark_nilam(%StudentMarkNilam{} = student_mark_nilam) do
     Repo.delete(student_mark_nilam)
   end

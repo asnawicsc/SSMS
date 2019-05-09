@@ -34,6 +34,18 @@
   </div>
 
   <div class="form-group">
+    <%= label f, :category, class: "control-label" %>
+    <%= text_input f, :category, class: "form-control" %>
+    <%= error_tag f, :category %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :sub_category, class: "control-label" %>
+    <%= text_input f, :sub_category, class: "form-control" %>
+    <%= error_tag f, :sub_category %>
+  </div>
+
+  <div class="form-group">
     <%= submit "Submit", class: "btn btn-primary" %>
   </div>
 <% end %>

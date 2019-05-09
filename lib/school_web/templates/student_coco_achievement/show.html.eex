@@ -1,0 +1,48 @@
+<h2>Show Student coco achievement</h2>
+
+<ul>
+
+  <li>
+    <strong>Student:</strong>
+    <%= @student_coco_achievement.student_id %>
+  </li>
+
+  <li>
+    <strong>Date:</strong>
+    <%= @student_coco_achievement.date %>
+  </li>
+
+  <li>
+    <strong>Category:</strong>
+    <%= @student_coco_achievement.category %>
+  </li>
+
+  <li>
+    <strong>Participant type:</strong>
+    <%= @student_coco_achievement.participant_type %>
+  </li>
+
+  <li>
+    <strong>Peringkat:</strong>
+    <%= @student_coco_achievement.peringkat %>
+  </li>
+
+  <li>
+    <strong>Sub category:</strong>
+    <%= @student_coco_achievement.sub_category %>
+  </li>
+
+  <li>
+    <strong>Competition name:</strong>
+    <%= @student_coco_achievement.competition_name %>
+  </li>
+
+  <li>
+    <strong>Rank:</strong>
+    <%= @student_coco_achievement.rank %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: student_coco_achievement_path(@conn, :edit, @student_coco_achievement) %></span>
+<span><%= link "Back", to: student_coco_achievement_path(@conn, :index) %></span>

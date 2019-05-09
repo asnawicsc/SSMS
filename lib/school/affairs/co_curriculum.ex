@@ -7,6 +7,10 @@ defmodule School.Affairs.CoCurriculum do
     field(:description, :string)
     field(:institution_id, :integer)
     field(:teacher_id, :integer)
+    field(:category, :string)
+    field(:sub_category, :string)
+    field(:student_id, :integer)
+    field(:class_id, :integer)
 
     timestamps()
   end
@@ -14,6 +18,6 @@ defmodule School.Affairs.CoCurriculum do
   @doc false
   def changeset(co_curriculum, attrs) do
     co_curriculum
-    |> cast(attrs, [:teacher_id, :institution_id, :code, :description])
+    |> cast(attrs, [:teacher_id, :institution_id, :code, :description, :category, :sub_category])
   end
 end

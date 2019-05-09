@@ -40,30 +40,50 @@
 <Br>
     <h4 align="center">Standard: <%= @standard.name %></h4>
 
-    <table class="table" id="example" align="center" width="100%">
-      <colgroup>
-        <col col span="2" >
-      </colgroup>
-      <tr align="center">
-        <th >Subject</th>
-        <th  colspan="2">Grade A</th>
-        <th colspan="2">Grade B</th>
-        <th  colspan="2">Grade C</th>
-        <th  colspan="2">Grade D</th>
-        <th  colspan="2">Grade E</th>
-        
-        <th  colspan="2">Pass</th>
-        <th  colspan="2">Fail</th>
-         <th  >GPS</th>
-
+    <table border="1" class="table" id="example" align="center" width="100%">
+      <tr>
+        <th colspan="1" rowspan="4" >Kelas</th>
+        <th colspan="1" rowspan="4" >Bil.Murid</th>
+        <th colspan="1" rowspan="4" >Peperiksaan</th>
+        <th colspan ="10" rowspan="1"> Markah/Gred </th>
+        <th colspan = "2" rowspan="2"> Bilanagan Lulus </th>
+        <th colspan = "2" rowspan="2"> Bilanagan Gagal </th>
+        <th colspan="1" rowspan="4"> Purata Markah </th>
+        <th colspan="1" rowspan="4"> GPA </th>
       </tr>
+      <tr>
+        <th rowspan="1" colspan="8"> Bilangan Lulus </th>
+        <th rowspan="1" colspan="2"> Bilangan Gagal </th>
+      </tr>
+      <tr>
+        <th rowspan="1" colspan="2"> A </th>
+        <th rowspan="1" colspan="2"> B </th>
+        <th rowspan="1" colspan="2"> C </th>
+        <th rowspan="1" colspan="2"> D </th>
+        <th rowspan="1" colspan="2"> E </th>
+        <th rowspan="2" colspan="1"> Jumlah </th>
+        <th rowspan="2" colspan="1"> Peratus </th>
+        <th rowspan="2" colspan="1"> Jumlah </th>
+        <th rowspan="2" colspan="1"> Peratus </th>
+      </tr>
+      <tr>
+        <th rowspan="1" colspan="2"> 80~100 </th>
+        <th rowspan="1" colspan="2"> 65~79 </th>
+        <th rowspan="1" colspan="2"> 50~64 </th>
+        <th rowspan="1" colspan="2"> 40~49 </th>
+        <th rowspan="1" colspan="2"> 0~39 </th>
+      </tr>
+
+
      
 
         <%= for item <- @group_subject do %>
         
         <tr>
+          <th><%=item.kelas %></th>
+          <th><%=item.total_student %></th>
      
-          <th><%=item.subject %></a></th>
+          <th><%=item.subject %></th>
           <th ><%= item.a %></th>
           <th ><%= (item.a/item.total_student)*100|>Float.round(2) %>%</th>
           <th><%= item.b %></th>
@@ -83,7 +103,11 @@
       </tr>
        <% end %>
 
-    <tr >
+    </table>
+
+    <table>
+      
+      <tr >
        <th >AVG</a></th>
          <th >AVG</a></th>
               <% a= @a %>
@@ -134,7 +158,6 @@
           end %></th>
           <th ></th>
     </tr>
-
     </table>
 
 

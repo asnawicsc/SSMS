@@ -775,7 +775,7 @@
 
     end
 
-                                math= all_date|>Enum.filter(fn x -> x.subject =="Math" end)
+    math= all_date|>Enum.filter(fn x -> x.subject =="Math" end)
    {math1,math2,math3}=	if math == [] do
 
     	{"","",""}
@@ -1901,15 +1901,10 @@ else
         semester2= semester|>Enum.fetch!(1)
 
       {semester1,semester2}
-
       
     end %>
 
-
     <%= if semester1 != nil  do %>
-
-
-
 
     <% student_comment = Repo.get_by(School.Affairs.StudentComment, student_id: profile.stuid,semester_id: semester1.id) %>
 
@@ -2031,11 +2026,31 @@ else
              <% end %>
            </td>
  </tr>
+
+ <% std_coco = Repo.all(
+ from(t in School.Affairs.CoCurriculum,
+  left_join: s in School.Affairs.Student_coco_achievement,
+  on: s.competition_name == t.description,
+  where: s.student_id == ^profile.stuid,
+  select: %{category: t.category, sub_category: t.sub_category, desc: s.competition_name, rank: s.rank, date: s.date}
+    ) 
+ 
+  )  |> Enum.filter(fn x -> Integer.to_string(x.date.year) == profile.year end)%>
+
+  
+  
   <tr>
    <td style="margin: 5px; padding: 5px; " align="left">荣誉榜 Pencapaian: </td>
+   <%= for x <- std_coco do %>
    <td colspan="5" align="left" style="margin: 3px; padding: 3px;" height="50px;">
+    <%= if std_coco != [] do %>
+    <%= x.desc%>: <%= x.rank %>
+    <% else %>
+    "N/A"
+    <% end %>
 
   </td>
+  <% end %>
   
  </tr>
   <tr>
@@ -2043,14 +2058,40 @@ else
       <td style="margin: 5px; padding: 5px; " align="left">Pakaian Seragam</td>
    <td colspan="4" align="left" style="margin: 3px; padding: 3px;">
 
-  </td>
+ <% std_coco_uniform = Repo.all(
+ from(t in School.Affairs.StudentCocurriculum,
+
+  where: t.student_id == ^profile.stuid and t.category == ^"Unit Beruniform",
+  select:  t.sub_category  ) 
   
+  )%>
+
+  <%= if std_coco_uniform != [] do %>
+<%= hd(std_coco_uniform) %>
+<% else %>
+"n/a"
+  <%end %>
+  </td>
+
  </tr>
   <tr>
    <td style="margin: 5px; padding: 5px; " align="left">学会 </td>
     <td style="margin: 5px; padding: 5px; " align="left">Persatuan</td>
    <td colspan="4" align="left" style="margin: 3px; padding: 3px; ">
 
+ <% std_coco_persatuan = Repo.all(
+ from(t in School.Affairs.StudentCocurriculum,
+
+  where: t.student_id == ^profile.stuid and t.category == ^"Kelab&Persatuan",
+  select:  t.sub_category  ) 
+  
+  )%>
+
+  <%= if std_coco_persatuan != [] do %>
+   <%= hd(std_coco_persatuan) %>
+  <% else %>
+    "n/a"
+  <%end %>
   </td>
   
  </tr>
@@ -2059,9 +2100,25 @@ else
    <td style="margin: 5px; padding: 5px; " align="left">Sukan/Permainan: </td>
    <td colspan="4" align="left" style="margin: 3px; padding: 3px;" > 
 
+ <% std_coco_sukan = Repo.all(
+ from(t in School.Affairs.StudentCocurriculum,
+
+  where: t.student_id == ^profile.stuid and t.category == ^"Sukan & Permainan",
+  select:  t.sub_category  ) 
+  
+  )%>
+
+  <%= if std_coco_sukan != [] do %>
+<%= hd(std_coco_sukan) %>
+<% else %>
+"n/a"
+  <%end %>
   </td>
   
  </tr>
+
+ 
+
 <tr align="center">
   <td colspan="2" style="margin: 1px; padding: 1px;" align="center">T.Tangan Guru Besar<br>校长签名 </td>
    <td colspan="2" style="margin: 1px; padding: 1px;" align="center">T.Tangan Guru Darjah<br>级任签名 </td>

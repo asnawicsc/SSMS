@@ -1,6 +1,4 @@
 
-
-    
             <!-- START card-->
             <div class="card card-default">
                <div class="card-header"> Create User</div>
@@ -36,7 +34,7 @@
             </div>
 
 
-                         <%= if   @conn.private.plug_session["user_id"] != nil do %>
+              <%= if   @conn.private.plug_session["user_id"] != nil do %>
               
           
                 <% user_id=@conn.private.plug_session["user_id"] %>
@@ -45,37 +43,37 @@
 
                   <% user=Repo.get_by(Settings.User, %{id: user_id }) %>
 
+
+
                   <%= if user.role == "Admin" do %>
 
 
                         <div class="form-group">
               <span>Role : <select class="select" required="required" name="role">
-                                          <%= for a <- role|>Enum.filter(fn x -> x.name !="Admin" and x.name !="Teacher" end) |> Enum.sort do %>
-                                          <option value="<%= a.name %>">
-                                          <%= a.name %>
+                                          <option value="Support">
+                                          Support
                                           </option>
-                                          <% end %>
+                                          <option >
+                                          Teacher
+                                          </option>
                                       </select></span>
               </div>
 
               <% end %>
+
+
               <%= if user.role == "Support" do %>
 
 
                         <div class="form-group">
                                     <span>Role : <select class="select" required="required" name="role">
                                           <%= for a <- role|>Enum.filter(fn x -> x.name !="Admin" and x.name !="Support" end) |> Enum.sort do %>
-                                          <option value="<%= a.name %>">
-                                          <%= a.name %>
+                                          <option>
+                                          Teacher
                                           </option>
                                           <% end %>
                                       </select></span>
                         </div>
-                  <% end %>
-                  <%= if user.role == "Teacher" do %>
-
-
-                       
                   <% end %>
                 <% end %>
                   <% end %>

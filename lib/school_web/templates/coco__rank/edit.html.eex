@@ -1,0 +1,5 @@
+<h2>Edit Coco  rank</h2>
+
+<%= render "form.html", Map.put(assigns, :action, coco__rank_path(@conn, :update, @coco__rank)) %>
+
+<span><%= link "Back", to: coco__rank_path(@conn, :index) %></span>

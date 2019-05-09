@@ -9,6 +9,7 @@ defmodule SchoolWeb.CoCurriculumController do
     inst_id = Affairs.get_inst_id(conn)
     cocos = Affairs.list_cocurriculum(Affairs.get_inst_id(conn))
     semesters = Affairs.list_semesters(inst_id)
+
     render(conn, "enroll_students.html", cocos: cocos, semesters: semesters)
   end
 
