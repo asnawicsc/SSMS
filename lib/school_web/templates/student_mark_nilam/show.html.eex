@@ -1,0 +1,28 @@
+<h2>Show Student mark nilam</h2>
+
+<ul>
+
+  <li>
+    <strong>Student:</strong>
+    <%= @student_mark_nilam.student_id %>
+  </li>
+
+  <li>
+    <strong>Institution:</strong>
+    <%= @student_mark_nilam.institution_id %>
+  </li>
+
+  <li>
+    <strong>Total book:</strong>
+    <%= @student_mark_nilam.total_book %>
+  </li>
+
+  <li>
+    <strong>Year:</strong>
+    <%= @student_mark_nilam.year %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: student_mark_nilam_path(@conn, :edit, @student_mark_nilam) %></span>
+<span><%= link "Back", to: student_mark_nilam_path(@conn, :index) %></span>

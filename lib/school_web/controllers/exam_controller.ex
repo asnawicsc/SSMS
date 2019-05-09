@@ -40,7 +40,8 @@ defmodule SchoolWeb.ExamController do
   end
 
   def list_report(conn, params) do
-    render(conn, "list_report.html")
+    user = Repo.get_by(School.Settings.User, %{id: conn.private.plug_session["user_id"]})
+    render(conn, "list_report.html", user: user)
   end
 
   def list_report_history(conn, params) do
@@ -224,7 +225,8 @@ defmodule SchoolWeb.ExamController do
           #   )
 
           for grade <- grades do
-            if student_mark >= grade.mix and student_mark <= grade.max do
+            if Decimal.to_float(student_mark) >= Decimal.to_float(grade.min) and
+                 Decimal.to_float(student_mark) <= Decimal.to_float(grade.max) do
               %{
                 student_id: data.student_id,
                 grade: grade.name,
@@ -512,6 +514,7 @@ defmodule SchoolWeb.ExamController do
                       left_join: s in School.Affairs.Class,
                       on: s.level_id == m.level_id,
                       left_join: k in School.Affairs.Teacher,
+                      on: k.id == s.teacher_id,
                       where:
                         m.semester_id == ^conn.private.plug_session["semester_id"] and
                           s.institution_id == ^conn.private.plug_session["institution_id"] and
@@ -964,6 +967,222 @@ defmodule SchoolWeb.ExamController do
     end
   end
 
+  def sorting_marking(conn, male) do
+    all =
+      if conn.private.plug_session["institution_id"] == 3 do
+        m =
+          male
+          |> Enum.group_by(fn x -> x.sex end)
+          |> Enum.filter(fn x -> x |> elem(0) == "M" end)
+          |> Enum.map(fn x -> x |> elem(1) end)
+          |> List.flatten()
+
+        a =
+          for item <- m do
+            ori_name = item.student_name
+
+            sort_name = item.student_name |> String.replace("'", "A")
+
+            %{
+              class_id: item.class_id,
+              subject_id: item.subject_id,
+              exam_id: item.exam_id,
+              id: item.id,
+              student_name: item.student_name,
+              mark: item.mark,
+              grade: item.grade
+            }
+          end
+          |> Enum.sort_by(fn x -> x.student_name end)
+
+        f =
+          male
+          |> Enum.group_by(fn x -> x.sex end)
+          |> Enum.filter(fn x -> x |> elem(0) == "F" end)
+          |> Enum.map(fn x -> x |> elem(1) end)
+          |> List.flatten()
+
+        b =
+          for item <- f do
+            ori_name = item.student_name
+
+            sort_name = item.student_name |> String.replace("'", "A")
+
+            %{
+              class_id: item.class_id,
+              subject_id: item.subject_id,
+              exam_id: item.exam_id,
+              id: item.id,
+              student_name: item.student_name,
+              mark: item.mark,
+              grade: item.grade
+            }
+          end
+          |> Enum.sort_by(fn x -> x.student_name end)
+
+        all = a ++ b
+      else
+        a =
+          for item <- male do
+            ori_name = item.student_name
+
+            sort_name = item.student_name |> String.replace("'", "A")
+
+            %{
+              class_id: item.class_id,
+              subject_id: item.subject_id,
+              exam_id: item.exam_id,
+              id: item.id,
+              student_name: item.student_name,
+              mark: item.mark,
+              grade: item.grade
+            }
+          end
+          |> Enum.sort_by(fn x -> x.student_name end)
+      end
+  end
+
+  def sorting_marking2(conn, male) do
+    all =
+      if conn.private.plug_session["institution_id"] == 3 do
+        m =
+          male
+          |> Enum.group_by(fn x -> x.sex end)
+          |> Enum.filter(fn x -> x |> elem(0) == "M" end)
+          |> Enum.map(fn x -> x |> elem(1) end)
+          |> List.flatten()
+
+        a =
+          for item <- m do
+            ori_name = item.student_name
+
+            sort_name = item.student_name |> String.replace("'", "A")
+
+            %{
+              class_id: item.class_id,
+              subject_id: item.subject_id,
+              exam_id: item.exam_id,
+              student_id: item.student_id,
+              student_name: item.student_name,
+              mark: item.mark,
+              grade: item.grade
+            }
+          end
+          |> Enum.sort_by(fn x -> x.student_name end)
+
+        f =
+          male
+          |> Enum.group_by(fn x -> x.sex end)
+          |> Enum.filter(fn x -> x |> elem(0) == "F" end)
+          |> Enum.map(fn x -> x |> elem(1) end)
+          |> List.flatten()
+
+        b =
+          for item <- f do
+            ori_name = item.student_name
+
+            sort_name = item.student_name |> String.replace("'", "A")
+
+            %{
+              class_id: item.class_id,
+              subject_id: item.subject_id,
+              exam_id: item.exam_id,
+              student_id: item.student_id,
+              student_name: item.student_name,
+              mark: item.mark,
+              grade: item.grade
+            }
+          end
+          |> Enum.sort_by(fn x -> x.student_name end)
+
+        all = a ++ b
+      else
+        a =
+          for item <- male do
+            ori_name = item.student_name
+
+            sort_name = item.student_name |> String.replace("'", "A")
+
+            %{
+              class_id: item.class_id,
+              subject_id: item.subject_id,
+              exam_id: item.exam_id,
+              student_id: item.student_id,
+              student_name: item.student_name,
+              mark: item.mark,
+              grade: item.grade
+            }
+          end
+          |> Enum.sort_by(fn x -> x.student_name end)
+      end
+  end
+
+  def sorting_student(conn, male) do
+    all =
+      if conn.private.plug_session["institution_id"] == 3 do
+        m =
+          male
+          |> Enum.group_by(fn x -> x.sex end)
+          |> Enum.filter(fn x -> x |> elem(0) == "M" end)
+          |> Enum.map(fn x -> x |> elem(1) end)
+          |> List.flatten()
+
+        a =
+          for item <- m do
+            ori_name = item.student_name
+
+            sort_name = item.student_name |> String.replace("'", "A")
+
+            %{
+              id: item.id,
+              chinese_name: item.chinese_name,
+              student_name: item.student_name,
+              sex: item.sex
+            }
+          end
+          |> Enum.sort_by(fn x -> x.student_name end)
+
+        f =
+          male
+          |> Enum.group_by(fn x -> x.sex end)
+          |> Enum.filter(fn x -> x |> elem(0) == "F" end)
+          |> Enum.map(fn x -> x |> elem(1) end)
+          |> List.flatten()
+
+        b =
+          for item <- f do
+            ori_name = item.student_name
+
+            sort_name = item.student_name |> String.replace("'", "A")
+
+            %{
+              id: item.id,
+              chinese_name: item.chinese_name,
+              student_name: item.student_name,
+              sex: item.sex
+            }
+          end
+          |> Enum.sort_by(fn x -> x.student_name end)
+
+        all = a ++ b
+      else
+        a =
+          for item <- male do
+            ori_name = item.student_name
+
+            sort_name = item.student_name |> String.replace("'", "A")
+
+            %{
+              id: item.id,
+              chinese_name: item.chinese_name,
+              student_name: item.student_name,
+              sex: item.sex
+            }
+          end
+          |> Enum.sort_by(fn x -> x.student_name end)
+      end
+  end
+
   def marking(conn, params) do
     subject_id = params["s_id"]
     class_id = params["c_id"]
@@ -987,11 +1206,14 @@ defmodule SchoolWeb.ExamController do
             id: s.student_id,
             student_name: p.name,
             mark: s.mark,
-            grade: s.grade
+            grade: s.grade,
+            sex: p.sex
           },
           order_by: [asc: p.name]
         )
       )
+
+    all = sorting_marking(conn, all)
 
     if all == [] do
       class =
@@ -1025,10 +1247,12 @@ defmodule SchoolWeb.ExamController do
               s.class_id == ^class.id and
                 p.institution_id == ^conn.private.plug_session["institution_id"] and
                 s.semester_id == ^exam_master.semester_id,
-            select: %{id: p.id, chinese_name: p.chinese_name, student_name: p.name},
+            select: %{id: p.id, chinese_name: p.chinese_name, student_name: p.name, sex: p.sex},
             order_by: [asc: p.name]
           )
         )
+
+      student = sorting_student(conn, student)
 
       not_attend =
         Repo.all(
@@ -1095,7 +1319,7 @@ defmodule SchoolWeb.ExamController do
               s.class_id == ^class.id and
                 p.institution_id == ^conn.private.plug_session["institution_id"] and
                 s.semester_id == ^exam_master.semester_id,
-            select: %{id: p.id, student_name: p.name},
+            select: %{id: p.id, chinese_name: p.chinese_name, student_name: p.name, sex: p.sex},
             order_by: [asc: p.name]
           )
         )
@@ -1112,12 +1336,15 @@ defmodule SchoolWeb.ExamController do
               subject_id: subject_id,
               student_name: item.student_name,
               mark: 0,
-              grade: "F"
+              grade: "F",
+              sex: item.sex
             }
           else
           end
         end
         |> Enum.filter(fn x -> x != nil end)
+
+      fi = sorting_marking2(conn, fi)
 
       # csrf = Phoenix.Controller.get_csrf_token()
 
@@ -1411,7 +1638,8 @@ defmodule SchoolWeb.ExamController do
               )
 
             for grade <- grades do
-              if student_mark >= grade.mix and student_mark <= grade.max and student_mark != -1 do
+              if Decimal.to_float(student_mark) >= Decimal.to_float(grade.min) and
+                   Decimal.to_float(student_mark) <= Decimal.to_float(grade.max) do
                 %{
                   student_id: data.student_id,
                   student_name: data.student_name,
@@ -1925,7 +2153,8 @@ defmodule SchoolWeb.ExamController do
               )
 
             for grade <- grades do
-              if student_mark >= grade.mix and student_mark <= grade.max do
+              if Decimal.to_float(student_mark) >= Decimal.to_float(grade.min) and
+                   Decimal.to_float(student_mark) <= Decimal.to_float(grade.max) do
                 %{
                   student_id: data.student_id,
                   student_name: data.student_name,
@@ -2077,7 +2306,8 @@ defmodule SchoolWeb.ExamController do
             em.student_id == ^student.id and e.name == ^exam_name and
               c.institution_id == ^institution.id and e.institution_id == ^institution.id and
               j.institution_id == ^institution.id and s.institution_id == ^institution.id and
-              sb.institution_id == ^institution.id and sc.institute_id == ^institution.id,
+              sb.institution_id == ^institution.id and sc.institute_id == ^institution.id and
+              sb.with_mark == ^1,
           select: %{
             student_name: s.name,
             chinese_name: s.chinese_name,
@@ -2087,6 +2317,7 @@ defmodule SchoolWeb.ExamController do
             subject_name: sb.description,
             subject_cname: sb.cdesc,
             mark: em.mark,
+            grade: em.grade,
             standard_id: e.level_id
           }
         )
@@ -2101,31 +2332,47 @@ defmodule SchoolWeb.ExamController do
 
     all_data =
       for data <- all do
-        grades =
-          Repo.all(
-            from(
-              g in School.Affairs.ExamGrade,
-              where:
-                g.institution_id == ^conn.private.plug_session["institution_id"] and
-                  g.exam_master_id == ^exam.id
+        if data.mark != nil do
+          grades =
+            Repo.all(
+              from(
+                g in School.Affairs.ExamGrade,
+                where:
+                  g.institution_id == ^conn.private.plug_session["institution_id"] and
+                    g.exam_master_id == ^exam.id
+              )
             )
-          )
 
-        for grade <- grades do
-          if data.mark >= grade.min and data.mark <= grade.max do
-            %{
-              class_name: data.class_name,
-              semester: data.semester,
-              student_name: data.student_name,
-              chinese_name: data.chinese_name,
-              grade: grade.name,
-              gpa: grade.gpa,
-              subject_code: data.subject_code,
-              subject_name: data.subject_name,
-              subject_cname: data.subject_cname,
-              student_mark: data.mark
-            }
+          for grade <- grades do
+            if Decimal.to_float(data.mark) >= Decimal.to_float(grade.min) and
+                 Decimal.to_float(data.mark) <= Decimal.to_float(grade.max) do
+              %{
+                class_name: data.class_name,
+                semester: data.semester,
+                student_name: data.student_name,
+                chinese_name: data.chinese_name,
+                grade: grade.name,
+                gpa: grade.gpa,
+                subject_code: data.subject_code,
+                subject_name: data.subject_name,
+                subject_cname: data.subject_cname,
+                student_mark: Decimal.to_float(data.mark)
+              }
+            end
           end
+        else
+          %{
+            class_name: data.class_name,
+            semester: data.semester,
+            student_name: data.student_name,
+            chinese_name: data.chinese_name,
+            grade: "E",
+            gpa: 0,
+            subject_code: data.subject_code,
+            subject_name: data.subject_name,
+            subject_cname: data.subject_cname,
+            student_mark: 0
+          }
         end
       end
       |> List.flatten()
@@ -2145,8 +2392,19 @@ defmodule SchoolWeb.ExamController do
     g = all_data |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "G" end)
 
     per = all_data |> Enum.map(fn x -> x.student_mark end) |> Enum.count()
-    total_mark = all_data |> Enum.map(fn x -> x.student_mark end) |> Enum.sum()
-    total_gpa = all_data |> Enum.map(fn x -> Decimal.to_float(x.gpa) end) |> Enum.sum()
+
+    total_mark =
+      all_data
+      |> Enum.filter(fn x -> x.student_mark != 0 end)
+      |> Enum.map(fn x -> x.student_mark end)
+      |> Enum.sum()
+
+    total_gpa =
+      all_data
+      |> Enum.filter(fn x -> x.gpa != 0 end)
+      |> Enum.map(fn x -> Decimal.to_float(x.gpa) end)
+      |> Enum.sum()
+
     cgpa = (total_gpa / per) |> Float.round(2)
 
     total_per = per * 100
@@ -2335,31 +2593,47 @@ defmodule SchoolWeb.ExamController do
 
         all_data =
           for data <- all do
-            grades =
-              Repo.all(
-                from(
-                  g in School.Affairs.ExamGrade,
-                  where:
-                    g.institution_id == ^conn.private.plug_session["institution_id"] and
-                      g.exam_master_id == ^exam.id
+            if data.mark != nil do
+              grades =
+                Repo.all(
+                  from(
+                    g in School.Affairs.ExamGrade,
+                    where:
+                      g.institution_id == ^conn.private.plug_session["institution_id"] and
+                        g.exam_master_id == ^exam.id
+                  )
                 )
-              )
 
-            for grade <- grades do
-              if data.mark >= grade.min and data.mark <= grade.max do
-                %{
-                  class_name: data.class_name,
-                  semester: data.semester,
-                  student_name: data.student_name,
-                  chinese_name: data.chinese_name,
-                  grade: grade.name,
-                  gpa: grade.gpa,
-                  subject_code: data.subject_code,
-                  subject_name: data.subject_name,
-                  subject_cname: data.subject_cname,
-                  student_mark: data.mark
-                }
+              for grade <- grades do
+                if Decimal.to_float(data.mark) >= Decimal.to_float(grade.min) and
+                     Decimal.to_float(data.mark) <= Decimal.to_float(grade.max) do
+                  %{
+                    class_name: data.class_name,
+                    semester: data.semester,
+                    student_name: data.student_name,
+                    chinese_name: data.chinese_name,
+                    grade: grade.name,
+                    gpa: grade.gpa,
+                    subject_code: data.subject_code,
+                    subject_name: data.subject_name,
+                    subject_cname: data.subject_cname,
+                    student_mark: data.mark
+                  }
+                end
               end
+            else
+              %{
+                class_name: data.class_name,
+                semester: data.semester,
+                student_name: data.student_name,
+                chinese_name: data.chinese_name,
+                grade: "E",
+                gpa: 0,
+                subject_code: data.subject_code,
+                subject_name: data.subject_name,
+                subject_cname: data.subject_cname,
+                student_mark: 0
+              }
             end
           end
           |> List.flatten()
@@ -2378,9 +2652,23 @@ defmodule SchoolWeb.ExamController do
         f = all_data |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "F" end)
         g = all_data |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "G" end)
 
-        per = all_data |> Enum.map(fn x -> x.student_mark end) |> Enum.count()
-        total_mark = all_data |> Enum.map(fn x -> x.student_mark end) |> Enum.sum()
-        total_gpa = all_data |> Enum.map(fn x -> Decimal.to_float(x.gpa) end) |> Enum.sum()
+        per =
+          all_data
+          |> Enum.map(fn x -> x.student_mark end)
+          |> Enum.count()
+
+        total_mark =
+          all_data
+          |> Enum.filter(fn x -> x.student_mark != 0 end)
+          |> Enum.map(fn x -> x.student_mark end)
+          |> Enum.sum()
+
+        total_gpa =
+          all_data
+          |> Enum.filter(fn x -> x.student_mark != 0 end)
+          |> Enum.map(fn x -> Decimal.to_float(x.gpa) end)
+          |> Enum.sum()
+
         cgpa = (total_gpa / per) |> Float.round(2)
 
         total_per = per * 100
@@ -2538,7 +2826,8 @@ defmodule SchoolWeb.ExamController do
 
             a =
               for grade <- grades do
-                if item.mark >= grade.min and item.mark <= grade.max do
+                if Decimal.to_float(item.mark) >= Decimal.to_float(grade.min) and
+                     Decimal.to_float(item.mark) <= Decimal.to_float(grade.max) do
                   %{
                     exam_master_id: item.exam_master_id,
                     exam_name: item.exam_name,
@@ -2823,7 +3112,8 @@ defmodule SchoolWeb.ExamController do
               )
 
             for grade <- grades do
-              if student_mark >= grade.mix and student_mark <= grade.max do
+              if Decimal.to_float(student_mark) >= Decimal.to_float(grade.min) and
+                   Decimal.to_float(student_mark) <= Decimal.to_float(grade.max) do
                 %{
                   student_id: data.student_id,
                   student_name: data.student_name,

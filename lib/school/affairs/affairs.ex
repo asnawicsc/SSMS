@@ -6298,6 +6298,64 @@ defmodule School.Affairs do
     |> Repo.insert()
   end
 
+  def update_student_coco_achievement(
+        %Student_coco_achievement{} = student_coco_achievement,
+        attrs
+      ) do
+    student_coco_achievement
+    |> Student_coco_achievement.changeset(attrs)
+    |> Repo.update()
+  end
+
+  alias School.Affairs.StudentMarkNilam
+
+  @doc """
+  Returns the list of student_mark_nilam.
+
+  ## Examples
+
+      iex> list_student_mark_nilam()
+      [%StudentMarkNilam{}, ...]
+
+  """
+  def list_student_mark_nilam do
+    Repo.all(StudentMarkNilam)
+  end
+
+  @doc """
+  Gets a single student_mark_nilam.
+
+  Raises `Ecto.NoResultsError` if the Student mark nilam does not exist.
+
+  ## Examples
+
+      iex> get_student_mark_nilam!(123)
+      %StudentMarkNilam{}
+
+      iex> get_student_mark_nilam!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_student_mark_nilam!(id), do: Repo.get!(StudentMarkNilam, id)
+
+  @doc """
+  Creates a student_mark_nilam.
+
+  ## Examples
+
+      iex> create_student_mark_nilam(%{field: value})
+      {:ok, %StudentMarkNilam{}}
+
+      iex> create_student_mark_nilam(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_student_mark_nilam(attrs \\ %{}) do
+    %StudentMarkNilam{}
+    |> StudentMarkNilam.changeset(attrs)
+    |> Repo.insert()
+  end
+
   @doc """
   Updates a student_coco_achievement.
 
@@ -6310,13 +6368,15 @@ defmodule School.Affairs do
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_student_coco_achievement(%Student_coco_achievement{} = student_coco_achievement, attrs) do
-    student_coco_achievement
-    |> Student_coco_achievement.changeset(attrs)
+
+  def update_student_mark_nilam(%StudentMarkNilam{} = student_mark_nilam, attrs) do
+    student_mark_nilam
+    |> StudentMarkNilam.changeset(attrs)
     |> Repo.update()
   end
 
   @doc """
+
   Deletes a Student_coco_achievement.
 
   ## Examples
@@ -6346,6 +6406,10 @@ defmodule School.Affairs do
   end
 
   alias School.Affairs.Coco_Rank
+
+  def change_coco__rank(%Coco_Rank{} = coco__rank) do
+    Coco_Rank.changeset(coco__rank, %{})
+  end
 
   @doc """
   Returns the list of coco_ranks.
@@ -6437,7 +6501,21 @@ defmodule School.Affairs do
       %Ecto.Changeset{source: %Coco_Rank{}}
 
   """
-  def change_coco__rank(%Coco_Rank{} = coco__rank) do
-    Coco_Rank.changeset(coco__rank, %{})
+
+  def delete_student_mark_nilam(%StudentMarkNilam{} = student_mark_nilam) do
+    Repo.delete(student_mark_nilam)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking student_mark_nilam changes.
+
+  ## Examples
+
+      iex> change_student_mark_nilam(student_mark_nilam)
+      %Ecto.Changeset{source: %StudentMarkNilam{}}
+
+  """
+  def change_student_mark_nilam(%StudentMarkNilam{} = student_mark_nilam) do
+    StudentMarkNilam.changeset(student_mark_nilam, %{})
   end
 end

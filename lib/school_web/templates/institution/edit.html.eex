@@ -1,6 +1,6 @@
 <h2>Edit Institution</h2>
 
 <%= render "form.html", 
-changeset: @changeset, action: institution_path(@conn, :update, @institution), bin: @institution.logo_bin %>
+changeset: @changeset, action: institution_path(@conn, :update, @institution), bin: @institution.logo_bin,hm_bin: @institution.hm_bin %>
 
 <span><%= link "Back", to: institution_path(@conn, :index) %></span>

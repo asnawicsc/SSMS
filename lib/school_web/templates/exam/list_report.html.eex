@@ -390,7 +390,9 @@
                            </div>
                         </div>
                      </div>
-
+                     <%= if @user.role != "Teacher" do %>
+                        
+          
                                            <div class="col-lg-3 col-md-5">
                         <div class="card" data-filter-group="code">
                            <div class="card-body text-center">
@@ -411,6 +413,8 @@
                            </div>
                         </div>
                      </div>
+
+                               <% end %>
                        <div class="col-lg-3 col-md-5">
                         <div class="card" data-filter-group="code">
                            <div class="card-body text-center">

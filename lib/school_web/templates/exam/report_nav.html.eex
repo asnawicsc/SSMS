@@ -92,12 +92,7 @@
                            <span>Head Count Report</span>
                            <span class="ml-auto badge"><em class="fa-2x fa fa-clock text-green"></em></span>
                         </a>
-                         <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" href="/user_login_report">
-                           <span class="circle bg-warning mr-2"></span>
-                           <span>User Login Report</span>
-                           <span class="ml-auto badge"><em class="fa-2x fa fa-user text-danger"></em></span>
-                        </a>
-              
+               
                      </div>
             
                   </div>

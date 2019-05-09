@@ -112,7 +112,7 @@ defmodule SchoolWeb.ExamGradeController do
 
     Affairs.create_exam_grade(%{
       name: "A",
-      min: 80,
+      min: 80.0,
       max: 100,
       gpa: 12.00,
       exam_master_id: params["exam_master_id"],
@@ -121,8 +121,8 @@ defmodule SchoolWeb.ExamGradeController do
 
     Affairs.create_exam_grade(%{
       name: "B",
-      min: 60,
-      max: 79,
+      min: 60.0,
+      max: 79.9,
       gpa: 8.00,
       exam_master_id: params["exam_master_id"],
       institution_id: conn.private.plug_session["institution_id"]
@@ -130,8 +130,8 @@ defmodule SchoolWeb.ExamGradeController do
 
     Affairs.create_exam_grade(%{
       name: "C",
-      min: 50,
-      max: 59,
+      min: 50.0,
+      max: 59.9,
       gpa: 6.00,
       exam_master_id: params["exam_master_id"],
       institution_id: conn.private.plug_session["institution_id"]
@@ -139,8 +139,8 @@ defmodule SchoolWeb.ExamGradeController do
 
     Affairs.create_exam_grade(%{
       name: "D",
-      min: 40,
-      max: 49,
+      min: 40.0,
+      max: 49.9,
       gpa: 4.00,
       exam_master_id: params["exam_master_id"],
       institution_id: conn.private.plug_session["institution_id"]
@@ -149,7 +149,7 @@ defmodule SchoolWeb.ExamGradeController do
     Affairs.create_exam_grade(%{
       name: "E",
       min: 0,
-      max: 39,
+      max: 39.9,
       gpa: 2.00,
       exam_master_id: params["exam_master_id"],
       institution_id: conn.private.plug_session["institution_id"]

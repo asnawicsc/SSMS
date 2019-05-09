@@ -81,7 +81,9 @@ defmodule SchoolWeb.TeacherController do
         }
       end
 
-    render(conn, "teacher_attendances.html",
+    render(
+      conn,
+      "teacher_attendances.html",
       not_yet: not_yet_full,
       teachers_attend: teachers_attend_full
     )
@@ -306,7 +308,34 @@ defmodule SchoolWeb.TeacherController do
   end
 
   def upload_signiture(conn, params) do
-    IEx.pry()
+    image_params = params["item"]["file"]
+
+    institution = Settings.get_institution!(conn.private.plug_session["institution_id"])
+    institution_params = %{}
+
+    institution_params =
+      if image_params != nil do
+        result = upload_image(image_params, conn)
+
+        institution_params = Map.put(institution_params, :hm_bin, result.bin)
+      else
+        institution
+      end
+
+    institution_params =
+      if image_params != nil do
+        result = upload_image(image_params, conn)
+
+        institution_params = Map.put(institution_params, :hm_filename, result.filename)
+      else
+        institution
+      end
+
+    Settings.update_institution(institution, institution_params)
+
+    conn
+    |> put_flash(:info, "Upload HM succesfully.")
+    |> redirect(to: page_path(conn, :support_dashboard))
   end
 
   def create_teacher_login(conn, params) do
@@ -394,7 +423,8 @@ defmodule SchoolWeb.TeacherController do
 
     teacher =
       Repo.all(
-        from(s in School.Affairs.Teacher,
+        from(
+          s in School.Affairs.Teacher,
           where:
             s.institution_id == ^conn.private.plug_session["institution_id"] and s.is_delete != 1,
           order_by: [asc: s.rank, asc: s.name]
@@ -455,11 +485,11 @@ defmodule SchoolWeb.TeacherController do
 
     institute = Repo.get(Institution, conn.private.plug_session["institution_id"])
 
-    path = File.cwd!() <> "/media/" <> institute.name <> "/teacher"
+    path = File.cwd!() <> "/media/" <> institute.name
     image_path = Application.app_dir(:school, "priv/static/images")
 
     if File.exists?(path) == false do
-      File.mkdir(File.cwd!() <> "/media/" <> institute.name <> "/teacher")
+      File.mkdir(File.cwd!() <> "/media/" <> institute.name)
     end
 
     fl = param.filename |> String.replace(" ", "_")
@@ -491,7 +521,8 @@ defmodule SchoolWeb.TeacherController do
       teacher_name = teacher.filename |> String.split(".") |> hd
 
       teacher =
-        Repo.get_by(Teacher,
+        Repo.get_by(
+          Teacher,
           name: teacher_name,
           institution_id: conn.private.plug_session["institution_id"]
         )
@@ -571,10 +602,23 @@ defmodule SchoolWeb.TeacherController do
         teacher_params
       end
 
+    if teacher == nil do
+      teacher = Repo.get(Teacher, id)
+    end
+
     teacherss = Teacher.changeset(teacher, teacher_params)
+    user_result = Repo.all(from(u in User, where: u.email == ^teacher.email))
 
     case Repo.update(teacherss) do
       {:ok, teacher} ->
+        # update the user... 
+
+        if user_result != [] do
+          u = hd(user_result)
+
+          res = User.changeset(u, %{email: teacher.email}) |> Repo.update()
+        end
+
         url = teacher_path(conn, :index, focus: teacher.code)
         referer = conn.req_headers |> Enum.filter(fn x -> elem(x, 0) == "referer" end)
 
@@ -590,6 +634,11 @@ defmodule SchoolWeb.TeacherController do
           |> put_flash(:info, "#{teacher.name} updated successfully.")
           |> redirect(to: url)
         end
+
+      {:error, changeset} ->
+        conn
+        |> put_flash(:info, "Some details are missing.")
+        |> redirect(to: page_path(conn, :dashboard))
     end
   end
 

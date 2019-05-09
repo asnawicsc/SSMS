@@ -739,6 +739,31 @@ defmodule SchoolWeb.ClassController do
         )
       )
 
+    students_nilam =
+      Repo.all(
+        from(
+          st in StudentClass,
+          left_join: s in Student,
+          on: s.id == st.sudent_id,
+          left_join: k in School.Affairs.StudentMarkNilam,
+          on: st.sudent_id == k.student_id,
+          left_join: h in School.Affairs.Semester,
+          on: h.year == k.year,
+          where:
+            st.class_id == ^class_id and
+              st.semester_id == ^conn.private.plug_session["semester_id"],
+          select: %{
+            id: st.sudent_id,
+            name: s.name,
+            chinese_name: s.chinese_name,
+            image_bin: s.image_bin,
+            total_book: k.total_book
+          },
+          order_by: [asc: s.name]
+        )
+      )
+      |> Enum.uniq()
+
     monitor =
       Repo.all(
         from(
@@ -791,7 +816,8 @@ defmodule SchoolWeb.ClassController do
       institution_id: institution_id,
       students: students,
       subject_class: subject_class,
-      semester_id: semester_id
+      semester_id: semester_id,
+      students_nilam: students_nilam
     )
   end
 

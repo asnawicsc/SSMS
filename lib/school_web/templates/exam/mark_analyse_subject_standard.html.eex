@@ -109,21 +109,53 @@
       
       <tr >
        <th >AVG</a></th>
+         <th >AVG</a></th>
+              <% a= @a %>
+
+
           <th ><%= @a %></th>
-          <th ><%= (@a/@total)*100|>Float.round(2) %>%</th>
+          <th ><%= if @total == 0  do
+             0
+           else
+            (@a/@total)*100|>Float.round(2)
+          end %></th>
           <th ><%= @b %></th>
-          <th ><%= (@b/@total)*100|>Float.round(2) %>%</th>
+           <th ><%= if @total == 0  do
+             0
+           else
+            (@b/@total)*100|>Float.round(2)
+          end %></th>
           <th ><%= @c %></th>
-          <th ><%= (@c/@total)*100|>Float.round(2) %>%</th>
+             <th ><%= if @total == 0  do
+             0
+           else
+            (@c/@total)*100|>Float.round(2)
+          end %></th>
           <th ><%= @d %></th>
-          <th ><%= (@d/@total)*100|>Float.round(2) %>%</th>
+            <th ><%= if @total == 0  do
+             0
+           else
+            (@d/@total)*100|>Float.round(2)
+          end %></th>
           <th ><%= @e %></th>
-          <th ><%= (@e/@total)*100|>Float.round(2) %>%</th>
+            <th ><%= if @total == 0  do
+             0
+           else
+            (@e/@total)*100|>Float.round(2)
+          end %></th>
 
           <th ><%= @lulus %></th>
-          <th ><%= (@lulus/@total)*100|>Float.round(2) %>%</th>
+            <th ><%= if @total == 0  do
+             0
+           else
+            (@lulus/@total)*100|>Float.round(2)
+          end %></th>
           <th ><%= @tak_lulus %></th>
-          <th ><%= (@tak_lulus/@total)*100|>Float.round(2) %>%</th>
+             <th ><%= if @total == 0  do
+             0
+           else
+            (@tak_lulus/@total)*100|>Float.round(2)
+          end %></th>
           <th ></th>
     </tr>
     </table>

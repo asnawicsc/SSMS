@@ -1860,6 +1860,41 @@ defmodule SchoolWeb.StudentController do
     )
   end
 
+  def edit_nilam(conn, params) do
+    semester_id = conn.private.plug_session["semester_id"] |> Integer.to_string()
+
+    students =
+      Repo.all(
+        from(
+          st in StudentClass,
+          left_join: s in Student,
+          on: s.id == st.sudent_id,
+          left_join: k in School.Affairs.StudentMarkNilam,
+          on: st.sudent_id == k.student_id,
+          left_join: h in School.Affairs.Semester,
+          on: h.year == k.year,
+          where:
+            st.class_id == ^params["class_id"] and
+              st.semester_id == ^conn.private.plug_session["semester_id"],
+          select: %{
+            id: st.sudent_id,
+            name: s.name,
+            chinese_name: s.chinese_name,
+            image_bin: s.image_bin,
+            total_book: k.total_book
+          },
+          order_by: [asc: s.name]
+        )
+      )
+      |> Enum.uniq()
+
+    render(conn, "edit_nilam.html",
+      students: students,
+      semester_id: semester_id,
+      class_id: params["class_id"]
+    )
+  end
+
   def edit_height_weight(conn, params) do
     student = Repo.get(Student, params["student_id"])
 
@@ -1913,6 +1948,49 @@ defmodule SchoolWeb.StudentController do
     student = Map.put(student, :weight, weight)
 
     render(conn, "edit_height_weight.html", student: student, semester_id: params["semester_id"])
+  end
+
+  def submit_nilam_all(conn, params) do
+    student = params["student"]
+    semester_id = params["semester_id"]
+    class_id = params["class_id"]
+
+    semester =
+      Repo.get_by(School.Affairs.Semester, %{
+        id: String.to_integer(semester_id),
+        institution_id: conn.private.plug_session["institution_id"]
+      })
+
+    for item <- student do
+      student_id = item |> elem(0)
+
+      student =
+        Repo.get_by(School.Affairs.StudentMarkNilam, %{
+          student_id: String.to_integer(student_id),
+          institution_id: conn.private.plug_session["institution_id"],
+          year: semester.year
+        })
+
+      total_book = item |> elem(1) |> Enum.fetch!(0) |> elem(1)
+
+      if student != nil do
+        School.Affairs.StudentMarkNilam.changeset(student, %{total_book: total_book})
+        |> Repo.update()
+      else
+        student_mark_nilam_params = %{
+          institution_id: conn.private.plug_session["institution_id"],
+          student_id: student_id,
+          year: semester.year,
+          total_book: total_book
+        }
+
+        Affairs.create_student_mark_nilam(student_mark_nilam_params)
+      end
+    end
+
+    conn
+    |> put_flash(:info, "Nilam updated successfully.")
+    |> redirect(to: "/class_setting/#{class_id}")
   end
 
   def submit_height_weight_all(conn, params) do
