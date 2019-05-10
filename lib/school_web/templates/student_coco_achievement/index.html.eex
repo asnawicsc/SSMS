@@ -1,5 +1,9 @@
 <h2>Listing Student coco achievements</h2>
 
+
+<span style="display: none"><%= link "Add Records", to: student_coco_achievement_path(@conn, :add_achievement) %></span><br>
+<span style="display: none"><%= link "Generate Report", to: student_coco_achievement_path(@conn, :gen_report) %></span>
+
 <table class="table">
   <thead>
     <tr>
@@ -16,7 +20,7 @@
     </tr>
   </thead>
   <tbody>
-<%= for student_coco_achievement <- @student_coco_achievements do %>
+<%= for student_coco_achievement <- @student_coco_achievements |> Enum.sort_by(fn x -> x.student_id end) do %>
     <tr>
       <td><%= student_coco_achievement.student_id %></td>
       <td><%= student_coco_achievement.date %></td>
@@ -37,6 +41,4 @@
   </tbody>
 </table>
 
-<span><%= link "New Student coco achievement", to: student_coco_achievement_path(@conn, :new) %></span><br>
-<span><%= link "Add Records", to: student_coco_achievement_path(@conn, :add_achievement) %></span><br>
-<span><%= link "Generate Report", to: student_coco_achievement_path(@conn, :gen_report) %></span>
+

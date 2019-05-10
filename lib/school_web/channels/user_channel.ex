@@ -1963,45 +1963,46 @@ defmodule SchoolWeb.UserChannel do
     participant = payload["participant"]
     peringkat = payload["peringkat"]
     rank = payload["rank"]
+    a = 1
 
-    Affairs.create_student_coco_achievement(%{
-      date: date,
-      student_id: student_id,
-      category: category,
-      sub_category: sub_category,
-      competition_name: event_name,
-      participant_type: participant,
-      peringkat: peringkat,
-      rank: rank
-    })
+    check_data =
+      cond do
+        category == "Unit Beruniform" ->
+          check_data =
+            Repo.all(
+              from(c in Affairs.StudentCocurriculum,
+                where:
+                  c.student_id == ^student_id and c.category == "Unit Beruniform" and
+                    c.sub_category == ^sub_category,
+                select: %{category: c.category, sub_category: c.sub_category}
+              )
+            )
 
-    students =
-      Repo.all(
-        from(
-          m in School.Affairs.Student_coco_achievement,
-          left_join: s in School.Affairs.Student,
-          on: s.id == m.student_id,
-          left_join: c in StudentClass,
-          on: m.student_id == c.sudent_id,
-          left_join: t in Class,
-          on: t.id == c.class_id,
-          select: %{
-            name: s.name,
-            class_name: t.name,
-            ic: s.ic,
-            event_name: m.competition_name,
-            peringkat: m.peringkat,
-            rank: m.rank,
-            date: m.date
-          }
-        )
-      )
+        category == "Sukan & Permainan" ->
+          check_data =
+            Repo.all(
+              from(c in Affairs.StudentCocurriculum,
+                where:
+                  c.student_id == ^student_id and c.category == "Sukan & Permainan" and
+                    c.sub_category == ^sub_category,
+                select: %{category: c.category, sub_category: c.sub_category}
+              )
+            )
 
-    html =
-      Phoenix.View.render_to_string(
-        SchoolWeb.Student_coco_achievementView,
-        "report_std_coco.html",
-        students: students,
+        category == "Kelab&Persatuan" ->
+          check_data =
+            Repo.all(
+              from(c in Affairs.StudentCocurriculum,
+                where:
+                  c.student_id == ^student_id and c.category == "Kelab&Persatuan" and
+                    c.sub_category == ^sub_category,
+                select: %{category: c.category, sub_category: c.sub_category}
+              )
+            )
+      end
+
+    if check_data != [] do
+      Affairs.create_student_coco_achievement(%{
         date: date,
         student_id: student_id,
         category: category,
@@ -2010,11 +2011,98 @@ defmodule SchoolWeb.UserChannel do
         participant_type: participant,
         peringkat: peringkat,
         rank: rank
-      )
+      })
 
-    IO.inspect(students)
+      added_student_name =
+        Repo.all(
+          from(s in Affairs.Student,
+            where: s.id == ^student_id,
+            select: s.name
+          )
+        )
 
-    {:reply, {:ok, %{html: html}}, socket}
+      students =
+        Repo.all(
+          from(
+            m in School.Affairs.Student_coco_achievement,
+            left_join: s in School.Affairs.Student,
+            on: s.id == m.student_id,
+            left_join: c in StudentClass,
+            on: m.student_id == c.sudent_id,
+            left_join: t in Class,
+            on: t.id == c.class_id,
+            select: %{
+              name: s.name,
+              class_name: t.name,
+              ic: s.ic,
+              event_name: m.competition_name,
+              peringkat: m.peringkat,
+              rank: m.rank,
+              date: m.date
+            }
+          )
+        )
+
+      html =
+        Phoenix.View.render_to_string(
+          SchoolWeb.Student_coco_achievementView,
+          "report_std_coco.html",
+          students: students,
+          date: date,
+          student_id: student_id,
+          category: category,
+          sub_category: sub_category,
+          competition_name: event_name,
+          participant_type: participant,
+          peringkat: peringkat,
+          rank: rank
+        )
+
+      {:reply, {:ok, %{html: html, name: added_student_name}}, socket}
+    else
+      ex_coco =
+        cond do
+          category == "Unit Beruniform" ->
+            ex_coco =
+              Repo.all(
+                from(c in Affairs.StudentCocurriculum,
+                  where: c.student_id == ^student_id and c.category == "Unit Beruniform",
+                  select: %{category: c.category, sub_category: c.sub_category}
+                )
+              )
+
+          category == "Sukan & Permainan" ->
+            ex_coco =
+              Repo.all(
+                from(c in Affairs.StudentCocurriculum,
+                  where: c.student_id == ^student_id and c.category == "Sukan & Permainan",
+                  select: %{category: c.category, sub_category: c.sub_category}
+                )
+              )
+
+          category == "Kelab&Persatuan" ->
+            ex_coco =
+              Repo.all(
+                from(c in Affairs.StudentCocurriculum,
+                  where: c.student_id == ^student_id and c.category == "Kelab&Persatuan",
+                  select: %{category: c.category, sub_category: c.sub_category}
+                )
+              )
+        end
+
+      ex_name =
+        Repo.all(
+          from(s in Affairs.Student,
+            where: s.id == ^student_id,
+            select: s.name
+          )
+        )
+
+      ex_cat = ex_coco |> Enum.map(fn x -> x.category end)
+      ex_sub = ex_coco |> Enum.map(fn x -> x.sub_category end)
+
+      {:reply, {:error, %{name: ex_name, ex_cat: ex_cat, ex_sub: ex_sub}}, socket}
+    end
   end
 
   def handle_in("sub_teach_class", payload, socket) do

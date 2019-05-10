@@ -1,6 +1,6 @@
 
 
-
+<%= link "Enroll Students", to: co_curriculum_path(@conn, :enroll_students)%>
 
 <div class="content-heading">
     <div><%= gettext "Listing Cocurriculum" %>
@@ -55,6 +55,5 @@
       </div>
      
 </div>
-<span><%= link "New Co curriculum", to: co_curriculum_path(@conn, :new) %></span><br>
 
-<%= link "Enroll Students", to: co_curriculum_path(@conn, :enroll_students)%>
+

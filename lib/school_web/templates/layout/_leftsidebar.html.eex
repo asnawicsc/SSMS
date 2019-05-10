@@ -310,6 +310,15 @@
                             <em class="fas fa-plus"></em>
                               <span data-localize="sidebar.nav.extra.EXTRA"><%= gettext "Create Cocurriculum" %></span>
                            </a>
+
+                           <a href="co_curriculum/enroll_students" title="School Setup" >
+                            <em class="fas fa-plus"></em>
+                              <span data-localize="sidebar.nav.extra.EXTRA"><%= gettext "Enroll Students" %></span>
+                           </a>
+                           <a href="/coco_ranks/new" title="School Setup" >
+                            <em class="fas fa-plus"></em>
+                              <span data-localize="sidebar.nav.extra.EXTRA"><%= gettext "Create Cocurriculum Rank" %></span>
+                           </a>
                              <a href="/co_mark" title="School Setup" >
                             <em class="icon-refresh"></em>
                               <span data-localize="sidebar.nav.extra.EXTRA"><%= gettext "Mark" %></span>
@@ -541,7 +550,7 @@
                         </li>
                         <li class=" ">
                         
-                           <a href="/mark_sheet" title="School Setup" ">
+                           <a href="/mark_sheet" title="School Setup" >
                             <em class="icon-note"></em>
                               <span data-localize="sidebar.nav.extra.EXTRA"><%= gettext "Mark" %></span>
                            </a>
@@ -554,12 +563,12 @@
                         </li>
                         <li class=" ">
 
-                                                 <a href="/classes/enroll_students" title="Enroll Setup" ">
+                                                 <a href="/classes/enroll_students" title="Enroll Setup" >
                             <em class="icon-note"></em>
                               <span data-localize="sidebar.nav.extra.EXTRA"><%= gettext "Enroll Student" %></span>
                            </a>
              
-                                <a href="/students/new" title="Create Setup" ">
+                                <a href="/students/new" title="Create Setup" >
                             <em class="icon-note"></em>
                               <span data-localize="sidebar.nav.extra.EXTRA"><%= gettext "Create Student" %></span>
                            </a>
@@ -570,14 +579,19 @@
                           <span data-localize="sidebar.heading.HEADER">Cocurriculum Management</span>
                         </li>
                         <li class=" ">
-                             <a href="/cocurriculum" title="School Setup" ">
+                             <a href="/cocurriculum" title="School Setup" >
                             <em class="fas fa-book"></em>
                               <span data-localize="sidebar.nav.extra.EXTRA"><%= gettext "List" %></span>
                            </a>
                         
-                           <a href="/co_mark" title="School Setup" ">
+                           <a href="/co_mark" title="School Setup" >
                             <em class="icon-note"></em>
                               <span data-localize="sidebar.nav.extra.EXTRA"><%= gettext "Mark" %></span>
+                           </a>
+
+                           <a href="/add_records" title="School Setup" >
+                            <em class="icon-note"></em>
+                              <span data-localize="sidebar.nav.extra.EXTRA"><%= gettext "Achievement" %></span>
                            </a>
 
                            

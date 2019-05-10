@@ -47,7 +47,7 @@
                                        <br>
                                        <select id="show_sub_ctg" class="custom-select -custom-select-sm" required="required" name="category">
                                           <option selected="">Choose a sub-category</option>
-                                          <%= for a <- @cocurriculum|>Enum.sort_by(fn x -> x.sub_category end) do %>
+                                          <%= for a <- @cocurriculum|>Enum.uniq(fn x -> x.sub_category end) do %>
                                           <option style = "display:none"aria-label="<%=a.category%>"value="<%= a.id %>" ><%= a.sub_category %>
                                           </option>
                                           <% end %>
