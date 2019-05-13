@@ -1,0 +1,214 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>SENARAI NAMA MURID YANG MENYERTAI PERTANDINGAN</title>
+
+  </head>
+
+  <body>
+       <div align="right" >
+    <form action="" method="get">
+          <input type="hidden" name="date_to" value="<%= @date_to %>">
+          <input type="hidden" name="date_from" value="<%= @date_from %>">
+
+         <input type="hidden" name="class_id" value="<%= @class_id %>">
+         <input type="hidden" name="level_id" value="<%= @level_id %>">
+         <input type="hidden" name="sort_id" value="<%= @sort_id %>">
+         <input type="hidden" name="peringkat" value="<%= @peringkat %>">
+
+        
+     
+<input align="left" class="btn btn-info btn-ml" type="submit" name="" value="Print!">
+</form>
+</div>
+<br>
+<h4 align="center"> SENARAI NAMA MURID YANG MENYERTAI PERTANDINGAN</h4>
+
+<div> Dari Tarikh: <%= @date_from %></div>
+<div> Ke Tarikh: <%= @date_to %></div><br>
+
+<div class="table-responsive table-bordered">
+
+  <%= if @sekolah != [] do %>
+  <label>Peringkat: Sekolah</label>
+    <table align= "center" class="table" width="100%">
+      <tr>
+        <th rowspan="2" ><%= gettext "BIL" %></th>
+        <th rowspan="2" ><%= gettext "PERKARA" %></th>
+        <th rowspan="1" colspan="5"><%=gettext "PESERTA" %></th>
+      </tr>
+      <tr>
+        <th rowspan="1"><%= gettext "No" %></th>
+        <th rowspan="1" colspan="2"><%= gettext "Nama Murid" %></th>
+        <th rowspan="1" colspan="1"><%= gettext "TARIKH" %></th>
+        <th rowspan="1" colspan="1"><%= gettext "Kelas" %></th>
+      </tr>
+
+  <% data = @sekolah |> Enum.group_by(fn x -> x.desc end)  %>
+  <% keys = Map.keys(data) %>
+  
+
+
+  <%= for k <- keys |> Enum.with_index() do %>
+  <%key = elem(k,0)%>
+    <%= if @sort_id == "1" do %>
+      <%= for d <- data[key] |> Enum.sort_by(fn x -> x.student_name end) |> Enum.with_index() do %>
+      <% x = elem(d, 0) %>
+        <tr>
+          <th><%= if elem(d,1) == 0, do:  elem(k,1)+1, else: "" %></th>
+          <th><%= if elem(d,1) == 0, do: x.desc, else: "" %></th>
+          <th><%= elem(d, 1 ) + 1 %></th>
+          <th style="border-right: 0;"><%= x.student_name %></th>
+          <th style="border-left: 0; "><%= x.chinese_name %></th>
+          <th><%= x.date %></th>
+          <th><%= x.class_name %></th>
+        </tr>
+      <% end %>
+
+    <% else %>
+      <%= for d <- data[key] |> Enum.sort_by(fn x -> x.date end) |> Enum.with_index() do %>
+      <% x = elem(d, 0) %>
+
+        <tr>
+          <th></th>
+          <th><%= if elem(d,1) == 0, do: x.desc, else: "" %></th>
+          <th><%= elem(d, 1 ) + 1 %></th>
+          <th style="border-right: 0;"><%= x.student_name %></th>
+          <th style="border-left: 0; "><%= x.chinese_name %></th>
+          <th><%= x.date %></th>
+          <th><%= x.class_name %></th>
+        </tr>
+      <% end %>
+    <% end %>
+  <% end %>
+       
+
+    </table>
+     <%end%>
+
+     <%= if @zon != [] do %>
+  <label>Peringkat: Zon</label>
+    <table align= "center" class="table" width="100%">
+      <tr>
+        <th rowspan="2" ><%= gettext "BIL" %></th>
+        <th rowspan="2" ><%= gettext "PERKARA" %></th>
+        <th rowspan="1" colspan="5"><%=gettext "PESERTA" %></th>
+      </tr>
+      <tr>
+        <th rowspan="1"><%= gettext "No" %></th>
+        <th rowspan="1" colspan="2"><%= gettext "Nama Murid" %></th>
+        <th rowspan="1" colspan="1"><%= gettext "TARIKH" %></th>
+        <th rowspan="1" colspan="1"><%= gettext "Kelas" %></th>
+      </tr>
+
+     <%= for x <- @zon do %>
+      <tr>
+       <th></th>
+       <th><%= x.desc %></th>
+       <th></th>
+       <th><%= x.student_name %></th>
+       <th><%= x.chinese_name %></th>
+       <th><%= x.date %></th>
+       <th><%= x.class_name %></th>
+      </tr>
+      <%end%>
+
+    </table>
+     <%end%>
+
+     <%= if @negeri != [] do %>
+  <label>Peringkat: Negeri</label>
+    <table align= "center" class="table" width="100%">
+      <tr>
+        <th rowspan="2" ><%= gettext "BIL" %></th>
+        <th rowspan="2" ><%= gettext "PERKARA" %></th>
+        <th rowspan="1" colspan="5"><%=gettext "PESERTA" %></th>
+      </tr>
+      <tr>
+        <th rowspan="1"><%= gettext "No" %></th>
+        <th rowspan="1" colspan="2"><%= gettext "Nama Murid" %></th>
+        <th rowspan="1" colspan="1"><%= gettext "TARIKH" %></th>
+        <th rowspan="1" colspan="1"><%= gettext "Kelas" %></th>
+      </tr>
+
+      <%= for x <- @negeri do %>
+      <tr>
+       <th></th>
+       <th><%= x.desc %></th>
+       <th></th>
+       <th><%= x.student_name %></th>
+       <th><%= x.chinese_name %></th>
+       <th><%= x.date %></th>
+       <th><%= x.class_name %></th>
+      </tr>
+      <%end%>
+
+    </table>
+     <%end%>
+    
+    <%= if @kebangsaan != [] do %>
+  <label>Peringkat: Kebangsaan</label>
+    <table align= "center" class="table" width="100%">
+      <tr>
+        <th rowspan="2" ><%= gettext "BIL" %></th>
+        <th rowspan="2" ><%= gettext "PERKARA" %></th>
+        <th rowspan="1" colspan="5"><%=gettext "PESERTA" %></th>
+      </tr>
+      <tr>
+        <th rowspan="1"><%= gettext "No" %></th>
+        <th rowspan="1" colspan="2"><%= gettext "Nama Murid" %></th>
+        <th rowspan="1" colspan="1"><%= gettext "TARIKH" %></th>
+        <th rowspan="1" colspan="1"><%= gettext "Kelas" %></th>
+      </tr>
+
+     <%= for x <- @kebangsaan do %>
+      <tr>
+       <th></th>
+       <th><%= x.desc %></th>
+       <th></th>
+       <th><%= x.student_name %></th>
+       <th><%= x.chinese_name %></th>
+       <th><%= x.date %></th>
+       <th><%= x.class_name %></th>
+      </tr>
+      <%end%>
+
+    </table>
+     <%end%>
+
+     <%= if @antarabangsa != [] do %>
+  <label>Peringkat: Antarabangsa</label>
+    <table align= "center" class="table" width="100%">
+      <tr>
+        <th rowspan="2" ><%= gettext "BIL" %></th>
+        <th rowspan="2" ><%= gettext "PERKARA" %></th>
+        <th rowspan="1" colspan="5"><%=gettext "PESERTA" %></th>
+      </tr>
+      <tr>
+        <th rowspan="1"><%= gettext "No" %></th>
+        <th rowspan="1" colspan="2"><%= gettext "Nama Murid" %></th>
+        <th rowspan="1" colspan="1"><%= gettext "TARIKH" %></th>
+        <th rowspan="1" colspan="1"><%= gettext "Kelas" %></th>
+      </tr>
+
+      <%= for x <- @antarabangsa do %>
+      <tr>
+       <th></th>
+       <th><%= x.desc %></th>
+       <th></th>
+       <th><%= x.student_name %></th>
+       <th><%= x.chinese_name %></th>
+       <th><%= x.date %></th>
+       <th><%= x.class_name %></th>
+      </tr>
+      <%end%>
+
+    </table>
+     <%end%>
+
+</div>
+
+  </body>
+</html>

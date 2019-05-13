@@ -1,0 +1,5 @@
+<h2>Edit Student coco achievement</h2>
+
+<%= render "form.html", Map.put(assigns, :action, student_coco_achievement_path(@conn, :update, @student_coco_achievement)) %>
+
+<span><%= link "Back", to: student_coco_achievement_path(@conn, :index) %></span>

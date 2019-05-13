@@ -5,6 +5,7 @@
 <% subject = School.Repo.all(from l in School.Affairs.Subject,where: l.institution_id ==^@conn.private.plug_session["institution_id"], select: {l.description, l.id}) %>
 
 <% class = School.Repo.all(from l in School.Affairs.Class,where: l.institution_id ==^@conn.private.plug_session["institution_id"], select: {l.name, l.id}) |> List.insert_at(0, {"Left empty to apply all class in the chosen standard.", 0}) %>
+<% teacher = School.Repo.all(from l in School.Affairs.Teacher,where: l.institution_id ==^@conn.private.plug_session["institution_id"], select: {l.name, l.id}) |> List.insert_at(0, {"Choose a teacher", 0}) %>
 
 <%= form_for @changeset, @action, fn f -> %>
   <%= if @changeset.action do %>
@@ -34,6 +35,12 @@
     <%= label f, :class_id, class: "control-label" %>
     <%= select f, :class_id,class, class: "form-control" %>
     <%= error_tag f, :class_id %>
+  </div>
+
+  <div class="form-group" data-step="3" data-intro="Choose a class for the subject to be assigned.">
+    <%= label f, :teacher_id, teacher: "control-label" %>
+    <%= select f, :teacher_id,teacher, teacher: "form-control" %>
+    <%= error_tag f, :teacher_id %>
   </div>
  
 

@@ -1,0 +1,54 @@
+<center><b><%= @institution.name %></b></center><br>
+<center>SENARAI KOKURIKULUM PELAJAR</center>
+
+<% date = Date.utc_today() %>
+<div style="float: right;"><%= date.day %>-<%= date.month %>-<%= date.year %></div><br>
+
+<div><%= @coco_details.category%>:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <%=@coco_details.sub_category%></div><br>
+
+
+<table class="table" border="1" style="border-collapse: collapse;" width="60%" height="10%" >
+  <col width="10">
+  <col>
+  <col width="60">
+
+  <thead>
+    <tr align="center">
+      <th ><%= gettext "No." %></th>
+      <th align="right" style="border-right: none;"><%= gettext "Student Name." %></th>
+      <th style="border-left: none;"></th>
+      <th><%= gettext "Gender" %></th>
+      <th><%= gettext "Class" %></th>
+    </tr>
+  </thead>
+
+  <tbody>
+ <% require IEx %>
+  <tbody>
+       <%= for item_data <- @students |> Enum.with_index do %>
+      <% item = elem(item_data, 0) %>
+      <tr align="center" >
+      <td align="left"><%= elem(item_data, 1 ) + 1 %></td>
+       <td align="left" style="border-right: none;"><%= item.name %></td>
+       <td align="left" style="border-left: none;"><%= item.chinese_name %></td>
+       <td><%= item.gender %></td>
+         <td ><%= item.class_name %></td>
+      </tr>
+         <% end %>
+    </tbody>
+  </table>
+
+<style type="text/css">
+  
+  table { 
+    border-spacing: 0;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+td {
+    padding:2px;
+}
+td img {
+    display:block;
+}
+</style>

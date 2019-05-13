@@ -19,13 +19,23 @@
                            <option value="<%= semester.id %>"><%= semester.start_date %> - <%= semester.end_date %></option>
                            <% end %>
                      </select>
-                       <select id="show_coco" class="custom-select custom-select-sm">
-                           <option selected="">Choose a coco</option>
-                           <%= for coco <- @cocos|>Enum.sort_by(fn x -> x.description end) do %>
-                           <option value="<%= coco.id %>"><%= coco.description %></option>
+
+                       <select id="show_ctg" class="custom-select custom-select-sm">
+                           <option selected="">Choose a category</option>
+                           <%= for coco <- @cocos|>Enum.uniq(fn x -> x.category end) do %>
+                           <option value="<%= coco.category %>"><%= coco.category %></option>
                            <% end %>
                     
                         </select>
+
+                        <select id="show_sub_ctg" class="custom-select custom-select-sm">
+                           <option selected="">Choose a Sub Category</option>
+                           <%= for coco <- @cocos|>Enum.uniq(fn x -> x.sub_category end) do %>
+                           <option data-type="<%= coco.sub_category %>"style = "display: none" value="<%= coco.id %>" aria-label="<%= coco.category %>"><%= coco.sub_category %></option>
+                           <% end %>
+                    
+                        </select>
+                        
                      </form>
                     <ol id="student_list">
                       
@@ -73,13 +83,48 @@
  <script type="text/javascript">
    $(document).ready(function(){
 
+    $("select#show_ctg").change(function(){
+      var val = $(this).val()
+      if(val == "Unit Beruniform"){
+        $('option[aria-label="Unit Beruniform"]').show()
+        $('option[aria-label="Kelab&Persatuan"]').hide()
+        $('option[aria-label="Sukan & Permainan"]').hide()
+        $('option[aria-label="Rumah Sukan"]').hide()
+      }
+      else if(val == "Kelab&Persatuan"){
+        $('option[aria-label="Kelab&Persatuan"]').show()
+        $('option[aria-label="Unit Beruniform"]').hide()
+        $('option[aria-label="Sukan & Permainan"]').hide()
+        $('option[aria-label="Rumah Sukan"]').hide()
+      }
+      else if(val == "Sukan & Permainan"){
+        $('option[aria-label="Sukan & Permainan"]').show()
+        $('option[aria-label="Unit Beruniform"]').hide()
+        $('option[aria-label="Kelab&Persatuan"]').hide()
+        $('option[aria-label="Rumah Sukan"]').hide()
+      }
+      else if(val == "Rumah Sukan"){
+        $('option[aria-label="Rumah Sukan"]').show()
+        $('option[aria-label="Unit Beruniform"]').hide()
+        $('option[aria-label="Kelab&Persatuan"]').hide()
+        $('option[aria-label="Sukan & Permainan"]').hide()
+      }
+      else{
+        $('option[aria-label]').hide()
+      }
+      
+      console.log(val)
+      })
+
     $(document).on("click", ".add_to_coco", function(){
 
       var student_id = $(this).attr("id")
 
 
-      var id = $("select#show_coco").val()
+      var id = $("select#show_sub_ctg").val()
       var semester_id = $("select#semesters").val()
+      var category = $("select#show_ctg").val()
+      var sub_category = $("#show_sub_ctg option:selected").attr("data-type")
 
               swal({
                 title: "Are you sure?",
@@ -94,7 +139,7 @@
               }, function(isConfirm) {
                 if (isConfirm) {
 
-                 channel.push("add_coco_students", {student_id: student_id, semester_id: semester_id, coco_id: id, user_id: window.currentUser, institution_id: window.currentInstitute})
+                 channel.push("add_coco_students", {student_id: student_id, semester_id: semester_id, coco_id: id, user_id: window.currentUser, institution_id: window.currentInstitute, category: category, sub_category: sub_category})
 
                  .receive(
                  "ok", payload => {
@@ -127,8 +172,8 @@
     }) 
 
 
-    $("select#show_coco").change(function(){
-      var id = $("select#show_coco").val()
+    $("select#show_sub_ctg").change(function(){
+      var id = $("select#show_sub_ctg").val()
       var semester_id = $("select#semesters").val()
 
 
@@ -182,7 +227,6 @@
                  {data: 'c_name'},
                  {data: 'ic'},
                  {data: 'b_cert'},
-                
                  {data: 'phone'},
                  {data: 'id',
                     render: function(data, type, row, meta){

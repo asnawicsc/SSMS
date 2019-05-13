@@ -8,8 +8,12 @@
   </li>
 
   <li>
-    <strong>Description:</strong>
-    <%= @co_curriculum.description %>
+    <strong>Category:</strong>
+    <%= @co_curriculum.category %>
+  </li>
+  <li>
+    <strong>Sub Category:</strong>
+    <%= @co_curriculum.sub_category %>
   </li>
 
     <li>

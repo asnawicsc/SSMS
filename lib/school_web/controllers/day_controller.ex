@@ -9,22 +9,21 @@ defmodule SchoolWeb.DayController do
     render(conn, "index.html", day: day)
   end
 
-  def default_day(conn,params) do
-
+  def default_day(conn, params) do
     Repo.delete_all(Day)
     Affairs.create_day(%{name: "Sunday", number: 1})
-     Affairs.create_day(%{name: "Monday", number: 2})
-      Affairs.create_day(%{name: "Tuesday", number: 3})
-       Affairs.create_day(%{name: "Wednesday", number: 4})
-        Affairs.create_day(%{name: "Thursday", number: 5})
-         Affairs.create_day(%{name: "Friday", number: 6})
-          Affairs.create_day(%{name: "Saturday", number: 7})
+    Affairs.create_day(%{name: "Monday", number: 2})
+    Affairs.create_day(%{name: "Tuesday", number: 3})
+    Affairs.create_day(%{name: "Wednesday", number: 4})
+    Affairs.create_day(%{name: "Thursday", number: 5})
+    Affairs.create_day(%{name: "Friday", number: 6})
+    Affairs.create_day(%{name: "Saturday", number: 7})
 
-           day = Affairs.list_day()
-  conn
-        |> put_flash(:info, "Day update successfully.")
-        |> redirect(to: day_path(conn, :indexs, day))
-    
+    day = Affairs.list_day()
+
+    conn
+    |> put_flash(:info, "Day update successfully.")
+    |> redirect(to: day_path(conn, :index, day))
   end
 
   def new(conn, _params) do
@@ -38,6 +37,7 @@ defmodule SchoolWeb.DayController do
         conn
         |> put_flash(:info, "Day created successfully.")
         |> redirect(to: day_path(conn, :show, day))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
@@ -62,6 +62,7 @@ defmodule SchoolWeb.DayController do
         conn
         |> put_flash(:info, "Day updated successfully.")
         |> redirect(to: day_path(conn, :show, day))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", day: day, changeset: changeset)
     end

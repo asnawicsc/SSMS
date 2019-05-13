@@ -2171,7 +2171,7 @@ defmodule SchoolWeb.PdfController do
             "report_cards_test.html"
 
           _ ->
-            "report_cards_sk.html"
+            "report_cards_kk.html"
         end
 
       html =
@@ -6490,7 +6490,7 @@ defmodule SchoolWeb.PdfController do
         datas = item |> elem(1)
 
         for data <- datas do
-          student_mark = data.mark
+          student_mark = data.mark |> Decimal.to_integer()
 
           grades =
             Repo.all(
@@ -6615,9 +6615,28 @@ defmodule SchoolWeb.PdfController do
   end
 
   def student_list_by_co(conn, params) do
+    inst_id = conn.private.plug_session["institution_id"]
+    institution = Repo.get_by(School.Settings.Institution, id: inst_id)
+
     cocurriculum = params["cocurriculum_id"]
+    coco_details = Repo.get_by(School.Affairs.CoCurriculum, id: cocurriculum)
     co_level = params["standard_id"]
     co_semester = params["semester_id"]
+    class = params["class"]
+    class = String.graphemes(class)
+    sort_by = params["sort_by"]
+    type = params["type"]
+    IO.inspect(sort_by)
+
+    sort_by =
+      if sort_by != "nil" do
+        sort_by = String.to_integer(sort_by)
+      else
+        sort_by
+      end
+
+    IO.inspect(sort_by)
+
     sem = Repo.get(Semester, co_semester)
 
     students1 =
@@ -6636,27 +6655,55 @@ defmodule SchoolWeb.PdfController do
             student_id: s.student_id,
             chinese_name: a.chinese_name,
             name: a.name,
-            mark: s.mark
+            mark: s.mark,
+            gender: a.sex,
+            race: a.race
           }
         )
       )
 
     sc =
-      Repo.all(
-        from(
-          s in Student,
-          left_join: sc in StudentClass,
-          on: sc.sudent_id == s.id,
-          left_join: c in Class,
-          on: c.id == sc.class_id,
-          where: sc.institute_id == ^sem.institution_id and sc.semester_id == ^co_semester,
-          select: %{
-            student_id: s.id,
-            class: c.name,
-            level_id: sc.level_id
-          }
-        )
-      )
+      if class == [] do
+        sc =
+          Repo.all(
+            from(
+              s in Student,
+              left_join: sc in StudentClass,
+              on: sc.sudent_id == s.id,
+              left_join: c in Class,
+              on: c.id == sc.class_id,
+              where:
+                sc.institute_id == ^sem.institution_id and
+                  sc.semester_id == ^co_semester,
+              select: %{
+                student_id: s.id,
+                class: c.name,
+                class_id: c.id,
+                level_id: sc.level_id
+              }
+            )
+          )
+      else
+        sc =
+          Repo.all(
+            from(
+              s in Student,
+              left_join: sc in StudentClass,
+              on: sc.sudent_id == s.id,
+              left_join: c in Class,
+              on: c.id == sc.class_id,
+              where:
+                c.id in ^class and sc.institute_id == ^sem.institution_id and
+                  sc.semester_id == ^co_semester,
+              select: %{
+                student_id: s.id,
+                class: c.name,
+                class_id: c.id,
+                level_id: sc.level_id
+              }
+            )
+          )
+      end
 
     students =
       for student <- students1 do
@@ -6664,6 +6711,7 @@ defmodule SchoolWeb.PdfController do
           b = sc |> Enum.filter(fn x -> x.student_id == student.student_id end) |> hd()
 
           student = Map.put(student, :class_name, b.class)
+          student = Map.put(student, :class_id, b.class_id)
           student = Map.put(student, :level_id, b.level_id)
           student
         else
@@ -6673,6 +6721,8 @@ defmodule SchoolWeb.PdfController do
         end
       end
 
+    students = students |> Enum.filter(fn x -> x.class_name != "no class assigned" end)
+
     students =
       if co_level != "Choose a level" do
         students |> Enum.filter(fn x -> x.level_id == String.to_integer(co_level) end)
@@ -6680,12 +6730,88 @@ defmodule SchoolWeb.PdfController do
         students
       end
 
+    students =
+      if sort_by == 3 do
+        students |> Enum.sort_by(fn d -> d.name end)
+      else
+        students
+      end
+
+    students =
+      if sort_by == 2 do
+        students |> Enum.sort_by(fn d -> {d.class_name, d.name} end)
+      else
+        students
+      end
+
+    students =
+      if sort_by == 1 do
+        students |> Enum.sort_by(fn d -> {d.class_name, d.id} end)
+      else
+        students
+      end
+
+    summary = %{}
+
+    summary =
+      if type == "1" do
+        male = Enum.filter(students, fn x -> x.gender == "Male" end)
+        male_chinese = Enum.count(male, fn x -> x.race == "Chinese" end)
+        male_malay = Enum.count(male, fn x -> x.race == "Malay" end)
+        male_indian = Enum.count(male, fn x -> x.race == "Indian" end)
+        #  male_other = Enum.count(male, fn x -> x.race == "other" end)
+
+        female = Enum.filter(students, fn x -> x.gender == "Female" end)
+        female_chinese = Enum.count(female, fn x -> x.race == "Chinese" end)
+        female_malay = Enum.count(female, fn x -> x.race == "Malay" end)
+        female_indian = Enum.count(female, fn x -> x.race == "Indian" end)
+        # female_other = Enum.count(female, fn x -> x.race == "other" end)
+        tot_chinese = male_chinese + female_chinese
+        tot_indian = male_indian + female_indian
+        tot_malay = male_malay + female_malay
+        tot_std = tot_chinese + tot_malay + tot_indian
+
+        # summary = Map.put(summary, :male, male)
+        summary = Map.put(summary, :male_chinese, male_chinese)
+        summary = Map.put(summary, :male_malay, male_malay)
+        summary = Map.put(summary, :male_indian, male_indian)
+        # Map.put(summary, :male_other, male_other)
+
+        # summary = Map.put(summary, :female, female)
+        summary = Map.put(summary, :female_chinese, female_chinese)
+        summary = Map.put(summary, :female_malay, female_malay)
+        summary = Map.put(summary, :female_indian, female_indian)
+
+        summary = Map.put(summary, :tot_chinese, tot_chinese)
+        summary = Map.put(summary, :tot_indian, tot_indian)
+        summary = Map.put(summary, :tot_malay, tot_malay)
+        summary = Map.put(summary, :tot_std, tot_std)
+
+        # Map.put(summary, :female_other, female_other)
+        summary
+      else
+        summary
+      end
+
     html =
-      Phoenix.View.render_to_string(
-        SchoolWeb.PdfView,
-        "student_listing_by_cocurriculum.html",
-        students: students
-      )
+      if type == "1" do
+        Phoenix.View.render_to_string(
+          SchoolWeb.PdfView,
+          "student_listing_by_cocurriculum.html",
+          students: students,
+          summary: summary,
+          institution: institution,
+          coco_details: coco_details
+        )
+      else
+        Phoenix.View.render_to_string(
+          SchoolWeb.PdfView,
+          "student2_listing_by_cocurriculum.html",
+          students: students,
+          institution: institution,
+          coco_details: coco_details
+        )
+      end
 
     pdf_params = %{"html" => html}
 
@@ -6703,9 +6829,7 @@ defmodule SchoolWeb.PdfController do
           "--margin-bottom",
           "5",
           "--encoding",
-          "utf-8",
-          "--orientation",
-          "Portrait"
+          "utf-8"
         ],
         delete_temporary: true
       )

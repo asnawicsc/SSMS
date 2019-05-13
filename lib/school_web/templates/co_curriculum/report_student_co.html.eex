@@ -11,10 +11,14 @@
        <div align="right" ">
     <form action="/pdf/student_list_by_co" method="get">
           <input type="hidden" name="cocurriculum_id" value="<%= @cocurriculum %>">
-    <input type="hidden" name="standard_id" value="<%= @co_level %>">
+          <input type="hidden" name="standard_id" value="<%= @co_level %>">
 
-      <input type="hidden" name="semester_id" value="<%= @co_semester %>">
+         <input type="hidden" name="semester_id" value="<%= @co_semester %>">
+         <input type="hidden" name="class" value="<%= @class %>">
+         <input type="hidden" name="sort_by" value="<%= @sort_by %>">
+         <input type="hidden" name="type" value="<%= @type %>">
 
+        
      
 <input align="left" class="btn btn-info btn-ml" type="submit" name="" value="Print!">
 </form>
@@ -24,25 +28,53 @@
 <div class="table-responsive table-bordered">
     <table class="table">
 
-      <tr >
-
-         <th><%= gettext "Student Name" %></th>
-          <th ><%= gettext "Chinese Name" %></th>
-          <th ><%= gettext "Class" %></th>
+      <tr>
+        <th><%= gettext "Student Name" %></th>
+        <th ><%= gettext "Chinese Name" %></th>
+        <th><%=gettext "Gender" %></th>
+        <th ><%= gettext "Class" %></th>
         <th ><%= gettext "Mark" %></th>
+        <th ><%= gettext "Race" %></th>
       </tr>
        <%= for item <- @students do %>
 
       <tr>
-
        <th ><%= item.name %></th>
        <th ><%= item.chinese_name %></th>
-         <th ><%= item.class_name %></th>
-        <th  ><%=item.mark %></th>
-
+       <th><%= item.gender %></th>
+       <th ><%= item.class_name %></th>
+       <th  ><%=item.mark %></th>
+       <th  ><%=item.race %></th>
       </tr>
          <% end %>
 
+    </table>
+    
+</div>
+<div class="table-responsive table-bordered">
+    <table class = "table">
+      <tr> 
+        <th>Chinese</th>
+        <td>Male: <%= @summary.male_chinese %></td>
+        <td>Female: <%= @summary.female_chinese %></td>
+        <td> <%= @summary.tot_chinese %></td>
+      </tr>
+      <tr> 
+        <th>Malay</th>
+        <td>Male: <%= @summary.male_malay %></td>
+        <td>Female: <%= @summary.female_malay %></td>
+        <td> <%= @summary.tot_malay %></td>
+      </tr>
+      <tr> 
+        <th>Indian</th>
+        <td>Male: <%= @summary.male_indian %></td>
+        <td>Female: <%= @summary.female_indian %></td>
+        <td> <%= @summary.tot_indian %></td>
+      </tr>
+      <tr> 
+        <th>Total=</th>
+        <td><%= @summary.tot_std %></td>
+      </tr>
     </table>
 </div>
 

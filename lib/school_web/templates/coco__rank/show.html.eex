@@ -1,0 +1,18 @@
+<h2>Show Coco  rank</h2>
+
+<ul>
+
+  <li>
+    <strong>Sub category:</strong>
+    <%= @coco__rank.sub_category %>
+  </li>
+
+  <li>
+    <strong>Rank:</strong>
+    <%= @coco__rank.rank %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: coco__rank_path(@conn, :edit, @coco__rank) %></span>
+<span><%= link "Back", to: coco__rank_path(@conn, :index) %></span>

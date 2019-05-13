@@ -1,61 +1,81 @@
+<center><b><%= @institution.name %></b></center><br>
+<center>SENARAI KOKURIKULUM PELAJAR</center>
 
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>CoCurriculum Mark</title>
-    <style>
-    html {
-      font-family: sans-serif;
-    }
-    table {
-      border-collapse: collapse;
-      border: 2px solid rgb(200,200,200);
-      letter-spacing: 1px;
-      font-size: 0.8rem;
-    }
-    td, th {
-      border: 1px solid rgb(190,190,190);
-      padding: 10px 20px;
-    }
-    td {
-      text-align: center;
-    }
-    caption {
-      padding: 10px;
-    }
-    </style>
-  </head>
+<% date = Date.utc_today() %>
+<div style="float: right;"><%= date.day %>-<%= date.month %>-<%= date.year %></div><br>
+
+<div><%= @coco_details.category%>:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <%=@coco_details.sub_category%></div><br>
+
+
+<table class="table" border="1" style="border-collapse: collapse;" width="60%" height="10%" >
+  <col width="10">
+  <col>
+  <col width="60">
+
+  <thead>
+    <tr align="center">
+      <th ><%= gettext "No." %></th>
+      <th align="right" style="border-right: none;"><%= gettext "Student Name." %></th>
+      <th style="border-left: none;"></th>
+      <th><%= gettext "Gender" %></th>
+      <th><%= gettext "Class" %></th>
+    </tr>
+  </thead>
+
+  <tbody>
  <% require IEx %>
-  <body>
-
-
-    <table width="100%">
-      <colgroup>
-        <col col span="2" >
-      </colgroup>
-      <tr>
-
-         <th style="background-color:#97DB9A;"><%= gettext "Student Name" %></th>
-          <th style="background-color:#97DB9A;"><%= gettext "Chinese Name" %></th>
-          <th style="background-color:#97DB9A;"><%= gettext "Class" %></th>
-        <th style="background-color:#97DB9A;"><%= gettext "Mark" %></th>
-      </tr>
-       <%= for item <- @students do %>
-
-      <tr>
-
-       <th ><%= item.name %></th>
-       <th ><%= item.chinese_name %></th>
-         <th ><%= item.class_name %></th>
-        <th  ><%=item.mark %></th>
-
+  <tbody>
+       <%= for item_data <- @students |> Enum.with_index do %>
+      <% item = elem(item_data, 0) %>
+      <tr align="center" >
+      <td align="left"><%= elem(item_data, 1 ) + 1 %></td>
+       <td align="left" style="border-right: none;"><%= item.name %></td>
+       <td align="left" style="border-left: none;"><%= item.chinese_name %></td>
+       <td><%= item.gender %></td>
+         <td ><%= item.class_name %></td>
       </tr>
          <% end %>
+    </tbody>
+  </table>
+    <br>
 
+    <table class ="table" border="1" width="20%" style="border-collapse: collapse;">
+      <tr> 
+        <th align="left">Chinese</th>
+        <td style="border-right: none;">M: <%= @summary.male_chinese %></td>
+        <td style="border-left: none;">F: <%= @summary.female_chinese %></td>
+        <td align="center"> <%= @summary.tot_chinese %></td>
+      </tr>
+      <tr> 
+        <th align="left">Malay</th>
+        <td style="border-right: none;">M: <%= @summary.male_malay %></td>
+        <td style="border-left: none;">F: <%= @summary.female_malay %></td>
+        <td align="center"> <%= @summary.tot_malay %></td>
+      </tr>
+      <tr> 
+        <th align="left">Indian</th>
+        <td style="border-right: none;">M: <%= @summary.male_indian %></td>
+        <td style="border-left: none;">F: <%= @summary.female_indian %></td>
+        <td align="center"> <%= @summary.tot_indian %></td>
+      </tr>
+      <tr> 
+        <th align="left" colspan="4" >Total=&nbsp;<%= @summary.tot_std %></th>
+      </tr>
     </table>
 
+ 
 
-  </body>
-</html>
-
+<style type="text/css">
+  
+  table { 
+    border-spacing: 0;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+td {
+    padding:2px;
+}
+td img {
+    display:block;
+}
+</style>

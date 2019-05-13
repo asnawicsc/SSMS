@@ -1,0 +1,28 @@
+<h2>Listing Coco ranks</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Sub category</th>
+      <th>Rank</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for coco__rank <- @coco_ranks do %>
+    <tr>
+      <td><%= coco__rank.sub_category %></td>
+      <td><%= coco__rank.rank %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: coco__rank_path(@conn, :show, coco__rank), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: coco__rank_path(@conn, :edit, coco__rank), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: coco__rank_path(@conn, :delete, coco__rank), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Coco  rank", to: coco__rank_path(@conn, :new) %></span>

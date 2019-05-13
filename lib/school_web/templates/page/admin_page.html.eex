@@ -49,6 +49,7 @@
                                <% end %>
   </div>
   <div class="col-lg-4">
+    
   	 <%= render( SchoolWeb.InstitutionView ,"new.html",conn: @conn, changeset: @changeset) %>
     <%= render( SchoolWeb.UserView ,"register_new_user.html",conn: @conn) %>
 

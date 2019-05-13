@@ -559,6 +559,7 @@ defmodule SchoolWeb.Router do
     )
 
     resources("/teacher_attendance", TeacherAttendanceController)
+    resources("/student_class", StudentClassController)
 
     resources("/announcements", AnnouncementController)
     get("/announcements/:id/broadcast", AnnouncementController, :broadcast)
@@ -738,7 +739,11 @@ defmodule SchoolWeb.Router do
     resources("/ehehomeworks", EhomeworkController)
     resources("/mark_sheet_temp", MarkSheetTempController)
     resources("/exam_attendance", ExamAttendanceController)
+    resources("/student_coco_achievements", Student_coco_achievementController)
+    resources("/coco_ranks", Coco_RankController)
 
+    get("/add_records", Student_coco_achievementController, :add_achievement)
+    get("/gen_report", Student_coco_achievementController, :gen_report)
     get("/ehomework/:class_id", EhomeworkController, :ehomework)
     get("/show_ehomework_calendar/class/:class_id", EhomeworkController, :show_ehomework_calendar)
     get("/view_homework/class/:class_id/end_date/:end_date", EhomeworkController, :view_homework)

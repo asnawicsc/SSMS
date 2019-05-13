@@ -1,5 +1,7 @@
 <% teacher = School.Repo.all(from l in School.Affairs.Teacher,where: l.institution_id ==^@conn.private.plug_session["institution_id"], select: {l.name, l.id}) %>
 
+<% category = ["Unit Beruniform", "Sukan & Permainan", "Kelab&Persatuan"]%>
+
 
 <div class="card">
      <div class="card-header">
@@ -21,16 +23,27 @@
   </div>
 
   <div class="form-group">
-    <%= label f, :description, class: "control-label" %>
-    <%= text_input f, :description, class: "form-control" %>
-    <%= error_tag f, :description %>
-  </div>
-
-
-  <div class="form-group">
     <%= label f, :teacher_id, class: "control-label" %>
     <%= select f, :teacher_id, teacher, class: "form-control" %>
     <%= error_tag f, :teacher_id %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :category, class: "control-label" %>
+    <%= select f, :category, category, class: "form-control" %>
+    <%= error_tag f, :category %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :sub_category, class: "control-label" %>
+    <%= text_input f, :sub_category, class: "form-control" %>
+    <%= error_tag f, :sub_category %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :Event, class: "control-label" %>
+    <%= text_input f, :description, class: "form-control" %>
+    <%= error_tag f, :description %>
   </div>
 
   <div class="form-group">

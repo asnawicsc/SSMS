@@ -1,0 +1,28 @@
+
+
+
+<% sub_category =Repo.all(from(s in Affairs.CoCurriculum,select: s.sub_category))|> Enum.uniq()%>
+
+<%= form_for @changeset, @action, fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= label f, :sub_category, class: "control-label" %>
+    <%= select f, :sub_category,sub_category, class: "form-control" %>
+    <%= error_tag f, :sub_category %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :rank, class: "control-label" %>
+    <%= text_input f, :rank, class: "form-control" %>
+    <%= error_tag f, :rank %>
+  </div>
+
+  <div class="form-group">
+    <%= submit "Submit", class: "btn btn-primary" %>
+  </div>
+<% end %>

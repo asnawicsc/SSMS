@@ -1,0 +1,198 @@
+
+
+<div class="content-heading">
+   <div>Student Co Curriculum Achievement
+      <small><%= gettext("welcome")%>!</small>
+   </div>
+   <!-- START Language list-->
+   <div class="ml-auto">
+   </div>
+   <!-- END Language list-->
+</div>
+<div class="row">
+   <div class="col-lg-9">
+      <div class="card">
+         <div class="card-header">Co Curriculum Achievement Report</div>
+         <div class="card-body">
+            <div aria-label="project_nilam">
+               <div class="content">
+                  <div class="container-fluid">
+                     <div class="row">
+                        <div class="col-md-12">
+                           <div class="card ">
+                              <div class="card-header ">
+                                 <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+                                 <form>
+                                 <div class="col-sm-8">
+                                 	<label class="bmd-label-floating">
+                                       <%= gettext "From: " %>
+                                       </label>
+                                 	<input type="date" id="date_from" value="2019-01-01">
+                                 	<label class="bmd-label-floating">
+                                       <%= gettext "To: " %>
+                                       </label>
+                                 	<input type="date" id="date_to" value="2019-12-31">
+                                 </div><br>
+                                 
+                                 <div class="row">
+                                    <% level = Repo.all(from(s in School.Affairs.Level, select: %{institution_id: s.institution_id,id: s.id, name: s.name}))|>Enum.filter(fn x-> x.institution_id ==@conn.private.plug_session["institution_id"] end) %>
+                                    <div id="show_level" class="col-sm-3">
+                                       <label class="bmd-label-floating">
+                                       <%= gettext "Level" %>
+                                       </label>
+                                       <br>
+                                       <select class="custom-select -custom-select-sm" required="required" name="co_level">
+                                             <option selected="">ALL LEVEL</option>
+                                          <%= for a <- level |> Enum.sort do %>
+                                          <option value="<%= a.id %>">
+                                             <%= a.name %>
+                                          </option>
+                                          <% end %>
+                                       </select>
+                                    </div>
+
+                                 <% class = Repo.all(from(s in School.Affairs.Class, select: %{institution_id: s.institution_id,id: s.id, name: s.name}))|>Enum.filter(fn x-> x.institution_id ==@conn.private.plug_session["institution_id"] end) %>
+
+                                    <div class="col-sm-3">
+                                       <label class="bmd-label-floating">
+                                       <%= gettext "Class" %>
+                                       </label>
+                                       <br>
+                                       <select class="custom-select -custom-select-sm" required="required" id="class">
+                                             <option selected="">ALL CLASS</option>
+                                       </select>
+                                    </div>
+                                    <div id = "show_peringkat"class="col-sm-3">
+                                       <label class="bmd-label-floating">
+                                       <%= gettext "Peringkat" %>
+                                       </label>
+                                       <br>
+                                       <input type="checkbox" name="class" value ="Sekolah"> Sekolah<br>
+                                       <input type="checkbox" name="class" value ="Zon"> Zon<br>
+                                       <input type="checkbox" name="class" value ="Negeri"> Negeri<br>
+                                       <input type="checkbox" name="class" value ="Kebangsaan"> Kebangsaan<br>
+                                       <input type="checkbox" name="class" value ="Antarabangsa"> Antarabangsa<br>
+                                     
+                                    </div>
+                                    <div id = "sort_by" class="col-sm-3">
+                                      <label>
+                                        <%= gettext "Listing Sort By"%>
+                                      </label>
+                                      <br>
+                                      <input type="radio" name="sort" value="1"> Student<br>
+                                      <input type="radio" name="sort" value="2"> Date
+                                    </div>
+
+                                    <div class="btn btn-primary" id="gen_report">Generate!</div>
+                                    </form>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="card">
+         <div id="exam_filter_analysis"></div>
+      </div>
+      <div class="card-body" id="report_cocurriculum"></div>
+   </div>
+</div>
+<script type="text/javascript">
+  $(document).ready(function(){
+
+    $("div#gen_report").click(function(){
+
+      var peringkat = []
+      peringkat = getPeringkatValues()
+      var date_from = $("#date_from").val();
+      console.log(peringkat)
+      var date_to = $("#date_to").val();
+      var class_id = $("#class").val();
+      console.log(class_id)
+      var level_id = $('select[name="co_level"]').val();
+      var sort_id = $("input[name='sort']:checked").val();
+
+      if (date_from == "") {
+      alert("Please choose date from");
+      return false;}
+
+      if (date_to == "") {
+      alert("Please choose date to");
+      return false;}
+
+      if (date_to < date_from) {
+      alert("Please choose a correct date range");
+      return false;}
+
+      if(class_id == "No class available"){
+      	alert("Please choose an available class");
+      	return false;}
+      
+      if (peringkat == 0) {
+      alert("Please choose peringkat");
+      return false;}
+
+       if (sort_id == undefined) {
+      alert("Please choose a sorting format!");
+      return false;}
+
+        channel.push("gen_std_achievement", {
+        	date_from: date_from,
+            date_to: date_to,
+            class_id: class_id,
+            level_id: level_id,
+            sort_id: sort_id,
+            peringkat: peringkat
+           
+       })
+       
+      .receive("ok", payload => {
+       
+           $("div#report_cocurriculum").html(payload.html)
+       })  
+    })
+  })
+
+  $("#show_level").change(function(){
+  	var lvl_id = $('select[name="co_level"]').val();
+  	channel.push("filter_class", {
+  		lvl_id: lvl_id
+  	}).receive("ok", payload => {
+  		var classes = payload.class
+  		$("#class").children().remove();
+  		if (classes == "ALL CLASS"){
+  			var option = '<option>ALL CLASS</option>';
+  			$("#class").append(option)
+  		}
+  		else if(classes == 0){
+  			var option = '<option> No class available </option>';
+  			$("#class").append(option)
+
+  		}
+  		else
+  			$(classes).each(function(i, v){
+  			var option = '<option value ="'+v.class_id+'">' + v.class_name +'</option>';
+  			$("#class").append(option)
+  			});
+  		console.log(classes)
+  	})
+  })
+
+
+  function getPeringkatValues(){
+  var chkArray = [];
+  
+  /* look for all checkboes that have a parent id called 'checkboxlist' attached to it and check if it was checked */
+  $("#show_peringkat input:checked").each(function() {
+    chkArray.push($(this).val());
+  });
+
+  return(chkArray);
+}
+</script>
+
+
