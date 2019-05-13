@@ -1916,7 +1916,7 @@ else
         id: student_comment.comment1
       ).c_malay
           end %>
-          ,<br>
+          <br>
           <%= if student_comment.comment2 != nil do
 
           
@@ -1934,7 +1934,7 @@ else
       ).c_malay
           end %>
 
-          ,<br>
+          <br>
           <%= if student_comment.comment3 != nil do
 
          Repo.get_by(School.Affairs.Comment,

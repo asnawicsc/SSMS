@@ -152,26 +152,30 @@ defmodule SchoolWeb.ClassController do
         day_name = c |> Enum.fetch!(5) |> String.trim()
 
         class =
-          Repo.get_by(School.Affairs.Class,
+          Repo.get_by(
+            School.Affairs.Class,
             name: class_name,
             institution_id: conn.private.plug_session["institution_id"]
           )
 
         teacher =
-          Repo.get_by(School.Affairs.Teacher,
+          Repo.get_by(
+            School.Affairs.Teacher,
             name: teacher_name,
             institution_id: conn.private.plug_session["institution_id"]
           )
 
         time_table =
-          Repo.get_by(School.Affairs.Timetable,
+          Repo.get_by(
+            School.Affairs.Timetable,
             teacher_id: teacher.id,
             institution_id: conn.private.plug_session["institution_id"]
           )
 
         subject =
           Repo.all(
-            from(s in School.Affairs.Subject,
+            from(
+              s in School.Affairs.Subject,
               where:
                 s.timetable_code == ^subject_code and
                   s.institution_id == ^conn.private.plug_session["institution_id"]
@@ -217,7 +221,8 @@ defmodule SchoolWeb.ClassController do
           })
 
           timetable =
-            Repo.get_by(School.Affairs.Timetable,
+            Repo.get_by(
+              School.Affairs.Timetable,
               teacher_id: teacher.id,
               institution_id: conn.private.plug_session["institution_id"]
             )
@@ -280,7 +285,8 @@ defmodule SchoolWeb.ClassController do
           end
         else
           timetable =
-            Repo.get_by(School.Affairs.Timetable,
+            Repo.get_by(
+              School.Affairs.Timetable,
               teacher_id: teacher.id,
               institution_id: conn.private.plug_session["institution_id"]
             )
@@ -400,7 +406,8 @@ defmodule SchoolWeb.ClassController do
 
     classes =
       Repo.all(
-        from(c in Class,
+        from(
+          c in Class,
           where:
             c.institution_id == ^conn.private.plug_session["institution_id"] and c.is_delete == 0
         )
@@ -437,7 +444,8 @@ defmodule SchoolWeb.ClassController do
 
     classes =
       Repo.all(
-        from(c in Class,
+        from(
+          c in Class,
           where:
             c.institution_id == ^conn.private.plug_session["institution_id"] and c.is_delete == 0
         )
@@ -545,7 +553,8 @@ defmodule SchoolWeb.ClassController do
   def sync_library_membership_all(conn, params) do
     students_in =
       Repo.all(
-        from(t in School.Affairs.Student,
+        from(
+          t in School.Affairs.Student,
           left_join: sc in School.Affairs.StudentClass,
           on: sc.sudent_id == t.id,
           left_join: c in School.Affairs.Class,
@@ -843,7 +852,9 @@ defmodule SchoolWeb.ClassController do
 
     class = Repo.get_by(Class, id: params["class_id"])
 
-    render(conn, "class_monitor.html",
+    render(
+      conn,
+      "class_monitor.html",
       class: class,
       class_id: params["class_id"],
       students: students
@@ -880,7 +891,8 @@ defmodule SchoolWeb.ClassController do
           })
 
           student =
-            Repo.get_by(StudentClass,
+            Repo.get_by(
+              StudentClass,
               sudent_id: params["student_id"],
               class_id: params["class_id"],
               semester_id: conn.private.plug_session["semester_id"],
@@ -958,7 +970,9 @@ defmodule SchoolWeb.ClassController do
 
     user = Repo.get_by(User, email: email)
 
-    render(conn, "edit_monitor.html",
+    render(
+      conn,
+      "edit_monitor.html",
       monitor: monitor,
       class_id: params["class_id"],
       students: students,
@@ -983,7 +997,8 @@ defmodule SchoolWeb.ClassController do
     Settings.update_user(user, user_params)
 
     existing_monitor =
-      Repo.get_by(StudentClass,
+      Repo.get_by(
+        StudentClass,
         is_monitor: 1,
         class_id: params["class_id"],
         semester_id: conn.private.plug_session["semester_id"],
@@ -995,7 +1010,8 @@ defmodule SchoolWeb.ClassController do
     School.Affairs.update_student_class(existing_monitor, student_existing_monitor)
 
     new_monitor =
-      Repo.get_by(StudentClass,
+      Repo.get_by(
+        StudentClass,
         sudent_id: params["student_id"],
         class_id: params["class_id"],
         semester_id: conn.private.plug_session["semester_id"],
@@ -1017,7 +1033,8 @@ defmodule SchoolWeb.ClassController do
 
     subjects =
       Repo.all(
-        from(s in School.Affairs.Subject,
+        from(
+          s in School.Affairs.Subject,
           where: s.institution_id == ^inst_id,
           select: %{id: s.id, timetable_description: s.timetable_description}
         )
@@ -1037,21 +1054,24 @@ defmodule SchoolWeb.ClassController do
       case user.role do
         "Admin" ->
           Repo.all(
-            from(c in Affairs.Class,
+            from(
+              c in Affairs.Class,
               where: c.institution_id == ^conn.private.plug_session["institution_id"]
             )
           )
 
         "Support" ->
           Repo.all(
-            from(c in Affairs.Class,
+            from(
+              c in Affairs.Class,
               where: c.institution_id == ^conn.private.plug_session["institution_id"]
             )
           )
 
         "Monitor" ->
           Repo.all(
-            from(c in Affairs.Class,
+            from(
+              c in Affairs.Class,
               where: c.institution_id == ^conn.private.plug_session["institution_id"]
             )
           )
@@ -1067,7 +1087,8 @@ defmodule SchoolWeb.ClassController do
 
         "Clerk" ->
           Repo.all(
-            from(c in Affairs.Class,
+            from(
+              c in Affairs.Class,
               where: c.institution_id == ^conn.private.plug_session["institution_id"]
             )
           )

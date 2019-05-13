@@ -22,22 +22,24 @@ defmodule SchoolWeb.Student_coco_achievementController do
 
     rank =
       Repo.all(
-        from(a in School.Affairs.Coco_Rank,
-          select: %{sub_category: a.sub_category, rank: a.rank}
-        )
+        from(a in School.Affairs.Coco_Rank, select: %{sub_category: a.sub_category, rank: a.rank})
       )
 
     class =
       Repo.all(
-        from(s in School.Affairs.Class,
+        from(
+          s in School.Affairs.Class,
           where: s.institution_id == ^conn.private.plug_session["institution_id"],
-          select: %{institution_id: s.institution_id, id: s.id, name: s.name}
+          select: %{institution_id: s.institution_id, id: s.id, name: s.name},
+          order_by: [s.name]
         )
       )
 
     changeset = Affairs.change_student_coco_achievement(%Student_coco_achievement{})
 
-    render(conn, "add_achievement.html",
+    render(
+      conn,
+      "add_achievement.html",
       changeset: changeset,
       cocos: cocos,
       semesters: semesters,
@@ -71,7 +73,9 @@ defmodule SchoolWeb.Student_coco_achievementController do
     student_coco_achievement = Affairs.get_student_coco_achievement!(id)
     changeset = Affairs.change_student_coco_achievement(student_coco_achievement)
 
-    render(conn, "edit.html",
+    render(
+      conn,
+      "edit.html",
       student_coco_achievement: student_coco_achievement,
       changeset: changeset
     )
@@ -90,7 +94,9 @@ defmodule SchoolWeb.Student_coco_achievementController do
         |> redirect(to: student_coco_achievement_path(conn, :show, student_coco_achievement))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html",
+        render(
+          conn,
+          "edit.html",
           student_coco_achievement: student_coco_achievement,
           changeset: changeset
         )
