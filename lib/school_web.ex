@@ -50,7 +50,8 @@ defmodule SchoolWeb do
         ExamMaster,
         Exam,
         CoCurriculum,
-        Period
+        Period,
+        Timetable
       }
     end
   end

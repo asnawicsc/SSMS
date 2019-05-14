@@ -69,7 +69,7 @@
    <script src="/vendor/screenfull/dist/screenfull.js"></script>
    <!-- LOCALIZE-->
    <script src="/vendor/jquery-localize/dist/jquery.localize.js"></script>
-
+<link rel="stylesheet" href="/vendor/chosen-js/chosen.css">
    <script src="/vendor/demo/demo-rtl.js"></script>
    <!-- =============== PAGE VENDOR SCRIPTS ===============-->
    <script src="/vendor/demo/demo-panels.js"></script>
@@ -89,6 +89,7 @@
 
     <script src="/vendor/components-jqueryui/jquery-ui.js"></script>
     <script src="/vendor/jqueryui-touch-punch/jquery.ui.touch-punch.js"></script>
+    <script src="/vendor/chosen-js/chosen.jquery.js"></script>
    <!-- =============== APP SCRIPTS ===============-->
    <script src="/js/app_angle.js"></script>
     <script type="text/javascript">
@@ -124,6 +125,7 @@
 <script src="/vendor/datatables.net-bs4/dataTables.keyTable.js"></script>
 <script src="/vendor/datatables.net-bs4/dataTables.responsive.js"></script>
 <script src="/vendor/datatables.net-bs4/responsive.bootstrap.js"></script>    
+
 <!-- SPARKLINE-->
    <script src="/vendor/jquery-sparkline/jquery.sparkline.js"></script>
  <script src="/vendor/easy-pie-chart/dist/jquery.easypiechart.js"></script>

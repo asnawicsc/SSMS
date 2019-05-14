@@ -20,6 +20,7 @@ defmodule SchoolWeb.Coco_RankController do
         conn
         |> put_flash(:info, "Coco  rank created successfully.")
         |> redirect(to: coco__rank_path(conn, :show, coco__rank))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
@@ -44,6 +45,7 @@ defmodule SchoolWeb.Coco_RankController do
         conn
         |> put_flash(:info, "Coco  rank updated successfully.")
         |> redirect(to: coco__rank_path(conn, :show, coco__rank))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", coco__rank: coco__rank, changeset: changeset)
     end

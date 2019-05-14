@@ -34,11 +34,11 @@
                      </form>
 
                     <div class="card-body">
-                    	<table border="1" class="s_unmark" id="s_unmark">
+                    	<table  class="s_unmark table table-bordered" id="s_unmark">
                     		<tr>
-                    			<th> Name (C)</th>
                     			<th> Name</th>
-                    			
+                    			<th> Name (C)</th>
+                    			<th>Action</th>
                     		</tr>
                     		
                     		
@@ -57,7 +57,7 @@
                   <div class="card card-default">
                      <div class="card-header"><b>Step 2:</b><br>Please insert the records for the student
                      <div class="card-body">
-                     <form>
+                     <form id="myForm">
 
                       <div id = "name">Name:
                       	<li>1. </li>
@@ -65,19 +65,13 @@
 
                       Date :<input id="event_date" type="date"><br><br>
 
-                        <select id="show_ctg" class="custom-select custom-select-sm">
-                           <option selected="">Choose a category</option>
-                           <%= for coco <- @cocos|>Enum.uniq(fn x -> x.category end) do %>
-                           <option value="<%= coco.category %>"><%= coco.category %></option>
-                           <% end %>
-                    
-                        </select>
-
+                        <label>Participant</label>
                          <select id="participant" class="custom-select custom-select-sm">
                            <option selected="" value="Pemain">Pemain</option>
                            <option value="Peserta">Peserta</option>
                         </select>
 
+                        <label>Level</label>
                         <select id="peringkat" class="custom-select custom-select-sm">
                            <option selected="" value="Sekolah">Sekolah</option>
                            <option value="Zon">Zon</option>
@@ -86,30 +80,46 @@
                            <option value="Antarabangsa">Antarabangsa</option>
                         </select>
 
+                        <label>Category</label>
+                        <select id="show_ctg" class="custom-select custom-select-sm">
+                           <option selected="">Choose a category</option>
+                           <%= for coco <- @cocos|>Enum.uniq(fn x -> x.category end) do %>
+                           <option value="<%= coco.category %>"><%= coco.category %></option>
+                           <% end %>
+                        </select>
+
+                        <div style = "display: none" id="show_sub_ctg"> <label>Sub Category</label><br>
+	                        <select id="show_sub_ctg" class="custom-select custom-select-sm">
+	                           <option selected="">Choose a Sub Category</option>
+	                           <%= for coco <- @cocos |>Enum.uniq(fn x -> x.sub_category end) do %>
+	                           <option data-type="<%= coco.sub_category %>"style = "display: none" value="<%= coco.sub_category %>" aria-label="<%= coco.category %>"><%= coco.sub_category %></option>
+	                           <% end %>
+	                    
+	                        </select>
+						</div>
+
+                        <div style = "display: none" id="show_desc">
+	                        <label>Event</label><br>
+	                        <select id="show_desc" class="custom-select custom-select-sm">
+	                           <option selected="">Choose an Event</option>
+	                           <%= for coco <- @cocos|>Enum.uniq(fn x -> x.description end) do %>
+	                           <option data-type="<%= coco.description %>" value="<%= coco.description %>" aria-label="<%= coco.sub_category %>"><%= coco.description %></option>
+	                           <% end %>
+	                        </select>
+                        	
+                        </div>
+                       
+                        <div style = "display: none" id="show_rank">
+	                        <label>Rank</label><br>
+	                        <select id="show_rank" class="custom-select custom-select-sm">
+	                           <option selected="">Rank</option>
+	                           <%= for a <- @rank|>Enum.uniq(fn x -> x.rank end) do %>
+	                           <option data-type="<%= a.rank %>" value="<%= a.rank %>" aria-label="<%= a.sub_category %>"><%= a.rank %></option>
+	                           <% end %>
+	                    
+	                        </select> 
+                    	</div>
                         
-                        <select id="show_sub_ctg" class="custom-select custom-select-sm">
-                           <option selected="">Choose a Sub Category</option>
-                           <%= for coco <- @cocos|>Enum.uniq(fn x -> x.sub_category end) do %>
-                           <option data-type="<%= coco.sub_category %>"style = "display: none" value="<%= coco.sub_category %>" aria-label="<%= coco.category %>"><%= coco.sub_category %></option>
-                           <% end %>
-                    
-                        </select>
-
-                        <select id="show_desc" class="custom-select custom-select-sm">
-                           <option selected="">Choose an Event</option>
-                           <%= for coco <- @cocos|>Enum.uniq(fn x -> x.description end) do %>
-                           <option data-type="<%= coco.description %>" value="<%= coco.description %>" aria-label="<%= coco.sub_category %>"><%= coco.description %></option>
-                           <% end %>
-                    
-                        </select>
-
-                        <select id="show_rank" class="custom-select custom-select-sm">
-                           <option selected="">Rank</option>
-                           <%= for a <- @rank|>Enum.uniq(fn x -> x.rank end) do %>
-                           <option data-type="<%= a.rank %>" value="<%= a.rank %>" aria-label="<%= a.sub_category %>"><%= a.rank %></option>
-                           <% end %>
-                    
-                        </select>
 
                         </div>
                         <div class="btn btn-primary add_to_coco" id="add_button">Add</div>
@@ -125,7 +135,33 @@
 <script type="text/javascript">
    $(document).ready(function(){
 
+   	var existing_name = localStorage.getItem("name"); 
+   	var cat = localStorage.getItem("category");
+   	var sub = localStorage.getItem("sub_category");
+   	var flag = localStorage.getItem("flag"); 
+
+   	if (flag == 1) {
+   		
+   		swal("Opps! ", existing_name + " achievement was not added"+ "\nCurrently in : " +cat + "-" + sub  , "info");
+   		localStorage.clear();
+
+   	}
+
+   	if (flag == 0) {
+   		
+   		swal("Added Successfully! ", existing_name + " achievement was added","info");
+   		localStorage.clear();
+
+   	}
+
     $("select#show_ctg").change(function(){
+
+    	if($("select#show_ctg").val() == "Choose a category"){
+   		$("div#show_sub_ctg").hide() 
+   		$("div#show_desc").hide() 
+   		$("div#show_rank").hide() }else{
+   			$("div#show_sub_ctg").show()}
+
       var val = $(this).val()
       if(val == "Unit Beruniform"){
         $('option[aria-label="Unit Beruniform"]').show()
@@ -155,7 +191,7 @@
         $('option[aria-label]').hide()
       }
       
-      console.log(val)
+     
       })
 
     $(document).on("click", ".add_to_coco", function(){
@@ -168,6 +204,12 @@
       var peringkat = $("select#peringkat").val()
       var event_name = $("select#show_desc").val()
       var rank = $("select#show_rank").val()
+
+     
+     if(date == 0 || student_id == undefined || category == "Choose a category" || sub_category == "Choose a Sub Category" || event_name == "Choose an Event"){
+     	alert("Please ensure all the details are complete")
+     	return false;
+     }
       
 
               swal({
@@ -182,16 +224,36 @@
                 closeOnCancel: false
               }, function(isConfirm) {
                 if (isConfirm) {
+                	
 
                  channel.push("add_coco_achievement", {student_id: student_id, date: date, category: category, sub_category: sub_category, participant: participant, peringkat: peringkat, event_name: event_name, rank: rank})
 
                  .receive(
                  "ok", payload => {
-                   $("#records").html(payload.html)
-                   
-                  
+                   // $("#records").html(payload.html)
+                   name = payload.name;
+                   localStorage.setItem("flag", 0);
+                   localStorage.setItem("name", name);
 
+        
+               	location.reload();
                  })
+
+                 .receive(
+                 "error", payload => {
+                   // $("#records").html(payload.html)
+                   ex_cat = payload.ex_cat;
+                   ex_sub = payload.ex_sub;
+                   name = payload.name;
+                   
+                   localStorage.setItem("name", name);
+                   localStorage.setItem("category", ex_cat);
+                   localStorage.setItem("sub_category", ex_sub);
+                   localStorage.setItem("flag", 1);
+
+                   location.reload();
+                 })
+
        
 
                 } else {
@@ -203,31 +265,40 @@
 
 
     $("select#show_sub_ctg").change(function(){
+
       var sub_category = $("select#show_sub_ctg").val()
+      
 
       channel.push("filter_events" , {
       	sub_category: sub_category
       }).receive("ok", payload =>{
       	var list = payload.all
-      	$("#show_desc").children().remove();
+      	$("select#show_desc").children().remove();
 
       	$(list).each(function(i, v){
             //var li = '<li id="'+v.id+'">'+v.name+v.chinese_name+'</li>'
             var option = '<option value ="'+v.events+'">' + v.events +'</option>';
-            $("#show_desc").append(option);
+            $("select#show_desc").append(option);
             })
       })
+
+      if(sub_category == "Choose a Sub Category"){
+   		$("div#show_desc").hide() 
+   		$("div#show_rank").hide() } else{
+   			$("div#show_desc").show()
+   			$("div#show_rank").show()
+   		}
 
       channel.push("filter_ranks" , {
       	sub_category: sub_category
       }).receive("ok", payload =>{
       	var list = payload.all
-      	$("#show_rank").children().remove();
+      	$("select#show_rank").children().remove();
 
       	$(list).each(function(i, v){
             //var li = '<li id="'+v.id+'">'+v.name+v.chinese_name+'</li>'
             var option = '<option value ="'+v.rank+'">' + v.rank +'</option>';
-            $("#show_rank").append(option);
+            $("select#show_rank").append(option);
             })
       })
 
@@ -245,20 +316,22 @@
       .receive("ok", payload => {
            $("#s_unmark").html("")
            var list = payload.all
-           var thead = "<tr><th> Name </th> <th></th> <th> Name(C)</th></tr>"
+           var thead = "<tr><th> Name </th>  <th> Name(C)</th><th>Action</th></tr>"
            $("#s_unmark").append(thead)
            $(list).each(function(i, v){
             //var li = '<li id="'+v.id+'">'+v.name+v.chinese_name+'</li>'
 
-            var markup = '<tr id ="'+v.id+'"> <td >' + v.name + '</td><td></td><td>' + v.chinese_name + '</td></tr>';
+            var markup = '<tr id ="'+v.id+'"> <td >' + v.name + '</td><td>' + v.chinese_name + '</td><td><div class="btn btn-primary add_to" id="'+v.id+'">Add</div></td></tr>';
             $("#s_unmark").append(markup) 
             })
        })  
     })
 
-    $("#s_unmark").on("click", "tr", function() {
-        $("#name").children().replaceWith(this);
-        var id = $(this).attr("id");
+    $(document).on("click", ".add_to", function() {
+        var html = $(this).parent().parent().clone();
+		html.find(".add_to").hide();
+        $("div#name").html(html);
+
     })
 
     $("#name").on("click", "tr", function() {

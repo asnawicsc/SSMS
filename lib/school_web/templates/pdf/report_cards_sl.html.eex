@@ -1911,7 +1911,14 @@ else
 
           end %>
 
-        , <br>
+<%= if student_comment.comment1 != nil do
+           
+      Repo.get_by(School.Affairs.Comment,
+        id: student_comment.comment1
+      ).c_malay
+          end %>
+          <br>
+
           <%= if student_comment.comment2 != nil do
 
           
@@ -1921,8 +1928,17 @@ else
 
           end %>
 
-         
-        , <br>
+
+          <%= if student_comment.comment2 != nil do
+
+
+              Repo.get_by(School.Affairs.Comment,
+        id: student_comment.comment2
+      ).c_malay
+          end %>
+
+          <br>
+
           <%= if student_comment.comment3 != nil do
 
          Repo.get_by(School.Affairs.Comment,

@@ -1699,8 +1699,7 @@ defmodule SchoolWeb.UserChannel do
       Repo.all(
         from(
           s in School.Affairs.ExamMark,
-          where:
-            s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
+          where: s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
           select: %{
             class_id: s.class_id,
             subject_id: s.subject_id,
@@ -1856,7 +1855,7 @@ defmodule SchoolWeb.UserChannel do
     sub_category = payload["sub_category"]
 
     all =
-      if(sub_category != "Choose a Sub Category") do
+      if sub_category != "Choose a Sub Category" do
         all =
           Repo.all(
             from(
@@ -1882,7 +1881,7 @@ defmodule SchoolWeb.UserChannel do
     sub_category = payload["sub_category"]
 
     all =
-      if(sub_category != "Choose a Sub Category") do
+      if sub_category != "Choose a Sub Category" do
         all =
           Repo.all(
             from(
@@ -1963,45 +1962,49 @@ defmodule SchoolWeb.UserChannel do
     participant = payload["participant"]
     peringkat = payload["peringkat"]
     rank = payload["rank"]
+    a = 1
 
-    Affairs.create_student_coco_achievement(%{
-      date: date,
-      student_id: student_id,
-      category: category,
-      sub_category: sub_category,
-      competition_name: event_name,
-      participant_type: participant,
-      peringkat: peringkat,
-      rank: rank
-    })
+    check_data =
+      cond do
+        category == "Unit Beruniform" ->
+          check_data =
+            Repo.all(
+              from(
+                c in Affairs.StudentCocurriculum,
+                where:
+                  c.student_id == ^student_id and c.category == "Unit Beruniform" and
+                    c.sub_category == ^sub_category,
+                select: %{category: c.category, sub_category: c.sub_category}
+              )
+            )
 
-    students =
-      Repo.all(
-        from(
-          m in School.Affairs.Student_coco_achievement,
-          left_join: s in School.Affairs.Student,
-          on: s.id == m.student_id,
-          left_join: c in StudentClass,
-          on: m.student_id == c.sudent_id,
-          left_join: t in Class,
-          on: t.id == c.class_id,
-          select: %{
-            name: s.name,
-            class_name: t.name,
-            ic: s.ic,
-            event_name: m.competition_name,
-            peringkat: m.peringkat,
-            rank: m.rank,
-            date: m.date
-          }
-        )
-      )
+        category == "Sukan & Permainan" ->
+          check_data =
+            Repo.all(
+              from(
+                c in Affairs.StudentCocurriculum,
+                where:
+                  c.student_id == ^student_id and c.category == "Sukan & Permainan" and
+                    c.sub_category == ^sub_category,
+                select: %{category: c.category, sub_category: c.sub_category}
+              )
+            )
 
-    html =
-      Phoenix.View.render_to_string(
-        SchoolWeb.Student_coco_achievementView,
-        "report_std_coco.html",
-        students: students,
+        category == "Kelab&Persatuan" ->
+          check_data =
+            Repo.all(
+              from(
+                c in Affairs.StudentCocurriculum,
+                where:
+                  c.student_id == ^student_id and c.category == "Kelab&Persatuan" and
+                    c.sub_category == ^sub_category,
+                select: %{category: c.category, sub_category: c.sub_category}
+              )
+            )
+      end
+
+    if check_data != [] do
+      Affairs.create_student_coco_achievement(%{
         date: date,
         student_id: student_id,
         category: category,
@@ -2010,11 +2013,103 @@ defmodule SchoolWeb.UserChannel do
         participant_type: participant,
         peringkat: peringkat,
         rank: rank
-      )
+      })
 
-    IO.inspect(students)
+      added_student_name =
+        Repo.all(
+          from(
+            s in Affairs.Student,
+            where: s.id == ^student_id,
+            select: s.name
+          )
+        )
 
-    {:reply, {:ok, %{html: html}}, socket}
+      students =
+        Repo.all(
+          from(
+            m in School.Affairs.Student_coco_achievement,
+            left_join: s in School.Affairs.Student,
+            on: s.id == m.student_id,
+            left_join: c in StudentClass,
+            on: m.student_id == c.sudent_id,
+            left_join: t in Class,
+            on: t.id == c.class_id,
+            select: %{
+              name: s.name,
+              class_name: t.name,
+              ic: s.ic,
+              event_name: m.competition_name,
+              peringkat: m.peringkat,
+              rank: m.rank,
+              date: m.date
+            }
+          )
+        )
+
+      html =
+        Phoenix.View.render_to_string(
+          SchoolWeb.Student_coco_achievementView,
+          "report_std_coco.html",
+          students: students,
+          date: date,
+          student_id: student_id,
+          category: category,
+          sub_category: sub_category,
+          competition_name: event_name,
+          participant_type: participant,
+          peringkat: peringkat,
+          rank: rank
+        )
+
+      {:reply, {:ok, %{html: html, name: added_student_name}}, socket}
+    else
+      ex_coco =
+        cond do
+          category == "Unit Beruniform" ->
+            ex_coco =
+              Repo.all(
+                from(
+                  c in Affairs.StudentCocurriculum,
+                  where: c.student_id == ^student_id and c.category == "Unit Beruniform",
+                  select: %{category: c.category, sub_category: c.sub_category}
+                )
+              )
+
+          category == "Sukan & Permainan" ->
+            ex_coco =
+              Repo.all(
+                from(
+                  c in Affairs.StudentCocurriculum,
+                  where: c.student_id == ^student_id and c.category == "Sukan & Permainan",
+                  select: %{category: c.category, sub_category: c.sub_category}
+                )
+              )
+
+          category == "Kelab&Persatuan" ->
+            ex_coco =
+              Repo.all(
+                from(
+                  c in Affairs.StudentCocurriculum,
+                  where: c.student_id == ^student_id and c.category == "Kelab&Persatuan",
+                  select: %{category: c.category, sub_category: c.sub_category}
+                )
+              )
+        end
+
+      ex_name =
+        Repo.all(
+          from(
+            s in Affairs.Student,
+            where: s.id == ^student_id,
+            select: s.name
+          )
+        )
+
+      ex_cat = ex_coco |> Enum.map(fn x -> x.category end)
+      ex_sub = ex_coco |> Enum.map(fn x -> x.sub_category end)
+
+      {:reply, {:error, %{name: ex_name, ex_cat: ex_cat, ex_sub: ex_sub}}, socket}
+    end
   end
 
   def handle_in("sub_teach_class", payload, socket) do
@@ -2074,7 +2169,8 @@ defmodule SchoolWeb.UserChannel do
       if lvl_id != "ALL LEVEL" do
         class =
           Repo.all(
-            from(c in Affairs.Class,
+            from(
+              c in Affairs.Class,
               where: c.level_id == ^lvl_id,
               select: %{class_name: c.name, class_id: c.id}
             )
@@ -2223,7 +2319,8 @@ defmodule SchoolWeb.UserChannel do
         subject_code = item |> elem(0)
 
         subject =
-          Repo.get_by(School.Affairs.Subject,
+          Repo.get_by(
+            School.Affairs.Subject,
             code: subject_code,
             institution_id: inst_id
           )
@@ -2307,7 +2404,8 @@ defmodule SchoolWeb.UserChannel do
 
     subject_all =
       Repo.all(
-        from(s in School.Affairs.Subject,
+        from(
+          s in School.Affairs.Subject,
           where: s.institution_id == ^inst_id and s.with_mark == 1,
           select: s.code
         )
@@ -2626,7 +2724,8 @@ defmodule SchoolWeb.UserChannel do
         datas = item |> elem(1)
 
         subject =
-          Repo.get_by(School.Affairs.Subject,
+          Repo.get_by(
+            School.Affairs.Subject,
             code: subject_code,
             institution_id: inst_id
           )
@@ -2737,7 +2836,8 @@ defmodule SchoolWeb.UserChannel do
 
     subject_all =
       Repo.all(
-        from(s in School.Affairs.Subject,
+        from(
+          s in School.Affairs.Subject,
           where: s.institution_id == ^inst_id and s.with_mark == 1,
           select: s.code
         )
@@ -3399,8 +3499,7 @@ defmodule SchoolWeb.UserChannel do
                 on: s.id == sa.student_id,
                 where:
                   sa.peringkat in ^peringkat and t.level_id == ^level_id and
-                    c.class_id == ^class_id and
-                    sa.date >= ^date_from and sa.date <= ^date_to,
+                    c.class_id == ^class_id and sa.date >= ^date_from and sa.date <= ^date_to,
                 select: %{
                   desc: sa.competition_name,
                   student_name: s.name,
@@ -3425,8 +3524,8 @@ defmodule SchoolWeb.UserChannel do
                 left_join: s in Affairs.Student,
                 on: s.id == sa.student_id,
                 where:
-                  sa.peringkat in ^peringkat and t.level_id == ^level_id and
-                    sa.date >= ^date_from and sa.date <= ^date_to,
+                  sa.peringkat in ^peringkat and t.level_id == ^level_id and sa.date >= ^date_from and
+                    sa.date <= ^date_to,
                 select: %{
                   desc: sa.competition_name,
                   student_name: s.name,
@@ -3451,8 +3550,7 @@ defmodule SchoolWeb.UserChannel do
                 left_join: s in Affairs.Student,
                 on: s.id == sa.student_id,
                 where:
-                  sa.peringkat in ^peringkat and
-                    sa.date >= ^date_from and sa.date <= ^date_to,
+                  sa.peringkat in ^peringkat and sa.date >= ^date_from and sa.date <= ^date_to,
                 select: %{
                   desc: sa.competition_name,
                   student_name: s.name,
@@ -3552,9 +3650,7 @@ defmodule SchoolWeb.UserChannel do
               on: sc.sudent_id == s.id,
               left_join: c in Class,
               on: c.id == sc.class_id,
-              where:
-                sc.institute_id == ^sem.institution_id and
-                  sc.semester_id == ^co_semester,
+              where: sc.institute_id == ^sem.institution_id and sc.semester_id == ^co_semester,
               select: %{
                 student_id: s.id,
                 class: c.name,
@@ -4225,7 +4321,8 @@ defmodule SchoolWeb.UserChannel do
     user = Repo.get(User, user_id)
 
     teacher =
-      Repo.get_by(School.Affairs.Teacher,
+      Repo.get_by(
+        School.Affairs.Teacher,
         secondid: term,
         institution_id: institution_id
       )
@@ -4242,7 +4339,8 @@ defmodule SchoolWeb.UserChannel do
       month = date |> String.split("-") |> Enum.fetch!(1)
 
       attns =
-        Repo.get_by(School.Affairs.TeacherAttendance,
+        Repo.get_by(
+          School.Affairs.TeacherAttendance,
           teacher_id: teacher_id,
           institution_id: institution_id,
           date: date
@@ -4280,7 +4378,8 @@ defmodule SchoolWeb.UserChannel do
           msg
         else
           attn =
-            Repo.get_by(School.Affairs.TeacherAttendance,
+            Repo.get_by(
+              School.Affairs.TeacherAttendance,
               teacher_id: teacher_id,
               institution_id: institution_id,
               date: date
@@ -4312,7 +4411,8 @@ defmodule SchoolWeb.UserChannel do
 
                   shift =
                     Repo.all(
-                      from(s in School.Affairs.Shift,
+                      from(
+                        s in School.Affairs.Shift,
                         left_join: r in School.Affairs.ShiftMaster,
                         on: s.shift_master_id == r.id,
                         where: s.teacher_id == ^teacher_id,
@@ -4452,7 +4552,8 @@ defmodule SchoolWeb.UserChannel do
     date = time_in |> String.split_at(10) |> elem(0)
 
     attns =
-      Repo.get_by(School.Affairs.TeacherAttendance,
+      Repo.get_by(
+        School.Affairs.TeacherAttendance,
         teacher_id: teacher_id,
         institution_id: institution_id,
         date: date
@@ -4479,7 +4580,8 @@ defmodule SchoolWeb.UserChannel do
         msg
       else
         attn =
-          Repo.get_by(School.Affairs.TeacherAttendance,
+          Repo.get_by(
+            School.Affairs.TeacherAttendance,
             teacher_id: teacher_id,
             institution_id: institution_id,
             date: date
