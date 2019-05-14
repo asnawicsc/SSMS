@@ -1,0 +1,69 @@
+
+
+<table class="table" border="1" width="100%">
+  
+  <tbody>
+<td >
+<b  style="font-size: 25px;"><%= @institution.name %></b></br>
+班级<b> Class: <%= @class.name %></b> <br>
+老师<b> Nama GURU : ________________________________________________________________ </b><br>
+事项<b> PERKARA &nbsp;&nbsp;&nbsp;: <%= @exam_name %></b><b style="margin-left: 10px;"> 日期 Tarikh:<%= SchoolWeb.LayoutView.my_time(DateTime.utc_now) %></b> 
+
+</td>
+    </tbody>
+</table>
+    <table class="display" align="center" style="border-collapse: collapse;" border="1" width="100%">
+      <colgroup>
+        <col col span="2" >
+      </colgroup>
+     
+      <tr align="center">
+        <th>No</th>
+        <th width="300px;">Name</th>
+        <th width="80px;">BCF</th>
+         <th width="80px;">BCT</th>
+         <th width="80px;">BMF</th>
+          <th width="80px;">BMT</th>
+          <th width="80px;">BIF</th>
+          <th width="80px;">BIT</th>
+          <th width="80px;">MATH</th>
+          <th width="80px;">Math</th>
+          <th width="80px;">Sains</th>
+        <th width="100px;">Jumlah</th>
+           <th width="100px;">Purata</th>
+         <th width="80px;">KDK</th>
+         <th width="80px;">KDD</th>
+      </tr>
+      <%= for item <- @student_class|>Enum.with_index do %>
+      <% no = item|>elem(1) %>
+          <% item = item|>elem(0) %>
+
+ 
+
+         <th><%= no + 1 %></th>
+        <th align="left"><%= item.student_name %></th>
+         <th ></th>
+            <th ></th>
+             <th ></th>
+              <th ></th>
+               <th ></th>
+                <th ></th>
+                 <th ></th>
+                  <th ></th>
+                   <th ></th>
+                    <th ></th>
+                     <th ></th>
+                      <th ></th>
+                       <th ></th>
+      </tr>
+       <% end %>
+
+ 
+
+    </table>
+    <table align="center" width="100%">
+      <tr align="center"><td>全科及格人数：</td><td>有不及格的人数：</td><td>(缺考TH)</td></tr>
+    </table>
+
+  </body>
+</html>

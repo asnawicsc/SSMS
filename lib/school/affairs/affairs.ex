@@ -1504,6 +1504,19 @@ defmodule School.Affairs do
     Repo.all(ExamMaster)
   end
 
+  def list_exam_master(institution_id) do
+    Repo.all(
+      from(
+        c in ExamMaster,
+        where: c.institution_id == ^institution_id,
+        select: %{
+          id: c.id,
+          name: c.name
+        }
+      )
+    )
+  end
+
   @doc """
   Gets a single exam_master.
 

@@ -742,6 +742,12 @@ defmodule SchoolWeb.Router do
     resources("/student_coco_achievements", Student_coco_achievementController)
     resources("/coco_ranks", Coco_RankController)
 
+    post(
+      "/exam_result_class_pdf",
+      PdfController,
+      :exam_result_class_pdf
+    )
+
     get("/add_records", Student_coco_achievementController, :add_achievement)
     get("/gen_report", Student_coco_achievementController, :gen_report)
     get("/ehomework/:class_id", EhomeworkController, :ehomework)

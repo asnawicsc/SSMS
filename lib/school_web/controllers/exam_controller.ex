@@ -1127,7 +1127,8 @@ defmodule SchoolWeb.ExamController do
           s in School.Affairs.ExamMark,
           left_join: p in Student,
           on: p.id == s.student_id,
-          where: s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
+          where:
+            s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
           select: %{
             class_id: s.class_id,
             subject_id: s.subject_id,
@@ -1315,7 +1316,8 @@ defmodule SchoolWeb.ExamController do
       Repo.all(
         from(
           s in School.Affairs.ExamMark,
-          where: s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
+          where:
+            s.class_id == ^class_id and s.subject_id == ^subject_id and s.exam_id == ^exam_id,
           select: %{
             class_id: s.class_id,
             subject_id: s.subject_id,
@@ -1434,11 +1436,14 @@ defmodule SchoolWeb.ExamController do
 
     class = Affairs.list_classes(Affairs.get_inst_id(conn))
 
+    exam = Affairs.list_exam_master(Affairs.get_inst_id(conn))
+
     render(
       conn,
       "exam_result_class.html",
       class: class,
-      level: level
+      level: level,
+      exam: exam
     )
   end
 
