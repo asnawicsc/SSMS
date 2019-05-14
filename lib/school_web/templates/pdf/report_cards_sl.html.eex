@@ -1596,7 +1596,7 @@ else
 <body>
 
 
-  <table  class="table" style="font-size: 14px;">
+  <table  class="table" style="font-size: 15px;">
 
     <tr align="center">
   <td colspan="6" align="center" style="margin: 3px; padding: 3px; border-left: 0; border-right: 0; border-top: 0" ><h3><b><%= @institute.name %></b></h3><br>
@@ -1789,7 +1789,7 @@ else
     <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
-          <td style="margin: 5px; padding: 5px; border-right: 0" align="left">设计和技术</td>
+          <td style="margin: 5px; padding: 5px; border-right: 0" align="left">设计与工艺</td>
   <td style="margin: 5px; padding: 5px; border-left: 0" align="left">RBT</td>
  <td style="margin: 3px; padding: 3px;"><%= if rbt1 != "" do rbt1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if rbt1 != "" do rbt1|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if rbt2 != "" do rbt2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if rbt2 != "" do rbt2|>elem(1) else "" end %></td>
@@ -1797,7 +1797,7 @@ else
     <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
-       <td style="margin: 5px; padding: 5px; border-right: 0" align="left">通信信息技术</td>
+       <td style="margin: 5px; padding: 5px; border-right: 0" align="left">信息与通信技术</td>
   <td style="margin: 5px; padding: 5px; border-left: 0" align="left">TMK</td>
   <td style="margin: 3px; padding: 3px;"><%= if tmk1 != "" do tmk1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if tmk1 != "" do tmk1|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if tmk2 != "" do tmk2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if tmk2 != "" do tmk2|>elem(1) else "" end %></td>
@@ -1910,13 +1910,8 @@ else
       ).c_chinese
 
           end %>
-<%= if student_comment.comment1 != nil do
-           
-      Repo.get_by(School.Affairs.Comment,
-        id: student_comment.comment1
-      ).c_malay
-          end %>
-          ,<br>
+
+        , <br>
           <%= if student_comment.comment2 != nil do
 
           
@@ -1926,15 +1921,8 @@ else
 
           end %>
 
-          <%= if student_comment.comment2 != nil do
-
-
-              Repo.get_by(School.Affairs.Comment,
-        id: student_comment.comment2
-      ).c_malay
-          end %>
-
-          ,<br>
+         
+        , <br>
           <%= if student_comment.comment3 != nil do
 
          Repo.get_by(School.Affairs.Comment,
@@ -1943,13 +1931,7 @@ else
 
           end %>
 
-           <%= if student_comment.comment3 != nil do
 
-
-              Repo.get_by(School.Affairs.Comment,
-        id: student_comment.comment3
-      ).c_malay
-          end %>
 
            <% end %></td>
   
