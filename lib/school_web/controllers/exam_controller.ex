@@ -465,31 +465,32 @@ defmodule SchoolWeb.ExamController do
               |> List.flatten()
               |> Enum.uniq()
 
-            if kelakuan != [] do
-              a =
-                for item <- kelakuan do
-                  %{
-                    id: item.id,
-                    c_id: item.c_id,
-                    s_id: item.s_id,
-                    class: item.class,
-                    exam: item.exam,
-                    subject: item.subject,
-                    teacher_name: teacher.name,
-                    cname: teacher.cname,
-                    em_id: item.em_id
-                  }
-                end
+            a =
+              if kelakuan != [] do
+                a =
+                  for item <- kelakuan do
+                    %{
+                      id: item.id,
+                      c_id: item.c_id,
+                      s_id: item.s_id,
+                      class: item.class,
+                      exam: item.exam,
+                      subject: item.subject,
+                      teacher_name: teacher.name,
+                      cname: teacher.cname,
+                      em_id: item.em_id
+                    }
+                  end
 
-              a
-            else
-              []
-            end
+                a
+              else
+                []
+              end
           else
             []
           end
 
-        a = a ++ full
+        a = (a ++ full) |> Enum.uniq()
 
         {class, a}
       end
@@ -1436,7 +1437,18 @@ defmodule SchoolWeb.ExamController do
 
     class = Affairs.list_classes(Affairs.get_inst_id(conn))
 
-    exam = Affairs.list_exam_master(Affairs.get_inst_id(conn))
+    exam =
+      Repo.all(
+        from(
+          c in School.Affairs.ExamMaster,
+          where: c.institution_id == ^conn.private.plug_session["institution_id"],
+          select: %{
+            id: c.id,
+            name: c.name,
+            exam_no: c.exam_no
+          }
+        )
+      )
 
     render(
       conn,

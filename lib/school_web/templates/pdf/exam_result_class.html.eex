@@ -34,27 +34,27 @@
          <th width="80px;">KDK</th>
          <th width="80px;">KDD</th>
       </tr>
-      <%= for item <- @student_class|>Enum.with_index do %>
+      <%= for item <- @examdata|>Enum.with_index do %>
       <% no = item|>elem(1) %>
           <% item = item|>elem(0) %>
 
  
 
          <th><%= no + 1 %></th>
-        <th align="left"><%= item.student_name %></th>
+        <th align="left"><%= item.a %></th>
          <th ></th>
-            <th ></th>
-             <th ></th>
-              <th ></th>
-               <th ></th>
-                <th ></th>
-                 <th ></th>
-                  <th ></th>
-                   <th ></th>
-                    <th ></th>
-                     <th ></th>
-                      <th ></th>
-                       <th ></th>
+            <th ><%= item.ab %></th>
+             <th ><%= item.b %></th>
+              <th ><%= item.c %></th>
+               <th ><%= item.d %></th>
+                <th ><%= item.e %></th>
+                 <th ><%= item.f %></th>
+                  <th ><%= item.g %></th>
+                   <th ><%= item.h %></th>
+                    <th ><%= item.i %></th>
+                     <th ><%= item.j %></th>
+                      <th ><%= item.k %></th>
+                       <th ><%= item.l %></th>
       </tr>
        <% end %>
 
