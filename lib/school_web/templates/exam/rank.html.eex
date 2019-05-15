@@ -53,6 +53,8 @@
         <th >No</th>
         <th >Name</th>
         <th >Jan</th>
+
+        
         
         <%= for item <- @mark|>Enum.sort_by(fn x -> x end) do %>    
          
@@ -64,14 +66,15 @@
       </tr>
      
 
+<%IO.inspect @z%>
         <%= for item <- @z do %>
           <% no = item|>elem(1) %>
           <% item = item|>elem(0) %>
         <tr>
        <th ><%= no+1 %></th>
           <th><a href="/report_card/<%= @exam_name %>/<%= @exam_id %>/<%= item.student_id %>/<%= item.rank %>-<%= @total_student%>"><%=item.name %> (<%=item.chinese_name %>)</a></th>
-      <th><%= if item.sex == "M" or item.sex == "LELAKI" do "L" end %>
-        <%= if item.sex == "F" or item.sex == "PEREMPUAN" do "P" end %></th>
+      <th><%= if item.sex == "Male" or item.sex == "LELAKI" do "L" end %>
+        <%= if item.sex == "Female" or item.sex == "PEREMPUAN" do "P" end %></th>
         <%= for subject <- item.subject do %>
          <%= if subject.grade != "G" and subject.grade != "E" and subject.grade != "F" do %>
 

@@ -1784,6 +1784,10 @@ defmodule SchoolWeb.ExamController do
     #   Repo.get_by(School.Affairs.Class, %{teacher_id: teacher.id})
     # end
 
+    level =
+      Repo.all(from(l in School.Affairs.Level))
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
     class =
       Repo.all(
         from(
@@ -1796,7 +1800,8 @@ defmodule SchoolWeb.ExamController do
     render(
       conn,
       "exam_result_analysis_class.html",
-      class: class
+      class: class,
+      level: level
     )
   end
 
