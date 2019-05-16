@@ -585,6 +585,22 @@ defmodule SchoolWeb.ClassController do
         Task.start_link(__MODULE__, :reg_lib_student, [student, lib_id, uri])
       end
 
+    list_student_nos =
+      for student <- students_in do
+        student.student_no
+      end
+
+    body = %{lib_id: lib_id, scope: remove_members, codes: list_student_nos}
+
+    response =
+      HTTPoison.post!(uri, Poison.encode!(body), [{"Content-Type", "application/json"}]).body
+
+    IO.inspect(response)
+
+    # a list of students that's in... send to li6rary to remove those that is not in the current semesters...
+
+    # just to delete the membership so that it cant borrow books.
+
     conn
     |> put_flash(:info, "Library membership synced!")
     |> redirect(to: page_path(conn, :support_dashboard))
