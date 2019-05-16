@@ -4,6 +4,8 @@
 <span style="display: none"><%= link "Add Records", to: student_coco_achievement_path(@conn, :add_achievement) %></span><br>
 <span style="display: none"><%= link "Generate Report", to: student_coco_achievement_path(@conn, :gen_report) %></span>
 
+
+
 <table class="table">
   <thead>
     <tr>

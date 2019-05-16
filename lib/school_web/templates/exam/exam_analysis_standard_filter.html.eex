@@ -1,12 +1,12 @@
 
         
     <input type="hidden" name="_csrf_token" value="<%= @csrf %>">
-              
-                        <label class="bmd-label-floating"><%= gettext "Exam Name" %></label>
+
+                        <label class="bmd-label-floating"><%= gettext "Subject Name" %></label>
                        <select class="custom-select -custom-select-sm" onchange="getval99(this)"  name="exam_analysis_standard_result_id" required="" >
-                        <option selected="selected">Choose a Exam</option>
-                           <%= for a <- @exam|>Enum.uniq |> Enum.sort do %>
-                                            <option value="<%= a.id %>" ><%= a.exam_name %>
+                        <option selected="selected">Choose a Subject</option>
+                           <%= for a <- @subject do %>
+                                            <option value="<%= a.sub_id %>" ><%= a.sub_name %>
                                             </option>
                                           <% end %>
                                         </select>
@@ -26,7 +26,7 @@
 
        channel.push("exam_result_analysis_standard2", 
         {csrf: csrf, institution_id: window.currentInstitute ,
-          exam_id: d,
+          subject_id: d,
           standard_id: localStorage.getItem("exam_analysis_result_standard"),
           user_id: window.currentUser})
 

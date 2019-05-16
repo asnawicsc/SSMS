@@ -31,7 +31,7 @@
 
         <div align="right" style="margin-right: 30px;">
     <form action="/pdf/exam_result_analysis_class" method="POST">
-       <input type="hidden" name="exam_id" value="<%= @exam_id %>">
+       
  <input type="hidden" name="class_id" value="<%= @class_id %>">
   <input type="hidden" name="_csrf_token" value="<%= @csrf %>">
 <input align="left" class="btn btn-info btn-ml" type="submit" name="" value="Print!">
@@ -45,6 +45,7 @@
         <col col span="2" >
       </colgroup>
       <tr align="center">
+        <th> Student Name </th>
         <th >Subject</th>
         <th  colspan="2">Grade A</th>
         <th colspan="2">Grade B</th>
@@ -59,11 +60,15 @@
       </tr>
      
 
+      
         <%= for item <- @group_subject do %>
+        <% exm = item.subject |> elem(0) %>
+        <% sub = item.subject |> elem(1) %>
         
         <tr>
      
-          <th><%=item.subject %></a></th>
+          <th> Name</th>
+          <th><%= exm %></a></th>
           <th ><%= item.a %></th>
           <th ><%= (item.a/item.total_student)*100|>Float.round(2) %>%</th>
           <th><%= item.b %></th>
