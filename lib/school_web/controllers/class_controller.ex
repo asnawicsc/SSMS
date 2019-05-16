@@ -590,7 +590,7 @@ defmodule SchoolWeb.ClassController do
         student.student_no
       end
 
-    body = %{lib_id: lib_id, scope: remove_members, codes: list_student_nos}
+    body = %{lib_id: lib_id, scope: "remove_members", codes: list_student_nos}
 
     response =
       HTTPoison.post!(uri, Poison.encode!(body), [{"Content-Type", "application/json"}]).body
