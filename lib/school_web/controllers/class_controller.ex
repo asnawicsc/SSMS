@@ -579,6 +579,7 @@ defmodule SchoolWeb.ClassController do
 
     uri = Application.get_env(:school, :api)[:url]
     lib_id = inst.library_organization_id
+    IO.inspect("no of students sync... #{Enum.count(students_in)}")
 
     a =
       for student <- students_in do
