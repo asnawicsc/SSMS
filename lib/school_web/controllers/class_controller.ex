@@ -591,7 +591,7 @@ defmodule SchoolWeb.ClassController do
         student.student_no
       end
 
-    body = %{lib_id: lib_id, scope: remove_members, codes: list_student_nos}
+    body = %{lib_id: lib_id, scope: "remove_members", codes: list_student_nos}
 
     response =
       HTTPoison.post!(uri, Poison.encode!(body), [{"Content-Type", "application/json"}]).body
@@ -617,8 +617,6 @@ defmodule SchoolWeb.ClassController do
         ""
       end
 
-    IO.inspect(chinese_name)
-
     ic =
       if student.ic == nil do
         student.b_cert
@@ -630,7 +628,7 @@ defmodule SchoolWeb.ClassController do
       if student.phone == nil do
         "no_phone"
       else
-        student.phone
+        String.trim(student.phone)
       end
 
     path =
@@ -638,9 +636,7 @@ defmodule SchoolWeb.ClassController do
         name
       }&ic=#{ic}&phone=#{phone}&code=#{student.student_no}&line=#{student.line1}"
 
-    IO.inspect(uri <> path)
     response = HTTPoison.get!(uri <> path, [{"Content-Type", "application/json"}]).body
-    IO.inspect(response)
   end
 
   def edit_class(conn, params) do
