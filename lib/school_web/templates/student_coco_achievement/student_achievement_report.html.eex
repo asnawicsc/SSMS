@@ -48,8 +48,6 @@
 
   <% data = @sekolah |> Enum.group_by(fn x -> x.desc end)  %>
   <% keys = Map.keys(data) %>
-  
-
 
   <%= for k <- keys |> Enum.with_index() do %>
   <%key = elem(k,0)%>
@@ -103,17 +101,42 @@
         <th rowspan="1" colspan="1"><%= gettext "Kelas" %></th>
       </tr>
 
-     <%= for x <- @zon do %>
-      <tr>
-       <th></th>
-       <th><%= x.desc %></th>
-       <th></th>
-       <th><%= x.student_name %></th>
-       <th><%= x.chinese_name %></th>
-       <th><%= x.date %></th>
-       <th><%= x.class_name %></th>
-      </tr>
-      <%end%>
+  <% data = @zon |> Enum.group_by(fn x -> x.desc end)  %>
+  <% keys = Map.keys(data) %>
+
+  <%= for k <- keys |> Enum.with_index() do %>
+  <%key = elem(k,0)%>
+    <%= if @sort_id == "1" do %>
+      <%= for d <- data[key] |> Enum.sort_by(fn x -> x.student_name end) |> Enum.with_index() do %>
+      <% x = elem(d, 0) %>
+        <tr>
+          <th><%= if elem(d,1) == 0, do:  elem(k,1)+1, else: "" %></th>
+          <th><%= if elem(d,1) == 0, do: x.desc, else: "" %></th>
+          <th><%= elem(d, 1 ) + 1 %></th>
+          <th style="border-right: 0;"><%= x.student_name %></th>
+          <th style="border-left: 0; "><%= x.chinese_name %></th>
+          <th><%= x.date %></th>
+          <th><%= x.class_name %></th>
+        </tr>
+      <% end %>
+
+    <% else %>
+      <%= for d <- data[key] |> Enum.sort_by(fn x -> x.date end) |> Enum.with_index() do %>
+      <% x = elem(d, 0) %>
+
+        <tr>
+          <th></th>
+          <th><%= if elem(d,1) == 0, do: x.desc, else: "" %></th>
+          <th><%= elem(d, 1 ) + 1 %></th>
+          <th style="border-right: 0;"><%= x.student_name %></th>
+          <th style="border-left: 0; "><%= x.chinese_name %></th>
+          <th><%= x.date %></th>
+          <th><%= x.class_name %></th>
+        </tr>
+      <% end %>
+    <% end %>
+  <% end %>
+       
 
     </table>
      <%end%>
@@ -133,17 +156,42 @@
         <th rowspan="1" colspan="1"><%= gettext "Kelas" %></th>
       </tr>
 
-      <%= for x <- @negeri do %>
-      <tr>
-       <th></th>
-       <th><%= x.desc %></th>
-       <th></th>
-       <th><%= x.student_name %></th>
-       <th><%= x.chinese_name %></th>
-       <th><%= x.date %></th>
-       <th><%= x.class_name %></th>
-      </tr>
-      <%end%>
+  <% data = @negeri |> Enum.group_by(fn x -> x.desc end)  %>
+  <% keys = Map.keys(data) %>
+
+  <%= for k <- keys |> Enum.with_index() do %>
+  <%key = elem(k,0)%>
+    <%= if @sort_id == "1" do %>
+      <%= for d <- data[key] |> Enum.sort_by(fn x -> x.student_name end) |> Enum.with_index() do %>
+      <% x = elem(d, 0) %>
+        <tr>
+          <th><%= if elem(d,1) == 0, do:  elem(k,1)+1, else: "" %></th>
+          <th><%= if elem(d,1) == 0, do: x.desc, else: "" %></th>
+          <th><%= elem(d, 1 ) + 1 %></th>
+          <th style="border-right: 0;"><%= x.student_name %></th>
+          <th style="border-left: 0; "><%= x.chinese_name %></th>
+          <th><%= x.date %></th>
+          <th><%= x.class_name %></th>
+        </tr>
+      <% end %>
+
+    <% else %>
+      <%= for d <- data[key] |> Enum.sort_by(fn x -> x.date end) |> Enum.with_index() do %>
+      <% x = elem(d, 0) %>
+
+        <tr>
+          <th></th>
+          <th><%= if elem(d,1) == 0, do: x.desc, else: "" %></th>
+          <th><%= elem(d, 1 ) + 1 %></th>
+          <th style="border-right: 0;"><%= x.student_name %></th>
+          <th style="border-left: 0; "><%= x.chinese_name %></th>
+          <th><%= x.date %></th>
+          <th><%= x.class_name %></th>
+        </tr>
+      <% end %>
+    <% end %>
+  <% end %>
+       
 
     </table>
      <%end%>
@@ -163,17 +211,42 @@
         <th rowspan="1" colspan="1"><%= gettext "Kelas" %></th>
       </tr>
 
-     <%= for x <- @kebangsaan do %>
-      <tr>
-       <th></th>
-       <th><%= x.desc %></th>
-       <th></th>
-       <th><%= x.student_name %></th>
-       <th><%= x.chinese_name %></th>
-       <th><%= x.date %></th>
-       <th><%= x.class_name %></th>
-      </tr>
-      <%end%>
+  <% data = @kebangsaan |> Enum.group_by(fn x -> x.desc end)  %>
+  <% keys = Map.keys(data) %>
+
+  <%= for k <- keys |> Enum.with_index() do %>
+  <%key = elem(k,0)%>
+    <%= if @sort_id == "1" do %>
+      <%= for d <- data[key] |> Enum.sort_by(fn x -> x.student_name end) |> Enum.with_index() do %>
+      <% x = elem(d, 0) %>
+        <tr>
+          <th><%= if elem(d,1) == 0, do:  elem(k,1)+1, else: "" %></th>
+          <th><%= if elem(d,1) == 0, do: x.desc, else: "" %></th>
+          <th><%= elem(d, 1 ) + 1 %></th>
+          <th style="border-right: 0;"><%= x.student_name %></th>
+          <th style="border-left: 0; "><%= x.chinese_name %></th>
+          <th><%= x.date %></th>
+          <th><%= x.class_name %></th>
+        </tr>
+      <% end %>
+
+    <% else %>
+      <%= for d <- data[key] |> Enum.sort_by(fn x -> x.date end) |> Enum.with_index() do %>
+      <% x = elem(d, 0) %>
+
+        <tr>
+          <th></th>
+          <th><%= if elem(d,1) == 0, do: x.desc, else: "" %></th>
+          <th><%= elem(d, 1 ) + 1 %></th>
+          <th style="border-right: 0;"><%= x.student_name %></th>
+          <th style="border-left: 0; "><%= x.chinese_name %></th>
+          <th><%= x.date %></th>
+          <th><%= x.class_name %></th>
+        </tr>
+      <% end %>
+    <% end %>
+  <% end %>
+       
 
     </table>
      <%end%>
@@ -193,17 +266,42 @@
         <th rowspan="1" colspan="1"><%= gettext "Kelas" %></th>
       </tr>
 
-      <%= for x <- @antarabangsa do %>
-      <tr>
-       <th></th>
-       <th><%= x.desc %></th>
-       <th></th>
-       <th><%= x.student_name %></th>
-       <th><%= x.chinese_name %></th>
-       <th><%= x.date %></th>
-       <th><%= x.class_name %></th>
-      </tr>
-      <%end%>
+  <% data = @antarabangsa |> Enum.group_by(fn x -> x.desc end)  %>
+  <% keys = Map.keys(data) %>
+
+  <%= for k <- keys |> Enum.with_index() do %>
+  <%key = elem(k,0)%>
+    <%= if @sort_id == "1" do %>
+      <%= for d <- data[key] |> Enum.sort_by(fn x -> x.student_name end) |> Enum.with_index() do %>
+      <% x = elem(d, 0) %>
+        <tr>
+          <th><%= if elem(d,1) == 0, do:  elem(k,1)+1, else: "" %></th>
+          <th><%= if elem(d,1) == 0, do: x.desc, else: "" %></th>
+          <th><%= elem(d, 1 ) + 1 %></th>
+          <th style="border-right: 0;"><%= x.student_name %></th>
+          <th style="border-left: 0; "><%= x.chinese_name %></th>
+          <th><%= x.date %></th>
+          <th><%= x.class_name %></th>
+        </tr>
+      <% end %>
+
+    <% else %>
+      <%= for d <- data[key] |> Enum.sort_by(fn x -> x.date end) |> Enum.with_index() do %>
+      <% x = elem(d, 0) %>
+
+        <tr>
+          <th></th>
+          <th><%= if elem(d,1) == 0, do: x.desc, else: "" %></th>
+          <th><%= elem(d, 1 ) + 1 %></th>
+          <th style="border-right: 0;"><%= x.student_name %></th>
+          <th style="border-left: 0; "><%= x.chinese_name %></th>
+          <th><%= x.date %></th>
+          <th><%= x.class_name %></th>
+        </tr>
+      <% end %>
+    <% end %>
+  <% end %>
+       
 
     </table>
      <%end%>

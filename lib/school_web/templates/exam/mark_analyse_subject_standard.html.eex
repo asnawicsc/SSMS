@@ -1,4 +1,3 @@
-<% require IEx %>
 <!DOCTYPE html>
 <html>
   <head>
@@ -16,31 +15,56 @@
     }
     td, th {
       border: 1px solid rgb(190,190,190);
-      padding: 10px 20px;
+      padding: 1px 20px;
+      text-align: center;
     }
     td {
       text-align: center;
     }
     caption {
-      padding: 10px;
+      padding: 1px;
     }
+
+    .table {
+        border: 1px solid rgb(190,190,190);
+        padding: 1px 2px;
+        text-align: center;
+        }
+    
+    
     </style>
   </head>
  <% require IEx %>
   <body>
 
-        <div align="right" style="margin-right: 30px;">
-    <form action="/pdf/exam_result_analysis_class_standard" method="POST">
-       <input type="hidden" name="exam_id" value="<%= @exam_id %>">
- <input type="hidden" name="standard_id" value="<%= @standard_id %>">
-  <input type="hidden" name="_csrf_token" value="<%= @csrf %>">
-<input align="left"  class="btn btn-info btn-ml" type="submit" name="" value="Print!">
-</form>
-</div>
-<Br>
-    <h4 align="center">Standard: <%= @standard.name %></h4>
+    <div align="right" style="margin-right: 30px;">
+      <form action="/pdf/exam_result_analysis_class_standard" method="POST">
+        <input type="hidden" name="standard_id" value="<%= @standard_id %>">
+        <input type="hidden" name="subject_id" value="<%= @subject_id %>">
+        <input type="hidden" name="institution_id" value="<%= @institution_id %>">
+        <input type="hidden" name="institution_name" value="<%= @institution_name %>">
 
-    <table border="1" class="table" id="example" align="center" width="100%">
+        <input type="hidden" name="year" value="<%= @year %>">
+        <input type="hidden" name="_csrf_token" value="<%= @csrf %>">
+        <input align="left"  class="btn btn-info btn-ml" type="submit" name="" value="Print!">
+      </form>
+    </div>
+
+     <h3><center><b><%= @institution_name %></b></center></h3>
+    <center>ANALISA KEPUTUSAN PEPERIKSAAN</center>
+
+    <div>
+
+      <h6 style="float: center;" align="center">Subject: <%= @subject_name %></h6>
+     
+      Tahun: <%= @year %>
+
+      <% date = Date.utc_today() %>
+      <h6 style="float: right;"><%= date.day %>-<%= date.month %>-<%= date.year %></h6>
+    </div>
+    
+
+    <table border="2" class= "table" id="example" align="center" width="100%">
       <tr>
         <th colspan="1" rowspan="4" >Kelas</th>
         <th colspan="1" rowspan="4" >Bil.Murid</th>
@@ -48,7 +72,6 @@
         <th colspan ="10" rowspan="1"> Markah/Gred </th>
         <th colspan = "2" rowspan="2"> Bilanagan Lulus </th>
         <th colspan = "2" rowspan="2"> Bilanagan Gagal </th>
-        <th colspan="1" rowspan="4"> Purata Markah </th>
         <th colspan="1" rowspan="4"> GPA </th>
       </tr>
       <tr>
@@ -74,92 +97,74 @@
         <th rowspan="1" colspan="2"> 0~39 </th>
       </tr>
 
-
-     
-
-        <%= for item <- @group_subject do %>
-        
+        <%= for item <- @group_subject do %>  
         <tr>
-          <th><%=item.kelas %></th>
-          <th><%=item.total_student %></th>
+          <td style="text-align: left;"><%=item.kelas %></td>
+          <td><%=item.total_student %></td>
      
-          <th><%=item.subject %></th>
-          <th ><%= item.a %></th>
-          <th ><%= (item.a/item.total_student)*100|>Float.round(2) %>%</th>
-          <th><%= item.b %></th>
-           <th ><%= (item.b/item.total_student)*100|>Float.round(2) %>%</th>
-            <th><%= item.c %></th>
-           <th ><%= (item.c/item.total_student)*100|>Float.round(2) %>%</th>
-            <th><%= item.d %></th>
-           <th ><%= (item.d/item.total_student)*100|>Float.round(2) %>%</th>
-            <th><%= item.e %></th>
-           <th ><%= (item.e/item.total_student)*100|>Float.round(2) %>%</th>
-          
-            <th><%= item.lulus %></th>
-           <th ><%= (item.lulus/item.total_student)*100|>Float.round(2) %>%</th>
-            <th><%= item.tak_lulus %></th>
-           <th ><%= (item.tak_lulus/item.total_student)*100|>Float.round(2) %>%</th>
-           <th></th>
+          <td><%=item.exam_name %></td>
+          <td style="border-right: 0;"><%= item.a %></td>
+          <td style="border-left: 0;">(<%= (item.a/item.total_student)*100|>Float.round(2) %>)%</td>
+          <td style="border-right: 0;"><%= item.b %></td>
+          <td style="border-left: 0;">(<%= (item.b/item.total_student)*100|>Float.round(2) %>)%</td>
+          <td style="border-right: 0;"><%= item.c %></td>
+          <td style="border-left: 0;">(<%= (item.c/item.total_student)*100|>Float.round(2) %>)%</td>
+          <td style="border-right: 0;"><%= item.d %></td>
+          <td style="border-left: 0;">(<%= (item.d/item.total_student)*100|>Float.round(2) %>)%</td>
+          <td style="border-right: 0;"><%= item.e %></td>
+          <td style="border-left: 0;">(<%= (item.e/item.total_student)*100|>Float.round(2) %>)%</td>
+          <td><%= item.lulus %></td>
+          <td ><%= (item.lulus/item.total_student)*100|>Float.round(2) %>%</td>
+          <td><%= item.tak_lulus %></td>
+          <td ><%= (item.tak_lulus/item.total_student)*100|>Float.round(2) %>%</td>
+          <td><%= ((item.a*1)+(item.b*2)+(item.c*3)+(item.d*4)+(item.e*5))/item.total_student|>Float.round(2) %></td>
       </tr>
-       <% end %>
-
+        <% end %>
     </table>
 
-    <table>
-      
-      <tr >
-       <th >AVG</a></th>
-         <th >AVG</a></th>
-              <% a= @a %>
+    <table width="100%">
 
-
-          <th ><%= @a %></th>
-          <th ><%= if @total == 0  do
-             0
-           else
-            (@a/@total)*100|>Float.round(2)
-          end %></th>
-          <th ><%= @b %></th>
-           <th ><%= if @total == 0  do
-             0
-           else
-            (@b/@total)*100|>Float.round(2)
-          end %></th>
-          <th ><%= @c %></th>
-             <th ><%= if @total == 0  do
-             0
-           else
-            (@c/@total)*100|>Float.round(2)
-          end %></th>
-          <th ><%= @d %></th>
-            <th ><%= if @total == 0  do
-             0
-           else
-            (@d/@total)*100|>Float.round(2)
-          end %></th>
-          <th ><%= @e %></th>
-            <th ><%= if @total == 0  do
-             0
-           else
-            (@e/@total)*100|>Float.round(2)
-          end %></th>
-
-          <th ><%= @lulus %></th>
-            <th ><%= if @total == 0  do
-             0
-           else
-            (@lulus/@total)*100|>Float.round(2)
-          end %></th>
-          <th ><%= @tak_lulus %></th>
-             <th ><%= if @total == 0  do
-             0
-           else
-            (@tak_lulus/@total)*100|>Float.round(2)
-          end %></th>
-          <th ></th>
-    </tr>
+     <%= for item <- @group_exam do %>
+      <tr>
+        <th colspan="9" style="text-align: left;"> Ringkasan: <%= item.g_exam_name %></th>
+      </tr>
+      <tr>
+        <th rowspan="3" style="border-bottom: 0;">Jumlah Bilangan Murid</th>
+        <th rowspan="5" >Jumlah / Peratus</th>
+        <th rowspan="1">A</th>
+        <th rowspan="1"><%= item.g_a %></th>
+        <th rowspan="1"><%= (item.g_a / item.g_total_student)*100|>Float.round(2)%>%</th>
+        <th rowspan="4"> Bilangan Lulus </th>
+        <th rowspan="4" style="border-right: 0;"> <%= item.g_lulus %> </th>
+        <th rowspan="4" style="border-left: 0; "> <%= (item.g_lulus / item.g_total_student)*100|> Float.round(2)%>%</th>
+        <th rowspan="3" style="border-bottom: 0;" >GPA</th>
+      </tr>
+      <tr>
+        <th rowspan="1" >B</th>
+        <th rowspan="1"><%= item.g_b %></th>
+        <th rowspan="1"><%= (item.g_b / item.g_total_student)*100|>Float.round(2)%>%</th>
+      </tr>
+      <tr>
+        <th rowspan="1" >C</th>
+        <th rowspan="1"><%= item.g_c %></th>
+        <th rowspan="1"><%= (item.g_c / item.g_total_student)*100|>Float.round(2)%>%</th>
+      </tr>
+      <tr>
+        <th rowspan="2" style="border-top: 0;"><%= item.g_total_student %></th>
+        <th rowspan="1" >D</th>
+        <th rowspan="1"><%= item.g_d %></th>
+        <th rowspan="1"><%= (item.g_d / item.g_total_student)*100|>Float.round(2)%>%</th>
+        <th rowspan="2" style="border-top: 0;" ><%= ((item.g_a*1)+(item.g_b*2)+(item.g_c*3)+(item.g_d*4)+(item.g_e*5))/item.g_total_student|>Float.round(2) %></th>
+      </tr>
+      <tr>
+        <th rowspan="1" >E</th>
+        <th rowspan="1"><%= item.g_e %></th>
+        <th rowspan="1"><%= (item.g_e / item.g_total_student)*100|>Float.round(2)%>%</th>
+        <th rowspan="1">Bilangan Gagal</th>
+        <th rowspan="1" style="border-right: 0; "> <%= item.g_tak_lulus %> </th>
+        <th rowspan="1" style="border-left: 0; "> <%= (item.g_tak_lulus / item.g_total_student)*100|> Float.round(2)%>%</th>
+      </tr>
+       <%end%>
     </table>
-
-
   </body>
 </html>

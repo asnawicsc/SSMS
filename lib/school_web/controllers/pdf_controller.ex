@@ -6421,18 +6421,21 @@ defmodule SchoolWeb.PdfController do
 
   def exam_result_analysis_class_standard(conn, params) do
     standard_id = params["standard_id"]
-    exam_id = params["exam_id"]
+    subject_id = params["subject_id"]
+    institution_id = params["institution_id"]
+    institution_name = params["institution_name"]
+    year = params["year"]
 
     standard =
       Repo.get_by(School.Affairs.Level, %{
         id: standard_id,
-        institution_id: conn.private.plug_session["institution_id"]
+        institution_id: institution_id
       })
 
-    exam =
-      Repo.get_by(School.Affairs.ExamMaster, %{
-        id: exam_id,
-        institution_id: conn.private.plug_session["institution_id"]
+    subject =
+      Repo.get_by(School.Affairs.Subject, %{
+        id: subject_id,
+        institution_id: institution_id
       })
 
     all =
@@ -6441,17 +6444,15 @@ defmodule SchoolWeb.PdfController do
           s in School.Affairs.ExamMark,
           left_join: p in School.Affairs.Subject,
           on: s.subject_id == p.id,
-          left_join: g in School.Affairs.Exam,
-          on: s.exam_id == g.id,
+          left_join: k in School.Affairs.Exam,
+          on: s.exam_id == k.id,
           left_join: t in School.Affairs.ExamMaster,
-          on: g.exam_master_id == t.id,
+          on: k.exam_master_id == t.id,
           left_join: r in School.Affairs.Class,
           on: r.id == s.class_id,
-          where:
-            r.level_id == ^standard.id and g.exam_master_id == ^exam.id and
-              p.institution_id == ^conn.private.plug_session["institution_id"] and
-              t.institution_id == ^conn.private.plug_session["institution_id"] and
-              r.institution_id == ^conn.private.plug_session["institution_id"],
+          left_join: d in School.Affairs.Level,
+          on: r.level_id == d.id,
+          where: r.level_id == ^standard_id and p.id == ^subject_id,
           select: %{
             class_name: r.name,
             subject_code: p.code,
@@ -6462,30 +6463,30 @@ defmodule SchoolWeb.PdfController do
         )
       )
 
-    all_mark = all |> Enum.group_by(fn x -> x.subject_code end)
+    all_mark = all |> Enum.group_by(fn x -> x.class_name end)
+
+    grades =
+      Repo.all(
+        from(
+          g in School.Affairs.ExamGrade,
+          left_join: e in School.Affairs.Exam,
+          on: g.exam_master_id == e.exam_master_id,
+          where: g.institution_id == ^institution_id and e.subject_id == ^subject_id
+        )
+      )
 
     mark1 =
       for item <- all_mark do
-        subject_code = item |> elem(0)
+        subject_code = item |> elem(1) |> Enum.map(fn x -> x.subject_code end) |> Enum.uniq()
 
         datas = item |> elem(1)
 
-        for data <- datas do
-          student_mark = data.mark |> Decimal.to_integer()
-
-          grades =
-            Repo.all(
-              from(
-                g in School.Affairs.ExamGrade,
-                where:
-                  g.institution_id == ^conn.private.plug_session["institution_id"] and
-                    g.exam_master_id == ^exam.id
-              )
-            )
+        for data <- datas |> Enum.filter(fn x -> x.mark != nil end) do
+          student_mark = data.mark |> Decimal.to_float()
 
           for grade <- grades do
-            if Decimal.to_float(student_mark) >= Decimal.to_float(grade.min) and
-                 Decimal.to_float(student_mark) <= Decimal.to_float(grade.max) do
+            if student_mark >= grade.min |> Decimal.to_float() &&
+                 student_mark <= grade.max |> Decimal.to_float() do
               %{
                 student_id: data.student_id,
                 grade: grade.name,
@@ -6501,37 +6502,72 @@ defmodule SchoolWeb.PdfController do
       end
       |> List.flatten()
       |> Enum.filter(fn x -> x != nil end)
+      |> Enum.uniq()
 
-    group = mark1 |> Enum.group_by(fn x -> x.subject_code end)
+    group = mark1 |> Enum.group_by(fn x -> {x.class_name, x.exam_name} end)
+    all = mark1 |> Enum.group_by(fn x -> x.exam_name end)
+
+    group_exam =
+      for item <- all do
+        g_total_student = item |> elem(1) |> Enum.count()
+        g_a = item |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "A" end)
+        g_b = item |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "B" end)
+        g_c = item |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "C" end)
+        g_d = item |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "D" end)
+        g_e = item |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "E" end)
+
+        g_exam_name = item |> elem(1) |> Enum.map(fn x -> x.exam_name end) |> Enum.uniq()
+
+        g_lulus = g_a + g_b + g_c + g_d
+        g_fail = g_e
+
+        %{
+          g_exam_name: g_exam_name,
+          g_total_student: g_total_student,
+          g_a: g_a,
+          g_b: g_b,
+          g_c: g_c,
+          g_d: g_d,
+          g_e: g_e,
+          g_lulus: g_lulus,
+          g_tak_lulus: g_fail
+        }
+      end
+
+    g_a = group_exam |> Enum.map(fn x -> x.g_a end) |> Enum.sum()
+    g_b = group_exam |> Enum.map(fn x -> x.g_b end) |> Enum.sum()
+    g_c = group_exam |> Enum.map(fn x -> x.g_c end) |> Enum.sum()
+    g_d = group_exam |> Enum.map(fn x -> x.g_d end) |> Enum.sum()
+    g_e = group_exam |> Enum.map(fn x -> x.g_e end) |> Enum.sum()
+    g_lulus = group_exam |> Enum.map(fn x -> x.g_lulus end) |> Enum.sum()
+    g_fail = group_exam |> Enum.map(fn x -> x.g_tak_lulus end) |> Enum.sum()
+    g_total_student = group_exam |> Enum.map(fn x -> x.g_total_student end) |> Enum.sum()
 
     group_subject =
       for item <- group do
-        subject = item |> elem(0)
-
         total_student = item |> elem(1) |> Enum.count()
         a = item |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "A" end)
         b = item |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "B" end)
         c = item |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "C" end)
         d = item |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "D" end)
         e = item |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "E" end)
-        f = item |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "F" end)
-        g = item |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "G" end)
+        kelas = item |> elem(1) |> Enum.map(fn x -> x.class_name end) |> Enum.uniq()
+        exam_name = item |> elem(1) |> Enum.map(fn x -> x.exam_name end) |> Enum.uniq()
 
         lulus = a + b + c + d
-        fail = e + f + g
+        fail = e
 
         %{
-          subject: subject,
+          exam_name: exam_name,
           total_student: total_student,
           a: a,
           b: b,
           c: c,
           d: d,
           e: e,
-          f: f,
-          g: g,
           lulus: lulus,
-          tak_lulus: fail
+          tak_lulus: fail,
+          kelas: kelas
         }
       end
 
@@ -6540,31 +6576,22 @@ defmodule SchoolWeb.PdfController do
     c = group_subject |> Enum.map(fn x -> x.c end) |> Enum.sum()
     d = group_subject |> Enum.map(fn x -> x.d end) |> Enum.sum()
     e = group_subject |> Enum.map(fn x -> x.e end) |> Enum.sum()
-    f = group_subject |> Enum.map(fn x -> x.f end) |> Enum.sum()
-    g = group_subject |> Enum.map(fn x -> x.g end) |> Enum.sum()
     lulus = group_subject |> Enum.map(fn x -> x.lulus end) |> Enum.sum()
     tak_lulus = group_subject |> Enum.map(fn x -> x.tak_lulus end) |> Enum.sum()
     total = group_subject |> Enum.map(fn x -> x.total_student end) |> Enum.sum()
+
+    group_subject = group_subject |> Enum.sort_by(fn x -> x.exam_name end)
 
     html =
       Phoenix.View.render_to_string(
         SchoolWeb.PdfView,
         "result_analysis_by_standard.html",
-        a: a,
-        b: b,
-        c: c,
-        d: d,
-        e: e,
-        f: f,
-        g: g,
-        lulus: lulus,
-        tak_lulus: tak_lulus,
-        total: total,
         group_subject: group_subject,
-        exam: exam,
         standard: standard,
-        standard_id: standard_id,
-        exam_id: exam_id
+        subject_name: subject.description,
+        group_exam: group_exam,
+        institution_name: institution_name,
+        year: year
       )
 
     pdf_params = %{"html" => html}
@@ -6585,7 +6612,7 @@ defmodule SchoolWeb.PdfController do
           "--encoding",
           "utf-8",
           "--orientation",
-          "Landscape"
+          "Portrait"
         ],
         delete_temporary: true
       )
