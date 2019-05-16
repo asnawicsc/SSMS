@@ -3,34 +3,47 @@
 <table class="table" border="1" width="100%">
   
   <tbody>
-<td >
+    <td  align="center" style="margin: 3px; padding: 3px; border-right: 0;  "><img  src='data:image/png;base64, <%= @institution.logo_bin %>' height="80px"></td></td>
+<td  style="margin: 3px; padding: 3px; border-left: 0;  ">
 <b  style="font-size: 25px;"><%= @institution.name %></b></br>
 班级<b> Class: <%= @class.name %></b> <br>
-老师<b> Nama GURU : ________________________________________________________________ </b><br>
-事项<b> PERKARA &nbsp;&nbsp;&nbsp;: <%= @exam_name %></b><b style="margin-left: 10px;"> 日期 Tarikh:<%= SchoolWeb.LayoutView.my_time(DateTime.utc_now) %></b> 
+级任老师<b> Nama GURU : ________________________________________________________________ </b><br>
+事项<b> PERKARA &nbsp;&nbsp;&nbsp;: <%= @exam_name %></b><b style="margin-left: 10px;"> 列印日期:<%= SchoolWeb.LayoutView.my_time(DateTime.utc_now) %></b> 
 
 </td>
     </tbody>
 </table>
-    <table class="display" align="center" style="border-collapse: collapse;" border="1" width="100%">
+    <table class="display" align="center" style="border-collapse: collapse; white-space: nowrap; border-spacing: 0;"  cellspacing="0" border="1"  width="100%">
       <colgroup>
         <col col span="2" >
       </colgroup>
      
-      <tr align="center">
+           <tr align="center">
         <th>No</th>
         <th width="300px;">Name</th>
-        <th width="80px;">BCF</th>
-         <th width="80px;">BCT</th>
-         <th width="80px;">BMF</th>
-          <th width="80px;">BMT</th>
-          <th width="80px;">BIF</th>
+        <th width="80px;">BCL</th>
+        <th width="80px;">BCT</th>
+         <th width="80px;">BCF</th>
+          <th width="80px;">BML</th>
+         <th width="80px;">BMT</th>
+          <th width="80px;">BMF</th>
+           <th width="80px;">BIL</th>
           <th width="80px;">BIT</th>
-          <th width="80px;">MATH</th>
-          <th width="80px;">Math</th>
-          <th width="80px;">Sains</th>
-        <th width="100px;">Jumlah</th>
-           <th width="100px;">Purata</th>
+          <th width="80px;">BIF</th>
+          <th width="80px;">MAT</th>
+          <th width="80px;">SN</th>
+           <th width="80px;">PM</th>
+            <th width="80px;">AGM</th>
+             <th width="80px;">SEJ</th>
+              <th width="80px;">RBT</th>
+               <th width="80px;">TMK</th>
+                <th width="80px;">DSV</th>
+                 <th width="80px;">PJ</th>
+                  <th width="80px;">PK</th>
+                  <th width="80px;">MZ</th>
+                   <th width="80px;">KLK</th>
+        <th width="100px;">总分</th>
+           <th width="100px;">平均</th>
          <th width="80px;">KDK</th>
          <th width="80px;">KDD</th>
       </tr>
@@ -38,12 +51,9 @@
       <% no = item|>elem(1) %>
           <% item = item|>elem(0) %>
 
- 
 
          <th><%= no + 1 %></th>
-        <th align="left"><%= item.a %></th>
-         <th ></th>
-            <th ><%= item.ab %></th>
+            <th align="left"><%= item.a %></th>
              <th ><%= item.b %></th>
               <th ><%= item.c %></th>
                <th ><%= item.d %></th>
@@ -55,14 +65,28 @@
                      <th ><%= item.j %></th>
                       <th ><%= item.k %></th>
                        <th ><%= item.l %></th>
+                        <th ><%= item.m %></th>
+                         <th ><%= item.n %></th>
+                          <th ><%= item.o %></th>
+                           <th ><%= item.p %></th>
+                            <th ><%= item.q %></th>
+                             <th ><%= item.r %></th>
+                              <th ><%= item.s %></th>
+                                <th ><%= item.sa %></th>
+                                  <th ><%= item.sb %></th>
+                               <th ><%= item.t %></th>
+                                <th ><%= item.u %></th>
+                                 <th ><%= item.v %></th>
+                                  <th ><%= item.w %></th>
+                                   <th ><%= item.x %></th>
       </tr>
        <% end %>
 
- 
+
 
     </table>
     <table align="center" width="100%">
-      <tr align="center"><td>全科及格人数：</td><td>有不及格的人数：</td><td>(缺考TH)</td></tr>
+      <tr align="center"><td>全科及格人数： <%= @pass %></td><td>有不及格的人数： <%= @fail %></td><td>(缺考TH) : <%= @atten %></td></tr>
     </table>
 
   </body>

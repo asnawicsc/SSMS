@@ -775,7 +775,7 @@
 
     end
 
-    math= all_date|>Enum.filter(fn x -> x.subject =="Math" end)
+    math= all_date|>Enum.filter(fn x -> x.subject =="MAT" end)
    {math1,math2,math3}=	if math == [] do
 
     	{"","",""}
@@ -834,7 +834,7 @@
 
     end
 
-                                    sains= all_date|>Enum.filter(fn x -> x.subject =="Sains" end)
+                                    sains= all_date|>Enum.filter(fn x -> x.subject =="SN" end)
    {sains1,sains2,sains3}=	if sains == [] do
 
     	{"","",""}
@@ -1001,7 +1001,7 @@
     end
 
 
-        sej= all_date|>Enum.filter(fn x -> x.subject =="Sjr" end)
+        sej= all_date|>Enum.filter(fn x -> x.subject =="SEJ" end)
    {sej1,sej2,sej3}=	if sej == [] do
 
     	{"","",""}
@@ -1173,7 +1173,7 @@
     end
 
 
-            seni= all_date|>Enum.filter(fn x -> x.subject =="P.Seni" end)
+            seni= all_date|>Enum.filter(fn x -> x.subject =="DSV" end)
    {seni1,seni2,seni3}=	if seni == [] do
 
     	{"","",""}
@@ -1289,8 +1289,66 @@
 
     end
 
+          pk= all_date|>Enum.filter(fn x -> x.subject =="PK" end)
+   {pk1,pk2,pk3}= if pk == [] do
 
-                laku= all_date|>Enum.filter(fn x -> x.subject =="LAKU" end)
+      {"","",""}
+    else
+       pk=pk|>hd  
+      
+ 
+    pk_s1m=if pk.s1m != nil  and pk.s1m != "0" do
+      pk.s1m
+    else
+      ""
+     end
+
+     pk_s1g=if pk.s1g != nil do
+      pk.s1g
+    else
+      "" 
+     end  
+
+    pk1={pk_s1m,pk_s1g}  
+
+
+          pk_s2m=if pk.s2m != nil and pk.s2m != "0"  do
+      pk.s2m
+    else
+      ""
+     end
+
+     pk_s2g=if pk.s2g != nil do
+      pk.s2g
+    else
+      "" 
+     end  
+
+    pk2={pk_s2m,pk_s2g}  
+
+
+     pk_s3m=if pk.s3m != nil and pk.s3m != "0" do
+      pk.s2m
+    else
+      ""
+     end
+
+     pk_s3g=if pk.s3g != nil do
+      pk.s3g
+    else
+      "" 
+     end  
+
+    pk3={pk_s3m,pk_s3g}  
+
+
+
+     {pk1,pk2,pk3}
+
+    end
+
+
+                laku= all_date|>Enum.filter(fn x -> x.subject =="KLK" end)
    {laku1,laku2,laku3}= if laku == [] do
 
       {"","",""}
@@ -1809,19 +1867,27 @@ else
     <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center"  >
-  <td style="margin: 5px; padding: 5px; "  align="left">艺术教育</td>
-  <td style="margin: 5px; padding: 5px; border-left: 0"  align="left">Pendidikan Kesenian</td>
+  <td style="margin: 5px; padding: 5px; "  align="left">不是正确的是</td>
+  <td style="margin: 5px; padding: 5px; border-left: 0"  align="left">Dunia Seni Visual</td>
   <td style="margin: 3px; padding: 3px;"><%= if seni1 != "" do seni1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if seni1 != "" do seni1|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if seni2 != "" do seni2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if seni2 != "" do seni2|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if seni3 != "" do seni3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if seni3 != "" do seni3|>elem(1) else "" end %></td>
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
-      <td style="margin: 5px; padding: 5px; " align="left">体健</td>
-  <td style="margin: 5px; padding: 5px; border-left: 0" align="left">PJK</td>
+      <td style="margin: 5px; padding: 5px; " align="left">体育</td>
+  <td style="margin: 5px; padding: 5px; border-left: 0" align="left">Pendidikan Jasmani</td>
     <td style="margin: 3px; padding: 3px;"><%= if pj1 != "" do pj1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if pj1 != "" do pj1|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if pj2 != "" do pj2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if pj2 != "" do pj2|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if pj3 != "" do pj3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if pj3 != "" do pj3|>elem(1) else "" end %></td>
+   <td style="margin: 3px; padding: 3px;"></td>
+ </tr>
+   <tr align="center">
+      <td style="margin: 5px; padding: 5px; " align="left">体健</td>
+  <td style="margin: 5px; padding: 5px; border-left: 0" align="left">Pendidikan Kesihatan</td>
+    <td style="margin: 3px; padding: 3px;"><%= if pk1 != "" do pk1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if pk1 != "" do pk1|>elem(1) else "" end %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if pk2 != "" do pk2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if pk2 != "" do pk2|>elem(1) else "" end %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if pk3 != "" do pk3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if pk3 != "" do pk3|>elem(1) else "" end %></td>
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
 
@@ -2041,16 +2107,17 @@ else
   
   <tr>
    <td style="margin: 5px; padding: 5px; " align="left">荣誉榜 Pencapaian: </td>
-   <%= for x <- std_coco do %>
+  
    <td colspan="5" align="left" style="margin: 3px; padding: 3px;" height="50px;">
+     <%= for x <- std_coco do %>
     <%= if std_coco != [] do %>
     <%= x.desc%>: <%= x.rank %>
     <% else %>
     "N/A"
     <% end %>
-
+    <% end %>
   </td>
-  <% end %>
+  
   
  </tr>
   <tr>

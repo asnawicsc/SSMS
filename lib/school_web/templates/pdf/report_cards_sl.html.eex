@@ -63,7 +63,7 @@
   
   <% 
 
-    bml= all_date|>Enum.filter(fn x -> x.subject =="MA04" end)
+    bml= all_date|>Enum.filter(fn x -> x.subject =="BML" end)
     {bml1,bml2,bml3}= if bml == [] do
 
       {"","",""}
@@ -121,7 +121,7 @@
 
     end
 
-        bmb= all_date|>Enum.filter(fn x -> x.subject =="MA03" end)
+        bmb= all_date|>Enum.filter(fn x -> x.subject =="BMB" end)
     {bmb1,bmb2,bmb3}= if bmb == [] do
 
       {"","",""}
@@ -181,7 +181,7 @@
     end
 
 
-            bmp= all_date|>Enum.filter(fn x -> x.subject =="MA01" end)
+            bmp= all_date|>Enum.filter(fn x -> x.subject =="BMT" end)
     {bmp1,bmp2,bmp3}= if bmp == [] do
 
       {"","",""}
@@ -244,7 +244,7 @@
 
     end
 
-                bmpm= all_date|>Enum.filter(fn x -> x.subject =="MA02" end)
+                bmpm= all_date|>Enum.filter(fn x -> x.subject =="BMF" end)
    {bmpm1,bmpm2,bmpm3}= if bmpm == [] do
 
       {"","",""}
@@ -303,7 +303,7 @@
     end
 
 
-                    ingl= all_date|>Enum.filter(fn x -> x.subject =="ING04" end)
+                    ingl= all_date|>Enum.filter(fn x -> x.subject =="BIL" end)
    {ingl1,ingl2,ingl3}= if ingl == [] do
 
       {"","",""}
@@ -363,7 +363,7 @@
 
     end
 
-    ingb= all_date|>Enum.filter(fn x -> x.subject =="ING03" end)
+    ingb= all_date|>Enum.filter(fn x -> x.subject =="BIB" end)
    {ingb1,ingb2,ingb3}= if ingb == [] do
 
       {"","",""}
@@ -418,7 +418,7 @@
 
     end
 
-        ingp= all_date|>Enum.filter(fn x -> x.subject =="ING01" end)
+        ingp= all_date|>Enum.filter(fn x -> x.subject =="BIT" end)
    {ingp1,ingp2,ingp3}= if ingp == [] do
 
       {"","",""}
@@ -477,7 +477,7 @@
     end
 
 
-            ingpm= all_date|>Enum.filter(fn x -> x.subject =="ING02" end)
+            ingpm= all_date|>Enum.filter(fn x -> x.subject =="BIF" end)
    {ingpm1,ingpm2,ingpm3}=  if ingpm == [] do
 
       {"","",""}
@@ -536,7 +536,7 @@
 
     end
 
-                chl= all_date|>Enum.filter(fn x -> x.subject =="CH04" end)
+                chl= all_date|>Enum.filter(fn x -> x.subject =="BCL" end)
    {chl1,chl2,chl3}=  if chl == [] do
 
       {"","",""}
@@ -598,7 +598,7 @@
     end
 
 
-                    chb= all_date|>Enum.filter(fn x -> x.subject =="CH03" end)
+                    chb= all_date|>Enum.filter(fn x -> x.subject =="BCB" end)
    {chb1,chb2,chb3}=  if chb == [] do
 
       {"","",""}
@@ -655,7 +655,7 @@
 
     end
 
-                        chp= all_date|>Enum.filter(fn x -> x.subject =="CH01" end)
+                        chp= all_date|>Enum.filter(fn x -> x.subject =="BCT" end)
    {chp1,chp2,chp3}=  if chp == [] do
 
       {"","",""}
@@ -713,7 +713,7 @@
 
     end
 
-   chpm= all_date|>Enum.filter(fn x -> x.subject =="CH02" end)
+   chpm= all_date|>Enum.filter(fn x -> x.subject =="BCF" end)
    {chpm1,chpm2,chpm3}= if chpm == [] do
 
       {"","",""}
@@ -770,7 +770,7 @@
 
     end
 
-    math= all_date|>Enum.filter(fn x -> x.subject =="MATH" end)
+    math= all_date|>Enum.filter(fn x -> x.subject =="MAT" end)
    {math1,math2,math3}= if math == [] do
 
       {"","",""}
@@ -830,7 +830,7 @@
 
     end
 
-    sains= all_date|>Enum.filter(fn x -> x.subject =="SAINS" end)
+    sains= all_date|>Enum.filter(fn x -> x.subject =="SN" end)
    {sains1,sains2,sains3}=  if sains == [] do
 
       {"","",""}
@@ -1286,7 +1286,7 @@
 
     end
 
-                laku= all_date|>Enum.filter(fn x -> x.subject =="LAKU" end)
+                laku= all_date|>Enum.filter(fn x -> x.subject =="KLK" end)
    {laku1,laku2,laku3}= if laku == [] do
 
       {"","",""}

@@ -1443,12 +1443,12 @@ defmodule SchoolWeb.ExamController do
           c in School.Affairs.ExamMaster,
           where: c.institution_id == ^conn.private.plug_session["institution_id"],
           select: %{
-            id: c.id,
             name: c.name,
             exam_no: c.exam_no
           }
         )
       )
+      |> Enum.uniq()
 
     render(
       conn,
@@ -1737,10 +1737,24 @@ defmodule SchoolWeb.ExamController do
       Repo.all(from(l in School.Affairs.Level))
       |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
 
+    exam =
+      Repo.all(
+        from(
+          c in School.Affairs.ExamMaster,
+          where: c.institution_id == ^conn.private.plug_session["institution_id"],
+          select: %{
+            name: c.name,
+            exam_no: c.exam_no
+          }
+        )
+      )
+      |> Enum.uniq()
+
     render(
       conn,
       "exam_result_standard.html",
-      level: level
+      level: level,
+      exam: exam
     )
   end
 
