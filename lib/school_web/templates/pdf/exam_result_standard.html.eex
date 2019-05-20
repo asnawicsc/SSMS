@@ -130,9 +130,9 @@
                                   <th ><%= item.w %></th>
                                    <th ><%= item.x %></th>
                                    <%= if item.y == true do %>
-                                   <th ></th>
-                                   <% else %>
                                    <th >✔</th>
+                                   <% else %>
+                                   <th ></th>
                                      
                                    <% end %>
                                     
@@ -142,7 +142,7 @@
 
     </table>
     <table align="center" width="100%">
-      <tr align="center"><td>全科及格人数： <%= @pass %></td><td>有不及格的人数： <%= @fail %></td><td>(缺考TH) : <%= @atten %></td></tr>
+      <tr align="center"><td>全科及格人数： <%= @pass %></td><td>有不及格的人数： <%= @fail - @atten %></td><td>(缺考TH) : <%= @atten %></td></tr>
     </table>
 
   </body>
