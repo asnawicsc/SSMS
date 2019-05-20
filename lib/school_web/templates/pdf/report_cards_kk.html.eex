@@ -1851,7 +1851,7 @@ else
     <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
-          <td style="margin: 5px; padding: 5px; " align="left">设计和技术</td>
+          <td style="margin: 5px; padding: 5px; " align="left">科技与工艺</td>
   <td style="margin: 5px; padding: 5px; border-left: 0" align="left">RBT</td>
  <td style="margin: 3px; padding: 3px;"><%= if rbt1 != "" do rbt1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if rbt1 != "" do rbt1|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if rbt2 != "" do rbt2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if rbt2 != "" do rbt2|>elem(1) else "" end %></td>
@@ -1859,7 +1859,7 @@ else
     <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
-       <td style="margin: 5px; padding: 5px; " align="left">通信信息技术</td>
+       <td style="margin: 5px; padding: 5px; " align="left">信息与通信</td>
   <td style="margin: 5px; padding: 5px; border-left: 0" align="left">TMK</td>
   <td style="margin: 3px; padding: 3px;"><%= if tmk1 != "" do tmk1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if tmk1 != "" do tmk1|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if tmk2 != "" do tmk2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if tmk2 != "" do tmk2|>elem(1) else "" end %></td>
@@ -1867,7 +1867,7 @@ else
     <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center"  >
-  <td style="margin: 5px; padding: 5px; "  align="left">不是正确的是</td>
+  <td style="margin: 5px; padding: 5px; "  align="left">美术</td>
   <td style="margin: 5px; padding: 5px; border-left: 0"  align="left">Dunia Seni Visual</td>
   <td style="margin: 3px; padding: 3px;"><%= if seni1 != "" do seni1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if seni1 != "" do seni1|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if seni2 != "" do seni2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if seni2 != "" do seni2|>elem(1) else "" end %></td>
@@ -1890,23 +1890,15 @@ else
   <td style="margin: 3px; padding: 3px;"><%= if pk3 != "" do pk3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if pk3 != "" do pk3|>elem(1) else "" end %></td>
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
-
-  <tr align="center">
-     <td style="margin: 5px; padding: 5px; " align="left">操行</td>
-  <td  style="margin: 5px; padding: 5px; border-left: 0" align="left">Kelakuan</td>
-    <td style="margin: 3px; padding: 3px;"><%= if laku1 != "" do laku1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if laku1 != "" do laku1|>elem(1) else "" end %></td>
-  <td style="margin: 3px; padding: 3px;"><%= if laku2 != "" do laku2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if laku2 != "" do laku2|>elem(1) else "" end %></td>
-  <td style="margin: 3px; padding: 3px;"><%= if laku3 != "" do laku3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if laku3 != "" do laku3|>elem(1) else "" end %></td>
+<tr align="center">
+  <td style="margin: 5px; padding: 5px; " align="left"></td>
+   <td  style="margin: 5px; padding: 5px; border-left: 0" align="left"></td>
+      <td style="margin: 3px; padding: 3px;"></td>
+  <td style="margin: 3px; padding: 3px;"></td>
+  <td style="margin: 3px; padding: 3px;"></td>
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
-  <tr align="center">
-    <td style="margin: 5px; padding: 5px; " align="left">出席日数</td>
-  <td style="margin: 5px; padding: 5px; border-left: 0" align="left">Kedatangan</td>
-    <td style="margin: 3px; padding: 3px;"><%= kedatangan1 %></td>
-  <td style="margin: 3px; padding: 3px;"><%= kedatangan2 %></td>
-  <td style="margin: 3px; padding: 3px;"><%= kedatangan3 %></td>
-   <td style="margin: 3px; padding: 3px;"></td>
- </tr>
+ 
   <tr align="center">
   <td style="margin: 5px; padding: 5px; " align="left">总分</td>
    <td  style="margin: 5px; padding: 5px; border-left: 0" align="left">Jumlah Markah</td>
@@ -1924,7 +1916,7 @@ else
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
-  <td style="margin: 5px; padding: 5px; "  align="left">本班名次</td>
+  <td style="margin: 5px; padding: 5px; "  align="left">班级名次</td>
    <td style="margin: 5px; padding: 5px; border-left: 0"  align="left">Kedudukan Dalam Kelas</td>
         <td style="margin: 3px; padding: 3px;"><%= crank1 %></td>
   <td style="margin: 3px; padding: 3px;"><%= crank2 %></td>
@@ -1937,6 +1929,22 @@ else
         <td style="margin: 3px; padding: 3px;"><%= srank1 %></td>
   <td style="margin: 3px; padding: 3px;"><%= srank2 %></td>
   <td style="margin: 3px; padding: 3px;"><%= srank3 %></td>
+   <td style="margin: 3px; padding: 3px;"></td>
+ </tr>
+  <tr align="center">
+     <td style="margin: 5px; padding: 5px; " align="left">操行</td>
+  <td  style="margin: 5px; padding: 5px; border-left: 0" align="left">Kelakuan</td>
+    <td style="margin: 3px; padding: 3px;"><%= if laku1 != "" do laku1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if laku1 != "" do laku1|>elem(1) else "" end %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if laku2 != "" do laku2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if laku2 != "" do laku2|>elem(1) else "" end %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if laku3 != "" do laku3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if laku3 != "" do laku3|>elem(1) else "" end %></td>
+   <td style="margin: 3px; padding: 3px;"></td>
+ </tr>
+  <tr align="center">
+    <td style="margin: 5px; padding: 5px; " align="left">出席日数</td>
+  <td style="margin: 5px; padding: 5px; border-left: 0" align="left">Kedatangan</td>
+    <td style="margin: 3px; padding: 3px;"><%= kedatangan1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= kedatangan2 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= kedatangan3 %></td>
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
    <tr align="center">
@@ -2113,7 +2121,7 @@ else
     <%= if std_coco != [] do %>
     <%= x.desc%>: <%= x.rank %>
     <% else %>
-    "N/A"
+  
     <% end %>
     <% end %>
   </td>
@@ -2136,7 +2144,7 @@ else
   <%= if std_coco_uniform != [] do %>
 <%= hd(std_coco_uniform) %>
 <% else %>
-"n/a"
+
   <%end %>
   </td>
 
@@ -2157,7 +2165,7 @@ else
   <%= if std_coco_persatuan != [] do %>
    <%= hd(std_coco_persatuan) %>
   <% else %>
-    "n/a"
+  
   <%end %>
   </td>
   
@@ -2178,7 +2186,7 @@ else
   <%= if std_coco_sukan != [] do %>
 <%= hd(std_coco_sukan) %>
 <% else %>
-"n/a"
+
   <%end %>
   </td>
   

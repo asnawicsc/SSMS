@@ -46,42 +46,98 @@
            <th width="100px;">平均</th>
          <th width="80px;">KDK</th>
          <th width="80px;">KDD</th>
+          <th width="80px;"></th>
       </tr>
-      <%= for item <- @examdata|>Enum.with_index do %>
+          <%= for item <- @examdata|>Enum.with_index do %>
       <% no = item|>elem(1) %>
           <% item = item|>elem(0) %>
 
 
          <th><%= no + 1 %></th>
             <th align="left"><%= item.a %></th>
-             <th ><%= item.b %></th>
-              <th ><%= item.c %></th>
-               <th ><%= item.d %></th>
-                <th ><%= item.e %></th>
-                 <th ><%= item.f %></th>
-                  <th ><%= item.g %></th>
-                   <th ><%= item.h %></th>
-                    <th ><%= item.i %></th>
-                     <th ><%= item.j %></th>
-                      <th ><%= item.k %></th>
-                       <th ><%= item.l %></th>
-                        <th ><%= item.m %></th>
-                         <th ><%= item.n %></th>
-                          <th ><%= item.o %></th>
-                           <th ><%= item.p %></th>
-                            <th ><%= item.q %></th>
-                             <th ><%= item.r %></th>
-                              <th ><%= item.s %></th>
-                                <th ><%= item.sa %></th>
-                                  <th ><%= item.sb %></th>
-                               <th ><%= item.t %></th>
+
+              <th ><%= item.b %></th>
+
+      
+        
+             <th ><%= item.c %></th>
+
+
+
+                  <th ><%= item.d %></th>
+
+            
+
+              <th ><%= item.e %></th>
+     
+  
+             <th ><%= item.f %></th>
+  
+
+             <th ><%= item.g %></th>
+ 
+
+              <th ><%= item.h %></th>
+
+             <th ><%= item.i %></th>
+     
+             <th ><%= item.j %></th>
+     
+
+
+             <th ><%= item.k %></th>
+ 
+              
+
+             <th ><%= item.l %></th>
+     
+
+ 
+                  <th ><%= item.m %></th>
+            
+
+                  <th ><%= item.n %></th>
+    
+
+
+
+                  <th ><%= item.o %></th>
+
+
+              <th ><%= item.p %></th>
+    
+   
+              <th ><%= item.q %></th>
+
+     
+              <th ><%= item.r %></th>
+     
+              <th ><%= item.s %></th>
+ 
+
+              <th ><%= item.sa %></th>
+      
+        
+              <th ><%= item.sb %></th>
+        
+      
+              <th ><%= item.t %></th>
+         
+                   
+
                                 <th ><%= item.u %></th>
                                  <th ><%= item.v %></th>
                                   <th ><%= item.w %></th>
                                    <th ><%= item.x %></th>
+                                   <%= if item.y == true do %>
+                                   <th ></th>
+                                   <% else %>
+                                   <th >✔</th>
+                                     
+                                   <% end %>
+                                    
       </tr>
        <% end %>
-
 
 
     </table>
@@ -91,3 +147,4 @@
 
   </body>
 </html>
+
