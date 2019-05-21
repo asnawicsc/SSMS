@@ -80,43 +80,6 @@ defmodule SchoolWeb.PdfController do
   end
 
   def rerun_all_temp(conn, params) do
-    list_class =
-      Repo.all(
-        from(
-          s in School.Affairs.Class,
-          where:
-            s.level_id == ^class_info.level_id and
-              s.institution_id == ^conn.private.plug_session["institution_id"]
-        )
-      )
-
-    all_student =
-      for item <- list_class do
-        student_class =
-          Repo.all(
-            from(
-              s in School.Affairs.Student,
-              left_join: g in School.Affairs.StudentClass,
-              on: s.id == g.sudent_id,
-              left_join: k in School.Affairs.Class,
-              on: k.id == g.class_id,
-              where:
-                s.institution_id == ^conn.private.plug_session["institution_id"] and
-                  g.semester_id == ^conn.private.plug_session["semester_id"] and
-                  g.class_id == ^item.id,
-              select: %{
-                student_id: s.id,
-                student_name: s.name,
-                chinese_name: s.chinese_name,
-                class_name: k.name
-              }
-            )
-          )
-      end
-      |> List.flatten()
-      |> Enum.uniq()
-      |> Enum.count()
-
     semester = Repo.get_by(School.Affairs.Semester, id: conn.private.plug_session["semester_id"])
 
     institute =
@@ -130,7 +93,7 @@ defmodule SchoolWeb.PdfController do
         )
       )
 
-    student_class =
+    student_class_data =
       Repo.all(
         from(
           s in School.Affairs.Student,
@@ -140,28 +103,34 @@ defmodule SchoolWeb.PdfController do
           on: k.id == g.class_id,
           where:
             s.institution_id == ^conn.private.plug_session["institution_id"] and
-              g.semester_id == ^conn.private.plug_session["semester_id"] and
-              g.class_id == ^class_info.id,
+              g.semester_id == ^conn.private.plug_session["semester_id"],
+          # and
+          # g.class_id == ^class_info.id,
           select: %{
             student_id: s.id,
             student_name: s.name,
             chinese_name: s.chinese_name,
-            class_name: k.name
+            class_name: k.name,
+            class_id: g.class_id
           }
         )
       )
 
-    list_exam =
+    IO.puts("finish student class data")
+
+    list_exam_data =
       Repo.all(
         from(
           s in School.Affairs.ExamMaster,
+          # s.level_id == ^class_info.level_id and
           where:
-            s.level_id == ^class_info.level_id and
-              s.institution_id == ^conn.private.plug_session["institution_id"] and
-              s.semester_id == ^semester_id
+            s.institution_id == ^conn.private.plug_session["institution_id"] and
+              s.semester_id == ^conn.private.plug_session["semester_id"]
         )
       )
       |> Enum.sort()
+
+    IO.puts("finish list exam data")
 
     exam_big_data =
       Repo.all(
@@ -181,7 +150,8 @@ defmodule SchoolWeb.PdfController do
           on: sc.class_id == c.id,
           left_join: sb in School.Affairs.Subject,
           on: em.subject_id == sb.id,
-          where: c.name == ^class_name and sc.semester_id == ^semester_id,
+          # c.name == ^class_name and 
+          where: sc.semester_id == ^conn.private.plug_session["semester_id"],
           # and em.subject_id == ^item.id 
           # and em.student_id == ^stud_class.student_id,
           select: %{
@@ -206,23 +176,82 @@ defmodule SchoolWeb.PdfController do
         )
       )
 
-    for item <- list_class do
-      IO.puts("class start #{item.name}")
+    IO.puts("finish exam big data")
 
-      SchoolWeb.PdfController.task_generate_report_card_temp(
+    list_class_data =
+      Repo.all(
+        from(
+          s in School.Affairs.Class,
+          where: s.institution_id == ^conn.private.plug_session["institution_id"]
+        )
+      )
+
+    IO.puts("finish list class data")
+
+    student_big_data =
+      Repo.all(
+        from(
+          s in School.Affairs.Student,
+          left_join: g in School.Affairs.StudentClass,
+          on: s.id == g.sudent_id,
+          left_join: k in School.Affairs.Class,
+          on: k.id == g.class_id,
+          where:
+            s.institution_id == ^conn.private.plug_session["institution_id"] and
+              g.semester_id == ^conn.private.plug_session["semester_id"],
+          # g.class_id == ^item.id,
+          select: %{
+            student_id: s.id,
+            student_name: s.name,
+            chinese_name: s.chinese_name,
+            class_name: k.name,
+            class_id: g.class_id
+          }
+        )
+      )
+
+    IO.puts("finish student big data")
+
+    for item <- list_class_data do
+      class_info = item
+      list_class = list_class_data |> Enum.filter(fn x -> x.level_id == item.level_id end)
+
+      all_student =
+        for item <- list_class do
+          student_big_data |> Enum.filter(fn x -> x.class_id == item.id end)
+        end
+        |> List.flatten()
+        |> Enum.uniq()
+        |> Enum.count()
+
+      IO.puts("class start #{item.name}")
+      student_class = student_class_data |> Enum.filter(fn x -> x.class_id == item.id end)
+      list_exam = list_exam_data |> Enum.filter(fn x -> x.level_id == item.level_id end)
+
+      Task.start_link(__MODULE__, :task_generate_report_card_temp, [
+        # batch, batch_params, bin, cur_user
+
+        # SchoolWeb.PdfController.task_generate_report_card_temp(
         conn,
         params,
         item.name,
-        semester_id,
+        conn.private.plug_session["semester_id"],
         list_class,
         all_student,
         semester,
         institute,
         subject,
         student_class,
-        list_exam
-      )
+        list_exam,
+        exam_big_data
+      ])
+
+      # )
     end
+
+    conn
+    |> put_flash(:info, "running...")
+    |> redirect(to: page_path(conn, :support_dashboard))
   end
 
   def task_generate_report_card_temp(
@@ -236,7 +265,8 @@ defmodule SchoolWeb.PdfController do
         institute,
         subject,
         student_class,
-        list_exam
+        list_exam,
+        exam_big_data
       ) do
     class_info = list_class |> Enum.filter(fn x -> x.name == class_name end) |> hd()
 
@@ -245,6 +275,7 @@ defmodule SchoolWeb.PdfController do
         for item <- subject do
           all =
             exam_big_data
+            |> Enum.filter(fn x -> x.class_name == class_info.name end)
             |> Enum.filter(fn x -> x.em_subject_id == item.id end)
             |> Enum.filter(fn x -> x.em_student_id == stud_class.student_id end)
             |> Enum.filter(fn x -> x != nil end)
@@ -9027,7 +9058,8 @@ defmodule SchoolWeb.PdfController do
 
     marks =
       Repo.all(
-        from(s in School.Affairs.MarkSheetTemp,
+        from(
+          s in School.Affairs.MarkSheetTemp,
           where:
             s.class == ^class.name and
               s.institution_id == ^conn.private.plug_session["institution_id"] and s.year == ^year
@@ -10011,7 +10043,8 @@ defmodule SchoolWeb.PdfController do
 
     marks =
       Repo.all(
-        from(s in School.Affairs.MarkSheetTemp,
+        from(
+          s in School.Affairs.MarkSheetTemp,
           where:
             s.class in ^list_class and
               s.institution_id == ^conn.private.plug_session["institution_id"] and s.year == ^year
