@@ -19,7 +19,7 @@ defmodule School do
   end
 
   def give_index(n, list) do
-    if List.last(list) == elem(n, 3) do
+    if List.last(list) == elem(n, 0) do
       nil
     else
       if elem(n, 0) != nil do
@@ -43,7 +43,13 @@ defmodule School do
         next_val = Enum.fetch!(list, elem(n, 2) + 1)
         {elem(n, 3), elem(n, 1), elem(n, 2) + 1, next_val, 1}
       else
-        next_val = Enum.fetch!(list, elem(n, 2) + 1)
+        next_val =
+          if List.last(list) == elem(n, 3) do
+            nil
+          else
+            Enum.fetch!(list, elem(n, 2) + 1)
+          end
+
         {elem(n, 3), elem(n, 1) + 1 + elem(n, 4), elem(n, 2) + 1, next_val, 0}
       end
     end

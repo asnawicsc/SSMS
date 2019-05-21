@@ -901,7 +901,7 @@
       ""
      end
 
-     pm_s1g=if pm.s1g != nil do
+     pm_s1g=if pm.s1g != nil  and pm.s1m != nil and pm.s1m != "0" do
       pm.s1g
     else
       "" 
@@ -916,7 +916,7 @@
       ""
      end
 
-     pm_s2g=if pm.s2g != nil do
+     pm_s2g=if pm.s2g != nil and pm.s2m != nil and pm.s2m != "0" do
       pm.s2g
     else
       "" 
@@ -930,7 +930,7 @@
       ""
      end
 
-     pm_s3g=if pm.s3g != nil do
+     pm_s3g=if pm.s3g != nil and pm.s3m != nil and pm.s3m != "0" do
       pm.s3g
     else
       "" 
@@ -953,12 +953,13 @@
     	
  
       agama_s1m=if agama.s1m != nil and agama.s1m != "0" do
+
       agama.s1m
     else
       ""
      end
 
-     agama_s1g=if agama.s1g != nil do
+     agama_s1g=if agama.s1g != nil and agama.s1m != nil and agama.s1m != "0" do
       agama.s1g
     else
       "" 
@@ -973,7 +974,7 @@
       ""
      end
 
-     agama_s2g=if agama.s2g != nil do
+     agama_s2g=if agama.s2g != nil  and agama.s2m != nil and agama.s2m != "0" do
       agama.s2g
     else
       "" 
@@ -987,7 +988,7 @@
       ""
      end
 
-     agama_s3g=if agama.s3g != nil do
+     agama_s3g=if agama.s3g != nil  and agama.s3m != nil and agama.s3m != "0" do
       agama.s3g
     else
       "" 
@@ -1538,11 +1539,23 @@ else
   crank=crank|>hd
 
 
+crank1=if all_date|>Enum.any?(fn x -> x.s1g =="TH" end) do
+
+  crank1 =""
+  else
+
  crank1=if crank.s1m != nil do
   crank.s1m
 else
    crank.s1g
  end
+
+ end
+
+  crank2=if all_date|>Enum.any?(fn x -> x.s2g =="TH" end) do
+
+  crank2 =""
+else
 
   crank2=if crank.s2m != nil do
   crank.s2m
@@ -1550,11 +1563,20 @@ else
    crank.s2g
  end
 
+end
+
+ crank3= if all_date|>Enum.any?(fn x -> x.s3g =="TH" end) do
+
+  crank3 =""
+else
+
   crank3=if crank.s3m != nil do
   crank.s3m
 else
    crank.s3g
  end
+
+end
 
 {crank1,crank2,crank3}
 
@@ -1578,6 +1600,9 @@ else
 
   srank=srank|>hd
 
+srank1=if all_date|>Enum.any?(fn x -> x.s1g =="TH" end) do
+  srank1=""
+else
 
  srank1=if srank.s1m != nil do
   srank.s1m
@@ -1585,17 +1610,31 @@ else
    srank.s1g
  end
 
+end
+
+srank2=if all_date|>Enum.any?(fn x -> x.s2g =="TH" end) do
+  srank2=""
+else
+
   srank2=if srank.s2m != nil do
   srank.s2m
 else
    srank.s2g
  end
 
+end
+
+srank3=if all_date|>Enum.any?(fn x -> x.s3g =="TH" end) do
+  srank3=""
+else
+
   srank3=if srank.s3m != nil do
   srank.s3m
 else
    srank.s3g
  end
+
+end
 
 {srank1,srank2,srank3}
 
@@ -1811,7 +1850,7 @@ else
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
 <tr align="center">
-  <td style="margin: 5px; padding: 5px; " align="left">数学</td>
+  <td style="margin: 5px; padding: 5px; " align="left"><b>数学</b></td>
   <td  style="margin: 5px; padding: 5px; border-left: 0" align="left">Matematik</td>
   <td style="margin: 3px; padding: 3px;"><%= if math1 != "" do math1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if math1 != "" do math1|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if math2 != "" do math2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if math2 != "" do math2|>elem(1) else "" end %></td>
@@ -1819,7 +1858,7 @@ else
     <td style="margin: 3px; padding: 3px;"></td>
  </tr>
  <tr align="center">
-    <td style="margin: 5px; padding: 5px; " align="left">科学</td>
+    <td style="margin: 5px; padding: 5px; " align="left"><b>科学</b></td>
   <td  style="margin: 5px; padding: 5px; border-left: 0" align="left">Sains</td>
   <td style="margin: 3px; padding: 3px;"><%= if sains1 != "" do sains1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if sains1 != "" do sains1|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if sains2 != "" do sains2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if sains2 != "" do sains2|>elem(1) else "" end %></td>
@@ -1827,7 +1866,7 @@ else
     <td style="margin: 3px; padding: 3px;"></td>
  </tr>
  <tr align="center">
-   <td style="margin: 5px; padding: 5px; " align="left">道德教育</td>
+   <td style="margin: 5px; padding: 5px; " align="left"><b>道德教育</b></td>
   <td style="margin: 5px; padding: 5px; border-left: 0" align="left">Pendidikan Moral</td>
   <td style="margin: 3px; padding: 3px;"><%= if pm1 != "" do pm1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if pm1 != "" do pm1|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if pm2 != "" do pm2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if pm2 != "" do pm2|>elem(1) else "" end %></td>
@@ -1835,7 +1874,7 @@ else
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
  <tr align="center">
-  <td style="margin: 5px; padding: 5px; " align="left">回教</td>
+  <td style="margin: 5px; padding: 5px; " align="left"><b>回教</b></td>
   <td style="margin: 5px; padding: 5px; border-left: 0" align="left">Agama Islam</td>
  <td style="margin: 3px; padding: 3px;"><%= if agama1 != "" do agama1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if agama1 != "" do agama1|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if agama2 != "" do agama2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if agama2 != "" do agama2|>elem(1) else "" end %></td>
@@ -1843,7 +1882,7 @@ else
     <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
-      <td style="margin: 5px; padding: 5px; " align="left">历史</td>
+      <td style="margin: 5px; padding: 5px; " align="left"><b>历史</b></td>
   <td style="margin: 5px; padding: 5px; border-left: 0" align="left">Sejarah</td>
  <td style="margin: 3px; padding: 3px;"><%= if sej1 != "" do sej1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if sej1 != "" do sej1|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if sej2 != "" do sej2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if sej2 != "" do sej2|>elem(1) else "" end %></td>
@@ -1851,7 +1890,7 @@ else
     <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
-          <td style="margin: 5px; padding: 5px; " align="left">科技与工艺</td>
+          <td style="margin: 5px; padding: 5px; " align="left"><b>科技与工艺</b></td>
   <td style="margin: 5px; padding: 5px; border-left: 0" align="left">RBT</td>
  <td style="margin: 3px; padding: 3px;"><%= if rbt1 != "" do rbt1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if rbt1 != "" do rbt1|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if rbt2 != "" do rbt2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if rbt2 != "" do rbt2|>elem(1) else "" end %></td>
@@ -1859,7 +1898,7 @@ else
     <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
-       <td style="margin: 5px; padding: 5px; " align="left">信息与通信</td>
+       <td style="margin: 5px; padding: 5px; " align="left"><b>信息与通信</b></td>
   <td style="margin: 5px; padding: 5px; border-left: 0" align="left">TMK</td>
   <td style="margin: 3px; padding: 3px;"><%= if tmk1 != "" do tmk1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if tmk1 != "" do tmk1|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if tmk2 != "" do tmk2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if tmk2 != "" do tmk2|>elem(1) else "" end %></td>
@@ -1867,7 +1906,7 @@ else
     <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center"  >
-  <td style="margin: 5px; padding: 5px; "  align="left">美术</td>
+  <td style="margin: 5px; padding: 5px; "  align="left"><b>美术</b></td>
   <td style="margin: 5px; padding: 5px; border-left: 0"  align="left">Dunia Seni Visual</td>
   <td style="margin: 3px; padding: 3px;"><%= if seni1 != "" do seni1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if seni1 != "" do seni1|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if seni2 != "" do seni2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if seni2 != "" do seni2|>elem(1) else "" end %></td>
@@ -1875,7 +1914,7 @@ else
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
-      <td style="margin: 5px; padding: 5px; " align="left">体育</td>
+      <td style="margin: 5px; padding: 5px; " align="left"><b>体育</b></td>
   <td style="margin: 5px; padding: 5px; border-left: 0" align="left">Pendidikan Jasmani</td>
     <td style="margin: 3px; padding: 3px;"><%= if pj1 != "" do pj1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if pj1 != "" do pj1|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if pj2 != "" do pj2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if pj2 != "" do pj2|>elem(1) else "" end %></td>
@@ -1883,7 +1922,7 @@ else
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
    <tr align="center">
-      <td style="margin: 5px; padding: 5px; " align="left">体健</td>
+      <td style="margin: 5px; padding: 5px; " align="left"><b>体健</b></td>
   <td style="margin: 5px; padding: 5px; border-left: 0" align="left">Pendidikan Kesihatan</td>
     <td style="margin: 3px; padding: 3px;"><%= if pk1 != "" do pk1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if pk1 != "" do pk1|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if pk2 != "" do pk2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if pk2 != "" do pk2|>elem(1) else "" end %></td>
@@ -1900,7 +1939,7 @@ else
  </tr>
  
   <tr align="center">
-  <td style="margin: 5px; padding: 5px; " align="left">总分</td>
+  <td style="margin: 5px; padding: 5px; " align="left"><b>总分</b></td>
    <td  style="margin: 5px; padding: 5px; border-left: 0" align="left">Jumlah Markah</td>
       <td style="margin: 3px; padding: 3px;"><%= total1 %></td>
   <td style="margin: 3px; padding: 3px;"><%= total2 %></td>
@@ -1908,7 +1947,7 @@ else
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center" >
-  <td  style="margin: 5px; padding: 5px; " align="left">平均 </td>
+  <td  style="margin: 5px; padding: 5px; " align="left"><b>平均 </b></td>
   <td  style="margin: 5px; padding: 5px; border-left: 0" align="left">Purata</td>
   <td style="margin: 3px; padding: 3px;"><%= averg1 %></td>
   <td style="margin: 3px; padding: 3px;"><%= averg2 %></td>
@@ -1916,7 +1955,7 @@ else
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
-  <td style="margin: 5px; padding: 5px; "  align="left">班级名次</td>
+  <td style="margin: 5px; padding: 5px; "  align="left"><b>班级名次</b></td>
    <td style="margin: 5px; padding: 5px; border-left: 0"  align="left">Kedudukan Dalam Kelas</td>
         <td style="margin: 3px; padding: 3px;"><%= crank1 %></td>
   <td style="margin: 3px; padding: 3px;"><%= crank2 %></td>
@@ -1924,7 +1963,7 @@ else
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
-  <td style="margin: 5px; padding: 5px; " align="left" >全级名次</td>
+  <td style="margin: 5px; padding: 5px; " align="left" ><b>全级名次</b></td>
   <td style="margin: 5px; padding: 5px; border-left: 0" align="left">Kedudukan Dalam Darjah</td>
         <td style="margin: 3px; padding: 3px;"><%= srank1 %></td>
   <td style="margin: 3px; padding: 3px;"><%= srank2 %></td>
@@ -1932,7 +1971,7 @@ else
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
-     <td style="margin: 5px; padding: 5px; " align="left">操行</td>
+     <td style="margin: 5px; padding: 5px; " align="left"><b>操行</td>
   <td  style="margin: 5px; padding: 5px; border-left: 0" align="left">Kelakuan</td>
     <td style="margin: 3px; padding: 3px;"><%= if laku1 != "" do laku1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if laku1 != "" do laku1|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if laku2 != "" do laku2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if laku2 != "" do laku2|>elem(1) else "" end %></td>
@@ -1940,7 +1979,7 @@ else
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
-    <td style="margin: 5px; padding: 5px; " align="left">出席日数</td>
+    <td style="margin: 5px; padding: 5px; " align="left"><b>出席日数</b></td>
   <td style="margin: 5px; padding: 5px; border-left: 0" align="left">Kedatangan</td>
     <td style="margin: 3px; padding: 3px;"><%= kedatangan1 %></td>
   <td style="margin: 3px; padding: 3px;"><%= kedatangan2 %></td>
@@ -1948,7 +1987,7 @@ else
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
    <tr align="center">
-  <td style="margin: 5px; padding: 5px; " align="left">体高 & 体重</td>
+  <td style="margin: 5px; padding: 5px; " align="left"><b>体高 & 体重</b></td>
   <td style="margin: 5px; padding: 5px; border-left: 0" align="left">Tinggi & Berat</td>
   <td style="margin: 3px; padding: 3px;"><%= hw1 %></td>
   <td style="margin: 3px; padding: 3px;"><%= hw2 %></td>
@@ -2114,7 +2153,7 @@ else
   
   
   <tr>
-   <td style="margin: 5px; padding: 5px; " align="left">荣誉榜 Pencapaian: </td>
+   <td style="margin: 5px; padding: 5px; " align="left"><b>荣誉榜 Pencapaian:</b> </td>
   
    <td colspan="5" align="left" style="margin: 3px; padding: 3px;" height="50px;">
      <%= for x <- std_coco do %>
@@ -2129,7 +2168,7 @@ else
   
  </tr>
   <tr>
-   <td style="margin: 5px; padding: 5px; " align="left">制服团体</td>
+   <td style="margin: 5px; padding: 5px; " align="left"><b>制服团体</b></td>
       <td style="margin: 5px; padding: 5px; " align="left">Pakaian Seragam</td>
    <td colspan="4" align="left" style="margin: 3px; padding: 3px;">
 
@@ -2150,7 +2189,7 @@ else
 
  </tr>
   <tr>
-   <td style="margin: 5px; padding: 5px; " align="left">学会 </td>
+   <td style="margin: 5px; padding: 5px; " align="left"><b>学会 </b></td>
     <td style="margin: 5px; padding: 5px; " align="left">Persatuan</td>
    <td colspan="4" align="left" style="margin: 3px; padding: 3px; ">
 
@@ -2171,7 +2210,7 @@ else
   
  </tr>
   <tr>
-   <td style="margin: 5px; padding: 5px; " align="left">运动/球类</td>
+   <td style="margin: 5px; padding: 5px; " align="left"><b>运动/球类</b></td>
    <td style="margin: 5px; padding: 5px; " align="left">Sukan/Permainan: </td>
    <td colspan="4" align="left" style="margin: 3px; padding: 3px;" > 
 

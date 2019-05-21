@@ -8,7 +8,7 @@
     </div>
     <!-- END Language list-->
 </div>
-
+<a href="/generate_again">all</a>
 <div class="row">
 
     <%= render( SchoolWeb.ExamView ,"report_nav.html",conn: @conn) %>

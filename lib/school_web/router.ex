@@ -754,6 +754,7 @@ defmodule SchoolWeb.Router do
       :exam_result_standard_pdf
     )
 
+    get("/generate_again", PdfController, :rerun_all_temp)
     get("/add_records", Student_coco_achievementController, :add_achievement)
     get("/gen_report", Student_coco_achievementController, :gen_report)
     get("/ehomework/:class_id", EhomeworkController, :ehomework)
