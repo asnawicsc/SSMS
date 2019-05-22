@@ -171,7 +171,12 @@ defmodule SchoolWeb.PdfController do
             grade: em.grade,
             standard_id: sc.level_id,
             em_subject_id: em.subject_id,
-            em_student_id: em.student_id
+            em_student_id: em.student_id,
+            e_level_id: e.level_id,
+            sb_with_mark: sb.with_mark,
+            student_heigt: s.height,
+            student_weight: s.weight,
+            e_level_id: e.level_id
           }
         )
       )
@@ -525,47 +530,12 @@ defmodule SchoolWeb.PdfController do
 
     class_rank =
       for stud_class <- student_class do
-        all = exam_big_data
+        all = exam_big_data |> Enum.filter(fn x -> x.em_student_id == stud_class.student_id end)
 
         all_result =
-          Repo.all(
-            from(
-              em in School.Affairs.ExamMark,
-              left_join: z in School.Affairs.Exam,
-              on: em.exam_id == z.id,
-              left_join: e in School.Affairs.ExamMaster,
-              on: z.exam_master_id == e.id,
-              left_join: j in School.Affairs.Semester,
-              on: e.semester_id == j.id,
-              left_join: s in School.Affairs.Student,
-              on: em.student_id == s.id,
-              left_join: sc in School.Affairs.StudentClass,
-              on: sc.sudent_id == s.id,
-              left_join: c in School.Affairs.Class,
-              on: sc.class_id == c.id,
-              left_join: sb in School.Affairs.Subject,
-              on: em.subject_id == sb.id,
-              where:
-                c.name == ^class_name and sc.semester_id == ^semester_id and sb.with_mark == 1,
-              select: %{
-                student_id: s.id,
-                student_name: s.name,
-                chinese_name: s.chinese_name,
-                class_name: c.name,
-                exam_master_id: e.id,
-                exam_name: e.name,
-                semester: j.id,
-                semester_no: j.sem,
-                year: j.year,
-                subject_code: sb.code,
-                subject_name: sb.description,
-                subject_cname: sb.cdesc,
-                mark: em.mark,
-                grade: em.grade,
-                standard_id: sc.level_id
-              }
-            )
-          )
+          exam_big_data
+          |> Enum.filter(fn x -> x.class_name == class_info.name end)
+          |> Enum.filter(fn x -> x.sb_with_mark == 1 end)
 
         total_mark =
           for exam <- list_exam |> Enum.with_index() do
@@ -890,6 +860,12 @@ defmodule SchoolWeb.PdfController do
                     s3m = total_mark |> Enum.fetch!(2) |> elem(1)
 
                     {s1m, s2m, s3m}
+                  else
+                    IO.inspect("got more than 3 at line 894, class #{class_name}")
+                    s1m = ""
+                    s2m = ""
+                    s3m = ""
+                    {s1m, s2m, s3m}
                   end
                 end
               end
@@ -921,86 +897,14 @@ defmodule SchoolWeb.PdfController do
     standard_rank =
       for stud_class <- student_class do
         all =
-          Repo.all(
-            from(
-              em in School.Affairs.ExamMark,
-              left_join: z in School.Affairs.Exam,
-              on: em.exam_id == z.id,
-              left_join: e in School.Affairs.ExamMaster,
-              on: z.exam_master_id == e.id,
-              left_join: j in School.Affairs.Semester,
-              on: e.semester_id == j.id,
-              left_join: s in School.Affairs.Student,
-              on: em.student_id == s.id,
-              left_join: sc in School.Affairs.StudentClass,
-              on: sc.sudent_id == s.id,
-              left_join: c in School.Affairs.Class,
-              on: sc.class_id == c.id,
-              left_join: sb in School.Affairs.Subject,
-              on: em.subject_id == sb.id,
-              where:
-                c.name == ^class_name and em.student_id == ^stud_class.student_id and
-                  sc.semester_id == ^semester_id,
-              select: %{
-                student_id: s.id,
-                student_name: s.name,
-                chinese_name: s.chinese_name,
-                class_name: c.name,
-                exam_master_id: e.id,
-                exam_name: e.name,
-                semester: j.id,
-                semester_no: j.sem,
-                year: j.year,
-                subject_code: sb.code,
-                subject_name: sb.description,
-                subject_cname: sb.cdesc,
-                mark: em.mark,
-                grade: em.grade,
-                standard_id: sc.level_id
-              }
-            )
-          )
+          exam_big_data
+          |> Enum.filter(fn x -> x.class_name == class_info.name end)
+          |> Enum.filter(fn x -> x.em_student_id == stud_class.student_id end)
 
         all_result =
-          Repo.all(
-            from(
-              em in School.Affairs.ExamMark,
-              left_join: z in School.Affairs.Exam,
-              on: em.exam_id == z.id,
-              left_join: e in School.Affairs.ExamMaster,
-              on: z.exam_master_id == e.id,
-              left_join: j in School.Affairs.Semester,
-              on: e.semester_id == j.id,
-              left_join: s in School.Affairs.Student,
-              on: em.student_id == s.id,
-              left_join: sc in School.Affairs.StudentClass,
-              on: sc.sudent_id == s.id,
-              left_join: c in School.Affairs.Class,
-              on: sc.class_id == c.id,
-              left_join: sb in School.Affairs.Subject,
-              on: em.subject_id == sb.id,
-              where:
-                e.level_id == ^class_info.level_id and sc.semester_id == ^semester_id and
-                  sb.with_mark == 1,
-              select: %{
-                student_id: s.id,
-                student_name: s.name,
-                chinese_name: s.chinese_name,
-                class_name: c.name,
-                exam_master_id: e.id,
-                exam_name: e.name,
-                semester: j.id,
-                semester_no: j.sem,
-                year: j.year,
-                subject_code: sb.code,
-                subject_name: sb.description,
-                subject_cname: sb.cdesc,
-                mark: em.mark,
-                grade: em.grade,
-                standard_id: sc.level_id
-              }
-            )
-          )
+          exam_big_data
+          |> Enum.filter(fn x -> x.e_level_id == class_info.level_id end)
+          |> Enum.filter(fn x -> x.sb_with_mark == 1 end)
 
         total_mark =
           for exam <- list_exam |> Enum.with_index() do
@@ -1424,44 +1328,10 @@ defmodule SchoolWeb.PdfController do
     total_markfinish =
       for stud_class <- student_class do
         all =
-          Repo.all(
-            from(
-              em in School.Affairs.ExamMark,
-              left_join: z in School.Affairs.Exam,
-              on: em.exam_id == z.id,
-              left_join: e in School.Affairs.ExamMaster,
-              on: z.exam_master_id == e.id,
-              left_join: j in School.Affairs.Semester,
-              on: e.semester_id == j.id,
-              left_join: s in School.Affairs.Student,
-              on: em.student_id == s.id,
-              left_join: sc in School.Affairs.StudentClass,
-              on: sc.sudent_id == s.id,
-              left_join: c in School.Affairs.Class,
-              on: sc.class_id == c.id,
-              left_join: sb in School.Affairs.Subject,
-              on: em.subject_id == sb.id,
-              where:
-                c.name == ^class_name and em.student_id == ^stud_class.student_id and
-                  sc.semester_id == ^semester_id and sb.with_mark == 1,
-              select: %{
-                student_id: s.id,
-                student_name: s.name,
-                chinese_name: s.chinese_name,
-                class_name: c.name,
-                exam_master_id: e.id,
-                exam_name: e.name,
-                semester: j.id,
-                semester_no: j.sem,
-                year: j.year,
-                subject_code: sb.code,
-                subject_name: sb.description,
-                subject_cname: sb.cdesc,
-                mark: em.mark,
-                standard_id: sc.level_id
-              }
-            )
-          )
+          exam_big_data
+          |> Enum.filter(fn x -> x.class_name == class_info.name end)
+          |> Enum.filter(fn x -> x.student_id == stud_class.student_id end)
+          |> Enum.filter(fn x -> x.sb_with_mark == 1 end)
 
         total_mark =
           for exam <- list_exam |> Enum.with_index() do
@@ -1680,44 +1550,10 @@ defmodule SchoolWeb.PdfController do
     total_purata =
       for stud_class <- student_class do
         all =
-          Repo.all(
-            from(
-              em in School.Affairs.ExamMark,
-              left_join: z in School.Affairs.Exam,
-              on: em.exam_id == z.id,
-              left_join: e in School.Affairs.ExamMaster,
-              on: z.exam_master_id == e.id,
-              left_join: j in School.Affairs.Semester,
-              on: e.semester_id == j.id,
-              left_join: s in School.Affairs.Student,
-              on: em.student_id == s.id,
-              left_join: sc in School.Affairs.StudentClass,
-              on: sc.sudent_id == s.id,
-              left_join: c in School.Affairs.Class,
-              on: sc.class_id == c.id,
-              left_join: sb in School.Affairs.Subject,
-              on: em.subject_id == sb.id,
-              where:
-                c.name == ^class_name and em.student_id == ^stud_class.student_id and
-                  sc.semester_id == ^semester_id and sb.with_mark == 1,
-              select: %{
-                student_id: s.id,
-                student_name: s.name,
-                chinese_name: s.chinese_name,
-                class_name: c.name,
-                exam_master_id: e.id,
-                exam_name: e.name,
-                semester: j.id,
-                semester_no: j.sem,
-                year: j.year,
-                subject_code: sb.code,
-                subject_name: sb.description,
-                subject_cname: sb.cdesc,
-                mark: em.mark,
-                standard_id: sc.level_id
-              }
-            )
-          )
+          exam_big_data
+          |> Enum.filter(fn x -> x.class_name == class_info.name end)
+          |> Enum.filter(fn x -> x.student_id == stud_class.student_id end)
+          |> Enum.filter(fn x -> x.sb_with_mark == 1 end)
 
         total_average =
           for exam <- list_exam |> Enum.with_index() do
@@ -1837,15 +1673,15 @@ defmodule SchoolWeb.PdfController do
 
                 total_absent =
                   if conn.private.plug_session["institution_id"] == 9 do
-                    a =
+                    absent_data =
                       list
                       |> Enum.map(fn x -> x.absent end)
                       |> Enum.uniq()
 
-                    if a == [] do
+                    if absent_data == [] do
                       0
                     else
-                      a |> hd
+                      absent_data |> hd
                     end
                   end
 
@@ -1936,46 +1772,9 @@ defmodule SchoolWeb.PdfController do
     total_h_w =
       for stud_class <- student_class do
         all =
-          Repo.all(
-            from(
-              em in School.Affairs.ExamMark,
-              left_join: z in School.Affairs.Exam,
-              on: em.exam_id == z.id,
-              left_join: e in School.Affairs.ExamMaster,
-              on: z.exam_master_id == e.id,
-              left_join: j in School.Affairs.Semester,
-              on: e.semester_id == j.id,
-              left_join: s in School.Affairs.Student,
-              on: em.student_id == s.id,
-              left_join: sc in School.Affairs.StudentClass,
-              on: sc.sudent_id == s.id,
-              left_join: c in School.Affairs.Class,
-              on: sc.class_id == c.id,
-              left_join: sb in School.Affairs.Subject,
-              on: em.subject_id == sb.id,
-              where:
-                c.name == ^class_name and em.student_id == ^stud_class.student_id and
-                  sc.semester_id == ^semester_id,
-              select: %{
-                student_id: s.id,
-                student_name: s.name,
-                chinese_name: s.chinese_name,
-                class_name: c.name,
-                exam_master_id: e.id,
-                exam_name: e.name,
-                semester: j.id,
-                semester_no: j.sem,
-                year: j.year,
-                subject_code: sb.code,
-                subject_name: sb.description,
-                subject_cname: sb.cdesc,
-                mark: em.mark,
-                standard_id: sc.level_id,
-                student_heigt: s.height,
-                student_weight: s.weight
-              }
-            )
-          )
+          exam_big_data
+          |> Enum.filter(fn x -> x.class_name == class_info.name end)
+          |> Enum.filter(fn x -> x.student_id == stud_class.student_id end)
 
         total_hei_wei =
           for exam <- list_exam |> Enum.with_index() do
@@ -2147,9 +1946,7 @@ defmodule SchoolWeb.PdfController do
         Affairs.create_mark_sheet_temp(item)
       end
 
-      conn
-      |> put_flash(:info, "Mark sheet temp created successfully.")
-      |> redirect(to: "/list_report")
+      IO.puts("Mark sheet temp created successfully.")
     end
   end
 
@@ -2941,6 +2738,12 @@ defmodule SchoolWeb.PdfController do
                     s3m = total_mark |> Enum.fetch!(2) |> elem(1)
 
                     {s1m, s2m, s3m}
+                  else
+                    IO.inspect("got more than 3 at line 894, class #{class_name}")
+                    s1m = ""
+                    s2m = ""
+                    s3m = ""
+                    {s1m, s2m, s3m}
                   end
                 end
               end
@@ -3888,15 +3691,15 @@ defmodule SchoolWeb.PdfController do
 
                 total_absent =
                   if conn.private.plug_session["institution_id"] == 9 do
-                    a =
+                    absent_data =
                       list
                       |> Enum.map(fn x -> x.absent end)
                       |> Enum.uniq()
 
-                    if a == [] do
+                    if absent_data == [] do
                       0
                     else
-                      a |> hd
+                      absent_data |> hd
                     end
                   end
 
@@ -3913,6 +3716,7 @@ defmodule SchoolWeb.PdfController do
 
                 total_average =
                   if total_per != 0 do
+                    IO.puts("line 3920 #{a} / #{total_per}")
                     a / total_per * 100
                   else
                     0
