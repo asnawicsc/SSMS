@@ -1,146 +1,125 @@
-<% require IEx %>
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-    <style>
-    html {
-      font-family: sans-serif;
-    }
-    table {
-      border-collapse: collapse;
-      border: 2px solid rgb(200,200,200);
-      letter-spacing: 1px;
-      font-size: 0.8rem;
-    }
-    td, th {
-      border: 1px solid rgb(190,190,190);
-      padding: 10px 20px;
-    }
-    td {
-      text-align: center;
-    }
-    caption {
-      padding: 10px;
-    }
-    </style>
-  </head>
- <% require IEx %>
-  <body>
 
-        <div align="right" style="margin-right: 30px;">
-    <form action="/pdf/exam_result_analysis_class" method="POST">
-       
- <input type="hidden" name="class_id" value="<%= @class_id %>">
-  <input type="hidden" name="_csrf_token" value="<%= @csrf %>">
-<input align="left" class="btn btn-info btn-ml" type="submit" name="" value="Print!">
+   <div class="row" >
+ &nbsp;
+&nbsp;
+&nbsp;
+
+    <form action="/pdf/class_ranking" method="POST">
+  <input type="hidden" name="class_id" value="<%= @class_id %>">
+   <input type="hidden" name="_csrf_token" value="<%= @csrf %>">
+<input align="left" type="submit" class="btn btn-primary btn-sm " name="" value="Print!">
 </form>
-</div>
-<Br>
-    <h4 align="center">CLASS: <%= @class.name %></h4>
 
-    <table id="example" align="center" width="100%">
+</div>
+
+<Br>
+
+<table class="table"  width="100%">
+  
+  <tbody>
+<td >
+<b  style="font-size: 25px;"><%= @institution.name %></b></br>
+班级<b> Class:</b> <br>
+老师<b> Nama GURU : ________________________________________________________________ </b><br>
+事项<b> PERKARA &nbsp;&nbsp;&nbsp;: <%= @exam_name %></b><b style="margin-left: 10px;"> 日期 Tarikh:<%= SchoolWeb.LayoutView.my_time(DateTime.utc_now) %></b> 
+
+</td>
+    </tbody>
+</table>
+    <div class="row" >
+  
+  
+ </div>
+ <div class="table-responsive table-bordered">
+    <table class="table" id="table_rank" align="center" ">
       <colgroup>
         <col col span="2" >
       </colgroup>
       <tr align="center">
-        <th> Student Name </th>
-        <th >Subject</th>
-        <th  colspan="2">Grade A</th>
-        <th colspan="2">Grade B</th>
-        <th  colspan="2">Grade C</th>
-        <th colspan="2">Grade D</th>
-        <th  colspan="2">Grade E</th>
-        
-        <th  colspan="2">Pass</th>
-        <th  colspan="2">Fail</th>
-         <th  >GPS</th>
-
+       
+        <th >No</th>     
+        <th >Name</th>
+        <th>Class</th>
+        <th >Sem(Exam)</th>
+        <%= for item <- @mark|>Enum.sort_by(fn x -> x end) do %>      
+        <th   align="center" colspan="1"><%= item|>elem(0) %></th>
+        <% end %>
+        <th >Jumlah</th>
+        <th >Purata</th>
+        <th >KDK</th>
+        <th >KDD</th>
+        <th >Lulus</th>
+         
       </tr>
-     
 
+      <% keys = @z |> Map.keys() %>
+
+        <%= for key <- keys |> Enum.with_index(1) do %>
+        
+         <% y = elem(key, 0) %>
+         <% x = @z[y] %>   
+          <tr>
+            <%= for sub <- x |> Enum.with_index() do %>
+              <% p = elem(sub, 0)%>
+              <th> <%= if elem(sub,1) == 0, do: elem(key,1), else: "" %></th>
+              <th> <%= if elem(sub,1) == 0, do: y.b, else: "" %></th>
+              <th><%= if elem(sub,1) == 0, do: p.class_name, else: ""  %></th>
+              <th><%= p.exam_name %></th>
+
+              <%= for subject2 <- p.subject do %>
+                <th><%= subject2.student_mark %></th>
+              <%end%>
+
+              <th><%= p.total_mark %></th>
+              <th><%= p.total_average %></th>
+          </tr>
+            <%end%>
+
+          <tr>
+            <% sum = x |> hd() %>
+
+              <th></th>
+              <th></th>
+              <th></th>
+              <th>-</th>
       
-        <%= for item <- @group_subject do %>
-        <% exm = item.subject |> elem(0) %>
-        <% sub = item.subject |> elem(1) %>
-        
-        <tr>
-     
-          <th> Name</th>
-          <th><%= exm %></a></th>
-          <th ><%= item.a %></th>
-          <th ><%= (item.a/item.total_student)*100|>Float.round(2) %>%</th>
-          <th><%= item.b %></th>
-           <th ><%= (item.b/item.total_student)*100|>Float.round(2) %>%</th>
-            <th><%= item.c %></th>
-           <th ><%= (item.c/item.total_student)*100|>Float.round(2) %>%</th>
-            <th><%= item.d %></th>
-           <th ><%= (item.d/item.total_student)*100|>Float.round(2) %>%</th>
-            <th><%= item.e %></th>
-           <th ><%= (item.e/item.total_student)*100|>Float.round(2) %>%</th>
+              <%= for mark <- sum.subject do %>
+               <% tot = mark.all |> Enum.map(fn x -> x.student_mark |> Decimal.to_integer() end) |> Enum.sum() %>
+               <% per = mark.all |> Enum.map(fn x -> x.student_mark end) |> Enum.count() %>
+               <% val = tot/per%>
+               <th><%= val %></th>
+              <%end%>
+
+              <th><%= sum.avg_all_mark %></th>
+              <th><%= sum.avg_mark %></th>
+              <th><%= sum.class_rank %></th>
+              <th><%= sum.rank %></th>
+              <th><%= sum.num_pass %></th>            
+          </tr>
           
-            <th><%= item.lulus %></th>
-           <th ><%= (item.lulus/item.total_student)*100|>Float.round(2) %>%</th>
-            <th><%= item.tak_lulus %></th>
-           <th ><%= (item.tak_lulus/item.total_student)*100|>Float.round(2) %>%</th>
-           <th></th>
-      </tr>
-       <% end %>
-
-    <tr >
-       <th >AVG</a></th>
-              <% a= @a %>
-
-
-          <th ><%= @a %></th>
-          <th ><%= if @total == 0  do
-             0
-           else
-            (@a/@total)*100|>Float.round(2)
-          end %></th>
-          <th ><%= @b %></th>
-           <th ><%= if @total == 0  do
-             0
-           else
-            (@b/@total)*100|>Float.round(2)
-          end %></th>
-          <th ><%= @c %></th>
-             <th ><%= if @total == 0  do
-             0
-           else
-            (@c/@total)*100|>Float.round(2)
-          end %></th>
-          <th ><%= @d %></th>
-            <th ><%= if @total == 0  do
-             0
-           else
-            (@d/@total)*100|>Float.round(2)
-          end %></th>
-          <th ><%= @e %></th>
-            <th ><%= if @total == 0  do
-             0
-           else
-            (@e/@total)*100|>Float.round(2)
-          end %></th>
-
-          <th ><%= @lulus %></th>
-            <th ><%= if @total == 0  do
-             0
-           else
-            (@lulus/@total)*100|>Float.round(2)
-          end %></th>
-          <th ><%= @tak_lulus %></th>
-             <th ><%= if @total == 0  do
-             0
-           else
-            (@tak_lulus/@total)*100|>Float.round(2)
-          end %></th>
-          <th ></th>
-    </tr>
-
+          <% end %>
     </table>
+  </div>
 
 
   </body>
 </html>
+
+<script type="text/javascript">
+  var table_rank = document.getElementById('table_rank');
+  var table_length = table_rank.rows.length;
+  var data_array = [];
+  for (i = 1; i < table_length; i++){
+     //gets cells of current row
+     var cells = table_rank.rows.item(i).cells;
+     //gets amount of cells of current row
+     var cell_length = cells.length;
+     //loops through each cell in current row
+     var href_data = cells.item(1).innerHTML;
+     var data = href_data.match(/href="([^"]*)/)[1].split("/report_card/")[1];
+     data_array.push(data);
+  }
+  $("input#all_report_card_data").val(data_array)
+
+  
+</script>
