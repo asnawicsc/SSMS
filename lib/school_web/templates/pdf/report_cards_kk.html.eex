@@ -901,11 +901,28 @@
       ""
      end
 
-     pm_s1g=if pm.s1g != nil  and pm.s1m != nil and pm.s1m != "0" do
-      pm.s1g
-    else
-      "" 
-     end  
+    #  pm_s1g=if pm.s1g != nil  and pm.s1m != nil  and pm.s1g != "E" do
+    #   pm.s1g
+    # else
+    #   "" 
+    #  end 
+
+      pm_s1g=if pm.s1g != nil do
+         a= if pm.s1g != "TH" do
+                b=if pm.s1m == "0" do
+                  ""
+                else
+                  pm.s1g
+                  
+                end
+          else
+            pm.s1g
+            
+          end
+     else
+      ""
+         
+     end   
       
       pm1={pm_s1m,pm_s1g}
 
@@ -916,10 +933,27 @@
       ""
      end
 
-     pm_s2g=if pm.s2g != nil and pm.s2m != nil and pm.s2m != "0" do
-      pm.s2g
-    else
-      "" 
+    #  pm_s2g=if pm.s2g != nil and pm.s2m != nil  and pm.s1g != "E"  do
+    #   pm.s2g
+    # else
+    #   "" 
+    #  end 
+
+           pm_s2g=if pm.s2g != nil do
+         a= if pm.s2g != "TH" do
+                b=if pm.s2m == "0" do
+                  ""
+                else
+                  pm.s2g
+                  
+                end
+          else
+            pm.s2g
+            
+          end
+     else
+      ""
+         
      end  
       
       pm2={pm_s2m,pm_s2g}
@@ -930,10 +964,27 @@
       ""
      end
 
-     pm_s3g=if pm.s3g != nil and pm.s3m != nil and pm.s3m != "0" do
-      pm.s3g
-    else
-      "" 
+    #  pm_s3g=if pm.s3g != nil and pm.s3m != nil  and pm.s1g != "E" do
+    #   pm.s3g
+    # else
+    #   "" 
+    #  end
+
+                pm_s3g=if pm.s3g != nil do
+         a= if pm.s3g != "TH" do
+                b=if pm.s3m == "0" do
+                  ""
+                else
+                  pm.s3g
+                  
+                end
+          else
+            pm.s3g
+            
+          end
+     else
+      ""
+         
      end  
       
       pm3={pm_s3m,pm_s3g}
@@ -959,10 +1010,27 @@
       ""
      end
 
-     agama_s1g=if agama.s1g != nil and agama.s1m != nil and agama.s1m != "0" do
-      agama.s1g
-    else
-      "" 
+    #  agama_s1g=if agama.s1g != nil and agama.s1m != nil  and agama.s1g != "E" do
+    #   agama.s1g
+    # else
+    #   "" 
+    #  end
+
+     agama_s1g=if agama.s1g != nil do
+         a= if agama.s1g != "TH" do
+                b= if agama.s1m == "0" do
+                  ""
+                else
+                  agama.s1g
+                  
+                end
+          else
+            agama.s1g
+            
+          end
+     else
+      ""
+         
      end  
       
       agama1={agama_s1m,agama_s1g}
@@ -974,11 +1042,28 @@
       ""
      end
 
-     agama_s2g=if agama.s2g != nil  and agama.s2m != nil and agama.s2m != "0" do
-      agama.s2g
-    else
-      "" 
-     end  
+    #  agama_s2g=if agama.s2g != nil  and agama.s2m != nil  and agama.s1g != "E" do
+    #   agama.s2g
+    # else
+    #   "" 
+    #  end 
+
+          agama_s2g=if agama.s2g != nil do
+           a=if agama.s2g != "TH" do
+                 b=if agama.s2m == "0" do
+                  ""
+                else
+                  agama.s2g
+                  
+                end
+          else
+            agama.s2g
+            
+          end
+     else
+      ""
+         
+     end   
       
       agama2={agama_s2m,agama_s2g}
 
@@ -988,11 +1073,28 @@
       ""
      end
 
-     agama_s3g=if agama.s3g != nil  and agama.s3m != nil and agama.s3m != "0" do
-      agama.s3g
-    else
-      "" 
-     end  
+    #  agama_s3g=if agama.s3g != nil  and agama.s3m != nil  and agama.s1g != "E"  do
+    #   agama.s3g
+    # else
+    #   "" 
+    #  end  
+
+               agama_s3g=if agama.s3g != nil do
+          a= if agama.s3g != "TH" do
+               b= if agama.s3m == "0" do
+                  ""
+                else
+                  agama.s3g
+                  
+                end
+          else
+            agama.s3g
+            
+          end
+     else
+      ""
+         
+     end 
       
       agama3={agama_s3m,agama_s3g}
 
@@ -1228,6 +1330,63 @@
 
 
      {seni1,seni2,seni3}
+
+    end
+
+     mz= all_date|>Enum.filter(fn x -> x.subject =="MZ" end)
+   {mz1,mz2,mz3}= if mz == [] do
+
+      {"","",""}
+    else
+       mz=mz|>hd  
+      
+ 
+
+     mz_s1m=if mz.s1m != nil  and mz.s1m != "0" do
+      mz.s1m
+    else
+      ""
+     end
+
+     mz_s1g=if mz.s1g != nil do
+      mz.s1g
+    else
+      "" 
+     end  
+      
+     mz1={mz_s1m,mz_s1g}  
+
+     mz_s2m=if mz.s2m != nil  and mz.s2m != "0" do
+      mz.s2m
+    else
+      ""
+     end
+
+     mz_s2g=if mz.s2g != nil do
+      mz.s2g
+    else
+      "" 
+     end  
+      
+     mz2={mz_s2m,mz_s2g}  
+
+
+     mz_s3m=if mz.s3m != nil  and mz.s3m != "0" do
+      mz.s3m
+    else
+      ""
+     end
+
+     mz_s3g=if mz.s3g != nil do
+      mz.s3g
+    else
+      "" 
+     end  
+      
+     mz3={mz_s3m,mz_s3g}        
+
+
+     {mz1,mz2,mz3}
 
     end
 
@@ -1905,6 +2064,14 @@ else
    <td style="margin: 3px; padding: 3px;"><%= if tmk3 != "" do tmk3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if tmk3 != "" do tmk3|>elem(1) else "" end %></td>
     <td style="margin: 3px; padding: 3px;"></td>
  </tr>
+   <tr align="center"  >
+  <td style="margin: 5px; padding: 5px; "  align="left"><b>音乐世界</b></td>
+  <td style="margin: 5px; padding: 5px; border-left: 0"  align="left">Dunia Muzik</td>
+  <td style="margin: 3px; padding: 3px;"><%= if mz1 != "" do mz1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if mz1 != "" do mz1|>elem(1) else "" end %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if mz2 != "" do mz2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if mz2 != "" do mz2|>elem(1) else "" end %></td>
+  <td style="margin: 3px; padding: 3px;"><%= if mz3 != "" do mz3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if mz3 != "" do mz3|>elem(1) else "" end %></td>
+   <td style="margin: 3px; padding: 3px;"></td>
+ </tr>
   <tr align="center"  >
   <td style="margin: 5px; padding: 5px; "  align="left"><b>美术</b></td>
   <td style="margin: 5px; padding: 5px; border-left: 0"  align="left">Dunia Seni Visual</td>
@@ -2038,7 +2205,7 @@ else
         id: student_comment.comment1
       ).c_malay
           end %>
-          ,
+         
           <%= if student_comment.comment2 != nil do
 
           
@@ -2056,7 +2223,7 @@ else
       ).c_malay
           end %>
 
-          ,
+          
           <%= if student_comment.comment3 != nil do
 
          Repo.get_by(School.Affairs.Comment,
@@ -2100,7 +2267,7 @@ else
         id: student_comment.comment1
       ).c_malay
           end %>
-          ,
+          
           <%= if student_comment.comment2 != nil do
 
           
@@ -2118,7 +2285,7 @@ else
       ).c_malay
           end %>
 
-          ,
+          
           <%= if student_comment.comment3 != nil do
 
          Repo.get_by(School.Affairs.Comment,

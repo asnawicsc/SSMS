@@ -37,7 +37,7 @@
              <th width="80px;">SEJ</th>
               <th width="80px;">RBT</th>
                <th width="80px;">TMK</th>
-                <th width="80px;">DSV</th>
+               <th width="80px;"><%= if @institution.id != 9 do "PSV" else "DSV" end %></th>
                  <th width="80px;">PJ</th>
                   <th width="80px;">PK</th>
                   <th width="80px;">MZ</th>

@@ -9,7 +9,11 @@
     </div>
   <% end %>
 
-
+  <div class="form-group">
+    <%= label f, (gettext "code"), class: "control-label" %>
+    <%= text_input f, :code, class: "form-control" %>
+    <%= error_tag f, :code %>
+  </div>
 
   <div class="form-group">
     <%= label f, (gettext "description"), class: "control-label" %>

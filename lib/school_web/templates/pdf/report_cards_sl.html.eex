@@ -884,7 +884,7 @@
 
     end
 
-        pm= all_date|>Enum.filter(fn x -> x.subject =="PM" end)
+       pm= all_date|>Enum.filter(fn x -> x.subject =="PM" end)
    {pm1,pm2,pm3}=  if pm == [] do
 
       {"","",""}
@@ -897,7 +897,7 @@
       ""
      end
 
-     pm_s1g=if pm.s1g != nil do
+     pm_s1g=if pm.s1g != nil  and pm.s1m != nil  and pm.s1g != "E" do
       pm.s1g
     else
       "" 
@@ -912,7 +912,7 @@
       ""
      end
 
-     pm_s2g=if pm.s2g != nil do
+     pm_s2g=if pm.s2g != nil and pm.s2m != nil  and pm.s1g != "E"  do
       pm.s2g
     else
       "" 
@@ -926,7 +926,7 @@
       ""
      end
 
-     pm_s3g=if pm.s3g != nil do
+     pm_s3g=if pm.s3g != nil and pm.s3m != nil  and pm.s1g != "E" do
       pm.s3g
     else
       "" 
@@ -939,6 +939,7 @@
     end
 
 
+
     agama= all_date|>Enum.filter(fn x -> x.subject =="AGM" end)
    {agama1,agama2,agama3}=  if agama == [] do
 
@@ -948,12 +949,13 @@
       
  
       agama_s1m=if agama.s1m != nil and agama.s1m != "0" do
+
       agama.s1m
     else
       ""
      end
 
-     agama_s1g=if agama.s1g != nil do
+     agama_s1g=if agama.s1g != nil and agama.s1m != nil  and agama.s1g != "E" do
       agama.s1g
     else
       "" 
@@ -968,7 +970,7 @@
       ""
      end
 
-     agama_s2g=if agama.s2g != nil do
+     agama_s2g=if agama.s2g != nil  and agama.s2m != nil  and agama.s1g != "E" do
       agama.s2g
     else
       "" 
@@ -982,7 +984,7 @@
       ""
      end
 
-     agama_s3g=if agama.s3g != nil do
+     agama_s3g=if agama.s3g != nil  and agama.s3m != nil  and agama.s1g != "E"  do
       agama.s3g
     else
       "" 
@@ -994,6 +996,7 @@
      {agama1,agama2,agama3}
 
     end
+
 
 
         sej= all_date|>Enum.filter(fn x -> x.subject =="SEJ" end)

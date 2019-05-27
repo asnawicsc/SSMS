@@ -413,7 +413,29 @@ defmodule SchoolWeb.ClassController do
         )
       )
 
-    render(conn, "report_card_generator.html", semesters: semesters, classes: classes)
+    level =
+      Repo.all(from(l in School.Affairs.Level))
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
+    exam =
+      Repo.all(
+        from(
+          c in School.Affairs.ExamMaster,
+          where: c.institution_id == ^conn.private.plug_session["institution_id"],
+          select: %{
+            name: c.name,
+            exam_no: c.exam_no
+          }
+        )
+      )
+      |> Enum.uniq()
+
+    render(conn, "report_card_generator.html",
+      level: level,
+      exam: exam,
+      semesters: semesters,
+      classes: classes
+    )
   end
 
   def mark_analyse_by_grade(conn, params) do

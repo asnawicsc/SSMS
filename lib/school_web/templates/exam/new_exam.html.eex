@@ -9,7 +9,7 @@
         <div class="card card-default d-none d-lg-block">
             <div class="card-body">
               <div class="row">
-                <div class="col-sm-6">
+                <div class="col-sm-4">
                     <div class="form-group bmd-form-group">
                         <label class="bmd-label-floating">
                             <%= gettext "Exam Name" %>
@@ -17,6 +17,21 @@
                         <input name="exam_name" class="form-control" type="text" required="">
                     </div>
                 </div>
+                  <div class="col-sm-2">
+                        <div class="form-group ">
+                            <label>
+                                <%= gettext "Exam No" %>
+                            </label>
+                            <select class="custom-select custom-select" required="required"  name="exam_no">
+                                 <option selected="selected">Choose Exam No</option>
+                              
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                            </select>
+                        </div>
+                    </div>
 
                 
   
@@ -52,6 +67,7 @@
                             </select>
                         </div>
                     </div>
+                   
 
     
    

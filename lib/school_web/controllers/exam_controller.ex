@@ -120,6 +120,7 @@ defmodule SchoolWeb.ExamController do
     exam_name = params["exam_name"]
     level_id = params["level"]
     semester_id = params["semester"]
+    exam_no = params["exam_no"]
     institution_id = conn.private.plug_session["institution_id"]
 
     subjects = params["subject"] |> String.split(",")
@@ -128,7 +129,8 @@ defmodule SchoolWeb.ExamController do
       name: exam_name,
       level_id: level_id,
       semester_id: semester_id,
-      institution_id: institution_id
+      institution_id: institution_id,
+      exam_no: exam_no
     }
 
     case Affairs.create_exam_master(exam_master_params) do
@@ -136,8 +138,9 @@ defmodule SchoolWeb.ExamController do
         id = exam_master.id
 
         for subject <- subjects do
-          exam_params = %{exam_master_id: id, subject_id: subject}
+          exam_params = %{exam_master_id: id, subject_id: String.to_integer(subject)}
           changeset = Affairs.change_exam(%Exam{})
+
           Affairs.create_exam(exam_params)
         end
 
@@ -146,7 +149,9 @@ defmodule SchoolWeb.ExamController do
         |> redirect(to: exam_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset)
+        conn
+        |> put_flash(:info, "Exam create fail.")
+        |> redirect(to: exam_path(conn, :index))
     end
   end
 

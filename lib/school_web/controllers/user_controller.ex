@@ -105,7 +105,7 @@ defmodule SchoolWeb.UserController do
               from(
                 s in School.Affairs.Semester,
                 where:
-                  s.end_date >= ^Timex.today() and s.start_date <= ^Timex.today() and
+                  s.holiday_end >= ^Timex.today() and s.start_date <= ^Timex.today() and
                     s.institution_id == ^institution_id.id
               )
             )
