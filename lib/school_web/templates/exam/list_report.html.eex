@@ -124,7 +124,7 @@
                                  <em class="fa-5x far fa-list-alt text-success"></em>
                               </a>
                               <p>
-                                 <small class="text-dark">Exam Analysis Class</small>
+                                 <small class="text-dark">Exam Analysis Standard/Class</small>
                               </p>
                               
                            </div>
@@ -144,7 +144,7 @@
                                  <em class="fa-5x far fa-list-alt text-danger"></em>
                               </a>
                               <p>
-                                 <small class="text-dark">Exam Analysis Standard</small>
+                                 <small class="text-dark">Exam Analysis Subject</small>
                               </p>
                               
                            </div>

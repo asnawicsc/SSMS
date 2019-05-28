@@ -1,11 +1,26 @@
+<style>
+  table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+  }
+  th, td {
+    padding: 5px;
+  }
+  th {
+    text-align: left;
+  }
+</style>
 
    <div class="row" >
  &nbsp;
 &nbsp;
 &nbsp;
 
-    <form action="/pdf/class_ranking" method="POST">
+    <form action="/pdf/exam_result_analysis_class" method="POST">
   <input type="hidden" name="class_id" value="<%= @class_id %>">
+  <input type="hidden" name="institution_id" value="<%= @inst_id %>">
+  <input type="hidden" name="year" value="<%= @year %>">
+  <input type="hidden" name="flag" value="<%= @flag %>">
    <input type="hidden" name="_csrf_token" value="<%= @csrf %>">
 <input align="left" type="submit" class="btn btn-primary btn-sm " name="" value="Print!">
 </form>
@@ -14,41 +29,32 @@
 
 <Br>
 
-<table class="table"  width="100%">
+
   
   <tbody>
-<td >
-<b  style="font-size: 25px;"><%= @institution.name %></b></br>
-班级<b> Class:</b> <br>
-老师<b> Nama GURU : ________________________________________________________________ </b><br>
-事项<b> PERKARA &nbsp;&nbsp;&nbsp;: <%= @exam_name %></b><b style="margin-left: 10px;"> 日期 Tarikh:<%= SchoolWeb.LayoutView.my_time(DateTime.utc_now) %></b> 
 
-</td>
-    </tbody>
-</table>
-    <div class="row" >
-  
-  
- </div>
+<b><%= @institution.name %></b>
+
+<% date = Date.utc_today() %>
+<div style="float: right;"><%= date.day %>-<%= date.month %>-<%= date.year %></div><br>
+
+
  <div class="table-responsive table-bordered">
-    <table class="table" id="table_rank" align="center" ">
-      <colgroup>
-        <col col span="2" >
-      </colgroup>
+    <table  class="table"  align="center" width="100%">
       <tr align="center">
        
         <th >No</th>     
         <th >Name</th>
         <th>Class</th>
-        <th >Sem(Exam)</th>
+        <th>Sem(Exam)</th>
         <%= for item <- @mark|>Enum.sort_by(fn x -> x end) do %>      
-        <th   align="center" colspan="1"><%= item|>elem(0) %></th>
+        <th align="center" colspan="1"><%= item|>elem(0) %></th>
         <% end %>
-        <th >Jumlah</th>
-        <th >Purata</th>
-        <th >KDK</th>
-        <th >KDD</th>
-        <th >Lulus</th>
+        <th>Jumlah</th>
+        <th>Purata</th>
+        <th>KDK</th>
+        <th>KDD</th>
+        <th>Lulus</th>
          
       </tr>
 
@@ -58,43 +64,47 @@
         
          <% y = elem(key, 0) %>
          <% x = @z[y] %>   
-          <tr>
+          
             <%= for sub <- x |> Enum.with_index() do %>
+            <tr >
               <% p = elem(sub, 0)%>
-              <th> <%= if elem(sub,1) == 0, do: elem(key,1), else: "" %></th>
-              <th> <%= if elem(sub,1) == 0, do: y.b, else: "" %></th>
-              <th><%= if elem(sub,1) == 0, do: p.class_name, else: ""  %></th>
-              <th><%= p.exam_name %></th>
+              <td style="border-bottom: 0; border-top: 0;"> <%= if elem(sub,1) == 0, do: elem(key,1), else: "" %></td>
+              <td style="border-bottom: 0; border-top: 0;"> <%= if elem(sub,1) == 0, do: y.b, else: "" %></td>
+              <td style="border-bottom: 0; border-top: 0;"><%= if elem(sub,1) == 0, do: p.class_name, else: ""  %></td>
+              <td style="border-bottom: 0; border-top: 0;"><%= p.exam_name %></td>
 
               <%= for subject2 <- p.subject do %>
-                <th><%= subject2.student_mark %></th>
+                <td style="border-bottom: 0; border-top: 0;"><%= subject2.student_mark %></td>
               <%end%>
 
-              <th><%= p.total_mark %></th>
-              <th><%= p.total_average %></th>
+              <td style="border-bottom: 0; border-top: 0;"><%= p.total_mark %></td>
+              <td style="border-bottom: 0; border-top: 0;"><%= p.total_average %></td>
+              <td style="border-bottom: 0; border-top: 0;"></td>
+              <td style="border-bottom: 0; border-top: 0;"></td>
+              <td style="border-bottom: 0; border-top: 0;"></td>
           </tr>
             <%end%>
 
-          <tr>
+          <tr style="border-top: 0; border-bottom: 0;">
             <% sum = x |> hd() %>
 
-              <th></th>
-              <th></th>
-              <th></th>
-              <th>-</th>
+              <td style="border-top: 0;"></td>
+              <td style="border-top: 0;"></td>
+              <td style="border-top: 0;"></td>
+              <td style="border-top: 0;">-</td>
       
               <%= for mark <- sum.subject do %>
-               <% tot = mark.all |> Enum.map(fn x -> x.student_mark |> Decimal.to_integer() end) |> Enum.sum() %>
+               <% tot = mark.all |> Enum.map(fn x -> x.student_mark |> Decimal.to_float() end) |> Enum.sum() %>
                <% per = mark.all |> Enum.map(fn x -> x.student_mark end) |> Enum.count() %>
                <% val = tot/per%>
-               <th><%= val %></th>
+               <td style="border-top: 0;"><%= val %></td>
               <%end%>
 
-              <th><%= sum.avg_all_mark %></th>
-              <th><%= sum.avg_mark %></th>
-              <th><%= sum.class_rank %></th>
-              <th><%= sum.rank %></th>
-              <th><%= sum.num_pass %></th>            
+              <td style="border-top: 0;"><%= sum.avg_all_mark %></td>
+              <td style="border-top: 0;"><%= sum.avg_mark %></td>
+              <td style="border-top: 0;"><%= sum.class_rank %></td>
+              <td style="border-top: 0;"><%= sum.rank %></td>
+              <td style="border-top: 0;"><%= sum.num_pass %></td>            
           </tr>
           
           <% end %>
@@ -105,21 +115,3 @@
   </body>
 </html>
 
-<script type="text/javascript">
-  var table_rank = document.getElementById('table_rank');
-  var table_length = table_rank.rows.length;
-  var data_array = [];
-  for (i = 1; i < table_length; i++){
-     //gets cells of current row
-     var cells = table_rank.rows.item(i).cells;
-     //gets amount of cells of current row
-     var cell_length = cells.length;
-     //loops through each cell in current row
-     var href_data = cells.item(1).innerHTML;
-     var data = href_data.match(/href="([^"]*)/)[1].split("/report_card/")[1];
-     data_array.push(data);
-  }
-  $("input#all_report_card_data").val(data_array)
-
-  
-</script>

@@ -8,6 +8,7 @@ defmodule School.Affairs.ExamMaster do
     field(:semester_id, :integer)
     field(:year, :string)
     field(:institution_id, :integer)
+    field(:exam_number, :integer)
 
     timestamps()
   end

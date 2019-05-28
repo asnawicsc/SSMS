@@ -1,133 +1,95 @@
-<% require IEx %>
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-    <style>
-    html {
-      font-family: sans-serif;
-    }
-    table {
-      border-collapse: collapse;
-      border: 2px solid rgb(200,200,200);
-      letter-spacing: 1px;
-      font-size: 0.8rem;
-    }
-    td, th {
-      border: 1px solid rgb(190,190,190);
-      padding: 10px 20px;
-    }
-    td {
-      text-align: center;
-    }
-    caption {
-      padding: 10px;
-    }
-    </style>
-  </head>
- <% require IEx %>
-  <body>
+
+<style>
+  table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+  }
+  th, td {
+    padding: 5px;
+  }
+  th {
+    text-align: left;
+  }
+</style>
 
 
-    <h4 align="center">CLASS: <%= @class.name %></h4>
+<b><%= @institution.name %></b>
 
-    <table id="example" align="center" width="100%">
-      <colgroup>
-        <col col span="2" >
-      </colgroup>
+<br>
+
+<% date = Date.utc_today() %>
+<div style="float: right;"><%= date.day %>-<%= date.month %>-<%= date.year %></div><br>
+
+  
+    <table  class="table"  align="center" width="100%">
       <tr align="center">
-        <th style="background-color:#97DB9A;">Subject</th>
-        <th style="background-color:#97DB9A;" colspan="2">Grade A</th>
-        <th style="background-color:#97DB9A;" colspan="2">Grade B</th>
-        <th style="background-color:#97DB9A;" colspan="2">Grade C</th>
-        <th style="background-color:#97DB9A;" colspan="2">Grade D</th>
-        <th style="background-color:#97DB9A;" colspan="2">Grade E</th>
-        
-        <th style="background-color:#97DB9A;" colspan="2">Pass</th>
-        <th style="background-color:#97DB9A;" colspan="2">Fail</th>
-         <th style="background-color:#97DB9A;" >GPS</th>
-
+       
+        <th >No</th>     
+        <th >Name</th>
+        <th>Class</th>
+        <th>Sem(Exam)</th>
+        <%= for item <- @mark|>Enum.sort_by(fn x -> x end) do %>      
+        <th align="center" colspan="1"><%= item|>elem(0) %></th>
+        <% end %>
+        <th>Jumlah</th>
+        <th>Purata</th>
+        <th>KDK</th>
+        <th>KDD</th>
+        <th>Lulus</th>
+         
       </tr>
-     
 
-        <%= for item <- @group_subject do %>
+      <% keys = @z |> Map.keys() %>
+
+        <%= for key <- keys |> Enum.with_index(1) do %>
         
-        <tr>
-     
-          <th><%=item.subject %></a></th>
-          <th ><%= item.a %></th>
-          <th ><%= (item.a/item.total_student)*100|>Float.round(2) %>%</th>
-          <th><%= item.b %></th>
-           <th ><%= (item.b/item.total_student)*100|>Float.round(2) %>%</th>
-            <th><%= item.c %></th>
-           <th ><%= (item.c/item.total_student)*100|>Float.round(2) %>%</th>
-            <th><%= item.d %></th>
-           <th ><%= (item.d/item.total_student)*100|>Float.round(2) %>%</th>
-            <th><%= item.e %></th>
-           <th ><%= (item.e/item.total_student)*100|>Float.round(2) %>%</th>
+         <% y = elem(key, 0) %>
+         <% x = @z[y] %>   
           
-            <th><%= item.lulus %></th>
-           <th ><%= (item.lulus/item.total_student)*100|>Float.round(2) %>%</th>
-            <th><%= item.tak_lulus %></th>
-           <th ><%= (item.tak_lulus/item.total_student)*100|>Float.round(2) %>%</th>
-           <th></th>
-      </tr>
-       <% end %>
+            <%= for sub <- x |> Enum.with_index() do %>
+            <tr >
+              <% p = elem(sub, 0)%>
+              <td style="border-bottom: 0; border-top: 0;"> <%= if elem(sub,1) == 0, do: elem(key,1), else: "" %></td>
+              <td style="border-bottom: 0; border-top: 0;"> <%= if elem(sub,1) == 0, do: y.b, else: "" %></td>
+              <td style="border-bottom: 0; border-top: 0;"><%= if elem(sub,1) == 0, do: p.class_name, else: ""  %></td>
+              <td style="border-bottom: 0; border-top: 0;"><%= p.exam_name %></td>
 
-    <tr style="background-color: grey">
-       <th >AVG</a></th>
-              <% a= @a %>
+              <%= for subject2 <- p.subject do %>
+                <td style="border-bottom: 0; border-top: 0;"><%= subject2.student_mark %></td>
+              <%end%>
 
+              <td style="border-bottom: 0; border-top: 0;"><%= p.total_mark %></td>
+              <td style="border-bottom: 0; border-top: 0;"><%= p.total_average %></td>
+              <td style="border-bottom: 0; border-top: 0;"></td>
+              <td style="border-bottom: 0; border-top: 0;"></td>
+              <td style="border-bottom: 0; border-top: 0;"></td>
+          </tr>
+            <%end%>
 
-          <th ><%= @a %></th>
-          <th ><%= if @total == 0  do
-             0
-           else
-            (@a/@total)*100|>Float.round(2)
-          end %></th>
-          <th ><%= @b %></th>
-           <th ><%= if @total == 0  do
-             0
-           else
-            (@b/@total)*100|>Float.round(2)
-          end %></th>
-          <th ><%= @c %></th>
-             <th ><%= if @total == 0  do
-             0
-           else
-            (@c/@total)*100|>Float.round(2)
-          end %></th>
-          <th ><%= @d %></th>
-            <th ><%= if @total == 0  do
-             0
-           else
-            (@d/@total)*100|>Float.round(2)
-          end %></th>
-          <th ><%= @e %></th>
-            <th ><%= if @total == 0  do
-             0
-           else
-            (@e/@total)*100|>Float.round(2)
-          end %></th>
+          <tr style="border-top: 0; border-bottom: 0;">
+            <% sum = x |> hd() %>
 
-          <th ><%= @lulus %></th>
-            <th ><%= if @total == 0  do
-             0
-           else
-            (@lulus/@total)*100|>Float.round(2)
-          end %></th>
-          <th ><%= @tak_lulus %></th>
-             <th ><%= if @total == 0  do
-             0
-           else
-            (@tak_lulus/@total)*100|>Float.round(2)
-          end %></th>
-          <th ></th>
-    </tr>
+              <td style="border-top: 0;"></td>
+              <td style="border-top: 0;"></td>
+              <td style="border-top: 0;"></td>
+              <td style="border-top: 0;">-</td>
+      
+              <%= for mark <- sum.subject do %>
+               <% tot = mark.all |> Enum.map(fn x -> x.student_mark |> Decimal.to_float() end) |> Enum.sum() %>
+               <% per = mark.all |> Enum.map(fn x -> x.student_mark end) |> Enum.count() %>
+               <% val = tot/per%>
+               <td style="border-top: 0;"><%= val %></td>
+              <%end%>
 
+              <td style="border-top: 0;"><%= sum.avg_all_mark %></td>
+              <td style="border-top: 0;"><%= sum.avg_mark %></td>
+              <td style="border-top: 0;"><%= sum.class_rank %></td>
+              <td style="border-top: 0;"><%= sum.rank %></td>
+              <td style="border-top: 0;"><%= sum.num_pass %></td>            
+          </tr>
+          
+          <% end %>
     </table>
 
 
-  </body>
-</html>
+

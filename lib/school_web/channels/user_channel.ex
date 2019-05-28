@@ -3035,6 +3035,7 @@ defmodule SchoolWeb.UserChannel do
 
   def handle_in("exam_result_analysis_id", payload, socket) do
     flag = payload["flag"]
+    year = payload["year"]
 
     if flag == 1 do
       class_id = payload["class_id"] |> String.to_integer()
@@ -3056,7 +3057,7 @@ defmodule SchoolWeb.UserChannel do
             on: p.id == e.subject_id,
             where:
               g.institution_id == ^inst_id and
-                s.institution_id == ^inst_id and p.institution_id == ^inst_id,
+                s.institution_id == ^inst_id and p.institution_id == ^inst_id and g.year == ^year,
             select: %{
               class_id: c.id,
               class_name: c.name,
@@ -3067,7 +3068,8 @@ defmodule SchoolWeb.UserChannel do
               student_mark: e.mark,
               student_grade: e.grade,
               chinese_name: s.chinese_name,
-              level_id: g.level_id
+              level_id: g.level_id,
+              exam_number: g.exam_number
             }
           )
         )
@@ -3128,6 +3130,7 @@ defmodule SchoolWeb.UserChannel do
                   student_mark: 0,
                   chinese_name: data.chinese_name,
                   exam_name: data.exam_name,
+                  exam_number: data.exam_number,
                   all: n_data[data.student_name]
                 }
               end
@@ -3155,6 +3158,7 @@ defmodule SchoolWeb.UserChannel do
                           student_mark: Decimal.to_float(data.student_mark),
                           chinese_name: data.chinese_name,
                           exam_name: data.exam_name,
+                          exam_number: data.exam_number,
                           all: n_data[data.student_name]
                         }
                       end
@@ -3175,6 +3179,7 @@ defmodule SchoolWeb.UserChannel do
                     student_mark: 0.0,
                     chinese_name: data.chinese_name,
                     exam_name: data.exam_name,
+                    exam_number: data.exam_number,
                     all: n_data[data.student_name]
                   }
                 end
@@ -3213,6 +3218,7 @@ defmodule SchoolWeb.UserChannel do
           total_per = per
 
           class_id = new |> elem(1) |> Enum.map(fn x -> x.class_id end) |> Enum.uniq() |> hd
+          exam_number = new |> elem(1) |> Enum.map(fn x -> x.exam_number end) |> Enum.uniq() |> hd
 
           student_id = new |> elem(1) |> Enum.map(fn x -> x.student_id end) |> Enum.uniq() |> hd
 
@@ -3242,7 +3248,8 @@ defmodule SchoolWeb.UserChannel do
             per: per,
             total_per: total_per,
             total_average: total_average,
-            exam_name: exam_name
+            exam_name: exam_name,
+            exam_number: exam_number
           }
         end
 
@@ -3259,7 +3266,7 @@ defmodule SchoolWeb.UserChannel do
             for mark <- d.subject do
               tot =
                 mark.all
-                |> Enum.map(fn x -> x.student_mark |> Decimal.to_integer() end)
+                |> Enum.map(fn x -> x.student_mark |> Decimal.to_float() end)
                 |> Enum.sum()
 
               per = mark.all |> Enum.map(fn x -> x.student_mark end) |> Enum.count()
@@ -3285,6 +3292,7 @@ defmodule SchoolWeb.UserChannel do
             class_name = item |> Enum.map(fn x -> x.class_name end) |> Enum.uniq() |> hd
             class_id = item |> Enum.map(fn x -> x.class_id end) |> Enum.uniq() |> hd
             exam_name = item |> Enum.map(fn x -> x.exam_name end) |> Enum.uniq() |> hd
+            exam_number = item |> Enum.map(fn x -> x.exam_number end) |> Enum.uniq() |> hd
             chinese_name = item |> Enum.map(fn x -> x.chinese_name end) |> Enum.uniq() |> hd
 
             %{
@@ -3297,6 +3305,7 @@ defmodule SchoolWeb.UserChannel do
               class_name: class_name,
               class_id: class_id,
               exam_name: exam_name,
+              exam_number: exam_number,
               chinese_name: chinese_name
             }
           end
@@ -3323,6 +3332,7 @@ defmodule SchoolWeb.UserChannel do
               rank: rank,
               total_average: y.total_average,
               exam_name: y.exam_name,
+              exam_number: y.exam_number,
               avg_mark: y.avg_mark,
               all_mark: y.all_mark
             }
@@ -3343,7 +3353,7 @@ defmodule SchoolWeb.UserChannel do
             for mark <- d.subject do
               tot =
                 mark.all
-                |> Enum.map(fn x -> x.student_mark |> Decimal.to_integer() end)
+                |> Enum.map(fn x -> x.student_mark |> Decimal.to_float() end)
                 |> Enum.sum()
 
               per = mark.all |> Enum.map(fn x -> x.student_mark end) |> Enum.count()
@@ -3370,6 +3380,7 @@ defmodule SchoolWeb.UserChannel do
             class_name = item |> Enum.map(fn x -> x.class_name end) |> Enum.uniq() |> hd
             class_id = item |> Enum.map(fn x -> x.class_id end) |> Enum.uniq() |> hd
             exam_name = item |> Enum.map(fn x -> x.exam_name end) |> Enum.uniq() |> hd
+            exam_number = item |> Enum.map(fn x -> x.exam_number end) |> Enum.uniq() |> hd
             chinese_name = item |> Enum.map(fn x -> x.chinese_name end) |> Enum.uniq() |> hd
 
             %{
@@ -3385,6 +3396,7 @@ defmodule SchoolWeb.UserChannel do
               class_name: class_name,
               class_id: class_id,
               exam_name: exam_name,
+              exam_number: exam_number,
               chinese_name: chinese_name
             }
           end
@@ -3413,6 +3425,7 @@ defmodule SchoolWeb.UserChannel do
               class_rank: class_rank,
               total_average: y.total_average,
               exam_name: y.exam_name,
+              exam_number: y.exam_number,
               avg_mark: y.avg_mark,
               all_mark: y.all_mark,
               avg_all_mark: y.avg_all_mark
@@ -3420,6 +3433,7 @@ defmodule SchoolWeb.UserChannel do
           end
         end
         |> List.flatten()
+        |> Enum.sort_by(fn x -> x.exam_number end)
         |> Enum.group_by(fn x -> %{a: x.class_rank, b: x.name} end)
 
       mark = mark1 |> Enum.group_by(fn x -> x.subject_code end)
@@ -3436,7 +3450,10 @@ defmodule SchoolWeb.UserChannel do
               SchoolWeb.ExamView,
               "mark_analyse_subject.html",
               z: k2,
+              year: year,
+              inst_id: inst_id,
               exam_name: exam_name,
+              flag: flag,
               mark: mark,
               mark1: mark1,
               class_id: payload["class_id"],
@@ -3449,7 +3466,7 @@ defmodule SchoolWeb.UserChannel do
 
       {:reply, {:ok, %{html: html}}, socket}
     else
-      level_id = payload["level_id"] |> String.to_integer()
+      level_id = payload["class_id"] |> String.to_integer()
       inst_id = payload["institution_id"] |> String.to_integer()
 
       exam_mark =
@@ -3468,7 +3485,7 @@ defmodule SchoolWeb.UserChannel do
             on: p.id == e.subject_id,
             where:
               c.level_id == ^level_id and g.institution_id == ^inst_id and
-                s.institution_id == ^inst_id and p.institution_id == ^inst_id,
+                s.institution_id == ^inst_id and p.institution_id == ^inst_id and g.year == ^year,
             select: %{
               class_id: c.id,
               class_name: c.name,
@@ -3479,7 +3496,8 @@ defmodule SchoolWeb.UserChannel do
               student_mark: e.mark,
               student_grade: e.grade,
               chinese_name: s.chinese_name,
-              level_id: g.level_id
+              level_id: g.level_id,
+              exam_number: g.exam_number
             }
           )
         )
@@ -3540,6 +3558,7 @@ defmodule SchoolWeb.UserChannel do
                   student_mark: 0,
                   chinese_name: data.chinese_name,
                   exam_name: data.exam_name,
+                  exam_number: data.exam_number,
                   all: n_data[data.student_name]
                 }
               end
@@ -3567,6 +3586,7 @@ defmodule SchoolWeb.UserChannel do
                           student_mark: Decimal.to_float(data.student_mark),
                           chinese_name: data.chinese_name,
                           exam_name: data.exam_name,
+                          exam_number: data.exam_number,
                           all: n_data[data.student_name]
                         }
                       end
@@ -3587,6 +3607,7 @@ defmodule SchoolWeb.UserChannel do
                     student_mark: 0.0,
                     chinese_name: data.chinese_name,
                     exam_name: data.exam_name,
+                    exam_number: data.exam_number,
                     all: n_data[data.student_name]
                   }
                 end
@@ -3629,6 +3650,7 @@ defmodule SchoolWeb.UserChannel do
           student_id = new |> elem(1) |> Enum.map(fn x -> x.student_id end) |> Enum.uniq() |> hd
 
           exam_name = new |> elem(1) |> Enum.map(fn x -> x.exam_name end) |> Enum.uniq() |> hd
+          exam_number = new |> elem(1) |> Enum.map(fn x -> x.exam_number end) |> Enum.uniq() |> hd
           class_name = new |> elem(1) |> Enum.map(fn x -> x.class_name end) |> Enum.uniq() |> hd
 
           chinese_name =
@@ -3654,7 +3676,8 @@ defmodule SchoolWeb.UserChannel do
             per: per,
             total_per: total_per,
             total_average: total_average,
-            exam_name: exam_name
+            exam_name: exam_name,
+            exam_number: exam_number
           }
         end
 
@@ -3669,7 +3692,7 @@ defmodule SchoolWeb.UserChannel do
             for mark <- d.subject do
               tot =
                 mark.all
-                |> Enum.map(fn x -> x.student_mark |> Decimal.to_integer() end)
+                |> Enum.map(fn x -> x.student_mark |> Decimal.to_float() end)
                 |> Enum.sum()
 
               per = mark.all |> Enum.map(fn x -> x.student_mark end) |> Enum.count()
@@ -3695,6 +3718,7 @@ defmodule SchoolWeb.UserChannel do
             class_name = item |> Enum.map(fn x -> x.class_name end) |> Enum.uniq() |> hd
             class_id = item |> Enum.map(fn x -> x.class_id end) |> Enum.uniq() |> hd
             exam_name = item |> Enum.map(fn x -> x.exam_name end) |> Enum.uniq() |> hd
+            exam_number = item |> Enum.map(fn x -> x.exam_number end) |> Enum.uniq() |> hd
             chinese_name = item |> Enum.map(fn x -> x.chinese_name end) |> Enum.uniq() |> hd
 
             %{
@@ -3707,6 +3731,7 @@ defmodule SchoolWeb.UserChannel do
               class_name: class_name,
               class_id: class_id,
               exam_name: exam_name,
+              exam_number: exam_number,
               chinese_name: chinese_name
             }
           end
@@ -3733,6 +3758,7 @@ defmodule SchoolWeb.UserChannel do
               rank: rank,
               total_average: y.total_average,
               exam_name: y.exam_name,
+              exam_number: y.exam_number,
               avg_mark: y.avg_mark,
               all_mark: y.all_mark
             }
@@ -3752,7 +3778,7 @@ defmodule SchoolWeb.UserChannel do
             for mark <- d.subject do
               tot =
                 mark.all
-                |> Enum.map(fn x -> x.student_mark |> Decimal.to_integer() end)
+                |> Enum.map(fn x -> x.student_mark |> Decimal.to_float() end)
                 |> Enum.sum()
 
               per = mark.all |> Enum.map(fn x -> x.student_mark end) |> Enum.count()
@@ -3779,6 +3805,7 @@ defmodule SchoolWeb.UserChannel do
             class_name = item |> Enum.map(fn x -> x.class_name end) |> Enum.uniq() |> hd
             class_id = item |> Enum.map(fn x -> x.class_id end) |> Enum.uniq() |> hd
             exam_name = item |> Enum.map(fn x -> x.exam_name end) |> Enum.uniq() |> hd
+            exam_number = item |> Enum.map(fn x -> x.exam_number end) |> Enum.uniq() |> hd
             chinese_name = item |> Enum.map(fn x -> x.chinese_name end) |> Enum.uniq() |> hd
 
             %{
@@ -3794,6 +3821,7 @@ defmodule SchoolWeb.UserChannel do
               class_name: class_name,
               class_id: class_id,
               exam_name: exam_name,
+              exam_number: exam_number,
               chinese_name: chinese_name,
               avg_all_mark: avg_all_mark
             }
@@ -3833,6 +3861,7 @@ defmodule SchoolWeb.UserChannel do
                 class_name: p.class_name,
                 class_id: p.class_id,
                 exam_name: p.exam_name,
+                exam_number: p.exam_number,
                 chinese_name: p.chinese_name,
                 avg_all_mark: p.avg_all_mark,
                 class_rank: class_rank
@@ -3841,6 +3870,7 @@ defmodule SchoolWeb.UserChannel do
           end
         end
         |> List.flatten()
+        |> Enum.sort_by(fn x -> x.exam_number end)
         |> Enum.group_by(fn x -> %{a: x.rank, b: x.name} end)
 
       mark = mark1 |> Enum.group_by(fn x -> x.subject_code end)
@@ -3857,7 +3887,10 @@ defmodule SchoolWeb.UserChannel do
               SchoolWeb.ExamView,
               "mark_analyse_subject.html",
               z: k2,
+              year: year,
+              inst_id: inst_id,
               exam_name: exam_name,
+              flag: flag,
               mark: mark,
               mark1: mark1,
               class_id: payload["class_id"],
@@ -3891,11 +3924,14 @@ defmodule SchoolWeb.UserChannel do
       )
       |> Enum.uniq()
 
+    year = Repo.all(from(y in School.Affairs.Semester, select: %{year: y.year}))
+
     html =
       Phoenix.View.render_to_string(
         SchoolWeb.ExamView,
         "exam_analysis_standard_filter.html",
         subject: subject,
+        year: year,
         exam: exam,
         csrf: payload["csrf"]
       )
@@ -3907,6 +3943,7 @@ defmodule SchoolWeb.UserChannel do
     standard_id = payload["standard_id"]
     subject_id = payload["subject_id"]
     institution_id = payload["institution_id"]
+    e_year = payload["year"]
 
     standard =
       Repo.get_by(School.Affairs.Level, %{
@@ -3941,7 +3978,7 @@ defmodule SchoolWeb.UserChannel do
           on: r.id == s.class_id,
           left_join: d in School.Affairs.Level,
           on: r.level_id == d.id,
-          where: r.level_id == ^standard_id and p.id == ^subject_id,
+          where: t.year == ^e_year and r.level_id == ^standard_id and p.id == ^subject_id,
           select: %{
             class_name: r.name,
             subject_code: p.code,
@@ -4094,7 +4131,8 @@ defmodule SchoolWeb.UserChannel do
             group_exam: group_exam,
             subject_name: subject.description,
             institution_name: institution.name,
-            year: year
+            year: year,
+            e_year: e_year
           )
       else
         html = "No Data for Analysis"

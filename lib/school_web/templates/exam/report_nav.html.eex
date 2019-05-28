@@ -24,12 +24,12 @@
                         </a>
                         <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" href="/exam_result_analysis_class">
                            <span class="circle bg-warning mr-2"></span>
-                           <span>Exam Analysis Class</span>
+                           <span>Exam Analysis Standard/Class</span>
                            <span class="ml-auto badge"> <em class="fa-2x far fa-list-alt text-success"></em></span>
                         </a>
                         <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center rounded-0" href="/exam_result_analysis_standard">
                            <span class="circle bg-purple mr-2"></span>
-                           <span>Exam Analysis Standard</span>
+                           <span>Exam Analysis Subject</span>
                            <span class="ml-auto badge"> <em class="fa-2x far fa-list-alt text-danger"></em></span>
                         </a>
                         <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center rounded-0" href="/student_report_by_cocurriculum">

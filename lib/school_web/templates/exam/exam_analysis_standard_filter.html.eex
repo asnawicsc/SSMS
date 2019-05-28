@@ -2,40 +2,67 @@
         
     <input type="hidden" name="_csrf_token" value="<%= @csrf %>">
 
-                        <label class="bmd-label-floating"><%= gettext "Subject Name" %></label>
-                       <select class="custom-select -custom-select-sm" onchange="getval99(this)"  name="exam_analysis_standard_result_id" required="" >
-                        <option selected="selected">Choose a Subject</option>
-                           <%= for a <- @subject do %>
-                                            <option value="<%= a.sub_id %>" ><%= a.sub_name %>
-                                            </option>
-                                          <% end %>
-                                        </select>
-               
-              
+    <label class="bmd-label-floating"><%= gettext "Subject Name" %></label>
+   <select id="sel_subject" class="custom-select -custom-select-sm" onchange="getval99(this)"  name="exam_analysis_standard_result_id" required="" >
+    <option selected="selected">Choose a Subject</option>
+       <%= for a <- @subject do %>
+                        <option value="<%= a.sub_id %>" ><%= a.sub_name %>
+                        </option>
+                      <% end %>
+                    </select>
+
+<div id="sel_year" style="display: none;">
+   <label class="bmd-label-floating"><%= gettext "Year" %></label>
+     <select id ="year_val" class="custom-select -custom-select-sm" name="exam_analysis_standard_result_id" required="" >
+      <option selected="selected">Choose a Year</option>
+         <%= for a <- @year do %>
+      <option value="<%= a.year %>" ><%= a.year %>
+      </option>
+    <% end %>
+  </select>
+</div>
+
+<div style="display: none;" id="gen" class="form-group col-md-3">
+    <input align="left" type="submit" class="btn btn-primary btn-sm " name="" value="Generate!">
+</div>
+    
+                
 
 
 <script type="text/javascript">
 
 
- function getval99(sel)
-{
-    console.log("received")
-    d=sel.value
+  $("#sel_subject").change(function(){
+    $("#sel_year").show()
+  })
+
+
+  $("#sel_year").change(function(){
+    $("#gen").show()
+  })
+
+
+ $("#gen").click(function(){
+    d= $("#sel_subject").val()
+    year = $("#year_val").val()
+    console.log(year)
 
  var csrf= $("input[name='_csrf_token']").val() ;
 
        channel.push("exam_result_analysis_standard2", 
         {csrf: csrf, institution_id: window.currentInstitute ,
           subject_id: d,
+          year: year,
           standard_id: localStorage.getItem("exam_analysis_result_standard"),
           user_id: window.currentUser})
 
        .receive("ok", payload => {
             $("div#exam_record_analysis_standard").html(payload.html);
-            console.log("received")
+            
         })
 
 
-    }
+    })
+
 
 </script>
