@@ -14,7 +14,12 @@
           <input type="hidden" name="standard_id" value="<%= @co_level %>">
 
          <input type="hidden" name="semester_id" value="<%= @co_semester %>">
-         <input type="hidden" name="class" value="<%= @class %>">
+
+
+         <%= for a <- @class |> Enum.with_index(1) do %>
+         <input type="hidden" name="<%= elem(a , 0)%>" value="<%= elem(a , 1) %>">
+         <%end%>
+
          <input type="hidden" name="sort_by" value="<%= @sort_by %>">
          <input type="hidden" name="type" value="<%= @type %>">
 

@@ -1,95 +1,470 @@
-
 <style>
   table, th, td {
     border: 1px solid black;
     border-collapse: collapse;
   }
-  th, td {
-    padding: 5px;
+  tr, th, td {
+    padding: 1px;
+    text-align: center;
+    font-size: 10px;
   }
   th {
-    text-align: left;
+    text-align: center;
   }
 </style>
 
 
-<b><%= @institution.name %></b>
+<Br>
+  
+  <tbody>
 
-<br>
+<b><%= @institution.name %></b>
 
 <% date = Date.utc_today() %>
 <div style="float: right;"><%= date.day %>-<%= date.month %>-<%= date.year %></div><br>
 
-  
-    <table  class="table"  align="center" width="100%">
-      <tr align="center">
+<table>
+  <tr align="center">
        
-        <th >No</th>     
-        <th >Name</th>
+        <th>No</th>     
+        <th>Name</th>
         <th>Class</th>
-        <th>Sem(Exam)</th>
-        <%= for item <- @mark|>Enum.sort_by(fn x -> x end) do %>      
-        <th align="center" colspan="1"><%= item|>elem(0) %></th>
-        <% end %>
+        <th>Sem</th>
+        <th>BCF</th>
+        <th>BCT</th>
+        <th>BCL</th>
+        <th>BCB</th>
+        <th>BMF</th>
+        <th>BMT</th>
+        <th>BML</th>
+        <th>BMB</th>
+        <th>BIF</th>
+        <th>BIT</th>
+        <th>BIL</th>
+        <th>BIB</th>
+        <th>Math</th>
+        <th>AGM/PM</th>
+        <th>Sains</th>
+        <th>Muzik</th>
+        <th>DSV</th>
+        <th>PJ</th>
+        <th>PK</th>
+        <th>Sjr</th>
+        <th>TMK</th>
+        <th>RBT</th>
         <th>Jumlah</th>
         <th>Purata</th>
         <th>KDK</th>
         <th>KDD</th>
-        <th>Lulus</th>
-         
+        <th>Lulus</th>        
       </tr>
 
-      <% keys = @z |> Map.keys() %>
 
-        <%= for key <- keys |> Enum.with_index(1) do %>
-        
-         <% y = elem(key, 0) %>
-         <% x = @z[y] %>   
+      <%keys = Map.keys(@new_mark)%>
+
+      <%= for key <- keys |> Enum.with_index(1) do %>
+
+        <% xx = @new_mark[elem(key, 0)] %>
+
+        <% y = xx |> Enum.group_by(fn x -> x.semester end)%>
+
+        <% keys2 = Map.keys(y)%>
+
+        <%= for key2 <- keys2 |> Enum.with_index(1) do %>
+
+          <% x = y[elem(key2, 0)] %>
+
+          <% name = x |> Enum.map(fn x -> x.name end) |> Enum.uniq()%>
+          <% class = x |> Enum.map(fn x -> x.class end) |> Enum.uniq()%>
+          <% sem = x |> Enum.map(fn x -> x.semester end) |> Enum.uniq()%>
+
+          <% bcf = if x |> Enum.filter(fn x -> x.code == "BCF" end) |> Enum.map(fn x -> x.g1 end) != ["TH"] do
+            bcf =  x |> Enum.filter(fn x -> x.code == "BCF" end) |> Enum.map(fn x -> x.m1 end)
+           else
+            bcf =  x |> Enum.filter(fn x -> x.code == "BCF" end) |> Enum.map(fn x -> x.g1 end)
+          end%>
+
+
+          <% bct = if x |> Enum.filter(fn x -> x.code == "BCT" end) |> Enum.map(fn x -> x.g1 end) != ["TH"] do
+           bct =  x |> Enum.filter(fn x -> x.code == "BCT" end) |> Enum.map(fn x -> x.m1 end)
+           else
+            bct =  x |> Enum.filter(fn x -> x.code == "BCT" end) |> Enum.map(fn x -> x.g1 end)       
+          end%>
+
+
+          <% bcl = x |> Enum.filter(fn x -> x.code == "BCL" end)|> Enum.map(fn x -> x.g1 end) %>
+
+          <% bcb = x |> Enum.filter(fn x -> x.code == "BCB" end)|> Enum.map(fn x -> x.g1 end) %>
+
+          <% bmf = 
+            if x |> Enum.filter(fn x -> x.code == "BMF" end) |> Enum.map(fn x -> x.g1 end) != ["TH"] do 
+           bmf = x |> Enum.filter(fn x -> x.code == "BMF" end) |> Enum.map(fn x -> x.m1 end)
+           else 
+           bmf = x |> Enum.filter(fn x -> x.code == "BMF" end) |> Enum.map(fn x -> x.g1 end)
+          end%>
+
+
+          <% bmt = 
+            if x |> Enum.filter(fn x -> x.code == "BMT" end) |> Enum.map(fn x -> x.g1 end) != ["TH"] do 
+           bmt = x |> Enum.filter(fn x -> x.code == "BMT" end) |> Enum.map(fn x -> x.m1 end)
+           else 
+           bmt = x |> Enum.filter(fn x -> x.code == "BMT" end) |> Enum.map(fn x -> x.g1 end)
+          end%>
+
+          <% bml = x |> Enum.filter(fn x -> x.code == "BML" end)|> Enum.map(fn x -> x.g1 end) %>
+
+          <% bmb = x |> Enum.filter(fn x -> x.code == "BMB" end)|> Enum.map(fn x -> x.g1 end) %>
+
+
+          <% bif = 
+            if x |> Enum.filter(fn x -> x.code == "BIF" end) |> Enum.map(fn x -> x.g1 end) != ["TH"] do 
+           bif = x |> Enum.filter(fn x -> x.code == "BIF" end) |> Enum.map(fn x -> x.m1 end)
+           else 
+           bif = x |> Enum.filter(fn x -> x.code == "BIF" end) |> Enum.map(fn x -> x.g1 end)
+          end%>
+
+          <% bit = 
+            if x |> Enum.filter(fn x -> x.code == "BIT" end) |> Enum.map(fn x -> x.g1 end) != ["TH"] do 
+           bit = x |> Enum.filter(fn x -> x.code == "BIT" end) |> Enum.map(fn x -> x.m1 end)
+           else 
+           bit = x |> Enum.filter(fn x -> x.code == "BIT" end) |> Enum.map(fn x -> x.g1 end)
+          end%>
+
+          <% bil = x |> Enum.filter(fn x -> x.code == "BIL" end)|> Enum.map(fn x -> x.g1 end) %>
+
+          <% bib = x |> Enum.filter(fn x -> x.code == "BIB" end)|> Enum.map(fn x -> x.g1 end) %>
+
+           <% math = 
+            if x |> Enum.filter(fn x -> x.code == "MAT" end) |> Enum.map(fn x -> x.g1 end) != ["TH"] do 
+           math = x |> Enum.filter(fn x -> x.code == "MAT" end) |> Enum.map(fn x -> x.m1 end)
+           else 
+           math = x |> Enum.filter(fn x -> x.code == "MAT" end) |> Enum.map(fn x -> x.g1 end)
+          end%>
+
+          <% agm = 
+            if x |> Enum.filter(fn x -> x.code == "AGM" end) |> Enum.map(fn x -> x.g1 end) != ["TH"] do 
+           agm = x |> Enum.filter(fn x -> x.code == "AGM" or x.code == "PM" end) |> Enum.map(fn x -> x.m1 |> String.to_integer() end) |> Enum.sum()
+           else 
+           agm = x |> Enum.filter(fn x -> x.code == "AGM" end) |> Enum.map(fn x -> x.g1 end)
+          end%>
+
+           <% sn = 
+            if x |> Enum.filter(fn x -> x.code == "SN" end) |> Enum.map(fn x -> x.g1 end) != ["TH"] do 
+           sn = x |> Enum.filter(fn x -> x.code == "SN" end) |> Enum.map(fn x -> x.m1 end)
+           else 
+           sn = x |> Enum.filter(fn x -> x.code == "SN" end) |> Enum.map(fn x -> x.g1 end)
+          end%>
+
+          <% mz = x |> Enum.filter(fn x -> x.code == "MZ" end)|> Enum.map(fn x -> x.g1 end) %>
+
+          <% dsv = x |> Enum.filter(fn x -> x.code == "DSV" end)|> Enum.map(fn x -> x.g1 end) %>
+
+          <% pj = x |> Enum.filter(fn x -> x.code == "PJ" end)|> Enum.map(fn x -> x.g1 end) %>
+
+          <% pk = x |> Enum.filter(fn x -> x.code == "PK" end)|> Enum.map(fn x -> x.g1 end) %>
+
+
+          <% sj = 
+            if x |> Enum.filter(fn x -> x.code == "SJ" end) |> Enum.map(fn x -> x.g1 end) != ["TH"] do 
+           sj = x |> Enum.filter(fn x -> x.code == "SJ" end) |> Enum.map(fn x -> x.m1 end)
+           else 
+           sj = x |> Enum.filter(fn x -> x.code == "SJ" end) |> Enum.map(fn x -> x.g1 end)
+          end%>
+
+          <% tmk = x |> Enum.filter(fn x -> x.code == "TMK" end)|> Enum.map(fn x -> x.g1 end) %>
+
+          <% rbt = x |> Enum.filter(fn x -> x.code == "RBT" end)|> Enum.map(fn x -> x.g1 end) %>
+
+          <% total = x |> Enum.filter(fn x -> x.code == "TOTAL" end)|> Enum.map(fn x -> x.m1 end) %>
+
+          <% total_average = x |> Enum.filter(fn x -> x.code == "AVERG" end)|> Enum.map(fn x -> x.m1 end) %>
+
+          <% class_rank = x |> Enum.filter(fn x -> x.code == "CRANK" end)|> Enum.map(fn x -> x.m1 end) %>
+
+          <% std_rank = x |> Enum.filter(fn x -> x.code == "SRANK" end)|> Enum.map(fn x -> x.m1 end) %>
+
+          <% num_pass = x |> Enum.filter(fn x -> x.code == "BCF" || x.code == "BCT" || x.code == "BMF" || x.code == "BMT" || x.code == "BIF" || x.code == "BIT" || x.code == "MATH" || x.code == "AGM" || x.code == "PM" || x.code == "SN" || x.code == "SJ" end) |> Enum.map(fn x -> x.m1 |> Float.parse() |> elem(0) end) |> Enum.count(fn x -> x >= 40 end)%>
+
+          <% abs = x |> Enum.filter(fn x -> x.g1 == "TH" end) |> Enum.count() %>
+
           
-            <%= for sub <- x |> Enum.with_index() do %>
-            <tr >
-              <% p = elem(sub, 0)%>
-              <td style="border-bottom: 0; border-top: 0;"> <%= if elem(sub,1) == 0, do: elem(key,1), else: "" %></td>
-              <td style="border-bottom: 0; border-top: 0;"> <%= if elem(sub,1) == 0, do: y.b, else: "" %></td>
-              <td style="border-bottom: 0; border-top: 0;"><%= if elem(sub,1) == 0, do: p.class_name, else: ""  %></td>
-              <td style="border-bottom: 0; border-top: 0;"><%= p.exam_name %></td>
+          <%= if @sem == "ALL SEMESTER" do %>
+            <tr>
+              <td style="border-bottom: 0; border-top: 0;"><%= if elem(key2, 1) == 1 do elem(key , 1) else "" end%></td>
+              <td style="border-bottom: 0; border-top: 0;"><%= if elem(key2, 1) == 1 do name else "" end %></td>
+              <td style="border-bottom: 0; border-top: 0;"><%= if elem(key2, 1) == 1 do class else "" end %></td>
+              <td style="border-bottom: 0; border-top: 0;"><%= sem %></td>
+              <td style="border-bottom: 0; border-top: 0;"><%= if bcf != [nil] do bcf else "" end %></td>
+              <td style="border-bottom: 0; border-top: 0;"><%= if bct != [nil] do bct else "" end %></td>
+              <td style="border-bottom: 0; border-top: 0;"><%= if bcl != [nil] do bcl else "" end %></td>
+              <td style="border-bottom: 0; border-top: 0;"><%= if bcb != [nil] do bcb else "" end %></td>
+              <td style="border-bottom: 0; border-top: 0;"><%= if bmf != [nil] do bmf else "" end %></td>
+              <td style="border-bottom: 0; border-top: 0;"><%= if bmt != [nil] do bmt else "" end %></td>
+              <td style="border-bottom: 0; border-top: 0;"><%= if bml != [nil] do bml else "" end%></td>
+              <td style="border-bottom: 0; border-top: 0;"><%= if bmb != [nil] do bmb else "" end%></td>
+              <td style="border-bottom: 0; border-top: 0;"><%= if bif != [nil] do bif else "" end %></td>
+              <td style="border-bottom: 0; border-top: 0;"><%= if bit != [nil] do bit else "" end %></td>
+              <td style="border-bottom: 0; border-top: 0;"><%= if bil != [nil] do bil else "" end %></td>
+              <td style="border-bottom: 0; border-top: 0;"><%= if bib != [nil] do bib else "" end %></td>
+              <td style="border-bottom: 0; border-top: 0;"><%= if math != [nil] do math else "" end %></td>
+              <td style="border-bottom: 0; border-top: 0;"><%= if agm != [nil] do agm else "" end %></td>
+              <td style="border-bottom: 0; border-top: 0;"><%= if sn != [nil] do sn else "" end %></td>
+              <td style="border-bottom: 0; border-top: 0;"><%= if mz != [nil] do mz else "" end %></td>
+              <td style="border-bottom: 0; border-top: 0;"><%= if dsv != [nil] do dsv else "" end %></td>
+              <td style="border-bottom: 0; border-top: 0;"><%= if pj != [nil] do pj else "" end %></td>
+              <td style="border-bottom: 0; border-top: 0;"><%= if pk != [nil] do pk else "" end %></td>
+              <td style="border-bottom: 0; border-top: 0;"><%= if sj != [nil] do sj else "" end %></td>
+              <td style="border-bottom: 0; border-top: 0;"><%= if tmk != [nil] do tmk else "" end %></td>
+              <td style="border-bottom: 0; border-top: 0;"><%= if rbt != [nil] do rbt else "" end %></td>
+              <td style="border-bottom: 0; border-top: 0;"><%= total %></td>
+              <td style="border-bottom: 0; border-top: 0;"><%= total_average %></td>
+              <td style="border-bottom: 0; border-top: 0;"><%= if abs == 0 do class_rank else "" end %></td>
+              <td style="border-bottom: 0; border-top: 0;"><%= if abs == 0 do std_rank else "" end %></td> 
+              <td style="border-bottom: 0; border-top: 0;"><%= num_pass %></td> 
+            </tr>
+          <%= else %>
+           <tr>
+              <td style=" border-top: 0;"><%= if elem(key2, 1) == 1 do elem(key , 1) else "" end%></td>
+              <td style=" border-top: 0;"><%= if elem(key2, 1) == 1 do name else "" end %></td>
+              <td style=" border-top: 0;"><%= if elem(key2, 1) == 1 do class else "" end %></td>
+              <td style=" border-top: 0;"><%= sem %></td>
+              <td style=" border-top: 0;"><%= if bcf != [nil] do bcf else "" end %></td>
+              <td style=" border-top: 0;"><%= if bct != [nil] do bct else "" end %></td>
+              <td style=" border-top: 0;"><%= if bcl != [nil] do bcl else "" end %></td>
+              <td style=" border-top: 0;"><%= if bcb != [nil] do bcb else "" end %></td>
+              <td style=" border-top: 0;"><%= if bmf != [nil] do bmf else "" end %></td>
+              <td style=" border-top: 0;"><%= if bmt != [nil] do bmt else "" end %></td>
+              <td style=" border-top: 0;"><%= if bml != [nil] do bml else "" end%></td>
+              <td style=" border-top: 0;"><%= if bmb != [nil] do bmb else "" end%></td>
+              <td style=" border-top: 0;"><%= if bif != [nil] do bif else "" end %></td>
+              <td style=" border-top: 0;"><%= if bit != [nil] do bit else "" end %></td>
+              <td style=" border-top: 0;"><%= if bil != [nil] do bil else "" end %></td>
+              <td style=" border-top: 0;"><%= if bib != [nil] do bib else "" end %></td>
+              <td style=" border-top: 0;"><%= if math != [nil] do math else "" end %></td>
+              <td style=" border-top: 0;"><%= if agm != [nil] do agm else "" end %></td>
+              <td style=" border-top: 0;"><%= if sn != [nil] do sn else "" end %></td>
+              <td style=" border-top: 0;"><%= if mz != [nil] do mz else "" end %></td>
+              <td style=" border-top: 0;"><%= if dsv != [nil] do dsv else "" end %></td>
+              <td style=" border-top: 0;"><%= if pj != [nil] do pj else "" end %></td>
+              <td style=" border-top: 0;"><%= if pk != [nil] do pk else "" end %></td>
+              <td style=" border-top: 0;"><%= if sj != [nil] do sj else "" end %></td>
+              <td style=" border-top: 0;"><%= if tmk != [nil] do tmk else "" end %></td>
+              <td style=" border-top: 0;"><%= if rbt != [nil] do rbt else "" end %></td>
+              <td style=" border-top: 0;"><%= total %></td>
+              <td style=" border-top: 0;"><%= total_average %></td>
+              <td style=" border-top: 0;"><%= if abs == 0 do class_rank else "" end %></td>
+              <td style=" border-top: 0;"><%= if abs == 0 do std_rank else "" end %></td> 
+              <td style=" border-top: 0;"><%= num_pass %></td> 
+            </tr>
+          <%end%>
+        <% end %>
 
-              <%= for subject2 <- p.subject do %>
-                <td style="border-bottom: 0; border-top: 0;"><%= subject2.student_mark %></td>
-              <%end%>
+        <%= if @sem == "ALL SEMESTER" do %>
 
-              <td style="border-bottom: 0; border-top: 0;"><%= p.total_mark %></td>
-              <td style="border-bottom: 0; border-top: 0;"><%= p.total_average %></td>
-              <td style="border-bottom: 0; border-top: 0;"></td>
-              <td style="border-bottom: 0; border-top: 0;"></td>
-              <td style="border-bottom: 0; border-top: 0;"></td>
-          </tr>
+          <% bcf = if xx |> Enum.filter(fn x -> x.code == "BCF" end) |> Enum.map(fn x -> x.g1 end) != ["TH"] do
+            num = xx |> Enum.filter(fn x -> x.code == "BCF" end) |> Enum.map(fn x -> x.m1 end) |> Enum.count()
+            if num != 0 do
+              bcf =  (xx |> Enum.filter(fn x -> x.code == "BCF" end) |> Enum.map(fn x -> x.m1 |> Float.parse() |> elem(0) end) |> Enum.sum())/num
+            else bcf = 0
+            end
+           else
+            bcf =  0
+          end%>
+
+           <% bct = if xx |> Enum.filter(fn x -> x.code == "BCT" end) |> Enum.map(fn x -> x.g1 end) != ["TH"] do
+            num = xx |> Enum.filter(fn x -> x.code == "BCT" end) |> Enum.map(fn x -> x.m1 end) |> Enum.count()
+            if num != 0 do
+              bct =  (xx |> Enum.filter(fn x -> x.code == "BCT" end) |> Enum.map(fn x -> x.m1 |> Float.parse() |> elem(0) end) |> Enum.sum())/num
+            else 
+              bct = 0
+            end
+           else
+            bct =  0
+          end%>
+
+
+          <% bcl = xx |> Enum.filter(fn x -> x.code == "BCL" end)|> Enum.map(fn x -> x.g1 end) |> Enum.sort_by(fn x -> x end) |> List.first() %>
+
+          <% bcb = xx |> Enum.filter(fn x -> x.code == "BCB" end)|> Enum.map(fn x -> x.g1 end) |> Enum.sort_by(fn x -> x end) |> List.first() %>
+
+          <% bmf = 
+            if xx |> Enum.filter(fn x -> x.code == "BMF" end) |> Enum.map(fn x -> x.g1 end) != ["TH"] do
+              num = xx |> Enum.filter(fn x -> x.code == "BMF" end) |> Enum.map(fn x -> x.m1  end) |> Enum.count()
+              if num != 0 do
+                bmf = (xx |> Enum.filter(fn x -> x.code == "BMF" end) |> Enum.map(fn x -> x.m1 |> Float.parse() |> elem(0) end) |> Enum.sum())/num
+              else 
+                bmf = 0
+              end
+           else 
+           bmf = 0
+          end%>
+
+          <% bmt = 
+            if xx |> Enum.filter(fn x -> x.code == "BMT" end) |> Enum.map(fn x -> x.g1 end) != ["TH"] do 
+              num = xx |> Enum.filter(fn x -> x.code == "BMT" end) |> Enum.map(fn x -> x.m1  end) |> Enum.count()
+              if num != 0 do
+                bmt = (xx |> Enum.filter(fn x -> x.code == "BMT" end) |> Enum.map(fn x -> x.m1 |> Float.parse() |> elem(0) end) |> Enum.sum())/num
+              else
+                bmt = 0
+              end
+           else 
+              bmt = 0
+          end%>
+
+          <% bml = xx |> Enum.filter(fn x -> x.code == "BML" end)|> Enum.map(fn x -> x.g1 end) |> Enum.sort_by(fn x -> x end) |> List.first() %>
+
+           <% bmb = xx |> Enum.filter(fn x -> x.code == "BMB" end)|> Enum.map(fn x -> x.g1 end) |> Enum.sort_by(fn x -> x end) |> List.first() %>
+
+
+          <% bif = 
+            if xx |> Enum.filter(fn x -> x.code == "BIF" end) |> Enum.map(fn x -> x.g1 end) != ["TH"] do 
+              num = xx |> Enum.filter(fn x -> x.code == "BIF" end) |> Enum.map(fn x -> x.m1  end) |> Enum.count()
+              if num != 0 do
+                bif = (xx |> Enum.filter(fn x -> x.code == "BIF" end) |> Enum.map(fn x -> x.m1 |> Float.parse() |> elem(0) end) |> Enum.sum())/num
+              else bif = 0
+              end
+           else 
+           bif = 0
+          end%>
+
+          <% bit = 
+            if xx |> Enum.filter(fn x -> x.code == "BIT" end) |> Enum.map(fn x -> x.g1 end) != ["TH"] do 
+              num = xx |> Enum.filter(fn x -> x.code == "BIT" end) |> Enum.map(fn x -> x.m1  end) |> Enum.count()
+              if num != 0 do
+                bit = (xx |> Enum.filter(fn x -> x.code == "BIT" end) |> Enum.map(fn x -> x.m1 |> Float.parse() |> elem(0) end) |> Enum.sum())/num
+              else 
+                bit = 0
+              end
+           else 
+           bit = 0
+          end%>
+
+          <% bil = xx |> Enum.filter(fn x -> x.code == "BIL" end)|> Enum.map(fn x -> x.g1 end) |> Enum.sort_by(fn x -> x end) |> List.first() %>
+
+          <% bib = xx |> Enum.filter(fn x -> x.code == "BIB" end)|> Enum.map(fn x -> x.g1 end) |> Enum.sort_by(fn x -> x end) |> List.first() %>
+
+           <% math = 
+            if xx |> Enum.filter(fn x -> x.code == "MAT" end) |> Enum.map(fn x -> x.g1 end) != ["TH"] do 
+              num = xx |> Enum.filter(fn x -> x.code == "MAT" end) |> Enum.map(fn x -> x.m1  end) |> Enum.count()
+              if num != 0 do
+                math = (xx |> Enum.filter(fn x -> x.code == "MAT" end) |> Enum.map(fn x -> x.m1 |> Float.parse() |> elem(0) end) |> Enum.sum())/num
+              else
+                math = 0
+              end     
+           else 
+           math = 0
+          end%>
+
+          <% agm = 
+            if xx |> Enum.filter(fn x -> x.code == "AGM" end) |> Enum.map(fn x -> x.g1 end) != ["TH"] do 
+            num = (xx |> Enum.filter(fn x -> x.code == "AGM" or x.code == "PM" end) |> Enum.map(fn x -> x.m1  end) |> Enum.count())/2
+            if num != 0 do
+              agm = (xx |> Enum.filter(fn x -> x.code == "AGM" or x.code == "PM" end) |> Enum.map(fn x -> x.m1 |> Float.parse() |> elem(0) end) |> Enum.sum())/num
+            else
+              agm = 0
+            end
+           else 
+           agm = 0
+          end%>
+
+           <% sn = 
+            if xx |> Enum.filter(fn x -> x.code == "SN" end) |> Enum.map(fn x -> x.g1 end) != ["TH"] do 
+              num = xx |> Enum.filter(fn x -> x.code == "SN" end) |> Enum.map(fn x -> x.m1  end) |> Enum.count()
+              if num != 0 do
+               sn = (xx |> Enum.filter(fn x -> x.code == "SN" end) |> Enum.map(fn x -> x.m1 |> Float.parse() |> elem(0) end) |> Enum.sum())/num
+             else
+              sn = 0
+             end
+           else 
+           sn = 0
+          end%>
+
+          <% mz = xx |> Enum.filter(fn x -> x.code == "MZ" end)|> Enum.map(fn x -> x.g1 end) |> Enum.sort_by(fn x -> x end) |> List.first() %>
+
+          <% dsv = xx |> Enum.filter(fn x -> x.code == "DSV" end)|> Enum.map(fn x -> x.g1 end) |> Enum.sort_by(fn x -> x end) |> List.first() %>
+
+          <% pj = xx |> Enum.filter(fn x -> x.code == "PJ" end)|> Enum.map(fn x -> x.g1 end) |> Enum.sort_by(fn x -> x end) |> List.first() %>
+
+          <% pk = xx |> Enum.filter(fn x -> x.code == "PK" end)|> Enum.map(fn x -> x.g1 end) |> Enum.sort_by(fn x -> x end) |> List.first() %>
+
+
+          <% sj = 
+            if xx |> Enum.filter(fn x -> x.code == "SJ" end) |> Enum.map(fn x -> x.g1 end) != ["TH"] do 
+              num = xx |> Enum.filter(fn x -> x.code == "SJ" end) |> Enum.map(fn x -> x.m1  end) |> Enum.count()
+             if num != 0 do
+               sj = (xx |> Enum.filter(fn x -> x.code == "SJ" end) |> Enum.map(fn x -> x.m1 |> Float.parse() |> elem(0) end) |> Enum.sum())/num
+             else 
+              sj = 0
+             end
+           else 
+           sj = 0
+          end%>
+
+          <% tmk = xx |> Enum.filter(fn x -> x.code == "TMK" end)|> Enum.map(fn x -> x.g1 end) |> Enum.sort_by(fn x -> x end) |> List.first() %>
+
+          <% rbt = xx |> Enum.filter(fn x -> x.code == "RBT" end)|> Enum.map(fn x -> x.g1 end) |> Enum.sort_by(fn x -> x end) |> List.first() %>
+
+
+         
+          <% filter_abs = [bcf, bct, bmf, bmt, bif, bit, math, agm, sn, sj] |> Enum.filter(fn x -> x != 0 end) |> Enum.count() %>
+         
+
+          <% filter_abs = if filter_abs == 0 do
+            filter_abs = 1
+          else
+            filter_abs
+          end%>
+
+          <% num_pass = [bcf, bct, bmf, bmt, bif, bit, math, agm, sn, sj] |>Enum.count(fn x -> x >= 40 end) %>
+
+          <% total = bcf + bct + bmf + bmt + bif + bit + math + agm + sn + sj %>
+          <% total_average = (total / filter_abs) |> Float.round(2) %>
+
+          <tr>
+            <td style="border-top: 0;"></td>
+            <td style="border-top: 0;"></td>
+            <td style="border-top: 0;"></td>
+            <td style="border-top: 0;">-</td>
+            <td style="border-top: 0;"><%= if bcf != [nil] do bcf else "" end %></td>
+            <td style="border-top: 0;"><%= if bct != [nil] do bct else "" end %></td>
+            <td style="border-top: 0;"><%= if bcl != [nil] do bcl else "" end %></td>
+            <td style="border-top: 0;"><%= if bcb != [nil] do bcb else "" end %></td>
+            <td style="border-top: 0;"><%= if bmf != [nil] do bmf else "" end %></td>
+            <td style="border-top: 0;"><%= if bmt != [nil] do bmt else "" end %></td>
+            <td style="border-top: 0;"><%= if bml != [nil] do bml else "" end%></td>
+            <td style="border-top: 0;"><%= if bmb != [nil] do bmb else "" end%></td>
+            <td style="border-top: 0;"><%= if bif != [nil] do bif else "" end %></td>
+            <td style="border-top: 0;"><%= if bit != [nil] do bit else "" end %></td>
+            <td style="border-top: 0;"><%= if bil != [nil] do bil else "" end %></td>
+            <td style="border-top: 0;"><%= if bib != [nil] do bib else "" end %></td>
+            <td style="border-top: 0;"><%= if math != [nil] do math else "" end %></td>
+            <td style="border-top: 0;"><%= if agm != [nil] do agm else "" end %></td>
+            <td style="border-top: 0;"><%= if sn != [nil] do sn else "" end %></td>
+            <td style="border-top: 0;"><%= if mz != [nil] do mz else "" end %></td>
+            <td style="border-top: 0;"><%= if dsv != [nil] do dsv else "" end %></td>
+            <td style="border-top: 0;"><%= if pj != [nil] do pj else "" end %></td>
+            <td style="border-top: 0;"><%= if pk != [nil] do pk else "" end %></td>
+            <td style="border-top: 0;"><%= if sj != [nil] do sj else "" end %></td>
+            <td style="border-top: 0;"><%= if tmk != [nil] do tmk else "" end %></td>
+            <td style="border-top: 0;"><%= if rbt != [nil] do rbt else "" end %></td>
+            <td style="border-top: 0;"><%= total %></td>
+            <td style="border-top: 0;"><%= total_average %></td>
+            <td style="border-top: 0;"><%=  %></td>
+            <td style="border-top: 0;"><%=  %></td>
+            <td style="border-top: 0;"><%= num_pass %></td>
+            <%= if num_pass == 10 do %>
+              <td style="border: 0;">  &#10003;</td>
             <%end%>
 
-          <tr style="border-top: 0; border-bottom: 0;">
-            <% sum = x |> hd() %>
-
-              <td style="border-top: 0;"></td>
-              <td style="border-top: 0;"></td>
-              <td style="border-top: 0;"></td>
-              <td style="border-top: 0;">-</td>
-      
-              <%= for mark <- sum.subject do %>
-               <% tot = mark.all |> Enum.map(fn x -> x.student_mark |> Decimal.to_float() end) |> Enum.sum() %>
-               <% per = mark.all |> Enum.map(fn x -> x.student_mark end) |> Enum.count() %>
-               <% val = tot/per%>
-               <td style="border-top: 0;"><%= val %></td>
-              <%end%>
-
-              <td style="border-top: 0;"><%= sum.avg_all_mark %></td>
-              <td style="border-top: 0;"><%= sum.avg_mark %></td>
-              <td style="border-top: 0;"><%= sum.class_rank %></td>
-              <td style="border-top: 0;"><%= sum.rank %></td>
-              <td style="border-top: 0;"><%= sum.num_pass %></td>            
           </tr>
-          
-          <% end %>
+
+        <%end%>
+
+      <%end%>
+
     </table>
 
 
+
+</html>
 

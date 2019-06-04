@@ -1,0 +1,10 @@
+ <div  id="semester">
+  <label class="bmd-label-floating"><%= gettext "Semeter" %></label>
+    <select id = "sem" class="custom-select -custom-select-sm" class="select" required="required" >
+         <option selected="selected">ALL SEMESTER</option>
+           <%= for a <- @sem |> Enum.uniq() |> Enum.sort_by(fn x -> x.sem_id end) |> Enum.filter(fn x -> x.sem_id != nil end) do %>
+                            <option value="<%= a.sem_id %>" ><%= a.sem_id %>
+                            </option>
+            <% end %>
+    </select>
+</div>

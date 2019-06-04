@@ -46,10 +46,18 @@
 
         <input type="hidden" name="year" value="<%= @year %>">
         <input type="hidden" name="e_year" value="<%= @e_year %>">
+        
+
+        <%= for a <- @exam_id |> Enum.with_index(1) do %>
+        <input type="hidden" name="<%= elem(a, 1)%>" value="<%= elem(a, 0)%>">
+        <% end %>
+
         <input type="hidden" name="_csrf_token" value="<%= @csrf %>">
         <input align="left"  class="btn btn-info btn-ml" type="submit" name="" value="Print!">
       </form>
     </div>
+
+
 
      <h3><center><b><%= @institution_name %></b></center></h3>
     <center>ANALISA KEPUTUSAN PEPERIKSAAN</center>
@@ -58,7 +66,7 @@
 
       <h6 style="float: center;" align="center">Subject: <%= @subject_name %></h6>
      
-      Tahun: <%= @year %>
+      Tahun: <%= @e_year %>
 
       <% date = Date.utc_today() %>
       <h6 style="float: right;"><%= date.day %>-<%= date.month %>-<%= date.year %></h6>

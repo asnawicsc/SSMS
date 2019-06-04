@@ -46,7 +46,7 @@
                                                         <select id = "class" class="custom-select -custom-select-sm" class="select"  required="required" name="exam_result_analysis_class">
                                                              <option selected="selected">Choose a Class</option>
                                                                <%= for a <- @class |> Enum.sort do %>
-                                                                                <option value="<%= a.id %>" ><%= a.name %>
+                                                                                <option value="<%= a.name %>" ><%= a.name %>
                                                                                 </option>
                                                                 <% end %>
                                                         </select>
@@ -58,7 +58,7 @@
                                                         <select id = "standard" class="custom-select -custom-select-sm" class="select" required="required" name="exam_result_analysis_class">
                                                              <option selected="selected">Choose a Standard</option>
                                                                <%= for a <- @level |> Enum.sort do %>
-                                                                                <option value="<%= a.id %>" ><%= a.name %>
+                                                                                <option value="<%= a.id%>" ><%= a.name %>
                                                                                 </option>
                                                                 <% end %>
                                                         </select>
@@ -68,12 +68,14 @@
                                                       <label class="bmd-label-floating"><%= gettext "Year" %></label>
                                                         <select id = "year" class="custom-select -custom-select-sm" class="select" required="required" name="exam_result_analysis_class">
                                                              <option selected="selected">Choose a Year</option>
-                                                               <%= for a <- @year |> Enum.sort do %>
+                                                               <%= for a <- @year |> Enum.uniq() |> Enum.sort_by(fn x -> x.year end) |> Enum.filter(fn x -> x.year != nil end) do %>
                                                                                 <option value="<%= a.year %>" ><%= a.year %>
                                                                                 </option>
                                                                 <% end %>
                                                         </select>
                                                     </div>
+
+                                                    <div id="sem_filter"></div>
 
                                                     <div style="display: none;" id="gen" class="form-group col-md-3">
                                                         <input align="left" type="submit" class="btn btn-primary btn-sm " name="" value="Generate!">
@@ -162,6 +164,14 @@
 
     $("#year").change(function(){
     
+         var year = $("#year").val();
+
+         channel.push("filter_semester", {
+            year: year
+         }).receive("ok", payload => {
+            $("div#sem_filter").html(payload.html);
+         })
+
          $("div#gen").show()
     });
 
@@ -172,23 +182,20 @@ $("div#gen").click(function(){
     
     if($("#sort_type1").is(':checked')){ 
     var flag = 1}else{var flag = 2}
-
-    console.log(flag)
    
     var csrf= $("input[name='_csrf_token']").val() ;
     var year = $("#year").val();
+    var sem = $("#sem").val();
+    var class_id = $("#class").val()
+ 
 
-    if(flag == 1){
-        var d = $("#class").val()
-     
-    }else{
-        var d = $("#standard").val()
+    var standard_id = $("#standard").val()
          
-    }
+    
 
 
     channel.push("exam_result_analysis_id", {
-    institution_id: window.currentInstitute , year: year, flag: flag, class_id: d,user_id: window.currentUser,csrf: csrf })
+    institution_id: window.currentInstitute , sem: sem, year: year, flag: flag, class_id: class_id, standard_id: standard_id, user_id: window.currentUser,csrf: csrf })
     .receive("ok", payload => {
         $("div#exam_filter_analysis").html(payload.html);
     })

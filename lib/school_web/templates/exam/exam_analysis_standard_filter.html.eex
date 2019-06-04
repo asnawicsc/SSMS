@@ -15,14 +15,26 @@
    <label class="bmd-label-floating"><%= gettext "Year" %></label>
      <select id ="year_val" class="custom-select -custom-select-sm" name="exam_analysis_standard_result_id" required="" >
       <option selected="selected">Choose a Year</option>
-         <%= for a <- @year do %>
+         <%= for a <- @year |> Enum.uniq() |> Enum.sort_by(fn x -> x.year end) |> Enum.filter(fn x -> x.year != nil end) do %>
       <option value="<%= a.year %>" ><%= a.year %>
       </option>
     <% end %>
   </select>
 </div>
 
-<div style="display: none;" id="gen" class="form-group col-md-3">
+
+<div style="display: none;" id = "show_exam">
+   <label class="bmd-label-floating">
+   <%= gettext "Exams" %>
+   </label>
+   <br>
+   <%= for a <- @exam do %>
+   <input type="checkbox" name="exam" value ="<%=a.id%>"> <%=a.exam_name%><br>
+   <% end %>
+</div>
+<br>
+
+<div style="display: none; float: right;" id="gen">
     <input align="left" type="submit" class="btn btn-primary btn-sm " name="" value="Generate!">
 </div>
     
@@ -33,6 +45,7 @@
 
 
   $("#sel_subject").change(function(){
+    $("#show_exam").show()
     $("#sel_year").show()
   })
 
@@ -43,15 +56,19 @@
 
 
  $("#gen").click(function(){
-    d= $("#sel_subject").val()
-    year = $("#year_val").val()
-    console.log(year)
+    var d= $("#sel_subject").val()
+    var year = $("#year_val").val()
+    var exams = getExamValues()
+
+    console.log(exams)
+
 
  var csrf= $("input[name='_csrf_token']").val() ;
 
        channel.push("exam_result_analysis_standard2", 
         {csrf: csrf, institution_id: window.currentInstitute ,
           subject_id: d,
+          exam_id: exams,
           year: year,
           standard_id: localStorage.getItem("exam_analysis_result_standard"),
           user_id: window.currentUser})
@@ -63,6 +80,17 @@
 
 
     })
+
+ function getExamValues(){
+  var chkArray = [];
+  
+  /* look for all checkboxes that have a parent id called 'checkboxlist' attached to it and check if it was checked */
+  $("#show_exam input:checked").each(function() {
+    chkArray.push($(this).val());
+  });
+
+  return(chkArray);
+}
 
 
 </script>

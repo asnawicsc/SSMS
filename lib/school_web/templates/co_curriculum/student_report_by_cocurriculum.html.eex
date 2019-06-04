@@ -230,7 +230,7 @@
   function getClassValues(){
   var chkArray = [];
   
-  /* look for all checkboes that have a parent id called 'checkboxlist' attached to it and check if it was checked */
+  /* look for all checkboxes that have a parent id called 'checkboxlist' attached to it and check if it was checked */
   $("#show_class input:checked").each(function() {
     chkArray.push($(this).val());
   });
