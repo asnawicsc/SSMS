@@ -6717,9 +6717,7 @@ defmodule SchoolWeb.PdfController do
               on: sc.sudent_id == s.id,
               left_join: c in Class,
               on: c.id == sc.class_id,
-              where:
-                sc.institute_id == ^sem.institution_id and
-                  sc.semester_id == ^co_semester,
+              where: sc.institute_id == ^sem.institution_id and sc.semester_id == ^co_semester,
               select: %{
                 student_id: s.id,
                 class: c.name,
