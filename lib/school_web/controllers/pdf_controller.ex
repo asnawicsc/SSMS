@@ -2017,27 +2017,6 @@ defmodule SchoolWeb.PdfController do
       |> Enum.uniq()
       |> Enum.count()
 
-    student_class =
-      Repo.all(
-        from(
-          s in School.Affairs.Student,
-          left_join: g in School.Affairs.StudentClass,
-          on: s.id == g.sudent_id,
-          left_join: k in School.Affairs.Class,
-          on: k.id == g.class_id,
-          where:
-            s.institution_id == ^conn.private.plug_session["institution_id"] and
-              g.semester_id == ^conn.private.plug_session["semester_id"] and
-              g.class_id == ^class_info.id,
-          select: %{
-            student_id: s.id,
-            student_name: s.name,
-            chinese_name: s.chinese_name,
-            class_name: k.name
-          }
-        )
-      )
-
     semester = Repo.get_by(School.Affairs.Semester, id: semester_id)
 
     institute =
@@ -2268,7 +2247,7 @@ defmodule SchoolWeb.PdfController do
                 Repo.get_by(
                   School.Affairs.ExamAttendance,
                   student_id: all.student_id,
-                  semester_id: all.semester,
+                  semester_id: semester.id,
                   institution_id: conn.private.plug_session["institution_id"],
                   exam_master_id: all.exam_master_id,
                   subject_id: subject.id
@@ -2409,6 +2388,7 @@ defmodule SchoolWeb.PdfController do
                 subject_name: sb.description,
                 subject_cname: sb.cdesc,
                 mark: em.mark,
+                grade: em.grade,
                 standard_id: sc.level_id
               }
             )
@@ -2448,6 +2428,7 @@ defmodule SchoolWeb.PdfController do
                 subject_name: sb.description,
                 subject_cname: sb.cdesc,
                 mark: em.mark,
+                grade: em.grade,
                 standard_id: sc.level_id
               }
             )
@@ -2489,85 +2470,58 @@ defmodule SchoolWeb.PdfController do
                               )
                             )
 
-                          a =
-                            if absent == [] do
-                              grade_rank =
-                                for total_grade <- items do
-                                  grades =
-                                    Repo.all(
-                                      from(
-                                        g in School.Affairs.ExamGrade,
-                                        where:
-                                          g.institution_id ==
-                                            ^conn.private.plug_session["institution_id"] and
-                                            g.exam_master_id == ^total_grade.exam_master_id
-                                      )
-                                    )
+                          sum =
+                            items
+                            |> Enum.filter(fn x -> x.mark != 0 end)
+                            |> Enum.filter(fn x -> x.mark != nil end)
+                            |> Enum.map(fn x -> Decimal.to_float(x.mark) end)
+                            |> Enum.sum()
 
-                                  grade =
-                                    if total_grade.mark != nil do
-                                      for grade <- grades do
-                                        if Decimal.to_float(total_grade.mark) >=
-                                             Decimal.to_float(grade.min) and
-                                             Decimal.to_float(total_grade.mark) <=
-                                               Decimal.to_float(grade.max) do
-                                          grade.name
-                                        end
-                                      end
-                                      |> Enum.filter(fn x -> x != nil end)
-                                      |> hd
-                                    else
-                                      "E"
-                                    end
+                          fail =
+                            items
+                            |> Enum.filter(fn x -> x.mark != 0 end)
+                            |> Enum.filter(fn x -> x.mark != nil end)
+                            |> Enum.filter(fn x ->
+                              Decimal.to_float(x.mark) >= 1 and Decimal.to_float(x.mark) <= 39.9
+                            end)
 
-                                  grade
-                                end
-
-                              t_a = grade_rank |> Enum.count(fn x -> x == "A" end)
-                              t_b = grade_rank |> Enum.count(fn x -> x == "B" end)
-                              t_c = grade_rank |> Enum.count(fn x -> x == "C" end)
-                              t_d = grade_rank |> Enum.count(fn x -> x == "D" end)
-                              t_e = grade_rank |> Enum.count(fn x -> x == "E" end)
-
-                              t_a = t_a * 7
-                              t_b = t_b * 6
-                              t_c = t_c * 5
-                              t_d = t_d * 2
-                              t_e = t_e * 1
-
-                              t_grade = t_a + t_b + t_c + t_d + t_e
-
-                              pass =
-                                sum =
-                                items
-                                |> Enum.filter(fn x -> x.mark != 0 end)
-                                |> Enum.filter(fn x -> x.mark != nil end)
-                                |> Enum.map(fn x -> Decimal.to_float(x.mark) end)
-                                |> Enum.sum()
-
-                              if items != [] do
-                                item = items |> hd
-
-                                %{
-                                  student_id: item.student_id,
-                                  student_name: item.student_name,
-                                  chinese_name: item.chinese_name,
-                                  class_name: item.class_name,
-                                  exam_master_id: item.exam_master_id,
-                                  exam_name: item.exam_name,
-                                  semester: item.semester,
-                                  semester_no: item.semester_no,
-                                  year: item.year,
-                                  subject_code: "CRank",
-                                  subject_name: "Class Rank",
-                                  subject_cname: "Class Rank",
-                                  t_grade: t_grade,
-                                  total_mark: sum,
-                                  standard_id: item.standard_id
-                                }
-                              end
+                          fail =
+                            if fail != [] do
+                              true
                             else
+                              false
                             end
+
+                          th =
+                            if absent != [] do
+                              true
+                            else
+                              false
+                            end
+
+                          if items != [] do
+                            item = items |> hd
+
+                            %{
+                              student_id: item.student_id,
+                              student_name: item.student_name,
+                              chinese_name: item.chinese_name,
+                              class_name: item.class_name,
+                              exam_master_id: item.exam_master_id,
+                              exam_name: item.exam_name,
+                              semester: item.semester,
+                              semester_no: item.semester_no,
+                              year: item.year,
+                              subject_code: "CRank",
+                              subject_name: "Class Rank",
+                              subject_cname: "Class Rank",
+                              t_grade: "t_grade",
+                              th: th,
+                              fail: fail,
+                              total_mark: sum,
+                              standard_id: item.standard_id
+                            }
+                          end
 
                         10 ->
                           coming = items |> hd
@@ -2686,16 +2640,52 @@ defmodule SchoolWeb.PdfController do
                   |> Enum.filter(fn x -> x != nil end)
 
                 data =
-                  if conn.private.plug_session["institution_id"] == 9 do
-                    data
-                    |> Enum.sort_by(fn x -> x.t_grade end)
-                    |> Enum.reverse()
-                    |> Enum.with_index()
-                  else
-                    data
-                    |> Enum.sort_by(fn x -> x.total_mark end)
-                    |> Enum.reverse()
-                    |> Enum.with_index()
+                  case conn.private.plug_session["institution_id"] do
+                    9 ->
+                      data2 =
+                        data
+                        |> Enum.filter(fn x -> x.fail == true and x.th == false end)
+                        |> Enum.uniq()
+                        |> Enum.sort_by(fn x -> x.total_mark end)
+                        |> Enum.reverse()
+
+                      data3 =
+                        data
+                        |> Enum.filter(fn x -> x.th == true and x.fail == false end)
+                        |> Enum.uniq()
+                        |> Enum.sort_by(fn x -> x.total_mark end)
+                        |> Enum.reverse()
+
+                      data4 =
+                        data
+                        |> Enum.filter(fn x -> x.th == true and x.fail == true end)
+                        |> Enum.sort_by(fn x -> x.total_mark end)
+                        |> Enum.reverse()
+
+                      all_p =
+                        (data -- (data2 ++ data3 ++ data4))
+                        |> Enum.uniq()
+                        |> Enum.sort_by(fn x -> x.total_mark end)
+                        |> Enum.reverse()
+
+                      data = all_p ++ data2 ++ data3 ++ data4
+
+                      data
+                      |> School.assign_rank()
+                      |> Enum.map(fn x -> {elem(x, 0), elem(x, 1) - 2} end)
+                      |> Enum.drop(1)
+
+                    3 ->
+                      data
+                      |> Enum.sort_by(fn x -> x.total_mark end)
+                      |> Enum.reverse()
+                      |> Enum.with_index()
+
+                    _ ->
+                      data
+                      |> Enum.sort_by(fn x -> x.total_mark end)
+                      |> Enum.reverse()
+                      |> Enum.with_index()
                   end
 
                 data
@@ -2705,13 +2695,43 @@ defmodule SchoolWeb.PdfController do
               for item <- drg do
                 if item != [] do
                   no = item |> elem(1)
+                  item = item |> elem(0)
 
-                  total = drg |> Enum.count() |> Integer.to_string()
+                  total =
+                    if conn.private.plug_session["institution_id"] != 10 do
+                      student_class |> Enum.count() |> Integer.to_string()
+                    else
+                      class =
+                        Repo.get_by(School.Affairs.Class, %{
+                          name: item.class_name,
+                          institution_id: conn.private.plug_session["institution_id"]
+                        })
+
+                      absent =
+                        Repo.all(
+                          from(
+                            s in School.Affairs.ExamAttendance,
+                            where:
+                              s.semester_id == ^item.semester and
+                                s.institution_id == ^conn.private.plug_session["institution_id"] and
+                                s.exam_master_id == ^item.exam_master_id and
+                                s.class_id == ^class.id,
+                            select: %{student_id: s.student_id}
+                          )
+                        )
+                        |> Enum.uniq()
+
+                      total_absent = absent |> Enum.count()
+
+                      student_class = student_class |> Enum.count()
+
+                      total = student_class - total_absent
+
+                      total |> Integer.to_string()
+                    end
 
                   rank = no + 1
                   rank = rank |> Integer.to_string()
-
-                  item = item |> elem(0)
 
                   %{
                     student_id: item.student_id,
@@ -2774,6 +2794,12 @@ defmodule SchoolWeb.PdfController do
                     s2m = total_mark |> Enum.fetch!(1) |> elem(1)
                     s3m = total_mark |> Enum.fetch!(2) |> elem(1)
 
+                    {s1m, s2m, s3m}
+                  else
+                    IO.inspect("got more than 3 at line 894, class #{class_name}")
+                    s1m = ""
+                    s2m = ""
+                    s3m = ""
                     {s1m, s2m, s3m}
                   end
                 end
@@ -2840,6 +2866,7 @@ defmodule SchoolWeb.PdfController do
                 subject_name: sb.description,
                 subject_cname: sb.cdesc,
                 mark: em.mark,
+                grade: em.grade,
                 standard_id: sc.level_id
               }
             )
@@ -2880,6 +2907,7 @@ defmodule SchoolWeb.PdfController do
                 subject_name: sb.description,
                 subject_cname: sb.cdesc,
                 mark: em.mark,
+                grade: em.grade,
                 standard_id: sc.level_id
               }
             )
@@ -2921,84 +2949,57 @@ defmodule SchoolWeb.PdfController do
                               )
                             )
 
-                          a =
-                            if absent == [] do
-                              grade_rank =
-                                for total_grade <- items do
-                                  grades =
-                                    Repo.all(
-                                      from(
-                                        g in School.Affairs.ExamGrade,
-                                        where:
-                                          g.institution_id ==
-                                            ^conn.private.plug_session["institution_id"] and
-                                            g.exam_master_id == ^total_grade.exam_master_id
-                                      )
-                                    )
+                          sum =
+                            items
+                            |> Enum.filter(fn x -> x.mark != nil end)
+                            |> Enum.filter(fn x -> x.mark != 0 end)
+                            |> Enum.map(fn x -> Decimal.to_float(x.mark) end)
+                            |> Enum.sum()
 
-                                  grade =
-                                    if total_grade.mark != nil do
-                                      for grade <- grades do
-                                        if Decimal.to_float(total_grade.mark) >=
-                                             Decimal.to_float(grade.min) and
-                                             Decimal.to_float(total_grade.mark) <=
-                                               Decimal.to_float(grade.max) do
-                                          grade.name
-                                        end
-                                      end
-                                      |> Enum.filter(fn x -> x != nil end)
-                                      |> hd
-                                    else
-                                      "E"
-                                    end
+                          fail =
+                            items
+                            |> Enum.filter(fn x -> x.mark != nil end)
+                            |> Enum.filter(fn x -> x.mark != 0 end)
+                            |> Enum.filter(fn x ->
+                              Decimal.to_float(x.mark) >= 1 and Decimal.to_float(x.mark) <= 39.9
+                            end)
 
-                                  grade
-                                end
-
-                              t_a = grade_rank |> Enum.count(fn x -> x == "A" end)
-                              t_b = grade_rank |> Enum.count(fn x -> x == "B" end)
-                              t_c = grade_rank |> Enum.count(fn x -> x == "C" end)
-                              t_d = grade_rank |> Enum.count(fn x -> x == "D" end)
-                              t_e = grade_rank |> Enum.count(fn x -> x == "E" end)
-
-                              t_a = t_a * 7
-                              t_b = t_b * 6
-                              t_c = t_c * 5
-                              t_d = t_d * 2
-                              t_e = t_e * 1
-
-                              t_grade = t_a + t_b + t_c + t_d + t_e
-
-                              sum =
-                                items
-                                |> Enum.filter(fn x -> x.mark != nil end)
-                                |> Enum.filter(fn x -> x.mark != 0 end)
-                                |> Enum.map(fn x -> Decimal.to_float(x.mark) end)
-                                |> Enum.sum()
-
-                              if items != [] do
-                                item = items |> hd
-
-                                %{
-                                  student_id: item.student_id,
-                                  student_name: item.student_name,
-                                  chinese_name: item.chinese_name,
-                                  class_name: item.class_name,
-                                  exam_master_id: item.exam_master_id,
-                                  exam_name: item.exam_name,
-                                  semester: item.semester,
-                                  semester_no: item.semester_no,
-                                  year: item.year,
-                                  subject_code: "Standard",
-                                  subject_name: "Standard Rank",
-                                  subject_cname: "Standard Rank",
-                                  t_grade: t_grade,
-                                  total_mark: sum,
-                                  standard_id: item.standard_id
-                                }
-                              end
+                          fail =
+                            if fail != [] do
+                              true
                             else
+                              false
                             end
+
+                          th =
+                            if absent != [] do
+                              true
+                            else
+                              false
+                            end
+
+                          if items != [] do
+                            item = items |> hd
+
+                            %{
+                              student_id: item.student_id,
+                              student_name: item.student_name,
+                              chinese_name: item.chinese_name,
+                              class_name: item.class_name,
+                              exam_master_id: item.exam_master_id,
+                              exam_name: item.exam_name,
+                              semester: item.semester,
+                              semester_no: item.semester_no,
+                              year: item.year,
+                              subject_code: "Standard",
+                              subject_name: "Standard Rank",
+                              subject_cname: "Standard Rank",
+                              fail: fail,
+                              th: th,
+                              total_mark: sum,
+                              standard_id: item.standard_id
+                            }
+                          end
 
                         10 ->
                           coming = items |> hd
@@ -3052,14 +3053,14 @@ defmodule SchoolWeb.PdfController do
                         3 ->
                           coming = items |> hd
 
-                          absent =
-                            Repo.get_by(
-                              School.Affairs.ExamAttendance,
-                              student_id: coming.student_id,
-                              semester_id: coming.semester,
-                              institution_id: conn.private.plug_session["institution_id"],
-                              exam_master_id: coming.exam_master_id
-                            )
+                          # absent =
+                          #   Repo.get_by(
+                          #     School.Affairs.ExamAttendance,
+                          #     student_id: coming.student_id,
+                          #     semester_id: coming.semester,
+                          #     institution_id: conn.private.plug_session["institution_id"],
+                          #     exam_master_id: coming.exam_master_id
+                          #   )
 
                           sum =
                             items
@@ -3127,10 +3128,38 @@ defmodule SchoolWeb.PdfController do
 
                 data =
                   if conn.private.plug_session["institution_id"] == 9 do
+                    data2 =
+                      data
+                      |> Enum.filter(fn x -> x.fail == true and x.th == false end)
+                      |> Enum.uniq()
+                      |> Enum.sort_by(fn x -> x.total_mark end)
+                      |> Enum.reverse()
+
+                    data3 =
+                      data
+                      |> Enum.filter(fn x -> x.th == true and x.fail == false end)
+                      |> Enum.uniq()
+                      |> Enum.sort_by(fn x -> x.total_mark end)
+                      |> Enum.reverse()
+
+                    data4 =
+                      data
+                      |> Enum.filter(fn x -> x.th == true and x.fail == true end)
+                      |> Enum.sort_by(fn x -> x.total_mark end)
+                      |> Enum.reverse()
+
+                    all_p =
+                      (data -- (data2 ++ data3 ++ data4))
+                      |> Enum.uniq()
+                      |> Enum.sort_by(fn x -> x.total_mark end)
+                      |> Enum.reverse()
+
+                    data = all_p ++ data2 ++ data3 ++ data4
+
                     data
-                    |> Enum.sort_by(fn x -> x.t_grade end)
-                    |> Enum.reverse()
-                    |> Enum.with_index()
+                    |> School.assign_rank()
+                    |> Enum.map(fn x -> {elem(x, 0), elem(x, 1) - 2} end)
+                    |> Enum.drop(1)
                   else
                     data
                     |> Enum.sort_by(fn x -> x.total_mark end)
@@ -3179,11 +3208,15 @@ defmodule SchoolWeb.PdfController do
                                 k.level_id == ^class_info.level_id and
                                   s.semester_id == ^conn.private.plug_session["semester_id"] and
                                   k.institute_id == ^conn.private.plug_session["institution_id"] and
-                                  s.exam_master_id == ^item.exam_master_id
+                                  s.exam_master_id == ^item.exam_master_id,
+                              select: %{student_id: s.student_id}
                             )
                           )
                           |> Enum.uniq()
                           |> Enum.count()
+
+                        IO.inspect("all_student#{all_student}")
+                        IO.inspect("total_absent#{absent}")
 
                         total = all_student - absent
 
@@ -3207,7 +3240,13 @@ defmodule SchoolWeb.PdfController do
                         total = all_student
                     end
 
-                  total = total |> Integer.to_string()
+                  total =
+                    if conn.private.plug_session["institution_id"] == 10 do
+                      total |> Integer.to_string()
+                    else
+                      all_student |> Integer.to_string()
+                    end
+
                   rank = no + 1
                   rank = rank |> Integer.to_string()
 
@@ -3361,45 +3400,45 @@ defmodule SchoolWeb.PdfController do
                     9 ->
                       list =
                         for item <- fit do
-                          subject =
-                            Repo.get_by(
-                              School.Affairs.Subject,
-                              code: item.subject_code,
-                              institution_id: conn.private.plug_session["institution_id"]
-                            )
+                          # subject =
+                          #   Repo.get_by(
+                          #     School.Affairs.Subject,
+                          #     code: item.subject_code,
+                          #     institution_id: conn.private.plug_session["institution_id"]
+                          #   )
 
                           absent =
                             Repo.all(
                               from(
                                 s in School.Affairs.ExamAttendance,
+                                left_join: sb in School.Affairs.Subject,
+                                on: s.subject_id == sb.id,
                                 where:
                                   s.student_id == ^item.student_id and
                                     s.semester_id == ^item.semester and
                                     s.institution_id ==
                                       ^conn.private.plug_session["institution_id"] and
-                                    s.exam_master_id == ^item.exam_master_id
+                                    s.exam_master_id == ^item.exam_master_id and sb.with_mark == 1
                               )
                             )
 
-                          a =
-                            if absent == [] do
-                              %{
-                                student_id: item.student_id,
-                                student_name: item.student_name,
-                                chinese_name: item.chinese_name,
-                                class_name: item.class_name,
-                                exam_master_id: item.exam_master_id,
-                                exam_name: item.exam_name,
-                                semester: item.semester,
-                                semester_no: item.semester_no,
-                                year: item.year,
-                                subject_code: item.subject_code,
-                                subject_name: item.subject_name,
-                                subject_cname: item.subject_cname,
-                                mark: item.mark,
-                                standard_id: item.standard_id
-                              }
-                            end
+                          %{
+                            student_id: item.student_id,
+                            student_name: item.student_name,
+                            chinese_name: item.chinese_name,
+                            class_name: item.class_name,
+                            exam_master_id: item.exam_master_id,
+                            exam_name: item.exam_name,
+                            semester: item.semester,
+                            semester_no: item.semester_no,
+                            year: item.year,
+                            subject_code: item.subject_code,
+                            subject_name: item.subject_name,
+                            subject_cname: item.subject_cname,
+                            mark: item.mark,
+                            absent: absent |> Enum.count(),
+                            standard_id: item.standard_id
+                          }
                         end
                         |> Enum.filter(fn x -> x != nil end)
 
@@ -3417,13 +3456,15 @@ defmodule SchoolWeb.PdfController do
                             Repo.all(
                               from(
                                 s in School.Affairs.ExamAttendance,
+                                left_join: sb in School.Affairs.Subject,
+                                on: s.subject_id == sb.id,
                                 where:
                                   s.student_id == ^item.student_id and
                                     s.semester_id == ^item.semester and
                                     s.institution_id ==
                                       ^conn.private.plug_session["institution_id"] and
                                     s.exam_master_id == ^item.exam_master_id and
-                                    s.subject_id == ^subject.id
+                                    s.subject_id == ^subject.id and sb.with_mark == 1
                               )
                             )
 
@@ -3456,6 +3497,22 @@ defmodule SchoolWeb.PdfController do
                       list = fit
                   end
 
+                total_absent =
+                  if conn.private.plug_session["institution_id"] == 9 do
+                    a =
+                      list
+                      |> Enum.map(fn x -> x.absent end)
+                      |> Enum.uniq()
+
+                    if a == [] do
+                      0
+                    else
+                      a |> hd
+                    end
+                  else
+                    0
+                  end
+
                 a =
                   list
                   |> Enum.filter(fn x -> x.mark != 0 end)
@@ -3463,7 +3520,23 @@ defmodule SchoolWeb.PdfController do
                   |> Enum.map(fn x -> Decimal.to_float(x.mark) end)
                   |> Enum.sum()
 
-                per = list |> Enum.map(fn x -> x.mark end) |> Enum.count()
+                # per_th = list |> Enum.filter(fn x -> x.mark == nil end) |> Enum.count()
+
+                per = list |> Enum.map(fn x -> x.subject_code end) |> Enum.uniq() |> Enum.count()
+                IO.inspect("per, #{per}")
+
+                IO.inspect("total_absent, #{total_absent}")
+
+                per =
+                  per =
+                  if list |> Enum.any?(fn x -> x.subject_code == "AGM" end) do
+                    per = per - 1 - total_absent
+                    # per = per - 1 + per_th
+                  else
+                    per = per - total_absent
+                    # per = per + per_th
+                  end
+
                 total_per = per * 100
                 total_per = total_per |> Integer.to_string()
 
@@ -3613,25 +3686,23 @@ defmodule SchoolWeb.PdfController do
                               )
                             )
 
-                          a =
-                            if absent == [] do
-                              %{
-                                student_id: item.student_id,
-                                student_name: item.student_name,
-                                chinese_name: item.chinese_name,
-                                class_name: item.class_name,
-                                exam_master_id: item.exam_master_id,
-                                exam_name: item.exam_name,
-                                semester: item.semester,
-                                semester_no: item.semester_no,
-                                year: item.year,
-                                subject_code: item.subject_code,
-                                subject_name: item.subject_name,
-                                subject_cname: item.subject_cname,
-                                mark: item.mark,
-                                standard_id: item.standard_id
-                              }
-                            end
+                          %{
+                            student_id: item.student_id,
+                            student_name: item.student_name,
+                            chinese_name: item.chinese_name,
+                            class_name: item.class_name,
+                            exam_master_id: item.exam_master_id,
+                            exam_name: item.exam_name,
+                            semester: item.semester,
+                            semester_no: item.semester_no,
+                            year: item.year,
+                            subject_code: item.subject_code,
+                            subject_name: item.subject_name,
+                            subject_cname: item.subject_cname,
+                            mark: item.mark,
+                            absent: absent |> Enum.count(),
+                            standard_id: item.standard_id
+                          }
                         end
                         |> Enum.filter(fn x -> x != nil end)
 
@@ -3674,6 +3745,7 @@ defmodule SchoolWeb.PdfController do
                                 subject_name: item.subject_name,
                                 subject_cname: item.subject_cname,
                                 mark: item.mark,
+                                absent: absent |> Enum.count(),
                                 standard_id: item.standard_id
                               }
                             end
@@ -3694,11 +3766,36 @@ defmodule SchoolWeb.PdfController do
                   |> Enum.map(fn x -> Decimal.to_float(x.mark) end)
                   |> Enum.sum()
 
-                per = list |> Enum.map(fn x -> x.mark end) |> Enum.count()
+                total_absent =
+                  if conn.private.plug_session["institution_id"] == 9 do
+                    absent_data =
+                      list
+                      |> Enum.map(fn x -> x.absent end)
+                      |> Enum.uniq()
+
+                    if absent_data == [] do
+                      0
+                    else
+                      absent_data |> hd
+                    end
+                  else
+                    0
+                  end
+
+                per = list |> Enum.map(fn x -> x.subject_code end) |> Enum.uniq() |> Enum.count()
+
+                per =
+                  if list |> Enum.any?(fn x -> x.subject_code == "AGM" end) do
+                    per = per - 1 - total_absent
+                  else
+                    per = per - total_absent
+                  end
+
                 total_per = per * 100
 
                 total_average =
                   if total_per != 0 do
+                    IO.puts("line 3920 #{a} / #{total_per}")
                     a / total_per * 100
                   else
                     0
@@ -3980,7 +4077,7 @@ defmodule SchoolWeb.PdfController do
 
       conn
       |> put_flash(:info, "Mark sheet temp created successfully.")
-      |> redirect(to: "/list_report")
+      |> redirect(to: "/report_card_generator")
     else
       for item <- result do
         Affairs.create_mark_sheet_temp(item)
@@ -3988,7 +4085,7 @@ defmodule SchoolWeb.PdfController do
 
       conn
       |> put_flash(:info, "Mark sheet temp created successfully.")
-      |> redirect(to: "/list_report")
+      |> redirect(to: "/report_card_generator")
     end
   end
 
@@ -4056,6 +4153,9 @@ defmodule SchoolWeb.PdfController do
 
           3 ->
             "report_cards_sk.html"
+
+          2 ->
+            "report_cards_test.html"
 
           _ ->
             "report_cards_kk.html"
@@ -5942,13 +6042,16 @@ defmodule SchoolWeb.PdfController do
           on: k.id == d.exam_master_id,
           left_join: s in School.Affairs.Student,
           on: s.id == e.student_id,
+          left_join: sc in School.Affairs.StudentClass,
+          on: sc.sudent_id == s.id,
           left_join: p in School.Affairs.Subject,
           on: p.id == e.subject_id,
           where:
             e.class_id == ^class_id and k.id == ^exam_id and
               k.institution_id == ^conn.private.plug_session["institution_id"] and
               s.institution_id == ^conn.private.plug_session["institution_id"] and
-              p.institution_id == ^conn.private.plug_session["institution_id"],
+              p.institution_id == ^conn.private.plug_session["institution_id"] and
+              sc.semester_id == ^exam.semester_id,
           select: %{
             subject_code: p.code,
             exam_name: k.name,
@@ -8550,20 +8653,11 @@ defmodule SchoolWeb.PdfController do
     coco_details = Repo.get_by(School.Affairs.CoCurriculum, id: cocurriculum)
     co_level = params["standard_id"]
     co_semester = params["semester_id"]
+    class = params["class"]
+    class = String.graphemes(class)
     sort_by = params["sort_by"]
     type = params["type"]
-
-    keys =
-      Map.keys(params)
-      |> Enum.filter(fn x ->
-        x != "cocurriculum_id" and x != "type" and x != "standard_id" and x != "semester_id" and
-          x != "sort_by"
-      end)
-
-    class =
-      for a <- keys do
-        id = params[a]
-      end
+    IO.inspect(sort_by)
 
     sort_by =
       if sort_by != "nil" do
@@ -8571,6 +8665,8 @@ defmodule SchoolWeb.PdfController do
       else
         sort_by
       end
+
+    IO.inspect(sort_by)
 
     sem = Repo.get(Semester, co_semester)
 
