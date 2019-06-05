@@ -50,7 +50,7 @@
 
     <div class="form-group" data-step="3" data-intro="Choose a class for the subject to be assigned.">
     <%= label f, :teacher_id, teacher: "control-label" %>
-    <%= select f, :teacher_id,teacher, teacher: "form-control" %>
+    <%= select f, :teacher_id,teacher, class: "chosen-select form-control" %>
     <%= error_tag f, :teacher_id %>
   </div>
 

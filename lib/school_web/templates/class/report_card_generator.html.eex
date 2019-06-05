@@ -8,7 +8,7 @@
     </div>
     <!-- END Language list-->
 </div>
-
+<a href="/generate_again">all</a>
 <div class="row">
 
     <%= render( SchoolWeb.ExamView ,"report_nav.html",conn: @conn) %>
@@ -32,7 +32,7 @@
                                 </div>
                                 <div class="form-group col-md-4">
                                <select class="custom-select -custom-select-sm" name="semester"  required="required">
-                            <%= for sem <- @semesters do %>
+                            <%= for sem <- @semesters|>Enum.sort_by(fn x -> x.start_date end) do %>
                                 <option value="<%= sem.id %>">
                                     <%= sem.start_date %> -
                                         <%= sem.end_date %>
@@ -72,7 +72,7 @@
                         </div>
                                 <div class="form-group col-md-4">
                                  <select class="custom-select -custom-select-sm" name="semester"  required="required">
-                            <%= for sem <- @semesters do %>
+                            <%= for sem <- @semesters|>Enum.sort_by(fn x -> x.start_date end) do %>
                                 <option value="<%= sem.id %>">
                                     <%= sem.start_date %> -
                                         <%= sem.end_date %>
@@ -88,6 +88,174 @@
                     </div>
                 </div>
             </div>
+           <form method="post" action="/exam_result_class_pdf">
+          <div class="card">
+             <div class="card-header">Exam Result Class</div>
+                <div class="card-body">
+                    <div aria-label="project_nilam">
+                        <div class="content">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="card ">
+
+                                            <div class="card-header ">
+
+                                                <div class="row">
+
+                                                    
+                                                        <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+                                                   
+                                                    <div class="form-group col-md-4">
+                                                      <label class="bmd-label-floating"><%= gettext "Class Name" %></label>
+                                                        <select class="custom-select -custom-select-sm"  required="required" name="class_id">
+                                                              <option selected="">Choose a class</option>
+                           <%= for a <- @classes |> Enum.sort_by(fn x -> x.name end) do %>
+                                            <option value="<%= a.id %>" ><%= a.name %>
+                                            </option>
+                                          <% end %>
+                                        </select>
+                                                    </div>
+
+                                                        <div  class="form-group col-md-4">
+                                                      <label class="bmd-label-floating"><%= gettext "Exam Name" %></label>
+                                                        <select class="custom-select -custom-select-sm"  required="required" name="exam_no">
+                                                              <option selected="">Choose a Exam</option>
+                           <%= for a <- @exam |> Enum.sort_by(fn x -> x.name end) do %>
+                                            <option value="<%= a.exam_no %>" ><%= a.name %>
+                                            </option>
+                                          <% end %>
+                                        </select>
+                                                    </div>
+
+                                                       <div  class="form-group col-md-4">
+                                                      <label class="bmd-label-floating"><%= gettext "Year Name" %></label>
+                                                        <select class="custom-select -custom-select-sm"  required="required" name="year">
+                                                              <option selected="">Choose a Year</option>
+                        
+                                            <option value="2019" >2019
+                                            </option>
+                                             <option value="2020" >2020
+                                            </option>
+                                             <option value="2021" >2021
+                                            </option>
+                                             <option value="2022" >2022
+                                            </option>
+                                       
+                                        </select>
+                                                    </div>
+                                                   
+                                               
+                                                  
+                                               
+
+                                                    </div>
+                                                    <div class="row">
+                                                      <div id="gne" class="form-group col-md-12">
+                                                    <input class="btn btn-primary" name="type" value="PDF(Rank)" type="submit" style="margin-top: 30px">
+                                                      <input class="btn btn-primary" name="type" value="PDF(Student)" type="submit" style="margin-top: 30px">
+                                                      <input class="btn btn-success" name="type" value="Excel" type="submit" style="margin-top: 30px">
+                                                  </div>
+                                                </div>
+
+                                              
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+             </form>
+
+             <form method="post" action="/exam_result_standard_pdf">
+          <div class="card">
+             <div class="card-header">Exam Result Standard</div>
+                <div class="card-body">
+                    <div aria-label="project_nilam">
+                        <div class="content">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="card ">
+
+                                            <div class="card-header ">
+
+                                                <div class="row">
+
+                                                    
+                                                        <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token %>">
+                                                   
+                                                    <div class="form-group col-md-4">
+                                                      <label class="bmd-label-floating"><%= gettext "Standard Name" %></label>
+                                                        <select class="custom-select -custom-select-sm"  required="required" name="level_id">
+                                                              <option selected="">Choose a Standard</option>
+                           <%= for a <- @level |> Enum.sort_by(fn x -> x.name end) do %>
+                                            <option value="<%= a.id %>" ><%= a.name %>
+                                            </option>
+                                          <% end %>
+                                        </select>
+                                                    </div>
+
+                                                        <div  class="form-group col-md-4">
+                                                      <label class="bmd-label-floating"><%= gettext "Exam Name" %></label>
+                                                        <select class="custom-select -custom-select-sm"  required="required" name="exam_no">
+                                                              <option selected="">Choose a Exam</option>
+                           <%= for a <- @exam |> Enum.sort_by(fn x -> x.name end) do %>
+                                            <option value="<%= a.exam_no %>" ><%= a.name %>
+                                            </option>
+                                          <% end %>
+                                        </select>
+                                                    </div>
+
+                                                       <div  class="form-group col-md-4">
+                                                      <label class="bmd-label-floating"><%= gettext "Year Name" %></label>
+                                                        <select class="custom-select -custom-select-sm"  required="required" name="year">
+                                                              <option selected="">Choose a Year</option>
+                        
+                                            <option value="2019" >2019
+                                            </option>
+                                             <option value="2020" >2020
+                                            </option>
+                                             <option value="2021" >2021
+                                            </option>
+                                             <option value="2022" >2022
+                                            </option>
+                                       
+                                        </select>
+                                                    </div>
+                                                  
+                                                  
+                                               
+
+                                                    </div>
+   <div id="gne" class="form-group col-md-12">
+                                                   <input class="btn btn-primary" name="type" value="PDF(Rank)" type="submit" style="margin-top: 30px">
+                                                      <input class="btn btn-primary" name="type" value="PDF(Student)" type="submit" style="margin-top: 30px">
+                                                      <input class="btn btn-success" name="type" value="Excel" type="submit" style="margin-top: 30px">
+                                                </div>
+                                               
+                                              
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+             </form>
         </div>
 </div>
 

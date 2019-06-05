@@ -38,7 +38,7 @@
                                <td><%= no + 1 %></td>
                                 <td><%= as.teacher_name %></td>
                               <td><%= as.cname %></td>
-                              <td><%= as.exam %></td>
+                              <td><%= as.exam %>(<%= as.em_id %>)</td>
                                <td><%= as.class %></td>
                               <td><%= as.subject %></td>
                               <td>

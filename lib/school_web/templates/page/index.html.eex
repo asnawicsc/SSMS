@@ -232,6 +232,7 @@
                   </ol>
        
            <a href="/co_mark"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Mark</button></a>
+            <a href="/student_coco_achievements"><button class="mb-1 btn-sm btn btn-outline-primary" type="button">Assign Achievements</button></a>
 
        </div>
     </div>

@@ -6,7 +6,7 @@
     <td  align="center" style="margin: 3px; padding: 3px; border-right: 0;  "><img  src='data:image/png;base64, <%= @institution.logo_bin %>' height="80px"></td></td>
 <td  style="margin: 3px; padding: 3px; border-left: 0;  ">
 <b  style="font-size: 25px;"><%= @institution.name %></b></br>
-班级<b> Standard: <%= @level.name %></b> <br>
+班级<b> Class: <%= @class.name %></b> <br>
 级任老师<b> Nama GURU : ________________________________________________________________ </b><br>
 事项<b> PERKARA &nbsp;&nbsp;&nbsp;: <%= @exam_name %></b><b style="margin-left: 10px;"> 列印日期:<%= SchoolWeb.LayoutView.my_time(DateTime.utc_now) %></b> 
 
@@ -37,7 +37,7 @@
              <th width="80px;">SEJ</th>
               <th width="80px;">RBT</th>
                <th width="80px;">TMK</th>
-               <th width="80px;"><%= if @institution.id != 9 do "PSV" else "DSV" end %></th>
+                <th width="80px;"><%= if @institution.id != 9 do "PSV" else "DSV" end %></th>
                  <th width="80px;">PJ</th>
                   <th width="80px;">PK</th>
                   <th width="80px;">MZ</th>

@@ -1,24 +1,5 @@
 
  <% require IEx %>
-  <body>
-     <div class="row">
-     
-    <form action="/pdf/standard_ranking" method="POST">
-  <input type="hidden" name="exam_id" value="<%= @exam_id %>">
-  <input type="hidden" name="level_id" value="<%= @level_id %>">
-  <input type="hidden" name="_csrf_token" value="<%= @csrf %>">
-<input align="left" type="submit" name="" value="Print!">
-</form>
-
-    <form action="/all_report_card" method="POST">
-      <input type="hidden" name="_csrf_token" value="<%= @csrf %>">
-      <input type="hidden" name="array" id="all_report_card_data" value="">
-      <button type="submit" align="left" class="btn btn-info btn-sm " id="all_report_card" style="float: right">Print all Report Card</button>
-    </form>
-
-</div>
-
-<Br>
 
 <table class="table"  width="100%">
   

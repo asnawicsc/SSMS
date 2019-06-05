@@ -73,6 +73,28 @@ defmodule SchoolWeb.SubjectController do
   end
 
   def create_subject_setting(conn, params) do
+    subjects =
+      Repo.all(
+        from(
+          s in School.Affairs.Subject,
+          select: %{
+            id: s.id,
+            code: s.code,
+            timetable_code: s.timetable_code,
+            name: s.description,
+            timetable_description: s.timetable_description,
+            with_mark: s.with_mark,
+            institution_id: s.institution_id
+          }
+        )
+      )
+      |> Enum.filter(fn x -> x.institution_id == conn.private.plug_session["institution_id"] end)
+
+    for item <- subjects do
+      subject = Affairs.get_subject!(item.id)
+      Affairs.update_subject(subject, %{with_mark: 0})
+    end
+
     for item <- params["subject"] do
       subject_id = item |> elem(0)
       subject = Affairs.get_subject!(subject_id)

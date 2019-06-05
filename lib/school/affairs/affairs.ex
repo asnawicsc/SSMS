@@ -215,7 +215,9 @@ defmodule School.Affairs do
   end
 
   def list_semesters(institution_id) do
-    Repo.all(from(s in Semester, where: s.institution_id == ^institution_id))
+    Repo.all(
+      from(s in Semester, where: s.institution_id == ^institution_id, order_by: [s.start_date])
+    )
   end
 
   @doc """
@@ -3928,8 +3930,11 @@ defmodule School.Affairs do
     ExamPeriod.changeset(exam_period, %{})
   end
 
-  def has_calendar?(teacher_id) do
-    result = Repo.all(from(t in Timetable, where: t.teacher_id == ^teacher_id))
+  def has_calendar?(teacher_id, semester_id) do
+    result =
+      Repo.all(
+        from(t in Timetable, where: t.teacher_id == ^teacher_id and t.semester_id == ^semester_id)
+      )
 
     if result == [] do
       {:no, 0}
@@ -3942,7 +3947,7 @@ defmodule School.Affairs do
     # create a calendar
 
     {:ok, timetable} =
-      case School.Affairs.has_calendar?(teacher_id) do
+      case School.Affairs.has_calendar?(teacher_id, semester_id) do
         {:yes, timetable_id} ->
           timetable = Repo.get(Timetable, timetable_id)
           {:ok, timetable}
@@ -4131,7 +4136,7 @@ defmodule School.Affairs do
         %{
           start: my_time(x.start_datetime),
           end: my_time(x.end_datetime),
-          title: x.subject <> " - " <> x.class,
+          title: "#{x.subject} - #{x.class}",
           description: x.teacher,
           period_id: x.period_id,
           google_event_id: x.google_event_id,
@@ -4174,7 +4179,7 @@ defmodule School.Affairs do
         %{
           start: my_time(x.start_datetime),
           end: my_time(x.end_datetime),
-          title: x.subject <> " - " <> x.teacher,
+          title: "#{x.subject} - #{x.teacher}",
           description: x.teacher,
           period_id: x.period_id,
           google_event_id: x.google_event_id,
@@ -4200,8 +4205,6 @@ defmodule School.Affairs do
           }
         )
       )
-
-    IEx.pry()
 
     # |> Enum.map(fn x ->
     #   %{
@@ -6517,5 +6520,58 @@ defmodule School.Affairs do
   """
   def change_student_mark_nilam(%StudentMarkNilam{} = student_mark_nilam) do
     StudentMarkNilam.changeset(student_mark_nilam, %{})
+  end
+
+  def update_timetbl() do
+    periods = Repo.all(Period)
+
+    for period <- periods do
+      timetable = Repo.get(Timetable, period.timetable_id)
+
+      a = update_timetable(timetable, %{teacher_id: period.teacher_id})
+      IO.inspect(a)
+    end
+  end
+
+  def update_sbt() do
+    sbt_data =
+      Repo.all(
+        from(
+          p in Period,
+          left_join: t in Teacher,
+          on: t.id == p.teacher_id,
+          left_join: s in Subject,
+          on: s.id == p.subject_id,
+          left_join: c in Class,
+          on: c.id == p.class_id,
+          select: %{
+            sid: s.id,
+            tid: t.id,
+            cid: c.id,
+            subject: s.description,
+            teacher: t.name,
+            class: c.name
+          }
+        )
+      )
+      |> Enum.uniq()
+
+    for sbt <- sbt_data do
+      res =
+        Repo.all(
+          from(
+            s in SubjectTeachClass,
+            where: s.subject_id == ^sbt.sid and s.class_id == ^sbt.cid
+          )
+        )
+
+      if res |> Enum.count() == 1 do
+        result = hd(res)
+
+        a = SubjectTeachClass.changeset(result, %{teacher_id: sbt.tid}) |> Repo.update!()
+        IO.inspect(a)
+      else
+      end
+    end
   end
 end

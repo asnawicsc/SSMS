@@ -32,7 +32,17 @@
 
 <% standard = School.Repo.get_by(School.Affairs.Level,institution_id: @conn.private.plug_session["institution_id"],id: subject_teach_class.standard_id) %>
 
-<% teacher = School.Repo.get_by(School.Affairs.Teacher,institution_id: @conn.private.plug_session["institution_id"],id: subject_teach_class.teacher_id)  %>
+<% teacher = 
+
+
+if subject_teach_class.teacher_id != nil do 
+School.Repo.get_by(School.Affairs.Teacher,institution_id: @conn.private.plug_session["institution_id"],id: subject_teach_class.teacher_id) 
+
+else
+  %{name: "unknown"}
+end 
+
+ %>
 
     <tr>
       <td>  <%= if standard != nil , do: standard.name , else: "Unknown Standard" %></td>

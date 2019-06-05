@@ -1,3 +1,4 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <% require IEx %>
 <% require Integer %>
 
@@ -5,7 +6,10 @@
   <style type="text/css">
     table {
                   border-collapse: collapse;
+                   white-space: nowrap;
+                    border-spacing:0;
 
+          
                 }
 
                 td {
@@ -15,13 +19,6 @@
                   border: 1px solid #080808;
                 }
 
-                .border {
-                  border: 1px solid #080808;
-                }
-
-                .noborders td {
-                  border: 0;
-                }
   </style>
      <body >
 
@@ -1243,6 +1240,62 @@
 
     end
 
+                mz= all_date|>Enum.filter(fn x -> x.subject =="MZ" end)
+   {mz1,mz2,mz3}= if mz == [] do
+
+      {"","",""}
+    else
+       mz=mz|>hd  
+      
+
+     mz_s1m=if mz.s1m != nil  and mz.s1m != "0" do
+      mz.s1m
+    else
+      ""
+     end
+
+     mz_s1g=if mz.s1g != nil do
+      mz.s1g
+    else
+      "" 
+     end  
+      
+     mz1={mz_s1m,mz_s1g}  
+
+     mz_s2m=if mz.s2m != nil  and mz.s2m != "0" do
+      mz.s2m
+    else
+      ""
+     end
+
+     mz_s2g=if mz.s2g != nil do
+      mz.s2g
+    else
+      "" 
+     end  
+      
+    mz2={mz_s2m,mz_s2g}  
+
+
+     mz_s3m=if mz.s3m != nil  and mz.s3m != "0" do
+      mz.s3m
+    else
+      ""
+     end
+
+     mz_s3g=if mz.s3g != nil do
+      mz.s3g
+    else
+      "" 
+     end  
+      
+     mz3={mz_s3m,mz_s3g}        
+
+
+       {mz1,mz2,mz3}
+
+    end
+
          pjk= all_date|>Enum.filter(fn x -> x.subject =="PJK" end)
    {pjk1,pjk2,pjk3}= if pjk == [] do
 
@@ -1663,17 +1716,18 @@ else
 
 
    %>
-                  <%= if all_datar |> elem(1) |> Integer.is_odd do %>
-                    <div class="col-md-6" style="position: relative;">
+
+
+                                <%= if all_datar |> elem(1) |> Integer.is_even do %>
+                                 <div class="col-md-7" style="position: absolute;  left: 60px; display:block; overflow:visible; white-space: nowrap;">
+               
                       <% else %>
-                       <div class="col-md-6" style="position: relative">
+                           <div class="col-md-7" style="position: relative;  left: 1100px; display:block; overflow:visible; white-space: nowrap;">
                   <% end %>
          
 
-
-
- 
-              <table >
+  	
+  <table cellspacing="0" cellpadding="0" style="font-size: 18px; white-space: nowrap; " width="45%">
 
                 <tr align="center">
                 
@@ -1686,18 +1740,13 @@ else
 
                 </tr>
                 <tr align="left">
-                    <%= if @level.name =="Standard 6" do %>
-                  <td colspan="6"><b>学生姓名: <%= profile.cname %></b> <br>
-                    <b>Nama Murid: <%= profile.name %></b></font>
-                  </td>
-                  <% else %>
+                    
                    <td colspan="5"><b>学生姓名: <%= profile.cname %></b> <br>
-                    <b>Nama Murid: <%= profile.name %></b></font>
+                    <b>Nama Murid: <%= profile.name %></b>
                   </td>
-                  <% end %>
-
+           
                   <td><b>班级<br>
-        Darjah: <%= profile.class %></b></font>
+        Darjah: <%= profile.class %></b>
                   </td>
                 </tr>
 
@@ -1711,7 +1760,7 @@ else
                         <% chinese =item.name|>String.split_at(5)|>elem(0) %>
                           <% malay =item.name|>String.split_at(5)|>elem(1) %>
 
-                            <td align="center" style="margin: 0px; padding: 0px;">
+                            <td align="center" style="margin: 0px; padding: 0px; width: 100px" >
                               <%= chinese %>
                                 <BR>
                                 <%= malay %>
@@ -1764,10 +1813,7 @@ else
                                                     <% end %>
 
                                                       <% end %>
-                                                       <%= if @level.name =="Standard 6" do %>
-                                                       <td align="center" style="margin: 0px; padding: 0px;">PKSR
-                                            <BR>2</td>
-                                            <% end %>
+                                           
                                                         <td align="center" style="margin: 0px; padding: 0px;">平均
                                                           <BR>Purata</td>
                 </tr>
@@ -1777,7 +1823,7 @@ else
                     <BR> <b>国语 <br> Bahasa <br> Malaysia </b>
                     <BR>
                   </td>
-                  <td style="margin: 0px; padding: 0px;" align="left">会话 Lisan</td>
+                  <td style="margin: 0px; padding: 0px;" align="left">国语 Lisan</td>
                   <td style="margin: 0px; padding: 0px;">
                     <%= if bml1 != "" do   bml1|>elem(0)  else "" end %>
                       <div style="float:right;width:50%;">
@@ -1796,12 +1842,7 @@ else
                         <%= if bml3 != "" do bml3|>elem(1) else "" end %>
                           </div>
                   </td>
-                      <%= if @level.name =="Standard 6" do %>
-                       <td style="margin: 0px; padding: 0px;"></td>
-                       <% else %>
-                  
-
-                    <% end %>
+                     
                   <td style="margin: 0px; padding: 0px;"></td>
 
                 </tr>
@@ -1825,15 +1866,11 @@ else
                         <%= if bmb3 != "" do bmb3|>elem(1) else "" end %>
                           </div>
                   </td>
-                     <%= if @level.name =="Standard 6" do %>
-                       <td style="margin: 0px; padding: 0px;"></td>
-                       <% else %>
-
-                    <% end %>
+                   
                   <td style="margin: 0px; padding: 0px;"></td>
                 </tr>
                 <tr align="center">
-                  <td style="margin: 0px; padding: 0px;" align="left">写作 Penulisan</td>
+                  <td style="margin: 0px; padding: 0px;" align="left">作文 Penulisan</td>
                   <td style="margin: 0px; padding: 0px;">
                     <%= if bmp1 != "" do bmp1|>elem(0) else "" end %>
                       <div style="float:right;width:50%;">
@@ -1852,11 +1889,7 @@ else
                         <%= if bmp3 != "" do bmp3|>elem(1) else "" end %>
                           </div>
                   </td>
-                     <%= if @level.name =="Standard 6" do %>
-                       <td style="margin: 0px; padding: 0px;"></td>
-                       <% else %>
-
-                    <% end %>
+                   
                   <td style="margin: 0px; padding: 0px;"></td>
                 </tr>
                 <tr align="center">
@@ -1879,11 +1912,7 @@ else
                         <%= if bmpm3 != "" do bmpm3|>elem(1) else "" end %>
                           </div>
                   </td>
-                     <%= if @level.name =="Standard 6" do %>
-                       <td style="margin: 0px; padding: 0px;"></td>
-                       <% else %>
-
-                    <% end %>
+                   
                   <td style="margin: 0px; padding: 0px;"></td>
                 </tr>
                 <tr align="center">
@@ -1908,11 +1937,7 @@ else
                         <%= if ingl3 != "" do ingl3|>elem(1) else "" end %>
                           </div>
                   </td>
-                     <%= if @level.name =="Standard 6" do %>
-                       <td style="margin: 0px; padding: 0px;"></td>
-                       <% else %>
-
-                    <% end %>
+                   
                   <td style="margin: 0px; padding: 0px;"></td>
                 </tr>
                 <tr align="center">
@@ -1935,15 +1960,11 @@ else
                         <%= if ingb3 != "" do ingb3|>elem(1) else "" end %>
                           </div>
                   </td>
-                     <%= if @level.name =="Standard 6" do %>
-                       <td style="margin: 0px; padding: 0px;"></td>
-                       <% else %>
-
-                    <% end %>
+                  
                   <td style="margin: 0px; padding: 0px;"></td>
                 </tr>
                 <tr align="center">
-                  <td style="margin: 0px; padding: 0px;" align="left">写作 Penulisan</td>
+                  <td style="margin: 0px; padding: 0px;" align="left">作文 Penulisan</td>
                   <td style="margin: 0px; padding: 0px;">
                     <%= if ingp1 != "" do ingp1|>elem(0) else "" end %>
                       <div style="float:right;width:50%;">
@@ -1962,11 +1983,7 @@ else
                         <%= if ingp3 != "" do ingp3|>elem(1) else "" end %>
                           </div>
                   </td>
-                     <%= if @level.name =="Standard 6" do %>
-                       <td style="margin: 0px; padding: 0px;"></td>
-                       <% else %>
-
-                    <% end %>
+                   
                   <td style="margin: 0px; padding: 0px;"></td>
                 </tr>
                 <tr align="center">
@@ -1989,11 +2006,7 @@ else
                         <%= if ingpm3 != "" do ingpm3|>elem(1) else "" end %>
                           </div>
                   </td>
-                     <%= if @level.name =="Standard 6" do %>
-                       <td style="margin: 0px; padding: 0px;"></td>
-                       <% else %>
-
-                    <% end %>
+                    
                   <td style="margin: 0px; padding: 0px;"></td>
                 </tr align="center">
                 <tr align="center">
@@ -2017,11 +2030,7 @@ else
                         <%= if chl3 != "" do chl3|>elem(1) else "" end %>
                           </div>
                   </td>
-                     <%= if @level.name =="Standard 6" do %>
-                       <td style="margin: 0px; padding: 0px;"></td>
-                       <% else %>
-
-                    <% end %>
+                   
                   <td style="margin: 0px; padding: 0px;"></td>
                 </tr>
                 <tr align="center">
@@ -2044,15 +2053,11 @@ else
                         <%= if chb3 != "" do chb3|>elem(1) else "" end %>
                           </div>
                   </td>
-                     <%= if @level.name =="Standard 6" do %>
-                       <td style="margin: 0px; padding: 0px;"></td>
-                       <% else %>
-
-                    <% end %>
+                    
                   <td style="margin: 0px; padding: 0px;"></td>
                 </tr>
                 <tr align="center">
-                  <td style="margin: 0px; padding: 0px;" align="left">写作 Penulisan</td>
+                  <td style="margin: 0px; padding: 0px;" align="left">作文 Penulisan</td>
                   <td style="margin: 0px; padding: 0px;">
                     <%= if chp1 != "" do chp1|>elem(0) else "" end %>
                       <div style="float:right;width:50%;">
@@ -2071,11 +2076,7 @@ else
                         <%= if chp3 != "" do chp3|>elem(1) else "" end %>
                           </div>
                   </td>
-                     <%= if @level.name =="Standard 6" do %>
-                       <td style="margin: 0px; padding: 0px;"></td>
-                       <% else %>
-
-                    <% end %>
+                   
                   <td style="margin: 0px; padding: 0px;"></td>
                 </tr>
                 <tr align="center">
@@ -2098,11 +2099,7 @@ else
                         <%= if chpm3 != "" do chpm3|>elem(1) else "" end %>
                           </div>
                   </td>
-                     <%= if @level.name =="Standard 6" do %>
-                       <td style="margin: 0px; padding: 0px;"></td>
-                       <% else %>
-
-                    <% end %>
+                   
                   <td style="margin: 0px; padding: 0px;"></td>
                 </tr>
                 <tr align="center">
@@ -2126,11 +2123,7 @@ else
                         <%= if math3 != "" do math3|>elem(1) else "" end %>
                           </div>
                   </td>
-                     <%= if @level.name =="Standard 6" do %>
-                       <td style="margin: 0px; padding: 0px;"></td>
-                       <% else %>
-
-                    <% end %>
+                    
                   <td style="margin: 0px; padding: 0px;"></td>
                 </tr>
                 <tr align="center">
@@ -2154,15 +2147,11 @@ else
                         <%= if sains3 != "" do sains3|>elem(1) else "" end %>
                           </div>
                   </td>
-                     <%= if @level.name =="Standard 6" do %>
-                       <td style="margin: 0px; padding: 0px;"></td>
-                       <% else %>
-
-                    <% end %>
+                   
                   <td style="margin: 0px; padding: 0px;"></td>
                 </tr>
                 <tr align="center">
-                  <td style="margin: 0px; padding: 0px; border-right: 0" align="left">道德教育</td>
+                  <td style="margin: 0px; padding: 0px; border-right: 0" align="left">道德</td>
                   <td style="margin: 0px; padding: 0px; border-left: 0" align="left">Pendidikan Moral</td>
                   <td style="margin: 0px; padding: 0px;">
                     <%= if pm1 != "" do pm1|>elem(0) else "" end %>
@@ -2182,11 +2171,7 @@ else
                         <%= if pm3 != "" do pm3|>elem(1) else "" end %>
                           </div>
                   </td>
-                     <%= if @level.name =="Standard 6" do %>
-                       <td style="margin: 0px; padding: 0px;"></td>
-                       <% else %>
-
-                    <% end %>
+                    
                   <td style="margin: 0px; padding: 0px;"></td>
                 </tr>
                 <tr align="center">
@@ -2210,11 +2195,7 @@ else
                         <%= if agama3 != "" do agama3|>elem(1) else "" end %>
                           </div>
                   </td>
-                     <%= if @level.name =="Standard 6" do %>
-                       <td style="margin: 0px; padding: 0px;"></td>
-                       <% else %>
-
-                    <% end %>
+                    
                   <td style="margin: 0px; padding: 0px;"></td>
                 </tr>
                 <tr align="center">
@@ -2238,15 +2219,11 @@ else
                         <%= if sej3 != "" do sej3|>elem(1) else "" end %>
                           </div>
                   </td>
-                     <%= if @level.name =="Standard 6" do %>
-                       <td style="margin: 0px; padding: 0px;"></td>
-                       <% else %>
-
-                    <% end %>
+                    
                   <td style="margin: 0px; padding: 0px;"></td>
                 </tr>
                 <tr align="center">
-                  <td style="margin: 0px; padding: 0px; border-right: 0" align="left">设计和技术</td>
+                  <td style="margin: 0px; padding: 0px; border-right: 0" align="left">设计与工艺</td>
                   <td style="margin: 0px; padding: 0px; border-left: 0" align="left">RBT</td>
                   <td style="margin: 0px; padding: 0px;">
                     <%= if rbt1 != "" do rbt1|>elem(0) else "" end %>
@@ -2265,15 +2242,11 @@ else
                         <%= if rbt3 != "" do rbt3|>elem(1) else "" end %>
                           </div>
                   </td>
-                     <%= if @level.name =="Standard 6" do %>
-                       <td style="margin: 0px; padding: 0px;"></td>
-                       <% else %>
-
-                    <% end %>
+                    
                   <td style="margin: 0px; padding: 0px;"></td>
                 </tr>
                 <tr align="center">
-                  <td style="margin: 0px; padding: 0px; border-right: 0" align="left">通信信息技术</td>
+                  <td style="margin: 0px; padding: 0px; border-right: 0" align="left">通信与信息</td>
                   <td style="margin: 0px; padding: 0px; border-left: 0" align="left">TMK</td>
                   <td style="margin: 0px; padding: 0px;">
                     <%= if tmk1 != "" do tmk1|>elem(0) else "" end %>
@@ -2293,11 +2266,7 @@ else
                         <%= if tmk3 != "" do tmk3|>elem(1) else "" end %>
                           </div>
                   </td>
-                     <%= if @level.name =="Standard 6" do %>
-                       <td style="margin: 0px; padding: 0px;"></td>
-                       <% else %>
-
-                    <% end %>
+                   
                   <td style="margin: 0px; padding: 0px;"></td>
                 </tr>
                 <tr align="center">
@@ -2321,11 +2290,31 @@ else
                         <%= if seni3 != "" do seni3|>elem(1) else "" end %>
                           </div>
                   </td>
-                     <%= if @level.name =="Standard 6" do %>
-                       <td style="margin: 0px; padding: 0px;"></td>
-                       <% else %>
-
-                    <% end %>
+                    
+                  <td style="margin: 0px; padding: 0px;"></td>
+                </tr>
+                                <tr align="center">
+                  <td style="margin: 0px; padding: 0px; border-right: 0" align="left">音乐教育</td>
+                  <td style="margin: 0px; padding: 0px; border-left: 0" align="left">Pendidikan Muzik</td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if mz1 != "" do mz1|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if mz1 != "" do mz1|>elem(1) else "" end %>
+                          </div>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if mz2 != "" do mz2|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if mz2 != "" do mz2|>elem(1) else "" end %>
+                          </div>
+                  </td>
+                  <td style="margin: 0px; padding: 0px;">
+                    <%= if mz3 != "" do mz3|>elem(0) else "" end %>
+                      <div style="float:right;width:50%;">
+                        <%= if mz3 != "" do mz3|>elem(1) else "" end %>
+                          </div>
+                  </td>
+                    
                   <td style="margin: 0px; padding: 0px;"></td>
                 </tr>
                 <tr align="center">
@@ -2349,11 +2338,7 @@ else
                         <%= if pj3 != "" do pj3|>elem(1) else "" end %>
                           </div>
                   </td>
-                     <%= if @level.name =="Standard 6" do %>
-                       <td style="margin: 0px; padding: 0px;"></td>
-                       <% else %>
-
-                    <% end %>
+                   
                   <td style="margin: 0px; padding: 0px;"></td>
                 </tr>
                 <tr align="center">
@@ -2377,11 +2362,7 @@ else
                         <%= if pjk3 != "" do pjk3|>elem(1) else "" end %>
                           </div>
                   </td>
-                     <%= if @level.name =="Standard 6" do %>
-                       <td style="margin: 0px; padding: 0px;"></td>
-                       <% else %>
-
-                    <% end %>
+                    
                   <td style="margin: 0px; padding: 0px;"></td>
                 </tr>
                 <tr align="center">
@@ -2405,11 +2386,7 @@ else
                         <%= if laku3 != "" do laku3|>elem(1) else "" end %>
                           </div>
                   </td>
-                     <%= if @level.name =="Standard 6" do %>
-                       <td style="margin: 0px; padding: 0px;"></td>
-                       <% else %>
-
-                    <% end %>
+                  
                   <td style="margin: 0px; padding: 0px;"></td>
                 </tr>
                 <tr align="center">
@@ -2424,11 +2401,7 @@ else
                   <td style="margin: 0px; padding: 0px;">
                     <%= kedatangan3 %>
                   </td>
-                     <%= if @level.name =="Standard 6" do %>
-                       <td style="margin: 0px; padding: 0px;"></td>
-                       <% else %>
-
-                    <% end %>
+                    
                   <td style="margin: 0px; padding: 0px;"></td>
                 </tr>
                 <tr align="center">
@@ -2443,11 +2416,7 @@ else
                   <td style="margin: 0px; padding: 0px;">
                     <%= total3 %>
                   </td>
-                     <%= if @level.name =="Standard 6" do %>
-                       <td style="margin: 0px; padding: 0px;"></td>
-                       <% else %>
-
-                    <% end %>
+                   
                   <td style="margin: 0px; padding: 0px;"></td>
                 </tr>
                 <tr align="center">
@@ -2462,11 +2431,7 @@ else
                   <td style="margin: 0px; padding: 0px;">
                     <%= averg3 %>
                   </td>
-                    <%= if @level.name =="Standard 6" do %>
-                       <td style="margin: 0px; padding: 0px;"></td>
-                       <% else %>
-
-                    <% end %>
+                  
                   <td style="margin: 0px; padding: 0px;"></td>
                 </tr>
                 <tr align="center">
@@ -2481,11 +2446,7 @@ else
                   <td style="margin: 0px; padding: 0px;">
                     <%= crank3 %>
                   </td>
-                     <%= if @level.name =="Standard 6" do %>
-                       <td style="margin: 0px; padding: 0px;"></td>
-                       <% else %>
-
-                    <% end %>
+                    
                   <td style="margin: 0px; padding: 0px;"></td>
                 </tr>
                 <tr align="center">
@@ -2500,24 +2461,17 @@ else
                   <td style="margin: 0px; padding: 0px;">
                     <%= srank3 %>
                   </td>
-                     <%= if @level.name =="Standard 6" do %>
-                       <td style="margin: 0px; padding: 0px;"></td>
-                       <% else %>
-
-                    <% end %>
+                     
                   <td style="margin: 0px; padding: 0px;"></td>
                 </tr>
+
+
                 <tr align="center">
                   <td colspan="2" style="margin: 1px; padding: 1px; border-right: 0" align="left">校长签名 <br>
                   T.Tangan Guru Besar </td>
+                  <td style="margin: 0px; padding: 0px;"> </td>
                   <td style="margin: 0px; padding: 0px;"></td>
                   <td style="margin: 0px; padding: 0px;"></td>
-                  <td style="margin: 0px; padding: 0px;"></td>
-                    <%= if @level.name =="Standard 6" do %>
-                       <td style="margin: 0px; padding: 0px;"></td>
-                       <% else %>
-
-                    <% end %>
                    <td style="margin: 0px; padding: 0px;"></td>
                 </tr>
                 <tr align="center">
@@ -2526,11 +2480,6 @@ else
                <td style="margin: 0px; padding: 0px;"></td>
                   <td style="margin: 0px; padding: 0px;"></td>
                   <td style="margin: 0px; padding: 0px;"></td>
-                     <%= if @level.name =="Standard 6" do %>
-                       <td style="margin: 0px; padding: 0px;"></td>
-                       <% else %>
-
-                    <% end %>
                    <td style="margin: 0px; padding: 0px;"></td>
                </tr>
                 <tr align="center">
@@ -2540,23 +2489,15 @@ else
                   <td style="margin: 0px; padding: 0px;"></td>
                   <td style="margin: 0px; padding: 0px;"></td>
                   <td style="margin: 0px; padding: 0px;"></td>
-                     <%= if @level.name =="Standard 6" do %>
-                       <td style="margin: 0px; padding: 0px;"></td>
-                       <% else %>
-
-                    <% end %>
                    <td style="margin: 0px; padding: 0px;"></td>
                 </tr>
                 
 
                 <tr>
 
-                     <%= if @level.name =="Standard 6" do %>
-                        <td colspan="7" align="left" style="margin: 0px; padding: 0px;" height="50px;">评语 Komen: <br>
-
-                          <% else %>
+                   
                             <td colspan="6" align="left" style="margin: 0px; padding: 0px;" height="50px;">评语 Komen: <br>
-                    <% end %>
+                
                 
 
                     <% student_comment = Repo.get_by(School.Affairs.StudentComment, student_id: profile.stuid) %>
@@ -2605,10 +2546,10 @@ else
                                   <%= if student_comment.comment3 != nil do
 
 
-              Repo.get_by(School.Affairs.Comment,
-        id: student_comment.comment3
-      ).c_malay
-          end %>
+                                    Repo.get_by(School.Affairs.Comment,
+                              id: student_comment.comment3
+                            ).c_malay
+                                end %>
 
                                     <% end %>
                   </td>
@@ -2616,18 +2557,18 @@ else
                 </tr>
               
 
-              </table>
-            </div>
+   </table>
+         
 
-                  <%= if all_datar |> elem(1) |> Integer.is_odd do %>
-                    </div>
-               
-                  <div style="page-break-before: always;"></div>
-                
-                  <% end %>
+
+ <%= if all_datar |> elem(1) |> Integer.is_odd do %>
+                           </div>
+                     <div style="page-break-before: always;"></div>
+                     
+                     <%else %>
                    </div>
+                  <% end %>
+
             <% end %>
 
             </body>
-
-          

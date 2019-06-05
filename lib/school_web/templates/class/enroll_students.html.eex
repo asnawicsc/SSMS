@@ -6,7 +6,7 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-md-5">
+    <div class="col-md-4">
         <!-- START card-->
         <div class="card card-default">
             <div class="card-header"></div>
@@ -54,12 +54,10 @@
       </div>
 
 
-                       
-                           
 
         <!-- END card-->
     </div>
-    <div class="col-md-7">
+    <div class="col-md-8">
         <!-- START card-->
         <div class="card card-default">
             <div class="card-body" id="">
@@ -97,7 +95,7 @@
                                 <th>
                                     <%= gettext("Phone") %>
                                 </th>
-                                <th></th>
+                                <th ></th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -110,6 +108,17 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function(){
+
+         $(document).on("click", ".show_info", function(){
+
+           var student_id = $(this).attr("ids")
+
+           url="/show_student_info/"+student_id+""
+
+          var win = window.open(url, '_blank');
+  win.focus();
+
+         })
     
         $(document).on("click", ".add_to_class", function(){
     
@@ -238,6 +247,7 @@
                         return html
                       }
                      }
+                     
     
                  ]
              });
@@ -286,11 +296,10 @@
     
              var data = payload.students
 
-    
              $("table#result").DataTable({
                   destroy: true,
                  data: data,
-          
+       
              
                  columns: [
                      {data: 'name'},
@@ -303,7 +312,7 @@
                      {data: 'phone'},
                      {data: 'id',
                         render: function(data, type, row, meta){
-                          var html = '<div class="btn btn-primary add_to_class" id="'+data+'">Add</div>'   
+        var html = '<div class="row"><div class="btn btn-primary btn-xs add_to_class" id="'+data+'">Add</div><div class="btn btn-success btn-xs show_info" ids="'+data+'">Info</div>'   
                         return html
                       }
                      }

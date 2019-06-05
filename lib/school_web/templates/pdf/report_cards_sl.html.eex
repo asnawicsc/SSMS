@@ -63,7 +63,7 @@
   
   <% 
 
-    bml= all_date|>Enum.filter(fn x -> x.subject =="MA04" end)
+    bml= all_date|>Enum.filter(fn x -> x.subject =="BML" end)
     {bml1,bml2,bml3}= if bml == [] do
 
       {"","",""}
@@ -121,7 +121,7 @@
 
     end
 
-        bmb= all_date|>Enum.filter(fn x -> x.subject =="MA03" end)
+        bmb= all_date|>Enum.filter(fn x -> x.subject =="BMB" end)
     {bmb1,bmb2,bmb3}= if bmb == [] do
 
       {"","",""}
@@ -181,7 +181,7 @@
     end
 
 
-            bmp= all_date|>Enum.filter(fn x -> x.subject =="MA01" end)
+            bmp= all_date|>Enum.filter(fn x -> x.subject =="BMT" end)
     {bmp1,bmp2,bmp3}= if bmp == [] do
 
       {"","",""}
@@ -244,7 +244,7 @@
 
     end
 
-                bmpm= all_date|>Enum.filter(fn x -> x.subject =="MA02" end)
+                bmpm= all_date|>Enum.filter(fn x -> x.subject =="BMF" end)
    {bmpm1,bmpm2,bmpm3}= if bmpm == [] do
 
       {"","",""}
@@ -303,7 +303,7 @@
     end
 
 
-                    ingl= all_date|>Enum.filter(fn x -> x.subject =="ING04" end)
+                    ingl= all_date|>Enum.filter(fn x -> x.subject =="BIL" end)
    {ingl1,ingl2,ingl3}= if ingl == [] do
 
       {"","",""}
@@ -363,7 +363,7 @@
 
     end
 
-    ingb= all_date|>Enum.filter(fn x -> x.subject =="ING03" end)
+    ingb= all_date|>Enum.filter(fn x -> x.subject =="BIB" end)
    {ingb1,ingb2,ingb3}= if ingb == [] do
 
       {"","",""}
@@ -418,7 +418,7 @@
 
     end
 
-        ingp= all_date|>Enum.filter(fn x -> x.subject =="ING01" end)
+        ingp= all_date|>Enum.filter(fn x -> x.subject =="BIT" end)
    {ingp1,ingp2,ingp3}= if ingp == [] do
 
       {"","",""}
@@ -477,7 +477,7 @@
     end
 
 
-            ingpm= all_date|>Enum.filter(fn x -> x.subject =="ING02" end)
+            ingpm= all_date|>Enum.filter(fn x -> x.subject =="BIF" end)
    {ingpm1,ingpm2,ingpm3}=  if ingpm == [] do
 
       {"","",""}
@@ -536,7 +536,7 @@
 
     end
 
-                chl= all_date|>Enum.filter(fn x -> x.subject =="CH04" end)
+                chl= all_date|>Enum.filter(fn x -> x.subject =="BCL" end)
    {chl1,chl2,chl3}=  if chl == [] do
 
       {"","",""}
@@ -598,7 +598,7 @@
     end
 
 
-                    chb= all_date|>Enum.filter(fn x -> x.subject =="CH03" end)
+                    chb= all_date|>Enum.filter(fn x -> x.subject =="BCB" end)
    {chb1,chb2,chb3}=  if chb == [] do
 
       {"","",""}
@@ -655,7 +655,7 @@
 
     end
 
-                        chp= all_date|>Enum.filter(fn x -> x.subject =="CH01" end)
+                        chp= all_date|>Enum.filter(fn x -> x.subject =="BCT" end)
    {chp1,chp2,chp3}=  if chp == [] do
 
       {"","",""}
@@ -713,7 +713,7 @@
 
     end
 
-   chpm= all_date|>Enum.filter(fn x -> x.subject =="CH02" end)
+   chpm= all_date|>Enum.filter(fn x -> x.subject =="BCF" end)
    {chpm1,chpm2,chpm3}= if chpm == [] do
 
       {"","",""}
@@ -770,7 +770,7 @@
 
     end
 
-    math= all_date|>Enum.filter(fn x -> x.subject =="MATH" end)
+    math= all_date|>Enum.filter(fn x -> x.subject =="MAT" end)
    {math1,math2,math3}= if math == [] do
 
       {"","",""}
@@ -830,7 +830,7 @@
 
     end
 
-    sains= all_date|>Enum.filter(fn x -> x.subject =="SAINS" end)
+    sains= all_date|>Enum.filter(fn x -> x.subject =="SN" end)
    {sains1,sains2,sains3}=  if sains == [] do
 
       {"","",""}
@@ -884,7 +884,7 @@
 
     end
 
-        pm= all_date|>Enum.filter(fn x -> x.subject =="PM" end)
+       pm= all_date|>Enum.filter(fn x -> x.subject =="PM" end)
    {pm1,pm2,pm3}=  if pm == [] do
 
       {"","",""}
@@ -897,7 +897,7 @@
       ""
      end
 
-     pm_s1g=if pm.s1g != nil do
+     pm_s1g=if pm.s1g != nil  and pm.s1m != nil  and pm.s1g != "E" do
       pm.s1g
     else
       "" 
@@ -912,7 +912,7 @@
       ""
      end
 
-     pm_s2g=if pm.s2g != nil do
+     pm_s2g=if pm.s2g != nil and pm.s2m != nil  and pm.s1g != "E"  do
       pm.s2g
     else
       "" 
@@ -926,7 +926,7 @@
       ""
      end
 
-     pm_s3g=if pm.s3g != nil do
+     pm_s3g=if pm.s3g != nil and pm.s3m != nil  and pm.s1g != "E" do
       pm.s3g
     else
       "" 
@@ -939,6 +939,7 @@
     end
 
 
+
     agama= all_date|>Enum.filter(fn x -> x.subject =="AGM" end)
    {agama1,agama2,agama3}=  if agama == [] do
 
@@ -948,12 +949,13 @@
       
  
       agama_s1m=if agama.s1m != nil and agama.s1m != "0" do
+
       agama.s1m
     else
       ""
      end
 
-     agama_s1g=if agama.s1g != nil do
+     agama_s1g=if agama.s1g != nil and agama.s1m != nil  and agama.s1g != "E" do
       agama.s1g
     else
       "" 
@@ -968,7 +970,7 @@
       ""
      end
 
-     agama_s2g=if agama.s2g != nil do
+     agama_s2g=if agama.s2g != nil  and agama.s2m != nil  and agama.s1g != "E" do
       agama.s2g
     else
       "" 
@@ -982,7 +984,7 @@
       ""
      end
 
-     agama_s3g=if agama.s3g != nil do
+     agama_s3g=if agama.s3g != nil  and agama.s3m != nil  and agama.s1g != "E"  do
       agama.s3g
     else
       "" 
@@ -994,6 +996,7 @@
      {agama1,agama2,agama3}
 
     end
+
 
 
         sej= all_date|>Enum.filter(fn x -> x.subject =="SEJ" end)
@@ -1286,7 +1289,7 @@
 
     end
 
-                laku= all_date|>Enum.filter(fn x -> x.subject =="LAKU" end)
+                laku= all_date|>Enum.filter(fn x -> x.subject =="KLK" end)
    {laku1,laku2,laku3}= if laku == [] do
 
       {"","",""}
@@ -1596,19 +1599,19 @@ else
 <body>
 
 
-  <table  class="table" >
+  <table  class="table" style="font-size: 16px;">
 
     <tr align="center">
   <td colspan="6" align="center" style="margin: 3px; padding: 3px; border-left: 0; border-right: 0; border-top: 0" ><h3><b><%= @institute.name %></b></h3><br>
-        <h3><b><%= year %> 成绩单</b></h3></td>
+        <h3><b><%= profile.year %>学年成绩表</b></h3></td>
   
  </tr>
      <tr align="left">
-  <td colspan="5"><b>学生姓名: <%= profile.cname %></b> <br>
-        <b>Nama Murid: <%= profile.name %></b></font></td>
+  <td colspan="5"><b><h4>学生姓名: <%= profile.cname %></h4> <br>
+        <h4>Nama Murid: <%= profile.name %></h4></b></td>
   
-  <td><b>班级<br>
-        Darjah: <%= profile.class %></b></font></td>
+  <td><b><h4>班级</h4><br>
+       <h4> Darjah: <%= profile.class %></h4></b></font></td>
  </tr>
 
 
@@ -1623,11 +1626,11 @@ else
     <% chinese =item.name|>String.split_at(5)|>elem(0) %>
     <% malay =item.name|>String.split_at(5)|>elem(1) %>
 
-  <td align="center" style="margin: 3px; padding: 3px;"><%= chinese %><BR><%= malay %></td>
+  <td align="center" style="margin: 3px; padding: 3px; width: 100px;"><%= chinese %><BR><%= malay %></td>
  
   <% end %>
-    <td align="center" style="margin: 3px; padding: 3px;">评审二 <BR>PKSR2</td>
-  <td align="center" style="margin: 3px; padding: 3px;">评审三 <BR>PKSR3</td>
+    <td align="center" style="margin: 3px; padding: 3px; width: 100px;">评审二 <BR>PKSR2</td>
+  <td align="center" style="margin: 3px; padding: 3px; width: 100px;">评审三 <BR>PKSR3</td>
   <% end %>
     <%= if count == 2 do %>
     
@@ -1641,10 +1644,10 @@ else
   <% chinese =item.name|>String.split_at(5)|>elem(0) %>
     <% malay =item.name|>String.split_at(5)|>elem(1) %>
 
-  <td align="center" style="margin: 3px; padding: 3px;"><%= chinese %><BR><%= malay %></td>
+  <td align="center" style="margin: 3px; padding: 3px; width: 100px;"><%= chinese %><BR><%= malay %></td>
  
   <% end %>
-  <td align="center" style="margin: 3px; padding: 3px;">评审三 <BR>PKSR3</td>
+  <td align="center" style="margin: 3px; padding: 3px; width: 100px;">评审三 <BR>PKSR3</td>
 <% end %>
    <%= if count == 3 do %>
   <%= for item <- @list_exam do %>
@@ -1652,12 +1655,12 @@ else
     <% chinese =item.name|>String.split_at(5)|>elem(0) %>
     <% malay =item.name|>String.split_at(5)|>elem(1) %>
 
-  <td align="center" style="margin: 3px; padding: 3px;"><%= chinese %><BR><%= malay %></td>
+  <td align="center" style="margin: 3px; padding: 3px; width: 100px;"><%= chinese %><BR><%= malay %></td>
 
   <% end %>
 
   <% end %>
-    <td align="center" style="margin: 3px; padding: 3px;">平均 <BR>Purata</td>
+    <td align="center" style="margin: 3px; padding: 3px; width: 100px;">平均 <BR>Purata</td>
  </tr>
 
  <tr  align="center">
@@ -1789,7 +1792,7 @@ else
     <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
-          <td style="margin: 5px; padding: 5px; border-right: 0" align="left">设计和技术</td>
+          <td style="margin: 5px; padding: 5px; border-right: 0" align="left">设计与工艺</td>
   <td style="margin: 5px; padding: 5px; border-left: 0" align="left">RBT</td>
  <td style="margin: 3px; padding: 3px;"><%= if rbt1 != "" do rbt1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if rbt1 != "" do rbt1|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if rbt2 != "" do rbt2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if rbt2 != "" do rbt2|>elem(1) else "" end %></td>
@@ -1797,7 +1800,7 @@ else
     <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
-       <td style="margin: 5px; padding: 5px; border-right: 0" align="left">通信信息技术</td>
+       <td style="margin: 5px; padding: 5px; border-right: 0" align="left">信息与通信技术</td>
   <td style="margin: 5px; padding: 5px; border-left: 0" align="left">TMK</td>
   <td style="margin: 3px; padding: 3px;"><%= if tmk1 != "" do tmk1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if tmk1 != "" do tmk1|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if tmk2 != "" do tmk2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if tmk2 != "" do tmk2|>elem(1) else "" end %></td>
@@ -1829,7 +1832,7 @@ else
    <td style="margin: 3px; padding: 3px;"></td>
  </tr>
    <tr align="center">
-     <td style="margin: 5px; padding: 5px; border-right: 0" align="left">广藿香</td>
+     <td style="margin: 5px; padding: 5px; border-right: 0" align="left">阅读报告</td>
   <td  style="margin: 5px; padding: 5px; border-left: 0" align="left">Nilam</td>
     <td style="margin: 3px; padding: 3px;"> <% student_comment = Repo.get_by(School.Affairs.StudentMarkNilam, student_id: profile.stuid,year: profile.year) %>
      
@@ -1910,13 +1913,15 @@ else
       ).c_chinese
 
           end %>
+
 <%= if student_comment.comment1 != nil do
            
       Repo.get_by(School.Affairs.Comment,
         id: student_comment.comment1
       ).c_malay
           end %>
-          ,<br>
+          <br>
+
           <%= if student_comment.comment2 != nil do
 
           
@@ -1926,6 +1931,7 @@ else
 
           end %>
 
+
           <%= if student_comment.comment2 != nil do
 
 
@@ -1934,7 +1940,8 @@ else
       ).c_malay
           end %>
 
-          ,<br>
+          <br>
+
           <%= if student_comment.comment3 != nil do
 
          Repo.get_by(School.Affairs.Comment,
@@ -1943,13 +1950,7 @@ else
 
           end %>
 
-           <%= if student_comment.comment3 != nil do
 
-
-              Repo.get_by(School.Affairs.Comment,
-        id: student_comment.comment3
-      ).c_malay
-          end %>
 
            <% end %></td>
   

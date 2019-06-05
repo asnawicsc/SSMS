@@ -62,7 +62,7 @@
                                       
 
                                       <select name="grade[<%=item.id %>]">
-                                             <option selected="">Choose a grade </option>
+                                          <option value="<%= item.grade %>" selected><%= item.grade %></option>
                                           <option value="A">
                                              A
                                           </option>
