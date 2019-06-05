@@ -8252,150 +8252,150 @@ defmodule SchoolWeb.Pdf3Controller do
   end
 
   def exam_result_analysis_class(conn, params) do
+    flag = params["flag"] |> String.to_integer()
+    year = params["year"]
+    sem = params["sem"]
     class_id = params["class_id"]
-    exam_id = params["exam_id"]
+    standard_id = params["standard_id"]
+    inst_id = params["institution_id"] |> String.to_integer()
 
-    class =
-      Repo.get_by(School.Affairs.Class, %{
-        id: class_id,
-        institution_id: conn.private.plug_session["institution_id"]
-      })
-
-    exam =
-      Repo.get_by(School.Affairs.ExamMaster, %{
-        id: exam_id,
-        institution_id: conn.private.plug_session["institution_id"]
-      })
-
-    all =
+    institution =
       Repo.all(
         from(
-          s in School.Affairs.ExamMark,
-          left_join: p in School.Affairs.Subject,
-          on: s.subject_id == p.id,
-          left_join: d in School.Affairs.Exam,
-          on: s.exam_id == d.id,
-          left_join: t in School.Affairs.ExamMaster,
-          on: d.exam_master_id == t.id,
-          left_join: r in School.Affairs.Class,
-          on: r.id == s.class_id,
-          where:
-            s.class_id == ^class_id and d.exam_master_id == ^exam.id and
-              p.institution_id == ^conn.private.plug_session["institution_id"] and
-              t.institution_id == ^conn.private.plug_session["institution_id"] and
-              r.institution_id == ^conn.private.plug_session["institution_id"],
-          select: %{
-            class_name: r.name,
-            subject_code: p.code,
-            exam_name: t.name,
-            student_id: s.student_id,
-            mark: s.mark
-          }
+          c in School.Settings.Institution,
+          where: c.id == ^inst_id,
+          select: %{name: c.name}
         )
       )
+      |> hd
 
-    all_mark = all |> Enum.group_by(fn x -> x.subject_code end)
+    level_id =
+      if flag == 2 do
+        level_id =
+          Repo.all(
+            from(
+              c in School.Affairs.Class,
+              where: c.level_id == ^standard_id,
+              select: %{class_name: c.name}
+            )
+          )
+          |> Enum.map(fn x -> x.class_name end)
+      end
 
-    mark1 =
-      for item <- all_mark do
-        subject_code = item |> elem(0)
-
-        datas = item |> elem(1)
-
-        for data <- datas do
-          student_mark = data.mark
-
-          grades =
+    new_mark =
+      cond do
+        sem == "ALL SEMESTER" && flag == 1 ->
+          new_mark =
             Repo.all(
               from(
-                g in School.Affairs.ExamGrade,
-                where:
-                  g.institution_id == ^conn.private.plug_session["institution_id"] and
-                    g.exam_master_id == ^exam.id
+                m in School.Affairs.MarkSheetTemp,
+                left_join: c in School.Affairs.Class,
+                on: c.name == m.class,
+                where: m.institution_id == ^inst_id and m.year == ^year and m.class == ^class_id,
+                select: %{
+                  student_id: m.stuid,
+                  name: m.name,
+                  semester: m.semester,
+                  class: m.class,
+                  code: m.subject,
+                  m1: m.s1m,
+                  g1: m.s1g
+                }
               )
             )
+            |> Enum.uniq()
+            |> Enum.group_by(fn x -> x.name end)
 
-          for grade <- grades do
-            if Decimal.to_float(student_mark) >= Decimal.to_float(grade.min) and
-                 Decimal.to_float(student_mark) <= Decimal.to_float(grade.max) do
-              %{
-                student_id: data.student_id,
-                grade: grade.name,
-                gpa: grade.gpa,
-                subject_code: subject_code,
-                student_mark: student_mark,
-                class_name: data.class_name,
-                exam_name: data.exam_name
-              }
-            end
-          end
-        end
+        sem == "ALL SEMESTER" && flag == 2 ->
+          new_mark =
+            Repo.all(
+              from(
+                m in School.Affairs.MarkSheetTemp,
+                left_join: c in School.Affairs.Class,
+                on: c.name == m.class,
+                where: m.institution_id == ^inst_id and m.year == ^year and m.class in ^level_id,
+                select: %{
+                  student_id: m.stuid,
+                  name: m.name,
+                  semester: m.semester,
+                  class: m.class,
+                  code: m.subject,
+                  m1: m.s1m,
+                  g1: m.s1g
+                }
+              )
+            )
+            |> Enum.uniq()
+            |> Enum.group_by(fn x -> x.name end)
+
+        sem != "ALL SEMESTER" && flag == 1 ->
+          new_mark =
+            Repo.all(
+              from(
+                m in School.Affairs.MarkSheetTemp,
+                left_join: c in School.Affairs.Class,
+                on: c.name == m.class,
+                where:
+                  m.institution_id == ^inst_id and m.year == ^year and m.semester == ^sem and
+                    m.class == ^class_id,
+                select: %{
+                  student_id: m.stuid,
+                  name: m.name,
+                  semester: m.semester,
+                  class: m.class,
+                  code: m.subject,
+                  m1: m.s1m,
+                  g1: m.s1g
+                }
+              )
+            )
+            |> Enum.uniq()
+            |> Enum.group_by(fn x -> x.name end)
+
+        sem != "ALL SEMESTER" && flag == 2 ->
+          new_mark =
+            Repo.all(
+              from(
+                m in School.Affairs.MarkSheetTemp,
+                left_join: c in School.Affairs.Class,
+                on: c.name == m.class,
+                where:
+                  m.institution_id == ^inst_id and m.year == ^year and m.semester == ^sem and
+                    m.class in ^level_id,
+                select: %{
+                  student_id: m.stuid,
+                  name: m.name,
+                  semester: m.semester,
+                  class: m.class,
+                  code: m.subject,
+                  m1: m.s1m,
+                  g1: m.s1g
+                }
+              )
+            )
+            |> Enum.uniq()
+            |> Enum.group_by(fn x -> x.name end)
       end
-      |> List.flatten()
-      |> Enum.filter(fn x -> x != nil end)
-
-    group = mark1 |> Enum.group_by(fn x -> x.subject_code end)
-
-    group_subject =
-      for item <- group do
-        subject = item |> elem(0)
-
-        total_student = item |> elem(1) |> Enum.count()
-        a = item |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "A" end)
-        b = item |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "B" end)
-        c = item |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "C" end)
-        d = item |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "D" end)
-        e = item |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "E" end)
-        f = item |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "F" end)
-        g = item |> elem(1) |> Enum.map(fn x -> x.grade end) |> Enum.count(fn x -> x == "G" end)
-
-        lulus = a + b + c + d
-        fail = e + f + g
-
-        %{
-          subject: subject,
-          total_student: total_student,
-          a: a,
-          b: b,
-          c: c,
-          d: d,
-          e: e,
-          f: f,
-          g: g,
-          lulus: lulus,
-          tak_lulus: fail
-        }
-      end
-
-    a = group_subject |> Enum.map(fn x -> x.a end) |> Enum.sum()
-    b = group_subject |> Enum.map(fn x -> x.b end) |> Enum.sum()
-    c = group_subject |> Enum.map(fn x -> x.c end) |> Enum.sum()
-    d = group_subject |> Enum.map(fn x -> x.d end) |> Enum.sum()
-    e = group_subject |> Enum.map(fn x -> x.e end) |> Enum.sum()
-    f = group_subject |> Enum.map(fn x -> x.f end) |> Enum.sum()
-    g = group_subject |> Enum.map(fn x -> x.g end) |> Enum.sum()
-    lulus = group_subject |> Enum.map(fn x -> x.lulus end) |> Enum.sum()
-    tak_lulus = group_subject |> Enum.map(fn x -> x.tak_lulus end) |> Enum.sum()
-    total = group_subject |> Enum.map(fn x -> x.total_student end) |> Enum.sum()
 
     html =
-      Phoenix.View.render_to_string(
-        SchoolWeb.PdfView,
-        "exam_result_analysis_by_class.html",
-        a: a,
-        b: b,
-        c: c,
-        d: d,
-        e: e,
-        f: f,
-        g: g,
-        lulus: lulus,
-        tak_lulus: tak_lulus,
-        total: total,
-        group_subject: group_subject,
-        exam: exam,
-        class: class
-      )
+      if new_mark != %{} do
+        html =
+          Phoenix.View.render_to_string(
+            SchoolWeb.PdfView,
+            "exam_result_analysis_by_class.html",
+            new_mark: new_mark,
+            inst_id: inst_id,
+            flag: flag,
+            year: year,
+            sem: sem,
+            class_id: class_id,
+            standard_id: standard_id,
+            csrf: params["csrf"],
+            institution: institution
+          )
+      else
+        html = "No Data Inside"
+      end
 
     pdf_params = %{"html" => html}
 
@@ -8415,7 +8415,7 @@ defmodule SchoolWeb.Pdf3Controller do
           "--encoding",
           "utf-8",
           "--orientation",
-          "Landscape"
+          "Portrait"
         ],
         delete_temporary: true
       )
@@ -8431,6 +8431,20 @@ defmodule SchoolWeb.Pdf3Controller do
     institution_id = params["institution_id"]
     institution_name = params["institution_name"]
     year = params["year"]
+    e_year = params["e_year"]
+
+    keys =
+      Map.keys(params)
+      |> Enum.filter(fn x ->
+        x != "standard_id" and x != "subject_id" and x != "institution_id" and
+          x != "institution_name" and x != "year" and x != "e_year" and x != "exam_count" and
+          x != "_csrf_token"
+      end)
+
+    exam_id =
+      for a <- keys do
+        id = params[a]
+      end
 
     standard =
       Repo.get_by(School.Affairs.Level, %{
@@ -8458,7 +8472,9 @@ defmodule SchoolWeb.Pdf3Controller do
           on: r.id == s.class_id,
           left_join: d in School.Affairs.Level,
           on: r.level_id == d.id,
-          where: r.level_id == ^standard_id and p.id == ^subject_id,
+          where:
+            t.id in ^exam_id and t.year == ^e_year and r.level_id == ^standard_id and
+              p.id == ^subject_id,
           select: %{
             class_name: r.name,
             subject_code: p.code,
@@ -8468,6 +8484,7 @@ defmodule SchoolWeb.Pdf3Controller do
           }
         )
       )
+      |> Enum.filter(fn x -> x.mark != nil end)
 
     all_mark = all |> Enum.group_by(fn x -> x.class_name end)
 
@@ -8487,8 +8504,8 @@ defmodule SchoolWeb.Pdf3Controller do
 
         datas = item |> elem(1)
 
-        for data <- datas |> Enum.filter(fn x -> x.mark != nil end) do
-          student_mark = data.mark |> Decimal.to_float()
+        for data <- datas do
+          student_mark = student_mark = data.mark |> Decimal.to_float()
 
           for grade <- grades do
             if student_mark >= grade.min |> Decimal.to_float() &&
