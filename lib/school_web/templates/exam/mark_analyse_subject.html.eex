@@ -474,34 +474,7 @@
             <%end%>
 
 
-          <tr>
-            <% sum = x |> hd() %>
-
-              <th></th>
-              <th></th>
-              <th></th>
-              <th>-</th>
-      
-              <%= for mark <- sum.subject do %>
-               <% tot =
-                mark.all
-                |> Enum.filter(fn x -> x.student_mark != nil end)
-                |> Enum.map(fn x ->
-                  x.student_mark |> Decimal.to_float()
-                end)
-                |> Enum.sum() %>
-               <% per = mark.all |> Enum.map(fn x -> x.student_mark end) |> Enum.count() %>
-               <% val = tot/per%>
-               <th><%= val %></th>
-              <%end%>
-
-              <th><%= sum.avg_all_mark %></th>
-              <th><%= sum.avg_mark %></th>
-              <th><%= sum.class_rank %></th>
-              <th><%= sum.rank %></th>
-              <th><%= sum.num_pass %></th>            
-
-          </tr>
+ 
 
         <%end%>
 
