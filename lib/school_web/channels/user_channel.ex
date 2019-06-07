@@ -3006,6 +3006,8 @@ defmodule SchoolWeb.UserChannel do
         id: inst_id
       })
 
+    IEx.pry()
+
     html =
       Phoenix.View.render_to_string(
         SchoolWeb.ExamView,

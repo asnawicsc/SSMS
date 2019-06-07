@@ -24,12 +24,15 @@
         <th width="80px;">BCL</th>
         <th width="80px;">BCT</th>
          <th width="80px;">BCF</th>
+          <th width="80px;">BCB</th>
           <th width="80px;">BML</th>
          <th width="80px;">BMT</th>
           <th width="80px;">BMF</th>
+          <th width="80px;">BMB</th>
            <th width="80px;">BIL</th>
           <th width="80px;">BIT</th>
           <th width="80px;">BIF</th>
+            <th width="80px;">BIB</th>
           <th width="80px;">MAT</th>
           <th width="80px;">SN</th>
            <th width="80px;">PM</th>
@@ -66,7 +69,7 @@
 
                   <th ><%= item.d %></th>
 
-            
+             <th ><%= item.db %></th>
 
               <th ><%= item.e %></th>
      
@@ -76,13 +79,14 @@
 
              <th ><%= item.g %></th>
  
-
+   <th ><%= item.gb %></th>
               <th ><%= item.h %></th>
 
              <th ><%= item.i %></th>
      
              <th ><%= item.j %></th>
      
+             <th ><%= item.jb %></th>
 
 
              <th ><%= item.k %></th>

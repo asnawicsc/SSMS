@@ -8936,7 +8936,8 @@ defmodule SchoolWeb.PdfController do
             student_id: s.id,
             student_name: s.name,
             chinese_name: s.chinese_name,
-            class_name: k.name
+            class_name: k.name,
+            institution_id: s.institution_id
           }
         )
       )
@@ -9091,215 +9092,6 @@ defmodule SchoolWeb.PdfController do
             for sd <- student_class do
               name = sd.student_name <> "   " <> sd.chinese_name
 
-              bcf =
-                marks
-                |> Enum.filter(fn x ->
-                  x.stuid == Integer.to_string(sd.student_id) and x.subject == "BCF"
-                end)
-
-              bcf =
-                if bcf != [] do
-                  a = bcf |> hd
-
-                  if a.s1g == "TH" do
-                    "TH"
-                  else
-                    a.s1m
-                  end
-                else
-                  ""
-                end
-
-              bct =
-                marks
-                |> Enum.filter(fn x ->
-                  x.stuid == Integer.to_string(sd.student_id) and x.subject == "BCT"
-                end)
-
-              bct =
-                if bct != [] do
-                  a = bct |> hd
-
-                  if a.s1g == "TH" do
-                    "TH"
-                  else
-                    a.s1m
-                  end
-                else
-                  ""
-                end
-
-              bcl =
-                marks
-                |> Enum.filter(fn x ->
-                  x.stuid == Integer.to_string(sd.student_id) and x.subject == "BCL"
-                end)
-
-              bcl =
-                if bcl != [] do
-                  a = bcl |> hd
-
-                  if a.s1g == "TH" do
-                    "TH"
-                  else
-                    a.s1g
-                  end
-                else
-                  ""
-                end
-
-              bmf =
-                marks
-                |> Enum.filter(fn x ->
-                  x.stuid == Integer.to_string(sd.student_id) and x.subject == "BMF"
-                end)
-
-              bmf =
-                if bmf != [] do
-                  a = bmf |> hd
-
-                  if a.s1g == "TH" do
-                    "TH"
-                  else
-                    a.s1m
-                  end
-                else
-                  ""
-                end
-
-              bmt =
-                marks
-                |> Enum.filter(fn x ->
-                  x.stuid == Integer.to_string(sd.student_id) and x.subject == "BMT"
-                end)
-
-              bmt =
-                if bmt != [] do
-                  a = bmt |> hd
-
-                  if a.s1g == "TH" do
-                    "TH"
-                  else
-                    a.s1m
-                  end
-                else
-                  ""
-                end
-
-              bml =
-                marks
-                |> Enum.filter(fn x ->
-                  x.stuid == Integer.to_string(sd.student_id) and x.subject == "BML"
-                end)
-
-              bml =
-                if bml != [] do
-                  a = bml |> hd
-
-                  if a.s1g == "TH" do
-                    "TH"
-                  else
-                    a.s1g
-                  end
-                else
-                  ""
-                end
-
-              bif =
-                marks
-                |> Enum.filter(fn x ->
-                  x.stuid == Integer.to_string(sd.student_id) and x.subject == "BIF"
-                end)
-
-              bif =
-                if bif != [] do
-                  a = bif |> hd
-
-                  if a.s1g == "TH" do
-                    "TH"
-                  else
-                    a.s1m
-                  end
-                else
-                  ""
-                end
-
-              bit =
-                marks
-                |> Enum.filter(fn x ->
-                  x.stuid == Integer.to_string(sd.student_id) and x.subject == "BIT"
-                end)
-
-              bit =
-                if bit != [] do
-                  a = bit |> hd
-
-                  if a.s1g == "TH" do
-                    "TH"
-                  else
-                    a.s1m
-                  end
-                else
-                  ""
-                end
-
-              bil =
-                marks
-                |> Enum.filter(fn x ->
-                  x.stuid == Integer.to_string(sd.student_id) and x.subject == "BIL"
-                end)
-
-              bil =
-                if bil != [] do
-                  a = bil |> hd
-
-                  if a.s1g == "TH" do
-                    "TH"
-                  else
-                    a.s1g
-                  end
-                else
-                  ""
-                end
-
-              math =
-                marks
-                |> Enum.filter(fn x ->
-                  x.stuid == Integer.to_string(sd.student_id) and x.subject == "MAT"
-                end)
-
-              math =
-                if math != [] do
-                  a = math |> hd
-
-                  if a.s1g == "TH" do
-                    "TH"
-                  else
-                    a.s1m
-                  end
-                else
-                  ""
-                end
-
-              sains =
-                marks
-                |> Enum.filter(fn x ->
-                  x.stuid == Integer.to_string(sd.student_id) and x.subject == "SN"
-                end)
-
-              sains =
-                if sains != [] do
-                  a = sains |> hd
-
-                  if a.s1g == "TH" do
-                    "TH"
-                  else
-                    a.s1m
-                  end
-                else
-                  ""
-                end
-
               sejarah =
                 if conn.private.plug_session["institution_id"] != 3 do
                   sejarah =
@@ -9382,177 +9174,6 @@ defmodule SchoolWeb.PdfController do
                     else
                       a.s1m
                     end
-                  end
-                else
-                  ""
-                end
-
-              rbt =
-                marks
-                |> Enum.filter(fn x ->
-                  x.stuid == Integer.to_string(sd.student_id) and x.subject == "RBT"
-                end)
-
-              rbt =
-                if rbt != [] do
-                  a = rbt |> hd
-
-                  if a.s1g == "TH" do
-                    "TH"
-                  else
-                    a.s1g
-                  end
-                else
-                  ""
-                end
-
-              tmk =
-                marks
-                |> Enum.filter(fn x ->
-                  x.stuid == Integer.to_string(sd.student_id) and x.subject == "TMK"
-                end)
-
-              tmk =
-                if tmk != [] do
-                  a = tmk |> hd
-
-                  if a.s1g == "TH" do
-                    "TH"
-                  else
-                    a.s1g
-                  end
-                else
-                  ""
-                end
-
-              muzik =
-                marks
-                |> Enum.filter(fn x ->
-                  x.stuid == Integer.to_string(sd.student_id) and x.subject == "MZ"
-                end)
-
-              muzik =
-                if muzik != [] do
-                  a = muzik |> hd
-
-                  if a.s1g == "TH" do
-                    "TH"
-                  else
-                    a.s1g
-                  end
-                else
-                  ""
-                end
-
-              pk =
-                marks
-                |> Enum.filter(fn x ->
-                  x.stuid == Integer.to_string(sd.student_id) and x.subject == "PK"
-                end)
-
-              pk =
-                if pk != [] do
-                  a = pk |> hd
-
-                  if a.s1g == "TH" do
-                    "TH"
-                  else
-                    a.s1g
-                  end
-                else
-                  ""
-                end
-
-              pj =
-                marks
-                |> Enum.filter(fn x ->
-                  x.stuid == Integer.to_string(sd.student_id) and x.subject == "PJ"
-                end)
-
-              pj =
-                if pj != [] do
-                  a = pj |> hd
-
-                  if a.s1g == "TH" do
-                    "TH"
-                  else
-                    a.s1g
-                  end
-                else
-                  ""
-                end
-
-              seni =
-                marks
-                |> Enum.filter(fn x ->
-                  x.stuid == Integer.to_string(sd.student_id) and x.subject == "SENI"
-                end)
-
-              seni =
-                if seni != [] do
-                  a = seni |> hd
-
-                  if a.s1g == "TH" do
-                    "TH"
-                  else
-                    a.s1g
-                  end
-                else
-                  ""
-                end
-
-              klk =
-                marks
-                |> Enum.filter(fn x ->
-                  x.stuid == Integer.to_string(sd.student_id) and x.subject == "KLK"
-                end)
-
-              klk =
-                if klk != [] do
-                  a = klk |> hd
-
-                  if a.s1g == "TH" do
-                    "TH"
-                  else
-                    a.s1g
-                  end
-                else
-                  ""
-                end
-
-              dsv =
-                marks
-                |> Enum.filter(fn x ->
-                  x.stuid == Integer.to_string(sd.student_id) and x.subject == "DSV"
-                end)
-
-              dsv =
-                if dsv != [] do
-                  a = dsv |> hd
-
-                  if a.s1g == "TH" do
-                    "TH"
-                  else
-                    a.s1g
-                  end
-                else
-                  ""
-                end
-
-              psv =
-                marks
-                |> Enum.filter(fn x ->
-                  x.stuid == Integer.to_string(sd.student_id) and x.subject == "PSV"
-                end)
-
-              psv =
-                if psv != [] do
-                  a = psv |> hd
-
-                  if a.s1g == "TH" do
-                    "TH"
-                  else
-                    a.s1g
                   end
                 else
                   ""
@@ -9750,34 +9371,37 @@ defmodule SchoolWeb.PdfController do
 
               aa =
                 if conn.private.plug_session["institution_id"] != 9 do
-                  psv
+                  Affairs.subject_mark(sd, marks, "PSV")
                 else
-                  dsv
+                  Affairs.subject_mark(sd, marks, "DSV")
                 end
 
               %{
                 a: name,
-                b: bcl,
-                c: bct,
-                d: bcf,
-                e: bml,
-                f: bmt,
-                g: bmf,
-                h: bil,
-                i: bit,
-                j: bif,
-                k: math,
-                l: sains,
-                m: moral,
-                n: agama,
+                b: Affairs.subject_mark(sd, marks, "BCL"),
+                c: Affairs.subject_mark(sd, marks, "BCT"),
+                d: Affairs.subject_mark(sd, marks, "BCF"),
+                db: Affairs.subject_mark(sd, marks, "BCB"),
+                e: Affairs.subject_mark(sd, marks, "BML"),
+                f: Affairs.subject_mark(sd, marks, "BMT"),
+                g: Affairs.subject_mark(sd, marks, "BMF"),
+                gb: Affairs.subject_mark(sd, marks, "BMB"),
+                h: Affairs.subject_mark(sd, marks, "BIL"),
+                i: Affairs.subject_mark(sd, marks, "BIT"),
+                j: Affairs.subject_mark(sd, marks, "BIF"),
+                jb: Affairs.subject_mark(sd, marks, "BIB"),
+                k: Affairs.subject_mark(sd, marks, "MAT"),
+                l: Affairs.subject_mark(sd, marks, "SN"),
+                m: Affairs.subject_mark(sd, marks, "BCL"),
+                n: Affairs.subject_mark(sd, marks, "BCL"),
                 o: sejarah,
-                p: rbt,
-                q: tmk,
+                p: Affairs.subject_mark(sd, marks, "RBT"),
+                q: Affairs.subject_mark(sd, marks, "TMK"),
                 r: aa,
-                s: pj,
-                sa: pk,
-                sb: muzik,
-                t: klk,
+                s: Affairs.subject_mark(sd, marks, "PJ"),
+                sa: Affairs.subject_mark(sd, marks, "PK"),
+                sb: Affairs.subject_mark(sd, marks, "MZ"),
+                t: Affairs.subject_mark(sd, marks, "KLK"),
                 u: total,
                 v: averg,
                 w: crank,

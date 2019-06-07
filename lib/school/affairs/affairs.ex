@@ -6574,4 +6574,30 @@ defmodule School.Affairs do
       end
     end
   end
+
+  def subject_mark(student, marks, subject_code) do
+    data =
+      marks
+      |> Enum.filter(fn x ->
+        x.stuid == Integer.to_string(student.student_id) and x.subject == subject_code
+      end)
+
+    subject = Repo.get_by(Subject, code: subject_code, institution_id: student.institution_id)
+
+    if data != [] do
+      a = data |> hd
+
+      if a.s1g == "TH" do
+        "TH"
+      else
+        if subject.with_mark == 0 do
+          a.s1g
+        else
+          a.s1m
+        end
+      end
+    else
+      ""
+    end
+  end
 end
