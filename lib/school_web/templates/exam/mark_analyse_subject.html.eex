@@ -161,7 +161,7 @@
 
           <% agm = 
             if x |> Enum.filter(fn x -> x.code == "AGM" end) |> Enum.map(fn x -> x.g1 end) != ["TH"] do 
-           agm = x |> Enum.filter(fn x -> x.code == "AGM" or x.code == "PM" end) |> Enum.map(fn x -> x.m1 |> String.to_integer() end) |> Enum.sum()
+           agm = x |> Enum.filter(fn x -> x.code == "AGM" or x.code == "PM" end) |> Enum.map(fn x -> x.m1 |> Decimal.new |> Decimal.to_float end) |> Enum.sum()
            else 
            agm = x |> Enum.filter(fn x -> x.code == "AGM" end) |> Enum.map(fn x -> x.g1 end)
           end%>
@@ -374,7 +374,7 @@
 
           <% agm = 
             if xx |> Enum.filter(fn x -> x.code == "AGM" end) |> Enum.map(fn x -> x.g1 end) != ["TH"] do 
-            num = (xx |> Enum.filter(fn x -> x.code == "AGM" or x.code == "PM" end) |> Enum.map(fn x -> x.m1  end) |> Enum.count())/2
+            num = (xx |> Enum.filter(fn x -> x.code == "AGM" or x.code == "PM" end) |> Enum.map(fn x -> x.m1  end) |> Enum.count())
             if num != 0 do
               agm = (xx |> Enum.filter(fn x -> x.code == "AGM" or x.code == "PM" end) |> Enum.map(fn x -> x.m1 |> Float.parse() |> elem(0) end) |> Enum.sum())/num
             else

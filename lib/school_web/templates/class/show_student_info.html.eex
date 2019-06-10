@@ -80,7 +80,14 @@
                                  <div class="form-group row">
                                     <label class="text-bold col-xl-2 col-md-3 col-4 col-form-label text-right" for="inputContact3">Sex</label>
                                     <div class="col-xl-10 col-md-9 col-8">
-                                       <input class="form-control" id="inputContact3" name="sex" type="text" value="<%= @student.sex %>">
+                                        <select class="form-control" id="inputContact3" name="sex"  value="<%= @student.sex %>">
+                                          <option value="LELAKI">LELAKI</option>
+                                          <option value="PEREMPUAN">PEREMPUAN</option>
+                                       </select>
+                                       <script type="text/javascript">
+                                          var val = $("#inputContact3").attr("value")
+                                          $("#inputContact3").val(val) 
+                                       </script>
                                     </div>
                                  </div>
                                  <div class="form-group row">
@@ -110,7 +117,16 @@
                                  <div class="form-group row">
                                     <label class="text-bold col-xl-2 col-md-3 col-4 col-form-label text-right" for="inputContact8">Race</label>
                                     <div class="col-xl-10 col-md-9 col-8">
-                                       <input class="form-control" id="inputContact8" name="race" type="text" value="<%= @student.race %>">
+                                       <select class="form-control" id="inputContact8" name="race" type="text" value="<%= @student.race %>">
+                                          <option value="MELAYU">MELAYU</option>
+                                          <option value="CINA">CINA</option>
+                                          <option value="INDIA">INDIA</option>
+                                          <option value="LAIN">LAIN</option>
+                                       </select>
+                                       <script type="text/javascript">
+                                          var val2 = $("select#inputContact8").attr("value")
+                                          $("select#inputContact8").val(val2) 
+                                       </script>
                                     </div>
                                  </div>
                                  <div class="form-group row">

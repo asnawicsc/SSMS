@@ -3832,20 +3832,44 @@ defmodule SchoolWeb.UserChannel do
         students
       end
 
+    parameter_map =
+      case sem.institution_id do
+        9 ->
+          %{
+            male: "LELAKI",
+            chinese: "CINA",
+            malay: "MELAYU",
+            indian: "INDIA",
+            female: "PEREMPUAN",
+            other: "LAIN"
+          }
+
+        _ ->
+          %{
+            male: "LELAKI",
+            chinese: "CINA",
+            malay: "MELAYU",
+            indian: "INDIA",
+            female: "PEREMPUAN",
+            other: "LAIN"
+          }
+      end
+
     summary = %{}
 
     summary =
       if type == 1 do
-        male = Enum.filter(students, fn x -> x.gender == "Male" end)
-        male_chinese = Enum.count(male, fn x -> x.race == "Chinese" end)
-        male_malay = Enum.count(male, fn x -> x.race == "Malay" end)
-        male_indian = Enum.count(male, fn x -> x.race == "Indian" end)
+        male = Enum.filter(students, fn x -> x.gender == parameter_map.male end)
+        male_chinese = Enum.count(male, fn x -> x.race == parameter_map.chinese end)
+        male_malay = Enum.count(male, fn x -> x.race == parameter_map.malay end)
+        male_indian = Enum.count(male, fn x -> x.race == parameter_map.indian end)
         #  male_other = Enum.count(male, fn x -> x.race == "other" end)
 
-        female = Enum.filter(students, fn x -> x.gender == "Female" end)
-        female_chinese = Enum.count(female, fn x -> x.race == "Chinese" end)
-        female_malay = Enum.count(female, fn x -> x.race == "Malay" end)
-        female_indian = Enum.count(female, fn x -> x.race == "Indian" end)
+        female = Enum.filter(students, fn x -> x.gender == parameter_map.female end)
+        female_chinese = Enum.count(female, fn x -> x.race == parameter_map.chinese end)
+
+        female_malay = Enum.count(female, fn x -> x.race == parameter_map.malay end)
+        female_indian = Enum.count(female, fn x -> x.race == parameter_map.indian end)
         # female_other = Enum.count(female, fn x -> x.race == "other" end)
         tot_chinese = male_chinese + female_chinese
         tot_indian = male_indian + female_indian

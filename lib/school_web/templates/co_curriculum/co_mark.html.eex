@@ -45,7 +45,7 @@
                               <span class="sr-only">info</span>
                            </button>
                            <div class="dropdown-menu" role="menu">
-                            <%= for semester <- @semesters do %>
+                            <%= for semester <- @semesters |> Enum.reverse  do %>
                               <a class="dropdown-item" href="/cocurriculum/marking/<%= co_curriculum.id %>/<%= semester.id%>"><%= semester.start_date%></a>
                             <% end %>
                 
@@ -58,7 +58,7 @@
                               <span class="sr-only">info</span>
                            </button>
                            <div class="dropdown-menu" role="menu">
-                            <%= for semester <- @semesters do %>
+                            <%= for semester <- @semesters  |> Enum.reverse do %>
                               <a class="dropdown-item" href="/edit_co_rank/<%= co_curriculum.id %>/<%= semester.id%>"><%= semester.start_date%></a>
                             <% end %>
                 

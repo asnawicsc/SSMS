@@ -17,7 +17,7 @@
 
 
          <%= for a <- @class |> Enum.with_index(1) do %>
-         <input type="hidden" name="<%= elem(a , 0)%>" value="<%= elem(a , 1) %>">
+         <input type="hidden" name="class[<%= elem(a , 1)%>]" value="<%= elem(a , 0)%>">
          <%end%>
 
          <input type="hidden" name="sort_by" value="<%= @sort_by %>">
