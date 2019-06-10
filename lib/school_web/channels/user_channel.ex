@@ -3844,6 +3844,8 @@ defmodule SchoolWeb.UserChannel do
 
         female = Enum.filter(students, fn x -> x.gender == "Female" end)
         female_chinese = Enum.count(female, fn x -> x.race == "Chinese" end)
+
+        IO.inspect(female_chinese)
         female_malay = Enum.count(female, fn x -> x.race == "Malay" end)
         female_indian = Enum.count(female, fn x -> x.race == "Indian" end)
         # female_other = Enum.count(female, fn x -> x.race == "other" end)

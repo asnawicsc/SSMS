@@ -24,7 +24,7 @@
 
   <div class="form-group">
     <%= label f, :teacher_id, class: "control-label" %>
-    <%= select f, :teacher_id, teacher, class: "form-control" %>
+    <%= select f, :teacher_id, teacher, class: "chosen-select form-control" %>
     <%= error_tag f, :teacher_id %>
   </div>
 
