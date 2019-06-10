@@ -91,7 +91,7 @@
                                        <%= gettext "Classes" %>
                                        </label>
                                        <br>
-                                       <%= for a <- class do %>
+                                       <%= for a <- class |> Enum.sort do %>
                                        <input type="checkbox" name="class" value ="<%=a.id%>"> <%=a.name%><br>
                                        <% end %>
                                     </div>
