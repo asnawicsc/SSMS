@@ -182,9 +182,9 @@
 
     end
             bmp= all_date|>Enum.filter(fn x -> x.subject =="BMT" end)
-    {bmp1,bmp2,bmp3}=	if bmp == [] do
+    {bmp1,bmp2,bmp3, total_jumlah2, total_purata2,total_grade2 }=	if bmp == [] do
 
-    	{"","",""}
+    	{"","","","","",""}
     else
    		 bmp=bmp|>hd	
     	
@@ -239,14 +239,96 @@
 
       bmp3={bmp_s3m,bmp_s3g}
 
-     {bmp1,bmp2,bmp3}
+      ttbmp1=if bmp1|>elem(0) != ""  do
+        
+       tt= if bmp1|>elem(0)|>String.contains?(".") == true  do
+          bmp1|>elem(0)|>String.to_float
+        else
+           bmp1|>elem(0)|>String.to_integer
+          
+        end
+
+        tt
+      else
+        0
+      end
+            ttbmp2=if bmp2|>elem(0) != ""  do
+     tt= if bmp2|>elem(0)|>String.contains?(".") == true  do
+          bmp2|>elem(0)|>String.to_float
+        else
+           bmp2|>elem(0)|>String.to_integer
+          
+        end
+
+        tt
+      else
+        0
+      end
+
+       ttbmp3=if bmp3|>elem(0) != ""  do
+      tt= if bmp3|>elem(0)|>String.contains?(".") == true  do
+          bmp3|>elem(0)|>String.to_float
+        else
+           bmp3|>elem(0)|>String.to_integer
+          
+        end
+
+        tt
+      else
+        0
+      end
+
+     listtotal=  [ttbmp1] ++ [ttbmp2] ++ [ttbmp3] 
+
+     total_jumlah2= listtotal|>Enum.reject(fn x -> x == 0 end)|>Enum.sum
+      total_mk= listtotal|>Enum.reject(fn x -> x == 0 end)|>Enum.count
+            total_purata2= if total_mk != 0  do
+        total_jumlah2 / total_mk
+      else
+        0
+      end 
+
+
+
+    total_grade2 =
+      if total_purata2 >= 80 do
+      
+         "A"
+
+       else
+
+        if total_purata2 >= 60 do
+          "B" 
+
+        else
+           if total_purata2 >= 50 do
+          "C" 
+        else
+          if total_purata2 >= 40 do
+          "D" 
+        else
+          "E"
+          end
+        end
+
+        end
+      end
+
+
+
+
+
+
+     
+
+     {bmp1,bmp2,bmp3, total_jumlah2, total_purata2,total_grade2 }
 
     end
 
                 bmpm= all_date|>Enum.filter(fn x -> x.subject =="BMF" end)
-   {bmpm1,bmpm2,bmpm3}=	if bmpm == [] do
+    {bmpm1,bmpm2,bmpm3, total_jumlah, total_purata,total_grade }=	if bmpm == [] do
 
-    	{"","",""}
+    	{"","","","","",""}
     else
    		 bmpm=bmpm|>hd	
     	
@@ -298,7 +380,90 @@
         bmpm3={bmpm_s3m,bmpm_s3g}
 
 
-     {bmpm1,bmpm2,bmpm3}
+         ttbmpm1=if bmpm1|>elem(0) != ""  do
+        
+       tt= if bmpm1|>elem(0)|>String.contains?(".") == true  do
+          bmpm1|>elem(0)|>String.to_float
+        else
+           bmpm1|>elem(0)|>String.to_integer
+          
+        end
+
+        tt
+      else
+        0
+      end
+            ttbmpm2=if bmpm2|>elem(0) != ""  do
+     tt= if bmpm2|>elem(0)|>String.contains?(".") == true  do
+          bmpm2|>elem(0)|>String.to_float
+        else
+           bmpm2|>elem(0)|>String.to_integer
+          
+        end
+
+        tt
+      else
+        0
+      end
+
+       ttbmpm3=if bmpm3|>elem(0) != ""  do
+      tt= if bmpm3|>elem(0)|>String.contains?(".") == true  do
+          bmpm3|>elem(0)|>String.to_float
+        else
+           bmpm3|>elem(0)|>String.to_integer
+          
+        end
+
+        tt
+      else
+        0
+      end
+
+     listtotal=  [ttbmpm1] ++ [ttbmpm2] ++ [ttbmpm3] 
+
+     total_jumlah= listtotal|>Enum.reject(fn x -> x == 0 end)|>Enum.sum
+      total_mk= listtotal|>Enum.reject(fn x -> x == 0 end)|>Enum.count
+           total_purata= if total_mk != 0  do
+        total_jumlah / total_mk
+      else
+        0
+      end 
+
+
+
+    total_grade =
+      if total_purata >= 80 do
+      
+         "A"
+
+       else
+
+        if total_purata >= 60 do
+          "B" 
+
+        else
+           if total_purata >= 50 do
+          "C" 
+        else
+          if total_purata >= 40 do
+          "D" 
+        else
+          "E"
+          end
+        end
+
+        end
+      end
+
+
+
+
+
+
+     
+
+
+     {bmpm1,bmpm2,bmpm3, total_jumlah, total_purata,total_grade }
 
     end
 
@@ -420,9 +585,9 @@
     end
 
         ingp= all_date|>Enum.filter(fn x -> x.subject =="BIT" end)
-   {ingp1,ingp2,ingp3}=	if ingp == [] do
+     {ingp1,ingp2,ingp3, total_jumlah3, total_purata3,total_grade3 }=	if ingp == [] do
 
-    	{"","",""}
+    	{"","","","","",""}
     else
    		 ingp=ingp|>hd	
     	
@@ -473,16 +638,92 @@
 
         ingp3={ingp_s3m,ingp_s3g}
 
+         ttingp1=if ingp1|>elem(0) != ""  do
+        
+       tt= if ingp1|>elem(0)|>String.contains?(".") == true  do
+          ingp1|>elem(0)|>String.to_float
+        else
+           ingp1|>elem(0)|>String.to_integer
+          
+        end
 
-     {ingp1,ingp2,ingp3}
+        tt
+      else
+        0
+      end
+            ttingp2=if ingp2|>elem(0) != ""  do
+     tt= if ingp2|>elem(0)|>String.contains?(".") == true  do
+          ingp2|>elem(0)|>String.to_float
+        else
+           ingp2|>elem(0)|>String.to_integer
+          
+        end
+
+        tt
+      else
+        0
+      end
+
+       ttingp3=if ingp3|>elem(0) != ""  do
+      tt= if ingp3|>elem(0)|>String.contains?(".") == true  do
+          ingp3|>elem(0)|>String.to_float
+        else
+           ingp3|>elem(0)|>String.to_integer
+          
+        end
+
+        tt
+      else
+        0
+      end
+
+     listtotal=  [ttingp1] ++ [ttingp2] ++ [ttingp3] 
+
+     total_jumlah3= listtotal|>Enum.reject(fn x -> x == 0 end)|>Enum.sum
+      total_mk= listtotal|>Enum.reject(fn x -> x == 0 end)|>Enum.count
+           total_purata3= if total_mk != 0  do
+        total_jumlah3 / total_mk
+      else
+        0
+      end 
+
+
+
+    total_grade3 =
+      if total_purata3 >= 80 do
+      
+         "A"
+
+       else
+
+        if total_purata3 >= 60 do
+          "B" 
+
+        else
+           if total_purata3 >= 50 do
+          "C" 
+        else
+          if total_purata3 >= 40 do
+          "D" 
+        else
+          "E"
+          end
+        end
+
+        end
+      end
+
+
+
+     {ingp1,ingp2,ingp3, total_jumlah3, total_purata3,total_grade3 }
 
     end
 
 
             ingpm= all_date|>Enum.filter(fn x -> x.subject =="BIF" end)
-   {ingpm1,ingpm2,ingpm3}=	if ingpm == [] do
+   {ingpm1,ingpm2,ingpm3, total_jumlah4, total_purata4,total_grade4 }=	if ingpm == [] do
 
-    	{"","",""}
+    	{"","","","","",""}
     else
    		 ingpm=ingpm|>hd	
     	
@@ -532,11 +773,87 @@
       "" 
      end
 
-        ingpm3={ingpm_s3m,ingpm_s3g}  
+        ingpm3={ingpm_s3m,ingpm_s3g} 
+
+                 ttingpm1=if ingpm1|>elem(0) != ""  do
+        
+       tt= if ingpm1|>elem(0)|>String.contains?(".") == true  do
+          ingpm1|>elem(0)|>String.to_float
+        else
+           ingpm1|>elem(0)|>String.to_integer
+          
+        end
+
+        tt
+      else
+        0
+      end
+            ttingpm2=if ingpm2|>elem(0) != ""  do
+     tt= if ingpm2|>elem(0)|>String.contains?(".") == true  do
+          ingpm2|>elem(0)|>String.to_float
+        else
+           ingpm2|>elem(0)|>String.to_integer
+          
+        end
+
+        tt
+      else
+        0
+      end
+
+       ttingpm3=if ingpm3|>elem(0) != ""  do
+      tt= if ingpm3|>elem(0)|>String.contains?(".") == true  do
+          ingpm3|>elem(0)|>String.to_float
+        else
+           ingpm3|>elem(0)|>String.to_integer
+          
+        end
+
+        tt
+      else
+        0
+      end
+
+     listtotal=  [ttingpm1] ++ [ttingpm2] ++ [ttingpm3] 
+
+     total_jumlah4= listtotal|>Enum.reject(fn x -> x == 0 end)|>Enum.sum
+      total_mk= listtotal|>Enum.reject(fn x -> x == 0 end)|>Enum.count
+            total_purata4= if total_mk != 0  do
+        total_jumlah4 / total_mk
+      else
+        0
+      end 
 
 
 
-     {ingpm1,ingpm2,ingpm3}
+    total_grade4 =
+      if total_purata4 >= 80 do
+      
+         "A"
+
+       else
+
+        if total_purata4 >= 60 do
+          "B" 
+
+        else
+           if total_purata4 >= 50 do
+          "C" 
+        else
+          if total_purata4 >= 40 do
+          "D" 
+        else
+          "E"
+          end
+        end
+
+        end
+      end
+
+
+
+
+     {ingpm1,ingpm2,ingpm3, total_jumlah4, total_purata4,total_grade4 }
 
     end
 
@@ -660,9 +977,9 @@
     end
 
                         chp= all_date|>Enum.filter(fn x -> x.subject =="BCT" end)
-   {chp1,chp2,chp3}=	if chp == [] do
+    {chp1,chp2,chp3, total_jumlah5, total_purata5,total_grade5 }=	if chp == [] do
 
-    	{"","",""}
+    	{"","","","","",""}
     else
    		 chp=chp|>hd	
     	
@@ -712,15 +1029,93 @@
 
     chp3={chp_s3m,chp_s3g}
 
+                     ttchp1=if chp1|>elem(0) != ""  do
+        
+       tt= if chp1|>elem(0)|>String.contains?(".") == true  do
+          chp1|>elem(0)|>String.to_float
+        else
+           chp1|>elem(0)|>String.to_integer
+          
+        end
 
-     {chp1,chp2,chp3}
+        tt
+      else
+        0
+      end
+            ttchp2=if chp2|>elem(0) != ""  do
+     tt= if chp2|>elem(0)|>String.contains?(".") == true  do
+          ingpm2|>elem(0)|>String.to_float
+        else
+           chp2|>elem(0)|>String.to_integer
+          
+        end
+
+        tt
+      else
+        0
+      end
+
+       ttchp3=if chp3|>elem(0) != ""  do
+      tt= if chp3|>elem(0)|>String.contains?(".") == true  do
+          chp3|>elem(0)|>String.to_float
+        else
+           chp3|>elem(0)|>String.to_integer
+          
+        end
+
+        tt
+      else
+        0
+      end
+
+     listtotal=  [ttchp1] ++ [ttchp2] ++ [ttchp3] 
+
+
+     total_jumlah5= listtotal|>Enum.reject(fn x -> x == 0 end)|>Enum.sum
+      total_mk= listtotal|>Enum.reject(fn x -> x == 0 end)|>Enum.count
+      total_purata5= if total_mk != 0  do
+        total_jumlah5 / total_mk
+      else
+        0
+      end 
+
+
+
+    total_grade5 =
+      if total_purata5 >= 80 do
+      
+         "A"
+
+       else
+
+        if total_purata5 >= 60 do
+          "B" 
+
+        else
+           if total_purata5 >= 50 do
+          "C" 
+        else
+          if total_purata5 >= 40 do
+          "D" 
+        else
+          "E"
+          end
+        end
+
+        end
+      end
+
+
+
+
+     {chp1,chp2,chp3, total_jumlah5, total_purata5,total_grade5 }
 
     end
 
                             chpm= all_date|>Enum.filter(fn x -> x.subject =="BCF" end)
-   {chpm1,chpm2,chpm3}=	if chpm == [] do
+   {chpm1,chpm2,chpm3, total_jumlah6, total_purata6,total_grade6 }=	if chpm == [] do
 
-    	{"","",""}
+    	{"","","","","",""}
     else
    		 chpm=chpm|>hd	
     	
@@ -766,19 +1161,99 @@
     else
       "" 
      end  
+
+
+
+
       
       chpm3={chpm_s3m,chpm_s3g}
+
+                                ttchpm1=if chpm1|>elem(0) != ""  do
+        
+       tt= if chpm1|>elem(0)|>String.contains?(".") == true  do
+          chpm1|>elem(0)|>String.to_float
+        else
+           chpm1|>elem(0)|>String.to_integer
+          
+        end
+
+        tt
+      else
+        0
+      end
+            ttchpm2=if chpm2|>elem(0) != ""  do
+     tt= if chpm2|>elem(0)|>String.contains?(".") == true  do
+          chpm2|>elem(0)|>String.to_float
+        else
+           chp2|>elem(0)|>String.to_integer
+          
+        end
+
+        tt
+      else
+        0
+      end
+
+       ttchpm3=if chpm3|>elem(0) != ""  do
+      tt= if chpm3|>elem(0)|>String.contains?(".") == true  do
+          chpm3|>elem(0)|>String.to_float
+        else
+           chpm3|>elem(0)|>String.to_integer
+          
+        end
+
+        tt
+      else
+        0
+      end
+
+     listtotal=  [ttchpm1] ++ [ttchpm2] ++ [ttchpm3] 
+
+     total_jumlah6= listtotal|>Enum.reject(fn x -> x == 0 end)|>Enum.sum
+      total_mk= listtotal|>Enum.reject(fn x -> x == 0 end)|>Enum.count
+      total_purata6= if total_mk != 0  do
+        total_jumlah6 / total_mk
+      else
+        0
+      end 
+
+
+
+    total_grade6 =
+      if total_purata6 >= 80 do
+      
+         "A"
+
+       else
+
+        if total_purata6 >= 60 do
+          "B" 
+
+        else
+           if total_purata6 >= 50 do
+          "C" 
+        else
+          if total_purata6 >= 40 do
+          "D" 
+        else
+          "E"
+          end
+        end
+
+        end
+      end
+
     
 
     
-     {chpm1,chpm2,chpm3}
+    {chpm1,chpm2,chpm3, total_jumlah6, total_purata6,total_grade6 }
 
     end
 
     math= all_date|>Enum.filter(fn x -> x.subject =="MAT" end)
-   {math1,math2,math3}=	if math == [] do
+     {math1,math2,math3, total_jumlah7, total_purata7,total_grade7 }=	if math == [] do
 
-    	{"","",""}
+    	{"","","","","",""}
     else
    		 math=math|>hd	
     	
@@ -827,17 +1302,94 @@
       
       math3={math_s3m,math_s3g}
 
+                                      ttmath1=if math1|>elem(0) != ""  do
+        
+       tt= if math1|>elem(0)|>String.contains?(".") == true  do
+          math1|>elem(0)|>String.to_float
+        else
+           math1|>elem(0)|>String.to_integer
+          
+        end
+
+        tt
+      else
+        0
+      end
+            ttmath2=if math2|>elem(0) != ""  do
+     tt= if math2|>elem(0)|>String.contains?(".") == true  do
+          math2|>elem(0)|>String.to_float
+        else
+           math2|>elem(0)|>String.to_integer
+          
+        end
+
+        tt
+      else
+        0
+      end
+
+       ttmath3=if math3|>elem(0) != ""  do
+      tt= if math3|>elem(0)|>String.contains?(".") == true  do
+          math3|>elem(0)|>String.to_float
+        else
+           math3|>elem(0)|>String.to_integer
+          
+        end
+
+        tt
+      else
+        0
+      end
+
+     listtotal=  [ttmath1] ++ [ttmath2] ++ [ttmath3] 
+
+     total_jumlah7= listtotal|>Enum.reject(fn x -> x == 0 end)|>Enum.sum
+      total_mk= listtotal|>Enum.reject(fn x -> x == 0 end)|>Enum.count
+          total_purata7= if total_mk != 0  do
+        total_jumlah7 / total_mk
+      else
+        0
+      end 
+
+
+
+    total_grade7 =
+      if total_purata7 >= 80 do
+      
+         "A"
+
+       else
+
+        if total_purata7 >= 60 do
+          "B" 
+
+        else
+           if total_purata7 >= 50 do
+          "C" 
+        else
+          if total_purata7 >= 40 do
+          "D" 
+        else
+          "E"
+          end
+        end
+
+        end
+      end
+
+ 
+
     
 
 
-     {math1,math2,math3}
+     {math1,math2,math3, total_jumlah7, total_purata7,total_grade7 }
 
     end
 
                                     sains= all_date|>Enum.filter(fn x -> x.subject =="SN" end)
-   {sains1,sains2,sains3}=	if sains == [] do
+    {sains1,sains2,sains3, total_jumlah8, total_purata8,total_grade8 }=	if sains == [] do
 
-    	{"","",""}
+    	{"","","","","",""}
     else
    		 sains=sains|>hd	
     	
@@ -884,14 +1436,96 @@
       
       sains3={sains_s3m,sains_s3g}
 
-     {sains1,sains2,sains3}
+      ttsains1=if sains1|>elem(0) != ""  do
+        
+       tt= if sains1|>elem(0)|>String.contains?(".") == true  do
+          sains1|>elem(0)|>String.to_float
+        else
+           sains1|>elem(0)|>String.to_integer
+          
+        end
+
+        tt
+      else
+        0
+      end
+            ttsains2=if sains2|>elem(0) != ""  do
+     tt= if sains2|>elem(0)|>String.contains?(".") == true  do
+          sains2|>elem(0)|>String.to_float
+        else
+           sains2|>elem(0)|>String.to_integer
+          
+        end
+
+        tt
+      else
+        0
+      end
+
+       ttsains3=if sains3|>elem(0) != ""  do
+      tt= if sains3|>elem(0)|>String.contains?(".") == true  do
+          sains3|>elem(0)|>String.to_float
+        else
+           sains3|>elem(0)|>String.to_integer
+          
+        end
+
+        tt
+      else
+        0
+      end
+
+     listtotal=  [ttsains1] ++ [ttsains2] ++ [ttsains3] 
+
+     total_jumlah8= listtotal|>Enum.reject(fn x -> x == 0 end)|>Enum.sum
+      total_mk= listtotal|>Enum.reject(fn x -> x == 0 end)|>Enum.count
+          total_purata8= if total_mk != 0  do
+        total_jumlah8 / total_mk
+      else
+        0
+      end 
+
+
+
+    total_grade8 =
+      if total_purata8 >= 80 do
+      
+         "A"
+
+       else
+
+        if total_purata8 >= 60 do
+          "B" 
+
+        else
+           if total_purata8 >= 50 do
+          "C" 
+        else
+          if total_purata8 >= 40 do
+          "D" 
+        else
+          "E"
+          end
+        end
+
+        end
+      end
+
+ 
+
+    
+
+
+    {sains1,sains2,sains3, total_jumlah8, total_purata8,total_grade8 }
+
+  
 
     end
 
     pm= all_date|>Enum.filter(fn x -> x.subject =="PM" end)
-   {pm1,pm2,pm3}=  if pm == [] do
+    {pm1,pm2,pm3, total_jumlah9, total_purata9,total_grade9 }=  if pm == [] do
 
-      {"","",""}
+      {"","","","","",""}
     else
        pm=pm|>hd  
       
@@ -989,16 +1623,103 @@
       
       pm3={pm_s3m,pm_s3g}
 
-     {pm1,pm2,pm3}
+
+            ttpm1=if pm1|>elem(0) != ""  do
+        
+       tt= if pm1|>elem(0)|>String.contains?(".") == true  do
+          pm1|>elem(0)|>String.to_float
+        else
+           pm1|>elem(0)|>String.to_integer
+          
+        end
+
+        tt
+      else
+        0
+      end
+            ttpm2=if pm2|>elem(0) != ""  do
+     tt= if pm2|>elem(0)|>String.contains?(".") == true  do
+          pm2|>elem(0)|>String.to_float
+        else
+           pm2|>elem(0)|>String.to_integer
+          
+        end
+
+        tt
+      else
+        0
+      end
+
+       ttpm3=if pm3|>elem(0) != ""  do
+      tt= if pm3|>elem(0)|>String.contains?(".") == true  do
+          pm3|>elem(0)|>String.to_float
+        else
+           pm3|>elem(0)|>String.to_integer
+          
+        end
+
+        tt
+      else
+        0
+      end
+
+     listtotal=  [ttpm1] ++ [ttpm2] ++ [ttpm3] 
+
+     total_jumlah9= listtotal|>Enum.reject(fn x -> x == 0 end)|>Enum.sum
+      total_mk= listtotal|>Enum.reject(fn x -> x == 0 end)|>Enum.count
+          total_purata9= if total_mk != 0  do
+        total_jumlah9 / total_mk
+      else
+        0
+      end 
+
+
+
+    total_grade9 =
+      if total_purata9 >= 80 do
+      
+         "A"
+
+       else
+
+        if total_purata9 >= 60 do
+          "B" 
+
+        else
+           if total_purata9 >= 50 do
+          "C" 
+        else
+          if total_purata9 >= 40 do
+          "D" 
+        else
+           if total_purata9 == 0 do
+          "" 
+        else
+          "E"
+        end
+          end
+        end
+
+        end
+      end
+
+ 
+
+    
+
+
+   {pm1,pm2,pm3, total_jumlah9, total_purata9,total_grade9 }
+
+ 
 
     end
 
 
 
     agama= all_date|>Enum.filter(fn x -> x.subject =="AGM" end)
-   {agama1,agama2,agama3}=	if agama == [] do
+    {agama1,agama2,agama3, total_jumlah10, total_purata10,total_grade10 }=	if agama == [] do
 
-    	{"","",""}
+    	{"","","","","",""}
     else
    		 agama=agama|>hd	
     	
@@ -1098,16 +1819,99 @@
       
       agama3={agama_s3m,agama_s3g}
 
+                  ttagama1=if agama1|>elem(0) != ""  do
+        
+       tt= if agama1|>elem(0)|>String.contains?(".") == true  do
+          agama1|>elem(0)|>String.to_float
+        else
+           agama1|>elem(0)|>String.to_integer
+          
+        end
 
-     {agama1,agama2,agama3}
+        tt
+      else
+        0
+      end
+            ttagama2=if agama2|>elem(0) != ""  do
+     tt= if agama2|>elem(0)|>String.contains?(".") == true  do
+          agama2|>elem(0)|>String.to_float
+        else
+           agama2|>elem(0)|>String.to_integer
+          
+        end
+
+        tt
+      else
+        0
+      end
+
+       ttagama3=if agama3|>elem(0) != ""  do
+      tt= if agama3|>elem(0)|>String.contains?(".") == true  do
+          agama3|>elem(0)|>String.to_float
+        else
+           agama3|>elem(0)|>String.to_integer
+          
+        end
+
+        tt
+      else
+        0
+      end
+
+     listtotal=  [ttagama1] ++ [ttagama2] ++ [ttagama3] 
+
+     total_jumlah10= listtotal|>Enum.reject(fn x -> x == 0 end)|>Enum.sum
+      total_mk= listtotal|>Enum.reject(fn x -> x == 0 end)|>Enum.count
+      total_purata10= if total_mk != 0  do
+        total_jumlah10 / total_mk
+      else
+        0
+      end 
+
+
+    total_grade10 =
+      if total_purata10 >= 80 do
+      
+         "A"
+
+       else
+
+        if total_purata10 >= 60 do
+          "B" 
+
+        else
+           if total_purata10 >= 50 do
+          "C" 
+        else
+          if total_purata10 >= 40 do
+          "D" 
+        else
+           if total_purata10 == 0 do
+          "" 
+        else
+          "E"
+        end
+          end
+        end
+
+        end
+      end
+
+ 
+
+    
+
+
+   {agama1,agama2,agama3, total_jumlah10, total_purata10,total_grade10 }
+
 
     end
 
 
         sej= all_date|>Enum.filter(fn x -> x.subject =="SEJ" end)
-   {sej1,sej2,sej3}=	if sej == [] do
+    {sej1,sej2,sej3, total_jumlah11, total_purata11,total_grade11 }=	if sej == [] do
 
-    	{"","",""}
+    	{"","","","","",""}
     else
    		 sej=sej|>hd	
     	
@@ -1157,14 +1961,99 @@
       
      sej3={sej_s3m,sej_s3g}
 
-     {sej1,sej2,sej3}
+                       ttsej1=if sej1|>elem(0) != ""  do
+        
+       tt= if sej1|>elem(0)|>String.contains?(".") == true  do
+          sej1|>elem(0)|>String.to_float
+        else
+           sej1|>elem(0)|>String.to_integer
+          
+        end
+
+        tt
+      else
+        0
+      end
+            ttsej2=if sej2|>elem(0) != ""  do
+     tt= if sej2|>elem(0)|>String.contains?(".") == true  do
+          sej2|>elem(0)|>String.to_float
+        else
+           sej2|>elem(0)|>String.to_integer
+          
+        end
+
+        tt
+      else
+        0
+      end
+
+       ttsej3=if sej3|>elem(0) != ""  do
+      tt= if sej3|>elem(0)|>String.contains?(".") == true  do
+          sej3|>elem(0)|>String.to_float
+        else
+           sej3|>elem(0)|>String.to_integer
+          
+        end
+
+        tt
+      else
+        0
+      end
+
+     listtotal=  [ttsej1] ++ [ttsej2] ++ [ttsej3] 
+
+     total_jumlah11= listtotal|>Enum.reject(fn x -> x == 0 end)|>Enum.sum
+      total_mk= listtotal|>Enum.reject(fn x -> x == 0 end)|>Enum.count
+      total_purata11= if total_mk != 0  do
+        total_jumlah11 / total_mk
+      else
+        0
+      end 
+
+
+    total_grade11 =
+      if total_purata11 >= 80 do
+      
+         "A"
+
+       else
+
+        if total_purata11 >= 60 do
+          "B" 
+
+        else
+           if total_purata11 >= 50 do
+          "C" 
+        else
+          if total_purata11 >= 40 do
+          "D" 
+        else
+           if total_purata11 == 0 do
+          "" 
+        else
+          "E"
+        end
+          end
+        end
+
+        end
+      end
+
+ 
+
+    
+
+
+  {sej1,sej2,sej3, total_jumlah11, total_purata11,total_grade11 }
+
+ 
 
     end
 
         rbt= all_date|>Enum.filter(fn x -> x.subject =="RBT" end)
-   {rbt1,rbt2,rbt3}=	if rbt == [] do
+  {rbt1,rbt2,rbt3, total_jumlah12, total_purata12,total_grade12 }       =	if rbt == [] do
 
-    	{"","",""}
+    	{"","","","","",""}
     else
    		 rbt=rbt|>hd	
     	
@@ -1211,10 +2100,95 @@
       "" 
      end  
       
-     rbt3={rbt_s3m,rbt_s3g}            
+     rbt3={rbt_s3m,rbt_s3g}  
+
+                            ttrbt1=if rbt1|>elem(0) != ""  do
+        
+       tt= if rbt1|>elem(0)|>String.contains?(".") == true  do
+          rbt1|>elem(0)|>String.to_float
+        else
+           rbt1|>elem(0)|>String.to_integer
+          
+        end
+
+        tt
+      else
+        0
+      end
+            ttrbt2=if rbt2|>elem(0) != ""  do
+     tt= if rbt2|>elem(0)|>String.contains?(".") == true  do
+          rbt2|>elem(0)|>String.to_float
+        else
+           rbt2|>elem(0)|>String.to_integer
+          
+        end
+
+        tt
+      else
+        0
+      end
+
+       ttrbt3=if rbt3|>elem(0) != ""  do
+      tt= if rbt3|>elem(0)|>String.contains?(".") == true  do
+          rbt3|>elem(0)|>String.to_float
+        else
+           rbt3|>elem(0)|>String.to_integer
+          
+        end
+
+        tt
+      else
+        0
+      end
+
+     listtotal=  [ttrbt1] ++ [ttrbt2] ++ [ttrbt3] 
+
+     total_jumlah12= listtotal|>Enum.reject(fn x -> x == 0 end)|>Enum.sum
+      total_mk= listtotal|>Enum.reject(fn x -> x == 0 end)|>Enum.count
+      total_purata12= if total_mk != 0  do
+        total_jumlah12 / total_mk
+      else
+        0
+      end 
 
 
-     {rbt1,rbt2,rbt3}
+    total_grade12 =
+      if total_purata12 >= 80 do
+      
+         "A"
+
+       else
+
+        if total_purata12 >= 60 do
+          "B" 
+
+        else
+           if total_purata12 >= 50 do
+          "C" 
+        else
+          if total_purata12 >= 40 do
+          "D" 
+        else
+           if total_purata12 == 0 do
+          "" 
+        else
+          "E"
+        end
+          end
+        end
+
+        end
+      end
+
+ 
+
+    
+
+
+   {rbt1,rbt2,rbt3, total_jumlah12, total_purata12,total_grade12 }          
+
+
+   
 
     end
 
@@ -1863,7 +2837,7 @@ else
     <tr align="center" style="height: auto; ">
    
       <td  align="center" style="margin: 3px; padding: 3px; border-right: 0;  "><img  src='data:image/png;base64, <%= @institute.logo_bin %>' height="80px"></td>
-  <td colspan="4" align="left" style="margin: 3px; padding: 3px; border-right: 0 ; border-left: 0; " ><h5><b><%= @institute.name %></b></h5>
+  <td colspan="6" align="left" style="margin: 3px; padding: 3px; border-right: 0 ; border-left: 0; " ><h5><b><%= @institute.name %></b></h5>
     <h5><b><%= @institute.line1 %>,<%= @institute.line2 %>,<%= @institute.town %></h5></td>
     <td align="left" style=" border-left: 0; " ><h5><b><%= @institute.phone %></b></h5></td>
 
@@ -1871,18 +2845,36 @@ else
   
  </tr>
      <tr align="left">
-  <td colspan="2" style=" border-right: 0; "><b>学生姓名: <%= profile.cname %></b> <br>
+  <td colspan="2" style=" border-right: 0; "><b>姓名: <%= profile.stuid %></b>  &nbsp;  &nbsp;  &nbsp; <b><%= profile.cname %></b> <br>
+   
         <b>Nama Murid: <%= profile.name %></b></font></td>
         <td colspan="3" style=" border-right: 0 ; border-left: 0; "><b>Tahun : <%= year %></b> <br>
         <b> Guru Djh: <%= @class_teacher.name %></b></font></td>
   
-  <td style=" border-left: 0; "><b>班级<br>
+  <td style=" border-left: 0;  border-right: 0; "><b>班级<br>
         Darjah: <%= profile.class %></b></font></td>
+        <td style=" border-right: 0 ; border-left: 0; "></td>
+        <td style=" border-left: 0; "></td>
+
  </tr>
 
+ 
+  <tr align="center" >
+  <td colspan="2" align="center" style="margin: 3px; padding: 3px;" ><b> 学期 Semester </b></td>
+
+ <td align="center" style="margin: 3px; padding: 3px; width: 130px;">第一学期</td>
+ 
+
+   
+    <td align="center" colspan="2" style="margin: 3px; padding: 3px; width: 130px;">第二学期</td>
+
+    
+  <td align="center" colspan="3" ></td>
+
+ </tr>
 
  <tr align="center" >
-  <td colspan="2" align="center" style="margin: 3px; padding: 3px;" ><b>科目名称 MATA PELAJARAN</b></td>
+  <td colspan="2" align="center" style="margin: 3px; padding: 3px;" ><b>科目名称 <br> MATA PELAJARAN</b></td>
   <% count=@list_exam|>Enum.count %>
   <%= if count == 1 do %>
     
@@ -1892,15 +2884,15 @@ else
     <% chinese =item.name|>String.split_at(5)|>elem(0) %>
     <% malay =item.name|>String.split_at(5)|>elem(1) %>
 
-  <td align="center" style="margin: 3px; padding: 3px; width: 100px;"><%= chinese %><BR><%= malay %></td>
+  <td align="center" style="margin: 3px; padding: 3px; width: 130px;"><%= chinese %><BR><%= malay %></td>
  
   <% end %>
     <%= if @level.name =="Standard 6" do %>
-    <td align="center" style="margin: 3px; padding: 3px; width: 100px;" >评审二 <BR>PKSR2</td>
-  <td align="center" style="margin: 3px; padding: 3px; width: 100px;">评审三 <BR>PKSR3</td>
+    <td align="center" style="margin: 3px; padding: 3px; width: 130px;" >评审二 <BR>PKSR2</td>
+  <td align="center" style="margin: 3px; padding: 3px; width: 130px;">评审三 <BR>PKSR3</td>
   <% else %>
-   <td align="center" style="margin: 3px; padding: 3px; width: 100px;">评审二 <BR>PKSR2</td>
-  <td align="center" style="margin: 3px; padding: 3px; width: 100px;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>
+   <td align="center" style="margin: 3px; padding: 3px; width: 130px;">评审二 <BR>PKSR2</td>
+  <td align="center" style="margin: 3px; padding: 3px; width: 130px;"></td>
   <% end %>
   <% end %>
     <%= if count == 2 do %>
@@ -1915,13 +2907,13 @@ else
   <% chinese =item.name|>String.split_at(5)|>elem(0) %>
     <% malay =item.name|>String.split_at(5)|>elem(1) %>
 
-  <td align="center" style="margin: 3px; padding: 3px; width: 100px;"><%= chinese %><BR><%= malay %></td>
+  <td align="center" style="margin: 3px; padding: 3px; width: 130px;"><%= chinese %><BR><%= malay %></td>
  
   <% end %>
   <%= if @level.name =="Standard 6" do %>
-  <td align="center" style="margin: 3px; padding: 3px; width: 100px;">评审三 <BR>PKSR3</td>
+  <td align="center" style="margin: 3px; padding: 3px; width: 130px;">评审三 <BR>PKSR3</td>
   <% else %>
-  <td align="center" style="margin: 3px; padding: 3px; width: 100px;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>
+  <td align="center" style="margin: 3px; padding: 3px; width: 130px;"></td>
   <% end %>
 <% end %>
    <%= if count == 3 do %>
@@ -1930,12 +2922,14 @@ else
     <% chinese =item.name|>String.split_at(5)|>elem(0) %>
     <% malay =item.name|>String.split_at(5)|>elem(1) %>
 
-  <td align="center" style="margin: 3px; padding: 3px; width: 100px;"><%= chinese %><BR><%= malay %></td>
+  <td align="center" style="margin: 3px; padding: 3px; width: 130px;"><%= chinese %><BR><%= malay %></td>
 
   <% end %>
 
   <% end %>
-    <td align="center" style="margin: 3px; padding: 3px; width: 100px;">平均 <BR>Purata</td>
+    <td align="center" style="margin: 3px; padding: 3px; width: 130px;">总分 <BR>Jumlah</td>
+     <td align="center" style="margin: 3px; padding: 3px; width: 130px;">平均 <BR>Purata</td>
+      <td align="center" style="margin: 3px; padding: 3px; width: 130px;">等级 <BR>Gred</td>
  </tr>
 
  <tr  align="center">
@@ -1945,6 +2939,8 @@ else
   <td style="margin: 3px; padding: 3px;"><%= if bml2 != "" do bml2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if bml2 != "" do bml2|>elem(1) else "" end %></td>
    <td style="margin: 3px; padding: 3px;"><%= if bml3 != "" do bml2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if bml3 != "" do bml3|>elem(1) else "" end %></td>
     <td style="margin: 3px; padding: 3px;"></td>
+      <td style="margin: 3px; padding: 3px;"></td>
+        <td style="margin: 3px; padding: 3px;"></td>
   
  </tr>
  
@@ -1953,14 +2949,19 @@ else
   <td style="margin: 3px; padding: 3px;"><%= if bmp1 != "" do bmp1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if bmp1 != "" do bmp1|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if bmp2 != "" do bmp2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if bmp2 != "" do bmp2|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if bmp3 != "" do bmp3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if bmp3 != "" do bmp3|>elem(1) else "" end %></td>
-   <td style="margin: 3px; padding: 3px;"></td>
+   <td style="margin: 3px; padding: 3px;"><%= if total_jumlah2 != 0 do total_jumlah2 else "" end  %></td>
+         <td style="margin: 3px; padding: 3px;"><%= if  total_purata2  != 0 do total_purata2 else "" end %></td>
+        <td style="margin: 3px; padding: 3px;"><%= if total_grade2 != 0 do total_grade2 else "" end %></td>
+
  </tr>
  <tr align="center">
   <td style="margin: 3px; padding: 3px;" align="left">理解 Pemahaman</td>
   <td style="margin: 3px; padding: 3px;"><%= if bmpm1 != "" do bmpm1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if bmpm1 != "" do bmpm1|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if bmpm2 != "" do bmpm2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if bmpm2 != "" do bmpm2|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if bmpm3 != "" do bmpm3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if bmpm3 != "" do bmpm3|>elem(1) else "" end %></td>
-   <td style="margin: 3px; padding: 3px;"></td>
+   <td style="margin: 3px; padding: 3px;"><%= if total_jumlah != 0 do total_jumlah else "" end  %></td>
+         <td style="margin: 3px; padding: 3px;"><%= if  total_purata  != 0 do total_purata else "" end %></td>
+        <td style="margin: 3px; padding: 3px;"><%= if total_grade != 0 do total_grade else "" end %></td>
  </tr>
  <tr align="center">
  <td rowspan="3"  style="margin: 3px; padding: 3px;" align="left"><BR><b>英语 <br> Bahasa <br> Inggeris</b></td>
@@ -1969,6 +2970,8 @@ else
   <td style="margin: 3px; padding: 3px;"><%= if ingl2 != "" do ingl2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if ingl2 != "" do ingl2|>elem(1) else "" end %></td>
    <td style="margin: 3px; padding: 3px;"><%= if ingl3 != "" do ingl3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if ingl3 != "" do ingl3|>elem(1) else "" end %></td>
     <td style="margin: 3px; padding: 3px;"></td>
+          <td style="margin: 3px; padding: 3px;"></td>
+        <td style="margin: 3px; padding: 3px;"></td>
  </tr>
  
  <tr align="center">
@@ -1976,14 +2979,18 @@ else
 <td style="margin: 3px; padding: 3px;"><%= if ingp1 != "" do ingp1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if ingp1 != "" do ingp1|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if ingp2 != "" do ingp2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if ingp2 != "" do ingp2|>elem(1) else "" end %></td>
    <td style="margin: 3px; padding: 3px;"><%= if ingp3 != "" do ingp3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if ingp3 != "" do ingp3|>elem(1) else "" end %></td>
-   <td style="margin: 3px; padding: 3px;"></td>
+   <td style="margin: 3px; padding: 3px;"><%= if total_jumlah3 != 0 do total_jumlah3 else "" end  %></td>
+         <td style="margin: 3px; padding: 3px;"><%= if  total_purata3  != 0 do total_purata3 else "" end %></td>
+        <td style="margin: 3px; padding: 3px;"><%= if total_grade3 != 0 do total_grade3 else "" end %></td>
  </tr>
  <tr align="center">
   <td style="margin: 3px; padding: 3px;" align="left">理解 Pemahaman</td>
   <td style="margin: 3px; padding: 3px;"><%= if ingpm1 != "" do ingpm1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if ingpm1 != "" do ingpm1|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if ingpm2 != "" do ingpm2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if ingpm2 != "" do ingpm2|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if ingpm3 != "" do ingpm3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if ingpm3 != "" do ingpm3|>elem(1) else "" end %></td>
-   <td style="margin: 3px; padding: 3px;"></td>
+   <td style="margin: 3px; padding: 3px;"><%= if total_jumlah4 != 0 do total_jumlah4 else "" end  %></td>
+         <td style="margin: 3px; padding: 3px;"><%= if  total_purata4  != 0 do total_purata4 else "" end %></td>
+        <td style="margin: 3px; padding: 3px;"><%= if total_grade4 != 0 do total_grade4 else "" end %></td>
  </tr align="center">
  <tr align="center">
  <td rowspan="3"  style="margin: 3px; padding: 3px;" align="left"><b><BR>华语 <br> Bahasa <br> Cina</b></td>
@@ -1992,6 +2999,8 @@ else
   <td style="margin: 3px; padding: 3px;"><%= if chl2 != "" do chl2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if chl2 != "" do chl2|>elem(1) else "" end %></td>
    <td style="margin: 3px; padding: 3px;"><%= if chl3 != "" do chl3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if chl3 != "" do chl3|>elem(1) else "" end %></td>
     <td style="margin: 3px; padding: 3px;"></td>
+          <td style="margin: 3px; padding: 3px;"></td>
+        <td style="margin: 3px; padding: 3px;"></td>
  </tr>
  
  <tr align="center">
@@ -1999,14 +3008,18 @@ else
  <td style="margin: 3px; padding: 3px;"><%= if chp1 != "" do chp1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if chp1 != "" do chp1|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if chp2 != "" do chp2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if chp2 != "" do chp2|>elem(1) else "" end %></td>
    <td style="margin: 3px; padding: 3px;"><%= if chp3 != "" do chp3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if chp3 != "" do chp3|>elem(1) else "" end %></td>
-   <td style="margin: 3px; padding: 3px;"></td>
+  <td style="margin: 3px; padding: 3px;"><%= if total_jumlah5 != 0 do total_jumlah5 else "" end  %></td>
+         <td style="margin: 3px; padding: 3px;"><%= if  total_purata5  != 0 do total_purata5 else "" end %></td>
+        <td style="margin: 3px; padding: 3px;"><%= if total_grade5 != 0 do total_grade5 else "" end %></td>
  </tr>
  <tr align="center">
   <td style="margin: 5px; padding: 5px; " align="left">理解 Pemahaman</td>
  <td style="margin: 3px; padding: 3px;"><%= if chpm1 != "" do chpm1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if chpm1 != "" do chpm1|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if chpm2 != "" do chpm2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if chpm2 != "" do chpm2|>elem(1) else "" end %></td>
    <td style="margin: 3px; padding: 3px;"><%= if chpm3 != "" do chpm3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if chpm3 != "" do chpm3|>elem(1) else "" end %></td>
-   <td style="margin: 3px; padding: 3px;"></td>
+ <td style="margin: 3px; padding: 3px;"><%= if total_jumlah6 != 0 do total_jumlah6 else "" end  %></td>
+         <td style="margin: 3px; padding: 3px;"><%= if  total_purata6  != 0 do total_purata6 else "" end %></td>
+        <td style="margin: 3px; padding: 3px;"><%= if total_grade6 != 0 do total_grade6 else "" end %></td>
  </tr>
 <tr align="center">
   <td style="margin: 5px; padding: 5px; " align="left"><b>数学</b></td>
@@ -2014,7 +3027,9 @@ else
   <td style="margin: 3px; padding: 3px;"><%= if math1 != "" do math1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if math1 != "" do math1|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if math2 != "" do math2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if math2 != "" do math2|>elem(1) else "" end %></td>
    <td style="margin: 3px; padding: 3px;"><%= if math3 != "" do math3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if math3 != "" do math3|>elem(1) else "" end %></td>
-    <td style="margin: 3px; padding: 3px;"></td>
+  <td style="margin: 3px; padding: 3px;"><%= if total_jumlah7 != 0 do total_jumlah7 else "" end  %></td>
+         <td style="margin: 3px; padding: 3px;"><%= if  total_purata7  != 0 do total_purata7 else "" end %></td>
+        <td style="margin: 3px; padding: 3px;"><%= if total_grade7 != 0 do total_grade7 else "" end %></td>
  </tr>
  <tr align="center">
     <td style="margin: 5px; padding: 5px; " align="left"><b>科学</b></td>
@@ -2022,7 +3037,9 @@ else
   <td style="margin: 3px; padding: 3px;"><%= if sains1 != "" do sains1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if sains1 != "" do sains1|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if sains2 != "" do sains2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if sains2 != "" do sains2|>elem(1) else "" end %></td>
    <td style="margin: 3px; padding: 3px;"><%= if sains3 != "" do sains3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if sains3 != "" do sains3|>elem(1) else "" end %></td>
-    <td style="margin: 3px; padding: 3px;"></td>
+   <td style="margin: 3px; padding: 3px;"><%= if total_jumlah8 != 0 do total_jumlah8 else "" end  %></td>
+         <td style="margin: 3px; padding: 3px;"><%= if  total_purata8  != 0 do total_purata8 else "" end %></td>
+        <td style="margin: 3px; padding: 3px;"><%= if total_grade8 != 0 do total_grade8 else "" end %></td>
  </tr>
  <tr align="center">
    <td style="margin: 5px; padding: 5px; " align="left"><b>道德教育</b></td>
@@ -2030,7 +3047,9 @@ else
   <td style="margin: 3px; padding: 3px;"><%= if pm1 != "" do pm1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if pm1 != "" do pm1|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if pm2 != "" do pm2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if pm2 != "" do pm2|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if pm3 != "" do pm3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if pm3 != "" do pm3|>elem(1) else "" end %></td>
-   <td style="margin: 3px; padding: 3px;"></td>
+   <td style="margin: 3px; padding: 3px;"><%= if total_jumlah9 != 0 do total_jumlah9 else "" end  %></td>
+         <td style="margin: 3px; padding: 3px;"><%= if  total_purata9  != 0 do total_purata9 else "" end %></td>
+        <td style="margin: 3px; padding: 3px;"><%= if total_grade9 != 0 do total_grade9 else "" end %></td>
  </tr>
  <tr align="center">
   <td style="margin: 5px; padding: 5px; " align="left"><b>回教</b></td>
@@ -2038,7 +3057,9 @@ else
  <td style="margin: 3px; padding: 3px;"><%= if agama1 != "" do agama1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if agama1 != "" do agama1|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if agama2 != "" do agama2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if agama2 != "" do agama2|>elem(1) else "" end %></td>
    <td style="margin: 3px; padding: 3px;"><%= if agama3 != "" do agama3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if agama3 != "" do agama3|>elem(1) else "" end %></td>
-    <td style="margin: 3px; padding: 3px;"></td>
+     <td style="margin: 3px; padding: 3px;"><%= if total_jumlah10 != 0 do total_jumlah10 else "" end  %></td>
+         <td style="margin: 3px; padding: 3px;"><%= if  total_purata10  != 0 do total_purata10 else "" end %></td>
+        <td style="margin: 3px; padding: 3px;"><%= if total_grade10 != 0 do total_grade10 else "" end %></td>
  </tr>
   <tr align="center">
       <td style="margin: 5px; padding: 5px; " align="left"><b>历史</b></td>
@@ -2046,7 +3067,9 @@ else
  <td style="margin: 3px; padding: 3px;"><%= if sej1 != "" do sej1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if sej1 != "" do sej1|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if sej2 != "" do sej2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if sej2 != "" do sej2|>elem(1) else "" end %></td>
    <td style="margin: 3px; padding: 3px;"><%= if sej3 != "" do sej3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if sej3 != "" do sej3|>elem(1) else "" end %></td>
-    <td style="margin: 3px; padding: 3px;"></td>
+    <td style="margin: 3px; padding: 3px;"><%= if total_jumlah11 != 0 do total_jumlah11 else "" end  %></td>
+         <td style="margin: 3px; padding: 3px;"><%= if  total_purata11  != 0 do total_purata11 else "" end %></td>
+        <td style="margin: 3px; padding: 3px;"><%= if total_grade11 != 0 do total_grade11 else "" end %></td>
  </tr>
   <tr align="center">
           <td style="margin: 5px; padding: 5px; " align="left"><b>科技与工艺</b></td>
@@ -2054,7 +3077,9 @@ else
  <td style="margin: 3px; padding: 3px;"><%= if rbt1 != "" do rbt1|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if rbt1 != "" do rbt1|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if rbt2 != "" do rbt2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if rbt2 != "" do rbt2|>elem(1) else "" end %></td>
    <td style="margin: 3px; padding: 3px;"><%= if rbt3 != "" do rbt3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if rbt3 != "" do rbt3|>elem(1) else "" end %></td>
-    <td style="margin: 3px; padding: 3px;"></td>
+    <td style="margin: 3px; padding: 3px;"><%= if total_jumlah12 != 0 do total_jumlah12 else "" end  %></td>
+         <td style="margin: 3px; padding: 3px;"><%= if  total_purata12  != 0 do total_purata12 else "" end %></td>
+        <td style="margin: 3px; padding: 3px;"><%= if total_grade12 != 0 do total_grade12 else "" end %></td>
  </tr>
   <tr align="center">
        <td style="margin: 5px; padding: 5px; " align="left"><b>信息与通信</b></td>
@@ -2063,6 +3088,8 @@ else
   <td style="margin: 3px; padding: 3px;"><%= if tmk2 != "" do tmk2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if tmk2 != "" do tmk2|>elem(1) else "" end %></td>
    <td style="margin: 3px; padding: 3px;"><%= if tmk3 != "" do tmk3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if tmk3 != "" do tmk3|>elem(1) else "" end %></td>
     <td style="margin: 3px; padding: 3px;"></td>
+          <td style="margin: 3px; padding: 3px;"></td>
+        <td style="margin: 3px; padding: 3px;"></td>
  </tr>
    <tr align="center"  >
   <td style="margin: 5px; padding: 5px; "  align="left"><b>音乐世界</b></td>
@@ -2071,6 +3098,8 @@ else
   <td style="margin: 3px; padding: 3px;"><%= if mz2 != "" do mz2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if mz2 != "" do mz2|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if mz3 != "" do mz3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if mz3 != "" do mz3|>elem(1) else "" end %></td>
    <td style="margin: 3px; padding: 3px;"></td>
+         <td style="margin: 3px; padding: 3px;"></td>
+        <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center"  >
   <td style="margin: 5px; padding: 5px; "  align="left"><b>美术</b></td>
@@ -2079,6 +3108,8 @@ else
   <td style="margin: 3px; padding: 3px;"><%= if seni2 != "" do seni2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if seni2 != "" do seni2|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if seni3 != "" do seni3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if seni3 != "" do seni3|>elem(1) else "" end %></td>
    <td style="margin: 3px; padding: 3px;"></td>
+         <td style="margin: 3px; padding: 3px;"></td>
+        <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
       <td style="margin: 5px; padding: 5px; " align="left"><b>体育</b></td>
@@ -2087,6 +3118,8 @@ else
   <td style="margin: 3px; padding: 3px;"><%= if pj2 != "" do pj2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if pj2 != "" do pj2|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if pj3 != "" do pj3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if pj3 != "" do pj3|>elem(1) else "" end %></td>
    <td style="margin: 3px; padding: 3px;"></td>
+         <td style="margin: 3px; padding: 3px;"></td>
+        <td style="margin: 3px; padding: 3px;"></td>
  </tr>
    <tr align="center">
       <td style="margin: 5px; padding: 5px; " align="left"><b>体健</b></td>
@@ -2095,6 +3128,8 @@ else
   <td style="margin: 3px; padding: 3px;"><%= if pk2 != "" do pk2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if pk2 != "" do pk2|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if pk3 != "" do pk3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if pk3 != "" do pk3|>elem(1) else "" end %></td>
    <td style="margin: 3px; padding: 3px;"></td>
+         <td style="margin: 3px; padding: 3px;"></td>
+        <td style="margin: 3px; padding: 3px;"></td>
  </tr>
 <tr align="center">
   <td style="margin: 5px; padding: 5px; " align="left"></td>
@@ -2103,6 +3138,8 @@ else
   <td style="margin: 3px; padding: 3px;"></td>
   <td style="margin: 3px; padding: 3px;"></td>
    <td style="margin: 3px; padding: 3px;"></td>
+         <td style="margin: 3px; padding: 3px;"></td>
+        <td style="margin: 3px; padding: 3px;"></td>
  </tr>
  
   <tr align="center">
@@ -2112,6 +3149,8 @@ else
   <td style="margin: 3px; padding: 3px;"><%= total2 %></td>
   <td style="margin: 3px; padding: 3px;"><%= total3 %></td>
    <td style="margin: 3px; padding: 3px;"></td>
+         <td style="margin: 3px; padding: 3px;"></td>
+        <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center" >
   <td  style="margin: 5px; padding: 5px; " align="left"><b>平均 </b></td>
@@ -2120,6 +3159,8 @@ else
   <td style="margin: 3px; padding: 3px;"><%= averg2 %></td>
   <td style="margin: 3px; padding: 3px;"><%= averg3 %></td>
    <td style="margin: 3px; padding: 3px;"></td>
+         <td style="margin: 3px; padding: 3px;"></td>
+        <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
   <td style="margin: 5px; padding: 5px; "  align="left"><b>班级名次</b></td>
@@ -2128,6 +3169,8 @@ else
   <td style="margin: 3px; padding: 3px;"><%= crank2 %></td>
   <td style="margin: 3px; padding: 3px;"><%= crank3 %></td>
    <td style="margin: 3px; padding: 3px;"></td>
+         <td style="margin: 3px; padding: 3px;"></td>
+        <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
   <td style="margin: 5px; padding: 5px; " align="left" ><b>全级名次</b></td>
@@ -2136,6 +3179,8 @@ else
   <td style="margin: 3px; padding: 3px;"><%= srank2 %></td>
   <td style="margin: 3px; padding: 3px;"><%= srank3 %></td>
    <td style="margin: 3px; padding: 3px;"></td>
+         <td style="margin: 3px; padding: 3px;"></td>
+        <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
      <td style="margin: 5px; padding: 5px; " align="left"><b>操行</td>
@@ -2144,6 +3189,8 @@ else
   <td style="margin: 3px; padding: 3px;"><%= if laku2 != "" do laku2|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if laku2 != "" do laku2|>elem(1) else "" end %></td>
   <td style="margin: 3px; padding: 3px;"><%= if laku3 != "" do laku3|>elem(0) else "" end %><div style="float:right;width:50%;"><%= if laku3 != "" do laku3|>elem(1) else "" end %></td>
    <td style="margin: 3px; padding: 3px;"></td>
+         <td style="margin: 3px; padding: 3px;"></td>
+        <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
     <td style="margin: 5px; padding: 5px; " align="left"><b>出席日数</b></td>
@@ -2152,6 +3199,8 @@ else
   <td style="margin: 3px; padding: 3px;"><%= kedatangan2 %></td>
   <td style="margin: 3px; padding: 3px;"><%= kedatangan3 %></td>
    <td style="margin: 3px; padding: 3px;"></td>
+         <td style="margin: 3px; padding: 3px;"></td>
+        <td style="margin: 3px; padding: 3px;"></td>
  </tr>
    <tr align="center">
   <td style="margin: 5px; padding: 5px; " align="left"><b>体高 & 体重</b></td>
@@ -2160,11 +3209,13 @@ else
   <td style="margin: 3px; padding: 3px;"><%= hw2 %></td>
   <td style="margin: 3px; padding: 3px;"><%= hw3 %></td>
    <td style="margin: 3px; padding: 3px;"></td>
+         <td style="margin: 3px; padding: 3px;"></td>
+        <td style="margin: 3px; padding: 3px;"></td>
  </tr>
  <tr>
   <td rowspan="2"  align="left"><b>评语 <br> Komen</b></td>
   <td >第一学期</td>
-  <td colspan="4" align="left">
+  <td colspan="6" align="left">
 
     <% semester = Repo.all(from s in School.Affairs.Semester,where: s.year==^profile.year and s.institution_id==^@institute.id) %>
     <% no= semester|>Enum.count %>
@@ -2246,7 +3297,7 @@ else
  </tr>
  <tr>
    <td>第二学期</td>
-   <td colspan="4" align="left"  >
+   <td colspan="8" align="left"  >
  <%= if semester2 != ""  do %>
 
       <% student_comment = Repo.get_by(School.Affairs.StudentComment, student_id: profile.stuid,semester_id: semester2.id) %>
@@ -2322,7 +3373,7 @@ else
   <tr>
    <td style="margin: 5px; padding: 5px; " align="left"><b>荣誉榜 Pencapaian:</b> </td>
   
-   <td colspan="5" align="left" style="margin: 3px; padding: 3px;" height="50px;">
+   <td colspan="7" align="left" style="margin: 3px; padding: 3px;" height="50px;">
      <%= for x <- std_coco do %>
     <%= if std_coco != [] do %>
     <%= x.desc%>: <%= x.rank %>
@@ -2337,7 +3388,7 @@ else
   <tr>
    <td style="margin: 5px; padding: 5px; " align="left"><b>制服团体</b></td>
       <td style="margin: 5px; padding: 5px; " align="left">Pakaian Seragam</td>
-   <td colspan="4" align="left" style="margin: 3px; padding: 3px;">
+   <td colspan="6" align="left" style="margin: 3px; padding: 3px;">
 
  <% std_coco_uniform = Repo.all(
  from(t in School.Affairs.StudentCocurriculum,
@@ -2358,7 +3409,7 @@ else
   <tr>
    <td style="margin: 5px; padding: 5px; " align="left"><b>学会 </b></td>
     <td style="margin: 5px; padding: 5px; " align="left">Persatuan</td>
-   <td colspan="4" align="left" style="margin: 3px; padding: 3px; ">
+   <td colspan="6" align="left" style="margin: 3px; padding: 3px; ">
 
  <% std_coco_persatuan = Repo.all(
  from(t in School.Affairs.StudentCocurriculum,
@@ -2379,7 +3430,7 @@ else
   <tr>
    <td style="margin: 5px; padding: 5px; " align="left"><b>运动/球类</b></td>
    <td style="margin: 5px; padding: 5px; " align="left">Sukan/Permainan: </td>
-   <td colspan="4" align="left" style="margin: 3px; padding: 3px;" > 
+   <td colspan="6" align="left" style="margin: 3px; padding: 3px;" > 
 
  <% std_coco_sukan = Repo.all(
  from(t in School.Affairs.StudentCocurriculum,
@@ -2402,13 +3453,13 @@ else
 
 <tr align="center">
   <td colspan="2" style="margin: 1px; padding: 1px;" align="center">T.Tangan Guru Besar<br>校长签名 </td>
-   <td colspan="2" style="margin: 1px; padding: 1px;" align="center">T.Tangan Guru Darjah<br>级任签名 </td>
-     <td colspan="2" style="margin: 1px; padding: 1px;" align="center">T.Tangan Ibubapa/Penjaga<br>家长</td>
+   <td colspan="3" style="margin: 1px; padding: 1px;" align="center">T.Tangan Guru Darjah<br>级任签名 </td>
+     <td colspan="3" style="margin: 1px; padding: 1px;" align="center">T.Tangan Ibubapa/Penjaga<br>家长</td>
  </tr>
  <tr align="center">
   <td colspan="2" style="margin: 3px; padding: 3px;" align="center" height="70px;"> <img id="preview1" alt="Click here to change school logo" style='width:auto; height: 50px;' src='data:image/png;base64, <%= @institute.hm_bin %>'></td>
-   <td colspan="2" style="margin: 3px; padding: 3px;" align="center" height="70px;"></td>
-     <td colspan="2" style="margin: 3px; padding: 3px;" align="center" height="70px;"></td>
+   <td colspan="3" style="margin: 3px; padding: 3px;" align="center" height="70px;"></td>
+     <td colspan="3" style="margin: 3px; padding: 3px;" align="center" height="70px;"></td>
  </tr>
 
 
