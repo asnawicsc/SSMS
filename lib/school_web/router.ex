@@ -97,6 +97,12 @@ defmodule SchoolWeb.Router do
 
     get("/student_list_by_co", PdfController, :student_list_by_co)
 
+    get(
+      "/gen_student_coco_achievement",
+      Student_coco_achievementController,
+      :gen_student_coco_achievement
+    )
+
     post("/height_weight_report_show", PdfController, :height_weight_report_show)
 
     post("/parent_listing", PdfController, :parent_listing)
