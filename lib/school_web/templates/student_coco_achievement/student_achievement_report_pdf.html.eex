@@ -1,48 +1,17 @@
+<% require IEx %>
+<link rel="stylesheet" href="<%= Application.app_dir(:school, "priv/static") %>/css/bootstrap.min.css">
+ 
 
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>SENARAI NAMA MURID YANG MENYERTAI PERTANDINGAN</title>
+ 
 
-  </head>
-
-  <body>
-       <div align="right" >
-    <form action="/pdf/gen_student_coco_achievement" method="get">
-          <input type="hidden" name="date_to" value="<%= @date_to %>">
-          <input type="hidden" name="date_from" value="<%= @date_from %>">
-
-         <input type="hidden" name="class_id" value="<%= @class_id %>">
-         <input type="hidden" name="level_id" value="<%= @level_id %>">
-         <input type="hidden" name="sort_id" value="<%= @sort_id %>">
-         <input type="hidden" name="peringkat" value="<%= @peringkat %>">
-
-     
-<input align="left" class="btn btn-info btn-ml" type="submit" name="" value="Print!">
-</form>
-        <script type="text/javascript">
-          var level = [];
-$("input[name='class']").each(function(){
-console.log(this.attributes["value"])
-if (this.checked) {
-level.push(this.attributes["value"].value)
-}
-})
-$("input[name='peringkat']").val(level.join(","))
-        </script>
-</div>
-<br>
-<h4 align="center"> SENARAI NAMA MURID YANG MENYERTAI PERTANDINGAN</h4>
+  <%= if @sekolah != [] do %>
+<div style="page-break-after:  always;">
+ <h4 align="center"> SENARAI NAMA MURID YANG MENYERTAI PERTANDINGAN</h4>
 
 <div> Dari Tarikh: <%= @date_from %></div>
 <div> Ke Tarikh: <%= @date_to %></div><br>
-
-<div class="table-responsive table-bordered">
-
-  <%= if @sekolah != [] do %>
   <label>Peringkat: Sekolah</label>
-    <table align= "center" class="table" width="100%">
+    <table align= "center" class="table table-bordered" width="100%">
       <tr>
         <th rowspan="2" ><%= gettext "BIL" %></th>
         <th rowspan="2" ><%= gettext "PERKARA" %></th>
@@ -93,11 +62,19 @@ $("input[name='peringkat']").val(level.join(","))
        
 
     </table>
+</div>
      <%end%>
 
+
      <%= if @zon != [] do %>
+<div style="page-break-after: always;">
+  <h4 align="center"> SENARAI NAMA MURID YANG MENYERTAI PERTANDINGAN</h4>
+
+<div> Dari Tarikh: <%= @date_from %></div>
+<div> Ke Tarikh: <%= @date_to %></div><br>
+
   <label>Peringkat: Zon</label>
-    <table align= "center" class="table" width="100%">
+    <table align= "center" class="table table-bordered" width="100%">
       <tr>
         <th rowspan="2" ><%= gettext "BIL" %></th>
         <th rowspan="2" ><%= gettext "PERKARA" %></th>
@@ -148,8 +125,8 @@ $("input[name='peringkat']").val(level.join(","))
        
 
     </table>
+</div>
      <%end%>
-
      <%= if @negeri != [] do %>
   <label>Peringkat: Negeri</label>
     <table align= "center" class="table" width="100%">
@@ -315,7 +292,6 @@ $("input[name='peringkat']").val(level.join(","))
     </table>
      <%end%>
 
-</div>
 
-  </body>
-</html>
+
+
