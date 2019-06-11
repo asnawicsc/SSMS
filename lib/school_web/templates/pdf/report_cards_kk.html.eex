@@ -3169,18 +3169,18 @@ else
   <td style="margin: 3px; padding: 3px;"><%= crank2 %></td>
   <td style="margin: 3px; padding: 3px;"><%= crank3 %></td>
    <td style="margin: 3px; padding: 3px;"></td>
-         <td style="margin: 3px; padding: 3px;"></td>
-        <td style="margin: 3px; padding: 3px;"></td>
+   <td style="margin: 3px; padding: 3px;"></td>
+   <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
   <td style="margin: 5px; padding: 5px; " align="left" ><b>全级名次</b></td>
   <td style="margin: 5px; padding: 5px; border-left: 0" align="left">Kedudukan Dalam Darjah</td>
-        <td style="margin: 3px; padding: 3px;"><%= srank1 %></td>
+  <td style="margin: 3px; padding: 3px;"><%= srank1 %></td>
   <td style="margin: 3px; padding: 3px;"><%= srank2 %></td>
   <td style="margin: 3px; padding: 3px;"><%= srank3 %></td>
-   <td style="margin: 3px; padding: 3px;"></td>
-         <td style="margin: 3px; padding: 3px;"></td>
-        <td style="margin: 3px; padding: 3px;"></td>
+  <td style="margin: 3px; padding: 3px;"></td>
+  <td style="margin: 3px; padding: 3px;"></td>
+  <td style="margin: 3px; padding: 3px;"></td>
  </tr>
   <tr align="center">
      <td style="margin: 5px; padding: 5px; " align="left"><b>操行</td>
@@ -3239,17 +3239,15 @@ else
 
     <% student_comment = Repo.get_by(School.Affairs.StudentComment, student_id: profile.stuid,semester_id: semester1.id) %>
 
-          <%=  if student_comment != nil  do %>
+    <%=  if student_comment != nil  do %>
             
-     
-
-          <%= if student_comment.comment1 != nil do
+    <%= if student_comment.comment1 != nil do
 
       Repo.get_by(School.Affairs.Comment,
         id: student_comment.comment1
       ).c_chinese
 
-          end %>
+      end %>
       <%= if student_comment.comment1 != nil do
            
       Repo.get_by(School.Affairs.Comment,
@@ -3392,7 +3390,6 @@ else
 
  <% std_coco_uniform = Repo.all(
  from(t in School.Affairs.StudentCocurriculum,
-
   where: t.student_id == ^profile.stuid and t.category == ^"Unit Beruniform",
   select:  t.sub_category  ) 
   
@@ -3413,7 +3410,6 @@ else
 
  <% std_coco_persatuan = Repo.all(
  from(t in School.Affairs.StudentCocurriculum,
-
   where: t.student_id == ^profile.stuid and t.category == ^"Kelab&Persatuan",
   select:  t.sub_category  ) 
   
@@ -3434,7 +3430,6 @@ else
 
  <% std_coco_sukan = Repo.all(
  from(t in School.Affairs.StudentCocurriculum,
-
   where: t.student_id == ^profile.stuid and t.category == ^"Sukan & Permainan",
   select:  t.sub_category  ) 
   

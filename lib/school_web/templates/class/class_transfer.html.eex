@@ -11,7 +11,7 @@
         <div class="card-header bg-gray-lighter text-bold">Standards Tab Panel</div>
         <div class="list-group">
           <%= for class <- @classes do %>
-
+      
               <a class="list-group-item list-group-item-action" href="#<%= elem(class,0) |> String.replace(" ","_") %>" data-toggle="tab" id="tab_panel"><%= elem(class,0) %> </a>
           <% end %>
         </div>
