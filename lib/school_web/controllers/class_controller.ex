@@ -17,10 +17,12 @@ defmodule SchoolWeb.ClassController do
             class_name: c.name,
             next_class: c.next_class,
             level_name: l.name,
-            level_id: l.id
+            level_id: l.id,
+            is_delete: c.is_delete
           }
         )
       )
+      |> Enum.filter(fn x -> x.is_delete != 1 end)
       |> Enum.group_by(fn x -> x.level_name end)
 
     render(conn, "class_transfer.html", classes: all_classes)
