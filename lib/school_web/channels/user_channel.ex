@@ -3647,15 +3647,25 @@ defmodule SchoolWeb.UserChannel do
             Repo.all(
               from(
                 sa in Affairs.Student_coco_achievement,
-                left_join: c in Affairs.StudentClass,
-                on: c.sudent_id == sa.student_id,
-                left_join: t in Affairs.Class,
-                on: t.id == c.class_id,
                 left_join: s in Affairs.Student,
                 on: s.id == sa.student_id,
+                left_join: c in Affairs.StudentClass,
+                on: c.sudent_id == s.id,
+                left_join: t in Affairs.Class,
+                on: t.id == c.class_id,
                 where:
                   sa.peringkat in ^peringkat and sa.date >= ^date_from and sa.date <= ^date_to,
+                group_by: [
+                  sa.id,
+                  sa.student_id,
+                  sa.competition_name,
+                  s.name,
+                  s.chinese_name,
+                  sa.date,
+                  t.name
+                ],
                 select: %{
+                  student_id: sa.student_id,
                   desc: sa.competition_name,
                   student_name: s.name,
                   chinese_name: s.chinese_name,
@@ -3667,6 +3677,9 @@ defmodule SchoolWeb.UserChannel do
               )
             )
       end
+
+    # IEx.pry()
+    # Repo.all(from sa in Affairs.Student_coco_achievement, left_join: s in Affairs.Student, on: s.id == sa.student_id, left_join: sc in Affairs.StudentClass, on: sc.sudent_id == s.id, left_join: c in Affairs.Class, on: c.id == sc.class_id, group_by: [sa.id, sa.student_id, c.name], where: sc.semester_id == , select: %{student_id: sa.student_id, desc: sa.competition_name, peringkat: sa.peringkat, date: sa.date, class: c.name})
 
     sekolah =
       selection

@@ -1,24 +1,17 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>SENARAI NAMA MURID YANG MENYERTAI PERTANDINGAN</title>
+<% require IEx %>
 <link rel="stylesheet" href="<%= Application.app_dir(:school, "priv/static") %>/css/bootstrap.min.css">
-  </head>
+ 
 
+ 
 
-
-<br>
-<h4 align="center"> SENARAI NAMA MURID YANG MENYERTAI PERTANDINGAN</h4>
+  <%= if @sekolah != [] do %>
+<div style="page-break-after:  always;">
+ <h4 align="center"> SENARAI NAMA MURID YANG MENYERTAI PERTANDINGAN</h4>
 
 <div> Dari Tarikh: <%= @date_from %></div>
 <div> Ke Tarikh: <%= @date_to %></div><br>
-
-<div class="table-responsive table-bordered">
-
-  <%= if @sekolah != [] do %>
   <label>Peringkat: Sekolah</label>
-    <table align= "center" class="table" width="100%">
+    <table align= "center" class="table table-bordered" width="100%">
       <tr>
         <th rowspan="2" ><%= gettext "BIL" %></th>
         <th rowspan="2" ><%= gettext "PERKARA" %></th>
@@ -69,11 +62,19 @@
        
 
     </table>
+</div>
      <%end%>
 
+
      <%= if @zon != [] do %>
+<div style="page-break-after: always;">
+  <h4 align="center"> SENARAI NAMA MURID YANG MENYERTAI PERTANDINGAN</h4>
+
+<div> Dari Tarikh: <%= @date_from %></div>
+<div> Ke Tarikh: <%= @date_to %></div><br>
+
   <label>Peringkat: Zon</label>
-    <table align= "center" class="table" width="100%">
+    <table align= "center" class="table table-bordered" width="100%">
       <tr>
         <th rowspan="2" ><%= gettext "BIL" %></th>
         <th rowspan="2" ><%= gettext "PERKARA" %></th>
@@ -124,8 +125,8 @@
        
 
     </table>
+</div>
      <%end%>
-
      <%= if @negeri != [] do %>
   <label>Peringkat: Negeri</label>
     <table align= "center" class="table" width="100%">
@@ -291,7 +292,6 @@
     </table>
      <%end%>
 
-</div>
 
-  </body>
-</html>
+
+
